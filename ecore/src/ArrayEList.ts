@@ -89,10 +89,15 @@ export class ArrayEList<E> implements EList<E> {
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this.v_.length );
         return this.v_[index]
     }
-    set(index: number, e: E): void {
+    set(index: number, e: E): E {
         if (index < 0 || index >= this.v_.length)
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this.v_.length );
-            this.doSet(index,e);
+        if (this.isUnique()) {
+            var currIndex = this.indexOf(e);
+            if (currIndex >= 0 && currIndex != index)
+                throw new Error("element already in list : uniqueness constraint is not respected")
+        }    
+        return this.doSet(index,e);
     }
     indexOf(e: E): number {
         return this.v_.indexOf(e);
