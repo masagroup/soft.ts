@@ -2,22 +2,22 @@ import {Collection} from "./Collection";
 import {EList} from "./EList";
 
 export class ArrayEList<E> implements EList<E> {
-    private v_ : E[];
-    private isUnique_ : boolean;
+    private _v : E[];
+    private _isUnique : boolean;
 
     constructor(v:E[]=[],isUnique:boolean=false) {
-        this.v_ = v;
-        this.isUnique_ = isUnique;
+        this._v = v;
+        this._isUnique = isUnique;
     }
     add(e: E): boolean {
-        if (this.isUnique() && this.contains(e))
+        if (this._isUnique && this.contains(e))
             return false;
 
         this.doAdd(e);
         return true;
     }
     addAll(c: Collection<E>): boolean {
-        if (this.isUnique()) {
+        if (this._isUnique) {
             c = this.getNonDuplicates(c)
             if (c.isEmpty())
                 return false;
@@ -26,17 +26,17 @@ export class ArrayEList<E> implements EList<E> {
         return true
     }
     insert(index: number, e: E): boolean {
-        if ( index < 0 || index > this.v_.length )
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.v_.length );
-        if (this.isUnique() && this.contains(e) )
+        if ( index < 0 || index > this._v.length )
+            throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length );
+        if (this._isUnique && this.contains(e) )
             return false;
         this.doInsert(index,e);    
         return true
     }
     insertAll(index: number, c: Collection<E>): boolean {
-        if ( index < 0 || index > this.v_.length )
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.v_.length );
-        if (this.isUnique()){
+        if ( index < 0 || index > this._v.length )
+            throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length );
+        if (this._isUnique){
             c = this.getNonDuplicates(c);
             if ( c.isEmpty() )
                 return false;
@@ -52,10 +52,10 @@ export class ArrayEList<E> implements EList<E> {
 	    return true
     }
     removeAt(index: number): E {
-        if (index < 0 || index >= this.v_.length )
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.v_.length );
-        var e = this.v_[index];
-        this.v_.splice(index, 1);
+        if (index < 0 || index >= this._v.length )
+            throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length );
+        var e = this._v[index];
+        this._v.splice(index, 1);
         this.didRemove(index,e);
         this.didChange();
         return e;
@@ -64,7 +64,7 @@ export class ArrayEList<E> implements EList<E> {
         var modified = false;
         for ( let i = this.size(); --i >= 0; )
         {
-            if (c.contains(this.v_[i]))
+            if (c.contains(this._v[i]))
             {
                 this.removeAt(i);
                 modified = true;
@@ -76,7 +76,7 @@ export class ArrayEList<E> implements EList<E> {
         var modified = false;
         for ( let i = this.size(); --i >= 0; )
         {
-            if (!c.contains(this.v_[i]))
+            if (!c.contains(this._v[i]))
             {
                 this.removeAt(i);
                 modified = true;
@@ -85,14 +85,14 @@ export class ArrayEList<E> implements EList<E> {
         return modified;
     }
     get(index: number): E {
-        if (index < 0 || index >= this.v_.length)
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.v_.length );
-        return this.v_[index]
+        if (index < 0 || index >= this._v.length)
+            throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length );
+        return this._v[index]
     }
     set(index: number, e: E): E {
-        if (index < 0 || index >= this.v_.length)
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.v_.length );
-        if (this.isUnique()) {
+        if (index < 0 || index >= this._v.length)
+            throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length );
+        if (this._isUnique) {
             var currIndex = this.indexOf(e);
             if (currIndex >= 0 && currIndex != index)
                 throw new Error("element already in list : uniqueness constraint is not respected")
@@ -100,30 +100,27 @@ export class ArrayEList<E> implements EList<E> {
         return this.doSet(index,e);
     }
     indexOf(e: E): number {
-        return this.v_.indexOf(e);
+        return this._v.indexOf(e);
     }    
     clear(): void {
-        this.v_ = [];
+        this._v = [];
     }
     contains(e: E): boolean {
-        return this.v_.includes(e);
+        return this._v.includes(e);
     }
     isEmpty(): boolean {
-        return this.v_.length == 0;
+        return this._v.length == 0;
     }
     size(): number {
-        return this.v_.length;
+        return this._v.length;
     }
     toArray(): E[] {
-        return this.v_;
+        return this._v;
     }
     [Symbol.iterator](): Iterator<E, any, undefined> {
-        return this.v_[Symbol.iterator]();
+        return this._v[Symbol.iterator]();
     }
 
-    protected isUnique() : boolean {
-        return false;
-    }
     protected getNonDuplicates(c:Collection<E>):Collection<E> {
         var l = new ArrayEList<E>();
         for (const e of c) {
@@ -133,36 +130,36 @@ export class ArrayEList<E> implements EList<E> {
         return l;
     }
     protected doAdd(e:E):void {
-        var size = this.v_.length;
-        this.v_.push(e);
+        var size = this._v.length;
+        this._v.push(e);
         this.didAdd(size,e);
         this.didChange();
     }
     protected doAddAll(c:Collection<E>):boolean {
-        var oldSize = this.v_.length;
-        this.v_.push(...c.toArray());
-        for (let i = oldSize; i < this.v_.length; i++) {
-            this.didAdd(i ,this.v_[i]);
+        var oldSize = this._v.length;
+        this._v.push(...c.toArray());
+        for (let i = oldSize; i < this._v.length; i++) {
+            this.didAdd(i ,this._v[i]);
             this.didChange();
         }
         return !c.isEmpty();
     }
     protected doInsert(index:number,e:E) : void {
-        this.v_.splice(index,0,e);
+        this._v.splice(index,0,e);
         this.didAdd(index,e);
         this.didChange();
     }
     protected doInsertAll(index:number,c:Collection<E>) : boolean {
-        this.v_.splice(index,0,...c.toArray());
+        this._v.splice(index,0,...c.toArray());
         for (let i = index; i < index + c.size(); i++) {
-            this.didAdd(i ,this.v_[i]);
+            this.didAdd(i ,this._v[i]);
             this.didChange();
         }
         return !c.isEmpty();
     }
     protected doSet(index:number,e:E) : E {
-        var o = this.v_[index];
-        this.v_[index] = e;
+        var o = this._v[index];
+        this._v[index] = e;
         this.didSet(index,o,e);
         this.didChange();
         return o;
