@@ -4,11 +4,11 @@
     "target": "es5",
     "sourceMap": true,
     "declaration": true,
-    "baseUrl": "./", // This must be specified if "paths" is.
     "outDir": "./lib",
-    "paths": {
-      "ecore/*": ["./src/*",./src-gen/*]
-    }
+    "rootDirs": [
+      "src",
+      "src-gen"
+    ]
   },
   "exclude": [
     "node_modules",
