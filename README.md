@@ -1,0 +1,2 @@
+# soft.ts
+Soft TypeScript
