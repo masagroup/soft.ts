@@ -1,4 +1,4 @@
-import { ArrayEList } from '../src/ArrayEList'
+import { ArrayEList } from './ArrayEList'
 
 test('get', () => {
     var a = new ArrayEList<number>([1, 2, 3, 4]);
