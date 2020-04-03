@@ -1,0 +1,22 @@
+{
+  "name": "@masagroup/ecore",
+  "version": "0.0.1",
+  "description": "ecore typescript library",
+  "main": "index.js",
+  "scripts": {
+    "index": "barrelsby --directory ./src",
+    "build": "tsc",
+    "test": "jest"
+  },
+  "author": "Jocelyn DUMAY",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^25.1.4",
+    "barrelsby": "^2.2.0",
+    "jest": "^25.2.4",
+    "ts-jest": "^25.3.0",
+    "ts-node": "^8.8.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {}
+}
