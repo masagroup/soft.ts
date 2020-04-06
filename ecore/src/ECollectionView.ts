@@ -7,6 +7,6 @@
 //
 // *****************************************************************************
 
-export interface ECollectionView
+export interface ECollectionView<E>
 {
 }
