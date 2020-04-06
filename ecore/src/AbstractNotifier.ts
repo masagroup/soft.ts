@@ -15,22 +15,22 @@ import { ArrayEList } from "./ArrayEList";
 
 export class AbstractNotifier implements ENotifier {
     private _eAdapters: EList<EAdapter>;
-    public eDeliver: boolean;
+    eDeliver: boolean;
     
-    public constructor() {
+    constructor() {
         this._eAdapters = new AdapterList(this)
         this.eDeliver = true;
     }
 
-    public get eAdapters(): EList<EAdapter> {
+    get eAdapters(): EList<EAdapter> {
         return this._eAdapters;
     }
     
-    public get eNotificationRequired() : boolean {
+    get eNotificationRequired() : boolean {
         return this.eDeliver && !this._eAdapters.isEmpty();
     }
 
-    public eNotify(notification: ENotification): void {
+    eNotify(notification: ENotification): void {
         for (const adapter of this._eAdapters) {
             adapter.notifyChanged(notification);
         }
