@@ -6,12 +6,23 @@
 // Copyright (c) 2020 MASA Group
 //
 // *****************************************************************************
+import { createMock } from "ts-auto-mock";
+import { On, method } from "ts-auto-mock/extension";
+import { AbstractNotifier } from "./AbstractNotifier";
+import { EAdapter } from "./EAdapter";
 
-test('get', () => {
-    var a = new ArrayEList<number>([1, 2, 3, 4]);
-    expect(a.get(0)).toBe(1);
-    expect(a.get(1)).toBe(2);
-    expect(a.get(2)).toBe(3);
-    expect(a.get(3)).toBe(4);
+
+test('constructor', () => {
+    var n = new AbstractNotifier();
+    expect(n.eDeliver).toBeTruthy();
+    expect(n.eAdapters.isEmpty()).toBeTruthy();
 });
 
+test('target', () => {
+    const mockAdapter: EAdapter = createMock<EAdapter>();
+    var n = new AbstractNotifier();
+    n.eAdapters.add(mockAdapter);
+    expect(mockAdapter.target).toBe(n);
+    n.eAdapters.remove(mockAdapter);
+    expect(mockAdapter.target).toBeNull()
+})
