@@ -1,4 +1,12 @@
 module.exports = {
+  setupFiles: [
+    "<rootDir>/jest-ts-auto-mock.config.ts"
+  ],
+  globals: {
+    "ts-jest": {
+      "compiler": "ttypescript"
+    }
+  },
   transform: {
     '^.+\\.ts?$': 'ts-jest'
   },
