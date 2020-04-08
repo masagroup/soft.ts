@@ -87,12 +87,7 @@ test("insert", (t) => {
 
 test("insert_invalid_range", (t) => {
     var a = new ArrayEList<number>();
-    t.throws(
-        () => {
-            a.insert(1, 0);
-        },
-        { instanceOf: RangeError }
-    );
+    t.throws(() => a.insert(1, 0), { instanceOf: RangeError });
 });
 
 test("insert_unique", (t) => {
@@ -129,12 +124,7 @@ test("removeAt", (t) => {
 
 test("removeAt_invalid_range", (t) => {
     var a = new ArrayEList<number>([0, 1, 2]);
-    t.throws(
-        () => {
-            a.removeAt(3);
-        },
-        { instanceOf: RangeError }
-    );
+    t.throws(() => a.removeAt(3), { instanceOf: RangeError });
 });
 
 test("removeAll", (t) => {
@@ -159,22 +149,12 @@ test("set", (t) => {
 
 test("set_invalid_range", (t) => {
     var a = new ArrayEList<number>([0, 1, 2]);
-    t.throws(
-        () => {
-            a.set(3, 1);
-        },
-        { instanceOf: RangeError }
-    );
+    t.throws(() => a.set(3, 1), { instanceOf: RangeError });
 });
 
 test("set_invalid_constraint", (t) => {
     var a = new ArrayEList<number>([0, 1, 2], true);
-    t.throws(
-        () => {
-            a.set(0, 1);
-        },
-        { instanceOf: Error }
-    );
+    t.throws(() => a.set(0, 1), { instanceOf: Error });
 });
 
 test("indexOf", (t) => {
