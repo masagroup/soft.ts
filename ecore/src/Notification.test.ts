@@ -7,9 +7,9 @@
 //
 // *****************************************************************************
 
-import test from "ava";
+import test, { beforeEach } from "ava";
 import { Notification } from "./Notification";
-import { mock, instance, verify } from "ts-mockito";
+import { mock, instance, verify, when } from "ts-mockito";
 import { EObject } from "./EObject";
 import { EventType } from "./ENotification";
 import { EStructuralFeature } from "./EStructuralFeature";
@@ -47,5 +47,67 @@ test('dispatch', t => {
     var n = new Notification(o,EventType.ADD,f,1,2,3);
     n.dispatch();
     t.notThrows( () => verify(mockObject.eNotify(n)).once());
+});
+
+
+test('mergeSet', t => {
+    const mockObject = mock<EObject>();
+    const o = instance(mockObject);
+    
+    var n1 = new Notification(o,EventType.SET,1,1,2);
+    var n2 = new Notification(o,EventType.SET,1,2,3);
+    t.true( n1.merge(n2) );
+    t.is( n1.eventType , EventType.SET);
+    t.is( n1.oldValue , 1);
+    t.is( n1.newValue , 3);
+});
+
+test('mergeUnSet', t => {
+    const mockObject = mock<EObject>();
+    const o = instance(mockObject);
+
+    {
+        var n1 = new Notification(o,EventType.SET,1,1,2);
+        var n2 = new Notification(o,EventType.UNSET,1,2,0);
+        t.true( n1.merge(n2) );
+        t.is( n1.eventType , EventType.SET);
+        t.is( n1.oldValue , 1);
+        t.is( n1.newValue , 0);    
+    }
+    {
+        var n1 = new Notification(o,EventType.UNSET,1,1,0);
+        var n2 = new Notification(o,EventType.SET,1,0,2);
+        t.true( n1.merge(n2) );
+        t.is( n1.eventType , EventType.SET);
+        t.is( n1.oldValue , 1);
+        t.is( n1.newValue , 2);  
+    }
+});
+
+test('mergeRemoveMany', t => {
+    const mockObject = mock<EObject>();
+    const mockObject1 = mock<EObject>();
+    const mockObject2 = mock<EObject>();
+    const mockObject3 = mock<EObject>();
+    const o = instance(mockObject);
+    const o1 = instance(mockObject1);
+    const o2 = instance(mockObject1);
+    const o3 = instance(mockObject1);
+    {
+        var n1 = new Notification(o,EventType.REMOVE,1,o1,null,2);
+        var n2 = new Notification(o,EventType.REMOVE,1,o2,null,2);
+        t.true( n1.merge(n2) );
+        t.is( n1.eventType , EventType.REMOVE_MANY);
+        t.deepEqual(n1.oldValue, [o1,o2]);
+        t.deepEqual(n1.newValue, [2,3]);
+    }
+    {
+        var n1 = new Notification(o,EventType.REMOVE_MANY,1,[o1,o2],[2,3] );
+        var n2 = new Notification(o,EventType.REMOVE,1,o3,null,2);
+        t.true( n1.merge(n2) );
+        t.is( n1.eventType , EventType.REMOVE_MANY);
+        t.deepEqual(n1.oldValue, [o1,o2,o3]);
+        t.deepEqual(n1.newValue, [2,3,4]);
+    }
 });
 

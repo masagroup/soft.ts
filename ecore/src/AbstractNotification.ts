@@ -17,9 +17,9 @@ import { NotificationChain } from "./NotificationChain";
 
 export abstract class AbstractNotification implements ENotification, ENotificationChain {
     
-    abstract feature: EStructuralFeature;
-    abstract featureID: number;
-    abstract notifier: ENotifier;
+    abstract readonly feature: EStructuralFeature;
+    abstract readonly featureID: number;
+    abstract readonly notifier: ENotifier;
     eventType: EventType;
     oldValue: any;
     newValue: any;
@@ -45,7 +45,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                     case EventType.SET:
                     case EventType.UNSET:
                     {
-                        if (this.notifier === notification.notifier && this.featureID === notification.featureID)
+                        if (this.notifier == notification.notifier && this.featureID == notification.featureID)
                         {
                             this.newValue = notification.newValue;
                             if (notification.eventType == EventType.SET)
@@ -63,8 +63,9 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                 {
                     case EventType.REMOVE:
                     {
-                        if ( this.notifier === notification.notifier && this.featureID === notification.featureID)
+                        if ( this.notifier == notification.notifier && this.featureID == notification.featureID)
                         {
+                            this.eventType = EventType.REMOVE_MANY;
                             var originalPosition = this.position;
                             var notificationPosition = notification.position;
                             var removedValues : any[] = [];
@@ -91,23 +92,23 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                 {
                     case EventType.REMOVE:
                     {
-                        if ( this.notifier === notification.notifier && this.featureID === notification.featureID)
+                        if ( this.notifier == notification.notifier && this.featureID == notification.featureID)
                         {
                             var notificationPosition = notification.position;
-                            var positions : number[] = notification.newValue;
+                            var positions : number[] = this.newValue || [];
                             var newPositions : number[] = new Array(positions.length + 1);
 
                             var index = 0;
                             for (const oldPosition of positions) {
-                                if (oldPosition < notificationPosition) {
+                                if (oldPosition <= notificationPosition) {
                                     newPositions[index++]= oldPosition;
-                                    notificationPosition++;
+                                    ++notificationPosition;
                                 }
                                 else
                                     break;
                             }
                             
-                            var oldValue : any[] = this.oldValue;
+                            var oldValue : any[] = this.oldValue || [];
                             oldValue.splice(index,0,notification.oldValue);
                             
                             newPositions[index] = notificationPosition;
