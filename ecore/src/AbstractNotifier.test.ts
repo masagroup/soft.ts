@@ -6,32 +6,43 @@
 // Copyright (c) 2020 MASA Group
 //
 // *****************************************************************************
+import test from 'ava'
+import { mock, verify, instance } from 'ts-mockito';
 import { AbstractNotifier } from "./AbstractNotifier";
 import { EAdapter } from "./EAdapter";
 import { ENotification } from "./ENotification";
 
 
-test('constructor', () => {
+test('constructor', t => {
     var n = new AbstractNotifier();
-    expect(n.eDeliver).toBeTruthy();
-    expect(n.eAdapters.isEmpty()).toBeTruthy();
+    t.true(n.eDeliver);
+    t.true(n.eAdapters.isEmpty());
 });
 
-test('target', () => {
-    // const mockAdapter: EAdapter = createMock<EAdapter>();
-    // var n = new AbstractNotifier();
-    // n.eAdapters.add(mockAdapter);
-    // expect(mockAdapter.target).toBe(n);
-    // n.eAdapters.remove(mockAdapter);
-    // expect(mockAdapter.target).toBeNull()
+test('target', t => {
+    // mocks
+    const mockAdapter = mock<EAdapter>();
+    const adapter = instance(mockAdapter);
+    
+    var n = new AbstractNotifier();
+    n.eAdapters.add(adapter);
+    t.is(adapter.target,n);
+    n.eAdapters.remove(adapter);
+    t.is(adapter.target,null);
 });
 
-test('eNotify', () => {
-    // const mockAdapter: EAdapter = createMock<EAdapter>();
-    // const mockNotifyChanged: jest.Mock = On(mockAdapter).get(method('notifyChanged'));
-    // const mockNotification : ENotification = createMock<ENotification>();
-    // var n = new AbstractNotifier();
-    // n.eAdapters.add(mockAdapter);
-    // n.eNotify(mockNotification);
-    // expect(mockNotifyChanged).toHaveBeenCalledWith(mockNotification);
+test('eNotify', t => {
+    // mocks
+    const mockAdapter = mock<EAdapter>();
+    const mockNotification = mock<ENotification>();
+    const adapter = instance(mockAdapter);
+    const notification = instance(mockNotification);
+
+    // call
+    var n = new AbstractNotifier();
+    n.eAdapters.add(adapter);
+    n.eNotify(notification);
+
+    // checks
+    t.notThrows(() => verify(mockAdapter.notifyChanged(notification)).called());
 });

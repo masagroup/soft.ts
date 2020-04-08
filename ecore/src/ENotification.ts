@@ -10,7 +10,7 @@
 import { ENotifier } from "./ENotifier";
 import { EStructuralFeature } from "./EStructuralFeature";
 
-enum EventType {    
+export enum EventType {    
     // CREATE An event type indicating that the notifier has been created.
     CREATE = 1,
     // SET An event type indicating that a feature of the notifier has been set.

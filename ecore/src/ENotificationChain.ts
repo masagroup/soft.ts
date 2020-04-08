@@ -18,5 +18,5 @@ export interface ENotificationChain {
 	add(notification : ENotification) : boolean;
 
 	// Dispatch Dispatches each notification to the appropriate notifier via notifier.ENotify method
-	dispatch();
+	dispatch(): void;
 }

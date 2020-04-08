@@ -1,3 +1,12 @@
+// *****************************************************************************
+//
+// This file is part of a MASA library or program.
+// Refer to the included end-user license agreement for restrictions.
+//
+// Copyright (c) 2020 MASA Group
+//
+// *****************************************************************************
+
 import {Collection} from "./Collection";
 
 export interface List<E> extends Collection<E> 
