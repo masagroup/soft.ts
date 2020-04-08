@@ -4,18 +4,15 @@
     "target": "es2020",
     "sourceMap": true,
     "declaration": true,
-    "outDir": "lib",
+    "outDir": "dist",
     "rootDirs": [
       "src",
       "src-gen"
     ],
-    "plugins": [
-      { "transform": "ts-auto-mock/transformer", "cacheBetweenTests": false }
-    ]
   },
   "exclude": [
     "node_modules",
     "test",
-    "lib"
+    "dist"
   ]
 }
