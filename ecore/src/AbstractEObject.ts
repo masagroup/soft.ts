@@ -17,6 +17,8 @@ import { EReference } from "./EReference";
 import { EResource } from "./EResource";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENOtificationChain";
+import { Notification } from "./Notification";
+import { EventType } from "./ENotification";
 
 const EOPPOSITE_FEATURE_BASE: number = -1;
 
@@ -111,7 +113,9 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
 
     eResource(): EResource {
         if (this._eResource == null) {
-            if (this._eContainer != null) this._eResource = this._eContainer.eResource();
+            if (this._eContainer != null) {
+                this._eResource = this._eContainer.eResource();
+            }
         }
         return this._eResource;
     }
@@ -196,8 +200,10 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eOperationID(operation: EOperation): number {
-        if (!this.eClass().eAllOperations.contains(operation))
+        if (!this.eClass().eAllOperations.contains(operation)) {
             throw new Error("The operation '" + operation.name + "' is not a valid feature");
+        }
+
         return this.eDerivedFeatureID(operation.eContainer(), operation.operationID);
     }
 
@@ -215,59 +221,81 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
 
     private eGetFromFeature(feature: EStructuralFeature, resolve: boolean, core: boolean): any {
         var featureID = this.eFeatureID(feature);
-        if (featureID >= 0) return this.eGetFromID(featureID, resolve, core);
+        if (featureID >= 0) {
+            return this.eGetFromID(featureID, resolve, core);
+        }
         throw new Error("The feature '" + feature.name + "' is not a valid feature");
     }
 
     eGetFromID(featureID: number, resolve: boolean, core: boolean): any {
         var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+        if (feature == null) {
+            throw new Error("Invalid featureID: " + featureID);
+        }
         return null;
     }
 
     eSet(feature: EStructuralFeature, newValue: any): void {
         var featureID = this.eFeatureID(feature);
-        if (featureID >= 0) this.eSetFromID(featureID, newValue);
-        else throw new Error("The feature '" + feature.name + "' is not a valid feature");
+        if (featureID >= 0) {
+            this.eSetFromID(featureID, newValue);
+        } else {
+            throw new Error("The feature '" + feature.name + "' is not a valid feature");
+        }
     }
 
     eSetFromID(featureID: number, newValue: any): void {
         var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+        if (feature == null) {
+            throw new Error("Invalid featureID: " + featureID);
+        }
     }
 
     eIsSet(feature: EStructuralFeature): boolean {
         var featureID = this.eFeatureID(feature);
-        if (featureID >= 0) return this.eIsSetFromID(featureID);
+        if (featureID >= 0) {
+            return this.eIsSetFromID(featureID);
+        }
         throw new Error("The feature '" + feature.name + "' is not a valid feature");
     }
 
     eIsSetFromID(featureID: number): boolean {
         var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+        if (feature == null) {
+            throw new Error("Invalid featureID: " + featureID);
+        }
         return false;
     }
 
     eUnset(feature: EStructuralFeature): void {
         var featureID = this.eFeatureID(feature);
-        if (featureID >= 0) this.eUnsetFromID(featureID);
-        else throw new Error("The feature '" + feature.name + "' is not a valid feature");
+        if (featureID >= 0) {
+            this.eUnsetFromID(featureID);
+        } else {
+            throw new Error("The feature '" + feature.name + "' is not a valid feature");
+        }
     }
 
     eUnsetFromID(featureID: number): void {
         var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+        if (feature == null) {
+            throw new Error("Invalid featureID: " + featureID);
+        }
     }
 
     eInvoke(operation: EOperation, args: EList<any>): any {
         var operationID = this.eOperationID(operation);
-        if (operationID >= 0) return this.eInvokeFromID(operationID, args);
+        if (operationID >= 0) {
+            return this.eInvokeFromID(operationID, args);
+        }
         throw new Error("The operation '" + operation.name + "' is not a valid operation");
     }
 
     eInvokeFromID(operationID: number, args: EList<any>): any {
         var operation = this.eClass().getEOperation(operationID);
-        if (operation == null) throw new Error("Invalid operationID: " + operationID);
+        if (operation == null) {
+            throw new Error("Invalid operationID: " + operationID);
+        }
     }
 
     eSetResource(newResource: EResource, notifications: ENotificationChain): ENotificationChain {
@@ -277,8 +305,9 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
 
     eInverseAdd(otherEnd: EObject, featureID: number, n: ENotificationChain): ENotificationChain {
         var notifications = n;
-        if (featureID >= 0) this.eBasicInverseAdd(otherEnd, featureID, notifications);
-        else {
+        if (featureID >= 0) {
+            this.eBasicInverseAdd(otherEnd, featureID, notifications);
+        } else {
             notifications = this.eBasicRemoveFromContainer(notifications);
             return this.eBasicSetContainer(otherEnd, featureID, notifications);
         }
@@ -297,8 +326,9 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
         featureID: number,
         notifications: ENotificationChain
     ): ENotificationChain {
-        if (featureID >= 0) return this.eBasicInverseRemove(otherEnd, featureID, notifications);
-        else return this.eBasicSetContainer(null, featureID, notifications);
+        return featureID >= 0
+            ? this.eBasicInverseRemove(otherEnd, featureID, notifications)
+            : this.eBasicSetContainer(null, featureID, notifications);
     }
 
     eBasicInverseRemove(
@@ -315,9 +345,49 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
         n: ENotificationChain
     ): ENotificationChain {
         var notifications = n;
+        var oldResource = this._eResource;
+        var oldContainer = this._eContainer;
+        var oldContainerFeatureID = this._eContainerFeatureID;
+
         // basic set
         this._eContainer = newContainer;
         this._eContainerFeatureID = newContainerFeatureID;
+
+        // notification
+        if (this.eNotificationRequired) {
+            if (
+                oldContainer != null &&
+                oldContainerFeatureID >= 0 &&
+                oldContainerFeatureID != newContainerFeatureID
+            ) {
+                var notification = new Notification(
+                    this,
+                    EventType.SET,
+                    oldContainerFeatureID,
+                    oldContainer,
+                    null
+                );
+                if (notifications != null) {
+                    notifications.add(notification);
+                } else {
+                    notifications = notification;
+                }
+            }
+            if (newContainerFeatureID >= 0) {
+                var notification = new Notification(
+                    this,
+                    EventType.SET,
+                    newContainerFeatureID,
+                    oldContainerFeatureID == newContainerFeatureID ? oldContainer : null,
+                    newContainer
+                );
+                if (notifications != null) {
+                    notifications.add(notification);
+                } else {
+                    notifications = notification;
+                }
+            }
+        }
         return notifications;
     }
 
