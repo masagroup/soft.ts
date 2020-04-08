@@ -111,3 +111,41 @@ test('mergeRemoveMany', t => {
     }
 });
 
+
+test('add', t => {
+    const mockObject = mock<EObject>();
+    const o = instance(mockObject);
+    {
+        var n = new Notification(o,EventType.SET,1,1,2);
+        t.false(n.add(null));
+        
+    }
+    {
+        // create 2 identical set notifications
+        var n1 = new Notification(o,EventType.SET,1,1,2);
+        var n2 = new Notification(o,EventType.SET,1,1,2);
+        
+        // no add because there is a merge
+        t.false(n1.add(n2));
+    }
+    {
+        // create 2 add notifications with 2 different objects
+        const mockObject1 = mock<EObject>();
+        const mockObject2 = mock<EObject>();
+        const o1 = instance(mockObject1);
+        const o2 = instance(mockObject2);    
+        var n1 = new Notification(o,EventType.ADD,1,o1,null);
+        var n2 = new Notification(o,EventType.ADD,1,o2,null);
+
+        // check add
+        t.true( n1.add(n2) );
+
+        // check that there is no merge by calling dispacth
+        // we should have 2 notification
+        n1.dispatch();
+        t.notThrows(() => { 
+            verify(mockObject.eNotify(n1)).once();
+            verify(mockObject.eNotify(n2)).once();
+         });
+    }
+});
