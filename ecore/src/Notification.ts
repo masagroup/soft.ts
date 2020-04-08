@@ -14,10 +14,10 @@ import { EObject } from "./EObject";
 import { EventType } from "./ENotification";
 
 export class Notification extends AbstractNotification {
+    private _object: EObject;
     private _feature: EStructuralFeature;
     private _featureID: number;
-    private _object: EObject;
-
+    
     constructor(object : EObject, eventType : EventType, feature : EStructuralFeature | number, oldValue : any , newValue : any , position : number = -1) {
         super(eventType,oldValue,newValue,position);
         this._object = object;
@@ -29,7 +29,6 @@ export class Notification extends AbstractNotification {
             this._featureID = -1;
             this._feature = feature;
         }
-        this._featureID = -1;
     }
 
     get feature() : EStructuralFeature {
