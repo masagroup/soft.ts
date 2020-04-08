@@ -6,7 +6,8 @@
   "scripts": {
     "index": "barrelsby --directory ./src",
     "build": "tsc",
-    "test": "ava --verbose"
+    "test": "ava --verbose",
+    "pretty": "prettier --write **/*.ts"
   },
   "author": "Jocelyn DUMAY",
   "license": "ISC",
@@ -14,6 +15,7 @@
     "@ava/typescript": "^1.1.1",
     "ava": "^3.6.0",
     "barrelsby": "^2.2.0",
+    "prettier": "^2.0.4",
     "ts-mockito": "^2.5.0",
     "typescript": "^3.8.3"
   },
@@ -30,6 +32,10 @@
     "concurrency": 1,
     "failFast": true,
     "failWithoutAssertions": true
+  },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 4
   },
   "dependencies": {}
 }
