@@ -6,32 +6,32 @@
 // Copyright (c) 2020 MASA Group
 //
 // *****************************************************************************
-import test from 'ava'
-import { mock, verify, instance } from 'ts-mockito';
+
+import test from "ava";
+import { mock, verify, instance } from "ts-mockito";
 import { AbstractNotifier } from "./AbstractNotifier";
 import { EAdapter } from "./EAdapter";
 import { ENotification } from "./ENotification";
 
-
-test('constructor', t => {
+test("constructor", (t) => {
     var n = new AbstractNotifier();
     t.true(n.eDeliver);
     t.true(n.eAdapters.isEmpty());
 });
 
-test('target', t => {
+test("target", (t) => {
     // mocks
     const mockAdapter = mock<EAdapter>();
     const adapter = instance(mockAdapter);
-    
+
     var n = new AbstractNotifier();
     n.eAdapters.add(adapter);
-    t.is(adapter.target,n);
+    t.is(adapter.target, n);
     n.eAdapters.remove(adapter);
-    t.is(adapter.target,null);
+    t.is(adapter.target, null);
 });
 
-test('eNotify', t => {
+test("eNotify", (t) => {
     // mocks
     const mockAdapter = mock<EAdapter>();
     const mockNotification = mock<ENotification>();

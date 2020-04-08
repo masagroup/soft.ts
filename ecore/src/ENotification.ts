@@ -10,7 +10,7 @@
 import { ENotifier } from "./ENotifier";
 import { EStructuralFeature } from "./EStructuralFeature";
 
-export enum EventType {    
+export enum EventType {
     // CREATE An event type indicating that the notifier has been created.
     CREATE = 1,
     // SET An event type indicating that a feature of the notifier has been set.
@@ -36,34 +36,33 @@ export enum EventType {
 }
 
 export interface ENotification {
-
     // the type of change that has occurred.
-	readonly eventType : EventType;
+    readonly eventType: EventType;
 
-	// the object affected by the change.
-	readonly notifier : ENotifier;
+    // the object affected by the change.
+    readonly notifier: ENotifier;
 
     // the object representing the feature of the notifier that has changed.
-    readonly feature : EStructuralFeature;
-    
+    readonly feature: EStructuralFeature;
+
     // the numeric ID of the feature relative to the given class, or NO_FEATURE_ID when not applicable.
-	readonly featureID : number;
+    readonly featureID: number;
 
-	// the value of the notifier's feature before the change occurred.
-	// For a list-based feature, this represents a value, or a list of values, removed from the list.
-	// For a move, this represents the old position of the moved value.
-    readonly oldValue : any;
+    // the value of the notifier's feature before the change occurred.
+    // For a list-based feature, this represents a value, or a list of values, removed from the list.
+    // For a move, this represents the old position of the moved value.
+    readonly oldValue: any;
 
-	// the value of the notifier's feature after the change occurred.
-	// For a list-based feature, this represents a value, or a list of values, added to the list,
-	// an array of int containing the original index of each value in the list of values removed from the list (except for the case of a clear),
-	// the value moved within the list, or nill otherwise.
-	readonly newValue : any;
+    // the value of the notifier's feature after the change occurred.
+    // For a list-based feature, this represents a value, or a list of values, added to the list,
+    // an array of int containing the original index of each value in the list of values removed from the list (except for the case of a clear),
+    // the value moved within the list, or nill otherwise.
+    readonly newValue: any;
 
-	// GetPosition Returns the position within a list-based feature at which the change occurred.
-	// It returns NO_INDEX when not applicable.
-	readonly position : number;
+    // GetPosition Returns the position within a list-based feature at which the change occurred.
+    // It returns NO_INDEX when not applicable.
+    readonly position: number;
 
-	// Merge Returns whether the notification can be and has been merged with this one.
-	merge(notification : ENotification) : boolean;
+    // Merge Returns whether the notification can be and has been merged with this one.
+    merge(notification: ENotification): boolean;
 }

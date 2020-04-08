@@ -13,10 +13,9 @@ import { ENotification } from "./ENotification";
 // As notifications are produced,they are accumulated in a chain,
 // and possibly even merged, before finally being dispatched to the notifier.
 export interface ENotificationChain {
+    // Adds a notification to the chain.
+    add(notification: ENotification): boolean;
 
-	// Add Adds a notification to the chain.
-	add(notification : ENotification) : boolean;
-
-	// Dispatch Dispatches each notification to the appropriate notifier via notifier.ENotify method
-	dispatch(): void;
+    // Dispatches each notification to the appropriate notifier via notifier.ENotify method
+    dispatch(): void;
 }

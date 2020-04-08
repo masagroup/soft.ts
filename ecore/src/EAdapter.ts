@@ -10,12 +10,11 @@
 import { ENotifier } from "./ENotifier";
 import { ENotification } from "./ENotification";
 
-export interface EAdapter
-{
+export interface EAdapter {
     // the target from which the adapter receives notification.
     // In general, an adapter may be shared by more than one notifier.
-    target : ENotifier;
+    target: ENotifier;
 
     // NotifyChanged Notifies that a change to some feature has occurred.
-	notifyChanged(notification : ENotification) : void;
+    notifyChanged(notification: ENotification): void;
 }

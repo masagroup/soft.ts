@@ -1,5 +1,12 @@
-import {List} from "./List";
+// *****************************************************************************
+//
+// This file is part of a MASA library or program.
+// Refer to the included end-user license agreement for restrictions.
+//
+// Copyright (c) 2020 MASA Group
+//
+// *****************************************************************************
 
-export interface EList<E> extends List<E> 
-{ 
-}
+import { List } from "./List";
+
+export interface EList<E> extends List<E> {}

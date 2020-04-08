@@ -16,17 +16,17 @@ import { ArrayEList } from "./ArrayEList";
 export class AbstractNotifier implements ENotifier {
     private _eAdapters: EList<EAdapter>;
     eDeliver: boolean;
-    
+
     constructor() {
-        this._eAdapters = new AdapterList(this)
+        this._eAdapters = new AdapterList(this);
         this.eDeliver = true;
     }
 
     get eAdapters(): EList<EAdapter> {
         return this._eAdapters;
     }
-    
-    get eNotificationRequired() : boolean {
+
+    get eNotificationRequired(): boolean {
         return this.eDeliver && !this._eAdapters.isEmpty();
     }
 
@@ -35,21 +35,20 @@ export class AbstractNotifier implements ENotifier {
             adapter.notifyChanged(notification);
         }
     }
-
 }
 
 class AdapterList extends ArrayEList<EAdapter> {
-    private _notifier : AbstractNotifier;
+    private _notifier: AbstractNotifier;
 
-    constructor( notifier : AbstractNotifier) {
+    constructor(notifier: AbstractNotifier) {
         super();
-        this._notifier = notifier
+        this._notifier = notifier;
     }
 
-    protected didAdd(index:number,e:EAdapter):void {
+    protected didAdd(index: number, e: EAdapter): void {
         e.target = this._notifier;
     }
-    protected didRemove(index:number,e:EAdapter):void {
+    protected didRemove(index: number, e: EAdapter): void {
         e.target = null;
     }
 }

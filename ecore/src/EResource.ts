@@ -7,6 +7,4 @@
 //
 // *****************************************************************************
 
-export interface EResource
-{
-}
+export interface EResource {}

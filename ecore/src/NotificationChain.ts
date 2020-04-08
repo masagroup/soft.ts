@@ -13,30 +13,26 @@ import { EList } from "./EList";
 import { ArrayEList } from "./ArrayEList";
 
 export class NotificationChain implements ENotificationChain {
-
-    private _notifications : EList<ENotification>;
+    private _notifications: EList<ENotification>;
 
     constructor() {
         this._notifications = new ArrayEList<ENotification>();
     }
 
     add(notification: ENotification): boolean {
-        if (notification == null)
-            return false;
-        
+        if (notification == null) return false;
+
         for (const n of this._notifications) {
-            if (n.merge(notification))
-                return false;
+            if (n.merge(notification)) return false;
         }
-        
+
         this._notifications.add(notification);
-        return true
+        return true;
     }
-    dispatch() : void {
+    dispatch(): void {
         for (const notification of this._notifications) {
             if (notification.notifier != null && notification.eventType != -1)
                 notification.notifier.eNotify(notification);
         }
     }
-    
 }

@@ -20,44 +20,71 @@ import { ENotificationChain } from "./ENOtificationChain";
 
 const EOPPOSITE_FEATURE_BASE: number = -1;
 
-export function isReference( s : EStructuralFeature ) :boolean {
-    return s.hasOwnProperty('eReferenceType');
+export function isReference(s: EStructuralFeature): boolean {
+    return s.hasOwnProperty("eReferenceType");
 }
 
-
 export interface EObjectInternal extends EObject {
-    eStaticClass() : EClass;
+    eStaticClass(): EClass;
 
-	eDirectResource() : EResource
-	eSetResource(resource : EResource, notifications: ENotificationChain) : ENotificationChain;
-	eInverseAdd(otherEnd : EObject, featureID : number, notifications : ENotificationChain) : ENotificationChain;
-	eInverseRemove(otherEnd  :EObject, featureID : number, notifications : ENotificationChain) : ENotificationChain;
+    eDirectResource(): EResource;
 
-	eDerivedFeatureID(container :EObject, featureID : number) : number;
-	eDerivedOperationID(container :EObject, operationID : number) : number;
-	eGetFromID(featureID : number, resolve : boolean, core : boolean) : any;
-	eSetFromID(featureID : number, newValue : any) : void;
-	eUnsetFromID(featureID : number) : void;
-	eIsSetFromID(featureID : number) : boolean;
-	eInvokeFromID(operationID : number, args : EList<any>) : any;
+    eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain;
 
-	eBasicInverseAdd(otherEnd :EObject, featureID : number, notifications : ENotificationChain) : ENotificationChain;
-	eBasicInverseRemove(otherEnd :EObject, featureID : number, notifications : ENotificationChain) : ENotificationChain;
+    eInverseAdd(
+        otherEnd: EObject,
+        featureID: number,
+        notifications: ENotificationChain
+    ): ENotificationChain;
 
-	eObjectForFragmentSegment(fragment : string) : EObject;
-	eURIFragmentSegment(feature : EStructuralFeature, o : EObject) : string;
+    eInverseRemove(
+        otherEnd: EObject,
+        featureID: number,
+        notifications: ENotificationChain
+    ): ENotificationChain;
 
-	eProxyURI() : URL
-	eSetProxyURI(uri : URL): void
-	eResolveProxy(proxy : EObject) : EObject
+    eDerivedFeatureID(container: EObject, featureID: number): number;
+
+    eDerivedOperationID(container: EObject, operationID: number): number;
+
+    eGetFromID(featureID: number, resolve: boolean, core: boolean): any;
+
+    eSetFromID(featureID: number, newValue: any): void;
+
+    eUnsetFromID(featureID: number): void;
+
+    eIsSetFromID(featureID: number): boolean;
+
+    eInvokeFromID(operationID: number, args: EList<any>): any;
+
+    eBasicInverseAdd(
+        otherEnd: EObject,
+        featureID: number,
+        notifications: ENotificationChain
+    ): ENotificationChain;
+
+    eBasicInverseRemove(
+        otherEnd: EObject,
+        featureID: number,
+        notifications: ENotificationChain
+    ): ENotificationChain;
+
+    eObjectForFragmentSegment(fragment: string): EObject;
+
+    eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string;
+
+    eProxyURI(): URL;
+
+    eSetProxyURI(uri: URL): void;
+
+    eResolveProxy(proxy: EObject): EObject;
 }
 
 export class AbstractEObject extends AbstractNotifier implements EObjectInternal {
-    
-    private _eResource : EResource;
-    private _eContainer : EObject;
-    private _eContainerFeatureID : number;
-    private _eProxyURI? : URL;
+    private _eResource: EResource;
+    private _eContainer: EObject;
+    private _eContainerFeatureID: number;
+    private _eProxyURI?: URL;
 
     constructor() {
         super();
@@ -65,69 +92,79 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
         this._eContainer = null;
         this._eContainerFeatureID = -1;
     }
-    
-    eClass() : EClass {
+
+    eClass(): EClass {
         return this.eStaticClass();
     }
-    
-    eStaticClass() : EClass {
+
+    eStaticClass(): EClass {
         return null;
     }
 
-    eContainer() : EObject {
+    eContainer(): EObject {
         return this._eContainer;
     }
 
-    eContainerFeatureID() : number {
+    eContainerFeatureID(): number {
         return this._eContainerFeatureID;
     }
 
-    eResource() : EResource {
-        if ( this._eResource == null ) {
-            if (this._eContainer != null )
-                this._eResource = this._eContainer.eResource();
+    eResource(): EResource {
+        if (this._eResource == null) {
+            if (this._eContainer != null) this._eResource = this._eContainer.eResource();
         }
         return this._eResource;
     }
 
-    eDirectResource() : EResource {
+    eDirectResource(): EResource {
         return this._eResource;
     }
 
-    eSetDirectResource( eResource : EResource ) : void {
+    eSetDirectResource(eResource: EResource): void {
         this._eResource = eResource;
     }
-    
-    eContainingFeature() : EStructuralFeature {
-        if (this._eContainer != null ) {
-            if ( this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE ) {
-                var feature = <EStructuralFeature>this._eContainer.eClass().getEStructuralFeature(EOPPOSITE_FEATURE_BASE-this._eContainerFeatureID);
+
+    eContainingFeature(): EStructuralFeature {
+        if (this._eContainer != null) {
+            if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
+                var feature = <EStructuralFeature>(
+                    this._eContainer
+                        .eClass()
+                        .getEStructuralFeature(EOPPOSITE_FEATURE_BASE - this._eContainerFeatureID)
+                );
                 return feature;
-            }
-            else {
-                var reference = <EReference>this.eClass().getEStructuralFeature(this._eContainerFeatureID);
+            } else {
+                var reference = <EReference>(
+                    this.eClass().getEStructuralFeature(this._eContainerFeatureID)
+                );
                 return reference.eOpposite;
             }
         }
         return null;
     }
-    
-    eContainmentFeature() : EReference {
-        return this.eObjectContainmentFeature(this,this._eContainer,this._eContainerFeatureID);
+
+    eContainmentFeature(): EReference {
+        return this.eObjectContainmentFeature(this, this._eContainer, this._eContainerFeatureID);
     }
 
-    private eObjectContainmentFeature( o : EObject, container: EObject, containerFeatureID : number ) : EReference {
+    private eObjectContainmentFeature(
+        o: EObject,
+        container: EObject,
+        containerFeatureID: number
+    ): EReference {
         if (this._eContainer != null) {
-            if ( this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
-                var feature : EStructuralFeature = this._eContainer.eClass().getEStructuralFeature(EOPPOSITE_FEATURE_BASE- containerFeatureID);
-                if ( isReference(feature) ) {
+            if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
+                var feature: EStructuralFeature = this._eContainer
+                    .eClass()
+                    .getEStructuralFeature(EOPPOSITE_FEATURE_BASE - containerFeatureID);
+                if (isReference(feature)) {
                     return <EReference>feature;
                 }
-            }
-            else
-            {
-                var feature : EStructuralFeature = this.eClass().getEStructuralFeature(containerFeatureID);
-                if ( isReference(feature) ) {
+            } else {
+                var feature: EStructuralFeature = this.eClass().getEStructuralFeature(
+                    containerFeatureID
+                );
+                if (isReference(feature)) {
                     return <EReference>feature;
                 }
             }
@@ -135,114 +172,102 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
         }
         return null;
     }
-    
-    eContents() : EList<EObject> {
-        return null;
-    }
-    
-    eAllContents() : ECollectionView<EObject> {
-        return null;
-    }
-    
-    eCrossReferencesList() : EList<EObject> {
+
+    eContents(): EList<EObject> {
         return null;
     }
 
-    eFeatureID(feature : EStructuralFeature) : number {
-        if ( !this.eClass().eAllStructuralFeatures.contains(feature))
-            throw new Error("The feature '" + feature.name + "' is not a valid feature")
-        return this.eDerivedFeatureID( feature.eContainer(), feature.featureID);
+    eAllContents(): ECollectionView<EObject> {
+        return null;
     }
 
-    eDerivedFeatureID(container : EObject, featureID : number ) : number {
+    eCrossReferencesList(): EList<EObject> {
+        return null;
+    }
+
+    eFeatureID(feature: EStructuralFeature): number {
+        if (!this.eClass().eAllStructuralFeatures.contains(feature))
+            throw new Error("The feature '" + feature.name + "' is not a valid feature");
+        return this.eDerivedFeatureID(feature.eContainer(), feature.featureID);
+    }
+
+    eDerivedFeatureID(container: EObject, featureID: number): number {
         return featureID;
     }
-    
-    eOperationID(operation : EOperation) : number {
-        if ( !this.eClass().eAllOperations.contains(operation))
-            throw new Error("The operation '" + operation.name + "' is not a valid feature")
-        return this.eDerivedFeatureID( operation.eContainer(), operation.operationID);
+
+    eOperationID(operation: EOperation): number {
+        if (!this.eClass().eAllOperations.contains(operation))
+            throw new Error("The operation '" + operation.name + "' is not a valid feature");
+        return this.eDerivedFeatureID(operation.eContainer(), operation.operationID);
     }
 
-    eDerivedOperationID(container : EObject, operationID : number ) : number {
+    eDerivedOperationID(container: EObject, operationID: number): number {
         return operationID;
     }
-    
-    eGet(feature : EStructuralFeature) : any {
-        return this.eGetFromFeature(feature,true,true);
+
+    eGet(feature: EStructuralFeature): any {
+        return this.eGetFromFeature(feature, true, true);
     }
-    
-    eGetResolve(feature: EStructuralFeature, resolve: boolean) : any {
-        return this.eGetFromFeature(feature,resolve,true);
+
+    eGetResolve(feature: EStructuralFeature, resolve: boolean): any {
+        return this.eGetFromFeature(feature, resolve, true);
     }
-    
-    private eGetFromFeature(feature: EStructuralFeature, resolve: boolean, core:boolean) : any {
+
+    private eGetFromFeature(feature: EStructuralFeature, resolve: boolean, core: boolean): any {
         var featureID = this.eFeatureID(feature);
-        if (featureID >= 0)
-            return this.eGetFromID(featureID,resolve,core);
+        if (featureID >= 0) return this.eGetFromID(featureID, resolve, core);
         throw new Error("The feature '" + feature.name + "' is not a valid feature");
-	}
-
-    eGetFromID(featureID: number, resolve: boolean, core: boolean) : any {
-        var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null)
-            throw new Error("Invalid featureID: " + featureID);
-	    return null
     }
 
-    eSet(feature : EStructuralFeature, newValue : any) : void {
-        var featureID = this.eFeatureID(feature)
-        if (featureID >= 0)
-            this.eSetFromID(featureID,newValue);
-        else
-            throw new Error("The feature '" + feature.name + "' is not a valid feature");
+    eGetFromID(featureID: number, resolve: boolean, core: boolean): any {
+        var feature = this.eClass().getEStructuralFeature(featureID);
+        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+        return null;
+    }
+
+    eSet(feature: EStructuralFeature, newValue: any): void {
+        var featureID = this.eFeatureID(feature);
+        if (featureID >= 0) this.eSetFromID(featureID, newValue);
+        else throw new Error("The feature '" + feature.name + "' is not a valid feature");
     }
 
     eSetFromID(featureID: number, newValue: any): void {
         var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null)
-            throw new Error("Invalid featureID: " + featureID);
-	}
-    
-    eIsSet(feature : EStructuralFeature) : boolean {
+        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+    }
+
+    eIsSet(feature: EStructuralFeature): boolean {
         var featureID = this.eFeatureID(feature);
-        if (featureID >= 0)
-            return this.eIsSetFromID(featureID);
+        if (featureID >= 0) return this.eIsSetFromID(featureID);
         throw new Error("The feature '" + feature.name + "' is not a valid feature");
     }
-    
+
     eIsSetFromID(featureID: number): boolean {
         var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null)
-            throw new Error("Invalid featureID: " + featureID);
-	    return false
+        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+        return false;
     }
 
-    eUnset(feature : EStructuralFeature) : void {
-        var featureID = this.eFeatureID(feature)
-        if (featureID >= 0)
-            this.eUnsetFromID(featureID);
-        else
-            throw new Error("The feature '" + feature.name + "' is not a valid feature");
+    eUnset(feature: EStructuralFeature): void {
+        var featureID = this.eFeatureID(feature);
+        if (featureID >= 0) this.eUnsetFromID(featureID);
+        else throw new Error("The feature '" + feature.name + "' is not a valid feature");
     }
-    
+
     eUnsetFromID(featureID: number): void {
         var feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null)
-            throw new Error("Invalid featureID: " + featureID);
-	}
+        if (feature == null) throw new Error("Invalid featureID: " + featureID);
+    }
 
-    eInvoke(operation : EOperation, args : EList<any>) : any {
+    eInvoke(operation: EOperation, args: EList<any>): any {
         var operationID = this.eOperationID(operation);
-        if (operationID >= 0)
-            return this.eInvokeFromID(operationID,args);
+        if (operationID >= 0) return this.eInvokeFromID(operationID, args);
         throw new Error("The operation '" + operation.name + "' is not a valid operation");
     }
 
-    eInvokeFromID(operationID: number, args: EList<any>) : any{
+    eInvokeFromID(operationID: number, args: EList<any>): any {
         var operation = this.eClass().getEOperation(operationID);
-        if (operation == null)
-            throw new Error("Invalid operationID: " + operationID);
+        if (operation == null) throw new Error("Invalid operationID: " + operationID);
     }
 
     eSetResource(newResource: EResource, notifications: ENotificationChain): ENotificationChain {
@@ -252,57 +277,74 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
 
     eInverseAdd(otherEnd: EObject, featureID: number, n: ENotificationChain): ENotificationChain {
         var notifications = n;
-        if ( featureID >= 0 )
-            this.eBasicInverseAdd(otherEnd,featureID,notifications);
+        if (featureID >= 0) this.eBasicInverseAdd(otherEnd, featureID, notifications);
         else {
             notifications = this.eBasicRemoveFromContainer(notifications);
             return this.eBasicSetContainer(otherEnd, featureID, notifications);
         }
     }
-    
-    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
+
+    eBasicInverseAdd(
+        otherEnd: EObject,
+        featureID: number,
+        notifications: ENotificationChain
+    ): ENotificationChain {
         return notifications;
     }
 
-    eInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
-        if (featureID >= 0)
-            return this.eBasicInverseRemove(otherEnd, featureID, notifications);
-        else
-            return this.eBasicSetContainer(null, featureID, notifications);
+    eInverseRemove(
+        otherEnd: EObject,
+        featureID: number,
+        notifications: ENotificationChain
+    ): ENotificationChain {
+        if (featureID >= 0) return this.eBasicInverseRemove(otherEnd, featureID, notifications);
+        else return this.eBasicSetContainer(null, featureID, notifications);
     }
 
-    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
+    eBasicInverseRemove(
+        otherEnd: EObject,
+        featureID: number,
+        notifications: ENotificationChain
+    ): ENotificationChain {
         return notifications;
     }
 
-    protected eBasicSetContainer(newContainer : EObject, newContainerFeatureID : number , n : ENotificationChain) : ENotificationChain {
+    protected eBasicSetContainer(
+        newContainer: EObject,
+        newContainerFeatureID: number,
+        n: ENotificationChain
+    ): ENotificationChain {
         var notifications = n;
         // basic set
-	    this._eContainer = newContainer;
-	    this._eContainerFeatureID = newContainerFeatureID;
-        return notifications
+        this._eContainer = newContainer;
+        this._eContainerFeatureID = newContainerFeatureID;
+        return notifications;
     }
 
-    eBasicRemoveFromContainer(notifications : ENotificationChain) : ENotificationChain {
-	    if ( this._eContainerFeatureID >= 0 )
-		    return this.eBasicRemoveFromContainerFeature(notifications);
-	    else {
-		    if (this._eContainer != null) 
-			    return this.eInverseRemove(this, EOPPOSITE_FEATURE_BASE-this._eContainerFeatureID, notifications);
-		}
-	    return notifications
+    eBasicRemoveFromContainer(notifications: ENotificationChain): ENotificationChain {
+        if (this._eContainerFeatureID >= 0)
+            return this.eBasicRemoveFromContainerFeature(notifications);
+        else {
+            if (this._eContainer != null)
+                return this.eInverseRemove(
+                    this,
+                    EOPPOSITE_FEATURE_BASE - this._eContainerFeatureID,
+                    notifications
+                );
+        }
+        return notifications;
     }
 
-    eBasicRemoveFromContainerFeature(notifications : ENotificationChain) : ENotificationChain {
+    eBasicRemoveFromContainerFeature(notifications: ENotificationChain): ENotificationChain {
         var feature = this.eClass().getEStructuralFeature(this._eContainerFeatureID);
         if (isReference(feature)) {
             var inverseFeature = (feature as EReference).eOpposite;
-            if (this._eContainer != null && inverseFeature != null )
-                return this.eInverseRemove(this,inverseFeature.featureID,notifications);
+            if (this._eContainer != null && inverseFeature != null)
+                return this.eInverseRemove(this, inverseFeature.featureID, notifications);
         }
-	    return notifications;
+        return notifications;
     }
-    
+
     eObjectForFragmentSegment(fragment: string): EObject {
         throw new Error("Method not implemented.");
     }
@@ -311,7 +353,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
         throw new Error("Method not implemented.");
     }
 
-    eIsProxy() : boolean {
+    eIsProxy(): boolean {
         return this._eProxyURI == undefined;
     }
 
@@ -326,5 +368,4 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     eResolveProxy(proxy: EObject): EObject {
         throw new Error("Method not implemented.");
     }
-
 }
