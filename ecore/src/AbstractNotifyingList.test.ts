@@ -14,8 +14,7 @@ import { EStructuralFeature } from "./EStructuralFeature";
 import { EAdapter } from "./EAdapter";
 import { instance, mock, when, verify, anything, strictEqual, objectContaining } from "ts-mockito";
 import { ImmutableEList } from "./ImmutableEList";
-import { ENotification, EventType } from "./ENotification";
-import { Notification } from "./Notification";
+import { EventType } from "./ENotification";
 import { ENotificationChain } from "./ENOtificationChain";
 
 class NotifyingListTest<E> extends AbstractNotifyingList<E> {

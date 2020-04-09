@@ -20,7 +20,7 @@ import { ENotificationChain } from "./ENOtificationChain";
 import { Notification } from "./Notification";
 import { EventType } from "./ENotification";
 
-const EOPPOSITE_FEATURE_BASE: number = -1;
+export const EOPPOSITE_FEATURE_BASE: number = -1;
 
 export function isReference(s: EStructuralFeature): boolean {
     return s.hasOwnProperty("eReferenceType");
