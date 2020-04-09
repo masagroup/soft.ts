@@ -33,6 +33,10 @@ export class NotifyingList<E> extends ArrayEList<E> implements ENotifyingList<E>
         return -1;
     }
 
+    get isNotificationRequired() : boolean {
+        return this.notifier != null && this.notifier.eDeliver && !this.notifier.eAdapters.isEmpty();
+    }
+
     AddWithNotification(object: any, notifications: ENotificationChain): ENotificationChain {
         throw new Error("Method not implemented.");
     }
@@ -63,6 +67,43 @@ export class NotifyingList<E> extends ArrayEList<E> implements ENotifyingList<E>
                 return this.list.notifier;
             }
         }(this);
-    }    
+    }
+    
+    private createAndAddNotification(nc : ENotificationChain, eventType : EventType, oldValue : any, newValue : any, position : number = -1) : ENotificationChain {
+        var notifications = nc;
+        if ( this.isNotificationRequired)  {
+            var notification = this.createNotification(eventType, oldValue, newValue, position);
+            if ( notifications != null) {
+                notifications.add(notification);
+            } else {
+                notifications = <ENotificationChain>notification;
+            }
+        }
+        return notifications
+    }
+
+    private createAndDispatchNotification(notifications : ENotificationChain, eventType : EventType, oldValue : any , newValue : any, position : number = -1 ) : void {
+        this.createAndDispatchNotificationFn(notifications, () => {
+            return this.createNotification(eventType, oldValue, newValue, position);
+        })
+    }
+
+    private createAndDispatchNotificationFn(notifications : ENotificationChain, createNotification : () => ENotification) {
+        if (this.isNotificationRequired) {
+            var notification = createNotification();
+            if (notifications != null) {
+                notifications.add(notification);
+                notifications.dispatch();
+            }
+            var notifier = this.notifier;
+            if (notifier != null) {
+                notifier.eNotify(notification);
+            }
+        } else {
+            if ( notifications != null ) {
+                notifications.dispatch();
+            }
+        }
+    } 
 }
 
