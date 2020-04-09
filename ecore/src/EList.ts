@@ -9,4 +9,9 @@
 
 import { List } from "./List";
 
-export interface EList<E> extends List<E> {}
+export interface EList<E> extends List<E> {
+
+    move(to : number , e : E) : void;
+
+	moveTo(to : number , from : number ) : E;
+}

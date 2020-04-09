@@ -10,20 +10,20 @@
 import { ENotifyingList } from "./ENotifyingList";
 import { ENotifier } from "./ENotifier";
 import { EStructuralFeature } from "./EStructuralFeature";
-import { ArrayEList } from "./ArrayEList";
 import { AbstractNotification } from "./AbstractNotification";
 import { EventType, ENotification } from "./ENotification";
 import { ENotificationChain } from "./ENotificationChain";
-import { Collection } from ".";
+import { Collection } from "./Collection";
 import { NotificationChain } from "./NotificationChain";
+import { BasicEList } from "./BasicEList";
 
-export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements ENotifyingList<E> {
+export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements ENotifyingList<E> {
     abstract readonly notifier: ENotifier;
     abstract readonly feature: EStructuralFeature;
     abstract readonly featureID: number;
 
-    constructor(v: E[] = []) {
-        super(v, true);
+    constructor(iterable: Iterable<E> | ArrayLike<E> = []) {
+        super(iterable, true);
     }
 
     get isNotificationRequired(): boolean {

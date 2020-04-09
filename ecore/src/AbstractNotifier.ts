@@ -11,7 +11,7 @@ import { ENotifier } from "./ENotifier";
 import { EList } from "./EList";
 import { EAdapter } from "./EAdapter";
 import { ENotification } from "./ENotification";
-import { ArrayEList } from "./ArrayEList";
+import { BasicEList } from "./BasicEList";
 
 export class AbstractNotifier implements ENotifier {
     private _eAdapters: EList<EAdapter>;
@@ -37,7 +37,7 @@ export class AbstractNotifier implements ENotifier {
     }
 }
 
-class AdapterList extends ArrayEList<EAdapter> {
+class AdapterList extends BasicEList<EAdapter> {
     private _notifier: AbstractNotifier;
 
     constructor(notifier: AbstractNotifier) {

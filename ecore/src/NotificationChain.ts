@@ -9,14 +9,12 @@
 
 import { ENotificationChain } from "./ENotificationChain";
 import { ENotification } from "./ENotification";
-import { EList } from "./EList";
-import { ArrayEList } from "./ArrayEList";
 
 export class NotificationChain implements ENotificationChain {
-    private _notifications: EList<ENotification>;
+    private _notifications: ENotification[];
 
     constructor() {
-        this._notifications = new ArrayEList<ENotification>();
+        this._notifications = [];
     }
 
     add(notification: ENotification): boolean {
@@ -26,7 +24,7 @@ export class NotificationChain implements ENotificationChain {
             if (n.merge(notification)) return false;
         }
 
-        this._notifications.add(notification);
+        this._notifications.push(notification);
         return true;
     }
     dispatch(): void {

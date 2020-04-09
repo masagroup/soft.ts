@@ -16,6 +16,7 @@ export class ImmutableEList<E> implements EList<E> {
     constructor(v: E[] = []) {
         this._v = v;
     }
+    
 
     get(index: number): E {
         return this._v[index];
@@ -82,6 +83,13 @@ export class ImmutableEList<E> implements EList<E> {
     }
 
     retainAll(c: Collection<E>): boolean {
+        throw new Error("Immutable list can't be modified");
+    }
+
+    move(to: number, e: E): void {
+        throw new Error("Immutable list can't be modified");
+    }
+    moveTo(to: number, from: number): E {
         throw new Error("Immutable list can't be modified");
     }
 }
