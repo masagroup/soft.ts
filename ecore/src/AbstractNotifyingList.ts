@@ -90,7 +90,7 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
     }
 
     protected doInsertAll(index: number, c: Collection<E>): boolean {
-        if (this.isEmpty()) {
+        if (c.isEmpty()) {
             return false;
         }
 
@@ -196,10 +196,11 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
             if (notifications != null) {
                 notifications.add(notification);
                 notifications.dispatch();
-            }
-            let notifier = this.notifier;
-            if (notifier != null) {
-                notifier.eNotify(notification);
+            } else {
+                let notifier = this.notifier;
+                if (notifier != null) {
+                    notifier.eNotify(notification);
+                }
             }
         } else {
             if (notifications != null) {
