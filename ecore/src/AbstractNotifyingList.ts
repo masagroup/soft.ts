@@ -22,7 +22,7 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
     abstract readonly feature: EStructuralFeature;
     abstract readonly featureID: number;
 
-    constructor(v: [] = []) {
+    constructor(v: E[] = []) {
         super(v, true);
     }
 
