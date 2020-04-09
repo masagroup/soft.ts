@@ -20,7 +20,7 @@ test("constructor", (t) => {
     const o = instance(mockObject);
     const f = instance(mockFeature);
     {
-        var n = new Notification(o, EventType.ADD, 0, 1, 2);
+        let n = new Notification(o, EventType.ADD, 0, 1, 2);
         t.is(n.notifier, o);
         t.is(n.eventType, EventType.ADD);
         t.is(n.featureID, 0);
@@ -29,7 +29,7 @@ test("constructor", (t) => {
         t.is(n.position, -1);
     }
     {
-        var n = new Notification(o, EventType.ADD, f, 1, 2, 3);
+        let n = new Notification(o, EventType.ADD, f, 1, 2, 3);
         t.is(n.notifier, o);
         t.is(n.eventType, EventType.ADD);
         t.is(n.feature, f);
@@ -44,7 +44,7 @@ test("dispatch", (t) => {
     const mockFeature = mock<EStructuralFeature>();
     const o = instance(mockObject);
     const f = instance(mockFeature);
-    var n = new Notification(o, EventType.ADD, f, 1, 2, 3);
+    let n = new Notification(o, EventType.ADD, f, 1, 2, 3);
     n.dispatch();
     t.notThrows(() => verify(mockObject.eNotify(n)).once());
 });
@@ -53,8 +53,8 @@ test("mergeSet", (t) => {
     const mockObject = mock<EObject>();
     const o = instance(mockObject);
 
-    var n1 = new Notification(o, EventType.SET, 1, 1, 2);
-    var n2 = new Notification(o, EventType.SET, 1, 2, 3);
+    let n1 = new Notification(o, EventType.SET, 1, 1, 2);
+    let n2 = new Notification(o, EventType.SET, 1, 2, 3);
     t.true(n1.merge(n2));
     t.is(n1.eventType, EventType.SET);
     t.is(n1.oldValue, 1);
@@ -65,16 +65,16 @@ test("mergeUnSet", (t) => {
     const mockObject = mock<EObject>();
     const o = instance(mockObject);
     {
-        var n1 = new Notification(o, EventType.SET, 1, 1, 2);
-        var n2 = new Notification(o, EventType.UNSET, 1, 2, 0);
+        let n1 = new Notification(o, EventType.SET, 1, 1, 2);
+        let n2 = new Notification(o, EventType.UNSET, 1, 2, 0);
         t.true(n1.merge(n2));
         t.is(n1.eventType, EventType.SET);
         t.is(n1.oldValue, 1);
         t.is(n1.newValue, 0);
     }
     {
-        var n1 = new Notification(o, EventType.UNSET, 1, 1, 0);
-        var n2 = new Notification(o, EventType.SET, 1, 0, 2);
+        let n1 = new Notification(o, EventType.UNSET, 1, 1, 0);
+        let n2 = new Notification(o, EventType.SET, 1, 0, 2);
         t.true(n1.merge(n2));
         t.is(n1.eventType, EventType.SET);
         t.is(n1.oldValue, 1);
@@ -92,16 +92,16 @@ test("mergeRemoveMany", (t) => {
     const o2 = instance(mockObject1);
     const o3 = instance(mockObject1);
     {
-        var n1 = new Notification(o, EventType.REMOVE, 1, o1, null, 2);
-        var n2 = new Notification(o, EventType.REMOVE, 1, o2, null, 2);
+        let n1 = new Notification(o, EventType.REMOVE, 1, o1, null, 2);
+        let n2 = new Notification(o, EventType.REMOVE, 1, o2, null, 2);
         t.true(n1.merge(n2));
         t.is(n1.eventType, EventType.REMOVE_MANY);
         t.deepEqual(n1.oldValue, [o1, o2]);
         t.deepEqual(n1.newValue, [2, 3]);
     }
     {
-        var n1 = new Notification(o, EventType.REMOVE_MANY, 1, [o1, o2], [2, 3]);
-        var n2 = new Notification(o, EventType.REMOVE, 1, o3, null, 2);
+        let n1 = new Notification(o, EventType.REMOVE_MANY, 1, [o1, o2], [2, 3]);
+        let n2 = new Notification(o, EventType.REMOVE, 1, o3, null, 2);
         t.true(n1.merge(n2));
         t.is(n1.eventType, EventType.REMOVE_MANY);
         t.deepEqual(n1.oldValue, [o1, o2, o3]);
@@ -113,13 +113,13 @@ test("add", (t) => {
     const mockObject = mock<EObject>();
     const o = instance(mockObject);
     {
-        var n = new Notification(o, EventType.SET, 1, 1, 2);
+        let n = new Notification(o, EventType.SET, 1, 1, 2);
         t.false(n.add(null));
     }
     {
         // create 2 identical set notifications
-        var n1 = new Notification(o, EventType.SET, 1, 1, 2);
-        var n2 = new Notification(o, EventType.SET, 1, 1, 2);
+        let n1 = new Notification(o, EventType.SET, 1, 1, 2);
+        let n2 = new Notification(o, EventType.SET, 1, 1, 2);
 
         // no add because there is a merge
         t.false(n1.add(n2));
@@ -130,8 +130,8 @@ test("add", (t) => {
         const mockObject2 = mock<EObject>();
         const o1 = instance(mockObject1);
         const o2 = instance(mockObject2);
-        var n1 = new Notification(o, EventType.ADD, 1, o1, null);
-        var n2 = new Notification(o, EventType.ADD, 1, o2, null);
+        let n1 = new Notification(o, EventType.ADD, 1, o1, null);
+        let n2 = new Notification(o, EventType.ADD, 1, o2, null);
 
         // check add
         t.true(n1.add(n2));

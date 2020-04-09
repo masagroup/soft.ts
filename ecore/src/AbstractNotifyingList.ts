@@ -33,15 +33,15 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
     }
 
     addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
-        var index = this.size();
+        let index = this.size();
         this.doAdd(e);
         return this.createAndAddNotification(notifications, EventType.ADD, null, e, index);
     }
 
     removeWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
-        var index = this.indexOf(e);
+        let index = this.indexOf(e);
         if (index != -1) {
-            var old = this.removeAt(index);
+            let old = this.removeAt(index);
             return this.createAndAddNotification(notifications, EventType.REMOVE, old, null, index);
         }
         return notifications;
@@ -52,13 +52,13 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
         e: E,
         notifications: ENotificationChain
     ): ENotificationChain {
-        var old = this.doSet(index, e);
+        let old = this.doSet(index, e);
         return this.createAndAddNotification(notifications, EventType.SET, old, e, index);
     }
 
     public removeAt(index: number): E {
-        var oldObject = super.removeAt(index);
-        var notifications: ENotificationChain = null;
+        let oldObject = super.removeAt(index);
+        let notifications: ENotificationChain = null;
         notifications = this.inverseRemove(oldObject, notifications);
         this.createAndDispatchNotification(notifications, EventType.REMOVE, oldObject, null, index);
         return oldObject;
@@ -73,9 +73,9 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
     }
 
     protected doAdd(e: E): void {
-        var index = this.size();
+        let index = this.size();
         super.doAdd(e);
-        var notifications = this.inverseAdd(e, null);
+        let notifications = this.inverseAdd(e, null);
         this.createAndDispatchNotification(notifications, EventType.ADD, null, e, index);
     }
 
@@ -85,7 +85,7 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
 
     protected doInsert(index: number, e: E) {
         super.doInsert(index, e);
-        var notifications = this.inverseAdd(e, null);
+        let notifications = this.inverseAdd(e, null);
         this.createAndDispatchNotification(notifications, EventType.ADD, null, e, index);
     }
 
@@ -94,8 +94,8 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
             return false;
         }
 
-        var result = super.doInsertAll(index, c);
-        var notifications: ENotificationChain = new NotificationChain();
+        let result = super.doInsertAll(index, c);
+        let notifications: ENotificationChain = new NotificationChain();
         for (const e of c) {
             notifications = this.inverseAdd(e, notifications);
         }
@@ -115,9 +115,9 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
     }
 
     protected doSet(index: number, newObject: E): E {
-        var oldObject = super.doSet(index, newObject);
+        let oldObject = super.doSet(index, newObject);
         if (newObject != oldObject) {
-            var notifications: ENotificationChain = null;
+            let notifications: ENotificationChain = null;
             notifications = this.inverseRemove(oldObject, notifications);
             notifications = this.inverseAdd(newObject, notifications);
             this.createAndDispatchNotification(
@@ -163,9 +163,9 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
         newValue: any,
         position: number = -1
     ): ENotificationChain {
-        var notifications = nc;
+        let notifications = nc;
         if (this.isNotificationRequired) {
-            var notification = this.createNotification(eventType, oldValue, newValue, position);
+            let notification = this.createNotification(eventType, oldValue, newValue, position);
             if (notifications != null) {
                 notifications.add(notification);
             } else {
@@ -192,12 +192,12 @@ export abstract class AbstractNotifyingList<E> extends ArrayEList<E> implements 
         createNotification: () => ENotification
     ) {
         if (this.isNotificationRequired) {
-            var notification = createNotification();
+            let notification = createNotification();
             if (notifications != null) {
                 notifications.add(notification);
                 notifications.dispatch();
             }
-            var notifier = this.notifier;
+            let notifier = this.notifier;
             if (notifier != null) {
                 notifier.eNotify(notification);
             }

@@ -13,16 +13,15 @@ import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENotificationChain";
 
 export interface ENotifyingList<E> extends EList<E> {
-    
-    readonly notifier : ENotifier;
+    readonly notifier: ENotifier;
 
-    readonly feature : EStructuralFeature;
-    
-    readonly featureID : number;
+    readonly feature: EStructuralFeature;
 
-	addWithNotification(e : E, notifications : ENotificationChain) : ENotificationChain;
+    readonly featureID: number;
 
-	removeWithNotification(e : E, notifications : ENotificationChain) : ENotificationChain;
+    addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain;
 
-	setWithNotification(index : number, e : E, notifications : ENotificationChain) : ENotificationChain;
+    removeWithNotification(e: E, notifications: ENotificationChain): ENotificationChain;
+
+    setWithNotification(index: number, e: E, notifications: ENotificationChain): ENotificationChain;
 }

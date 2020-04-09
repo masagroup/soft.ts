@@ -14,7 +14,7 @@ import { EAdapter } from "./EAdapter";
 import { ENotification } from "./ENotification";
 
 test("constructor", (t) => {
-    var n = new AbstractNotifier();
+    let n = new AbstractNotifier();
     t.true(n.eDeliver);
     t.true(n.eAdapters.isEmpty());
 });
@@ -24,7 +24,7 @@ test("target", (t) => {
     const mockAdapter = mock<EAdapter>();
     const adapter = instance(mockAdapter);
 
-    var n = new AbstractNotifier();
+    let n = new AbstractNotifier();
     n.eAdapters.add(adapter);
     t.is(adapter.target, n);
     n.eAdapters.remove(adapter);
@@ -39,7 +39,7 @@ test("eNotify", (t) => {
     const notification = instance(mockNotification);
 
     // call
-    var n = new AbstractNotifier();
+    let n = new AbstractNotifier();
     n.eAdapters.add(adapter);
     n.eNotify(notification);
 

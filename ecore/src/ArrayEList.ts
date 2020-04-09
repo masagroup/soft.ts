@@ -55,7 +55,7 @@ export class ArrayEList<E> implements EList<E> {
     }
 
     remove(e: E): boolean {
-        var index = this.indexOf(e);
+        let index = this.indexOf(e);
         if (index == -1) return false;
         this.removeAt(index);
         return true;
@@ -64,7 +64,7 @@ export class ArrayEList<E> implements EList<E> {
     removeAt(index: number): E {
         if (index < 0 || index >= this._v.length)
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length);
-        var e = this._v[index];
+        let e = this._v[index];
         this._v.splice(index, 1);
         this.didRemove(index, e);
         this.didChange();
@@ -72,7 +72,7 @@ export class ArrayEList<E> implements EList<E> {
     }
 
     removeAll(c: Collection<E>): boolean {
-        var modified = false;
+        let modified = false;
         for (let i = this.size(); --i >= 0; ) {
             if (c.contains(this._v[i])) {
                 this.removeAt(i);
@@ -83,7 +83,7 @@ export class ArrayEList<E> implements EList<E> {
     }
 
     retainAll(c: Collection<E>): boolean {
-        var modified = false;
+        let modified = false;
         for (let i = this.size(); --i >= 0; ) {
             if (!c.contains(this._v[i])) {
                 this.removeAt(i);
@@ -103,7 +103,7 @@ export class ArrayEList<E> implements EList<E> {
         if (index < 0 || index >= this._v.length)
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length);
         if (this._isUnique) {
-            var currIndex = this.indexOf(e);
+            let currIndex = this.indexOf(e);
             if (currIndex >= 0 && currIndex != index)
                 throw new Error("element already in list : uniqueness constraint is not respected");
         }
@@ -139,7 +139,7 @@ export class ArrayEList<E> implements EList<E> {
     }
 
     protected getNonDuplicates(c: Collection<E>): Collection<E> {
-        var l = new ArrayEList<E>();
+        let l = new ArrayEList<E>();
         for (const e of c) {
             if (!l.contains(e) && !this.contains(e)) l.add(e);
         }
@@ -147,14 +147,14 @@ export class ArrayEList<E> implements EList<E> {
     }
 
     protected doAdd(e: E): void {
-        var size = this._v.length;
+        let size = this._v.length;
         this._v.push(e);
         this.didAdd(size, e);
         this.didChange();
     }
 
     protected doAddAll(c: Collection<E>): boolean {
-        var oldSize = this._v.length;
+        let oldSize = this._v.length;
         this._v.push(...c.toArray());
         for (let i = oldSize; i < this._v.length; i++) {
             this.didAdd(i, this._v[i]);
@@ -179,7 +179,7 @@ export class ArrayEList<E> implements EList<E> {
     }
 
     protected doSet(index: number, e: E): E {
-        var o = this._v[index];
+        let o = this._v[index];
         this._v[index] = e;
         this.didSet(index, o, e);
         this.didChange();

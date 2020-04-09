@@ -14,13 +14,13 @@ import { ENotification, EventType } from "./ENotification";
 import { mock, instance, when, verify } from "ts-mockito";
 
 test("constructor", (t) => {
-    var c = new NotificationChain();
+    let c = new NotificationChain();
     t.not(c, null);
 });
 
 test("add", (t) => {
     // chain
-    var c = new NotificationChain();
+    let c = new NotificationChain();
 
     // mocks
     const mockNotifier = mock<ENotifier>();
@@ -50,7 +50,7 @@ test("dispatch", (t) => {
     when(mockNotification.notifier).thenReturn(notifier);
 
     // test
-    var c = new NotificationChain();
+    let c = new NotificationChain();
     t.true(c.add(notification));
     c.dispatch();
 

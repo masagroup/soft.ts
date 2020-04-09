@@ -131,14 +131,14 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     eContainingFeature(): EStructuralFeature {
         if (this._eContainer != null) {
             if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
-                var feature = <EStructuralFeature>(
+                let feature = <EStructuralFeature>(
                     this._eContainer
                         .eClass()
                         .getEStructuralFeature(EOPPOSITE_FEATURE_BASE - this._eContainerFeatureID)
                 );
                 return feature;
             } else {
-                var reference = <EReference>(
+                let reference = <EReference>(
                     this.eClass().getEStructuralFeature(this._eContainerFeatureID)
                 );
                 return reference.eOpposite;
@@ -158,14 +158,14 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     ): EReference {
         if (this._eContainer != null) {
             if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
-                var feature: EStructuralFeature = this._eContainer
+                let feature: EStructuralFeature = this._eContainer
                     .eClass()
                     .getEStructuralFeature(EOPPOSITE_FEATURE_BASE - containerFeatureID);
                 if (isReference(feature)) {
                     return <EReference>feature;
                 }
             } else {
-                var feature: EStructuralFeature = this.eClass().getEStructuralFeature(
+                let feature: EStructuralFeature = this.eClass().getEStructuralFeature(
                     containerFeatureID
                 );
                 if (isReference(feature)) {
@@ -220,7 +220,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     private eGetFromFeature(feature: EStructuralFeature, resolve: boolean, core: boolean): any {
-        var featureID = this.eFeatureID(feature);
+        let featureID = this.eFeatureID(feature);
         if (featureID >= 0) {
             return this.eGetFromID(featureID, resolve, core);
         }
@@ -228,7 +228,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eGetFromID(featureID: number, resolve: boolean, core: boolean): any {
-        var feature = this.eClass().getEStructuralFeature(featureID);
+        let feature = this.eClass().getEStructuralFeature(featureID);
         if (feature == null) {
             throw new Error("Invalid featureID: " + featureID);
         }
@@ -236,7 +236,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eSet(feature: EStructuralFeature, newValue: any): void {
-        var featureID = this.eFeatureID(feature);
+        let featureID = this.eFeatureID(feature);
         if (featureID >= 0) {
             this.eSetFromID(featureID, newValue);
         } else {
@@ -245,14 +245,14 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eSetFromID(featureID: number, newValue: any): void {
-        var feature = this.eClass().getEStructuralFeature(featureID);
+        let feature = this.eClass().getEStructuralFeature(featureID);
         if (feature == null) {
             throw new Error("Invalid featureID: " + featureID);
         }
     }
 
     eIsSet(feature: EStructuralFeature): boolean {
-        var featureID = this.eFeatureID(feature);
+        let featureID = this.eFeatureID(feature);
         if (featureID >= 0) {
             return this.eIsSetFromID(featureID);
         }
@@ -260,7 +260,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eIsSetFromID(featureID: number): boolean {
-        var feature = this.eClass().getEStructuralFeature(featureID);
+        let feature = this.eClass().getEStructuralFeature(featureID);
         if (feature == null) {
             throw new Error("Invalid featureID: " + featureID);
         }
@@ -268,7 +268,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eUnset(feature: EStructuralFeature): void {
-        var featureID = this.eFeatureID(feature);
+        let featureID = this.eFeatureID(feature);
         if (featureID >= 0) {
             this.eUnsetFromID(featureID);
         } else {
@@ -277,14 +277,14 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eUnsetFromID(featureID: number): void {
-        var feature = this.eClass().getEStructuralFeature(featureID);
+        let feature = this.eClass().getEStructuralFeature(featureID);
         if (feature == null) {
             throw new Error("Invalid featureID: " + featureID);
         }
     }
 
     eInvoke(operation: EOperation, args: EList<any>): any {
-        var operationID = this.eOperationID(operation);
+        let operationID = this.eOperationID(operation);
         if (operationID >= 0) {
             return this.eInvokeFromID(operationID, args);
         }
@@ -292,7 +292,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eInvokeFromID(operationID: number, args: EList<any>): any {
-        var operation = this.eClass().getEOperation(operationID);
+        let operation = this.eClass().getEOperation(operationID);
         if (operation == null) {
             throw new Error("Invalid operationID: " + operationID);
         }
@@ -304,7 +304,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eInverseAdd(otherEnd: EObject, featureID: number, n: ENotificationChain): ENotificationChain {
-        var notifications = n;
+        let notifications = n;
         if (featureID >= 0) {
             this.eBasicInverseAdd(otherEnd, featureID, notifications);
         } else {
@@ -344,10 +344,10 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
         newContainerFeatureID: number,
         n: ENotificationChain
     ): ENotificationChain {
-        var notifications = n;
-        var oldResource = this._eResource;
-        var oldContainer = this._eContainer;
-        var oldContainerFeatureID = this._eContainerFeatureID;
+        let notifications = n;
+        let oldResource = this._eResource;
+        let oldContainer = this._eContainer;
+        let oldContainerFeatureID = this._eContainerFeatureID;
 
         // basic set
         this._eContainer = newContainer;
@@ -360,7 +360,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
                 oldContainerFeatureID >= 0 &&
                 oldContainerFeatureID != newContainerFeatureID
             ) {
-                var notification = new Notification(
+                let notification = new Notification(
                     this,
                     EventType.SET,
                     oldContainerFeatureID,
@@ -374,7 +374,7 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
                 }
             }
             if (newContainerFeatureID >= 0) {
-                var notification = new Notification(
+                let notification = new Notification(
                     this,
                     EventType.SET,
                     newContainerFeatureID,
@@ -406,9 +406,9 @@ export class AbstractEObject extends AbstractNotifier implements EObjectInternal
     }
 
     eBasicRemoveFromContainerFeature(notifications: ENotificationChain): ENotificationChain {
-        var feature = this.eClass().getEStructuralFeature(this._eContainerFeatureID);
+        let feature = this.eClass().getEStructuralFeature(this._eContainerFeatureID);
         if (isReference(feature)) {
-            var inverseFeature = (feature as EReference).eOpposite;
+            let inverseFeature = (feature as EReference).eOpposite;
             if (this._eContainer != null && inverseFeature != null)
                 return this.eInverseRemove(this, inverseFeature.featureID, notifications);
         }

@@ -60,9 +60,9 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                             this.featureID == notification.featureID
                         ) {
                             this.eventType = EventType.REMOVE_MANY;
-                            var originalPosition = this.position;
-                            var notificationPosition = notification.position;
-                            var removedValues: any[] = [];
+                            let originalPosition = this.position;
+                            let notificationPosition = notification.position;
+                            let removedValues: any[] = [];
                             if (originalPosition <= notificationPosition) {
                                 removedValues = [this.oldValue, notification.oldValue];
                                 this.position = originalPosition;
@@ -87,11 +87,11 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                             this.notifier == notification.notifier &&
                             this.featureID == notification.featureID
                         ) {
-                            var notificationPosition = notification.position;
-                            var positions: number[] = this.newValue || [];
-                            var newPositions: number[] = new Array(positions.length + 1);
+                            let notificationPosition = notification.position;
+                            let positions: number[] = this.newValue || [];
+                            let newPositions: number[] = new Array(positions.length + 1);
 
-                            var index = 0;
+                            let index = 0;
                             for (const oldPosition of positions) {
                                 if (oldPosition <= notificationPosition) {
                                     newPositions[index++] = oldPosition;
@@ -99,7 +99,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                                 } else break;
                             }
 
-                            var oldValue: any[] = this.oldValue || [];
+                            let oldValue: any[] = this.oldValue || [];
                             oldValue.splice(index, 0, notification.oldValue);
 
                             newPositions[index] = notificationPosition;
