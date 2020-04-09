@@ -20,9 +20,9 @@ export interface ENotifyingList<E> extends EList<E> {
     
     readonly featureID : number;
 
-	AddWithNotification(object : any, notifications : ENotificationChain) : ENotificationChain;
+	addWithNotification(e : E, notifications : ENotificationChain) : ENotificationChain;
 
-	RemoveWithNotification(object : any, notifications : ENotificationChain) : ENotificationChain;
+	removeWithNotification(e : E, notifications : ENotificationChain) : ENotificationChain;
 
-	SetWithNotification(index : number, object : any, notifications : ENotificationChain) : ENotificationChain;
+	setWithNotification(index : number, e : E, notifications : ENotificationChain) : ENotificationChain;
 }
