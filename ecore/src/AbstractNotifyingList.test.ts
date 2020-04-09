@@ -86,3 +86,31 @@ test("add", t => {
        })) ).once() );
     t.deepEqual(l.toArray(), [3,4]);
 });
+
+test('addAll', t => {
+    let l = new NotifyingListTest<number>();
+    l.addAll( new ImmutableEList<number>([2,3]));
+    t.notThrows( () => verify( l.mockNotifier.eNotify(objectContaining({
+        eventType: EventType.ADD_MANY,
+        notifier: l.notifier,
+        feature: l.feature,
+        featureID: l.featureID,
+        oldValue: null,
+        newValue: [2,3],
+        position: 0
+       }))).once() );
+     t.deepEqual(l.toArray(), [2,3]);
+
+     l.addAll( new ImmutableEList<number>([4]));
+     t.notThrows( () => verify( l.mockNotifier.eNotify(objectContaining({
+         eventType: EventType.ADD,
+         notifier: l.notifier,
+         feature: l.feature,
+         featureID: l.featureID,
+         oldValue:null,
+         newValue:4,
+         position:2
+        })) ).once() );
+      t.deepEqual(l.toArray(), [2,3,4]);
+  
+});
