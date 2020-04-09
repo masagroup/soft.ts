@@ -37,10 +37,10 @@ class NotifyingListTest<E> extends AbstractNotifyingList<E> {
 
         when(this._mockNotifier.eDeliver).thenReturn(true);
         when(this._mockNotifier.eAdapters).thenReturn(new ImmutableEList([this._adapter]));
-        when(this._mockFeature.featureID).thenReturn(0)
+        when(this._mockFeature.featureID).thenReturn(0);
     }
 
-    get mockNotifier() : ENotifier {
+    get mockNotifier(): ENotifier {
         return this._mockNotifier;
     }
 
@@ -48,7 +48,7 @@ class NotifyingListTest<E> extends AbstractNotifyingList<E> {
         return this._notifier;
     }
 
-    get mockFeature() : EStructuralFeature {
+    get mockFeature(): EStructuralFeature {
         return this._mockFeature;
     }
 
@@ -61,56 +61,140 @@ class NotifyingListTest<E> extends AbstractNotifyingList<E> {
     }
 }
 
-test("add", t => {
+test("add", (t) => {
     let l = new NotifyingListTest<number>();
     l.add(3);
-    t.notThrows( () => verify( l.mockNotifier.eNotify(objectContaining({
-        eventType: EventType.ADD,
-        notifier: l.notifier,
-        feature: l.feature,
-        featureID: l.featureID,
-        oldValue:null,
-        newValue:3,
-        position:0
-       })) ).once() );
+    t.notThrows(() =>
+        verify(
+            l.mockNotifier.eNotify(
+                objectContaining({
+                    eventType: EventType.ADD,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: 3,
+                    position: 0,
+                })
+            )
+        ).once()
+    );
 
     l.add(4);
-    t.notThrows( () => verify( l.mockNotifier.eNotify(objectContaining({
-        eventType: EventType.ADD,
-        notifier: l.notifier,
-        feature: l.feature,
-        featureID: l.featureID,
-        oldValue:null,
-        newValue:4,
-        position:1
-       })) ).once() );
-    t.deepEqual(l.toArray(), [3,4]);
+    t.notThrows(() =>
+        verify(
+            l.mockNotifier.eNotify(
+                objectContaining({
+                    eventType: EventType.ADD,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: 4,
+                    position: 1,
+                })
+            )
+        ).once()
+    );
+    t.deepEqual(l.toArray(), [3, 4]);
 });
 
-test('addAll', t => {
+test("addAll", (t) => {
     let l = new NotifyingListTest<number>();
-    l.addAll( new ImmutableEList<number>([2,3]));
-    t.notThrows( () => verify( l.mockNotifier.eNotify(objectContaining({
-        eventType: EventType.ADD_MANY,
-        notifier: l.notifier,
-        feature: l.feature,
-        featureID: l.featureID,
-        oldValue: null,
-        newValue: [2,3],
-        position: 0
-       }))).once() );
-     t.deepEqual(l.toArray(), [2,3]);
+    l.addAll(
+        new ImmutableEList<number>([2, 3])
+    );
+    t.notThrows(() =>
+        verify(
+            l.mockNotifier.eNotify(
+                objectContaining({
+                    eventType: EventType.ADD_MANY,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: [2, 3],
+                    position: 0,
+                })
+            )
+        ).once()
+    );
+    t.deepEqual(l.toArray(), [2, 3]);
 
-     l.addAll( new ImmutableEList<number>([4]));
-     t.notThrows( () => verify( l.mockNotifier.eNotify(objectContaining({
-         eventType: EventType.ADD,
-         notifier: l.notifier,
-         feature: l.feature,
-         featureID: l.featureID,
-         oldValue:null,
-         newValue:4,
-         position:2
-        })) ).once() );
-      t.deepEqual(l.toArray(), [2,3,4]);
-  
+    l.addAll(
+        new ImmutableEList<number>([4])
+    );
+    t.notThrows(() =>
+        verify(
+            l.mockNotifier.eNotify(
+                objectContaining({
+                    eventType: EventType.ADD,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: 4,
+                    position: 2,
+                })
+            )
+        ).once()
+    );
+    t.deepEqual(l.toArray(), [2, 3, 4]);
+});
+
+test("insert", (t) => {
+    let l = new NotifyingListTest<number>();
+    l.insert(0, 1);
+    t.notThrows(() =>
+        verify(
+            l.mockNotifier.eNotify(
+                objectContaining({
+                    eventType: EventType.ADD,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: 1,
+                    position: 0,
+                })
+            )
+        ).once()
+    );
+    t.deepEqual(l.toArray(), [1]);
+
+    l.insert(0, 2);
+    t.notThrows(() =>
+        verify(
+            l.mockNotifier.eNotify(
+                objectContaining({
+                    eventType: EventType.ADD,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: 2,
+                    position: 0,
+                })
+            )
+        ).once()
+    );
+    t.deepEqual(l.toArray(), [2, 1]);
+
+    l.insert(1, 3);
+    t.notThrows(() =>
+        verify(
+            l.mockNotifier.eNotify(
+                objectContaining({
+                    eventType: EventType.ADD,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: 3,
+                    position: 1,
+                })
+            )
+        ).once()
+    );
+    t.deepEqual(l.toArray(), [2, 3, 1]);
 });
