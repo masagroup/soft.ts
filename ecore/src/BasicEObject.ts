@@ -82,7 +82,7 @@ export interface EObjectInternal extends EObject {
     eResolveProxy(proxy: EObject): EObject;
 }
 
-export class AbstractEObject extends AbstractNotifier implements EObjectInternal {
+export class BasicEObject extends AbstractNotifier implements EObjectInternal {
     private _eResource: EResource;
     private _eContainer: EObject;
     private _eContainerFeatureID: number;

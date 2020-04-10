@@ -8,12 +8,13 @@
 // *****************************************************************************
 
 import { AbstractNotifyingList } from "./AbstractNotifyingList";
-import { EObjectInternal, EOPPOSITE_FEATURE_BASE } from "./AbstractEObject";
+import { EObjectInternal, EOPPOSITE_FEATURE_BASE } from "./BasicEObject";
 import { ENotifier } from "./ENotifier";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENotificationChain";
+import { EObject } from "./EObject";
 
-export class EObjectEList<E> extends AbstractNotifyingList<E> {
+export class EObjectEList<O extends EObject > extends AbstractNotifyingList<O> {
     private _owner : EObjectInternal;
     private _featureID : number;
     private _inverseFeatureID : number;
@@ -47,8 +48,13 @@ export class EObjectEList<E> extends AbstractNotifyingList<E> {
         return this._featureID;
     }
 
-    inverseAdd(e : E, notifications : ENotificationChain) : ENotificationChain {
-        const internal = this.forceCast<EObjectInternal>(e);
+    get( index : number ) : O {
+        let o = super.get(index);
+        return this._proxies ? this.resolve( index, o ) : o;
+    }
+
+    inverseAdd(o : O, notifications : ENotificationChain) : ENotificationChain {
+        const internal = this.forceCast<EObjectInternal>(o);
         if (internal != null && this._inverse) {
             if ( this._opposite ) {
                 return internal.eInverseAdd(this._owner, this._inverseFeatureID, notifications)
@@ -59,8 +65,8 @@ export class EObjectEList<E> extends AbstractNotifyingList<E> {
         return notifications
     }
     
-    inverseRemove(e : E, notifications : ENotificationChain) : ENotificationChain {
-        const internal = this.forceCast<EObjectInternal>(e);
+    inverseRemove(o : O, notifications : ENotificationChain) : ENotificationChain {
+        const internal = this.forceCast<EObjectInternal>(o);
         if (internal != null && this._inverse) {
             if ( this._opposite ){
                 return internal.eInverseRemove(this._owner, this._inverseFeatureID, notifications)
@@ -75,5 +81,38 @@ export class EObjectEList<E> extends AbstractNotifyingList<E> {
         // @ts-ignore
         return input;
       }
+
+    private resolve( index : number , o : O ) : O {
+        let old = o;
+        let resolved = this.resolveProxy(o);
+        if ( resolved != o ) {
+            this.didSet(index, resolved, old);
+      
+            if (this._containment) {
+                let chain = this.inverseRemove(o, null);
+                if ( resolved.eContainer() )
+              @SuppressWarnings("unchecked") E element = (E)eObject;
+              NotificationChain notificationChain = inverseRemove(element, null);
+              if (((InternalEObject)resolved).eInternalContainer() == null)
+              {
+                notificationChain = inverseAdd(resolvedElement, notificationChain);
+              }
+              if (notificationChain != null)
+              {
+                notificationChain.dispatch();
+              }
+            }
+            
+            if (isNotificationRequired())
+            {
+              dispatchNotification(createNotification(Notification.RESOLVE, eObject, resolved, index, false));
+            }
+        }
+        return o;
+    }
+
+    private resolveProxy( o : O ) {
+        return o;
+    }
 
 }
