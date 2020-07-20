@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { AbstractNotifier } from "./AbstractNotifier";
+import { BasicNotifier } from "./BasicNotifier";
 import { EClass } from "./EClass";
 import { ECollectionView } from "./ECollectionView";
 import { EList } from "./EList";
@@ -18,7 +18,7 @@ import { EResource } from "./EResource";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENOtificationChain";
 import { Notification } from "./Notification";
-import { EventType } from "./ENotification";
+import { EventType, ENotification } from "./ENotification";
 
 export const EOPPOSITE_FEATURE_BASE: number = -1;
 
@@ -82,7 +82,7 @@ export interface EObjectInternal extends EObject {
     eResolveProxy(proxy: EObject): EObject;
 }
 
-export class BasicEObject extends AbstractNotifier implements EObjectInternal {
+export class BasicEObject extends BasicNotifier implements EObjectInternal {
     private _eResource: EResource;
     private _eContainer: EObject;
     private _eContainerFeatureID: number;
@@ -93,6 +93,14 @@ export class BasicEObject extends AbstractNotifier implements EObjectInternal {
         this._eResource = null;
         this._eContainer = null;
         this._eContainerFeatureID = -1;
+    }
+    eCrossReferences(): EList<EObject> {
+        throw new Error("Method not implemented.");
+    }
+    eAdapters: EList<import("./EAdapter").EAdapter>;
+    eDeliver: boolean;
+    eNotify(notification: ENotification): void {
+        throw new Error("Method not implemented.");
     }
 
     eClass(): EClass {
