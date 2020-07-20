@@ -12,13 +12,12 @@ import { Collection } from "./Collection";
 import { ImmutableEList } from "./ImmutableEList";
 
 export abstract class AbstractEList<E> implements EList<E> {
-
     private _isUnique: boolean;
 
-    constructor( isUnique: boolean = false) {
+    constructor(isUnique: boolean = false) {
         this._isUnique = isUnique;
     }
-    
+
     add(e: E): boolean {
         if (this._isUnique && this.contains(e)) {
             return false;
@@ -63,7 +62,7 @@ export abstract class AbstractEList<E> implements EList<E> {
     }
 
     abstract removeAt(index: number): E;
-    
+
     removeAll(c: Collection<E>): boolean {
         let modified = false;
         for (let i = this.size(); --i >= 0; ) {
@@ -106,22 +105,20 @@ export abstract class AbstractEList<E> implements EList<E> {
     indexOf(e: E): number {
         let index = 0;
         for (const element of this) {
-            if ( element == e )
-                return index;
-            else
-                index++;
+            if (element == e) return index;
+            else index++;
         }
         return -1;
     }
 
-    move(to : number , e : E) : void {
-        this.moveTo( to , this.indexOf(e));
+    move(to: number, e: E): void {
+        this.moveTo(to, this.indexOf(e));
     }
 
-	abstract moveTo( to : number , from : number ) : E;
+    abstract moveTo(to: number, from: number): E;
 
     clear(): void {
-        for ( let i = this.size() - 1 ; i >= 0; i-- ){
+        for (let i = this.size() - 1; i >= 0; i--) {
             this.removeAt(i);
         }
     }
@@ -139,18 +136,20 @@ export abstract class AbstractEList<E> implements EList<E> {
     abstract toArray(): E[];
 
     [Symbol.iterator](): Iterator<E> {
-        return new class implements Iterator<E>{                    
-            private _cursor : number;
-            private _list : AbstractEList<E>;
-            constructor( list : AbstractEList<E> ) {
+        return new (class implements Iterator<E> {
+            private _cursor: number;
+            private _list: AbstractEList<E>;
+            constructor(list: AbstractEList<E>) {
                 this._cursor = 0;
                 this._list = list;
             }
 
-            next(value?: any) : IteratorResult<E> {
-                return this._cursor++ < this._list.size() ? { value : this._list.get(this._cursor - 1), done : false } : { value : undefined , done : true};  
+            next(value?: any): IteratorResult<E> {
+                return this._cursor++ < this._list.size()
+                    ? { value: this._list.get(this._cursor - 1), done: false }
+                    : { value: undefined, done: true };
             }
-        }(this);        
+        })(this);
     }
 
     private getNonDuplicates(c: Collection<E>): Collection<E> {
@@ -161,7 +160,7 @@ export abstract class AbstractEList<E> implements EList<E> {
         return new ImmutableEList<E>([...s]);
     }
 
-    protected abstract doGet(index: number ) : E;
+    protected abstract doGet(index: number): E;
 
     protected abstract doAdd(e: E): void;
 
@@ -181,7 +180,7 @@ export abstract class AbstractEList<E> implements EList<E> {
         // NOTHING
     }
 
-    protected didClear(elements : E[]) : void {
+    protected didClear(elements: E[]): void {
         if (elements != null) {
             for (let i = 0; i < elements.length; ++i) {
                 this.didRemove(i, elements[i]);
@@ -189,7 +188,7 @@ export abstract class AbstractEList<E> implements EList<E> {
         }
     }
 
-    protected didMove(from : number , index : number, e: E, ): void {
+    protected didMove(from: number, index: number, e: E): void {
         // NOTHING
     }
 
@@ -199,5 +198,4 @@ export abstract class AbstractEList<E> implements EList<E> {
     protected didChange(): void {
         // NOTHING
     }
-    
 }

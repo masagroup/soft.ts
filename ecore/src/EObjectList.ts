@@ -11,5 +11,5 @@ import { ENotifyingList } from "./ENotifyingList";
 import { EList } from "./EList";
 
 export interface EObjectList<E> extends ENotifyingList<E> {
-    getUnResolvedList() : EList<E>;
+    getUnResolvedList(): EList<E>;
 }

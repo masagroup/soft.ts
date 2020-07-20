@@ -19,6 +19,7 @@ import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENOtificationChain";
 import { Notification } from "./Notification";
 import { EventType, ENotification } from "./ENotification";
+import { EAdapter } from "./EAdapter";
 
 export const EOPPOSITE_FEATURE_BASE: number = -1;
 
@@ -93,14 +94,6 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         this._eResource = null;
         this._eContainer = null;
         this._eContainerFeatureID = -1;
-    }
-    eCrossReferences(): EList<EObject> {
-        throw new Error("Method not implemented.");
-    }
-    eAdapters: EList<import("./EAdapter").EAdapter>;
-    eDeliver: boolean;
-    eNotify(notification: ENotification): void {
-        throw new Error("Method not implemented.");
     }
 
     eClass(): EClass {
@@ -193,8 +186,8 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         return null;
     }
 
-    eCrossReferencesList(): EList<EObject> {
-        return null;
+    eCrossReferences(): EList<EObject> {
+        throw new Error("Method not implemented.");
     }
 
     eFeatureID(feature: EStructuralFeature): number {

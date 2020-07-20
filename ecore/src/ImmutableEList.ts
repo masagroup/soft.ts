@@ -16,7 +16,6 @@ export class ImmutableEList<E> implements EList<E> {
     constructor(v: E[] = []) {
         this._v = v;
     }
-    
 
     get(index: number): E {
         return this._v[index];

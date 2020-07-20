@@ -13,22 +13,33 @@ import { ENotifier } from "./ENotifier";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENotificationChain";
 import { EObject } from "./EObject";
+import { EObjectList } from "./EObjectList";
+import { EList } from "./EList";
 
-export class BasicEObjectList<O extends EObject > extends AbstractNotifyingList<O> {
-    private _owner : EObjectInternal;
-    private _featureID : number;
-    private _inverseFeatureID : number;
-	private _containment : boolean;
-	private _inverse : boolean;
-    private _opposite : boolean;
-    private _proxies : boolean;
-    private _unset : boolean;
+export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O>
+    implements EObjectList<O> {
+    private _owner: EObjectInternal;
+    private _featureID: number;
+    private _inverseFeatureID: number;
+    private _containment: boolean;
+    private _inverse: boolean;
+    private _opposite: boolean;
+    private _proxies: boolean;
+    private _unset: boolean;
 
-
-    constructor(owner : EObjectInternal, featureID : number , inverseFeatureID : number, containment : boolean , inverse : boolean , opposite : boolean , proxies : boolean ,unset : boolean) {
+    constructor(
+        owner: EObjectInternal,
+        featureID: number,
+        inverseFeatureID: number,
+        containment: boolean,
+        inverse: boolean,
+        opposite: boolean,
+        proxies: boolean,
+        unset: boolean
+    ) {
         super();
         this._featureID = featureID;
-        this._inverseFeatureID= inverseFeatureID;
+        this._inverseFeatureID = inverseFeatureID;
         this._containment = containment;
         this._inverse = inverse;
         this._opposite = opposite;
@@ -36,63 +47,76 @@ export class BasicEObjectList<O extends EObject > extends AbstractNotifyingList<
         this._unset = unset;
     }
 
-    get notifier() : ENotifier {
+    get notifier(): ENotifier {
         return this._owner;
     }
 
-    get feature() : EStructuralFeature {
-        return this._owner != null ? this._owner.eClass().getEStructuralFeature(this._featureID) : null;
+    get feature(): EStructuralFeature {
+        return this._owner != null
+            ? this._owner.eClass().getEStructuralFeature(this._featureID)
+            : null;
     }
 
-    get featureID() : number {
+    get featureID(): number {
         return this._featureID;
     }
 
-    get( index : number ) : O {
+    get(index: number): O {
         let o = super.get(index);
-        return this._proxies ? this.resolve( index, o ) : o;
+        return this._proxies ? this.resolve(index, o) : o;
     }
 
-    inverseAdd(o : O, notifications : ENotificationChain) : ENotificationChain {
-        const internal = this.forceCast<EObjectInternal>(o);
-        if (internal != null && this._inverse) {
-            if ( this._opposite ) {
-                return internal.eInverseAdd(this._owner, this._inverseFeatureID, notifications)
-            } else {
-                return internal.eInverseAdd(this._owner, EOPPOSITE_FEATURE_BASE-this._featureID, notifications)
-            }
-        }
-        return notifications
+    getUnResolvedList(): EList<O> {
+        throw new Error("Method not implemented.");
     }
-    
-    inverseRemove(o : O, notifications : ENotificationChain) : ENotificationChain {
+
+    inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
         const internal = this.forceCast<EObjectInternal>(o);
         if (internal != null && this._inverse) {
-            if ( this._opposite ){
-                return internal.eInverseRemove(this._owner, this._inverseFeatureID, notifications)
+            if (this._opposite) {
+                return internal.eInverseAdd(this._owner, this._inverseFeatureID, notifications);
             } else {
-                return internal.eInverseRemove(this._owner, EOPPOSITE_FEATURE_BASE-this._featureID, notifications)
+                return internal.eInverseAdd(
+                    this._owner,
+                    EOPPOSITE_FEATURE_BASE - this._featureID,
+                    notifications
+                );
             }
         }
-        return notifications
+        return notifications;
+    }
+
+    inverseRemove(o: O, notifications: ENotificationChain): ENotificationChain {
+        const internal = this.forceCast<EObjectInternal>(o);
+        if (internal != null && this._inverse) {
+            if (this._opposite) {
+                return internal.eInverseRemove(this._owner, this._inverseFeatureID, notifications);
+            } else {
+                return internal.eInverseRemove(
+                    this._owner,
+                    EOPPOSITE_FEATURE_BASE - this._featureID,
+                    notifications
+                );
+            }
+        }
+        return notifications;
     }
 
     private forceCast<T>(input: any): T {
         // @ts-ignore
         return input;
-      }
+    }
 
-    private resolve( index : number , o : O ) : O {
+    private resolve(index: number, o: O): O {
         let old = o;
         let resolved = this.resolveProxy(o);
-        if ( resolved != o ) {
+        if (resolved != o) {
             this.didSet(index, resolved, old);
         }
         return o;
     }
 
-    private resolveProxy( o : O ) {
+    private resolveProxy(o: O) {
         return o;
     }
-
 }

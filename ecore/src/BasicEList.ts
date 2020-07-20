@@ -9,9 +9,7 @@
 
 import { AbstractEList } from "./AbstractEList";
 
-
 export class BasicEList<E> extends AbstractEList<E> {
-
     private _v: E[];
 
     constructor(iterable: Iterable<E> | ArrayLike<E> = [], isUnique: boolean = false) {
@@ -30,14 +28,15 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     moveTo(to: number, from: number): E {
-        if ( from < 0 || from >= this.size() ||
-		to < 0 || to > this.size() ) {
-            throw new RangeError("Index out of bounds: from=" + from + " to=" + to + " size=" + this.size());
+        if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
+            throw new RangeError(
+                "Index out of bounds: from=" + from + " to=" + to + " size=" + this.size()
+            );
         }
         let e = this._v[from];
-        if ( from != to ) {
-            this._v.splice(from,1);
-            this._v.splice(to,0,e);
+        if (from != to) {
+            this._v.splice(from, 1);
+            this._v.splice(to, 0, e);
             this.didMove(from, to, e);
             this.didChange();
         }
@@ -63,14 +62,14 @@ export class BasicEList<E> extends AbstractEList<E> {
         this.didChange();
         return o;
     }
-    
+
     protected doAdd(e: E): void {
         let size = this._v.length;
         this._v.push(e);
         this.didAdd(size, e);
         this.didChange();
     }
-    
+
     protected doAddAll(c: import("./Collection").Collection<E>): boolean {
         let oldSize = this._v.length;
         this._v.push(...c.toArray());
@@ -80,13 +79,13 @@ export class BasicEList<E> extends AbstractEList<E> {
         }
         return !c.isEmpty();
     }
-    
+
     protected doInsert(index: number, e: E): void {
         this._v.splice(index, 0, e);
         this.didAdd(index, e);
         this.didChange();
     }
-    
+
     protected doInsertAll(index: number, c: import("./Collection").Collection<E>): boolean {
         this._v.splice(index, 0, ...c.toArray());
         for (let i = index; i < index + c.size(); i++) {
@@ -95,6 +94,4 @@ export class BasicEList<E> extends AbstractEList<E> {
         }
         return !c.isEmpty();
     }
-    
-
 }

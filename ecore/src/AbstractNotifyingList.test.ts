@@ -312,8 +312,7 @@ test("addWithNotification", (t) => {
     t.deepEqual(l.toArray(), [1]);
 });
 
-
-test('removeWithNotification', t => {
+test("removeWithNotification", (t) => {
     let l = new NotifyingListTest<number>([1]);
     when(
         l.mockChain.add(
@@ -328,11 +327,11 @@ test('removeWithNotification', t => {
             })
         )
     ).thenReturn(true);
-    l.removeWithNotification(1,l.chain);
+    l.removeWithNotification(1, l.chain);
     t.deepEqual(l.toArray(), []);
 });
 
-test('setWithNotification', t => {
+test("setWithNotification", (t) => {
     let l = new NotifyingListTest<number>([1]);
     when(
         l.mockChain.add(
@@ -347,6 +346,6 @@ test('setWithNotification', t => {
             })
         )
     ).thenReturn(true);
-    l.setWithNotification(0,2,l.chain);
+    l.setWithNotification(0, 2, l.chain);
     t.deepEqual(l.toArray(), [2]);
 });
