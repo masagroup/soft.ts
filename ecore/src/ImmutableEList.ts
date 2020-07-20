@@ -57,7 +57,7 @@ export class ImmutableEList<E> implements EList<E> {
         throw new Error("Immutable list can't be modified");
     }
 
-    set(index: number, e: E): void {
+    set(index: number, e: E): E {
         throw new Error("Immutable list can't be modified");
     }
 
@@ -88,7 +88,15 @@ export class ImmutableEList<E> implements EList<E> {
     move(to: number, e: E): void {
         throw new Error("Immutable list can't be modified");
     }
-    moveTo(to: number, from: number): E {
+    moveTo(from: number, to: number): E {
         throw new Error("Immutable list can't be modified");
     }
+}
+
+export function getNonDuplicates<E>(c: Collection<E>, ref: Collection<E>): Collection<E> {
+    let s = new Set<E>(ref);
+    for (const e of c) {
+        s.delete(e);
+    }
+    return new ImmutableEList<E>([...s]);
 }

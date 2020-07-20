@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 import test from "ava";
-import { ImmutableEList } from "./ImmutableEList";
+import { ImmutableEList, getNonDuplicates } from "./ImmutableEList";
 
 test("get", (t) => {
     let l = new ImmutableEList([1, 2]);
@@ -90,4 +90,10 @@ test("removeAll", (t) => {
 test("retainAll", (t) => {
     let l = new ImmutableEList();
     t.throws(() => l.retainAll(null), { instanceOf: Error });
+});
+
+test("getNonDuplicates", (t) => {
+    let l1 = new ImmutableEList([1, 2]);
+    let l2 = new ImmutableEList([2, 3]);
+    t.deepEqual(getNonDuplicates(l1, l2).toArray(), [3]);
 });

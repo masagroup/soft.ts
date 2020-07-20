@@ -14,6 +14,6 @@ export interface List<E> extends Collection<E> {
     insertAll(index: number, c: Collection<E>): boolean;
     removeAt(index: number): E;
     get(index: number): E;
-    set(index: number, e: E): void;
+    set(index: number, e: E): E;
     indexOf(e: E): number;
 }

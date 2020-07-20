@@ -16,6 +16,8 @@ import { EObject } from "./EObject";
 import { EObjectList } from "./EObjectList";
 import { EList } from "./EList";
 import { EventType } from "./ENotification";
+import { Collection } from "./Collection";
+import { getNonDuplicates } from "./ImmutableEList";
 
 export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O>
     implements EObjectList<O> {
@@ -63,7 +65,129 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
     }
 
     getUnResolvedList(): EList<O> {
-        throw new Error("Method not implemented.");
+        return new (class implements EList<O> {
+            constructor(private _delegate: BasicEObjectList<O>) {}
+            move(newIndex: number, e: O): void {
+                let oldIndex = this.indexOf(e);
+                if (oldIndex == -1) {
+                    throw new Error("Object not found");
+                }
+                this._delegate.moveTo(oldIndex, newIndex);
+            }
+            moveTo(oldIndex: number, newIndex: number): O {
+                return this._delegate.moveTo(oldIndex, newIndex);
+            }
+            insert(index: number, e: O): boolean {
+                if (index < 0 || index > this.size()) {
+                    throw new Error("Index out of bounds: index=" + index + " size=" + this.size());
+                }
+                if (this._delegate._isUnique && this.contains(e)) {
+                    return false;
+                }
+                this._delegate.doInsert(index, e);
+                return true;
+            }
+            insertAll(index: number, c: Collection<O>): boolean {
+                if (index < 0 || index > this.size()) {
+                    throw new Error("Index out of bounds: index=" + index + " size=" + this.size());
+                }
+                if (this._delegate._isUnique) {
+                    c = getNonDuplicates<O>(this, c);
+                    if (c.isEmpty()) {
+                        return false;
+                    }
+                }
+                this._delegate.doInsertAll(index, c);
+                return true;
+            }
+            removeAt(index: number): O {
+                return this._delegate.removeAt(index);
+            }
+            remove(e: O): boolean {
+                let index = this.indexOf(e);
+                if (index == -1) {
+                    return false;
+                }
+                this._delegate.removeAt(index);
+                return true;
+            }
+            get(index: number): O {
+                if (index < 0 || index > this.size()) {
+                    throw new Error("Index out of bounds: index=" + index + " size=" + this.size());
+                }
+                return this._delegate._v[index];
+            }
+            set(index: number, e: O): O {
+                if (index < 0 || index > this.size()) {
+                    throw new Error("Index out of bounds: index=" + index + " size=" + this.size());
+                }
+                if (this._delegate._isUnique) {
+                    let currIndex = this.indexOf(e);
+                    if (currIndex >= 0 && currIndex != index)
+                        throw new Error(
+                            "element already in list : uniqueness constraint is not respected"
+                        );
+                }
+                return this._delegate.doSet(index, e);
+            }
+            indexOf(e: O): number {
+                let index = 0;
+                for (const element of this._delegate._v) {
+                    if (element == e) return index;
+                    else index++;
+                }
+                return -1;
+            }
+            add(e: O): boolean {
+                if (this._delegate._isUnique && this.contains(e)) return false;
+                this._delegate.doAdd(e);
+                return true;
+            }
+            addAll(c: Collection<O>): boolean {
+                if (this._delegate._isUnique) {
+                    c = getNonDuplicates<O>(this, c);
+                    if (c.isEmpty()) return false;
+                }
+                this._delegate.doAddAll(c);
+            }
+            clear(): void {
+                this._delegate.clear();
+            }
+            contains(e: O): boolean {
+                return this.indexOf(e) != -1;
+            }
+            isEmpty(): boolean {
+                return this._delegate.isEmpty();
+            }
+            removeAll(c: Collection<O>): boolean {
+                throw new Error("Method not implemented.");
+            }
+            retainAll(c: Collection<O>): boolean {
+                throw new Error("Method not implemented.");
+            }
+            size(): number {
+                return this._delegate.size();
+            }
+            toArray(): O[] {
+                return this._delegate.toArray();
+            }
+            [Symbol.iterator](): Iterator<O, any, undefined> {
+                return new (class implements Iterator<O> {
+                    private _cursor: number;
+                    private _delegate: BasicEObjectList<O>;
+                    constructor(_delegate: BasicEObjectList<O>) {
+                        this._cursor = 0;
+                        this._delegate = _delegate;
+                    }
+
+                    next(value?: any): IteratorResult<O> {
+                        return this._cursor++ < this._delegate.size()
+                            ? { value: this._delegate._v[this._cursor - 1], done: false }
+                            : { value: undefined, done: true };
+                    }
+                })(this._delegate);
+            }
+        })(this);
     }
 
     doGet(index: number): O {
@@ -130,7 +254,7 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
     }
 
     private resolveProxy(o: O) {
-        if ( this._proxies && o.eIsProxy() ) {
+        if (this._proxies && o.eIsProxy()) {
             <EObjectInternal>this._owner.eResolveProxy(o);
         }
         return o;

@@ -8,9 +8,11 @@
 // *****************************************************************************
 
 import { AbstractEList } from "./AbstractEList";
+import { Collection } from "./Collection";
+import { List } from "./List";
 
 export class BasicEList<E> extends AbstractEList<E> {
-    private _v: E[];
+    protected _v: E[];
 
     constructor(iterable: Iterable<E> | ArrayLike<E> = [], isUnique: boolean = false) {
         super(isUnique);
@@ -27,7 +29,7 @@ export class BasicEList<E> extends AbstractEList<E> {
         return e;
     }
 
-    moveTo(to: number, from: number): E {
+    moveTo(from: number, to: number): E {
         if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
             throw new RangeError(
                 "Index out of bounds: from=" + from + " to=" + to + " size=" + this.size()

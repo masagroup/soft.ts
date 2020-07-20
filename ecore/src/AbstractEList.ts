@@ -9,10 +9,10 @@
 
 import { EList } from "./EList";
 import { Collection } from "./Collection";
-import { ImmutableEList } from "./ImmutableEList";
+import { getNonDuplicates } from "./ImmutableEList";
 
 export abstract class AbstractEList<E> implements EList<E> {
-    private _isUnique: boolean;
+    protected _isUnique: boolean;
 
     constructor(isUnique: boolean = false) {
         this._isUnique = isUnique;
@@ -28,7 +28,7 @@ export abstract class AbstractEList<E> implements EList<E> {
 
     addAll(c: Collection<E>): boolean {
         if (this._isUnique) {
-            c = this.getNonDuplicates(c);
+            c = getNonDuplicates<E>(this, c);
             if (c.isEmpty()) return false;
         }
         this.doAddAll(c);
@@ -47,7 +47,7 @@ export abstract class AbstractEList<E> implements EList<E> {
         if (index < 0 || index > this.size())
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size());
         if (this._isUnique) {
-            c = this.getNonDuplicates(c);
+            c = getNonDuplicates<E>(this, c);
             if (c.isEmpty()) return false;
         }
         this.doInsertAll(index, c);
@@ -111,11 +111,13 @@ export abstract class AbstractEList<E> implements EList<E> {
         return -1;
     }
 
-    move(to: number, e: E): void {
-        this.moveTo(to, this.indexOf(e));
+    move(newIndex: number, e: E): void {
+        let oldIndex = this.indexOf(e);
+        if (oldIndex == -1) throw new Error("Object not found");
+        this.moveTo(oldIndex, newIndex);
     }
 
-    abstract moveTo(to: number, from: number): E;
+    abstract moveTo(from: number, to: number): E;
 
     clear(): void {
         for (let i = this.size() - 1; i >= 0; i--) {
@@ -150,14 +152,6 @@ export abstract class AbstractEList<E> implements EList<E> {
                     : { value: undefined, done: true };
             }
         })(this);
-    }
-
-    private getNonDuplicates(c: Collection<E>): Collection<E> {
-        let s = new Set<E>(c);
-        for (const e of this) {
-            s.delete(e);
-        }
-        return new ImmutableEList<E>([...s]);
     }
 
     protected abstract doGet(index: number): E;
