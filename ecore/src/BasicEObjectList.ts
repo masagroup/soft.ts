@@ -14,7 +14,7 @@ import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENotificationChain";
 import { EObject } from "./EObject";
 
-export class EObjectEList<O extends EObject > extends AbstractNotifyingList<O> {
+export class BasicEObjectList<O extends EObject > extends AbstractNotifyingList<O> {
     private _owner : EObjectInternal;
     private _featureID : number;
     private _inverseFeatureID : number;
