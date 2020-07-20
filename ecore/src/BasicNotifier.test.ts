@@ -9,12 +9,12 @@
 
 import test from "ava";
 import { mock, verify, instance } from "ts-mockito";
-import { AbstractNotifier } from "./AbstractNotifier";
+import { BasicNotifier } from "./BasicNotifier";
 import { EAdapter } from "./EAdapter";
 import { ENotification } from "./ENotification";
 
 test("constructor", (t) => {
-    let n = new AbstractNotifier();
+    let n = new BasicNotifier();
     t.true(n.eDeliver);
     t.true(n.eAdapters.isEmpty());
 });
@@ -24,7 +24,7 @@ test("target", (t) => {
     const mockAdapter = mock<EAdapter>();
     const adapter = instance(mockAdapter);
 
-    let n = new AbstractNotifier();
+    let n = new BasicNotifier();
     n.eAdapters.add(adapter);
     t.is(adapter.target, n);
     n.eAdapters.remove(adapter);
@@ -39,7 +39,7 @@ test("eNotify", (t) => {
     const notification = instance(mockNotification);
 
     // call
-    let n = new AbstractNotifier();
+    let n = new BasicNotifier();
     n.eAdapters.add(adapter);
     n.eNotify(notification);
 
