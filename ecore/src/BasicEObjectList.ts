@@ -15,6 +15,7 @@ import { ENotificationChain } from "./ENotificationChain";
 import { EObject } from "./EObject";
 import { EObjectList } from "./EObjectList";
 import { EList } from "./EList";
+import { EventType } from "./ENotification";
 
 export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O>
     implements EObjectList<O> {
@@ -61,13 +62,12 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         return this._featureID;
     }
 
-    get(index: number): O {
-        let o = super.get(index);
-        return this._proxies ? this.resolve(index, o) : o;
-    }
-
     getUnResolvedList(): EList<O> {
         throw new Error("Method not implemented.");
+    }
+
+    doGet(index: number): O {
+        return this.resolve(index, super.doGet(index));
     }
 
     inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
@@ -107,16 +107,32 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         return input;
     }
 
-    private resolve(index: number, o: O): O {
-        let old = o;
-        let resolved = this.resolveProxy(o);
-        if (resolved != o) {
-            this.didSet(index, resolved, old);
+    private resolve(index: number, object: O): O {
+        let resolved = this.resolveProxy(object);
+        if (resolved != object) {
+            this.doSet(index, resolved);
+            let notifications: ENotificationChain = null;
+            if (this._containment) {
+                notifications = this.inverseRemove(object, notifications);
+                let resolvedInternal = this.forceCast<EObjectInternal>(resolved);
+                if (resolvedInternal != null)
+                    notifications = this.inverseAdd(resolved, notifications);
+            }
+            this.createAndDispatchNotification(
+                notifications,
+                EventType.RESOLVE,
+                object,
+                resolved,
+                index
+            );
         }
-        return o;
+        return resolved;
     }
 
     private resolveProxy(o: O) {
+        if ( this._proxies && o.eIsProxy() ) {
+            <EObjectInternal>this._owner.eResolveProxy(o);
+        }
         return o;
     }
 }

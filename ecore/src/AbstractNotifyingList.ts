@@ -131,7 +131,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         return oldObject;
     }
 
-    private createNotification(
+    protected createNotification(
         eventType: EventType,
         oldValue: any,
         newValue: any,
@@ -156,7 +156,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         })(this);
     }
 
-    private createAndAddNotification(
+    protected createAndAddNotification(
         nc: ENotificationChain,
         eventType: EventType,
         oldValue: any,
@@ -175,7 +175,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         return notifications;
     }
 
-    private createAndDispatchNotification(
+    protected createAndDispatchNotification(
         notifications: ENotificationChain,
         eventType: EventType,
         oldValue: any,
