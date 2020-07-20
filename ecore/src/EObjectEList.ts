@@ -87,26 +87,6 @@ export class EObjectEList<O extends EObject > extends AbstractNotifyingList<O> {
         let resolved = this.resolveProxy(o);
         if ( resolved != o ) {
             this.didSet(index, resolved, old);
-      
-            if (this._containment) {
-                let chain = this.inverseRemove(o, null);
-                if ( resolved.eContainer() )
-              @SuppressWarnings("unchecked") E element = (E)eObject;
-              NotificationChain notificationChain = inverseRemove(element, null);
-              if (((InternalEObject)resolved).eInternalContainer() == null)
-              {
-                notificationChain = inverseAdd(resolvedElement, notificationChain);
-              }
-              if (notificationChain != null)
-              {
-                notificationChain.dispatch();
-              }
-            }
-            
-            if (isNotificationRequired())
-            {
-              dispatchNotification(createNotification(Notification.RESOLVE, eObject, resolved, index, false));
-            }
         }
         return o;
     }
