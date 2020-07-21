@@ -39,6 +39,7 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         unset: boolean
     ) {
         super();
+        this._owner = owner;
         this._featureID = featureID;
         this._inverseFeatureID = inverseFeatureID;
         this._containment = containment;
