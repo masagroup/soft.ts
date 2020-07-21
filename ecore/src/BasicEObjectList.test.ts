@@ -71,11 +71,37 @@ test("inverseOpposite", (t) => {
     const object = instance(mockObject);
 
     let l = new BasicEObjectList(owner,1,2,false,true,true,false,false);
-    
+
     when(mockOwner.eDeliver).thenReturn(false);
     when(mockOwner.eInverseAdd(owner,2,null)).thenReturn(null);
     t.true( l.add(object) );
 
     when(mockOwner.eInverseRemove(owner,2,null)).thenReturn(null);
     t.true( l.remove(object) );
+});
+
+test("contains", (t) => {
+    // mocks
+    const mockOwner = mock<EObjectInternal>();
+    const owner = instance(mockOwner);
+    let l = new BasicEObjectList(owner,1,2,false,true,true,false,false);
+    {
+        const mockObject = mock<EObjectInternal>();
+        const object = instance(mockObject);
+        l.add(object);
+        t.true( l.contains(object));
+        t.true( l.contains(object));
+    }
+    {
+        const mockObject = mock<EObjectInternal>();
+        const object = instance(mockObject);
+        l.add(object);
+        t.true( l.contains(object));
+    
+        const mockResolved = mock<EObjectInternal>();
+        const resolved = instance(mockResolved);
+        when(mockOwner.eResolveProxy(object)).thenReturn(resolved);
+        when(mockObject.eIsProxy()).thenReturn(true);
+        t.true(l.contains(resolved));
+    }
 });
