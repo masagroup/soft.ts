@@ -72,7 +72,7 @@ export class BasicEList<E> extends AbstractEList<E> {
         this.didChange();
     }
 
-    protected doAddAll(c: import("./Collection").Collection<E>): boolean {
+    protected doAddAll(c: Collection<E>): boolean {
         let oldSize = this._v.length;
         this._v.push(...c.toArray());
         for (let i = oldSize; i < this._v.length; i++) {
@@ -88,7 +88,7 @@ export class BasicEList<E> extends AbstractEList<E> {
         this.didChange();
     }
 
-    protected doInsertAll(index: number, c: import("./Collection").Collection<E>): boolean {
+    protected doInsertAll(index: number, c: Collection<E>): boolean {
         this._v.splice(index, 0, ...c.toArray());
         for (let i = index; i < index + c.size(); i++) {
             this.didAdd(i, this._v[i]);
