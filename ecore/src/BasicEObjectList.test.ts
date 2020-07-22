@@ -220,3 +220,26 @@ test("unresolvedContains", (t) => {
     verify(mockOwner.eResolveProxy(object)).once();
     verify(mockObject.eIsProxy()).once();
 });
+
+test("unresolvedSet", (t) => {
+    // mocks
+    const mockOwner = mock<EObjectInternal>();
+    const owner = instance(mockOwner);
+    when(mockOwner.eDeliver).thenReturn(false);
+
+    // add an object to unresolved
+    let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false);
+    let u = l.getUnResolvedList();
+    const mockObject = mock<EObjectInternal>();
+    const object = instance(mockObject);
+    u.add(object);
+
+    // set first index as another object & check that it has been replaced
+    const mockObject1 = mock<EObjectInternal>();
+    const object1 = instance(mockObject1);
+    u.set(0, object1);
+    t.is(u.get(0), object1);
+
+    // check that invalid range is supported
+    t.throws(() => u.set(1, object), { instanceOf: RangeError });
+});
