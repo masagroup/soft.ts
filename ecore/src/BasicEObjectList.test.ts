@@ -13,6 +13,8 @@ import { BasicEObjectList } from "./BasicEObjectList";
 import { EObjectInternal } from "./BasicEObject";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { EClass } from "./EClass";
+import { EObjectList } from "./EObjectList";
+import { EObject } from "./EObject";
 
 test("constructor", (t) => {
     {
@@ -136,3 +138,23 @@ test("get", (t) => {
     }
 });
 
+test("unresolved", (t) => {
+    // mocks
+    const mockOwner = mock<EObjectInternal>();
+    const owner = instance(mockOwner);
+    when(mockOwner.eDeliver).thenReturn(false);
+
+    // no proxy
+    {
+        let l = new BasicEObjectList(owner, 1, 2, false, false, false, false, false);
+        t.is(l.getUnResolvedList(), l);
+    }
+    // with proxy
+    {
+        let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false);
+        let u = l.getUnResolvedList();
+        t.not(u, l);
+        let e = <EObjectList<EObject>>u;
+        t.not(e, null);
+    }
+});

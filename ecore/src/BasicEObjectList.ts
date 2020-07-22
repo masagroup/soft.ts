@@ -64,36 +64,38 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
     }
 
     getUnResolvedList(): EList<O> {
-        return new (class extends AbstractNotifyingList<O> implements EObjectList<O> {
-            constructor(private _delegate: BasicEObjectList<O>) {
-                super([]);
-                this._v = _delegate.toArray();
-            }
+        return this._proxies
+            ? new (class extends AbstractNotifyingList<O> implements EObjectList<O> {
+                  constructor(private _delegate: BasicEObjectList<O>) {
+                      super([]);
+                      this._v = _delegate.toArray();
+                  }
 
-            get notifier(): ENotifier {
-                return this._delegate.notifier;
-            }
+                  get notifier(): ENotifier {
+                      return this._delegate.notifier;
+                  }
 
-            get feature(): EStructuralFeature {
-                return this._delegate.feature;
-            }
+                  get feature(): EStructuralFeature {
+                      return this._delegate.feature;
+                  }
 
-            get featureID(): number {
-                return this._delegate.featureID;
-            }
+                  get featureID(): number {
+                      return this._delegate.featureID;
+                  }
 
-            getUnResolvedList(): EList<O> {
-                return this;
-            }
+                  getUnResolvedList(): EList<O> {
+                      return this;
+                  }
 
-            inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
-                return this._delegate.inverseAdd(o, notifications);
-            }
+                  inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
+                      return this._delegate.inverseAdd(o, notifications);
+                  }
 
-            inverseRemove(o: O, notifications: ENotificationChain): ENotificationChain {
-                return this._delegate.inverseRemove(o, notifications);
-            }
-        })(this);
+                  inverseRemove(o: O, notifications: ENotificationChain): ENotificationChain {
+                      return this._delegate.inverseRemove(o, notifications);
+                  }
+              })(this)
+            : this;
     }
 
     indexOf(o: O): number {
