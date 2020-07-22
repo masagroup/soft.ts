@@ -1,24 +1,11 @@
 {
     "version": "0.2.0",
     "configurations": [
-        
-      /// Debugger attaches and then does nothing
       {
         "type": "node",
-        "request": "launch",
-        "name": "Debug AVA test file",
-        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ava",
-        "runtimeArgs": [
-          "debug",
-          "--break",
-          "${file}"
-        ],
-        "port": 9229,
-        "outputCapture": "std",
-        "skipFiles": [
-          "<node_internals>/**/*.js"
-        ]
+        "request": "attach",
+        "name": "Attach",
+        "port": 9229
       }
     ]
-  }
-  
+}
