@@ -106,6 +106,9 @@ test("contains", (t) => {
         when(mockOwner.eResolveProxy(object)).thenReturn(resolved);
         when(mockObject.eIsProxy()).thenReturn(true);
         t.true(l.contains(resolved));
+
+        verify(mockOwner.eResolveProxy(object)).once();
+        verify(mockObject.eIsProxy()).once();
     }
 });
 
@@ -129,12 +132,15 @@ test("get", (t) => {
         const mockObject = mock<EObjectInternal>();
         const object = instance(mockObject);
         l.add(object);
-        
+
         const mockResolved = mock<EObjectInternal>();
         const resolved = instance(mockResolved);
         when(mockOwner.eResolveProxy(object)).thenReturn(resolved);
         when(mockObject.eIsProxy()).thenReturn(true);
         t.is(l.get(0), resolved);
+
+        verify(mockOwner.eResolveProxy(object)).once();
+        verify(mockObject.eIsProxy()).once();
     }
 });
 
@@ -157,4 +163,33 @@ test("unresolved", (t) => {
         let e = <EObjectList<EObject>>u;
         t.not(e, null);
     }
+});
+
+test("unresolvedGet", (t) => {
+    // mocks
+    const mockOwner = mock<EObjectInternal>();
+    const owner = instance(mockOwner);
+    when(mockOwner.eDeliver).thenReturn(false);
+
+    let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false);
+    let u = l.getUnResolvedList();
+    const mockObject = mock<EObjectInternal>();
+    const object = instance(mockObject);
+    u.add(object);
+
+    // check that in unresolved it is the same
+    t.is(u.get(0), object);
+
+    // check that in original list , there is a resolution
+    const mockResolved = mock<EObjectInternal>();
+    const resolved = instance(mockResolved);
+    when(mockOwner.eResolveProxy(object)).thenReturn(resolved);
+    when(mockObject.eIsProxy()).thenReturn(true);
+    t.is(l.get(0), resolved);
+
+    // check that now it is the resolved one in the unresolved list
+    t.is(u.get(0), resolved);
+
+    verify(mockOwner.eResolveProxy(object)).once();
+    verify(mockObject.eIsProxy()).once();
 });
