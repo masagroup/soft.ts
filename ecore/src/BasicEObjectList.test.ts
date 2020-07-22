@@ -106,3 +106,33 @@ test("contains", (t) => {
         t.true(l.contains(resolved));
     }
 });
+
+test("get", (t) => {
+    // mocks
+    const mockOwner = mock<EObjectInternal>();
+    const owner = instance(mockOwner);
+    when(mockOwner.eDeliver).thenReturn(false);
+
+    // no proxy
+    {
+        let l = new BasicEObjectList(owner, 1, 2, false, false, false, false, false);
+        const mockObject = mock<EObjectInternal>();
+        const object = instance(mockObject);
+        l.add(object);
+        t.is(l.get(0), object);
+    }
+    // with proxy
+    {
+        let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false);
+        const mockObject = mock<EObjectInternal>();
+        const object = instance(mockObject);
+        l.add(object);
+        
+        const mockResolved = mock<EObjectInternal>();
+        const resolved = instance(mockResolved);
+        when(mockOwner.eResolveProxy(object)).thenReturn(resolved);
+        when(mockObject.eIsProxy()).thenReturn(true);
+        t.is(l.get(0), resolved);
+    }
+});
+
