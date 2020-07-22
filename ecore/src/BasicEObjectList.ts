@@ -73,28 +73,37 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
             get notifier(): ENotifier {
                 return this._delegate.notifier;
             }
-        
+
             get feature(): EStructuralFeature {
                 return this._delegate.feature;
             }
-        
+
             get featureID(): number {
                 return this._delegate.featureID;
             }
-            
+
             getUnResolvedList(): EList<O> {
                 return this;
             }
 
             inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
-                return this._delegate.inverseAdd(o,notifications);
+                return this._delegate.inverseAdd(o, notifications);
             }
 
             inverseRemove(o: O, notifications: ENotificationChain): ENotificationChain {
-                return this._delegate.inverseRemove(o,notifications);
+                return this._delegate.inverseRemove(o, notifications);
             }
-            
         })(this);
+    }
+
+    indexOf(o: O): number {
+        if (this._proxies) {
+            for (var [index, value] of this._v.entries()) {
+                if (value == o || this.resolve(index, value) == o) return index;
+            }
+            return -1;
+        }
+        return super.indexOf(o);
     }
 
     doGet(index: number): O {
@@ -160,10 +169,9 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         return resolved;
     }
 
-    private resolveProxy(o: O) {
-        if (this._proxies && o.eIsProxy()) {
-            <EObjectInternal>this._owner.eResolveProxy(o);
-        }
-        return o;
+    private resolveProxy(o: O): O {
+        return this._proxies && o.eIsProxy()
+            ? <O>(<EObjectInternal>this._owner).eResolveProxy(o)
+            : o;
     }
 }
