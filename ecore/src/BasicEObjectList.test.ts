@@ -15,26 +15,24 @@ import { EStructuralFeature } from "./EStructuralFeature";
 import { EClass } from "./EClass";
 
 test("constructor", (t) => {
-
     {
-        let l = new BasicEObjectList(null,1,2,false,false,false,false,false);
+        let l = new BasicEObjectList(null, 1, 2, false, false, false, false, false);
         t.is(l.notifier, null);
         t.is(l.featureID, 1);
         t.is(l.feature, null);
-
     }
     {
         // mocks
         const mockOwner = mock<EObjectInternal>();
         const owner = instance(mockOwner);
-        
+
         const mockFeature = mock<EStructuralFeature>();
         const feature = instance(mockFeature);
 
         const mockClass = mock<EClass>();
         const cls = instance(mockClass);
 
-        let l = new BasicEObjectList(owner,1,2,false,false,false,false,false);
+        let l = new BasicEObjectList(owner, 1, 2, false, false, false, false, false);
         t.is(l.notifier, owner);
         t.is(l.featureID, 1);
 
@@ -52,14 +50,14 @@ test("inverseNoOpposite", (t) => {
     const mockObject = mock<EObjectInternal>();
     const object = instance(mockObject);
 
-    let l = new BasicEObjectList(owner,1,-1,false,true,false,false,false);
+    let l = new BasicEObjectList(owner, 1, -1, false, true, false, false, false);
 
     when(mockOwner.eDeliver).thenReturn(false);
-    when(mockOwner.eInverseAdd(owner,-2,null)).thenReturn(null);
-    t.true( l.add(object) );
+    when(mockOwner.eInverseAdd(owner, -2, null)).thenReturn(null);
+    t.true(l.add(object));
 
-    when(mockOwner.eInverseRemove(owner,-2,null)).thenReturn(null);
-    t.true( l.remove(object) );
+    when(mockOwner.eInverseRemove(owner, -2, null)).thenReturn(null);
+    t.true(l.remove(object));
 });
 
 test("inverseOpposite", (t) => {
@@ -70,34 +68,37 @@ test("inverseOpposite", (t) => {
     const mockObject = mock<EObjectInternal>();
     const object = instance(mockObject);
 
-    let l = new BasicEObjectList(owner,1,2,false,true,true,false,false);
+    let l = new BasicEObjectList(owner, 1, 2, false, true, true, false, false);
 
     when(mockOwner.eDeliver).thenReturn(false);
-    when(mockOwner.eInverseAdd(owner,2,null)).thenReturn(null);
-    t.true( l.add(object) );
+    when(mockOwner.eInverseAdd(owner, 2, null)).thenReturn(null);
+    t.true(l.add(object));
 
-    when(mockOwner.eInverseRemove(owner,2,null)).thenReturn(null);
-    t.true( l.remove(object) );
+    when(mockOwner.eInverseRemove(owner, 2, null)).thenReturn(null);
+    t.true(l.remove(object));
 });
 
 test("contains", (t) => {
     // mocks
     const mockOwner = mock<EObjectInternal>();
     const owner = instance(mockOwner);
-    let l = new BasicEObjectList(owner,1,2,false,true,true,false,false);
+    when(mockOwner.eDeliver).thenReturn(false);
+
     {
+        let l = new BasicEObjectList(owner, 1, 2, false, true, true, false, false);
         const mockObject = mock<EObjectInternal>();
         const object = instance(mockObject);
         l.add(object);
-        t.true( l.contains(object));
-        t.true( l.contains(object));
+        t.true(l.contains(object));
+        t.true(l.contains(object));
     }
     {
+        let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false);
         const mockObject = mock<EObjectInternal>();
         const object = instance(mockObject);
         l.add(object);
-        t.true( l.contains(object));
-    
+        t.true(l.contains(object));
+
         const mockResolved = mock<EObjectInternal>();
         const resolved = instance(mockResolved);
         when(mockOwner.eResolveProxy(object)).thenReturn(resolved);
