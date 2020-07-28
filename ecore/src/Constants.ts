@@ -7,13 +7,6 @@
 //
 // *****************************************************************************
 
-import { ENotifyingList } from "./ENotifyingList";
-import { EList } from "./EList";
+export const EOPPOSITE_FEATURE_BASE: number = -1;
 
-export interface EObjectList<E> extends ENotifyingList<E> {
-    getUnResolvedList(): EList<E>;
-}
-
-export function isEObjectList<E>(l: EList<E>): l is EObjectList<E> {
-    return "getUnResolvedList" in l;
-}
+export const NO_INDEX = -1;

@@ -8,7 +8,6 @@
 // *****************************************************************************
 
 import { AbstractNotifyingList } from "./AbstractNotifyingList";
-import { EObjectInternal, EOPPOSITE_FEATURE_BASE } from "./BasicEObject";
 import { ENotifier } from "./ENotifier";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENotificationChain";
@@ -16,6 +15,8 @@ import { EObject } from "./EObject";
 import { EObjectList } from "./EObjectList";
 import { EList } from "./EList";
 import { EventType } from "./ENotification";
+import { EObjectInternal } from "./EObjectInternal";
+import { EOPPOSITE_FEATURE_BASE } from "./Constants";
 
 export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O>
     implements EObjectList<O> {

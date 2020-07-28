@@ -19,68 +19,11 @@ import { EStructuralFeature } from "./EStructuralFeature";
 import { ENotificationChain } from "./ENOtificationChain";
 import { Notification } from "./Notification";
 import { EventType, ENotification } from "./ENotification";
-import { EAdapter } from "./EAdapter";
+import { EObjectInternal } from "./EObjectInternal";
+import { EOPPOSITE_FEATURE_BASE } from "./Constants";
 
-export const EOPPOSITE_FEATURE_BASE: number = -1;
-
-export function isReference(s: EStructuralFeature): boolean {
-    return s.hasOwnProperty("eReferenceType");
-}
-
-export interface EObjectInternal extends EObject {
-    eStaticClass(): EClass;
-
-    eDirectResource(): EResource;
-
-    eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain;
-
-    eInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain
-    ): ENotificationChain;
-
-    eInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain
-    ): ENotificationChain;
-
-    eDerivedFeatureID(container: EObject, featureID: number): number;
-
-    eDerivedOperationID(container: EObject, operationID: number): number;
-
-    eGetFromID(featureID: number, resolve: boolean, core: boolean): any;
-
-    eSetFromID(featureID: number, newValue: any): void;
-
-    eUnsetFromID(featureID: number): void;
-
-    eIsSetFromID(featureID: number): boolean;
-
-    eInvokeFromID(operationID: number, args: EList<any>): any;
-
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain
-    ): ENotificationChain;
-
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain
-    ): ENotificationChain;
-
-    eObjectForFragmentSegment(fragment: string): EObject;
-
-    eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string;
-
-    eProxyURI(): URL;
-
-    eSetProxyURI(uri: URL): void;
-
-    eResolveProxy(proxy: EObject): EObject;
+export function isEReference(s: EStructuralFeature): s is EReference {
+    return "eReferenceType" in s;
 }
 
 export class BasicEObject extends BasicNotifier implements EObjectInternal {
@@ -162,15 +105,15 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
                 let feature: EStructuralFeature = this._eContainer
                     .eClass()
                     .getEStructuralFeature(EOPPOSITE_FEATURE_BASE - containerFeatureID);
-                if (isReference(feature)) {
-                    return <EReference>feature;
+                if (isEReference(feature)) {
+                    return feature;
                 }
             } else {
                 let feature: EStructuralFeature = this.eClass().getEStructuralFeature(
                     containerFeatureID
                 );
-                if (isReference(feature)) {
-                    return <EReference>feature;
+                if (isEReference(feature)) {
+                    return feature;
                 }
             }
             throw new Error("The containment feature could not be located");
@@ -408,8 +351,8 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eBasicRemoveFromContainerFeature(notifications: ENotificationChain): ENotificationChain {
         let feature = this.eClass().getEStructuralFeature(this._eContainerFeatureID);
-        if (isReference(feature)) {
-            let inverseFeature = (feature as EReference).eOpposite;
+        if (isEReference(feature)) {
+            let inverseFeature = feature.eOpposite;
             if (this._eContainer != null && inverseFeature != null)
                 return this.eInverseRemove(this, inverseFeature.featureID, notifications);
         }

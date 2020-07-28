@@ -10,11 +10,11 @@
 import test from "ava";
 import { mock, verify, instance, when } from "ts-mockito";
 import { BasicEObjectList } from "./BasicEObjectList";
-import { EObjectInternal } from "./BasicEObject";
-import { EStructuralFeature } from "./EStructuralFeature";
 import { EClass } from "./EClass";
-import { EObjectList } from "./EObjectList";
 import { EObject } from "./EObject";
+import { EObjectInternal } from "./EObjectInternal";
+import { EObjectList } from "./EObjectList";
+import { EStructuralFeature } from "./EStructuralFeature";
 
 test("constructor", (t) => {
     {
