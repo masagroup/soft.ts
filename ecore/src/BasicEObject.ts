@@ -156,22 +156,22 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eGet(feature: EStructuralFeature): any {
-        return this.eGetFromFeature(feature, true, true);
+        return this.eGetFromFeature(feature, true);
     }
 
     eGetResolve(feature: EStructuralFeature, resolve: boolean): any {
-        return this.eGetFromFeature(feature, resolve, true);
+        return this.eGetFromFeature(feature, resolve);
     }
 
-    private eGetFromFeature(feature: EStructuralFeature, resolve: boolean, core: boolean): any {
+    private eGetFromFeature(feature: EStructuralFeature, resolve: boolean): any {
         let featureID = this.eFeatureID(feature);
         if (featureID >= 0) {
-            return this.eGetFromID(featureID, resolve, core);
+            return this.eGetFromID(featureID, resolve);
         }
         throw new Error("The feature '" + feature.name + "' is not a valid feature");
     }
 
-    eGetFromID(featureID: number, resolve: boolean, core: boolean): any {
+    eGetFromID(featureID: number, resolve: boolean): any {
         let feature = this.eClass().getEStructuralFeature(featureID);
         if (feature == null) {
             throw new Error("Invalid featureID: " + featureID);
