@@ -10,9 +10,7 @@
 import { EModelElementImpl } from "./EModelElementImpl";
 
 export class EModelElementExt extends EModelElementImpl {
-    
     constructor() {
         super();
     }
-    
 }

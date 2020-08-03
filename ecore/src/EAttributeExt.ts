@@ -10,9 +10,7 @@
 import { EAttributeImpl } from "./EAttributeImpl";
 
 export class EAttributeExt extends EAttributeImpl {
-    
     constructor() {
         super();
     }
-    
 }

@@ -10,9 +10,7 @@
 import { EStructuralFeatureImpl } from "./EStructuralFeatureImpl";
 
 export class EStructuralFeatureExt extends EStructuralFeatureImpl {
-    
     constructor() {
         super();
     }
-    
 }

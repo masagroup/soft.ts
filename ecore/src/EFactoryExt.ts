@@ -10,9 +10,7 @@
 import { EFactoryImpl } from "./EFactoryImpl";
 
 export class EFactoryExt extends EFactoryImpl {
-    
     constructor() {
         super();
     }
-    
 }

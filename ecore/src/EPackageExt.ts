@@ -10,9 +10,7 @@
 import { EPackageImpl } from "./EPackageImpl";
 
 export class EPackageExt extends EPackageImpl {
-    
     constructor() {
         super();
     }
-    
 }

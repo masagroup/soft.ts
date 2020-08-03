@@ -10,9 +10,7 @@
 import { EReferenceImpl } from "./EReferenceImpl";
 
 export class EReferenceExt extends EReferenceImpl {
-    
     constructor() {
         super();
     }
-    
 }

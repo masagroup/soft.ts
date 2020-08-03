@@ -10,9 +10,7 @@
 import { EClassifierImpl } from "./EClassifierImpl";
 
 export class EClassifierExt extends EClassifierImpl {
-    
     constructor() {
         super();
     }
-    
 }

@@ -10,9 +10,7 @@
 import { EClassImpl } from "./EClassImpl";
 
 export class EClassExt extends EClassImpl {
-    
     constructor() {
         super();
     }
-    
 }

@@ -10,9 +10,7 @@
 import { ETypedElementImpl } from "./ETypedElementImpl";
 
 export class ETypedElementExt extends ETypedElementImpl {
-    
     constructor() {
         super();
     }
-    
 }

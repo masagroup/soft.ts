@@ -10,9 +10,7 @@
 import { EOperationImpl } from "./EOperationImpl";
 
 export class EOperationExt extends EOperationImpl {
-    
     constructor() {
         super();
     }
-    
 }
