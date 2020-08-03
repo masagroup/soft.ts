@@ -21,9 +21,14 @@ import { Notification } from "./Notification";
 import { EventType, ENotification } from "./ENotification";
 import { EObjectInternal } from "./EObjectInternal";
 import { EOPPOSITE_FEATURE_BASE } from "./Constants";
+import { EAttribute } from "./EAttribute";
 
 export function isEReference(s: EStructuralFeature): s is EReference {
     return "eReferenceType" in s;
+}
+
+export function isEAttribute(s: EStructuralFeature): s is EAttribute {
+    return "eAttributeType" in s;
 }
 
 export class BasicEObject extends BasicNotifier implements EObjectInternal {

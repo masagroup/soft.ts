@@ -12,8 +12,10 @@ import { EClass } from "./EClass";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { EOperation } from "./EOperation";
 import { EList } from "./EList";
-import { isEReference } from "./BasicEObject";
+import { isEReference, isEAttribute } from "./BasicEObject";
 import { ImmutableEList } from "./ImmutableEList";
+import { EAttribute } from "./EAttribute";
+import { EReference } from "./EReference";
 
 export class EClassExt extends EClassImpl {
     private _nameToFeatureMap: Map<string, EStructuralFeature>;
@@ -148,5 +150,57 @@ export class EClassExt extends EClassImpl {
 
         this._eContainmentFeatures = new ImmutableEList<EStructuralFeature>(containments);
         this._eCrossReferenceFeatures = new ImmutableEList<EStructuralFeature>(crossreferences);
+    }
+
+    protected initEAllAttributes() : void {
+        if ( this._eAllAttributes != null ) {
+            return;
+        }
+
+        let attributes : EAttribute[] = [];
+        let allAttributes : EAttribute[] = [];
+        let eIDAttribute : EAttribute = null;
+        for (const eSuperType of this.eSuperTypes ) {
+            for (const eAttribute of eSuperType.eAllAttributes) {
+                allAttributes.push(eAttribute);
+                if (eAttribute.isID && this._eIDAttribute == null )
+                    eIDAttribute = eAttribute;
+            }
+        }
+
+        for (const eFeature of this.eStructuralFeatures) {
+            if ( isEAttribute(eFeature) ) {
+                attributes.push(eFeature);
+                allAttributes.push(eFeature);
+                if (eFeature.isID && this._eIDAttribute == null )
+                    eIDAttribute = eFeature;
+            }
+        }
+
+        this._eIDAttribute = eIDAttribute;
+        this._eAttributes = new ImmutableEList<EAttribute>(attributes);
+        this._eAllAttributes = new ImmutableEList<EAttribute>(allAttributes);
+    }
+
+    protected initEAllReferences() : void {
+        if (this._eAllReferences != null ) {
+            return;
+        }
+
+        let references : EReference[] = [];
+        let allReferences : EReference[] = [];
+        for (const eSuperType of this.eSuperTypes ) {
+            allReferences.push(...eSuperType.eAllReferences.toArray());
+        }
+
+        for (const eFeature of this.eStructuralFeatures ) {
+            if ( isEReference(eFeature) ) {
+                references.push(eFeature);
+                allReferences.push(eFeature);
+            }
+        }
+
+        this._eReferences = new ImmutableEList<EReference>(references);
+        this._eAllReferences = new ImmutableEList<EReference>(allReferences);
     }
 }
