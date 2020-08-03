@@ -277,4 +277,8 @@ export class EClassExt extends EClassImpl {
         
         this._eAllSuperTypes = new ImmutableEList<EClass>(allSuperTypes);
     }
+
+    protected initEIDAttribute() : void {
+        this.initEAllAttributes();
+    }
 }
