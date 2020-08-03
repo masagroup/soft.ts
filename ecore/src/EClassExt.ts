@@ -263,4 +263,18 @@ export class EClassExt extends EClassImpl {
         this._eAllStructuralFeatures = new ImmutableEList<EStructuralFeature>(allFeatures);
 
     }
+
+    protected initEAllSuperTypes() : void {
+        if (this._eSuperTypes != null ) {
+            return;
+        }
+        
+        let allSuperTypes : EClass[] =[];
+        for (const eSuperType of this.eSuperTypes ) {
+            allSuperTypes.push(...eSuperType.eAllSuperTypes.toArray());
+            allSuperTypes.push(eSuperType);
+        }
+        
+        this._eAllSuperTypes = new ImmutableEList<EClass>(allSuperTypes);
+    }
 }
