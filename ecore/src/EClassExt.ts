@@ -203,4 +203,40 @@ export class EClassExt extends EClassImpl {
         this._eReferences = new ImmutableEList<EReference>(references);
         this._eAllReferences = new ImmutableEList<EReference>(allReferences);
     }
+
+    protected initEAllContainments() : void {
+        if ( this._eAllContainments != null ) {
+            return;
+        }
+
+        let allContainments : EReference[] = [];
+        for (const eReference of this.eAllReferences) {
+            if ( eReference.isContainment ) {
+                allContainments.push(eReference);
+            }
+        }
+        
+        this._eAllContainments = new ImmutableEList<EReference>(allContainments);
+    }
+
+    protected initEAllOperations() : void {
+        if ( this._eAllOperations != null ) {
+            return;
+        }
+
+        this._operationToOverrideMap = null;
+
+        let allOperations : EOperation[] = [];
+        for (const eSuperType of this.eAllSuperTypes) {
+            allOperations.push(...eSuperType.eAllOperations.toArray());
+        }
+
+        let operationID = allOperations.length;
+        for (const eOperation of this.eOperations) {
+            eOperation.operationID = operationID++;
+            allOperations.push(eOperation);
+        }
+
+        this._eAllOperations = new ImmutableEList<EOperation>(allOperations);
+    }
 }
