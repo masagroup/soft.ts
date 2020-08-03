@@ -239,4 +239,28 @@ export class EClassExt extends EClassImpl {
 
         this._eAllOperations = new ImmutableEList<EOperation>(allOperations);
     }
+
+    protected initEAllStructuralFeatures() : void {
+        if ( this._eAllStructuralFeatures != null ) {
+            return;
+        }
+
+        this._eCrossReferenceFeatures = null;
+        this._eContainmentFeatures = null;
+        this._nameToFeatureMap = null;
+
+        let allFeatures : EStructuralFeature[] = [];
+        for (const eSuperType of this.eAllSuperTypes) {
+            allFeatures.push(...eSuperType.eAllStructuralFeatures.toArray());
+        }
+        
+        let featureID = allFeatures.length;
+        for (const eFeature of this.eStructuralFeatures) {
+            eFeature.featureID = featureID++;
+            allFeatures.push(eFeature);
+        }
+
+        this._eAllStructuralFeatures = new ImmutableEList<EStructuralFeature>(allFeatures);
+
+    }
 }
