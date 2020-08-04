@@ -16,14 +16,93 @@ import { isEReference, isEAttribute } from "./BasicEObject";
 import { ImmutableEList } from "./ImmutableEList";
 import { EAttribute } from "./EAttribute";
 import { EReference } from "./EReference";
+import { Adapter } from "./Adapter";
+import { ENotification, EventType } from "./ENotification";
+import { EcoreConstants } from "./EcoreConstants";
+
+class ESuperAdapter extends Adapter {
+    constructor(private _eClass: EClassExt) {
+        super();
+    }
+
+    notifyChanged(notification: ENotification): void {
+        let eventType = notification.eventType;
+        let notifier = notification.notifier as EClassExt;
+        if (eventType != EventType.REMOVING_ADAPTER) {
+            if (notification.featureID == EcoreConstants.ECLASS__ESUPER_TYPES) {
+                switch (eventType) {
+                    case EventType.SET:
+                    case EventType.RESOLVE: {
+                        if (notification.oldValue != null) {
+                            let eClass = notification.oldValue as EClassExt;
+                            let index = eClass._subClasses.findIndex((c) => c == notifier);
+                            if (index != -1) eClass._subClasses.splice(index, 1);
+                        }
+                        if (notification.newValue != null) {
+                            let eClass = notification.newValue as EClassExt;
+                            eClass._subClasses.push(notifier);
+                        }
+                        break;
+                    }
+                    case EventType.ADD: {
+                        if (notification.newValue != null) {
+                            let eClass = notification.newValue as EClassExt;
+                            eClass._subClasses.push(notifier);
+                        }
+                        break;
+                    }
+                    case EventType.ADD_MANY: {
+                        if (notification.newValue != null) {
+                            let classes = notification.newValue as EClassExt[];
+                            for (const cls of classes) {
+                                cls._subClasses.push(notifier);
+                            }
+                        }
+                        break;
+                    }
+                    case EventType.REMOVE: {
+                        if (notification.oldValue != null) {
+                            let eClass = notification.oldValue as EClassExt;
+                            for (const [i, subClass] of eClass._subClasses.entries()) {
+                                if (subClass == notifier) {
+                                    eClass._subClasses.splice(i, 1);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    case EventType.REMOVE_MANY: {
+                        if (notification.oldValue != null) {
+                            let classes = notification.oldValue as EClassExt[];
+                            for (const eClass of classes) {
+                                for (const [i, subClass] of eClass._subClasses.entries()) {
+                                    if (subClass == notifier) {
+                                        eClass._subClasses.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            this._eClass.setModified(notification.featureID);
+        }
+    }
+}
 
 export class EClassExt extends EClassImpl {
     private _nameToFeatureMap: Map<string, EStructuralFeature>;
     private _operationToOverrideMap: Map<EOperation, EOperation>;
-    private _containmentFeatures: EList<EStructuralFeature>;
-    private _crossReferenceFeatures: EList<EStructuralFeature>;
+    private _adapter: ESuperAdapter;
+    public _subClasses: EClassExt[] = [];
+
     constructor() {
         super();
+        this._adapter = new ESuperAdapter(this);
+        this.eAdapters.add(this._adapter);
     }
 
     isSuperTypeOf(someClass: EClass): boolean {
@@ -128,7 +207,7 @@ export class EClassExt extends EClassImpl {
     private initFeatureSubSet(): void {
         this.initEAllStructuralFeatures();
 
-        if (this._containmentFeatures != null) {
+        if (this._eContainmentFeatures != null) {
             return;
         }
 
@@ -152,28 +231,26 @@ export class EClassExt extends EClassImpl {
         this._eCrossReferenceFeatures = new ImmutableEList<EStructuralFeature>(crossreferences);
     }
 
-    protected initEAllAttributes() : void {
-        if ( this._eAllAttributes != null ) {
+    protected initEAllAttributes(): void {
+        if (this._eAllAttributes != null) {
             return;
         }
 
-        let attributes : EAttribute[] = [];
-        let allAttributes : EAttribute[] = [];
-        let eIDAttribute : EAttribute = null;
-        for (const eSuperType of this.eSuperTypes ) {
+        let attributes: EAttribute[] = [];
+        let allAttributes: EAttribute[] = [];
+        let eIDAttribute: EAttribute = null;
+        for (const eSuperType of this.eSuperTypes) {
             for (const eAttribute of eSuperType.eAllAttributes) {
                 allAttributes.push(eAttribute);
-                if (eAttribute.isID && this._eIDAttribute == null )
-                    eIDAttribute = eAttribute;
+                if (eAttribute.isID && this._eIDAttribute == null) eIDAttribute = eAttribute;
             }
         }
 
         for (const eFeature of this.eStructuralFeatures) {
-            if ( isEAttribute(eFeature) ) {
+            if (isEAttribute(eFeature)) {
                 attributes.push(eFeature);
                 allAttributes.push(eFeature);
-                if (eFeature.isID && this._eIDAttribute == null )
-                    eIDAttribute = eFeature;
+                if (eFeature.isID && this._eIDAttribute == null) eIDAttribute = eFeature;
             }
         }
 
@@ -182,19 +259,19 @@ export class EClassExt extends EClassImpl {
         this._eAllAttributes = new ImmutableEList<EAttribute>(allAttributes);
     }
 
-    protected initEAllReferences() : void {
-        if (this._eAllReferences != null ) {
+    protected initEAllReferences(): void {
+        if (this._eAllReferences != null) {
             return;
         }
 
-        let references : EReference[] = [];
-        let allReferences : EReference[] = [];
-        for (const eSuperType of this.eSuperTypes ) {
+        let references: EReference[] = [];
+        let allReferences: EReference[] = [];
+        for (const eSuperType of this.eSuperTypes) {
             allReferences.push(...eSuperType.eAllReferences.toArray());
         }
 
-        for (const eFeature of this.eStructuralFeatures ) {
-            if ( isEReference(eFeature) ) {
+        for (const eFeature of this.eStructuralFeatures) {
+            if (isEReference(eFeature)) {
                 references.push(eFeature);
                 allReferences.push(eFeature);
             }
@@ -204,29 +281,29 @@ export class EClassExt extends EClassImpl {
         this._eAllReferences = new ImmutableEList<EReference>(allReferences);
     }
 
-    protected initEAllContainments() : void {
-        if ( this._eAllContainments != null ) {
+    protected initEAllContainments(): void {
+        if (this._eAllContainments != null) {
             return;
         }
 
-        let allContainments : EReference[] = [];
+        let allContainments: EReference[] = [];
         for (const eReference of this.eAllReferences) {
-            if ( eReference.isContainment ) {
+            if (eReference.isContainment) {
                 allContainments.push(eReference);
             }
         }
-        
+
         this._eAllContainments = new ImmutableEList<EReference>(allContainments);
     }
 
-    protected initEAllOperations() : void {
-        if ( this._eAllOperations != null ) {
+    protected initEAllOperations(): void {
+        if (this._eAllOperations != null) {
             return;
         }
 
         this._operationToOverrideMap = null;
 
-        let allOperations : EOperation[] = [];
+        let allOperations: EOperation[] = [];
         for (const eSuperType of this.eAllSuperTypes) {
             allOperations.push(...eSuperType.eAllOperations.toArray());
         }
@@ -240,8 +317,8 @@ export class EClassExt extends EClassImpl {
         this._eAllOperations = new ImmutableEList<EOperation>(allOperations);
     }
 
-    protected initEAllStructuralFeatures() : void {
-        if ( this._eAllStructuralFeatures != null ) {
+    protected initEAllStructuralFeatures(): void {
+        if (this._eAllStructuralFeatures != null) {
             return;
         }
 
@@ -249,11 +326,11 @@ export class EClassExt extends EClassImpl {
         this._eContainmentFeatures = null;
         this._nameToFeatureMap = null;
 
-        let allFeatures : EStructuralFeature[] = [];
+        let allFeatures: EStructuralFeature[] = [];
         for (const eSuperType of this.eAllSuperTypes) {
             allFeatures.push(...eSuperType.eAllStructuralFeatures.toArray());
         }
-        
+
         let featureID = allFeatures.length;
         for (const eFeature of this.eStructuralFeatures) {
             eFeature.featureID = featureID++;
@@ -261,24 +338,64 @@ export class EClassExt extends EClassImpl {
         }
 
         this._eAllStructuralFeatures = new ImmutableEList<EStructuralFeature>(allFeatures);
-
     }
 
-    protected initEAllSuperTypes() : void {
-        if (this._eSuperTypes != null ) {
+    protected initEAllSuperTypes(): void {
+        if (this._eSuperTypes != null) {
             return;
         }
-        
-        let allSuperTypes : EClass[] =[];
-        for (const eSuperType of this.eSuperTypes ) {
+
+        let allSuperTypes: EClass[] = [];
+        for (const eSuperType of this.eSuperTypes) {
             allSuperTypes.push(...eSuperType.eAllSuperTypes.toArray());
             allSuperTypes.push(eSuperType);
         }
-        
+
         this._eAllSuperTypes = new ImmutableEList<EClass>(allSuperTypes);
     }
 
-    protected initEIDAttribute() : void {
+    protected initEIDAttribute(): void {
         this.initEAllAttributes();
+    }
+
+    setModified(featureID: number): void {
+        switch (featureID) {
+            case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
+                this._eAllAttributes = null;
+                this._eAllStructuralFeatures = null;
+                this._eAllReferences = null;
+                this._eAllContainments = null;
+                break;
+            }
+            case EcoreConstants.ECLASS__EATTRIBUTES: {
+                this._eAllAttributes = null;
+                this._eAllStructuralFeatures = null;
+                this._eAllContainments = null;
+                break;
+            }
+            case EcoreConstants.ECLASS__EREFERENCES: {
+                this._eAllStructuralFeatures = null;
+                this._eAllReferences = null;
+                this._eAllContainments = null;
+                break;
+            }
+            case EcoreConstants.ECLASS__EOPERATIONS: {
+                this._eAllOperations = null;
+                this._eAllContainments = null;
+                break;
+            }
+            case EcoreConstants.ECLASS__ESUPER_TYPES: {
+                this._eAllSuperTypes = null;
+                this._eAllAttributes = null;
+                this._eAllOperations = null;
+                this._eAllStructuralFeatures = null;
+                this._eAllReferences = null;
+                this._eAllContainments = null;
+                break;
+            }
+        }
+        for (const subClass of this._subClasses) {
+            subClass.setModified(featureID);
+        }
     }
 }
