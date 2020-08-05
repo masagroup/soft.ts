@@ -22,7 +22,7 @@
   "ava": {
     "typescript": {
       "rewritePaths": {
-        "/": "dist/"
+        "src/": "dist/"
       },
       "extensions": [
         "ts"

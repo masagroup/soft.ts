@@ -5,10 +5,10 @@
     "sourceMap": true,
     "declaration": true,
     "outDir": "dist",
-    "rootDirs": [
-      "src"
-    ],
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules",
     "dist"
