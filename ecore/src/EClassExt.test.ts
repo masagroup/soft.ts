@@ -10,6 +10,7 @@
 import test from "ava";
 import { mock, verify, instance } from "ts-mockito";
 import { EClassExt } from "./EClassExt";
+import { ImmutableEList } from "./ImmutableEList";
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
     return eSuper._subClasses.indexOf(eClass) != -1;
@@ -31,7 +32,23 @@ test("superTypes", (t) => {
     eClass.eSuperTypes.add(eSuperClass);
     eSuperClass.eSuperTypes.add(eSuperClassClass);
 
+    // test super types getters
     t.deepEqual(eClass.eSuperTypes.toArray(), [eSuperClass]);
     t.deepEqual(eClass.eAllSuperTypes.toArray(), [eSuperClassClass, eSuperClass]);
     t.true(containsSubClass(eSuperClass, eClass));
+
+    // remove super class
+    eClass.eSuperTypes.remove(eSuperClass);
+    t.false(containsSubClass(eSuperClass, eClass));
+
+    // add many super classes
+    eClass.eSuperTypes.addAll( new ImmutableEList([eSuperClass,eSuperClass2]));
+    t.true(containsSubClass(eSuperClass, eClass));
+    t.true(containsSubClass(eSuperClass2, eClass));
+
+    // set super classes
+    eClass.eSuperTypes.set(1,eSuperClass3);
+    t.true(containsSubClass(eSuperClass, eClass));
+    t.true(containsSubClass(eSuperClass3, eClass));
+
 });
