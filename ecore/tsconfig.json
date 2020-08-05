@@ -6,13 +6,11 @@
     "declaration": true,
     "outDir": "dist",
     "rootDirs": [
-      "src",
-      "src-gen"
+      "src"
     ],
   },
   "exclude": [
     "node_modules",
-    "test",
     "dist"
   ]
 }

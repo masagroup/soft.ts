@@ -1,0 +1,4 @@
+*Impl.ts
+Ecore*.ts
+E*.ts
+!ENotif*.ts
