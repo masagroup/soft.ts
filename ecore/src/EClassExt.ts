@@ -341,7 +341,7 @@ export class EClassExt extends EClassImpl {
     }
 
     protected initEAllSuperTypes(): void {
-        if (this._eSuperTypes != null) {
+        if (this._eAllSuperTypes != null) {
             return;
         }
 

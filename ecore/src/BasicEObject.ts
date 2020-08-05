@@ -34,14 +34,11 @@ export function isEAttribute(s: EStructuralFeature): s is EAttribute {
 export class BasicEObject extends BasicNotifier implements EObjectInternal {
     private _eResource: EResource;
     private _eContainer: EObject;
-    private _eContainerFeatureID: number;
-    private _eProxyURI?: URL;
+    private _eContainerFeatureID: number = -1;
+    private _eProxyURI: URL;
 
     constructor() {
         super();
-        this._eResource = null;
-        this._eContainer = null;
-        this._eContainerFeatureID = -1;
     }
 
     eClass(): EClass {
@@ -373,7 +370,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eIsProxy(): boolean {
-        return this._eProxyURI == undefined;
+        return this._eProxyURI != null;
     }
 
     eProxyURI(): URL {
