@@ -11,6 +11,7 @@ import test from "ava";
 import { mock, verify, instance } from "ts-mockito";
 import { EClassExt } from "./EClassExt";
 import { ImmutableEList } from "./ImmutableEList";
+import { EAttributeExt } from "./EAttributeExt";
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
     return eSuper._subClasses.indexOf(eClass) != -1;
@@ -51,4 +52,17 @@ test("superTypes", (t) => {
     t.true(containsSubClass(eSuperClass, eClass));
     t.true(containsSubClass(eSuperClass3, eClass));
 
+});
+
+test('featuresAdd', t => {
+    let eClass = new EClassExt();
+    let eAttribute = new EAttributeExt();
+    t.is( eAttribute.featureID , -1 );
+
+    eClass.eStructuralFeatures.add(eAttribute);
+
+    t.is(eClass.getFeatureCount(),1);
+    t.is(eAttribute.featureID, 0 );
+    t.is(eAttribute.eContainingClass, eClass );
+    
 });
