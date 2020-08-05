@@ -1,4 +1,9 @@
 *Impl.ts
 Ecore*.ts
 E*.ts
+!EAdapter.ts
 !ENotif*.ts
+!EObjectInternal.ts
+!EObjectList.ts
+!*Ext.ts
+!*.test.ts
