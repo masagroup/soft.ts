@@ -122,3 +122,39 @@ test("featuresGetter", (t) => {
     t.is(eAttribute2.featureID, 3);
     t.is(eReference2.featureID, 4);
 });
+
+test("featuresGettersWithSuperType", (t) => {
+    let eClass = new EClassExt();
+    let eSuperClass = new EClassExt();
+    eClass.eSuperTypes.add(eSuperClass);
+
+    let eAttribute1 = new EAttributeExt();
+    let eAttribute2 = new EAttributeExt();
+    let eReference1 = new EReferenceExt();
+    let eReference2 = new EReferenceExt();
+
+    eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eReference1]));
+    eSuperClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute2, eReference2]));
+
+    // collections
+    t.deepEqual(eSuperClass.eAllStructuralFeatures.toArray(), [eAttribute2, eReference2]);
+    t.deepEqual(eSuperClass.eAllAttributes.toArray(), [eAttribute2]);
+    t.deepEqual(eSuperClass.eAttributes.toArray(), [eAttribute2]);
+    t.deepEqual(eSuperClass.eAllReferences.toArray(), [eReference2]);
+    t.deepEqual(eSuperClass.eReferences.toArray(), [eReference2]);
+
+    t.deepEqual(eClass.eAllStructuralFeatures.toArray(), [eAttribute2, eReference2,eAttribute1,eReference1]);
+    t.deepEqual(eClass.eAllAttributes.toArray(), [eAttribute2,eAttribute1]);
+    t.deepEqual(eClass.eAttributes.toArray(), [eAttribute1]);
+    t.deepEqual(eClass.eAllReferences.toArray(), [eReference2,eReference1]);
+    t.deepEqual(eClass.eReferences.toArray(), [eReference1]);
+
+    eClass.eSuperTypes.remove(eSuperClass);
+
+    t.deepEqual(eClass.eAllStructuralFeatures.toArray(), [eAttribute1,eReference1]);
+    t.deepEqual(eClass.eAllAttributes.toArray(), [eAttribute1]);
+    t.deepEqual(eClass.eAttributes.toArray(), [eAttribute1]);
+    t.deepEqual(eClass.eAllReferences.toArray(), [eReference1]);
+    t.deepEqual(eClass.eReferences.toArray(), [eReference1]);
+
+});
