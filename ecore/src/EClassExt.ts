@@ -179,7 +179,7 @@ export class EClassExt extends EClassImpl {
         if (this._nameToFeatureMap != null) {
             return;
         }
-
+        this.initEAllStructuralFeatures();
         this._nameToFeatureMap = new Map<string, EStructuralFeature>();
         for (const eFeature of this.eAllStructuralFeatures) {
             this._nameToFeatureMap.set(eFeature.name, eFeature);
@@ -190,7 +190,7 @@ export class EClassExt extends EClassImpl {
         if (this._operationToOverrideMap != null) {
             return;
         }
-
+        this.initEAllOperations();
         let size = this.eAllOperations.size();
         this._operationToOverrideMap = new Map<EOperation, EOperation>();
         for (let i = 0; i < size; i++) {
@@ -205,12 +205,11 @@ export class EClassExt extends EClassImpl {
     }
 
     private initFeatureSubSet(): void {
-        this.initEAllStructuralFeatures();
-
         if (this._eContainmentFeatures != null) {
             return;
         }
 
+        this.initEAllStructuralFeatures();
         let containments: EStructuralFeature[] = [];
         let crossreferences: EStructuralFeature[] = [];
         for (const eFeature of this.eStructuralFeatures) {

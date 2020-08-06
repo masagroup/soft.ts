@@ -158,3 +158,16 @@ test("featuresGettersWithSuperType", (t) => {
     t.deepEqual(eClass.eReferences.toArray(), [eReference1]);
 
 });
+
+test('featuresGetFromName', t => {
+    let eClass = new EClassExt();
+    let eAttribute1 = new EAttributeExt();
+    eAttribute1.name = "MyAttribute1";
+    let eAttribute2 = new EAttributeExt();
+    eAttribute2.name = "MyAttribute2";
+    eClass.eStructuralFeatures.addAll( new ImmutableEList([eAttribute1,eAttribute2]));
+    t.is( eClass.getEStructuralFeatureFromName("MyAttribute1"), eAttribute1 );
+    t.is( eClass.getEStructuralFeatureFromName("MyAttribute2"), eAttribute2 );
+    t.is( eClass.getEStructuralFeatureFromName("MyAttribute3"), undefined );
+
+});
