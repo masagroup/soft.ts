@@ -21,6 +21,10 @@ export class EAttributeExt extends EAttributeImpl {
         return this.eType as EDataType;
     }
 
+    get isID() : boolean {
+        return super.isID;
+    }
+
     set isID( newIsID : boolean ) {
         super.isID = newIsID;
         let eClass = this.eContainingClass;

@@ -22,6 +22,7 @@ test("instance", (t) => {
     let eClass = new EClassExt();
     eClass.name = "eClass";
     t.is(eClass.name, "eClass");
+    t.true(eClass.eAllAttributes.isEmpty());
 });
 
 test("superTypes", (t) => {
@@ -170,4 +171,16 @@ test('featuresGetFromName', t => {
     t.is( eClass.getEStructuralFeatureFromName("MyAttribute2"), eAttribute2 );
     t.is( eClass.getEStructuralFeatureFromName("MyAttribute3"), undefined );
 
+});
+
+test('attributeID', t => {
+    let eClass = new EClassExt();
+    let eAttribute = new EAttributeExt();
+    eClass.eStructuralFeatures.add( eAttribute );
+    
+    eAttribute.isID = true;
+    t.is( eClass.eIDAttribute , eAttribute );
+
+    eAttribute.isID = false;
+    t.is( eClass.eIDAttribute, null );
 });

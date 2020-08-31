@@ -241,7 +241,9 @@ export class EClassExt extends EClassImpl {
         for (const eSuperType of this.eSuperTypes) {
             for (const eAttribute of eSuperType.eAllAttributes) {
                 allAttributes.push(eAttribute);
-                if (eAttribute.isID && this._eIDAttribute == null) eIDAttribute = eAttribute;
+                if (eAttribute.isID && eIDAttribute == null) {
+                    eIDAttribute = eAttribute;
+                } 
             }
         }
 
@@ -249,7 +251,9 @@ export class EClassExt extends EClassImpl {
             if (isEAttribute(eFeature)) {
                 attributes.push(eFeature);
                 allAttributes.push(eFeature);
-                if (eFeature.isID && this._eIDAttribute == null) eIDAttribute = eFeature;
+                if (eFeature.isID && eIDAttribute == null) {
+                    eIDAttribute = eFeature;
+                }
             }
         }
 
