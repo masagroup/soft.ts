@@ -13,6 +13,7 @@ import { EClassExt } from "./EClassExt";
 import { ImmutableEList } from "./ImmutableEList";
 import { EAttributeExt } from "./EAttributeExt";
 import { EReferenceExt } from "./EReferenceExt";
+import { EOperationExt } from "./EOperationExt";
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
     return eSuper._subClasses.indexOf(eClass) != -1;
@@ -175,6 +176,8 @@ test('featuresGetFromName', t => {
 
 test('attributeID', t => {
     let eClass = new EClassExt();
+    t.is( eClass.eIDAttribute, null );
+
     let eAttribute = new EAttributeExt();
     eClass.eStructuralFeatures.add( eAttribute );
     
@@ -183,4 +186,22 @@ test('attributeID', t => {
 
     eAttribute.isID = false;
     t.is( eClass.eIDAttribute, null );
+});
+
+
+test('operationsGetter', t => {
+    let eClass = new EClassExt();
+    let eOperation1 = new EOperationExt();
+    let eOperation2 = new EOperationExt();
+ 
+    eClass.eOperations.addAll(new ImmutableEList([eOperation1, eOperation2]));
+
+    t.is( eClass.getOperationCount(), 2);
+    t.is( eClass.getEOperation(0), eOperation1);
+    t.is( eClass.getEOperation(1), eOperation2);
+    t.is( eClass.getEOperation(2), null);
+    t.is( eOperation1.operationID, 0);
+    t.is( eOperation2.operationID, 1);
+    t.is( eClass.getOperationID(eOperation1), 0 );
+    t.is( eClass.getOperationID(eOperation2), 1 );
 });
