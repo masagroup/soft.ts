@@ -204,4 +204,21 @@ test('operationsGetter', t => {
     t.is( eOperation2.operationID, 1);
     t.is( eClass.getOperationID(eOperation1), 0 );
     t.is( eClass.getOperationID(eOperation2), 1 );
+
+    t.deepEqual(eClass.eAllOperations.toArray(), [eOperation1, eOperation2]);
+    t.deepEqual(eClass.eOperations.toArray(), [eOperation1, eOperation2]);
+
+    let eOperation3 = new EOperationExt();
+    eClass.eOperations.insert(0,eOperation3);
+
+    t.is( eClass.getOperationCount(), 3);
+    t.is( eClass.getEOperation(0), eOperation3);
+    t.is( eClass.getEOperation(1), eOperation1);
+    t.is( eClass.getEOperation(2), eOperation2);
+    t.is( eOperation3.operationID, 0);
+    t.is( eOperation1.operationID, 1);
+    t.is( eOperation2.operationID, 2);
+    t.is( eClass.getOperationID(eOperation3), 0 );
+    t.is( eClass.getOperationID(eOperation1), 1 );
+    t.is( eClass.getOperationID(eOperation2), 2 );
 });
