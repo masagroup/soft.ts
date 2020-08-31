@@ -222,3 +222,27 @@ test('operationsGetter', t => {
     t.is( eClass.getOperationID(eOperation1), 1 );
     t.is( eClass.getOperationID(eOperation2), 2 );
 });
+
+test('operationsGetterWithSuperTypes', t => {
+    let eClass = new EClassExt();
+    let eSuperClass = new EClassExt();
+    eClass.eSuperTypes.add(eSuperClass);
+
+    let eOperation1 = new EOperationExt();
+    let eOperation2 = new EOperationExt();
+ 
+    eClass.eOperations.add(eOperation1);
+    eSuperClass.eOperations.add(eOperation2);
+
+    t.deepEqual(eSuperClass.eAllOperations.toArray(), [eOperation2]);
+    t.deepEqual(eSuperClass.eOperations.toArray(), [eOperation2]);
+
+    t.deepEqual(eClass.eAllOperations.toArray(), [eOperation2, eOperation1]);
+    t.deepEqual(eClass.eOperations.toArray(), [eOperation1]);
+
+    eClass.eSuperTypes.remove(eSuperClass);
+
+    t.deepEqual(eClass.eAllOperations.toArray(), [eOperation1]);
+    t.deepEqual(eClass.eOperations.toArray(), [eOperation1]);
+
+});
