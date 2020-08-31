@@ -196,7 +196,7 @@ export class EClassExt extends EClassImpl {
         for (let i = 0; i < size; i++) {
             for (let j = size - 1; j > i; j--) {
                 let oi = this.eAllOperations.get(i);
-                let oj = this.eAllOperations.get(i);
+                let oj = this.eAllOperations.get(j);
                 if (oj.isOverrideOf(oi)) {
                     this._operationToOverrideMap.set(oi, oj);
                 }

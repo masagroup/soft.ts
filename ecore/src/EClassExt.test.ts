@@ -8,12 +8,13 @@
 // *****************************************************************************
 
 import test from "ava";
-import { mock, verify, instance } from "ts-mockito";
+import { mock, verify, instance, when } from "ts-mockito";
 import { EClassExt } from "./EClassExt";
 import { ImmutableEList } from "./ImmutableEList";
 import { EAttributeExt } from "./EAttributeExt";
 import { EReferenceExt } from "./EReferenceExt";
 import { EOperationExt } from "./EOperationExt";
+import { EOperation } from "./EOperation";
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
     return eSuper._subClasses.indexOf(eClass) != -1;
@@ -297,5 +298,24 @@ test('isSuperTypeOf', t => {
     t.true( eSuperClass.isSuperTypeOf(eClass) );
     t.false( eClass.isSuperTypeOf(eSuperClass) );
     t.false( eOther.isSuperTypeOf(eClass) );
+});
+
+test('getOverride', t => {
+    
+    let eClass = new EClassExt();
+    let eSuperClass = new EClassExt();
+    eClass.eSuperTypes.add(eSuperClass);
+
+    let mockOperation1 = mock<EOperation>();
+    let mockOperation2 = mock<EOperation>();
+    let operation1 = instance(mockOperation1);
+    let operation2 = instance(mockOperation2);
+
+    eClass.eOperations.add(operation1);
+    eSuperClass.eOperations.add(operation2);
+
+    when(mockOperation1.isOverrideOf(operation2)).thenReturn(true);
+    t.is(eClass.getOverride(operation2),operation1);
+
 });
 
