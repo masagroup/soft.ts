@@ -285,3 +285,17 @@ test('eContainmentsFeatures', t => {
     t.deepEqual(eClass.eCrossReferenceFeatures.toArray(), [eReference0,eReference2]);
 
 });
+
+test('isSuperTypeOf', t => {
+    
+    let eClass = new EClassExt();
+    let eOther = new EClassExt();
+    let eSuperClass = new EClassExt();
+    eClass.eSuperTypes.add(eSuperClass);
+
+    t.true( eClass.isSuperTypeOf(eClass) );
+    t.true( eSuperClass.isSuperTypeOf(eClass) );
+    t.false( eClass.isSuperTypeOf(eSuperClass) );
+    t.false( eOther.isSuperTypeOf(eClass) );
+});
+
