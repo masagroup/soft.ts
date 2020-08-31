@@ -253,14 +253,17 @@ test('allContainments', t => {
     eClass.eSuperTypes.add(eSuperClass);
 
     let eReference0 = new EReferenceExt();
+    eReference0.name = 'ref0';
     let eReference1 = new EReferenceExt();
+    eReference1.name = 'ref1';
     eReference1.isContainment = true;
     let eReference2 = new EReferenceExt();
+    eReference2.name = 'ref2';
     eReference2.isContainment = true;
 
     eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1]) );
     eSuperClass.eStructuralFeatures.add(eReference2);
 
-    t.deepEqual(eClass.eContainmentFeatures.toArray(), [eReference2,eReference1]);
+    t.deepEqual(eClass.eAllContainments.toArray(), [eReference2,eReference1]);
 
 });

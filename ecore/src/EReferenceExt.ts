@@ -13,4 +13,9 @@ export class EReferenceExt extends EReferenceImpl {
     constructor() {
         super();
     }
+    
+    get isContainer() : boolean {
+        return this.eOpposite && this.eOpposite.isContainment;
+	}
+
 }
