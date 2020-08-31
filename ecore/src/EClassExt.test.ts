@@ -247,7 +247,7 @@ test('operationsGetterWithSuperTypes', t => {
 
 });
 
-test('allContainments', t => {
+test('eAllContainments', t => {
     let eClass = new EClassExt();
     let eSuperClass = new EClassExt();
     eClass.eSuperTypes.add(eSuperClass);
@@ -265,5 +265,23 @@ test('allContainments', t => {
     eSuperClass.eStructuralFeatures.add(eReference2);
 
     t.deepEqual(eClass.eAllContainments.toArray(), [eReference2,eReference1]);
+
+});
+
+test('eContainmentsFeatures', t => {
+    let eClass = new EClassExt();
+
+    let eReference0 = new EReferenceExt();
+    eReference0.name = 'ref0';
+    let eReference1 = new EReferenceExt();
+    eReference1.name = 'ref1';
+    eReference1.isContainment = true;
+    let eReference2 = new EReferenceExt();
+    eReference2.name = 'ref2';
+    
+    eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1, eReference2]) );
+    
+    t.deepEqual(eClass.eContainmentFeatures.toArray(), [eReference1]);
+    t.deepEqual(eClass.eCrossReferenceFeatures.toArray(), [eReference0,eReference2]);
 
 });
