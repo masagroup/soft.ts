@@ -246,3 +246,21 @@ test('operationsGetterWithSuperTypes', t => {
     t.deepEqual(eClass.eOperations.toArray(), [eOperation1]);
 
 });
+
+test('allContainments', t => {
+    let eClass = new EClassExt();
+    let eSuperClass = new EClassExt();
+    eClass.eSuperTypes.add(eSuperClass);
+
+    let eReference0 = new EReferenceExt();
+    let eReference1 = new EReferenceExt();
+    eReference1.isContainment = true;
+    let eReference2 = new EReferenceExt();
+    eReference2.isContainment = true;
+
+    eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1]) );
+    eSuperClass.eStructuralFeatures.add(eReference2);
+
+    t.deepEqual(eClass.eContainmentFeatures.toArray(), [eReference2,eReference1]);
+
+});
