@@ -15,6 +15,8 @@ import { EAttributeExt } from "./EAttributeExt";
 import { EReferenceExt } from "./EReferenceExt";
 import { EOperationExt } from "./EOperationExt";
 import { EOperation } from "./EOperation";
+import { getEcorePackage } from "./EcorePackage";
+import { getEcoreFactory } from "./EcoreFactory";
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
     return eSuper._subClasses.indexOf(eClass) != -1;
@@ -317,5 +319,9 @@ test('getOverride', t => {
     when(mockOperation1.isOverrideOf(operation2)).thenReturn(true);
     t.is(eClass.getOverride(operation2),operation1);
 
+});
+
+test('eClassEClass', t => {
+    t.is( getEcorePackage().getEClass(), getEcoreFactory().createEClass().eClass() );
 });
 
