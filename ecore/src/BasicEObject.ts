@@ -9,7 +9,6 @@
 
 import { BasicNotifier } from "./BasicNotifier";
 import { EClass } from "./EClass";
-import { ECollectionView } from "./ECollectionView";
 import { EList } from "./EList";
 import { EObject } from "./EObject";
 import { EOperation } from "./EOperation";
@@ -127,7 +126,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         return null;
     }
 
-    eAllContents(): ECollectionView<EObject> {
+    eAllContents(): IterableIterator<EObject> {
         return null;
     }
 
