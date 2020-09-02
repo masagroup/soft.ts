@@ -10,3 +10,5 @@
 export const EOPPOSITE_FEATURE_BASE: number = -1;
 
 export const NO_INDEX = -1;
+
+export const UNBOUNDED_MULTIPLICITY = -1;
