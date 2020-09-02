@@ -243,7 +243,7 @@ export class EClassExt extends EClassImpl {
                 allAttributes.push(eAttribute);
                 if (eAttribute.isID && eIDAttribute == null) {
                     eIDAttribute = eAttribute;
-                } 
+                }
             }
         }
 

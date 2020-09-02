@@ -71,5 +71,5 @@ export interface EObjectInternal extends EObject {
 }
 
 export function isEObjectInternal(o: EObject): o is EObjectInternal {
-    return o == undefined ? undefined : typeof o['eStaticClass'] === 'function';
+    return o == undefined ? undefined : typeof o["eStaticClass"] === "function";
 }

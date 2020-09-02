@@ -21,6 +21,10 @@ import { EventType, ENotification } from "./ENotification";
 import { EObjectInternal } from "./EObjectInternal";
 import { EOPPOSITE_FEATURE_BASE } from "./Constants";
 import { EAttribute } from "./EAttribute";
+import { Adapter } from "./Adapter";
+import { ImmutableEList } from "./ImmutableEList";
+import { AbstractEList } from "./AbstractEList";
+import { EObjectList } from "./EObjectList";
 
 export function isEReference(s: EStructuralFeature): s is EReference {
     return "eReferenceType" in s;
@@ -30,11 +34,131 @@ export function isEAttribute(s: EStructuralFeature): s is EAttribute {
     return "eAttributeType" in s;
 }
 
+type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
+
+abstract class AbstractContentsList extends ImmutableEList<EObject>
+    implements EObjectList<EObject> {
+    protected _obj: BasicEObject;
+    protected _getFeatureFn: getFeatureFnType;
+    private _initialized = false;
+    private _resolve = false;
+
+    constructor(obj: BasicEObject, getFeatureFn: getFeatureFnType, resolve: boolean) {
+        super();
+        this._obj = obj;
+        this._getFeatureFn = getFeatureFn;
+        this._resolve = resolve;
+    }
+
+    get(index: number): EObject {
+        this.initialize();
+        return super.get(index);
+    }
+
+    contains(e: EObject): boolean {
+        this.initialize();
+        return super.indexOf(e) != -1;
+    }
+
+    indexOf(e: EObject): number {
+        this.initialize();
+        return super.indexOf(e);
+    }
+
+    isEmpty(): boolean {
+        this.initialize();
+        return super.isEmpty();
+    }
+
+    size(): number {
+        this.initialize();
+        return super.size();
+    }
+
+    toArray(): EObject[] {
+        this.initialize();
+        return super.toArray();
+    }
+
+    [Symbol.iterator](): Iterator<EObject, any, undefined> {
+        this.initialize();
+        return super[Symbol.iterator]();
+    }
+
+    abstract getUnResolvedList(): EList<EObject>;
+
+    private initialize(): void {
+        if (this._initialized) return;
+
+        this._initialized = true;
+        let features = this._getFeatureFn(this._obj.eClass());
+        for (const feature of features) {
+            if (this._obj.eIsSet(feature)) {
+                let value = this._obj.eGetResolve(feature, this._resolve);
+                if (feature.isMany) {
+                    let l = value as EList<EObject>;
+                    this._v.push(...l);
+                } else if (value != null) {
+                    this._v.push(value);
+                }
+            }
+        }
+    }
+}
+
+class ResolvedContentsList extends AbstractContentsList {
+    constructor(obj: BasicEObject, getFeatureFn: getFeatureFnType) {
+        super(obj, getFeatureFn, true);
+    }
+
+    getUnResolvedList(): EList<EObject> {
+        return new UnResolvedContentsList(this._obj, this._getFeatureFn);
+    }
+}
+
+class UnResolvedContentsList extends AbstractContentsList {
+    constructor(obj: BasicEObject, getFeatureFn: getFeatureFnType) {
+        super(obj, getFeatureFn, false);
+    }
+
+    getUnResolvedList(): EList<EObject> {
+        return this;
+    }
+}
+
+class ContentsListAdapter extends Adapter {
+    private _obj: BasicEObject;
+    private _getFeatureFn: getFeatureFnType;
+    private _list: EList<EObject>;
+
+    constructor(obj: BasicEObject, getFeatureFn: getFeatureFnType) {
+        super();
+        this._obj = obj;
+        this._getFeatureFn = getFeatureFn;
+        obj.eAdapters.add(this);
+    }
+
+    notifyChanged(notification: ENotification): void {
+        if (this._list) {
+            let features = this._getFeatureFn(this._obj.eClass());
+            if (features.contains(notification.feature)) delete this._list;
+        }
+    }
+
+    getList(): EList<EObject> {
+        if (this._list == null)
+            this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
+        return this._list;
+    }
+}
+
 export class BasicEObject extends BasicNotifier implements EObjectInternal {
     private _eResource: EResource;
     private _eContainer: EObject;
     private _eContainerFeatureID: number = -1;
     private _eProxyURI: URL;
+    private _contents: ContentsListAdapter;
+    private _crossReferences: ContentsListAdapter;
 
     constructor() {
         super();
@@ -123,7 +247,13 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eContents(): EList<EObject> {
-        return null;
+        if (this._contents == null)
+            this._contents = new ContentsListAdapter(this, function (
+                c: EClass
+            ): EList<EStructuralFeature> {
+                return c.eContainmentFeatures;
+            });
+        return this._contents.getList();
     }
 
     eAllContents(): IterableIterator<EObject> {
@@ -131,7 +261,13 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eCrossReferences(): EList<EObject> {
-        throw new Error("Method not implemented.");
+        if (this._crossReferences == null)
+            this._crossReferences = new ContentsListAdapter(this, function (
+                c: EClass
+            ): EList<EStructuralFeature> {
+                return c.eCrossReferenceFeatures;
+            });
+        return this._crossReferences.getList();
     }
 
     eFeatureID(feature: EStructuralFeature): number {

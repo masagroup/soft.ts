@@ -17,20 +17,19 @@ export class EAttributeExt extends EAttributeImpl {
         super();
     }
 
-    getEAttributeType() : EDataType {
+    getEAttributeType(): EDataType {
         return this.eType as EDataType;
     }
 
-    get isID() : boolean {
+    get isID(): boolean {
         return super.isID;
     }
 
-    set isID( newIsID : boolean ) {
+    set isID(newIsID: boolean) {
         super.isID = newIsID;
         let eClass = this.eContainingClass;
-        if ( eClass != null ) {
+        if (eClass != null) {
             (eClass as EClassExt).setModified(EcoreConstants.ECLASS__EATTRIBUTES);
         }
     }
-
 }

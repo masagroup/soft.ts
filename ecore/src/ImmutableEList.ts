@@ -11,7 +11,7 @@ import { Collection } from "./Collection";
 import { EList } from "./EList";
 
 export class ImmutableEList<E> implements EList<E> {
-    private _v: E[];
+    protected _v: E[];
 
     constructor(v: E[] = []) {
         this._v = v;

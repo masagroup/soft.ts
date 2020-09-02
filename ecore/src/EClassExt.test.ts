@@ -148,92 +148,94 @@ test("featuresGettersWithSuperType", (t) => {
     t.deepEqual(eSuperClass.eAllReferences.toArray(), [eReference2]);
     t.deepEqual(eSuperClass.eReferences.toArray(), [eReference2]);
 
-    t.deepEqual(eClass.eAllStructuralFeatures.toArray(), [eAttribute2, eReference2,eAttribute1,eReference1]);
-    t.deepEqual(eClass.eAllAttributes.toArray(), [eAttribute2,eAttribute1]);
+    t.deepEqual(eClass.eAllStructuralFeatures.toArray(), [
+        eAttribute2,
+        eReference2,
+        eAttribute1,
+        eReference1,
+    ]);
+    t.deepEqual(eClass.eAllAttributes.toArray(), [eAttribute2, eAttribute1]);
     t.deepEqual(eClass.eAttributes.toArray(), [eAttribute1]);
-    t.deepEqual(eClass.eAllReferences.toArray(), [eReference2,eReference1]);
+    t.deepEqual(eClass.eAllReferences.toArray(), [eReference2, eReference1]);
     t.deepEqual(eClass.eReferences.toArray(), [eReference1]);
 
     eClass.eSuperTypes.remove(eSuperClass);
 
-    t.deepEqual(eClass.eAllStructuralFeatures.toArray(), [eAttribute1,eReference1]);
+    t.deepEqual(eClass.eAllStructuralFeatures.toArray(), [eAttribute1, eReference1]);
     t.deepEqual(eClass.eAllAttributes.toArray(), [eAttribute1]);
     t.deepEqual(eClass.eAttributes.toArray(), [eAttribute1]);
     t.deepEqual(eClass.eAllReferences.toArray(), [eReference1]);
     t.deepEqual(eClass.eReferences.toArray(), [eReference1]);
-
 });
 
-test('featuresGetFromName', t => {
+test("featuresGetFromName", (t) => {
     let eClass = new EClassExt();
     let eAttribute1 = new EAttributeExt();
     eAttribute1.name = "MyAttribute1";
     let eAttribute2 = new EAttributeExt();
     eAttribute2.name = "MyAttribute2";
-    eClass.eStructuralFeatures.addAll( new ImmutableEList([eAttribute1,eAttribute2]));
-    t.is( eClass.getEStructuralFeatureFromName("MyAttribute1"), eAttribute1 );
-    t.is( eClass.getEStructuralFeatureFromName("MyAttribute2"), eAttribute2 );
-    t.is( eClass.getEStructuralFeatureFromName("MyAttribute3"), undefined );
-
+    eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]));
+    t.is(eClass.getEStructuralFeatureFromName("MyAttribute1"), eAttribute1);
+    t.is(eClass.getEStructuralFeatureFromName("MyAttribute2"), eAttribute2);
+    t.is(eClass.getEStructuralFeatureFromName("MyAttribute3"), undefined);
 });
 
-test('attributeID', t => {
+test("attributeID", (t) => {
     let eClass = new EClassExt();
-    t.is( eClass.eIDAttribute, null );
+    t.is(eClass.eIDAttribute, null);
 
     let eAttribute = new EAttributeExt();
-    eClass.eStructuralFeatures.add( eAttribute );
-    
+    eClass.eStructuralFeatures.add(eAttribute);
+
     eAttribute.isID = true;
-    t.is( eClass.eIDAttribute , eAttribute );
+    t.is(eClass.eIDAttribute, eAttribute);
 
     eAttribute.isID = false;
-    t.is( eClass.eIDAttribute, null );
+    t.is(eClass.eIDAttribute, null);
 });
 
-
-test('operationsGetter', t => {
+test("operationsGetter", (t) => {
     let eClass = new EClassExt();
     let eOperation1 = new EOperationExt();
     let eOperation2 = new EOperationExt();
- 
+
     eClass.eOperations.addAll(new ImmutableEList([eOperation1, eOperation2]));
 
-    t.is( eClass.getOperationCount(), 2);
-    t.is( eClass.getEOperation(0), eOperation1);
-    t.is( eClass.getEOperation(1), eOperation2);
-    t.is( eClass.getEOperation(2), null);
-    t.is( eOperation1.operationID, 0);
-    t.is( eOperation2.operationID, 1);
-    t.is( eClass.getOperationID(eOperation1), 0 );
-    t.is( eClass.getOperationID(eOperation2), 1 );
+    t.is(eClass.getOperationCount(), 2);
+    t.is(eClass.getEOperation(0), eOperation1);
+    t.is(eClass.getEOperation(1), eOperation2);
+    t.is(eClass.getEOperation(2), null);
+    t.is(eOperation1.operationID, 0);
+    t.is(eOperation2.operationID, 1);
+    t.is(eClass.getOperationID(eOperation1), 0);
+    t.is(eClass.getOperationID(eOperation2), 1);
 
     t.deepEqual(eClass.eAllOperations.toArray(), [eOperation1, eOperation2]);
     t.deepEqual(eClass.eOperations.toArray(), [eOperation1, eOperation2]);
 
     let eOperation3 = new EOperationExt();
-    eClass.eOperations.insert(0,eOperation3);
+    eClass.eOperations.insert(0, eOperation3);
 
-    t.is( eClass.getOperationCount(), 3);
-    t.is( eClass.getEOperation(0), eOperation3);
-    t.is( eClass.getEOperation(1), eOperation1);
-    t.is( eClass.getEOperation(2), eOperation2);
-    t.is( eOperation3.operationID, 0);
-    t.is( eOperation1.operationID, 1);
-    t.is( eOperation2.operationID, 2);
-    t.is( eClass.getOperationID(eOperation3), 0 );
-    t.is( eClass.getOperationID(eOperation1), 1 );
-    t.is( eClass.getOperationID(eOperation2), 2 );
+    t.is(eClass.getOperationCount(), 3);
+    t.is(eClass.getEOperation(0), eOperation3);
+    t.is(eClass.getEOperation(1), eOperation1);
+    t.is(eClass.getEOperation(2), eOperation2);
+    t.is(eOperation3.operationID, 0);
+    t.is(eOperation1.operationID, 1);
+    t.is(eOperation2.operationID, 2);
+    t.is(eClass.getOperationID(eOperation3), 0);
+    t.is(eClass.getOperationID(eOperation1), 1);
+    t.is(eClass.getOperationID(eOperation2), 2);
 });
 
-test('operationsGetterWithSuperTypes', t => {
+test("operationsGetterWithSuperTypes", (t) => {
     let eClass = new EClassExt();
     let eSuperClass = new EClassExt();
     eClass.eSuperTypes.add(eSuperClass);
 
     let eOperation1 = new EOperationExt();
     let eOperation2 = new EOperationExt();
- 
+
     eClass.eOperations.add(eOperation1);
     eSuperClass.eOperations.add(eOperation2);
 
@@ -247,63 +249,58 @@ test('operationsGetterWithSuperTypes', t => {
 
     t.deepEqual(eClass.eAllOperations.toArray(), [eOperation1]);
     t.deepEqual(eClass.eOperations.toArray(), [eOperation1]);
-
 });
 
-test('eAllContainments', t => {
+test("eAllContainments", (t) => {
     let eClass = new EClassExt();
     let eSuperClass = new EClassExt();
     eClass.eSuperTypes.add(eSuperClass);
 
     let eReference0 = new EReferenceExt();
-    eReference0.name = 'ref0';
+    eReference0.name = "ref0";
     let eReference1 = new EReferenceExt();
-    eReference1.name = 'ref1';
+    eReference1.name = "ref1";
     eReference1.isContainment = true;
     let eReference2 = new EReferenceExt();
-    eReference2.name = 'ref2';
+    eReference2.name = "ref2";
     eReference2.isContainment = true;
 
-    eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1]) );
+    eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1]));
     eSuperClass.eStructuralFeatures.add(eReference2);
 
-    t.deepEqual(eClass.eAllContainments.toArray(), [eReference2,eReference1]);
-
+    t.deepEqual(eClass.eAllContainments.toArray(), [eReference2, eReference1]);
 });
 
-test('eContainmentsFeatures', t => {
+test("eContainmentsFeatures", (t) => {
     let eClass = new EClassExt();
 
     let eReference0 = new EReferenceExt();
-    eReference0.name = 'ref0';
+    eReference0.name = "ref0";
     let eReference1 = new EReferenceExt();
-    eReference1.name = 'ref1';
+    eReference1.name = "ref1";
     eReference1.isContainment = true;
     let eReference2 = new EReferenceExt();
-    eReference2.name = 'ref2';
-    
-    eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1, eReference2]) );
-    
-    t.deepEqual(eClass.eContainmentFeatures.toArray(), [eReference1]);
-    t.deepEqual(eClass.eCrossReferenceFeatures.toArray(), [eReference0,eReference2]);
+    eReference2.name = "ref2";
 
+    eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1, eReference2]));
+
+    t.deepEqual(eClass.eContainmentFeatures.toArray(), [eReference1]);
+    t.deepEqual(eClass.eCrossReferenceFeatures.toArray(), [eReference0, eReference2]);
 });
 
-test('isSuperTypeOf', t => {
-    
+test("isSuperTypeOf", (t) => {
     let eClass = new EClassExt();
     let eOther = new EClassExt();
     let eSuperClass = new EClassExt();
     eClass.eSuperTypes.add(eSuperClass);
 
-    t.true( eClass.isSuperTypeOf(eClass) );
-    t.true( eSuperClass.isSuperTypeOf(eClass) );
-    t.false( eClass.isSuperTypeOf(eSuperClass) );
-    t.false( eOther.isSuperTypeOf(eClass) );
+    t.true(eClass.isSuperTypeOf(eClass));
+    t.true(eSuperClass.isSuperTypeOf(eClass));
+    t.false(eClass.isSuperTypeOf(eSuperClass));
+    t.false(eOther.isSuperTypeOf(eClass));
 });
 
-test('getOverride', t => {
-    
+test("getOverride", (t) => {
     let eClass = new EClassExt();
     let eSuperClass = new EClassExt();
     eClass.eSuperTypes.add(eSuperClass);
@@ -317,11 +314,9 @@ test('getOverride', t => {
     eSuperClass.eOperations.add(operation2);
 
     when(mockOperation1.isOverrideOf(operation2)).thenReturn(true);
-    t.is(eClass.getOverride(operation2),operation1);
-
+    t.is(eClass.getOverride(operation2), operation1);
 });
 
-test('eClassEClass', t => {
-    t.is( getEcorePackage().getEClass(), getEcoreFactory().createEClass().eClass() );
+test("eClassEClass", (t) => {
+    t.is(getEcorePackage().getEClass(), getEcoreFactory().createEClass().eClass());
 });
-
