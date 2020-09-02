@@ -157,8 +157,8 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     private _eContainer: EObject;
     private _eContainerFeatureID: number = -1;
     private _eProxyURI: URL;
-    private _contents: ContentsListAdapter;
-    private _crossReferences: ContentsListAdapter;
+    private _contentsListAdapter: ContentsListAdapter;
+    private _crossReferencesListAdapter: ContentsListAdapter;
 
     constructor() {
         super();
@@ -247,13 +247,13 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eContents(): EList<EObject> {
-        if (this._contents == null)
-            this._contents = new ContentsListAdapter(this, function (
+        if (this._contentsListAdapter == null)
+            this._contentsListAdapter = new ContentsListAdapter(this, function (
                 c: EClass
             ): EList<EStructuralFeature> {
                 return c.eContainmentFeatures;
             });
-        return this._contents.getList();
+        return this._contentsListAdapter.getList();
     }
 
     eAllContents(): IterableIterator<EObject> {
@@ -261,13 +261,13 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eCrossReferences(): EList<EObject> {
-        if (this._crossReferences == null)
-            this._crossReferences = new ContentsListAdapter(this, function (
+        if (this._crossReferencesListAdapter == null)
+            this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
                 c: EClass
             ): EList<EStructuralFeature> {
                 return c.eCrossReferenceFeatures;
             });
-        return this._crossReferences.getList();
+        return this._crossReferencesListAdapter.getList();
     }
 
     eFeatureID(feature: EStructuralFeature): number {
