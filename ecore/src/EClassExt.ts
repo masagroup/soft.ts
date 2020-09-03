@@ -307,7 +307,7 @@ export class EClassExt extends EClassImpl {
         this._operationToOverrideMap = null;
 
         let allOperations: EOperation[] = [];
-        for (const eSuperType of this.eAllSuperTypes) {
+        for (const eSuperType of this.eSuperTypes) {
             allOperations.push(...eSuperType.eAllOperations.toArray());
         }
 
@@ -330,7 +330,7 @@ export class EClassExt extends EClassImpl {
         this._nameToFeatureMap = null;
 
         let allFeatures: EStructuralFeature[] = [];
-        for (const eSuperType of this.eAllSuperTypes) {
+        for (const eSuperType of this.eSuperTypes) {
             allFeatures.push(...eSuperType.eAllStructuralFeatures.toArray());
         }
 

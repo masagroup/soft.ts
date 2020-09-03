@@ -97,7 +97,7 @@ abstract class AbstractContentsList extends ImmutableEList<EObject>
                 let value = this._obj.eGetResolve(feature, this._resolve);
                 if (feature.isMany) {
                     let l = value as EList<EObject>;
-                    this._v.push(...l);
+                    this._v.push(...l.toArray());
                 } else if (value != null) {
                     this._v.push(value);
                 }
