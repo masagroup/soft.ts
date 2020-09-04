@@ -13,4 +13,8 @@ export class EClassifierExt extends EClassifierImpl {
     constructor() {
         super();
     }
+
+    protected initClassifierID(): number {
+        return this.ePackage != null ? this.ePackage.eClassifiers.indexOf(this) : -1;
+    }
 }
