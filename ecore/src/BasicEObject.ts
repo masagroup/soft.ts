@@ -25,6 +25,7 @@ import { Adapter } from "./Adapter";
 import { ImmutableEList } from "./ImmutableEList";
 import { AbstractEList } from "./AbstractEList";
 import { EObjectList } from "./EObjectList";
+import { ETreeIterator } from "./ETreeIterator";
 
 export function isEReference(s: EStructuralFeature): s is EReference {
     return "eReferenceType" in s;
@@ -257,7 +258,9 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eAllContents(): IterableIterator<EObject> {
-        return null;
+        return new ETreeIterator<EObject>(this,false, function(o : EObject) : Iterator<EObject> {
+            return o.eContents()[Symbol.iterator]();
+        });
     }
 
     eCrossReferences(): EList<EObject> {
