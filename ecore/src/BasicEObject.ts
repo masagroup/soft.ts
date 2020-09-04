@@ -258,7 +258,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eAllContents(): IterableIterator<EObject> {
-        return new ETreeIterator<EObject>(this,false, function(o : EObject) : Iterator<EObject> {
+        return new ETreeIterator<EObject>(this, false, function (o: EObject): Iterator<EObject> {
             return o.eContents()[Symbol.iterator]();
         });
     }

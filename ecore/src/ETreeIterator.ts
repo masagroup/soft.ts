@@ -10,14 +10,13 @@
 import { EObject } from "./EObject";
 import { EList } from "./EList";
 
-export class ETreeIterator<T> implements IterableIterator<T>
-{
-    private _obj : T;
-    private _getChildrenIterator : ( e : T) => Iterator<T>;
-    private _data : Iterator<T>[];
-    private _root : boolean;
+export class ETreeIterator<T> implements IterableIterator<T> {
+    private _obj: T;
+    private _getChildrenIterator: (e: T) => Iterator<T>;
+    private _data: Iterator<T>[];
+    private _root: boolean;
 
-    constructor( obj : T, root : boolean , getChildrenIterator : ( e : T ) => Iterator<T> ) {
+    constructor(obj: T, root: boolean, getChildrenIterator: (e: T) => Iterator<T>) {
         this._getChildrenIterator = getChildrenIterator;
         this._root = root;
         this._obj = obj;
@@ -27,24 +26,21 @@ export class ETreeIterator<T> implements IterableIterator<T>
     [Symbol.iterator](): IterableIterator<T> {
         return this;
     }
-    
+
     next(): IteratorResult<T> {
-        if ( this._data == null ) {
+        if (this._data == null) {
             this._data = [this._getChildrenIterator(this._obj)];
-            if (this._root)
-                return { value: this._obj, done: false };
+            if (this._root) return { value: this._obj, done: false };
         }
 
-        if ( this._data.length == 0 )
-            return {value: undefined, done: true};
+        if (this._data.length == 0) return { value: undefined, done: true };
 
-        let it = this._data[ this._data.length - 1];
+        let it = this._data[this._data.length - 1];
         let result = it.next();
-        while ( result.done ) {
+        while (result.done) {
             this._data.pop();
-            if ( this._data.length == 0 )
-                return {value: undefined, done: true};
-            it = this._data[ this._data.length - 1];
+            if (this._data.length == 0) return { value: undefined, done: true };
+            it = this._data[this._data.length - 1];
             result = it.next();
         }
 
@@ -52,5 +48,4 @@ export class ETreeIterator<T> implements IterableIterator<T>
         this._data.push(it);
         return result;
     }
-
 }
