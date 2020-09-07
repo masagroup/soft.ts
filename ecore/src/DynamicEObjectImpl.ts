@@ -16,6 +16,12 @@ import { EStructuralFeature } from "./EStructuralFeature";
 import { isEAttribute, isEReference } from "./BasicEObject";
 import { BasicEList } from "./BasicEList";
 import { BasicEObjectList } from "./BasicEObjectList";
+import { EObject } from "./EObject";
+import { ENotificationChain } from "./ENOtificationChain";
+import { EObjectInternal } from "./EObjectInternal";
+import { Notification } from "./Notification";
+import { EOPPOSITE_FEATURE_BASE } from "./Constants";
+import { EReference } from "./EReference";
 
 class DynamicFeaturesAdapter extends Adapter {
     constructor(private _obj: DynamicEObjectImpl) {
@@ -80,6 +86,116 @@ export class DynamicEObjectImpl extends EObjectImpl {
             return result;
         }
         return super.eGetFromID(featureID, resolve);
+    }
+
+    eSetFromID(featureID: number, newValue: any): void {
+        let dynamicFeatureID = featureID - this.eStaticClass().getFeatureCount();
+        if (dynamicFeatureID >= 0) {
+            let dynamicFeature = this.eDynamicFeature(featureID);
+            if (this.isContainer(dynamicFeature)) {
+                let newContainer = newValue as EObjectInternal;
+                if (
+                    newContainer != this.eContainer() ||
+                    (newContainer != null && this.eContainerFeatureID() != featureID)
+                ) {
+                    let notifications: ENotificationChain = null;
+                    if (this.eContainer())
+                        notifications = this.eBasicRemoveFromContainer(notifications);
+                    if (newContainer)
+                        notifications = newContainer.eInverseAdd(this, featureID, notifications);
+                    notifications = this.eBasicSetContainer(newContainer, featureID, notifications);
+                    if (notifications) notifications.dispatch();
+                } else if (this.eNotificationRequired) {
+                    this.eNotify(
+                        new Notification(this, EventType.SET, featureID, newValue, newValue)
+                    );
+                }
+            } else if (this.isBidirectional(dynamicFeature) || this.isContains(dynamicFeature)) {
+                // inverse - opposite
+                let oldValue = this._properties[dynamicFeatureID];
+                if (oldValue != newValue) {
+                    let notifications: ENotificationChain = null;
+                    let oldObject = oldValue as EObjectInternal;
+                    let newObject = newValue as EObjectInternal;
+                    if (!this.isBidirectional(dynamicFeature)) {
+                        if (oldObject)
+                            notifications = oldObject.eInverseRemove(
+                                this,
+                                EOPPOSITE_FEATURE_BASE - featureID,
+                                notifications
+                            );
+                        if (newObject)
+                            notifications = oldObject.eInverseAdd(
+                                this,
+                                EOPPOSITE_FEATURE_BASE - featureID,
+                                notifications
+                            );
+                    } else {
+                        let dynamicReference = dynamicFeature as EReference;
+                        let reverseFeature = dynamicReference.eOpposite;
+                        if (oldObject)
+                            notifications = oldObject.eInverseRemove(
+                                this,
+                                reverseFeature.featureID,
+                                notifications
+                            );
+                        if (newObject)
+                            notifications = newObject.eInverseAdd(
+                                this,
+                                reverseFeature.featureID,
+                                notifications
+                            );
+                    }
+                    // basic set
+                    this._properties[dynamicFeatureID] = newValue;
+
+                    if (this.eNotificationRequired) {
+                        let notification = new Notification(
+                            this,
+                            EventType.SET,
+                            featureID,
+                            oldValue,
+                            newValue
+                        );
+                        if (notifications) notifications.add(notification);
+                        else notifications = notification;
+                    }
+
+                    // notify
+                    if (notifications) notifications.dispatch();
+                } else {
+                    let oldvalue = this._properties[dynamicFeatureID];
+                    this._properties[dynamicFeatureID] = newValue;
+                    if (this.eNotificationRequired)
+                        this.eNotify(
+                            new Notification(this, EventType.SET, featureID, oldValue, newValue)
+                        );
+                }
+            }
+        } else {
+            super.eSetFromID(featureID, newValue);
+        }
+    }
+
+    private isContainer(feature: EStructuralFeature): boolean {
+        return isEReference(feature) && feature.eOpposite ? feature.eOpposite.isContainment : false;
+    }
+
+    private isBidirectional(feature: EStructuralFeature): boolean {
+        return isEReference(feature) ? feature.eOpposite != null : false;
+    }
+
+    private isContains(feature: EStructuralFeature): boolean {
+        return isEReference(feature) ? feature.isContainment : false;
+    }
+
+    private isBackReference(feature: EStructuralFeature): boolean {
+        return isEReference(feature) ? feature.isContainer : false;
+    }
+
+    private isProxy(feature: EStructuralFeature): boolean {
+        if (this.isContainer(feature) || this.isContains(feature)) return false;
+        return isEReference(feature) ? feature.isResolveProxies : false;
     }
 
     private createList(feature: EStructuralFeature) {
