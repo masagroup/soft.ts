@@ -1,6 +1,7 @@
 *Impl.ts
 Ecore*.ts
 E*.ts
+!Dynamic*.ts
 !EAdapter.ts
 !ENotif*.ts
 !EObjectInternal.ts
