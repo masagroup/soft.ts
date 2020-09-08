@@ -38,7 +38,8 @@ class DynamicFeaturesAdapter extends Adapter {
 }
 
 function resize(arr, newSize, defaultValue) {
-    return [...arr, ...Array(Math.max(newSize - arr.length, 0)).fill(defaultValue)];
+    while (newSize > arr.length) arr.push(defaultValue);
+    arr.length = newSize;
 }
 
 export class DynamicEObjectImpl extends EObjectImpl {
@@ -80,7 +81,9 @@ export class DynamicEObjectImpl extends EObjectImpl {
             let feature = this.eDynamicFeature(featureID);
             let result = this._properties[dynamicFeatureID];
             if (result == null) {
-                if (feature.isMany) result = this.createList(feature);
+                if (feature.isMany) {
+                    result = this.createList(feature);
+                }
                 this._properties[dynamicFeatureID] = result;
             }
             return result;
@@ -163,14 +166,14 @@ export class DynamicEObjectImpl extends EObjectImpl {
 
                     // notify
                     if (notifications) notifications.dispatch();
-                } else {
-                    let oldValue = this._properties[dynamicFeatureID];
-                    this._properties[dynamicFeatureID] = newValue;
-                    if (this.eNotificationRequired)
-                        this.eNotify(
-                            new Notification(this, EventType.SET, featureID, oldValue, newValue)
-                        );
                 }
+            } else {
+                let oldValue = this._properties[dynamicFeatureID];
+                this._properties[dynamicFeatureID] = newValue;
+                if (this.eNotificationRequired)
+                    this.eNotify(
+                        new Notification(this, EventType.SET, featureID, oldValue, newValue)
+                    );
             }
         } else {
             super.eSetFromID(featureID, newValue);
