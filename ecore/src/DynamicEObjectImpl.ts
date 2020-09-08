@@ -164,7 +164,7 @@ export class DynamicEObjectImpl extends EObjectImpl {
                     // notify
                     if (notifications) notifications.dispatch();
                 } else {
-                    let oldvalue = this._properties[dynamicFeatureID];
+                    let oldValue = this._properties[dynamicFeatureID];
                     this._properties[dynamicFeatureID] = newValue;
                     if (this.eNotificationRequired)
                         this.eNotify(
@@ -175,6 +175,22 @@ export class DynamicEObjectImpl extends EObjectImpl {
         } else {
             super.eSetFromID(featureID, newValue);
         }
+    }
+
+    eIsSetFromID(featureID: number): boolean {
+        let dynamicFeatureID = featureID - this.eStaticClass().getFeatureCount();
+        if (dynamicFeatureID >= 0) return this._properties[dynamicFeatureID] != null;
+        else return super.eIsSetFromID(featureID);
+    }
+
+    eUnsetFromID(featureID: number): void {
+        let dynamicFeatureID = featureID - this.eStaticClass().getFeatureCount();
+        if (dynamicFeatureID >= 0) {
+            let oldValue = this._properties[dynamicFeatureID];
+            this._properties[dynamicFeatureID] = null;
+            if (this.eNotificationRequired)
+                this.eNotify(new Notification(this, EventType.UNSET, featureID, oldValue, null));
+        } else super.eUnsetFromID(featureID);
     }
 
     private isContainer(feature: EStructuralFeature): boolean {
