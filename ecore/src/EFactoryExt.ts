@@ -18,10 +18,10 @@ export class EFactoryExt extends EFactoryImpl {
     }
 
     create(eClass: EClass): EObject {
-        if (this.ePackage != eClass.ePackage || eClass.isAbstract )
+        if (this.ePackage != eClass.ePackage || eClass.isAbstract)
             throw new Error("The class '" + eClass.name + "' is not a valid classifier");
         let eObject = new DynamicEObjectImpl();
         eObject.setEClass(eClass);
-        return eObject;    
+        return eObject;
     }
 }
