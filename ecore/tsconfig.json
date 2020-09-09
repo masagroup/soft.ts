@@ -1,18 +1,16 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2020",
+    "target": "es2017",
     "sourceMap": true,
     "declaration": true,
-    "outDir": "lib",
-    "rootDirs": [
-      "src",
-      "src-gen"
-    ],
+    "outDir": "dist",
   },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "node_modules",
-    "test",
-    "lib"
+    "dist"
   ]
 }

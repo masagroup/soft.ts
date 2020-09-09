@@ -7,13 +7,13 @@
 //
 // *****************************************************************************
 
-import { Collection } from "./Collection";
+import { ENotifyingList } from "./ENotifyingList";
+import { EList } from "./EList";
 
-export interface List<E> extends Collection<E> {
-    insert(index: number, e: E): boolean;
-    insertAll(index: number, c: Collection<E>): boolean;
-    removeAt(index: number): E;
-    get(index: number): E;
-    set(index: number, e: E): E;
-    indexOf(e: E): number;
+export interface EObjectList<E> extends EList<E> {
+    getUnResolvedList(): EList<E>;
+}
+
+export function isEObjectList<E>(l: EList<E>): l is EObjectList<E> {
+    return "getUnResolvedList" in l;
 }

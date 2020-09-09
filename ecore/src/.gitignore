@@ -1,0 +1,11 @@
+*Impl.ts
+Ecore*.ts
+E*.ts
+!Dynamic*.ts
+!EAdapter.ts
+!ENotif*.ts
+!EObjectInternal.ts
+!EObjectList.ts
+!ETreeIterator.ts
+!*Ext.ts
+!*.test.ts

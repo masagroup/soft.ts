@@ -1,16 +1,11 @@
 {
     "version": "0.2.0",
     "configurations": [
-        
-      /// Debugger attaches and then does nothing
       {
         "type": "node",
-        "request": "launch",
-        "name": "Jest Tests",
-        "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
-        "args": ["--config", "package.json", "--runInBand"],
-        "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-        "console": "internalConsole"
+        "request": "attach",
+        "name": "Attach",
+        "port": 9229
       }
     ]
-  }
+}

@@ -7,13 +7,8 @@
 //
 // *****************************************************************************
 
-import { Collection } from "./Collection";
+export const EOPPOSITE_FEATURE_BASE: number = -1;
 
-export interface List<E> extends Collection<E> {
-    insert(index: number, e: E): boolean;
-    insertAll(index: number, c: Collection<E>): boolean;
-    removeAt(index: number): E;
-    get(index: number): E;
-    set(index: number, e: E): E;
-    indexOf(e: E): number;
-}
+export const NO_INDEX = -1;
+
+export const UNBOUNDED_MULTIPLICITY = -1;
