@@ -10,9 +10,9 @@
 import { EObject } from "./EObject";
 
 export interface EResourceIDManager {
-    register(object : EObject) : void;
-	unRegister(object : EObject) : void;
+    register(object: EObject): void;
+    unRegister(object: EObject): void;
 
-	getID(object :EObject) : string;
-	getEObject(id : string) : EObject;
+    getID(object: EObject): string;
+    getEObject(id: string): EObject;
 }

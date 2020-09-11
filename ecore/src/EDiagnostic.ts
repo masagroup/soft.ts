@@ -8,8 +8,8 @@
 // *****************************************************************************
 
 export interface EDiagnostic {
-    readonly message : string;
-    readonly location : string;
-    readonly line : number;
-    readonly column : number;
+    readonly message: string;
+    readonly location: string;
+    readonly line: number;
+    readonly column: number;
 }

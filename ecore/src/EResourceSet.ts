@@ -7,6 +7,4 @@
 //
 // *****************************************************************************
 
-export class EResourceSet {
-    
-}
+export class EResourceSet {}

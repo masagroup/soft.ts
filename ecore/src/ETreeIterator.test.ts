@@ -17,7 +17,9 @@ test("iteratorWithRoot", (t) => {
     let emptyList = new ImmutableEList<EObject>();
     let mockObject = mock<EObject>();
     let object = instance<EObject>(mockObject);
-    let it = new ETreeIterator<EObject,EObject>(object, true, function (o: EObject): Iterator<EObject> {
+    let it = new ETreeIterator<EObject, EObject>(object, true, function (
+        o: EObject
+    ): Iterator<EObject> {
         return emptyList[Symbol.iterator]();
     });
     t.deepEqual(it.next(), { value: object, done: false });
@@ -28,7 +30,9 @@ test("iteratorNoRoot", (t) => {
     let emptyList = new ImmutableEList<EObject>();
     let mockObject = mock<EObject>();
     let object = instance<EObject>(mockObject);
-    let it = new ETreeIterator<EObject,EObject>(object, false, function (o: EObject): Iterator<EObject> {
+    let it = new ETreeIterator<EObject, EObject>(object, false, function (
+        o: EObject
+    ): Iterator<EObject> {
         return emptyList[Symbol.iterator]();
     });
     t.deepEqual(it.next(), { value: undefined, done: true });
@@ -38,7 +42,9 @@ test("iteratorWithRootIteration", (t) => {
     let emptyList = new ImmutableEList<EObject>();
     let mockObject = mock<EObject>();
     let object = instance<EObject>(mockObject);
-    let it = new ETreeIterator<EObject,EObject>(object, true, function (o: EObject): Iterator<EObject> {
+    let it = new ETreeIterator<EObject, EObject>(object, true, function (
+        o: EObject
+    ): Iterator<EObject> {
         return emptyList[Symbol.iterator]();
     });
     t.deepEqual([...it], [object]);
@@ -66,7 +72,9 @@ test("iteratorEContents", (t) => {
     when(mockGrandChild1.eContents()).thenReturn(emptyList);
     when(mockGrandChild2.eContents()).thenReturn(emptyList);
 
-    let it = new ETreeIterator<EObject,EObject>(object, false, function (o: EObject): Iterator<EObject> {
+    let it = new ETreeIterator<EObject, EObject>(object, false, function (
+        o: EObject
+    ): Iterator<EObject> {
         return o.eContents()[Symbol.iterator]();
     });
 
