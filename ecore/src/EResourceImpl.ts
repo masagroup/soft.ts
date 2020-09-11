@@ -23,6 +23,7 @@ import { AbstractNotifyingList } from "./AbstractNotifyingList";
 import { ENotificationChain } from "./ENOtificationChain";
 import { EObjectInternal } from "./EObjectInternal";
 import { ETreeIterator } from "./ETreeIterator";
+import { EObjectList } from "./EObjectList";
 
 class ResourceNotification extends AbstractNotification {
     private _notifier : ENotifier;
@@ -48,7 +49,7 @@ class ResourceNotification extends AbstractNotification {
     }
 }
 
-class ResourceContents extends AbstractNotifyingList<EObject> {
+class ResourceContents extends AbstractNotifyingList<EObject> implements EObjectList<EObject> {
     private _resource : EResource;
 
     constructor( resource : EResource ) {
@@ -66,6 +67,10 @@ class ResourceContents extends AbstractNotifyingList<EObject> {
 
     get featureID() : number {
         return EResourceConstants.RESOURCE__CONTENTS;
+    }
+
+    getUnResolvedList(): EList<EObject> {
+        return this;
     }
 
     protected inverseAdd(eObject: EObject, notifications: ENotificationChain): ENotificationChain {
@@ -132,7 +137,7 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     }
 
     eAllContents() : IterableIterator<EObject> {
-        return null;
+        return this.eAllContentsResolve(true);
     }
 
     getEObject( uriFragment : string ) : EObject {
@@ -189,4 +194,13 @@ export class EResourceImpl extends BasicNotifier implements EResource {
             this._resourceIDManager.unRegister(object);
     }
     
+    private eAllContentsResolve(resolve : boolean ) : IterableIterator<EObject> {
+        return new ETreeIterator<any,EObject>(this,false,function( o : any) : Iterator<EObject>{
+            let contents : EList<EObject> = o.eContents();
+            if (!resolve)
+                contents = (contents as EObjectList<EObject>).getUnResolvedList();
+            return contents[Symbol.iterator]();
+        });
+        
+    }
 }
