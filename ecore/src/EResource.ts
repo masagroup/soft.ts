@@ -11,9 +11,11 @@ import { ENotifier } from "./ENotifier";
 import { EObject } from "./EObject";
 import { EList } from "./EList";
 import { EResourceSet } from "./EResourceSet";
+import { EDiagnostic } from "./EDiagnostic";
+import * as fs from "fs";
+import { EResourceIDManager } from "./EResourceIDManager";
 
-
-export class EResourceConstans {
+export class EResourceConstants {
 
     public static readonly RESOURCE__RESOURCE_SET : number = 0;
 
@@ -27,16 +29,28 @@ export class EResourceConstans {
 export interface EResource extends ENotifier {
 
     eURI : URL;
+    eResourceIDManager : EResourceIDManager;
 
     eResourceSet() : EResourceSet;
     eContents() : EList<EObject>;
     eAllContents() : IterableIterator<EObject>;
     
     load() : void;
-    loadFromString() : void;
+    loadFromString( xml : string ) : void;
+    loadFromStream( s : fs.ReadStream) : void;
     unload() : void;
     readonly isLoaded : boolean;
 
     save() : void;
-    saveToString() : void;
+    saveToString() : string;
+    saveToStream( s : fs.WriteStream ) : void;
+
+    attached( object : EObject ) : void;
+    detached( object : EObject ) : void;
+
+    getEObject( uriFragment : string ) : EObject;
+    getURIFragment( object: EObject ) : string;
+
+    getErrors() : EList<EDiagnostic>;
+    getWarnings() : EList<EDiagnostic>;
 }

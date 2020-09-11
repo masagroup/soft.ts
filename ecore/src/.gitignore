@@ -3,9 +3,11 @@ Ecore*.ts
 E*.ts
 !Dynamic*.ts
 !EAdapter.ts
+!EDiag*.ts
 !ENotif*.ts
 !EObjectInternal.ts
 !EObjectList.ts
+!EResource*.ts
 !ETreeIterator.ts
 !*Ext.ts
 !*.test.ts
