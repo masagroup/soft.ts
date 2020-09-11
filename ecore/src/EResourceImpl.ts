@@ -19,6 +19,10 @@ import { EList } from "./EList";
 import { EObject } from "./EObject";
 import { EResourceIDManager } from "./EResourceIDManager";
 import * as fs from "fs";
+import { AbstractNotifyingList } from "./AbstractNotifyingList";
+import { ENotificationChain } from "./ENOtificationChain";
+import { EObjectInternal } from "./EObjectInternal";
+import { ETreeIterator } from "./ETreeIterator";
 
 class ResourceNotification extends AbstractNotification {
     private _notifier : ENotifier;
@@ -44,11 +48,44 @@ class ResourceNotification extends AbstractNotification {
     }
 }
 
+class ResourceContents extends AbstractNotifyingList<EObject> {
+    private _resource : EResource;
+
+    constructor( resource : EResource ) {
+        super();
+        this._resource = resource;
+    }
+
+    get notifier() : ENotifier {
+        return this._resource;
+    }
+
+    get feature() : EStructuralFeature {
+        return null;
+    }
+
+    get featureID() : number {
+        return EResourceConstants.RESOURCE__CONTENTS;
+    }
+
+    protected inverseAdd(eObject: EObject, notifications: ENotificationChain): ENotificationChain {
+        let n = (eObject as EObjectInternal).eSetResource( this._resource , notifications );
+        this._resource.attached(eObject);
+        return n;
+    }
+
+    protected inverseRemove(eObject: EObject, notifications: ENotificationChain): ENotificationChain {
+        this._resource.detached(eObject);
+        let n = (eObject as EObjectInternal).eSetResource( null, notifications );
+        return n;
+    }
+}
+
 
 export class EResourceImpl extends BasicNotifier implements EResource {
     
-    private _eURI : URL;
-    private _eResourceIDManager : EResourceIDManager;
+    private _uri : URL;
+    private _resourceIDManager : EResourceIDManager;
     private _isLoaded : boolean;
     private _resourceSet : EResourceSet;
     private _contents : EList<EObject>;
@@ -61,23 +98,23 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     }
 
     get eURI() : URL {
-        return this._eURI;
+        return this._uri;
     }
 
     set eURI( uri : URL ){
-        let oldURI = this._eURI;
-        this._eURI = uri;
+        let oldURI = this._uri;
+        this._uri = uri;
         if (this.eNotificationRequired) {
             this.eNotify(new ResourceNotification(this, EResourceConstants.RESOURCE__URI , EventType.SET, oldURI, uri, -1 ));
         }
     }
  
     get eResourceIDManager() {
-        return this._eResourceIDManager;
+        return this._resourceIDManager;
     }
 
     set eResourceIDManager( eResourceIDManager: EResourceIDManager ) {
-        this._eResourceIDManager = eResourceIDManager;
+        this._resourceIDManager = eResourceIDManager;
     }
 
     get isLoaded() {
@@ -89,7 +126,9 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     }
 
     eContents() : EList<EObject> {
-        return null;
+        if ( this._contents == null )
+            this._contents = new ResourceContents(this);
+        return this._contents;
     }
 
     eAllContents() : IterableIterator<EObject> {
@@ -141,12 +180,13 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     }
 
     attached( object : EObject ) : void {
-
+        if ( this._resourceIDManager )
+            this._resourceIDManager.register(object);
     }
     
     detached( object : EObject ) : void {
-        
+        if ( this._resourceIDManager )
+            this._resourceIDManager.unRegister(object);
     }
-
-
+    
 }
