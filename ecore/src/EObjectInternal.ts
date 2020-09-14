@@ -17,7 +17,8 @@ import { EStructuralFeature } from "./EStructuralFeature";
 export interface EObjectInternal extends EObject {
     eStaticClass(): EClass;
 
-    eDirectResource(): EResource;
+    eInternalResource(): EResource;
+    eInternalContainer(): EObject;
 
     eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain;
 

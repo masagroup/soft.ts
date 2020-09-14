@@ -26,6 +26,7 @@ import { ImmutableEList } from "./ImmutableEList";
 import { AbstractEList } from "./AbstractEList";
 import { EObjectList } from "./EObjectList";
 import { ETreeIterator } from "./ETreeIterator";
+import { ENotifyingList } from "./ENotifyingList";
 
 export function isEReference(s: EStructuralFeature): s is EReference {
     return "eReferenceType" in s;
@@ -173,8 +174,38 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         return null;
     }
 
-    eContainer(): EObject {
+    eInternalContainer(): EObject {
         return this._eContainer;
+    }
+
+    eContainer(): EObject {
+        let eContainer = this._eContainer;
+        if (eContainer && eContainer.eIsProxy()) {
+            let resolved = this.eResolveProxy(eContainer);
+            if (resolved != eContainer) {
+                let notifications = this.eBasicRemoveFromContainer(null);
+                this._eContainer = resolved;
+                if (notifications) {
+                    notifications.dispatch();
+                }
+                if (
+                    this.eNotificationRequired &&
+                    this._eContainerFeatureID >= EOPPOSITE_FEATURE_BASE
+                ) {
+                    this.eNotify(
+                        new Notification(
+                            this,
+                            EventType.RESOLVE,
+                            this._eContainerFeatureID,
+                            eContainer,
+                            resolved
+                        )
+                    );
+                }
+            }
+            return resolved;
+        }
+        return eContainer;
     }
 
     eContainerFeatureID(): number {
@@ -190,14 +221,40 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         return this._eResource;
     }
 
-    eDirectResource(): EResource {
+    eInternalResource(): EResource {
         return this._eResource;
     }
 
-    eSetDirectResource(eResource: EResource): void {
+    eSetInternalResource(eResource: EResource): void {
         this._eResource = eResource;
     }
 
+    eSetResource(newResource: EResource, n: ENotificationChain): ENotificationChain {
+        let notifications = n;
+        let oldResource = this.eInternalResource();
+        if (oldResource != null && newResource != null) {
+            let list = oldResource.eContents() as ENotifyingList<EObject>;
+            notifications = list.removeWithNotification(this, notifications);
+            oldResource.detached(this);
+        }
+        if (this._eContainer) {
+            if (this.eContainmentFeature().isResolveProxies) {
+                let oldContainerResource = this._eContainer.eResource();
+                if (oldContainerResource) {
+                    if (newResource == null) {
+                        oldContainerResource.attached(this);
+                    } else if (oldResource == null) {
+                        oldContainerResource.detached(this);
+                    }
+                }
+            } else {
+                notifications = this.eBasicRemoveFromContainer(notifications);
+                notifications = this.eBasicSetContainer(null, -1, notifications);
+            }
+        }
+        this.eSetInternalResource(newResource);
+        return notifications;
+    }
     eContainingFeature(): EStructuralFeature {
         if (this._eContainer != null) {
             if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
@@ -384,11 +441,6 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         }
     }
 
-    eSetResource(newResource: EResource, notifications: ENotificationChain): ENotificationChain {
-        this.eSetDirectResource(newResource);
-        return notifications;
-    }
-
     eInverseAdd(otherEnd: EObject, featureID: number, n: ENotificationChain): ENotificationChain {
         let notifications = n;
         if (featureID >= 0) {
@@ -434,6 +486,37 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         let oldResource = this._eResource;
         let oldContainer = this._eContainer;
         let oldContainerFeatureID = this._eContainerFeatureID;
+
+        let newResource: EResource = null;
+        if (oldResource) {
+            if (
+                newContainer &&
+                !this.eObjectContainmentFeature(this, newContainer, newContainerFeatureID)
+                    .isResolveProxies
+            ) {
+                let list = oldResource.eContents() as ENotifyingList<EObject>;
+                notifications = list.removeWithNotification(this, notifications);
+                this.eSetInternalResource(null);
+                newResource = newContainer.eResource();
+            } else {
+                oldResource = null;
+            }
+        } else {
+            if (oldContainer) {
+                oldResource = oldContainer.eResource();
+            }
+            if (newContainer) {
+                newResource = newContainer.eResource();
+            }
+        }
+
+        if (oldResource && oldResource != newResource) {
+            oldResource.detached(this);
+        }
+
+        if (newResource && newResource && oldResource) {
+            newResource.attached(this);
+        }
 
         // basic set
         this._eContainer = newContainer;
