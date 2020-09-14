@@ -24,6 +24,7 @@ import { ENotificationChain } from "./ENOtificationChain";
 import { EObjectInternal } from "./EObjectInternal";
 import { ETreeIterator } from "./ETreeIterator";
 import { EObjectList } from "./EObjectList";
+import { EcoreUtils } from "./EcoreUtils";
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier;
@@ -156,7 +157,18 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     }
 
     getEObject(uriFragment: string): EObject {
-        return null;
+        let id = uriFragment;
+        if (uriFragment.length > 0) {
+            if (uriFragment.charAt(0) == "/") {
+                let path = uriFragment.split("/");
+                path = path.splice(1);
+                return this.getObjectByPath(path);
+            } else if (uriFragment.charAt(uriFragment.length - 1) == "?") {
+                let index = uriFragment.slice(0, -2).lastIndexOf("?");
+                if (index != -1) id = uriFragment.slice(0, index);
+            }
+        }
+        return this.getObjectByID(id);
     }
 
     getURIFragment(object: EObject): string {
@@ -201,5 +213,40 @@ export class EResourceImpl extends BasicNotifier implements EResource {
             if (!resolve) contents = (contents as EObjectList<EObject>).getUnResolvedList();
             return contents[Symbol.iterator]();
         });
+    }
+
+    private getObjectByID(id: string): EObject {
+        if (this._resourceIDManager) return this._resourceIDManager.getEObject(id);
+
+        for (const eObject of this.eAllContentsResolve(false)) {
+            let objectID = EcoreUtils.getEObjectID(eObject);
+            if (id == objectID) return eObject;
+        }
+
+        return null;
+    }
+
+    private getObjectByPath(uriFragmentPath: string[]): EObject {
+        let eObject: EObject = null;
+        if (uriFragmentPath == null || uriFragmentPath.length == 0)
+            eObject = this.getObjectForRootSegment("");
+        else eObject = this.getObjectForRootSegment(uriFragmentPath[0]);
+
+        for (let i = 1; i < uriFragmentPath.length && eObject != null; i++)
+            eObject = (eObject as EObjectInternal).eObjectForFragmentSegment(uriFragmentPath[i]);
+
+        return eObject;
+    }
+
+    private getObjectForRootSegment(rootSegment: string): EObject {
+        let pos = 0;
+        if (rootSegment.length > 0) {
+            if (rootSegment.charAt(0) == "?") return this.getObjectByID(rootSegment.slice(1));
+            else pos = parseInt(rootSegment);
+        }
+
+        if (pos >= 0 && pos < this.eContents().size()) return this.eContents().get(pos);
+
+        return null;
     }
 }
