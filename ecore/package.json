@@ -37,5 +37,7 @@
     "printWidth": 100,
     "tabWidth": 4
   },
-  "dependencies": {}
+  "dependencies": {
+    "sax": "^1.2.4"
+  }
 }
