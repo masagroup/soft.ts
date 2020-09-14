@@ -25,6 +25,9 @@ import { EObjectInternal } from "./EObjectInternal";
 import { ETreeIterator } from "./ETreeIterator";
 import { EObjectList } from "./EObjectList";
 import { EcoreUtils } from "./EcoreUtils";
+import { BasicEList } from "./BasicEList";
+import { NotificationChain } from "./NotificationChain";
+import { ENotifyingList } from "./ENotifyingList";
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier;
@@ -36,7 +39,7 @@ class ResourceNotification extends AbstractNotification {
         eventType: EventType,
         oldValue: any,
         newValue: any,
-        position: number
+        position: number = -1
     ) {
         super(eventType, oldValue, newValue, position);
         this._notifier = notifier;
@@ -216,11 +219,17 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     }
 
     getErrors(): EList<EDiagnostic> {
-        return null;
+        if ( this._errors == null ) {
+            this._errors = new BasicEList<EDiagnostic>();
+        }
+        return this._errors;
     }
 
     getWarnings(): EList<EDiagnostic> {
-        return null;
+        if ( this._warnings == null ) {
+            this._warnings = new BasicEList<EDiagnostic>();
+        }
+        return this._warnings;
     }
 
     load(): void {}
@@ -245,6 +254,37 @@ export class EResourceImpl extends BasicNotifier implements EResource {
 
     detached(object: EObject): void {
         if (this._resourceIDManager) this._resourceIDManager.unRegister(object);
+    }
+
+    basicSetLoaded(isLoaded : boolean , msgs : ENotificationChain ) : ENotificationChain {
+        let notifications = msgs;
+        let oldLoaded = this._isLoaded;
+        this._isLoaded = isLoaded;
+        if ( this.eNotificationRequired) {
+            if ( notifications == null ) {
+                notifications = new NotificationChain();
+            }
+            notifications.add( new ResourceNotification(this,EResourceConstants.RESOURCE__IS_LOADED, EventType.SET, oldLoaded, this._isLoaded));
+        }
+        return notifications;
+    }
+
+    basicSetResourceSet( resourceSet : EResourceSet, msgs : ENotificationChain ) : ENotificationChain {
+        let notifications = msgs;
+        let oldResourseSet = this._resourceSet;
+        if ( oldResourseSet )
+        {
+            let list = oldResourseSet.getResources() as ENotifyingList<EResource>;
+            notifications = list.removeWithNotification(this,notifications);
+        }
+        this._resourceSet = resourceSet;
+        if ( this.eNotificationRequired) {
+            if ( notifications == null ) {
+                notifications = new NotificationChain();
+            }
+            notifications.add( new ResourceNotification(this,EResourceConstants.RESOURCE__RESOURCE_SET, EventType.SET, oldResourseSet, this._resourceSet));
+        }
+        return notifications;
     }
 
     private eAllContentsResolve(resolve: boolean): IterableIterator<EObject> {
