@@ -11,6 +11,7 @@ import { ENotifier } from "./ENotifier";
 import { EResource } from "./EResource";
 import { EList } from "./EList";
 import { EObject } from "./EObject";
+import { EURIConverter } from "./EURIConverter";
 
 export interface EResourceSet extends ENotifier {
 
@@ -19,4 +20,7 @@ export interface EResourceSet extends ENotifier {
     createResource( uri : URL ): EResource;
 
     getEObject(uri : URL , loadOnDemand: boolean ) : EObject;
+
+    getURIConverter() : EURIConverter;
+    setURIConverter( uriConverter : EURIConverter ) : void;
 }

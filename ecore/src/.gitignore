@@ -10,5 +10,6 @@ E*.ts
 !EObjectList.ts
 !EResource*.ts
 !ETreeIterator.ts
+!EURI*.ts
 !*Ext.ts
 !*.test.ts
