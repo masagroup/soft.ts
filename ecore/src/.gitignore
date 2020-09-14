@@ -2,6 +2,7 @@
 Ecore*.ts
 E*.ts
 !Dynamic*.ts
+!*Utils.ts
 !EAdapter.ts
 !EDiag*.ts
 !ENotif*.ts
