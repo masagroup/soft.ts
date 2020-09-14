@@ -171,8 +171,48 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         return this.getObjectByID(id);
     }
 
-    getURIFragment(object: EObject): string {
-        return null;
+    getURIFragment(eObject: EObject): string {
+        let id = EcoreUtils.getEObjectID(eObject);
+        if (id.length > 0) {
+            return id;
+        } else {
+            let internalEObject = eObject as EObjectInternal;
+            if (internalEObject.eInternalResource() == this) {
+                return "/" + this.getURIFragmentRootSegment(eObject);
+            } else {
+                let fragmentPath: string[] = [];
+                let isContained = false;
+                for (
+                    let eContainer = internalEObject.eInternalContainer() as EObjectInternal;
+                    eContainer != null;
+                    eContainer = internalEObject.eInternalContainer() as EObjectInternal
+                ) {
+                    if (id.length == 0) {
+                        fragmentPath.push(
+                            eContainer.eURIFragmentSegment(
+                                internalEObject.eContainingFeature(),
+                                internalEObject
+                            )
+                        );
+                    }
+                    internalEObject = eContainer;
+                    if (eContainer.eInternalResource() == this) {
+                        isContained = true;
+                        break;
+                    }
+                }
+                if (!isContained) {
+                    return "/-1";
+                }
+                if (id.length == 0) {
+                    fragmentPath.push(this.getURIFragmentRootSegment(internalEObject));
+                } else {
+                    fragmentPath.push("?" + id);
+                }
+                fragmentPath.push("");
+                return fragmentPath.join("/");
+            }
+        }
     }
 
     getErrors(): EList<EDiagnostic> {
@@ -248,5 +288,14 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         if (pos >= 0 && pos < this.eContents().size()) return this.eContents().get(pos);
 
         return null;
+    }
+
+    private getURIFragmentRootSegment(eObject: EObject): string {
+        let contents = this.eContents();
+        if (contents.size() > 1) {
+            return contents.indexOf(eObject).toString();
+        } else {
+            return "";
+        }
     }
 }

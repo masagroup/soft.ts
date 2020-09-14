@@ -37,4 +37,3 @@ export class EcoreUtils {
         return eFactory.createFromString(eDataType, literal);
     }
 }
-
