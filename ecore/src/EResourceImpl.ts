@@ -7,28 +7,28 @@
 //
 // *****************************************************************************
 
-import { EResource, EResourceConstants } from "./EResource";
-import { BasicNotifier } from "./BasicNotifier";
+import * as fs from "fs";
 import { AbstractNotification } from "./AbstractNotification";
-import { ENotifier } from "./ENotifier";
-import { EventType } from "./ENotification";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { EResourceSet } from "./EResourceSet";
+import { AbstractNotifyingList } from "./AbstractNotifyingList";
+import { BasicEList } from "./BasicEList";
+import { BasicNotifier } from "./BasicNotifier";
+import { EcoreUtils } from "./EcoreUtils";
 import { EDiagnostic } from "./EDiagnostic";
 import { EList } from "./EList";
-import { EObject } from "./EObject";
-import { EResourceIDManager } from "./EResourceIDManager";
-import * as fs from "fs";
-import { AbstractNotifyingList } from "./AbstractNotifyingList";
+import { EventType } from "./ENotification";
 import { ENotificationChain } from "./ENOtificationChain";
-import { EObjectInternal } from "./EObjectInternal";
-import { ETreeIterator } from "./ETreeIterator";
-import { EObjectList } from "./EObjectList";
-import { EcoreUtils } from "./EcoreUtils";
-import { BasicEList } from "./BasicEList";
-import { NotificationChain } from "./NotificationChain";
+import { ENotifier } from "./ENotifier";
 import { ENotifyingList } from "./ENotifyingList";
+import { EObject } from "./EObject";
+import { EObjectInternal } from "./EObjectInternal";
+import { EObjectList } from "./EObjectList";
+import { EResource, EResourceConstants } from "./EResource";
+import { EResourceIDManager } from "./EResourceIDManager";
+import { EResourceSet } from "./EResourceSet";
+import { EStructuralFeature } from "./EStructuralFeature";
+import { ETreeIterator } from "./ETreeIterator";
 import { EURIConverter } from "./EURIConverter";
+import { NotificationChain } from "./NotificationChain";
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier;
