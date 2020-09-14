@@ -34,13 +34,11 @@ export interface EResource extends ENotifier {
     eAllContents(): IterableIterator<EObject>;
 
     load(): void;
-    loadFromString(xml: string): void;
     loadFromStream(s: fs.ReadStream): void;
     unload(): void;
     readonly isLoaded: boolean;
 
     save(): void;
-    saveToString(): string;
     saveToStream(s: fs.WriteStream): void;
 
     attached(object: EObject): void;

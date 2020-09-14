@@ -28,11 +28,12 @@ import { EcoreUtils } from "./EcoreUtils";
 import { BasicEList } from "./BasicEList";
 import { NotificationChain } from "./NotificationChain";
 import { ENotifyingList } from "./ENotifyingList";
+import { EURIConverter } from "./EURIConverter";
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier;
     private _featureID: number;
-
+    
     constructor(
         notifier: ENotifier,
         featureID: number,
@@ -107,7 +108,8 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     private _contents: EList<EObject>;
     private _errors: EList<EDiagnostic>;
     private _warnings: EList<EDiagnostic>;
-
+    private static _defaultURIConverter = null;
+    
     constructor() {
         super();
         this._isLoaded = false;
@@ -232,21 +234,51 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         return this._warnings;
     }
 
-    load(): void {}
+    load(): void {
+        if (!this._isLoaded) {
+            let uriConverter = this.getURIConverter();
+            if ( uriConverter ) {
+                let s = uriConverter.createReadStream(this._uri);
+                if (s) {
+                    this.loadFromStream(s);
+                    s.close();
+                }
+            }
+        }
+    }
 
-    loadFromString(xml: string): void {}
+    loadFromStream(s: fs.ReadStream): void {
+        if (!this._isLoaded) {
+            let n = this.basicSetLoaded(true,null);
+            this.doLoad(s);
+            if (n)
+                n.dispatch();
+        }
+    }
 
-    loadFromStream(s: fs.ReadStream): void {}
+    protected doLoad(s: fs.ReadStream) : void {
+    }
 
     unload(): void {}
 
-    save(): void {}
+    save(): void {
+        let uriConverter = this.getURIConverter();
+            if ( uriConverter ) {
+                let s = uriConverter.createWriteStream(this._uri);
+                if (s) {
+                    this.saveToStream(s);
+                    s.close();
+                }
+            }
 
-    saveToString(): string {
-        return null;
     }
 
-    saveToStream(s: fs.WriteStream): void {}
+    saveToStream(s: fs.WriteStream): void {
+        this.doSave(s);
+    }
+
+    protected doSave(s: fs.WriteStream) : void {
+    }
 
     attached(object: EObject): void {
         if (this._resourceIDManager) this._resourceIDManager.register(object);
@@ -337,5 +369,9 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         } else {
             return "";
         }
+    }
+
+    private getURIConverter() : EURIConverter {
+        return this._resourceSet ? this._resourceSet.getURIConverter() : EResourceImpl._defaultURIConverter;
     }
 }
