@@ -12,14 +12,13 @@ import { EList } from "./EList";
 import { EURIHandler } from "./EURIHandler";
 
 export interface EURIConverter {
+    createReadStream(uri: URL): fs.ReadStream;
 
-    createReadStream(uri: URL ) : fs.ReadStream;
+    createWriteStream(uri: URL): fs.WriteStream;
 
-    createWriteStream(uri: URL ) : fs.WriteStream;
+    normalize(uri: URL): URL;
 
-    normalize(uri : URL ) : URL;
+    getURIHandler(uri: URL): EURIHandler;
 
-    getURIHandler(uri : URL) : EURIHandler;
-
-    getURIHandlers() : EList<EURIHandler>;
+    getURIHandlers(): EList<EURIHandler>;
 }

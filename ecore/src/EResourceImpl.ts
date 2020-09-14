@@ -33,7 +33,7 @@ import { EURIConverter } from "./EURIConverter";
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier;
     private _featureID: number;
-    
+
     constructor(
         notifier: ENotifier,
         featureID: number,
@@ -109,7 +109,7 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     private _errors: EList<EDiagnostic>;
     private _warnings: EList<EDiagnostic>;
     private static _defaultURIConverter = null;
-    
+
     constructor() {
         super();
         this._isLoaded = false;
@@ -221,14 +221,14 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     }
 
     getErrors(): EList<EDiagnostic> {
-        if ( this._errors == null ) {
+        if (this._errors == null) {
             this._errors = new BasicEList<EDiagnostic>();
         }
         return this._errors;
     }
 
     getWarnings(): EList<EDiagnostic> {
-        if ( this._warnings == null ) {
+        if (this._warnings == null) {
             this._warnings = new BasicEList<EDiagnostic>();
         }
         return this._warnings;
@@ -237,7 +237,7 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     load(): void {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter();
-            if ( uriConverter ) {
+            if (uriConverter) {
                 let s = uriConverter.createReadStream(this._uri);
                 if (s) {
                     this.loadFromStream(s);
@@ -249,36 +249,32 @@ export class EResourceImpl extends BasicNotifier implements EResource {
 
     loadFromStream(s: fs.ReadStream): void {
         if (!this._isLoaded) {
-            let n = this.basicSetLoaded(true,null);
+            let n = this.basicSetLoaded(true, null);
             this.doLoad(s);
-            if (n)
-                n.dispatch();
+            if (n) n.dispatch();
         }
     }
 
-    protected doLoad(s: fs.ReadStream) : void {
-    }
+    protected doLoad(s: fs.ReadStream): void {}
 
     unload(): void {}
 
     save(): void {
         let uriConverter = this.getURIConverter();
-            if ( uriConverter ) {
-                let s = uriConverter.createWriteStream(this._uri);
-                if (s) {
-                    this.saveToStream(s);
-                    s.close();
-                }
+        if (uriConverter) {
+            let s = uriConverter.createWriteStream(this._uri);
+            if (s) {
+                this.saveToStream(s);
+                s.close();
             }
-
+        }
     }
 
     saveToStream(s: fs.WriteStream): void {
         this.doSave(s);
     }
 
-    protected doSave(s: fs.WriteStream) : void {
-    }
+    protected doSave(s: fs.WriteStream): void {}
 
     attached(object: EObject): void {
         if (this._resourceIDManager) this._resourceIDManager.register(object);
@@ -288,33 +284,48 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         if (this._resourceIDManager) this._resourceIDManager.unRegister(object);
     }
 
-    basicSetLoaded(isLoaded : boolean , msgs : ENotificationChain ) : ENotificationChain {
+    basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain {
         let notifications = msgs;
         let oldLoaded = this._isLoaded;
         this._isLoaded = isLoaded;
-        if ( this.eNotificationRequired) {
-            if ( notifications == null ) {
+        if (this.eNotificationRequired) {
+            if (notifications == null) {
                 notifications = new NotificationChain();
             }
-            notifications.add( new ResourceNotification(this,EResourceConstants.RESOURCE__IS_LOADED, EventType.SET, oldLoaded, this._isLoaded));
+            notifications.add(
+                new ResourceNotification(
+                    this,
+                    EResourceConstants.RESOURCE__IS_LOADED,
+                    EventType.SET,
+                    oldLoaded,
+                    this._isLoaded
+                )
+            );
         }
         return notifications;
     }
 
-    basicSetResourceSet( resourceSet : EResourceSet, msgs : ENotificationChain ) : ENotificationChain {
+    basicSetResourceSet(resourceSet: EResourceSet, msgs: ENotificationChain): ENotificationChain {
         let notifications = msgs;
         let oldResourseSet = this._resourceSet;
-        if ( oldResourseSet )
-        {
+        if (oldResourseSet) {
             let list = oldResourseSet.getResources() as ENotifyingList<EResource>;
-            notifications = list.removeWithNotification(this,notifications);
+            notifications = list.removeWithNotification(this, notifications);
         }
         this._resourceSet = resourceSet;
-        if ( this.eNotificationRequired) {
-            if ( notifications == null ) {
+        if (this.eNotificationRequired) {
+            if (notifications == null) {
                 notifications = new NotificationChain();
             }
-            notifications.add( new ResourceNotification(this,EResourceConstants.RESOURCE__RESOURCE_SET, EventType.SET, oldResourseSet, this._resourceSet));
+            notifications.add(
+                new ResourceNotification(
+                    this,
+                    EResourceConstants.RESOURCE__RESOURCE_SET,
+                    EventType.SET,
+                    oldResourseSet,
+                    this._resourceSet
+                )
+            );
         }
         return notifications;
     }
@@ -371,7 +382,9 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         }
     }
 
-    private getURIConverter() : EURIConverter {
-        return this._resourceSet ? this._resourceSet.getURIConverter() : EResourceImpl._defaultURIConverter;
+    private getURIConverter(): EURIConverter {
+        return this._resourceSet
+            ? this._resourceSet.getURIConverter()
+            : EResourceImpl._defaultURIConverter;
     }
 }

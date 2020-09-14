@@ -14,13 +14,12 @@ import { EObject } from "./EObject";
 import { EURIConverter } from "./EURIConverter";
 
 export interface EResourceSet extends ENotifier {
+    getResources(): EList<EResource>;
+    getResource(uri: URL, loadOnDemand: boolean): EResource;
+    createResource(uri: URL): EResource;
 
-    getResources() : EList<EResource>;
-    getResource( uri : URL , loadOnDemand : boolean ) : EResource;
-    createResource( uri : URL ): EResource;
+    getEObject(uri: URL, loadOnDemand: boolean): EObject;
 
-    getEObject(uri : URL , loadOnDemand: boolean ) : EObject;
-
-    getURIConverter() : EURIConverter;
-    setURIConverter( uriConverter : EURIConverter ) : void;
+    getURIConverter(): EURIConverter;
+    setURIConverter(uriConverter: EURIConverter): void;
 }

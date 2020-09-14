@@ -10,10 +10,9 @@
 import * as fs from "fs";
 
 export interface EURIHandler {
+    canHandle(uri: URL): boolean;
 
-    canHandle(uri : URL) : boolean;
+    createReadStream(uri: URL): fs.ReadStream;
 
-	createReadStream(uri: URL ) : fs.ReadStream;
-
-    createWriteStream(uri: URL ) : fs.WriteStream;
+    createWriteStream(uri: URL): fs.WriteStream;
 }
