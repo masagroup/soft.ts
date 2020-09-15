@@ -28,6 +28,7 @@ import { EResourceSet } from "./EResourceSet";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { ETreeIterator } from "./ETreeIterator";
 import { EURIConverter } from "./EURIConverter";
+import { EURIConverterImpl } from "./EURIConverterImpl";
 import { NotificationChain } from "./NotificationChain";
 
 class ResourceNotification extends AbstractNotification {
@@ -108,7 +109,7 @@ export class EResourceImpl extends BasicNotifier implements EResource {
     private _contents: EList<EObject>;
     private _errors: EList<EDiagnostic>;
     private _warnings: EList<EDiagnostic>;
-    private static _defaultURIConverter = null;
+    private static _defaultURIConverter = new EURIConverterImpl();
 
     constructor() {
         super();
