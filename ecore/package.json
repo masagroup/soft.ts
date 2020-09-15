@@ -38,6 +38,7 @@
     "tabWidth": 4
   },
   "dependencies": {
+    "@types/sax": "^1.2.1",
     "sax": "^1.2.4"
   }
 }
