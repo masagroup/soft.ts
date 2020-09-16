@@ -248,12 +248,18 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         }
     }
 
-    loadFromStream(s: fs.ReadStream): void {
-        if (!this._isLoaded) {
-            let n = this.basicSetLoaded(true, null);
-            this.doLoad(s);
-            if (n) n.dispatch();
-        }
+    loadFromStream(s: fs.ReadStream): Promise<void> {
+        return new Promise((resolve, reject) => {
+            if (!this._isLoaded) {
+                let n = this.basicSetLoaded(true, null);
+                this.doLoad(s);
+                if (n) {
+                    n.dispatch();
+                }
+            }
+            if (this._errors.isEmpty()) resolve();
+            else reject();
+        });
     }
 
     protected doLoad(s: fs.ReadStream): void {}
@@ -271,8 +277,11 @@ export class EResourceImpl extends BasicNotifier implements EResource {
         }
     }
 
-    saveToStream(s: fs.WriteStream): void {
-        this.doSave(s);
+    saveToStream(s: fs.WriteStream): Promise<void> {
+        return new Promise((resolve, reject) => {
+            this.doSave(s);
+            resolve();
+        });
     }
 
     protected doSave(s: fs.WriteStream): void {}

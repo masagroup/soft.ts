@@ -14,9 +14,7 @@ import { EURIConverter } from "./EURIConverter";
 import { ImmutableEList } from "./ImmutableEList";
 import { FileURIHandler } from "./FileURIHandler";
 
-
 export class EURIConverterImpl implements EURIConverter {
-
     private _uriHandlers: EList<EURIHandler>;
 
     constructor() {
@@ -39,7 +37,7 @@ export class EURIConverterImpl implements EURIConverter {
 
     getURIHandler(uri: URL): EURIHandler {
         for (const uriHandler of this._uriHandlers) {
-            if ( uriHandler.canHandle(uri) ) {
+            if (uriHandler.canHandle(uri)) {
                 return uriHandler;
             }
         }
@@ -50,5 +48,3 @@ export class EURIConverterImpl implements EURIConverter {
         return this._uriHandlers;
     }
 }
-
-

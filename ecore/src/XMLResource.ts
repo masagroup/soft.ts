@@ -33,28 +33,36 @@ export class XMLResource extends EResourceImpl {
 
 export class XMLLoad {
     private _resource: XMLResource;
-    private _isResolvedDefered : boolean = false;
-    private _elements :string[];
-
+    private _isResolvedDefered: boolean = false;
+    private _elements: string[];
 
     constructor(resource: XMLResource) {
         this._resource = resource;
     }
 
     load(rs: fs.ReadStream): void {
-        let saxStream = new sax.SAXStream(true,{trim:true,lowercase:true,xmlns:true,position:true,});
-        saxStream.on("opentag",this.startTag);
-        saxStream.on("closetag",this.endTag);
-
+        let saxStream = new sax.SAXStream(true, {
+            trim: true,
+            lowercase: true,
+            xmlns: true,
+            position: true,
+        });
+        saxStream.on("opentag", this.onStartTag);
+        saxStream.on("closetag", this.onEndTag);
+        saxStream.on("error", this.onError);
         rs.pipe(saxStream);
     }
 
-    startTag( tag : sax.Tag | sax.QualifiedTag ) {
-
+    onStartTag(tag: sax.Tag | sax.QualifiedTag) {
+        console.log("onStartTag:" + tag);
     }
 
-    endTag( tagName : string ) {
+    onEndTag(tagName: string) {
+        console.log("onEndTag:" + tagName);
+    }
 
+    onError(err: Error) {
+        console.log("error:" + err);
     }
 }
 

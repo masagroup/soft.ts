@@ -11,17 +11,18 @@ import * as fs from "fs";
 import { EURIHandler } from "./EURIHandler";
 
 export class FileURIHandler implements EURIHandler {
-
     canHandle(uri: URL): boolean {
-        return uri.protocol == "file:" || (uri.protocol == null && uri.host == null && uri.search == null );
+        return (
+            uri.protocol == "file:" ||
+            (uri.protocol == null && uri.host == null && uri.search == null)
+        );
     }
 
     createReadStream(uri: URL): fs.ReadStream {
-        return fs.createReadStream( uri );
+        return fs.createReadStream(uri);
     }
 
     createWriteStream(uri: URL): fs.WriteStream {
-        return fs.createWriteStream( uri );
+        return fs.createWriteStream(uri);
     }
-
 }
