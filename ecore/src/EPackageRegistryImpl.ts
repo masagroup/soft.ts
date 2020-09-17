@@ -10,10 +10,20 @@
 import { EPackageRegistry } from "./EPackageRegistry";
 import { EFactory } from "./EFactory";
 import { EPackage } from "./EPackage";
+import { getEcorePackage } from "./EcorePackage";
 
 export class EPackageRegistryImpl implements EPackageRegistry {
     private _packages: Map<string, EPackage>;
     private _delegate: EPackageRegistry;
+    private static _instance = null;
+
+    public static getInstance(): EPackageRegistryImpl {
+        if (this._instance == null) {
+            this._instance = new EPackageRegistryImpl();
+            this._instance.registerPackage(getEcorePackage());
+        }
+        return this._instance;
+    }
 
     constructor(delegate: EPackageRegistry = null) {
         this._packages = new Map<string, EPackage>();

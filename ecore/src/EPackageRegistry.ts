@@ -17,3 +17,7 @@ export interface EPackageRegistry {
     getPackage(nsURI: string): EPackage;
     getFactory(nsURI: string): EFactory;
 }
+
+export function getPackageRegistry(): EPackageRegistry {
+    return require("./EPackageRegistryImpl").EPackageRegistry.getInstance();
+}

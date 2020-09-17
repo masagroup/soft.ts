@@ -15,6 +15,6 @@ export interface EResourceFactoryRegistry {
     getExtensionToFactoryMap(): Map<string, EResourceFactory>;
 }
 
-function getResourceFactoryRegistry(): EResourceFactoryRegistry {
-    return require("./EResourceFactoryRegistryImpl").EResourceFactoryRegistryImpl.instance;
+export function getResourceFactoryRegistry(): EResourceFactoryRegistry {
+    return require("./EResourceFactoryRegistryImpl").EResourceFactoryRegistryImpl.getInstance();
 }

@@ -18,7 +18,7 @@ test("convertDate", (t) => {
     when(mockEDataType.classifierID).thenReturn(EcoreConstants.EDATE);
 
     {
-        let date = EcoreFactoryExt.eInstance.createFromString(
+        let date = EcoreFactoryExt.getInstance().createFromString(
             eDataType,
             "2020-05-12T17:33:10.770Z"
         );
@@ -26,7 +26,7 @@ test("convertDate", (t) => {
         t.deepEqual(date, expected);
     }
     {
-        let date = EcoreFactoryExt.eInstance.createFromString(
+        let date = EcoreFactoryExt.getInstance().createFromString(
             eDataType,
             "2007-06-02T10:26:13.000Z"
         );
@@ -35,7 +35,7 @@ test("convertDate", (t) => {
     }
     {
         let date = new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770));
-        let dateStr = EcoreFactoryExt.eInstance.convertToString(eDataType, date);
+        let dateStr = EcoreFactoryExt.getInstance().convertToString(eDataType, date);
         t.is(dateStr, "2020-05-12T17:33:10.770Z");
     }
 });

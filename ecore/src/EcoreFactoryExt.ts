@@ -12,7 +12,14 @@ import { EDataType } from "./EDataType";
 import { anyFunction } from "ts-mockito";
 
 export class EcoreFactoryExt extends EcoreFactoryImpl {
-    static readonly eInstance: EcoreFactoryExt = new EcoreFactoryExt();
+    private static _instanceExt: EcoreFactoryExt = null;
+
+    public static getInstance(): EcoreFactoryExt {
+        if (this._instanceExt == null) {
+            this._instanceExt = new EcoreFactoryExt();
+        }
+        return this._instanceExt;
+    }
 
     protected constructor() {
         super();

@@ -15,7 +15,14 @@ import { XMLResourceFactory } from "./XMLResourceFactory";
 export class EResourceFactoryRegistryImpl implements EResourceFactoryRegistry {
     private _protocolToFactory: Map<string, EResourceFactory>;
     private _extensionToFactory: Map<string, EResourceFactory>;
-    public instance: EResourceFactoryRegistryImpl = new EResourceFactoryRegistryImpl();
+    private static _instance: EResourceFactoryRegistryImpl = null;
+
+    public static getInstance(): EResourceFactoryRegistryImpl {
+        if (this._instance == null) {
+            this._instance = new EResourceFactoryRegistryImpl();
+        }
+        return this._instance;
+    }
 
     private constructor() {
         this._protocolToFactory = new Map<string, EResourceFactory>();
