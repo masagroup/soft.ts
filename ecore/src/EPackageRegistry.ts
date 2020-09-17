@@ -19,5 +19,5 @@ export interface EPackageRegistry {
 }
 
 export function getPackageRegistry(): EPackageRegistry {
-    return require("./EPackageRegistryImpl").EPackageRegistry.getInstance();
+    return require("./EPackageRegistryImpl").EPackageRegistryImpl.getInstance();
 }
