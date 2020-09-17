@@ -8,6 +8,7 @@ E*.ts
 !ENotif*.ts
 !EObjectInternal.ts
 !EObjectList.ts
+!EPackageRegistry*.ts
 !EResource*.ts
 !ETreeIterator.ts
 !EURI*.ts
