@@ -23,6 +23,7 @@ import { EPackageRegistry, getPackageRegistry } from "./EPackageRegistry";
 import { ENotificationChain } from "./ENotificationChain";
 import { EURIConverterImpl } from "./EURIConverterImpl";
 import { EPackageRegistryImpl } from "./EPackageRegistryImpl";
+import { EResourceInternal } from "./EResourceInternal";
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
     constructor(private _resourceSet: EResourceSetImpl) {
@@ -42,11 +43,11 @@ class ResourcesList extends AbstractNotifyingList<EResource> {
     }
 
     protected inverseAdd(e: EResource, notifications: ENotificationChain): ENotificationChain {
-        return notifications;
+        return (e as EResourceInternal).basicSetResourceSet(this._resourceSet,notifications);
     }
 
     protected inverseRemove(e: EResource, notifications: ENotificationChain): ENotificationChain {
-        return notifications;
+        return (e as EResourceInternal).basicSetResourceSet(null,notifications);
     }
 }
 

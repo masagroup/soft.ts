@@ -24,6 +24,7 @@ import { EObjectInternal } from "./EObjectInternal";
 import { EObjectList } from "./EObjectList";
 import { EResource, EResourceConstants } from "./EResource";
 import { EResourceIDManager } from "./EResourceIDManager";
+import { EResourceInternal } from "./EResourceInternal";
 import { EResourceSet } from "./EResourceSet";
 import { EStructuralFeature } from "./EStructuralFeature";
 import { ETreeIterator } from "./ETreeIterator";
@@ -101,7 +102,8 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 }
 
-export class EResourceImpl extends BasicNotifier implements EResource {
+
+export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     private _uri: URL;
     private _resourceIDManager: EResourceIDManager;
     private _isLoaded: boolean;
