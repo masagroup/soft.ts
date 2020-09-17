@@ -257,7 +257,7 @@ export class EResourceImpl extends BasicNotifier implements EResource {
                     n.dispatch();
                 }
             }
-            if (this._errors.isEmpty()) resolve();
+            if (this.getErrors().isEmpty()) resolve();
             else reject();
         });
     }
