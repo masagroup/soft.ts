@@ -7,7 +7,6 @@
 //
 // *****************************************************************************
 
-import test from "ava";
 import { AbstractNotifyingList } from "./AbstractNotifyingList";
 import { ENotifier } from "./ENotifier";
 import { EStructuralFeature } from "./EStructuralFeature";
@@ -73,10 +72,11 @@ class NotifyingListTest<E> extends AbstractNotifyingList<E> {
     }
 }
 
-test("add", (t) => {
-    let l = new NotifyingListTest<number>();
-    l.add(3);
-    t.notThrows(() =>
+describe("AbstractNotifyingList", () => {
+    test("add", () => {
+        let l = new NotifyingListTest<number>();
+        l.add(3);
+
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -89,11 +89,10 @@ test("add", (t) => {
                     position: 0,
                 })
             )
-        ).once()
-    );
+        ).once();
+        expect(l.toArray()).toEqual([3]);
 
-    l.add(4);
-    t.notThrows(() =>
+        l.add(4);
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -106,17 +105,15 @@ test("add", (t) => {
                     position: 1,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [3, 4]);
-});
+        ).once();
+        expect(l.toArray()).toEqual([3, 4]);
+    });
 
-test("addAll", (t) => {
-    let l = new NotifyingListTest<number>();
-    l.addAll(
-        new ImmutableEList<number>([2, 3])
-    );
-    t.notThrows(() =>
+    test("addAll", () => {
+        let l = new NotifyingListTest<number>();
+        l.addAll(
+            new ImmutableEList<number>([2, 3])
+        );
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -129,14 +126,12 @@ test("addAll", (t) => {
                     position: 0,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [2, 3]);
+        ).once();
+        expect(l.toArray()).toEqual([2, 3]);
 
-    l.addAll(
-        new ImmutableEList<number>([4])
-    );
-    t.notThrows(() =>
+        l.addAll(
+            new ImmutableEList<number>([4])
+        );
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -149,15 +144,12 @@ test("addAll", (t) => {
                     position: 2,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [2, 3, 4]);
-});
+        ).once();
+    });
 
-test("insert", (t) => {
-    let l = new NotifyingListTest<number>();
-    l.insert(0, 1);
-    t.notThrows(() =>
+    test("insert", () => {
+        let l = new NotifyingListTest<number>();
+        l.insert(0, 1);
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -170,12 +162,10 @@ test("insert", (t) => {
                     position: 0,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [1]);
+        ).once();
+        expect(l.toArray()).toEqual([1]);
 
-    l.insert(0, 2);
-    t.notThrows(() =>
+        l.insert(0, 2);
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -188,12 +178,11 @@ test("insert", (t) => {
                     position: 0,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [2, 1]);
+        ).once();
 
-    l.insert(1, 3);
-    t.notThrows(() =>
+        expect(l.toArray()).toEqual([2, 1]);
+
+        l.insert(1, 3);
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -206,15 +195,13 @@ test("insert", (t) => {
                     position: 1,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [2, 3, 1]);
-});
+        ).once();
+        expect(l.toArray()).toEqual([2, 3, 1]);
+    });
 
-test("insertAll", (t) => {
-    let l = new NotifyingListTest<number>();
-    l.insertAll(0, new ImmutableEList([1, 2, 3]));
-    t.notThrows(() =>
+    test("insertAll", () => {
+        let l = new NotifyingListTest<number>();
+        l.insertAll(0, new ImmutableEList([1, 2, 3]));
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -227,12 +214,10 @@ test("insertAll", (t) => {
                     position: 0,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [1, 2, 3]);
+        ).once();
+        expect(l.toArray()).toEqual([1, 2, 3]);
 
-    l.insertAll(1, new ImmutableEList([4, 5]));
-    t.notThrows(() =>
+        l.insertAll(1, new ImmutableEList([4, 5]));
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -245,15 +230,13 @@ test("insertAll", (t) => {
                     position: 1,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [1, 4, 5, 2, 3]);
-});
+        ).once();
+        expect(l.toArray()).toEqual([1, 4, 5, 2, 3]);
+    });
 
-test("set", (t) => {
-    let l = new NotifyingListTest<number>([1, 2]);
-    l.set(1, 3);
-    t.notThrows(() =>
+    test("set", () => {
+        let l = new NotifyingListTest<number>([1, 2]);
+        l.set(1, 3);
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -266,15 +249,13 @@ test("set", (t) => {
                     position: 1,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [1, 3]);
-});
+        ).once();
+        expect(l.toArray()).toEqual([1, 3]);
+    });
 
-test("removeAt", (t) => {
-    let l = new NotifyingListTest<number>([1, 2]);
-    l.removeAt(1);
-    t.notThrows(() =>
+    test("removeAt", () => {
+        let l = new NotifyingListTest<number>([1, 2]);
+        l.removeAt(1);
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -287,65 +268,65 @@ test("removeAt", (t) => {
                     position: 1,
                 })
             )
-        ).once()
-    );
-    t.deepEqual(l.toArray(), [1]);
-});
+        ).once();
+        expect(l.toArray()).toEqual([1]);
+    });
 
-test("addWithNotification", (t) => {
-    let l = new NotifyingListTest<number>();
-    when(
-        l.mockChain.add(
-            objectContaining({
-                eventType: EventType.ADD,
-                notifier: l.notifier,
-                feature: l.feature,
-                featureID: l.featureID,
-                oldValue: null,
-                newValue: 1,
-                position: 0,
-            })
-        )
-    ).thenReturn(true);
+    test("addWithNotification", () => {
+        let l = new NotifyingListTest<number>();
+        when(
+            l.mockChain.add(
+                objectContaining({
+                    eventType: EventType.ADD,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: null,
+                    newValue: 1,
+                    position: 0,
+                })
+            )
+        ).thenReturn(true);
 
-    l.addWithNotification(1, l.chain);
-    t.deepEqual(l.toArray(), [1]);
-});
+        l.addWithNotification(1, l.chain);
+        expect(l.toArray()).toEqual([1]);
+    });
 
-test("removeWithNotification", (t) => {
-    let l = new NotifyingListTest<number>([1]);
-    when(
-        l.mockChain.add(
-            objectContaining({
-                eventType: EventType.REMOVE,
-                notifier: l.notifier,
-                feature: l.feature,
-                featureID: l.featureID,
-                oldValue: 1,
-                newValue: null,
-                position: 0,
-            })
-        )
-    ).thenReturn(true);
-    l.removeWithNotification(1, l.chain);
-    t.deepEqual(l.toArray(), []);
-});
+    test("removeWithNotification", () => {
+        let l = new NotifyingListTest<number>([1]);
+        when(
+            l.mockChain.add(
+                objectContaining({
+                    eventType: EventType.REMOVE,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: 1,
+                    newValue: null,
+                    position: 0,
+                })
+            )
+        ).thenReturn(true);
+        l.removeWithNotification(1, l.chain);
+        expect(l.toArray()).toEqual([]);
+    });
 
-test("setWithNotification", (t) => {
-    let l = new NotifyingListTest<number>([1]);
-    when(
-        l.mockChain.add(
-            objectContaining({
-                eventType: EventType.SET,
-                notifier: l.notifier,
-                feature: l.feature,
-                featureID: l.featureID,
-                oldValue: 1,
-                newValue: 2,
-                position: 0,
-            })
-        )
-    ).thenReturn(true);
-    l.setWithNotification(0, 2, l.chain);
-    t.deepEqual(l.toArray(), [2]);
+    test("setWithNotification", () => {
+        let l = new NotifyingListTest<number>([1]);
+        when(
+            l.mockChain.add(
+                objectContaining({
+                    eventType: EventType.SET,
+                    notifier: l.notifier,
+                    feature: l.feature,
+                    featureID: l.featureID,
+                    oldValue: 1,
+                    newValue: 2,
+                    position: 0,
+                })
+            )
+        ).thenReturn(true);
+        l.setWithNotification(0, 2, l.chain);
+        expect(l.toArray()).toEqual([2]);
+    });
 });
