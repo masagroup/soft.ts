@@ -35,6 +35,6 @@ export interface EResourceSet extends ENotifier {
     geResourceFactoryRegistry(): EResourceFactoryRegistry;
     setResourceFactoryRegistry(resourceFactoryRegistry: EResourceFactoryRegistry): void;
 
-    getURIResourceMap(): Map<URL, EResource>;
-    setURIResourceMap(uriMap: Map<URL, EResource>): void;
+    getURIResourceMap(): Map<string, EResource>;
+    setURIResourceMap(uriMap: Map<string, EResource>): void;
 }

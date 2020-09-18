@@ -54,7 +54,7 @@ class ResourcesList extends AbstractNotifyingList<EResource> {
 export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
     private _resources: EList<EResource>;
     private _uriConverter: EURIConverter;
-    private _uriResourceMap: Map<URL, EResource>;
+    private _uriResourceMap: Map<string, EResource>;
     private _resourceFactoryRegistry: EResourceFactoryRegistry;
     private _packageRegistry: EPackageRegistry;
 
@@ -82,11 +82,11 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
         this._resourceFactoryRegistry = resourceFactoryRegistry;
     }
 
-    getURIResourceMap(): Map<URL, EResource> {
+    getURIResourceMap(): Map<string, EResource> {
         return this._uriResourceMap;
     }
 
-    setURIResourceMap(uriMap: Map<URL, EResource>): void {
+    setURIResourceMap(uriMap: Map<string, EResource>): void {
         this._uriResourceMap = uriMap;
     }
 
@@ -96,7 +96,7 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
 
     getResource(uri: URL, loadOnDemand: boolean): EResource {
         if (this._uriResourceMap) {
-            let resource = this._uriResourceMap.get(uri);
+            let resource = this._uriResourceMap.get(uri.toString());
             if (resource) {
                 if (loadOnDemand && !resource.isLoaded) {
                     resource.load();
@@ -108,12 +108,12 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
         let normalizedURI = this._uriConverter.normalize(uri);
         for (const resource of this._resources) {
             let resourceURI = this._uriConverter.normalize(resource.eURI);
-            if (resourceURI == normalizedURI) {
+            if (resourceURI.toString() == normalizedURI.toString()) {
                 if (loadOnDemand && !resource.isLoaded) {
                     resource.load();
                 }
                 if (this._uriResourceMap) {
-                    this._uriResourceMap.set(uri, resource);
+                    this._uriResourceMap.set(uri.toString(), resource);
                 }
                 return resource;
             }
