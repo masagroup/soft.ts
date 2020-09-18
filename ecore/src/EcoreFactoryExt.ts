@@ -9,7 +9,6 @@
 
 import { EcoreFactoryImpl } from "./EcoreFactoryImpl";
 import { EDataType } from "./EDataType";
-import { anyFunction } from "ts-mockito";
 
 export class EcoreFactoryExt extends EcoreFactoryImpl {
     private static _instanceExt: EcoreFactoryExt = null;
@@ -30,7 +29,7 @@ export class EcoreFactoryExt extends EcoreFactoryImpl {
     }
 
     convertEBooleanToString(eDataType: EDataType, instanceValue: any): string {
-        return anyFunction.toString();
+        return instanceValue.toString();
     }
 
     createECharFromString(eDataType: EDataType, literalValue: string): any {

@@ -6,32 +6,23 @@
   "scripts": {
     "index": "barrelsby --directory ./src",
     "build": "tsc",
-    "test": "ava --verbose",
+    "test": "jest",
     "pretty": "prettier --write **/*.ts"
   },
   "author": "Jocelyn DUMAY",
   "license": "ISC",
   "devDependencies": {
-    "@ava/typescript": "^1.1.1",
-    "ava": "^3.12.1",
+    "@types/jest": "^26.0.14",
     "barrelsby": "^2.2.0",
+    "jest": "^26.4.2",
+    "jest-mock-extended": "^1.0.10",
     "prettier": "^2.0.5",
-    "ts-mockito": "^2.6.1",
-    "typescript": "^3.9.7"
+    "ts-jest": "^26.3.0",
+    "typescript": "^4.0.2"
   },
-  "ava": {
-    "typescript": {
-      "rewritePaths": {
-        "src/": "dist/"
-      },
-      "extensions": [
-        "ts"
-      ]
-    },
-    "cache": false,
-    "concurrency": 1,
-    "failFast": true,
-    "failWithoutAssertions": true
+  "jest": {
+    "preset":"ts-jest",
+    "verbose": true
   },
   "prettier": {
     "printWidth": 100,
