@@ -53,17 +53,11 @@ export class XMLLoad {
         rs.pipe(saxStream);
     }
 
-    onStartTag(tag: sax.Tag | sax.QualifiedTag) {
-        console.log("onStartTag:" + tag);
-    }
+    onStartTag(tag: sax.Tag | sax.QualifiedTag) {}
 
-    onEndTag(tagName: string) {
-        console.log("onEndTag:" + tagName);
-    }
+    onEndTag(tagName: string) {}
 
-    onError(err: Error) {
-        console.log("error:" + err);
-    }
+    onError(err: Error) {}
 }
 
 export class XMLSave {

@@ -102,7 +102,6 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 }
 
-
 export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     private _uri: URL;
     private _resourceIDManager: EResourceIDManager;

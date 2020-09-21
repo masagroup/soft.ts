@@ -7,53 +7,54 @@
 //
 // *****************************************************************************
 
-import test from "ava";
 import { NotificationChain } from "./NotificationChain";
 import { ENotifier } from "./ENotifier";
 import { ENotification, EventType } from "./ENotification";
 import { mock, instance, when, verify } from "ts-mockito";
 
-test("constructor", (t) => {
-    let c = new NotificationChain();
-    t.not(c, null);
-});
+describe("NotificationChain", () => {
+    test("constructor", () => {
+        let c = new NotificationChain();
+        expect(c).not.toBeNull();
+    });
 
-test("add", (t) => {
-    // chain
-    let c = new NotificationChain();
+    test("add", () => {
+        // chain
+        let c = new NotificationChain();
 
-    // mocks
-    const mockNotifier = mock<ENotifier>();
-    const mockNotification = mock<ENotification>();
-    const notifier = instance(mockNotifier);
-    const notification = instance(mockNotification);
+        // mocks
+        const mockNotifier = mock<ENotifier>();
+        const mockNotification = mock<ENotification>();
+        const notifier = instance(mockNotifier);
+        const notification = instance(mockNotification);
 
-    // when
-    when(mockNotification.eventType).thenReturn(EventType.ADD);
-    when(mockNotification.notifier).thenReturn(notifier);
-    when(mockNotification.merge(notification)).thenReturn(false);
+        // when
+        when(mockNotification.eventType).thenReturn(EventType.ADD);
+        when(mockNotification.notifier).thenReturn(notifier);
+        when(mockNotification.merge(notification)).thenReturn(false);
 
-    // test
-    t.true(c.add(notification));
-    t.true(c.add(notification));
-});
+        // test
+        expect(c.add(notification)).toBeTruthy();
+        expect(c.add(notification)).toBeTruthy();
+    });
 
-test("dispatch", (t) => {
-    // mocks
-    const mockNotifier = mock<ENotifier>();
-    const mockNotification = mock<ENotification>();
-    const notifier = instance(mockNotifier);
-    const notification = instance(mockNotification);
+    test("dispatch", () => {
+        // mocks
+        const mockNotifier = mock<ENotifier>();
+        const mockNotification = mock<ENotification>();
+        const notifier = instance(mockNotifier);
+        const notification = instance(mockNotification);
 
-    // when
-    when(mockNotification.eventType).thenReturn(EventType.ADD);
-    when(mockNotification.notifier).thenReturn(notifier);
+        // when
+        when(mockNotification.eventType).thenReturn(EventType.ADD);
+        when(mockNotification.notifier).thenReturn(notifier);
 
-    // test
-    let c = new NotificationChain();
-    t.true(c.add(notification));
-    c.dispatch();
+        // test
+        let c = new NotificationChain();
+        expect(c.add(notification)).toBeTruthy();
+        c.dispatch();
 
-    // verifications
-    t.notThrows(() => verify(mockNotifier.eNotify(notification)).once());
+        // verifications
+        verify(mockNotifier.eNotify(notification)).once();
+    });
 });

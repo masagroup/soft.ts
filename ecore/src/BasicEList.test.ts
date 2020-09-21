@@ -10,7 +10,7 @@
 import { BasicEList } from "./BasicEList";
 
 describe("BasicEList", () => {
-    test("get", (t) => {
+    test("get", () => {
         let a = new BasicEList<number>([1, 2, 3, 4]);
         expect(a.get(0)).toEqual(1);
         expect(a.get(1)).toEqual(2);
@@ -18,7 +18,7 @@ describe("BasicEList", () => {
         expect(a.get(3)).toEqual(4);
     });
 
-    test("size", (t) => {
+    test("size", () => {
         {
             let a = new BasicEList<number>();
             expect(a.size()).toEqual(0);
@@ -29,7 +29,7 @@ describe("BasicEList", () => {
         }
     });
 
-    test("isEmpty", (t) => {
+    test("isEmpty", () => {
         {
             let a = new BasicEList<number>();
             expect(a.isEmpty()).toBeTruthy();
@@ -40,35 +40,35 @@ describe("BasicEList", () => {
         }
     });
 
-    test("add", (t) => {
+    test("add", () => {
         let a = new BasicEList<number>();
         expect(a.add(0)).toBeTruthy();
         expect(a.add(1)).toBeTruthy();
         expect(a.toArray()).toEqual([0, 1]);
     });
 
-    test("add_unique", (t) => {
+    test("add_unique", () => {
         let a = new BasicEList<number>([], true);
         expect(a.add(0)).toBeTruthy();
         expect(a.add(0)).toBeFalsy();
         expect(a.toArray()).toEqual([0]);
     });
 
-    test("addAll", (t) => {
+    test("addAll", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         let b = new BasicEList<number>([3, 4, 5]);
         expect(a.addAll(b)).toBeTruthy();
         expect(a.toArray()).toEqual([0, 1, 2, 3, 4, 5]);
     });
 
-    test("addAll_unique", (t) => {
+    test("addAll_unique", () => {
         let a = new BasicEList<number>([0, 1, 2], true);
         let b = new BasicEList<number>([1, 2, 3]);
         expect(a.addAll(b)).toBeTruthy();
         expect(a.toArray()).toEqual([0, 1, 2, 3]);
     });
 
-    test("insert", (t) => {
+    test("insert", () => {
         {
             let a = new BasicEList<number>();
             expect(a.insert(0, 0)).toBeTruthy();
@@ -86,98 +86,98 @@ describe("BasicEList", () => {
         }
     });
 
-    test("insert_invalid_range", (t) => {
+    test("insert_invalid_range", () => {
         let a = new BasicEList<number>();
-        expect(a.insert(1, 0)).toThrowError(RangeError);
+        expect(() => a.insert(1, 0)).toThrowError(RangeError);
     });
 
-    test("insert_unique", (t) => {
+    test("insert_unique", () => {
         let a = new BasicEList<number>([0, 1, 2], true);
         expect(a.insert(0, 2)).toBeFalsy();
     });
 
-    test("insertAll", (t) => {
+    test("insertAll", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         let b = new BasicEList<number>([3, 4, 5]);
         expect(a.insertAll(0, b)).toBeTruthy();
         expect(a.toArray()).toEqual([3, 4, 5, 0, 1, 2]);
     });
 
-    test("insertAll_unique", (t) => {
+    test("insertAll_unique", () => {
         let a = new BasicEList<number>([0, 1, 2], true);
         let b = new BasicEList<number>([1, 2, 3]);
         expect(a.insertAll(0, b)).toBeTruthy();
         expect(a.toArray()).toEqual([3, 0, 1, 2]);
     });
 
-    test("remove", (t) => {
+    test("remove", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         expect(a.remove(1)).toBeTruthy();
         expect(a.toArray()).toEqual([0, 2]);
         expect(a.remove(1)).toBeFalsy();
     });
 
-    test("removeAt", (t) => {
+    test("removeAt", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         expect(a.removeAt(0)).toEqual(0);
         expect(a.toArray()).toEqual([1, 2]);
     });
 
-    test("removeAt_invalid_range", (t) => {
+    test("removeAt_invalid_range", () => {
         let a = new BasicEList<number>([0, 1, 2]);
-        expect(a.removeAt(3)).toThrowError(RangeError);
+        expect(() => a.removeAt(3)).toThrowError(RangeError);
     });
 
-    test("removeAll", (t) => {
+    test("removeAll", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         let b = new BasicEList<number>([1, 2]);
         expect(a.removeAll(b)).toBeTruthy();
         expect(a.toArray()).toEqual([0]);
     });
 
-    test("retainAll", (t) => {
+    test("retainAll", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         let b = new BasicEList<number>([1, 2]);
         expect(a.retainAll(b)).toBeTruthy();
         expect(a.toArray()).toEqual([1, 2]);
     });
 
-    test("set", (t) => {
+    test("set", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         expect(a.set(0, 1)).toEqual(0);
         expect(a.toArray()).toEqual([1, 1, 2]);
     });
 
-    test("set_invalid_range", (t) => {
+    test("set_invalid_range", () => {
         let a = new BasicEList<number>([0, 1, 2]);
-        expect(a.set(3, 1)).toThrowError(RangeError);
+        expect(() => a.set(3, 1)).toThrowError(RangeError);
     });
 
-    test("set_invalid_constraint", (t) => {
+    test("set_invalid_constraint", () => {
         let a = new BasicEList<number>([0, 1, 2], true);
-        expect(a.set(0, 1)).toThrowError(Error);
+        expect(() => a.set(0, 1)).toThrowError(Error);
     });
 
-    test("indexOf", (t) => {
+    test("indexOf", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         expect(a.indexOf(1)).toEqual(1);
         expect(a.indexOf(3)).toEqual(-1);
     });
 
-    test("clear", (t) => {
+    test("clear", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         expect(a.isEmpty()).toBeFalsy();
         a.clear();
         expect(a.isEmpty()).toBeTruthy();
     });
 
-    test("contains", (t) => {
+    test("contains", () => {
         let a = new BasicEList<number>([0, 1, 2]);
         expect(a.contains(1)).toBeTruthy();
         expect(a.contains(3)).toBeFalsy();
     });
 
-    test("iterator", (t) => {
+    test("iterator", () => {
         let a = new BasicEList<number>([3, 4, 5]);
         let v: number[] = [];
         for (const i of a) {

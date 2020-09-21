@@ -7,70 +7,70 @@
 //
 // *****************************************************************************
 
-import test from "ava";
 import { DynamicEObjectImpl } from "./DynamicEObjectImpl";
 import { getEcorePackage } from "./EcorePackage";
-import { EClassExt } from "./EClassExt";
 import { mock, instance, when, anything } from "ts-mockito";
 import { EClass } from "./EClass";
 import { EList } from "./EList";
 import { EAdapter } from "./EAdapter";
 import { getEcoreFactory } from "./EcoreFactory";
 
-test("constructor", (t) => {
-    let o = new DynamicEObjectImpl();
-    t.true(o != null);
-    t.is(o.eClass(), getEcorePackage().getEObject());
-});
+describe("DynamicEObjectImpl", () => {
+    test("constructor", () => {
+        let o = new DynamicEObjectImpl();
+        expect(o).not.toBeNull();
+        expect(o.eClass()).toBe(getEcorePackage().getEObject());
+    });
 
-test("mockClass", (t) => {
-    let o = new DynamicEObjectImpl();
-    let mockClass = mock<EClass>();
-    let mockAdapters = mock<EList<EAdapter>>();
-    let eClass = instance(mockClass);
-    let eAdapters = instance(mockAdapters);
-    when(mockClass.getFeatureCount()).thenReturn(0);
-    when(mockClass.eAdapters).thenReturn(eAdapters);
-    when(mockAdapters.add(anything())).thenReturn(true);
-    o.setEClass(eClass);
-    t.is(o.eClass(), eClass);
-});
+    test("mockClass", () => {
+        let o = new DynamicEObjectImpl();
+        let mockClass = mock<EClass>();
+        let mockAdapters = mock<EList<EAdapter>>();
+        let eClass = instance(mockClass);
+        let eAdapters = instance(mockAdapters);
+        when(mockClass.getFeatureCount()).thenReturn(0);
+        when(mockClass.eAdapters).thenReturn(eAdapters);
+        when(mockAdapters.add(anything())).thenReturn(true);
+        o.setEClass(eClass);
+        expect(o.eClass()).toBe(eClass);
+    });
 
-test("eClass", (t) => {
-    let o = new DynamicEObjectImpl();
-    let c = getEcoreFactory().createEClass();
-    o.setEClass(c);
-    t.is(o.eClass(), c);
-});
+    test("eClass", () => {
+        let o = new DynamicEObjectImpl();
+        let c = getEcoreFactory().createEClass();
+        o.setEClass(c);
+        expect(o.eClass()).toBe(c);
+    });
 
-test("getSet", (t) => {
-    let o = new DynamicEObjectImpl();
-    let c = getEcoreFactory().createEClass();
-    o.setEClass(c);
-    t.is(o.eClass(), c);
+    test("getSet", () => {
+        let o = new DynamicEObjectImpl();
+        let c = getEcoreFactory().createEClass();
+        o.setEClass(c);
+        expect(o.eClass()).toBe(c);
 
-    let a = getEcoreFactory().createEAttribute();
-    c.eStructuralFeatures.add(a);
+        let a = getEcoreFactory().createEAttribute();
+        c.eStructuralFeatures.add(a);
 
-    t.is(o.eGet(a), null);
+        expect(o.eGet(a)).toBeNull();
 
-    o.eSet(a, 1);
-    t.is(o.eGet(a), 1);
-});
+        o.eSet(a, 1);
+        expect(o.eGet(a)).toBe(1);
+    });
 
-test("unset", (t) => {
-    let o = new DynamicEObjectImpl();
-    let c = getEcoreFactory().createEClass();
-    o.setEClass(c);
-    t.is(o.eClass(), c);
+    test("unset", () => {
+        let o = new DynamicEObjectImpl();
+        let c = getEcoreFactory().createEClass();
+        o.setEClass(c);
+        expect(o.eClass()).toBe(c);
 
-    let a = getEcoreFactory().createEAttribute();
-    c.eStructuralFeatures.add(a);
+        let a = getEcoreFactory().createEAttribute();
+        c.eStructuralFeatures.add(a);
 
-    t.is(o.eGet(a), null);
-    o.eSet(a, 1);
-    t.is(o.eGet(a), 1);
+        expect(o.eGet(a)).toBe(null);
+        o.eSet(a, 1);
+        expect(o.eGet(a)).toBe(1);
 
-    o.eUnset(a);
-    t.is(o.eGet(a), null);
+        o.eUnset(a);
+        expect(o.eGet(a)).toBe(null);
+    });
 });

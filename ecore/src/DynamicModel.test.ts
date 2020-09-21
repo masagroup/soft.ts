@@ -17,7 +17,6 @@ import { getEcorePackage } from "./EcorePackage";
 import { UNBOUNDED_MULTIPLICITY } from "./Constants";
 import { EObject } from "./EObject";
 import { EList } from "./EList";
-import test from "ava";
 
 class DynamicMetaModel {
     bookStoreEPackage: EPackage;
@@ -134,21 +133,23 @@ class DynamicModel {
     }
 }
 
-test("dynamicModel", (t) => {
-    let mm = new DynamicMetaModel();
-    let m = new DynamicModel(mm);
+describe("DynamicModel", () => {
+    test("instance", () => {
+        let mm = new DynamicMetaModel();
+        let m = new DynamicModel(mm);
 
-    t.is(mm.bookStoreEClass, m.bookStoreObject.eClass());
-    t.is(mm.bookEClass, m.bookObject.eClass());
-    /*
-     * Read/Get the values of bookStoreObject attributes
-     */
-    t.is(m.bookStoreObject.eGet(mm.bookStoreOwner), "David Brown");
-    t.is(m.bookStoreObject.eGet(mm.bookStoreLocation), "Street#12, Top Town, NY");
+        expect(mm.bookStoreEClass).toBe(m.bookStoreObject.eClass());
+        expect(mm.bookEClass).toBe(m.bookObject.eClass());
+        /*
+         * Read/Get the values of bookStoreObject attributes
+         */
+        expect(m.bookStoreObject.eGet(mm.bookStoreOwner)).toBe("David Brown");
+        expect(m.bookStoreObject.eGet(mm.bookStoreLocation)).toBe("Street#12, Top Town, NY");
 
-    /*
-     * Read/Get the values of bookObject attributes
-     */
-    t.is(m.bookObject.eGet(mm.bookName), "Harry Potter and the Deathly Hallows");
-    t.is(m.bookObject.eGet(mm.bookISBN), 157221);
+        /*
+         * Read/Get the values of bookObject attributes
+         */
+        expect(m.bookObject.eGet(mm.bookName)).toBe("Harry Potter and the Deathly Hallows");
+        expect(m.bookObject.eGet(mm.bookISBN)).toBe(157221);
+    });
 });

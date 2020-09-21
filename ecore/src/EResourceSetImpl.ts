@@ -43,11 +43,11 @@ class ResourcesList extends AbstractNotifyingList<EResource> {
     }
 
     protected inverseAdd(e: EResource, notifications: ENotificationChain): ENotificationChain {
-        return (e as EResourceInternal).basicSetResourceSet(this._resourceSet,notifications);
+        return (e as EResourceInternal).basicSetResourceSet(this._resourceSet, notifications);
     }
 
     protected inverseRemove(e: EResource, notifications: ENotificationChain): ENotificationChain {
-        return (e as EResourceInternal).basicSetResourceSet(null,notifications);
+        return (e as EResourceInternal).basicSetResourceSet(null, notifications);
     }
 }
 
@@ -64,6 +64,7 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
         this._uriConverter = new EURIConverterImpl();
         this._resourceFactoryRegistry = getResourceFactoryRegistry();
         this._packageRegistry = new EPackageRegistryImpl(getPackageRegistry());
+        this._uriResourceMap = null;
     }
 
     getPackageRegistry(): EPackageRegistry {
@@ -141,7 +142,7 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
     }
 
     getEObject(uri: URL, loadOnDemand: boolean): EObject {
-        let trimmedUri = new URL( uri.toString() );
+        let trimmedUri = new URL(uri.toString());
         trimmedUri.hash = "";
         let resource = this.getResource(trimmedUri, loadOnDemand);
         return resource
