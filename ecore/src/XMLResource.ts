@@ -9,6 +9,7 @@
 
 import * as fs from "fs";
 import * as sax from "sax";
+import { EFactory } from "./EFactory";
 import { EResourceImpl } from "./EResourceImpl";
 
 export class XMLNamespaces {
@@ -91,11 +92,24 @@ export class XMLResource extends EResourceImpl {
     }
 }
 
+class XMLConstants {
+    static href = "href";
+	static typeAttrib = "type"
+	static schemaLocationAttrib            = "schemaLocation"
+	static noNamespaceSchemaLocationAttrib = "noNamespaceSchemaLocation"
+	static xsiURI                          = "http://www.w3.org/2001/XMLSchema-instance"
+	static xsiNS                           = "xsi"
+	static xmlNS                           = "xmlns"
+}
+
 export class XMLLoad {
     private _resource: XMLResource;
     private _isResolvedDefered: boolean = false;
-    private _elements: string[];
-
+    private _elements: string[] = [];
+    private _attributes: { [key: string]: sax.QualifiedAttribute } = null;
+    private _namespaces : XMLNamespaces = new XMLNamespaces();
+    private _spacesToFactories : Map<string,EFactory> = new Map<string,EFactory>();
+    
     constructor(resource: XMLResource) {
         this._resource = resource;
     }
@@ -107,18 +121,49 @@ export class XMLLoad {
             xmlns: true,
             position: true,
         });
-        saxStream.on("opentag", this.onStartTag);
-        saxStream.on("closetag", this.onEndTag);
-        saxStream.on("error", this.onError);
+        saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t));
+        saxStream.on("closetag", (t) => this.onEndTag(t));
+        saxStream.on("error", (e) => this.onError(e));
         rs.pipe(saxStream);
     }
 
-    onStartTag(tag: sax.QualifiedTag) {}
+    onStartTag(tag: sax.QualifiedTag) {
+        this.setAttributes(tag.attributes);
+        this._namespaces.pushContext();
+        this.handlePrefixMapping();
+
+    }
 
     onEndTag(tagName: string) {}
 
     onError(err: Error) {}
+
+    private setAttributes(attributes: {
+        [key: string]: sax.QualifiedAttribute;
+    }): { [key: string]: sax.QualifiedAttribute } {
+        let oldAttributes = this._attributes;
+        this._attributes = attributes;
+        return oldAttributes;
+    }
+
+    private handlePrefixMapping() : void {
+        if ( this._attributes ) {
+            for ( let i in this._attributes ) {
+                let attr = this._attributes[i];
+                if ( attr.prefix == XMLConstants.xmlNS ) {
+                    this.startPrefixMapping(attr.local,attr.value);
+                }
+            }            
+        }
+    }
+
+    private  startPrefixMapping(prefix : string, uri : string) {
+        this._namespaces.declarePrefix(prefix, uri);
+        this._spacesToFactories.delete(uri);
+    }
+    
 }
+
 
 export class XMLSave {
     private _resource: XMLResource;
