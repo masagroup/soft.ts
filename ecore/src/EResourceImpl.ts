@@ -236,17 +236,17 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         return this._warnings;
     }
 
-    load(): void {
+    load(): Promise<void> {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter();
             if (uriConverter) {
                 let s = uriConverter.createReadStream(this._uri);
                 if (s) {
-                    this.loadFromStream(s);
-                    s.close();
+                    return this.loadFromStream(s);
                 }
             }
         }
+        return Promise.reject();
     }
 
     loadFromStream(s: fs.ReadStream): Promise<void> {
@@ -267,15 +267,15 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
 
     unload(): void {}
 
-    save(): void {
+    save(): Promise<void> {
         let uriConverter = this.getURIConverter();
         if (uriConverter) {
             let s = uriConverter.createWriteStream(this._uri);
             if (s) {
-                this.saveToStream(s);
-                s.close();
+                return this.saveToStream(s);
             }
         }
+        return Promise.reject();
     }
 
     saveToStream(s: fs.WriteStream): Promise<void> {

@@ -33,12 +33,12 @@ export interface EResource extends ENotifier {
     eContents(): EList<EObject>;
     eAllContents(): IterableIterator<EObject>;
 
-    load(): void;
+    load(): Promise<void>;
     loadFromStream(s: fs.ReadStream): Promise<void>;
     unload(): void;
     readonly isLoaded: boolean;
 
-    save(): void;
+    save(): Promise<void>;
     saveToStream(s: fs.WriteStream): Promise<void>;
 
     attached(object: EObject): void;
