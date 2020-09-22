@@ -21,7 +21,6 @@ describe("XMIResource", () => {
         expect(resource.getWarnings().isEmpty()).toBeTruthy();
     });
 
-
     test("load", async () => {
         let resource = new XMIResource();
         resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
