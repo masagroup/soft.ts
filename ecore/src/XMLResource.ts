@@ -18,6 +18,7 @@ import { EFactory } from "./EFactory";
 import { EList } from "./EList";
 import { EObject } from "./EObject";
 import { EObjectInternal } from "./EObjectInternal";
+import { EPackage } from "./EPackage";
 import { EPackageRegistry, getPackageRegistry } from "./EPackageRegistry";
 import { EReference } from "./EReference";
 import { EResourceImpl } from "./EResourceImpl";
@@ -153,7 +154,7 @@ export class XMLLoad {
     protected _isResolveDeferred: boolean = false;
     protected _references: XMLReference[] = [];
     protected _packageRegistry : EPackageRegistry;
-
+    
     constructor(resource: XMLResource) {
         this._resource = resource;
         this._packageRegistry = this._resource.eResourceSet() ? this._resource.eResourceSet().getPackageRegistry() : getPackageRegistry();
@@ -219,7 +220,7 @@ export class XMLLoad {
         if (this._attributes) {
             for (let i in this._attributes) {
                 let attr = this._attributes[i];
-                if (attr.local == uri && attr.local == local) {
+                if (attr.uri == uri && attr.local == local) {
                     return attr.value;
                 }
             }
