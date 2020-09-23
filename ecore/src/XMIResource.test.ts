@@ -19,6 +19,7 @@ describe("XMIResource", () => {
         expect(resource.isLoaded).toBeTruthy();
         expect(resource.getErrors().isEmpty()).toBeTruthy();
         expect(resource.getWarnings().isEmpty()).toBeTruthy();
+        expect(resource.xmiVersion).toBe("2.0");
     });
 
     test("load", async () => {
