@@ -32,11 +32,11 @@ function isEDataType(e: EClassifier): e is EDataType {
 }
 
 enum FeatureKind {
-	Single,
-	Many,
-	ManyAdd,
-	ManyMove,
-	Other,
+    Single,
+    Many,
+    ManyAdd,
+    ManyMove,
+    Other,
 }
 
 export class XMLNamespaces {
@@ -121,34 +121,38 @@ export class XMLResource extends EResourceImpl {
 
 class XMLConstants {
     static href = "href";
-	static typeAttrib = "type"
-	static schemaLocationAttrib            = "schemaLocation"
-	static noNamespaceSchemaLocationAttrib = "noNamespaceSchemaLocation"
-	static xsiURI                          = "http://www.w3.org/2001/XMLSchema-instance"
-	static xsiNS                           = "xsi"
-	static xmlNS                           = "xmlns"
+    static typeAttrib = "type";
+    static schemaLocationAttrib = "schemaLocation";
+    static noNamespaceSchemaLocationAttrib = "noNamespaceSchemaLocation";
+    static xsiURI = "http://www.w3.org/2001/XMLSchema-instance";
+    static xsiNS = "xsi";
+    static xmlNS = "xmlns";
 }
 
 type XMLReference = {
-    object : EObject;
-	feature : EStructuralFeature;
-	id      : string;
-	pos     : number;
-}
+    object: EObject;
+    feature: EStructuralFeature;
+    id: string;
+    pos: number;
+};
 
 export class XMLLoad {
     private _resource: XMLResource;
-    private _parser : sax.SAXParser;
+    private _parser: sax.SAXParser;
     private _isResolvedDefered: boolean = false;
     private _elements: string[] = [];
     private _attributes: { [key: string]: sax.QualifiedAttribute } = null;
-    private _namespaces : XMLNamespaces = new XMLNamespaces();
-    private _uriToFactories : Map<string,EFactory> = new Map<string,EFactory>();
-    private _objects : EObject[] = [];
-    private _sameDocumentProxies : EObject[] =  [];
-    protected _notFeatures : { uri : string , local : string }[] =[ { uri : XMLConstants.xsiURI, local : XMLConstants.typeAttrib } , { uri : XMLConstants.xsiURI, local : XMLConstants.schemaLocationAttrib }, { uri : XMLConstants.xsiURI, local : XMLConstants.noNamespaceSchemaLocationAttrib } ];
-    private _isResolveDeferred : boolean = false;
-    private _references : XMLReference[] = [];
+    private _namespaces: XMLNamespaces = new XMLNamespaces();
+    private _uriToFactories: Map<string, EFactory> = new Map<string, EFactory>();
+    private _objects: EObject[] = [];
+    private _sameDocumentProxies: EObject[] = [];
+    protected _notFeatures: { uri: string; local: string }[] = [
+        { uri: XMLConstants.xsiURI, local: XMLConstants.typeAttrib },
+        { uri: XMLConstants.xsiURI, local: XMLConstants.schemaLocationAttrib },
+        { uri: XMLConstants.xsiURI, local: XMLConstants.noNamespaceSchemaLocationAttrib },
+    ];
+    private _isResolveDeferred: boolean = false;
+    private _references: XMLReference[] = [];
 
     constructor(resource: XMLResource) {
         this._resource = resource;
@@ -176,12 +180,31 @@ export class XMLLoad {
         if (this._objects.length == 0) {
             this.handleSchemaLocation();
         }
-        this.processElement(tag.uri,tag.local);
+        this.processElement(tag.uri, tag.local);
     }
 
-    onEndTag(tagName: string) {}
+    onEndTag(tagName: string) {
+        this._objects.pop();
+        if (this._objects.length == 0) {
+            this.handleReferences();
+        }
 
-    onError(err: Error) {}
+        let context = this._namespaces.popContext();
+        context.forEach((element) => {
+            this._uriToFactories.delete(element.uri);
+        });
+    }
+
+    onError(err: Error) {
+        this.error(
+            new EDiagnosticImpl(
+                err.message,
+                this._resource.eURI.toString(),
+                this._parser.line,
+                this._parser.column
+            )
+        );
+    }
 
     private setAttributes(attributes: {
         [key: string]: sax.QualifiedAttribute;
@@ -191,88 +214,193 @@ export class XMLLoad {
         return oldAttributes;
     }
 
-    private getAttributeValue(uri : string, local : string ) : string {
-        if ( this._attributes ) {
-            for ( let i in this._attributes ) {
+    private getAttributeValue(uri: string, local: string): string {
+        if (this._attributes) {
+            for (let i in this._attributes) {
                 let attr = this._attributes[i];
-                if ( attr.local == uri && attr.local == local ) {
+                if (attr.local == uri && attr.local == local) {
                     return attr.value;
                 }
-            }            
+            }
         }
         return null;
     }
 
-    private handlePrefixMapping() : void {
-        if ( this._attributes ) {
-            for ( let i in this._attributes ) {
+    private handlePrefixMapping(): void {
+        if (this._attributes) {
+            for (let i in this._attributes) {
                 let attr = this._attributes[i];
-                if ( attr.prefix == XMLConstants.xmlNS ) {
-                    this.startPrefixMapping(attr.local,attr.value);
+                if (attr.prefix == XMLConstants.xmlNS) {
+                    this.startPrefixMapping(attr.local, attr.value);
                 }
-            }            
+            }
         }
     }
 
-    private  startPrefixMapping(prefix : string, uri : string) {
+    private startPrefixMapping(prefix: string, uri: string) {
         this._namespaces.declarePrefix(prefix, uri);
         this._uriToFactories.delete(uri);
     }
-    
-    private handleSchemaLocation() : void {
-        let xsiSchemaLocation = this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.schemaLocationAttrib);
-        if ( xsiSchemaLocation ) {
+
+    private handleSchemaLocation(): void {
+        let xsiSchemaLocation = this.getAttributeValue(
+            XMLConstants.xsiURI,
+            XMLConstants.schemaLocationAttrib
+        );
+        if (xsiSchemaLocation) {
             this.handleXSISchemaLocation(xsiSchemaLocation);
         }
 
-        let xsiNoNamespaceSchemaLocation = this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.noNamespaceSchemaLocationAttrib);
-        if ( xsiNoNamespaceSchemaLocation ) {
+        let xsiNoNamespaceSchemaLocation = this.getAttributeValue(
+            XMLConstants.xsiURI,
+            XMLConstants.noNamespaceSchemaLocationAttrib
+        );
+        if (xsiNoNamespaceSchemaLocation) {
             this.handleXSINoNamespaceSchemaLocation(xsiSchemaLocation);
         }
     }
 
-    protected handleXSISchemaLocation( loc : string ) : void {
+    protected handleXSISchemaLocation(loc: string): void {}
 
-    }
+    protected handleXSINoNamespaceSchemaLocation(loc: string): void {}
 
-    protected handleXSINoNamespaceSchemaLocation( loc : string ) : void {
-        
-    }
-
-    private processElement(uri : string , local : string ) {
-        if ( this._objects.length == 0 ) {
-            let eObject = this.createObject(uri,local);
-            if ( eObject ) {
+    private processElement(uri: string, local: string) {
+        if (this._objects.length == 0) {
+            let eObject = this.createObject(uri, local);
+            if (eObject) {
                 this._objects.push(eObject);
                 this._resource.eContents().add(eObject);
             }
         } else {
-
+            this.handleFeature(uri, local);
         }
     }
 
-    private createObject(uri : string , local : string) : EObject {
-        let eFactory = this.getFactoryForURI( uri );
-        if ( eFactory ) {
+    private handleFeature(space: string, local: string) {
+        let eObject: EObject = null;
+        if (this._objects.length > 0) {
+            eObject = this._objects[this._objects.length - 1];
+        }
+
+        if (eObject) {
+            let eFeature = this.getFeature(eObject, local);
+            if (eFeature) {
+                let xsiType = this.getXSIType();
+                if (xsiType) {
+                    this.createObjectFromTypeName(eObject, xsiType, eFeature);
+                } else {
+                    this.createObjectFromFeatureType(eObject, eFeature);
+                }
+            } else {
+                this.handleUnknownFeature(local);
+            }
+        } else {
+            this.handleUnknownFeature(local);
+        }
+    }
+
+    private handleReferences() {
+        for (const eProxy of this._sameDocumentProxies) {
+            for (const eReference of eProxy.eClass().eAllReferences) {
+                let eOpposite = eReference.eOpposite;
+                if (eOpposite && eOpposite.isChangeable && eProxy.eIsSet(eReference)) {
+                    let resolvedObject = this._resource.getEObject(
+                        (eProxy as EObjectInternal).eProxyURI().href.slice(1)
+                    );
+                    if (resolvedObject) {
+                        let proxyHolder: EObject = null;
+                        if (eReference.isMany) {
+                            let value = eProxy.eGet(eReference);
+                            let list = value as EList<EObject>;
+                            proxyHolder = list.get(0);
+                        } else {
+                            let value = eProxy.eGet(eReference);
+                            proxyHolder = value as EObject;
+                        }
+
+                        if (eOpposite.isMany) {
+                            let value = proxyHolder.eGetResolve(eOpposite, false);
+                            let holderContents = value as EList<EObject>;
+                            let resolvedIndex = holderContents.indexOf(resolvedObject);
+                            if (resolvedIndex != -1) {
+                                let proxyIndex = holderContents.indexOf(eProxy);
+                                holderContents.moveTo(proxyIndex, resolvedIndex);
+                                if (proxyIndex > resolvedIndex) {
+                                    holderContents.removeAt(proxyIndex - 1);
+                                } else {
+                                    holderContents.removeAt(proxyIndex + 1);
+                                }
+                                break;
+                            }
+                        }
+
+                        let replace = false;
+                        if (eReference.isMany) {
+                            let value = resolvedObject.eGet(eReference);
+                            let list = value as EList<EObject>;
+                            replace = !list.contains(proxyHolder);
+                        } else {
+                            let value = resolvedObject.eGet(eReference);
+                            let object = value as EObject;
+                            replace = object != proxyHolder;
+                        }
+
+                        if (replace) {
+                            if (eOpposite.isMany) {
+                                let value = proxyHolder.eGetResolve(eOpposite, false);
+                                let list = value as EList<EObject>;
+                                let ndx = list.indexOf(eProxy);
+                                list.set(ndx, resolvedObject);
+                            } else {
+                                proxyHolder.eSet(eOpposite, resolvedObject);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        for (const reference of this._references) {
+            let eObject = this._resource.getEObject(reference.id);
+            if (eObject) {
+                this.setFeatureValue(reference.object, reference.feature, eObject, reference.pos);
+            } else {
+                this.error(
+                    new EDiagnosticImpl(
+                        "Unresolved reference '" + reference.id + "'",
+                        this._resource.eURI.toString(),
+                        this._parser.line,
+                        this._parser.column
+                    )
+                );
+            }
+        }
+    }
+
+    private getXSIType(): string {
+        return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib);
+    }
+
+    private createObject(uri: string, local: string): EObject {
+        let eFactory = this.getFactoryForURI(uri);
+        if (eFactory) {
             let ePackage = eFactory.ePackage;
             let eType = ePackage.getEClassifier(local);
-            return this.createObjectWithFactory(eFactory,eType);
+            return this.createObjectWithFactory(eFactory, eType);
         } else {
             let prefix = this._namespaces.getPrefix(uri);
-            if ( prefix )
-                this.handleUnknownPackage(prefix);
-            else 
-                this.handleUnknownURI(uri);
+            if (prefix) this.handleUnknownPackage(prefix);
+            else this.handleUnknownURI(uri);
             return null;
         }
     }
 
-    
-    private createObjectWithFactory(eFactory : EFactory, eType : EClassifier) : EObject {
-        if ( eFactory ) {
-            if ( isEClass(eType) && !eType.isAbstract ) {
+    private createObjectWithFactory(eFactory: EFactory, eType: EClassifier): EObject {
+        if (eFactory) {
+            if (isEClass(eType) && !eType.isAbstract) {
                 let eObject = eFactory.create(eType);
-                if ( eObject ) {
+                if (eObject) {
                     this.handleAttributes(eObject);
                 }
                 return eObject;
@@ -281,9 +409,9 @@ export class XMLLoad {
         return null;
     }
 
-    private createObjectFromFeatureType(eObject : EObject, eFeature : EStructuralFeature) : EObject {
-        let eResult : EObject = null;
-        if (eFeature && eFeature.eType ) {
+    private createObjectFromFeatureType(eObject: EObject, eFeature: EStructuralFeature): EObject {
+        let eResult: EObject = null;
+        if (eFeature && eFeature.eType) {
             let eType = eFeature.eType;
             let eFactory = eType.ePackage.eFactoryInstance;
             eResult = this.createObjectWithFactory(eFactory, eType);
@@ -294,14 +422,18 @@ export class XMLLoad {
         }
         return eResult;
     }
-    
-    private createObjectFromTypeName(eObject : EObject, qname : string, eFeature : EStructuralFeature) : EObject {
+
+    private createObjectFromTypeName(
+        eObject: EObject,
+        qname: string,
+        eFeature: EStructuralFeature
+    ): EObject {
         let prefix = "";
         let local = qname;
         let index = qname.indexOf(":");
-        if ( index != -1 ) {
-            prefix = qname.slice(0,index);
-            local = qname.slice(index+1);
+        if (index != -1) {
+            prefix = qname.slice(0, index);
+            local = qname.slice(index + 1);
         }
 
         let uri = this._namespaces.getURI(prefix);
@@ -310,146 +442,147 @@ export class XMLLoad {
             this.handleUnknownPackage(prefix);
             return null;
         }
-    
+
         let eType = eFactory.ePackage.getEClassifier(local);
         let eResult = this.createObjectWithFactory(eFactory, eType);
         if (eResult) {
             this.setFeatureValue(eObject, eFeature, eResult, -1);
             this._objects.push(eResult);
         }
-        return eResult
+        return eResult;
     }
 
-    private getFactoryForURI(uri : string) : EFactory {
+    private getFactoryForURI(uri: string): EFactory {
         let factory = this._uriToFactories.get(uri);
-        if ( factory == undefined ) {
+        if (factory == undefined) {
             let packageRegistry = getPackageRegistry();
-            if ( this._resource.eResourceSet() ) {
+            if (this._resource.eResourceSet()) {
                 packageRegistry = this._resource.eResourceSet().getPackageRegistry();
             }
             factory = packageRegistry.getFactory(uri);
-            if ( factory ) {
-                this._uriToFactories.set(uri,factory);
+            if (factory) {
+                this._uriToFactories.set(uri, factory);
             }
         }
-        return factory
+        return factory;
     }
 
-    protected handleAttributes(eObject : EObject) {
+    protected handleAttributes(eObject: EObject) {
         if (this._attributes) {
-            for ( let i in this._attributes ) {
+            for (let i in this._attributes) {
                 let attr = this._attributes[i];
-                if (attr.local == XMLConstants.href ) {
-                    this.handleProxy(eObject,attr.value);
-                } else if ( attr.uri != XMLConstants.xmlNS && this.isUserAttribute(attr)) {
-                    this.setAttributeValue(eObject,attr);
+                if (attr.local == XMLConstants.href) {
+                    this.handleProxy(eObject, attr.value);
+                } else if (attr.uri != XMLConstants.xmlNS && this.isUserAttribute(attr)) {
+                    this.setAttributeValue(eObject, attr);
                 }
-            }        
+            }
         }
     }
-    
-    private handleProxy(eProxy : EObject, id : string) : void {
-        let uri : URL = null;
+
+    private handleProxy(eProxy: EObject, id: string): void {
+        let uri: URL = null;
         try {
             uri = new URL(id);
-        }
-        catch {
+        } catch {
             return;
         }
         (eProxy as EObjectInternal).eSetProxyURI(uri);
-        
+
         let ndx = id.indexOf("#");
-        let trimmedURI : string = ndx != -1 ? id.slice(0,ndx-1) : id;
-        if ( this._resource.eURI.toString() == trimmedURI ) {
+        let trimmedURI: string = ndx != -1 ? id.slice(0, ndx - 1) : id;
+        if (this._resource.eURI.toString() == trimmedURI) {
             this._sameDocumentProxies.push(eProxy);
         }
     }
 
-    private setAttributeValue(eObject : EObject, attr : sax.QualifiedAttribute) {
+    private setAttributeValue(eObject: EObject, attr: sax.QualifiedAttribute) {
         let eFeature = this.getFeature(eObject, attr.local);
-        if ( eFeature ) {
+        if (eFeature) {
             let kind = this.getLoadFeatureKind(eFeature);
-            if ( kind == FeatureKind.Single || kind == FeatureKind.Many ) {
-                this.setFeatureValue(eObject, eFeature, attr.value, -2)
+            if (kind == FeatureKind.Single || kind == FeatureKind.Many) {
+                this.setFeatureValue(eObject, eFeature, attr.value, -2);
             } else {
-                this.setValueFromId(eObject, eFeature as EReference, attr.value)
+                this.setValueFromId(eObject, eFeature as EReference, attr.value);
             }
         } else {
-            this.handleUnknownFeature(attr.local)
+            this.handleUnknownFeature(attr.local);
         }
     }
 
-    private setFeatureValue(eObject : EObject,
-        eFeature : EStructuralFeature,
-        value : any,
-        position : number) {
+    private setFeatureValue(
+        eObject: EObject,
+        eFeature: EStructuralFeature,
+        value: any,
+        position: number
+    ) {
         let kind = this.getLoadFeatureKind(eFeature);
         switch (kind) {
-        case FeatureKind.Single: {
-            let eClassifier = eFeature.eType;
-            let eDataType = eClassifier as EDataType;
-            let eFactory = eDataType.ePackage.eFactoryInstance;
-            if ( value == null ) {
-                eObject.eSet(eFeature, null);
-            } else {
-                eObject.eSet(eFeature, eFactory.createFromString(eDataType, value as string));
-            }
-            break;
-        }
-        case FeatureKind.Many: {
-            let eClassifier = eFeature.eType;
-            let eDataType = eClassifier as EDataType;
-            let eFactory = eDataType.ePackage.eFactoryInstance;
-            let eList = eObject.eGetResolve(eFeature, false) as EList<EObject>;
-            if (position == -2) {
-            } else if (value == null) {
-                eList.add(null);
-            } else {
-                eList.add(eFactory.createFromString(eDataType, value as string));
-            }
-            break;
-        }
-        case FeatureKind.ManyAdd:
-        case FeatureKind.ManyMove:
-            let eList = eObject.eGetResolve(eFeature, false) as EList<EObject>;
-            if (position == -1) {
-                eList.add(value);
-            } else if (position == -2) {
-                eList.clear();
-            } else if (eObject == value) {
-                let index = eList.indexOf(value);
-                if (index == -1) {
-                    eList.insert(position, value);
+            case FeatureKind.Single: {
+                let eClassifier = eFeature.eType;
+                let eDataType = eClassifier as EDataType;
+                let eFactory = eDataType.ePackage.eFactoryInstance;
+                if (value == null) {
+                    eObject.eSet(eFeature, null);
                 } else {
-                    eList.moveTo(position, index);
+                    eObject.eSet(eFeature, eFactory.createFromString(eDataType, value as string));
                 }
-            } else if (kind == FeatureKind.ManyAdd) {
-                eList.add(value);
-            } else {
-                eList.move(position, value);
+                break;
             }
-            break;
-        default:
-            eObject.eSet(eFeature, value);
+            case FeatureKind.Many: {
+                let eClassifier = eFeature.eType;
+                let eDataType = eClassifier as EDataType;
+                let eFactory = eDataType.ePackage.eFactoryInstance;
+                let eList = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+                if (position == -2) {
+                } else if (value == null) {
+                    eList.add(null);
+                } else {
+                    eList.add(eFactory.createFromString(eDataType, value as string));
+                }
+                break;
+            }
+            case FeatureKind.ManyAdd:
+            case FeatureKind.ManyMove:
+                let eList = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+                if (position == -1) {
+                    eList.add(value);
+                } else if (position == -2) {
+                    eList.clear();
+                } else if (eObject == value) {
+                    let index = eList.indexOf(value);
+                    if (index == -1) {
+                        eList.insert(position, value);
+                    } else {
+                        eList.moveTo(position, index);
+                    }
+                } else if (kind == FeatureKind.ManyAdd) {
+                    eList.add(value);
+                } else {
+                    eList.move(position, value);
+                }
+                break;
+            default:
+                eObject.eSet(eFeature, value);
         }
     }
 
-    private setValueFromId(eObject : EObject, eReference : EReference, ids : string) {
+    private setValueFromId(eObject: EObject, eReference: EReference, ids: string) {
         let mustAdd = this._isResolveDeferred;
         let mustAddOrNotOppositeIsMany = false;
         let isFirstID = true;
         let position = 0;
-        let references : XMLReference[] = [];
+        let references: XMLReference[] = [];
         let tokens = ids.split(" ");
         let qName = "";
         for (let id of tokens) {
             let index = id.indexOf("#");
-            if (index != -1 ) {
+            if (index != -1) {
                 if (index == 0) {
                     id = id.slice(1);
                 } else {
                     let oldAttributes = this.setAttributes(null);
-                    let eProxy : EObject;
+                    let eProxy: EObject;
                     if (qName.length == 0) {
                         eProxy = this.createObjectFromFeatureType(eObject, eReference);
                     } else {
@@ -466,12 +599,12 @@ export class XMLLoad {
                 }
             } else {
                 let index = id.indexOf(":");
-                if ( index != -1 ) {
+                if (index != -1) {
                     qName = id;
-                    continue;    
+                    continue;
                 }
             }
-    
+
             if (!this._isResolveDeferred) {
                 if (isFirstID) {
                     let eOpposite = eReference.eOpposite;
@@ -484,7 +617,7 @@ export class XMLLoad {
                     }
                     isFirstID = false;
                 }
-    
+
                 if (mustAddOrNotOppositeIsMany) {
                     let resolved = this._resource.getEObject(id);
                     if (resolved) {
@@ -495,15 +628,20 @@ export class XMLLoad {
                     }
                 }
             }
-    
+
             if (mustAdd) {
-                references.push( {object: eObject, feature: eReference, id: id, pos: position} as XMLReference);
+                references.push({
+                    object: eObject,
+                    feature: eReference,
+                    id: id,
+                    pos: position,
+                } as XMLReference);
             }
-    
+
             qName = "";
             position++;
         }
-    
+
         if (position == 0) {
             this.setFeatureValue(eObject, eReference, null, -2);
         } else {
@@ -511,60 +649,77 @@ export class XMLLoad {
         }
     }
 
-    private getFeature(eObject : EObject, name : string) : EStructuralFeature {
+    private getFeature(eObject: EObject, name: string): EStructuralFeature {
         let eClass = eObject.eClass();
         let eFeature = eClass.getEStructuralFeatureFromName(name);
         return eFeature;
     }
 
-    private getLoadFeatureKind(eFeature : EStructuralFeature) : FeatureKind {
+    private getLoadFeatureKind(eFeature: EStructuralFeature): FeatureKind {
         let eClassifier = eFeature.eType;
-        if ( eClassifier && isEDataType(eClassifier) ) {
+        if (eClassifier && isEDataType(eClassifier)) {
             return eFeature.isMany ? FeatureKind.Many : FeatureKind.Single;
-        } else if( eFeature.isMany ) {
+        } else if (eFeature.isMany) {
             let eReference = eFeature as EReference;
             let eOpposite = eReference.eOpposite;
-            if ( eOpposite == null || eOpposite.isTransient || !eOpposite.isMany ) {
+            if (eOpposite == null || eOpposite.isTransient || !eOpposite.isMany) {
                 return FeatureKind.ManyAdd;
             }
             return FeatureKind.ManyMove;
         }
         return FeatureKind.Other;
     }
-    
-    private isUserAttribute(attr : sax.QualifiedAttribute) : boolean {
+
+    private isUserAttribute(attr: sax.QualifiedAttribute): boolean {
         for (const i in this._notFeatures) {
             let feature = this._notFeatures[i];
-            if ( feature.uri == attr.uri && feature.local == attr.local) {
+            if (feature.uri == attr.uri && feature.local == attr.local) {
                 return false;
             }
-                
         }
         return true;
     }
-    private handleUnknownFeature(name:string ) {
-        this.error( new EDiagnosticImpl("Feature "+name+" not found", this._resource.eURI.toString(), this._parser.column, this._parser.line));
+    private handleUnknownFeature(name: string) {
+        this.error(
+            new EDiagnosticImpl(
+                "Feature " + name + " not found",
+                this._resource.eURI.toString(),
+                this._parser.column,
+                this._parser.line
+            )
+        );
     }
 
-    private handleUnknownPackage(name:string ) {
-        this.error( new EDiagnosticImpl("Package "+name+" not found", this._resource.eURI.toString(), this._parser.column, this._parser.line));
+    private handleUnknownPackage(name: string) {
+        this.error(
+            new EDiagnosticImpl(
+                "Package " + name + " not found",
+                this._resource.eURI.toString(),
+                this._parser.column,
+                this._parser.line
+            )
+        );
     }
 
-    private handleUnknownURI(name:string ) {
-        this.error( new EDiagnosticImpl("URI "+name+" not found", this._resource.eURI.toString(), this._parser.column, this._parser.line));
+    private handleUnknownURI(name: string) {
+        this.error(
+            new EDiagnosticImpl(
+                "URI " + name + " not found",
+                this._resource.eURI.toString(),
+                this._parser.column,
+                this._parser.line
+            )
+        );
     }
 
-    private error(diagnostic : EDiagnostic) {
+    private error(diagnostic: EDiagnostic) {
         this._resource.getErrors().add(diagnostic);
     }
 
-    private warning(diagnostic : EDiagnostic) {
+    private warning(diagnostic: EDiagnostic) {
         this._resource.getWarnings().add(diagnostic);
     }
-
-
 }
-
 
 export class XMLSave {
     private _resource: XMLResource;
