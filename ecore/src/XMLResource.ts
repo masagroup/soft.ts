@@ -18,7 +18,7 @@ import { EFactory } from "./EFactory";
 import { EList } from "./EList";
 import { EObject } from "./EObject";
 import { EObjectInternal } from "./EObjectInternal";
-import { getPackageRegistry } from "./EPackageRegistry";
+import { EPackageRegistry, getPackageRegistry } from "./EPackageRegistry";
 import { EReference } from "./EReference";
 import { EResourceImpl } from "./EResourceImpl";
 import { EStructuralFeature } from "./EStructuralFeature";
@@ -137,25 +137,26 @@ type XMLReference = {
 };
 
 export class XMLLoad {
-    private _resource: XMLResource;
-    private _parser: sax.SAXParser;
-    private _isResolvedDefered: boolean = false;
-    private _elements: string[] = [];
-    private _attributes: { [key: string]: sax.QualifiedAttribute } = null;
-    private _namespaces: XMLNamespaces = new XMLNamespaces();
-    private _uriToFactories: Map<string, EFactory> = new Map<string, EFactory>();
-    private _objects: EObject[] = [];
-    private _sameDocumentProxies: EObject[] = [];
+    protected _resource: XMLResource;
+    protected _parser: sax.SAXParser;
+    protected _elements: string[] = [];
+    protected _attributes: { [key: string]: sax.QualifiedAttribute } = null;
+    protected _namespaces: XMLNamespaces = new XMLNamespaces();
+    protected _uriToFactories: Map<string, EFactory> = new Map<string, EFactory>();
+    protected _objects: EObject[] = [];
+    protected _sameDocumentProxies: EObject[] = [];
     protected _notFeatures: { uri: string; local: string }[] = [
         { uri: XMLConstants.xsiURI, local: XMLConstants.typeAttrib },
         { uri: XMLConstants.xsiURI, local: XMLConstants.schemaLocationAttrib },
         { uri: XMLConstants.xsiURI, local: XMLConstants.noNamespaceSchemaLocationAttrib },
     ];
-    private _isResolveDeferred: boolean = false;
-    private _references: XMLReference[] = [];
+    protected _isResolveDeferred: boolean = false;
+    protected _references: XMLReference[] = [];
+    protected _packageRegistry : EPackageRegistry;
 
     constructor(resource: XMLResource) {
         this._resource = resource;
+        this._packageRegistry = this._resource.eResourceSet() ? this._resource.eResourceSet().getPackageRegistry() : getPackageRegistry();
     }
 
     load(rs: fs.ReadStream): void {
@@ -214,7 +215,7 @@ export class XMLLoad {
         return oldAttributes;
     }
 
-    private getAttributeValue(uri: string, local: string): string {
+    protected getAttributeValue(uri: string, local: string): string {
         if (this._attributes) {
             for (let i in this._attributes) {
                 let attr = this._attributes[i];
@@ -378,7 +379,7 @@ export class XMLLoad {
         }
     }
 
-    private getXSIType(): string {
+    protected getXSIType(): string {
         return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib);
     }
 
@@ -455,11 +456,7 @@ export class XMLLoad {
     private getFactoryForURI(uri: string): EFactory {
         let factory = this._uriToFactories.get(uri);
         if (factory == undefined) {
-            let packageRegistry = getPackageRegistry();
-            if (this._resource.eResourceSet()) {
-                packageRegistry = this._resource.eResourceSet().getPackageRegistry();
-            }
-            factory = packageRegistry.getFactory(uri);
+            factory = this._packageRegistry.getFactory(uri);
             if (factory) {
                 this._uriToFactories.set(uri, factory);
             }
