@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EObject, EDataType } from "./internal";
+import { EObject, EDataType, EResource, EResourceSet, EObjectInternal, getPackageRegistry } from "./internal";
 
 export class EcoreUtils {
     static getEObjectID(eObject: EObject): string {
@@ -34,5 +34,37 @@ export class EcoreUtils {
     static createFromString(eDataType: EDataType, literal: string): any {
         let eFactory = eDataType.ePackage.eFactoryInstance;
         return eFactory.createFromString(eDataType, literal);
+    }
+
+    static resolveInObject(proxy:EObject,context: EObject) : EObject {
+        return this.resolveInResourceSet(proxy,context?.eResource()?.eResourceSet());
+    }
+    
+    static resolveInResource(proxy : EObject, resource : EResource) : EObject {
+        return this.resolveInResourceSet(proxy, resource?.eResourceSet());
+    }
+    
+    static resolveInResourceSet(proxy : EObject, resourceSet : EResourceSet) : EObject {
+        let proxyURI = (proxy as EObjectInternal).eProxyURI();
+        if (proxyURI) {
+            let resolved : EObject;
+            if (resourceSet) {
+                resolved = resourceSet.getEObject(proxyURI, true);
+            } else {
+                let proxyURIStr = proxyURI.toString();
+                let ndxHash = proxyURIStr.lastIndexOf("#");
+                let ePackage = getPackageRegistry().getPackage( ndxHash != -1 ? proxyURIStr.slice(0,ndxHash) : proxyURIStr );
+                if (ePackage) {
+                    let eResource = ePackage.eResource();
+                    if ( eResource ) {
+                        resolved = eResource.getEObject( ndxHash != -1 ? proxyURIStr.slice(ndxHash+1) : "");
+                    }
+                }
+            }
+            if (resolved  && resolved != proxy) {
+                return this.resolveInResourceSet(resolved, resourceSet)
+            }
+        }
+        return proxy
     }
 }

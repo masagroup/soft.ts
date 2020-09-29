@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import {
+    EcoreUtils,
     ETreeIterator,
     ENotification,
     ENotificationChain,
@@ -642,6 +643,6 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eResolveProxy(proxy: EObject): EObject {
-        throw new Error("Method not implemented.");
+        return EcoreUtils.resolveInObject(proxy,this);
     }
 }
