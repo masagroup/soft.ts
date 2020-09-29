@@ -9,20 +9,22 @@
 
 import * as fs from "fs";
 import * as sax from "sax";
-import { EClass } from "./EClass";
-import { EClassifier } from "./EClassifier";
-import { EDataType } from "./EDataType";
-import { EDiagnostic } from "./EDiagnostic";
-import { EDiagnosticImpl } from "./EDiagnosticImpl";
-import { EFactory } from "./EFactory";
-import { EList } from "./EList";
-import { EObject } from "./EObject";
-import { EObjectInternal } from "./EObjectInternal";
-import { EPackage } from "./EPackage";
-import { EPackageRegistry, getPackageRegistry } from "./EPackageRegistry";
-import { EReference } from "./EReference";
-import { EResourceImpl } from "./EResourceImpl";
-import { EStructuralFeature } from "./EStructuralFeature";
+import {
+    EStructuralFeature,
+    EReference,
+    EPackageRegistry,
+    getPackageRegistry,
+    EList,
+    EObject,
+    EObjectInternal,
+    EFactory,
+    EClass,
+    EClassifier,
+    EDataType,
+    EDiagnostic,
+    EDiagnosticImpl,
+    EResourceImpl,
+} from "./internal";
 
 function isEClass(e: EClassifier): e is EClass {
     return "isAbstract" in e;
@@ -101,9 +103,9 @@ export class XMLNamespaces {
 }
 
 export class XMLResource extends EResourceImpl {
-    protected doLoad(rs: fs.ReadStream): void {
+    protected doLoad(rs: fs.ReadStream): Promise<void> {
         let l = this.createLoad();
-        l.load(rs);
+        return l.load(rs);
     }
 
     protected doSave(ws: fs.WriteStream): void {
@@ -153,26 +155,32 @@ export class XMLLoad {
     ];
     protected _isResolveDeferred: boolean = false;
     protected _references: XMLReference[] = [];
-    protected _packageRegistry : EPackageRegistry;
-    
+    protected _packageRegistry: EPackageRegistry;
+
     constructor(resource: XMLResource) {
         this._resource = resource;
-        this._packageRegistry = this._resource.eResourceSet() ? this._resource.eResourceSet().getPackageRegistry() : getPackageRegistry();
+        this._packageRegistry = this._resource.eResourceSet()
+            ? this._resource.eResourceSet().getPackageRegistry()
+            : getPackageRegistry();
     }
 
-    load(rs: fs.ReadStream): void {
-        let saxStream = new sax.SAXStream(true, {
-            trim: true,
-            lowercase: true,
-            xmlns: true,
-            position: true,
+    load(rs: fs.ReadStream): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            let saxStream = new sax.SAXStream(true, {
+                trim: true,
+                lowercase: true,
+                xmlns: true,
+                position: true,
+            });
+            saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t));
+            saxStream.on("closetag", (t) => this.onEndTag(t));
+            saxStream.on("error", (e) => this.onError(e));
+            saxStream.on("end", () => {
+                resolve();
+            });
+            rs.pipe(saxStream);
+            this._parser = (saxStream as any)["_parser"];
         });
-        saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t));
-        saxStream.on("closetag", (t) => this.onEndTag(t));
-        saxStream.on("error", (e) => this.onError(e));
-        rs.pipe(saxStream);
-
-        this._parser = (saxStream as any)["_parser"];
     }
 
     onStartTag(tag: sax.QualifiedTag) {
@@ -440,7 +448,7 @@ export class XMLLoad {
 
         let uri = this._namespaces.getURI(prefix);
         let eFactory = this.getFactoryForURI(uri);
-        if (eFactory) {
+        if (!eFactory) {
             this.handleUnknownPackage(prefix);
             return null;
         }
@@ -471,7 +479,7 @@ export class XMLLoad {
                 let attr = this._attributes[i];
                 if (attr.local == XMLConstants.href) {
                     this.handleProxy(eObject, attr.value);
-                } else if (attr.uri != XMLConstants.xmlNS && this.isUserAttribute(attr)) {
+                } else if (attr.prefix != XMLConstants.xmlNS && this.isUserAttribute(attr)) {
                     this.setAttributeValue(eObject, attr);
                 }
             }
@@ -520,7 +528,7 @@ export class XMLLoad {
                 let eClassifier = eFeature.eType;
                 let eDataType = eClassifier as EDataType;
                 let eFactory = eDataType.ePackage.eFactoryInstance;
-                if (value == null) {
+                if (!value) {
                     eObject.eSet(eFeature, null);
                 } else {
                     eObject.eSet(eFeature, eFactory.createFromString(eDataType, value as string));
@@ -533,7 +541,7 @@ export class XMLLoad {
                 let eFactory = eDataType.ePackage.eFactoryInstance;
                 let eList = eObject.eGetResolve(eFeature, false) as EList<EObject>;
                 if (position == -2) {
-                } else if (value == null) {
+                } else if (!value) {
                     eList.add(null);
                 } else {
                     eList.add(eFactory.createFromString(eDataType, value as string));
@@ -660,7 +668,7 @@ export class XMLLoad {
         } else if (eFeature.isMany) {
             let eReference = eFeature as EReference;
             let eOpposite = eReference.eOpposite;
-            if (eOpposite == null || eOpposite.isTransient || !eOpposite.isMany) {
+            if (!eOpposite || eOpposite.isTransient || !eOpposite.isMany) {
                 return FeatureKind.ManyAdd;
             }
             return FeatureKind.ManyMove;
@@ -681,7 +689,7 @@ export class XMLLoad {
         this.error(
             new EDiagnosticImpl(
                 "Feature " + name + " not found",
-                this._resource.eURI.toString(),
+                this._resource.eURI?.toString(),
                 this._parser.column,
                 this._parser.line
             )
@@ -692,7 +700,7 @@ export class XMLLoad {
         this.error(
             new EDiagnosticImpl(
                 "Package " + name + " not found",
-                this._resource.eURI.toString(),
+                this._resource.eURI?.toString(),
                 this._parser.column,
                 this._parser.line
             )
@@ -703,7 +711,7 @@ export class XMLLoad {
         this.error(
             new EDiagnosticImpl(
                 "URI " + name + " not found",
-                this._resource.eURI.toString(),
+                this._resource.eURI?.toString(),
                 this._parser.column,
                 this._parser.line
             )

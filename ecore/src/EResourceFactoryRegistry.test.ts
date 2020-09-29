@@ -7,10 +7,12 @@
 //
 // *****************************************************************************
 
-import { EModelElementImpl } from "./internal";
+import { getResourceFactoryRegistry } from "./index";
 
-export class EModelElementExt extends EModelElementImpl {
-    constructor() {
-        super();
-    }
-}
+describe("EResourceFactoryRegistry", () => {
+    test("singleton ", () => {
+        let r = getResourceFactoryRegistry();
+        expect(r).not.toBeNull();
+        expect(r.getExtensionToFactoryMap().size).toBe(2);
+    });
+});

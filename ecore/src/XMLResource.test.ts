@@ -7,9 +7,7 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs";
-import { XMIResource } from "./XMIResource";
-import { XMLNamespaces } from "./XMLResource";
+import { XMLNamespaces } from "./internal";
 
 describe("XMLNamespaces", () => {
     test("constructor", () => {

@@ -8,12 +8,14 @@
 // *****************************************************************************
 
 import { mock, verify, instance, when } from "ts-mockito";
-import { BasicEObjectList } from "./BasicEObjectList";
-import { EClass } from "./EClass";
-import { EObject } from "./EObject";
-import { EObjectInternal } from "./EObjectInternal";
-import { EObjectList } from "./EObjectList";
-import { EStructuralFeature } from "./EStructuralFeature";
+import {
+    EClass,
+    EObject,
+    EObjectInternal,
+    EObjectList,
+    EStructuralFeature,
+    BasicEObjectList,
+} from "./internal";
 
 describe("BasicEObjectList", () => {
     test("constructor", () => {

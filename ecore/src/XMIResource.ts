@@ -1,4 +1,3 @@
-import { EObject } from "./EObject";
 // *****************************************************************************
 //
 // This file is part of a MASA library or program.
@@ -8,13 +7,13 @@ import { EObject } from "./EObject";
 //
 // *****************************************************************************
 
-import { XMLResource, XMLLoad, XMLSave } from "./XMLResource";
+import { EObject, XMLResource, XMLLoad, XMLSave } from "./internal";
 
 class XMIConstants {
-    static xmiURI        = "http://www.omg.org/XMI"
-	static xmiNS         = "xmi"
-	static versionAttrib = "version"
-    static uuidAttrib    = "uuid"
+    static xmiURI = "http://www.omg.org/XMI";
+    static xmiNS = "xmi";
+    static versionAttrib = "version";
+    static uuidAttrib = "uuid";
     static typeAttrib = "type";
 }
 
@@ -33,18 +32,22 @@ export class XMIResource extends XMLResource {
 export class XMILoad extends XMLLoad {
     constructor(resource: XMIResource) {
         super(resource);
-        this._notFeatures.push({ uri: XMIConstants.xmiURI, local: XMIConstants.typeAttrib },{ uri: XMIConstants.xmiURI, local: XMIConstants.versionAttrib },{ uri: XMIConstants.xmiURI, local: XMIConstants.uuidAttrib });
+        this._notFeatures.push(
+            { uri: XMIConstants.xmiURI, local: XMIConstants.typeAttrib },
+            { uri: XMIConstants.xmiURI, local: XMIConstants.versionAttrib },
+            { uri: XMIConstants.xmiURI, local: XMIConstants.uuidAttrib }
+        );
     }
 
-    protected getXSIType() : string {
+    protected getXSIType(): string {
         let xsiType = super.getXSIType();
-        if (( xsiType == null || xsiType.length == 0 ) && this._attributes ) {
+        if ((xsiType == null || xsiType.length == 0) && this._attributes) {
             return this.getAttributeValue(XMIConstants.xmiURI, XMIConstants.typeAttrib);
         }
         return xsiType;
     }
-    
-    protected handleAttributes(object : EObject) {
+
+    protected handleAttributes(object: EObject) {
         let version = this.getAttributeValue(XMIConstants.xmiURI, XMIConstants.versionAttrib);
         if (version && version.length > 0) {
             (this._resource as XMIResource).xmiVersion = version;

@@ -7,11 +7,8 @@
 //
 // *****************************************************************************
 
-import { Notification } from "./Notification";
+import { EObject, EStructuralFeature, EventType, Notification } from "./index";
 import { mock, instance, verify, when } from "ts-mockito";
-import { EObject } from "./EObject";
-import { EventType } from "./ENotification";
-import { EStructuralFeature } from "./EStructuralFeature";
 
 describe("Notification", () => {
     test("constructor", () => {

@@ -7,13 +7,15 @@
 //
 // *****************************************************************************
 
-import { ENotifier } from "./ENotifier";
-import { EObject } from "./EObject";
-import { EList } from "./EList";
-import { EResourceSet } from "./EResourceSet";
-import { EDiagnostic } from "./EDiagnostic";
+import {
+    ENotifier,
+    EObject,
+    EList,
+    EResourceSet,
+    EDiagnostic,
+    EResourceIDManager,
+} from "./internal";
 import * as fs from "fs";
-import { EResourceIDManager } from "./EResourceIDManager";
 
 export class EResourceConstants {
     public static readonly RESOURCE__RESOURCE_SET: number = 0;

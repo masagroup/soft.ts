@@ -7,10 +7,7 @@
 //
 // *****************************************************************************
 
-import { EFactoryImpl } from "./EFactoryImpl";
-import { EClass } from "./EClass";
-import { EObject } from "./EObject";
-import { DynamicEObjectImpl } from "./DynamicEObjectImpl";
+import { EClass, EObject, DynamicEObjectImpl, EFactoryImpl } from "./internal";
 
 export class EFactoryExt extends EFactoryImpl {
     constructor() {

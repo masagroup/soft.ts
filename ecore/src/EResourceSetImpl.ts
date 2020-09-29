@@ -7,23 +7,26 @@
 //
 // *****************************************************************************
 
-import { EResourceSet, EResourceSetConstants } from "./EResourceSet";
-import { EURIConverter } from "./EURIConverter";
-import { EAdapter } from "./EAdapter";
-import { EList } from "./EList";
-import { ENotification } from "./ENotification";
-import { EObject } from "./EObject";
-import { EResource } from "./EResource";
-import { AbstractNotifyingList } from "./AbstractNotifyingList";
-import { ENotifier } from "./ENotifier";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { BasicNotifier } from "./BasicNotifier";
-import { EResourceFactoryRegistry, getResourceFactoryRegistry } from "./EResourceFactoryRegistry";
-import { EPackageRegistry, getPackageRegistry } from "./EPackageRegistry";
-import { ENotificationChain } from "./ENotificationChain";
-import { EURIConverterImpl } from "./EURIConverterImpl";
-import { EPackageRegistryImpl } from "./EPackageRegistryImpl";
-import { EResourceInternal } from "./EResourceInternal";
+import {
+    ENotificationChain,
+    EPackageRegistry,
+    getPackageRegistry,
+    EResourceFactoryRegistry,
+    getResourceFactoryRegistry,
+    ENotifier,
+    EResourceInternal,
+    EResourceSet,
+    EResourceSetConstants,
+    EStructuralFeature,
+    EURIConverter,
+    EList,
+    EObject,
+    EResource,
+    AbstractNotifyingList,
+    BasicNotifier,
+    EURIConverterImpl,
+    EPackageRegistryImpl,
+} from "./internal";
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
     constructor(private _resourceSet: EResourceSetImpl) {

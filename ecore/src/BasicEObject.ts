@@ -7,26 +7,28 @@
 //
 // *****************************************************************************
 
-import { BasicNotifier } from "./BasicNotifier";
-import { EClass } from "./EClass";
-import { EList } from "./EList";
-import { EObject } from "./EObject";
-import { EOperation } from "./EOperation";
-import { EReference } from "./EReference";
-import { EResource } from "./EResource";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { ENotificationChain } from "./ENOtificationChain";
-import { Notification } from "./Notification";
-import { EventType, ENotification } from "./ENotification";
-import { EObjectInternal } from "./EObjectInternal";
-import { EOPPOSITE_FEATURE_BASE } from "./Constants";
-import { EAttribute } from "./EAttribute";
-import { Adapter } from "./Adapter";
-import { ImmutableEList } from "./ImmutableEList";
-import { AbstractEList } from "./AbstractEList";
-import { EObjectList } from "./EObjectList";
-import { ETreeIterator } from "./ETreeIterator";
-import { ENotifyingList } from "./ENotifyingList";
+import {
+    ETreeIterator,
+    ENotification,
+    ENotificationChain,
+    EObject,
+    EObjectList,
+    ENotifyingList,
+    EObjectInternal,
+    EList,
+    EClass,
+    EOperation,
+    EAttribute,
+    EReference,
+    EResource,
+    EStructuralFeature,
+    ImmutableEList,
+    Adapter,
+    Notification,
+    BasicNotifier,
+    EventType,
+    EOPPOSITE_FEATURE_BASE,
+} from "./internal";
 
 export function isEReference(s: EStructuralFeature): s is EReference {
     return "eReferenceType" in s;
@@ -148,8 +150,7 @@ class ContentsListAdapter extends Adapter {
     }
 
     getList(): EList<EObject> {
-        if (this._list == null)
-            this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
+        if (!this._list) this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
         return this._list;
     }
 }
@@ -213,8 +214,8 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eResource(): EResource {
-        if (this._eResource == null) {
-            if (this._eContainer != null) {
+        if (!this._eResource) {
+            if (this._eContainer) {
                 this._eResource = this._eContainer.eResource();
             }
         }
@@ -232,7 +233,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     eSetResource(newResource: EResource, n: ENotificationChain): ENotificationChain {
         let notifications = n;
         let oldResource = this.eInternalResource();
-        if (oldResource != null && newResource != null) {
+        if (oldResource && newResource) {
             let list = oldResource.eContents() as ENotifyingList<EObject>;
             notifications = list.removeWithNotification(this, notifications);
             oldResource.detached(this);
@@ -241,9 +242,9 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
             if (this.eContainmentFeature().isResolveProxies) {
                 let oldContainerResource = this._eContainer.eResource();
                 if (oldContainerResource) {
-                    if (newResource == null) {
+                    if (!newResource) {
                         oldContainerResource.attached(this);
-                    } else if (oldResource == null) {
+                    } else if (!oldResource) {
                         oldContainerResource.detached(this);
                     }
                 }

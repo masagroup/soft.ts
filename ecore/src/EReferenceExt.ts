@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EReferenceImpl } from "./EReferenceImpl";
+import { EReferenceImpl } from "./internal";
 
 export class EReferenceExt extends EReferenceImpl {
     constructor() {

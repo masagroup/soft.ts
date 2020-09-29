@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EDiagnostic } from "./EDiagnostic";
+import { EDiagnostic } from "./internal";
 
 export class EDiagnosticImpl implements EDiagnostic {
     private _message: string;
@@ -15,7 +15,12 @@ export class EDiagnosticImpl implements EDiagnostic {
     private _line: number;
     private _column: number;
 
-    constructor(message: string, location: string, line: number, column: number) {}
+    constructor(message: string, location: string, line: number, column: number) {
+        this._message = message;
+        this._location = location;
+        this._line = line;
+        this._column = column;
+    }
 
     get message(): string {
         return this._message;

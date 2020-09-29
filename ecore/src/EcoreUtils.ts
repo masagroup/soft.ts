@@ -7,14 +7,13 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./EObject";
-import { EDataType } from "./EDataType";
+import { EObject, EDataType } from "./internal";
 
 export class EcoreUtils {
     static getEObjectID(eObject: EObject): string {
         let eClass = eObject.eClass();
         let eIDAttribute = eClass.eIDAttribute;
-        return eIDAttribute == null || !eObject.eIsSet(eIDAttribute)
+        return !eIDAttribute || !eObject.eIsSet(eIDAttribute)
             ? ""
             : this.convertToString(eIDAttribute.eAttributeType, eObject.eGet(eIDAttribute));
     }

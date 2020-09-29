@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./EObject";
+import { EObject } from "./internal";
 
 export interface EResourceIDManager {
     register(object: EObject): void;

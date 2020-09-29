@@ -7,15 +7,18 @@
 //
 // *****************************************************************************
 
-import { ENotifyingList } from "./ENotifyingList";
-import { ENotifier } from "./ENotifier";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { AbstractNotification } from "./AbstractNotification";
-import { EventType, ENotification } from "./ENotification";
-import { ENotificationChain } from "./ENotificationChain";
-import { Collection } from "./Collection";
-import { NotificationChain } from "./NotificationChain";
-import { BasicEList } from "./BasicEList";
+import {
+    Collection,
+    ENotifier,
+    ENotification,
+    ENotificationChain,
+    ENotifyingList,
+    EStructuralFeature,
+    AbstractNotification,
+    NotificationChain,
+    EventType,
+    BasicEList,
+} from "./internal";
 
 export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements ENotifyingList<E> {
     abstract readonly notifier: ENotifier;

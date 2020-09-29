@@ -7,10 +7,7 @@
 //
 // *****************************************************************************
 
-import { EAttributeImpl } from "./EAttributeImpl";
-import { EDataType } from "./EDataType";
-import { EClassExt } from "./EClassExt";
-import { EcoreConstants } from "./EcoreConstants";
+import { EcoreConstants, EDataType, EClassExt, EAttributeImpl } from "./internal";
 
 export class EAttributeExt extends EAttributeImpl {
     constructor() {

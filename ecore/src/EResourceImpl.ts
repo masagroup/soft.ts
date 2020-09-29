@@ -8,29 +8,32 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { AbstractNotification } from "./AbstractNotification";
-import { AbstractNotifyingList } from "./AbstractNotifyingList";
-import { BasicEList } from "./BasicEList";
-import { BasicNotifier } from "./BasicNotifier";
-import { EcoreUtils } from "./EcoreUtils";
-import { EDiagnostic } from "./EDiagnostic";
-import { EList } from "./EList";
-import { EventType } from "./ENotification";
-import { ENotificationChain } from "./ENOtificationChain";
-import { ENotifier } from "./ENotifier";
-import { ENotifyingList } from "./ENotifyingList";
-import { EObject } from "./EObject";
-import { EObjectInternal } from "./EObjectInternal";
-import { EObjectList } from "./EObjectList";
-import { EResource, EResourceConstants } from "./EResource";
-import { EResourceIDManager } from "./EResourceIDManager";
-import { EResourceInternal } from "./EResourceInternal";
-import { EResourceSet } from "./EResourceSet";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { ETreeIterator } from "./ETreeIterator";
-import { EURIConverter } from "./EURIConverter";
-import { EURIConverterImpl } from "./EURIConverterImpl";
-import { NotificationChain } from "./NotificationChain";
+import {
+    EURIConverter,
+    ETreeIterator,
+    EResourceSet,
+    EResourceIDManager,
+    EResource,
+    EResourceInternal,
+    EResourceConstants,
+    EStructuralFeature,
+    EObject,
+    EObjectInternal,
+    EObjectList,
+    ENotifier,
+    ENotificationChain,
+    ENotifyingList,
+    EDiagnostic,
+    EList,
+    AbstractNotification,
+    AbstractNotifyingList,
+    BasicEList,
+    BasicNotifier,
+    EcoreUtils,
+    EventType,
+    EURIConverterImpl,
+    NotificationChain,
+} from "./internal";
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier;
@@ -250,20 +253,20 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     }
 
     loadFromStream(s: fs.ReadStream): Promise<void> {
-        return new Promise((resolve, reject) => {
-            if (!this._isLoaded) {
+        if (!this._isLoaded) {
+            return this.doLoad(s).then(() => {
                 let n = this.basicSetLoaded(true, null);
-                this.doLoad(s);
                 if (n) {
                     n.dispatch();
                 }
-            }
-            if (this.getErrors().isEmpty()) resolve();
-            else reject();
-        });
+            });
+        }
+        return Promise.reject();
     }
 
-    protected doLoad(s: fs.ReadStream): void {}
+    protected doLoad(s: fs.ReadStream): Promise<void> {
+        return null;
+    }
 
     unload(): void {}
 

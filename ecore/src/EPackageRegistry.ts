@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import { EPackage } from "./EPackage";
-import { EFactory } from "./EFactory";
+import { EPackage, EFactory } from "./internal";
 
 export interface EPackageRegistry {
     registerPackage(pack: EPackage): void;

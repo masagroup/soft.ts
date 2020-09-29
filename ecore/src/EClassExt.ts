@@ -7,18 +7,21 @@
 //
 // *****************************************************************************
 
-import { EClassImpl } from "./EClassImpl";
-import { EClass } from "./EClass";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { EOperation } from "./EOperation";
-import { EList } from "./EList";
-import { isEReference, isEAttribute } from "./BasicEObject";
-import { ImmutableEList } from "./ImmutableEList";
-import { EAttribute } from "./EAttribute";
-import { EReference } from "./EReference";
-import { Adapter } from "./Adapter";
-import { ENotification, EventType } from "./ENotification";
-import { EcoreConstants } from "./EcoreConstants";
+import {
+    EClass,
+    EStructuralFeature,
+    EOperation,
+    EAttribute,
+    EReference,
+    ENotification,
+    isEReference,
+    isEAttribute,
+    EClassImpl,
+    ImmutableEList,
+    Adapter,
+    EventType,
+    EcoreConstants,
+} from "./internal";
 
 class ESuperAdapter extends Adapter {
     constructor(private _eClass: EClassExt) {
@@ -241,7 +244,7 @@ export class EClassExt extends EClassImpl {
         for (const eSuperType of this.eSuperTypes) {
             for (const eAttribute of eSuperType.eAllAttributes) {
                 allAttributes.push(eAttribute);
-                if (eAttribute.isID && eIDAttribute == null) {
+                if (eAttribute.isID && !eIDAttribute) {
                     eIDAttribute = eAttribute;
                 }
             }
@@ -251,7 +254,7 @@ export class EClassExt extends EClassImpl {
             if (isEAttribute(eFeature)) {
                 attributes.push(eFeature);
                 allAttributes.push(eFeature);
-                if (eFeature.isID && eIDAttribute == null) {
+                if (eFeature.isID && !eIDAttribute) {
                     eIDAttribute = eFeature;
                 }
             }

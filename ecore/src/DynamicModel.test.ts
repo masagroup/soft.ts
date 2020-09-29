@@ -7,16 +7,18 @@
 //
 // *****************************************************************************
 
-import { EFactory } from "./EFactory";
-import { EPackage } from "./EPackage";
-import { EClass } from "./EClass";
-import { EAttribute } from "./EAttribute";
-import { EReference } from "./EReference";
-import { getEcoreFactory } from "./EcoreFactory";
-import { getEcorePackage } from "./EcorePackage";
-import { UNBOUNDED_MULTIPLICITY } from "./Constants";
-import { EObject } from "./EObject";
-import { EList } from "./EList";
+import {
+    EFactory,
+    EPackage,
+    EClass,
+    EAttribute,
+    EReference,
+    getEcoreFactory,
+    getEcorePackage,
+    EObject,
+    EList,
+    UNBOUNDED_MULTIPLICITY,
+} from "./internal";
 
 class DynamicMetaModel {
     bookStoreEPackage: EPackage;

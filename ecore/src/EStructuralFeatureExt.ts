@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EStructuralFeatureImpl } from "./EStructuralFeatureImpl";
+import { EStructuralFeatureImpl } from "./internal";
 
 export class EStructuralFeatureExt extends EStructuralFeatureImpl {
     constructor() {

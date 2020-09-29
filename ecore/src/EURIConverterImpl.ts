@@ -8,11 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EURIHandler } from "./EURIHandler";
-import { EList } from "./EList";
-import { EURIConverter } from "./EURIConverter";
-import { ImmutableEList } from "./ImmutableEList";
-import { FileURIHandler } from "./FileURIHandler";
+import { EList, EURIHandler, EURIConverter, ImmutableEList, FileURIHandler } from "./internal";
 
 export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>;

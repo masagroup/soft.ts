@@ -7,13 +7,15 @@
 //
 // *****************************************************************************
 
-import { DynamicEObjectImpl } from "./DynamicEObjectImpl";
-import { getEcorePackage } from "./EcorePackage";
 import { mock, instance, when, anything } from "ts-mockito";
-import { EClass } from "./EClass";
-import { EList } from "./EList";
-import { EAdapter } from "./EAdapter";
-import { getEcoreFactory } from "./EcoreFactory";
+import {
+    EClass,
+    EList,
+    EAdapter,
+    getEcoreFactory,
+    getEcorePackage,
+    DynamicEObjectImpl,
+} from "./internal";
 
 describe("DynamicEObjectImpl", () => {
     test("constructor", () => {

@@ -8,12 +8,8 @@
 // *****************************************************************************
 
 import { anything, instance, mock, verify, when } from "ts-mockito";
-import { EObject } from "./EObject";
-import { EResourceFactory } from "./EResourceFactory";
-import { EResourceFactoryRegistry } from "./EResourceFactoryRegistry";
-import { EResourceImpl } from "./EResourceImpl";
-import { EResourceInternal } from "./EResourceInternal";
-import { EResourceSetImpl } from "./EResourceSetImpl";
+import { EObject, EResourceFactory, EResourceFactoryRegistry, EResourceInternal } from "./index";
+import { EResourceSetImpl, EResourceImpl } from "./internal";
 
 describe("EResourceSetImpl", () => {
     test("constructor", () => {

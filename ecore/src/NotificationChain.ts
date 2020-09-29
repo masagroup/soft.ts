@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotificationChain } from "./ENotificationChain";
-import { ENotification } from "./ENotification";
+import { ENotification, ENotificationChain } from "./internal";
 
 export class NotificationChain implements ENotificationChain {
     private _notifications: ENotification[];

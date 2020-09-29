@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { BasicEList } from "./BasicEList";
+import { BasicEList } from "./internal";
 
 describe("BasicEList", () => {
     test("get", () => {

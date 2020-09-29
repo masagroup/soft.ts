@@ -7,11 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotifier } from "./ENotifier";
-import { EList } from "./EList";
-import { EAdapter } from "./EAdapter";
-import { ENotification } from "./ENotification";
-import { BasicEList } from "./BasicEList";
+import { ENotifier, EList, EAdapter, ENotification, BasicEList } from "./internal";
 
 export class BasicNotifier implements ENotifier {
     private _eAdapters: EList<EAdapter>;

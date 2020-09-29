@@ -7,9 +7,6 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./EObject";
-import { EList } from "./EList";
-
 export class ETreeIterator<O, T> implements IterableIterator<T> {
     private _obj: O;
     private _getChildrenIterator: (o: O) => Iterator<T>;

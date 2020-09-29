@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EResourceFactory } from "./EResourceFactory";
+import { EResourceFactory, EResourceFactoryRegistryImpl } from "./internal";
 
 export interface EResourceFactoryRegistry {
     getFactory(uri: URL): EResourceFactory;
@@ -16,5 +16,5 @@ export interface EResourceFactoryRegistry {
 }
 
 export function getResourceFactoryRegistry(): EResourceFactoryRegistry {
-    return require("./EResourceFactoryRegistryImpl").EResourceFactoryRegistryImpl.getInstance();
+    return EResourceFactoryRegistryImpl.getInstance();
 }

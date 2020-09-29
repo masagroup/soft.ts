@@ -8,10 +8,8 @@
 // *****************************************************************************
 
 import * as deepEqual from "deep-equal";
-import { ImmutableEList } from "./ImmutableEList";
 import { mock, instance, when } from "ts-mockito";
-import { EObject } from "./EObject";
-import { ETreeIterator } from "./ETreeIterator";
+import { EObject, ETreeIterator, ImmutableEList } from "./internal";
 
 describe("ETreeIterator", () => {
     test("iteratorWithRoot", () => {

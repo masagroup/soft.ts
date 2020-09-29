@@ -7,14 +7,13 @@
 //
 // *****************************************************************************
 
-import { EcoreFactoryImpl } from "./EcoreFactoryImpl";
-import { EDataType } from "./EDataType";
+import { EcoreFactoryImpl, EDataType } from "./internal";
 
 export class EcoreFactoryExt extends EcoreFactoryImpl {
     private static _instanceExt: EcoreFactoryExt = null;
 
     public static getInstance(): EcoreFactoryExt {
-        if (this._instanceExt == null) {
+        if (!this._instanceExt) {
             this._instanceExt = new EcoreFactoryExt();
         }
         return this._instanceExt;

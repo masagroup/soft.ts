@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import { ETypedElementImpl } from "./ETypedElementImpl";
-import { UNBOUNDED_MULTIPLICITY } from "./Constants";
+import { ETypedElementImpl, UNBOUNDED_MULTIPLICITY } from "./internal";
 
 export class ETypedElementExt extends ETypedElementImpl {
     constructor() {

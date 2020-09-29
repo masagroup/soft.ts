@@ -7,21 +7,24 @@
 //
 // *****************************************************************************
 
-import { EObjectImpl } from "./EObjectImpl";
-import { EClass } from "./EClass";
-import { Adapter } from "./Adapter";
-import { ENotification, EventType } from "./ENotification";
-import { EcoreConstants } from "./EcoreConstants";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { isEAttribute, isEReference } from "./BasicEObject";
-import { BasicEList } from "./BasicEList";
-import { BasicEObjectList } from "./BasicEObjectList";
-import { EObject } from "./EObject";
-import { ENotificationChain } from "./ENOtificationChain";
-import { EObjectInternal } from "./EObjectInternal";
-import { Notification } from "./Notification";
-import { EOPPOSITE_FEATURE_BASE } from "./Constants";
-import { EReference } from "./EReference";
+import {
+    ENotification,
+    ENotificationChain,
+    EObjectInternal,
+    EClass,
+    EReference,
+    EObjectImpl,
+    EcoreConstants,
+    Adapter,
+    EventType,
+    EStructuralFeature,
+    isEAttribute,
+    isEReference,
+    BasicEList,
+    BasicEObjectList,
+    Notification,
+    EOPPOSITE_FEATURE_BASE,
+} from "./internal";
 
 class DynamicFeaturesAdapter extends Adapter {
     constructor(private _obj: DynamicEObjectImpl) {

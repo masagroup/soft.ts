@@ -7,10 +7,12 @@
 //
 // *****************************************************************************
 
-import { EResourceFactory } from "./EResourceFactory";
-import { EResourceFactoryRegistry } from "./EResourceFactoryRegistry";
-import { XMIResourceFactory } from "./XMIResourceFactory";
-import { XMLResourceFactory } from "./XMLResourceFactory";
+import {
+    EResourceFactory,
+    EResourceFactoryRegistry,
+    XMIResourceFactory,
+    XMLResourceFactory,
+} from "./internal";
 
 export class EResourceFactoryRegistryImpl implements EResourceFactoryRegistry {
     private _protocolToFactory: Map<string, EResourceFactory>;
@@ -18,7 +20,7 @@ export class EResourceFactoryRegistryImpl implements EResourceFactoryRegistry {
     private static _instance: EResourceFactoryRegistryImpl = null;
 
     public static getInstance(): EResourceFactoryRegistryImpl {
-        if (this._instance == null) {
+        if (!this._instance) {
             this._instance = new EResourceFactoryRegistryImpl();
         }
         return this._instance;

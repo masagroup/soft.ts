@@ -7,14 +7,16 @@
 //
 // *****************************************************************************
 
-import { AbstractNotifyingList } from "./AbstractNotifyingList";
-import { ENotifier } from "./ENotifier";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { EAdapter } from "./EAdapter";
+import {
+    ENotificationChain,
+    ENotifier,
+    EStructuralFeature,
+    EAdapter,
+    ImmutableEList,
+    AbstractNotifyingList,
+    EventType,
+} from "./internal";
 import { instance, mock, when, verify, anything, strictEqual, objectContaining } from "ts-mockito";
-import { ImmutableEList } from "./ImmutableEList";
-import { EventType } from "./ENotification";
-import { ENotificationChain } from "./ENOtificationChain";
 
 class NotifyingListTest<E> extends AbstractNotifyingList<E> {
     private _mockNotifier: ENotifier;

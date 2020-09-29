@@ -8,9 +8,7 @@
 // *****************************************************************************
 
 import { mock, verify, instance } from "ts-mockito";
-import { BasicNotifier } from "./BasicNotifier";
-import { EAdapter } from "./EAdapter";
-import { ENotification } from "./ENotification";
+import { EAdapter, ENotification, BasicNotifier } from "./internal";
 
 describe("BasicNotifier", () => {
     test("constructor", () => {

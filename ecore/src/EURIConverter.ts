@@ -8,8 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EList } from "./EList";
-import { EURIHandler } from "./EURIHandler";
+import { EList, EURIHandler } from "./internal";
 
 export interface EURIConverter {
     createReadStream(uri: URL): fs.ReadStream;

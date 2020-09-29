@@ -8,29 +8,27 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { XMIResource } from "./XMIResource";
+import { XMIResource } from "./internal";
 
 describe("XMIResource", () => {
-    test('test', () => {
-        
+    test("test", () => {});
+    test("loadStream", async () => {
+        let resource = new XMIResource();
+        let url = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
+        let stream = fs.createReadStream(url);
+        await resource.loadFromStream(stream);
+        expect(resource.isLoaded).toBeTruthy();
+        expect(resource.getErrors().isEmpty()).toBeTruthy();
+        expect(resource.getWarnings().isEmpty()).toBeTruthy();
+        expect(resource.xmiVersion).toBe("2.0");
     });
-    // test("loadStream", async () => {
-    //     let resource = new XMIResource();
-    //     let url = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
-    //     let stream = fs.createReadStream(url);
-    //     await resource.loadFromStream(stream);
-    //     expect(resource.isLoaded).toBeTruthy();
-    //     expect(resource.getErrors().isEmpty()).toBeTruthy();
-    //     expect(resource.getWarnings().isEmpty()).toBeTruthy();
-    //     expect(resource.xmiVersion).toBe("2.0");
-    // });
 
-    // test("load", async () => {
-    //     let resource = new XMIResource();
-    //     resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
-    //     await resource.load();
-    //     expect(resource.isLoaded).toBeTruthy();
-    //     expect(resource.getErrors().isEmpty()).toBeTruthy();
-    //     expect(resource.getWarnings().isEmpty()).toBeTruthy();
-    // });
+    test("load", async () => {
+        let resource = new XMIResource();
+        resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
+        await resource.load();
+        expect(resource.isLoaded).toBeTruthy();
+        expect(resource.getErrors().isEmpty()).toBeTruthy();
+        expect(resource.getWarnings().isEmpty()).toBeTruthy();
+    });
 });

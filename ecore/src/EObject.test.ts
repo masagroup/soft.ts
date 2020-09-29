@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { getEcoreFactory } from "./EcoreFactory";
+import { getEcoreFactory } from "./index";
 
 describe("EObject", () => {
     test("eContents", () => {

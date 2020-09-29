@@ -7,13 +7,15 @@
 //
 // *****************************************************************************
 
-import { ENotifier } from "./ENotifier";
-import { EResource } from "./EResource";
-import { EList } from "./EList";
-import { EObject } from "./EObject";
-import { EURIConverter } from "./EURIConverter";
-import { EPackageRegistry } from "./EPackageRegistry";
-import { EResourceFactoryRegistry } from "./EResourceFactoryRegistry";
+import {
+    ENotifier,
+    EResource,
+    EList,
+    EObject,
+    EURIConverter,
+    EPackageRegistry,
+    EResourceFactoryRegistry,
+} from "./internal";
 
 export class EResourceSetConstants {
     public static readonly RESOURCE_SET__RESOURCES: number = 0;

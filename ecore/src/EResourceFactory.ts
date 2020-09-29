@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./EResource";
+import { EResource } from "./internal";
 
 export interface EResourceFactory {
     createResource(uri: URL): EResource;

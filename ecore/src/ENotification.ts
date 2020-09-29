@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotifier } from "./ENotifier";
-import { EStructuralFeature } from "./EStructuralFeature";
+import { ENotifier, EStructuralFeature } from "./internal";
 
 export enum EventType {
     // CREATE An event type indicating that the notifier has been created.

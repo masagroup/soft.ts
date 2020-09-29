@@ -7,9 +7,7 @@
 //
 // *****************************************************************************
 
-import { EResourceFactory } from "./EResourceFactory";
-import { EResource } from "./EResource";
-import { XMLResource } from "./XMLResource";
+import { EResource, EResourceFactory, XMLResource } from "./internal";
 
 export class XMLResourceFactory implements EResourceFactory {
     createResource(uri: URL): EResource {

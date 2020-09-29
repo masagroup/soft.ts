@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { ImmutableEList, getNonDuplicates } from "./ImmutableEList";
+import { ImmutableEList, getNonDuplicates } from "./internal";
 
 describe("ImmutableEList", () => {
     test("get", () => {
