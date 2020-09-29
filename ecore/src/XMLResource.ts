@@ -496,8 +496,8 @@ export class XMLLoad {
         (eProxy as EObjectInternal).eSetProxyURI(uri);
 
         let ndx = id.indexOf("#");
-        let trimmedURI: string = ndx != -1 ? id.slice(0, ndx - 1) : id;
-        if (this._resource.eURI.toString() == trimmedURI) {
+        let trimmedURI: string = ndx != -1 ? (ndx > 0 ? id.slice(0, ndx - 1) : "" ): id;
+        if (this._resource.eURI?.toString() == trimmedURI) {
             this._sameDocumentProxies.push(eProxy);
         }
     }
