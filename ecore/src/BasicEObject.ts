@@ -154,8 +154,7 @@ class ContentsListAdapter extends Adapter {
     }
 
     getList(): EList<EObject> {
-        if (!this._list)
-            this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
+        if (!this._list) this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
         return this._list;
     }
 }
@@ -592,42 +591,42 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eObjectForFragmentSegment(fragment: string): EObject {
         let index = -1;
-        if ( fragment && fragment.length > 0 && isNumeric(fragment.charAt(fragment.length-1))) {
+        if (fragment && fragment.length > 0 && isNumeric(fragment.charAt(fragment.length - 1))) {
             index = fragment.lastIndexOf(".");
-            if ( index != -1 ) {
-                let pos = parseInt(fragment.slice(index+1));
-                let eFeatureName = fragment.slice(1,index);
+            if (index != -1) {
+                let pos = parseInt(fragment.slice(index + 1));
+                let eFeatureName = fragment.slice(1, index);
                 let eFeature = this.getStructuralFeatureFromName(eFeatureName);
-                let list = this.eGetResolve(eFeature,false) as EList<EObject>;
-                if ( pos < list.size() ) {
+                let list = this.eGetResolve(eFeature, false) as EList<EObject>;
+                if (pos < list.size()) {
                     return list.get(pos);
                 }
             }
         }
-        if ( index == -1) {
+        if (index == -1) {
             let eFeature = this.getStructuralFeatureFromName(fragment);
-            return this.eGetResolve(eFeature,false) as EObject;
+            return this.eGetResolve(eFeature, false) as EObject;
         }
         return null;
     }
 
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string {
         let s = "@";
-	    s += feature.name;
-	    if (feature.isMany) {
-		    let v = this.eGetResolve(feature, false);
-		    let i = (v as EList<EObject>).indexOf(o);
-		    s += "." + i.toString();
-	    }
-	    return s
+        s += feature.name;
+        if (feature.isMany) {
+            let v = this.eGetResolve(feature, false);
+            let i = (v as EList<EObject>).indexOf(o);
+            s += "." + i.toString();
+        }
+        return s;
     }
 
-    private getStructuralFeatureFromName( featureName : string ) : EStructuralFeature {
+    private getStructuralFeatureFromName(featureName: string): EStructuralFeature {
         let eFeature = this.eClass().getEStructuralFeatureFromName(featureName);
         if (!eFeature) {
             throw new Error("The feature " + featureName + " is not a valid feature");
         }
-	    return eFeature;
+        return eFeature;
     }
 
     eIsProxy(): boolean {
