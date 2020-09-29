@@ -279,7 +279,10 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     }
 
     protected doUnload() : void {
-
+        this._contents = null;
+        this._errors = null;
+        this._warnings = null;
+        this._resourceIDManager?.clear();
     }
 
     save(): Promise<void> {

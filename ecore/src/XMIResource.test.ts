@@ -27,7 +27,7 @@ describe("XMIResource", () => {
             expect(resource.xmiVersion).toBe("2.0");
 
             let contents = resource.eContents();
-            //expect(contents.size()).toBe(1);
+            expect(contents.size()).toBe(1);
     
             let ePackage = contents.get(0) as EPackage;
             expect(ePackage).not.toBeNull();

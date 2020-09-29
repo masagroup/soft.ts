@@ -10,6 +10,8 @@
 import { EObject } from "./internal";
 
 export interface EResourceIDManager {
+    clear() : void;
+
     register(object: EObject): void;
     unRegister(object: EObject): void;
 
