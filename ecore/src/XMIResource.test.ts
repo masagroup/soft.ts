@@ -14,8 +14,8 @@ describe("XMIResource", () => {
     test("test", () => {});
     test("loadStream", async () => {
         let resource = new XMIResource();
-        let url = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
-        let stream = fs.createReadStream(url);
+        resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
+        let stream = fs.createReadStream(resource.eURI);
         await resource.loadFromStream(stream);
         expect(resource.isLoaded).toBeTruthy();
         expect(resource.getErrors().isEmpty()).toBeTruthy();
