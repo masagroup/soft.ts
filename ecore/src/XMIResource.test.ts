@@ -76,8 +76,7 @@ describe("XMIResource", () => {
     
         test("loadStream", async () => {
             let stream = fs.createReadStream(resource.eURI);
-            await resource.loadFromStream(stream);
-            
+            await resource.loadFromStream(stream);         
         });
     
         test("load", async () => {

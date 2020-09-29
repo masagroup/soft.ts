@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EPackage, EFactory } from "./internal";
+import { EPackage, EFactory, EPackageRegistryImpl} from "./internal";
 
 export interface EPackageRegistry {
     registerPackage(pack: EPackage): void;
@@ -18,5 +18,5 @@ export interface EPackageRegistry {
 }
 
 export function getPackageRegistry(): EPackageRegistry {
-    return require("./EPackageRegistryImpl").EPackageRegistryImpl.getInstance();
+    return EPackageRegistryImpl.getInstance();
 }
