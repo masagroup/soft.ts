@@ -38,6 +38,10 @@ export function isEAttribute(s: EStructuralFeature): s is EAttribute {
     return "eAttributeType" in s;
 }
 
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
 
 abstract class AbstractContentsList extends ImmutableEList<EObject>
@@ -150,7 +154,8 @@ class ContentsListAdapter extends Adapter {
     }
 
     getList(): EList<EObject> {
-        if (!this._list) this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
+        if (!this._list)
+            this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
         return this._list;
     }
 }
@@ -257,7 +262,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         return notifications;
     }
     eContainingFeature(): EStructuralFeature {
-        if (this._eContainer != null) {
+        if (this._eContainer) {
             if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
                 let feature = <EStructuralFeature>(
                     this._eContainer
@@ -284,7 +289,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         container: EObject,
         containerFeatureID: number
     ): EReference {
-        if (this._eContainer != null) {
+        if (this._eContainer) {
             if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
                 let feature: EStructuralFeature = this._eContainer
                     .eClass()
@@ -306,7 +311,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eContents(): EList<EObject> {
-        if (this._contentsListAdapter == null)
+        if (!this._contentsListAdapter)
             this._contentsListAdapter = new ContentsListAdapter(this, function (
                 c: EClass
             ): EList<EStructuralFeature> {
@@ -324,7 +329,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eCrossReferences(): EList<EObject> {
-        if (this._crossReferencesListAdapter == null)
+        if (!this._crossReferencesListAdapter)
             this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
                 c: EClass
             ): EList<EStructuralFeature> {
@@ -373,7 +378,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eGetFromID(featureID: number, resolve: boolean): any {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
         return null;
@@ -390,7 +395,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eSetFromID(featureID: number, newValue: any): void {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
     }
@@ -405,7 +410,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eIsSetFromID(featureID: number): boolean {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
         return false;
@@ -422,7 +427,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eUnsetFromID(featureID: number): void {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
     }
@@ -437,7 +442,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eInvokeFromID(operationID: number, args: EList<any>): any {
         let operation = this.eClass().getEOperation(operationID);
-        if (operation == null) {
+        if (!operation) {
             throw new Error("Invalid operationID: " + operationID);
         }
     }
@@ -586,11 +591,43 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eObjectForFragmentSegment(fragment: string): EObject {
-        throw new Error("Method not implemented.");
+        let index = -1;
+        if ( fragment && fragment.length > 0 && isNumeric(fragment.charAt(fragment.length-1))) {
+            index = fragment.lastIndexOf(".");
+            if ( index != -1 ) {
+                let pos = parseInt(fragment.slice(index+1));
+                let eFeatureName = fragment.slice(1,index);
+                let eFeature = this.getStructuralFeatureFromName(eFeatureName);
+                let list = this.eGetResolve(eFeature,false) as EList<EObject>;
+                if ( pos < list.size() ) {
+                    return list.get(pos);
+                }
+            }
+        }
+        if ( index == -1) {
+            let eFeature = this.getStructuralFeatureFromName(fragment);
+            return this.eGetResolve(eFeature,false) as EObject;
+        }
+        return null;
     }
 
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string {
-        throw new Error("Method not implemented.");
+        let s = "@";
+	    s += feature.name;
+	    if (feature.isMany) {
+		    let v = this.eGetResolve(feature, false);
+		    let i = (v as EList<EObject>).indexOf(o);
+		    s += "." + i.toString();
+	    }
+	    return s
+    }
+
+    private getStructuralFeatureFromName( featureName : string ) : EStructuralFeature {
+        let eFeature = this.eClass().getEStructuralFeatureFromName(featureName);
+        if (!eFeature) {
+            throw new Error("The feature " + featureName + " is not a valid feature");
+        }
+	    return eFeature;
     }
 
     eIsProxy(): boolean {
