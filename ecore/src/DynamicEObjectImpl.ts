@@ -66,7 +66,7 @@ export class DynamicEObjectImpl extends EObjectImpl {
     }
 
     eClass(): EClass {
-        return this._clz == null ? this.eStaticClass() : this._clz;
+        return !this._clz ? this.eStaticClass() : this._clz;
     }
 
     setEClass(clz: EClass) {
@@ -83,7 +83,7 @@ export class DynamicEObjectImpl extends EObjectImpl {
         if (dynamicFeatureID >= 0) {
             let feature = this.eDynamicFeature(featureID);
             let result = this._properties[dynamicFeatureID];
-            if (result == null) {
+            if (!result) {
                 if (feature.isMany) {
                     result = this.createList(feature);
                 }

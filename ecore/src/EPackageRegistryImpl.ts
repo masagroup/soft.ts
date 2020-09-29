@@ -15,7 +15,7 @@ export class EPackageRegistryImpl implements EPackageRegistry {
     private static _instance = null;
 
     public static getInstance(): EPackageRegistryImpl {
-        if (this._instance == null) {
+        if (!this._instance) {
             this._instance = new EPackageRegistryImpl();
             this._instance.registerPackage(getEcorePackage());
         }

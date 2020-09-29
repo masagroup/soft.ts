@@ -158,7 +158,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     }
 
     eContents(): EList<EObject> {
-        if (this._contents == null) this._contents = new ResourceContents(this);
+        if (!this._contents) this._contents = new ResourceContents(this);
         return this._contents;
     }
 
@@ -226,14 +226,14 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     }
 
     getErrors(): EList<EDiagnostic> {
-        if (this._errors == null) {
+        if (!this._errors) {
             this._errors = new BasicEList<EDiagnostic>();
         }
         return this._errors;
     }
 
     getWarnings(): EList<EDiagnostic> {
-        if (this._warnings == null) {
+        if (!this._warnings) {
             this._warnings = new BasicEList<EDiagnostic>();
         }
         return this._warnings;
@@ -303,7 +303,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         let oldLoaded = this._isLoaded;
         this._isLoaded = isLoaded;
         if (this.eNotificationRequired) {
-            if (notifications == null) {
+            if (!notifications) {
                 notifications = new NotificationChain();
             }
             notifications.add(
@@ -328,7 +328,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         }
         this._resourceSet = resourceSet;
         if (this.eNotificationRequired) {
-            if (notifications == null) {
+            if (!notifications) {
                 notifications = new NotificationChain();
             }
             notifications.add(
@@ -365,7 +365,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
 
     private getObjectByPath(uriFragmentPath: string[]): EObject {
         let eObject: EObject = null;
-        if (uriFragmentPath == null || uriFragmentPath.length == 0)
+        if (!uriFragmentPath || uriFragmentPath.length == 0)
             eObject = this.getObjectForRootSegment("");
         else eObject = this.getObjectForRootSegment(uriFragmentPath[0]);
 
