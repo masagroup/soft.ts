@@ -268,7 +268,19 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         return null;
     }
 
-    unload(): void {}
+    unload(): void {
+        if (this._isLoaded) {
+            let n = this.basicSetLoaded(false, null);
+            this.doUnload();
+            if (n) {
+                n.dispatch();
+            }
+        }
+    }
+
+    protected doUnload() : void {
+
+    }
 
     save(): Promise<void> {
         let uriConverter = this.getURIConverter();
