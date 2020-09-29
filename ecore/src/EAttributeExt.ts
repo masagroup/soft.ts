@@ -14,8 +14,12 @@ export class EAttributeExt extends EAttributeImpl {
         super();
     }
 
-    getEAttributeType(): EDataType {
+    get eAttributeType(): EDataType {
         return this.eType as EDataType;
+    }
+
+    basicGetEAttributeType(): EDataType {
+        return this.basicGetEType() as EDataType;
     }
 
     get isID(): boolean {
