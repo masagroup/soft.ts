@@ -15,6 +15,8 @@ import {
     EcoreConstants,
     Adapter,
     EPackageImpl,
+    EResource,
+    EResourceImpl,
 } from "./internal";
 
 class EPackageExtAdapter extends Adapter {
@@ -50,5 +52,16 @@ export class EPackageExt extends EPackageImpl {
             }
         }
         return this._nameToClassifier.get(name);
+    }
+
+    protected createResource(): EResource {
+        let resource = this.eResource();
+        if (!resource) {
+            let uri = new URL(this.nsURI);
+            resource = new EResourceImpl();
+            resource.eURI = uri;
+            resource.eContents().add(this);
+        }
+        return resource;
     }
 }
