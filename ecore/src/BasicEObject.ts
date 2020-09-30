@@ -643,6 +643,6 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eResolveProxy(proxy: EObject): EObject {
-        return EcoreUtils.resolveInObject(proxy,this);
+        return EcoreUtils.resolveInObject(proxy, this);
     }
 }

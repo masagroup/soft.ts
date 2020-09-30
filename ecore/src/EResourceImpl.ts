@@ -278,7 +278,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         }
     }
 
-    protected doUnload() : void {
+    protected doUnload(): void {
         this._contents = null;
         this._errors = null;
         this._warnings = null;

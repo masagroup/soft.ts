@@ -147,9 +147,12 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
     getEObject(uri: URL, loadOnDemand: boolean): EObject {
         let uriStr = uri.toString();
         let ndxHash = uriStr.lastIndexOf("#");
-        let resource = this.getResource(ndxHash != -1 ? new URL( uriStr.slice(0,ndxHash) ) : uri, loadOnDemand);
+        let resource = this.getResource(
+            ndxHash != -1 ? new URL(uriStr.slice(0, ndxHash)) : uri,
+            loadOnDemand
+        );
         return resource
-            ? resource.getEObject( ndxHash != -1 ? uriStr.slice(ndxHash+1) : "")
+            ? resource.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "")
             : null;
     }
 

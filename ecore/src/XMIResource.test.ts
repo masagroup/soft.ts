@@ -14,12 +14,12 @@ describe("XMIResource", () => {
     describe("load", () => {
         let resource = new XMIResource();
         resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
-    
+
         beforeEach(() => {
             resource.unload();
             expect(resource.isLoaded).toBeFalsy();
-        })
-    
+        });
+
         afterEach(() => {
             expect(resource.isLoaded).toBeTruthy();
             expect(resource.getErrors().isEmpty()).toBeTruthy();
@@ -28,7 +28,7 @@ describe("XMIResource", () => {
 
             let contents = resource.eContents();
             expect(contents.size()).toBe(1);
-    
+
             let ePackage = contents.get(0) as EPackage;
             expect(ePackage).not.toBeNull();
             expect(ePackage.name).toBe("BookStorePackage");
@@ -58,30 +58,28 @@ describe("XMIResource", () => {
 
             let eBooksReference = eBookStoreClass.getEStructuralFeature(2) as EReference;
             expect(eBooksReference.name).toBe("books");
-	
+
             let eBookClass = eClassifiers.get(1) as EClass;
             expect(eBookClass.name).toBe("Book");
             expect(eBookClass.getFeatureCount()).toBe(2);
 
             let eNameAttribute = eBookClass.getEStructuralFeature(0) as EAttribute;
             expect(eNameAttribute.name).toBe("name");
-	
 
             let eISBNFeature = eBookClass.getEStructuralFeature(1) as EAttribute;
             expect(eISBNFeature.name).toBe("isbn");
-	
+
             // check resolved reference
             expect(eBooksReference.eReferenceType).toBe(eBookClass);
-        })
-    
+        });
+
         test("loadStream", async () => {
             let stream = fs.createReadStream(resource.eURI);
-            await resource.loadFromStream(stream);         
+            await resource.loadFromStream(stream);
         });
-    
+
         test("load", async () => {
             await resource.load();
         });
     });
-    
 });
