@@ -11,7 +11,7 @@ import * as fs from "fs";
 import { EAttribute, EClass, EClassifier, EPackage, EReference, XMIResource } from "./internal";
 
 describe("XMIResource", () => {
-    describe("load", () => {
+    describe("loadBookStore", () => {
         let resource = new XMIResource();
         resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
 
@@ -71,6 +71,44 @@ describe("XMIResource", () => {
 
             // check resolved reference
             expect(eBooksReference.eReferenceType).toBe(eBookClass);
+        });
+
+        test("loadStream", async () => {
+            let stream = fs.createReadStream(resource.eURI);
+            await resource.loadFromStream(stream);
+        });
+
+        test("load", async () => {
+            await resource.load();
+        });
+    });
+
+    describe("loadLibrary",() => {
+        let resource = new XMIResource();
+        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.ecore");
+
+        beforeEach(() => {
+            resource.unload();
+            expect(resource.isLoaded).toBeFalsy();
+        });
+
+        afterEach(() => {
+            expect(resource.isLoaded).toBeTruthy();
+            expect(resource.getErrors().isEmpty()).toBeTruthy();
+            expect(resource.getWarnings().isEmpty()).toBeTruthy();
+            
+            let contents = resource.eContents();
+            expect(contents.size()).toBe(1);
+
+            let ePackage = contents.get(0) as EPackage;
+            let eClassifiers = ePackage.eClassifiers;
+
+            let eBookClass = eClassifiers.get(0) as EClass;
+            expect(eBookClass.name).toBe("Book");
+            expect(eBookClass.eSuperTypes.size()).toBe(1);
+            
+            let eCirculationItemClass = eBookClass.eSuperTypes.get(0) as EClass;
+            expect(eCirculationItemClass.name).toBe("CirculatingItem");
         });
 
         test("loadStream", async () => {
