@@ -103,9 +103,14 @@ export class XMLNamespaces {
 }
 
 export class XMLResource extends EResourceImpl {
-    protected doLoad(rs: fs.ReadStream): Promise<void> {
+    protected doLoadFromStream(rs: fs.ReadStream): Promise<void> {
         let l = this.createLoad();
-        return l.load(rs);
+        return l.loadFromStream(rs);
+    }
+
+    protected doLoadFromString(s: string){
+        let l = this.createLoad();
+        return l.loadFromString(s);
     }
 
     protected doSave(ws: fs.WriteStream): void {
@@ -164,7 +169,7 @@ export class XMLLoad {
             : getPackageRegistry();
     }
 
-    load(rs: fs.ReadStream): Promise<void> {
+    loadFromStream(rs: fs.ReadStream): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             let saxStream = new sax.SAXStream(true, {
                 trim: true,
@@ -181,6 +186,20 @@ export class XMLLoad {
             rs.pipe(saxStream);
             this._parser = (saxStream as any)["_parser"];
         });
+    }
+
+    loadFromString(s: string) : void {
+        let saxParser = new sax.SAXParser(true, {
+            trim: true,
+            lowercase: true,
+            xmlns: true,
+            position: true,
+        });
+        saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t);
+        saxParser.onclosetag = (t:string) => this.onEndTag(t);
+        saxParser.onerror = (e) => this.onError(e);
+        this._parser = saxParser;
+        this._parser.write(s).close();
     }
 
     onStartTag(tag: sax.QualifiedTag) {

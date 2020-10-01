@@ -254,7 +254,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
 
     loadFromStream(s: fs.ReadStream): Promise<void> {
         if (!this._isLoaded) {
-            return this.doLoad(s).then(() => {
+            return this.doLoadFromStream(s).then(() => {
                 let n = this.basicSetLoaded(true, null);
                 if (n) {
                     n.dispatch();
@@ -264,7 +264,19 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         return Promise.reject();
     }
 
-    protected doLoad(s: fs.ReadStream): Promise<void> {
+    loadFromString(s: string) {
+        this.doLoadFromString(s);
+        let n = this.basicSetLoaded(true, null);
+        if (n) {
+            n.dispatch();
+        }
+    }
+
+    protected doLoadFromStream(s: fs.ReadStream): Promise<void> {
+        return null;
+    }
+
+    protected doLoadFromString(s: string): void {
         return null;
     }
 

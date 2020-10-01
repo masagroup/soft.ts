@@ -37,6 +37,8 @@ export interface EResource extends ENotifier {
 
     load(): Promise<void>;
     loadFromStream(s: fs.ReadStream): Promise<void>;
+    loadFromString(s: string) : void;
+
     unload(): void;
     readonly isLoaded: boolean;
 

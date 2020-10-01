@@ -111,13 +111,21 @@ describe("XMIResource", () => {
             expect(eCirculationItemClass.name).toBe("CirculatingItem");
         });
 
-        test("loadStream", async () => {
+        test("load", async () => {
+            await resource.load();
+        });
+
+        test("loadFromStream", async () => {
             let stream = fs.createReadStream(resource.eURI);
             await resource.loadFromStream(stream);
         });
 
-        test("load", async () => {
-            await resource.load();
+        test("loadFromString", () => {
+            let s = fs.readFileSync(resource.eURI);
+            resource.loadFromString(s.toString());
         });
+
+        
+
     });
 });
