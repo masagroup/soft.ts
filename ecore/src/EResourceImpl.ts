@@ -309,13 +309,12 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     }
 
     saveToStream(s: fs.WriteStream): Promise<void> {
-        return new Promise((resolve, reject) => {
-            this.doSave(s);
-            resolve();
-        });
+        return this.doSave(s);
     }
 
-    protected doSave(s: fs.WriteStream): void {}
+    protected doSave(s: fs.WriteStream): Promise<void> {
+        return null;
+    }
 
     attached(object: EObject): void {
         if (this._resourceIDManager) this._resourceIDManager.register(object);
