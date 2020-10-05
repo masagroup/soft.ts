@@ -14,8 +14,7 @@ function isEClass(e: EClassifier): e is EClass {
 }
 
 export class EReferenceExt extends EReferenceImpl {
-
-    private _referenceType : EClass;
+    private _referenceType: EClass;
 
     constructor() {
         super();
@@ -26,24 +25,24 @@ export class EReferenceExt extends EReferenceImpl {
     }
 
     // get the value of eReferenceType
-	get eReferenceType() : EClass {
-		if (!this._referenceType || this._referenceType.eIsProxy() ) {
+    get eReferenceType(): EClass {
+        if (!this._referenceType || this._referenceType.eIsProxy()) {
             let eType = this.eType;
-            if ( isEClass(eType )) {
+            if (isEClass(eType)) {
                 this._referenceType = eType;
             }
         }
         return this._referenceType;
-	}
-	
-	// get the basic value of eReferenceType with no proxy resolution
-	basicGetEReferenceType() : EClass {
-	    if (!this._referenceType) {
+    }
+
+    // get the basic value of eReferenceType with no proxy resolution
+    basicGetEReferenceType(): EClass {
+        if (!this._referenceType) {
             let eType = this.basicGetEType();
-            if ( isEClass(eType )) {
+            if (isEClass(eType)) {
                 this._referenceType = eType;
             }
         }
         return this._referenceType;
-	}
+    }
 }

@@ -83,7 +83,7 @@ describe("XMIResource", () => {
         });
     });
 
-    describe("loadLibrary",() => {
+    describe("loadLibrary", () => {
         let resource = new XMIResource();
         resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.ecore");
 
@@ -96,7 +96,7 @@ describe("XMIResource", () => {
             expect(resource.isLoaded).toBeTruthy();
             expect(resource.getErrors().isEmpty()).toBeTruthy();
             expect(resource.getWarnings().isEmpty()).toBeTruthy();
-            
+
             let contents = resource.eContents();
             expect(contents.size()).toBe(1);
 
@@ -106,7 +106,7 @@ describe("XMIResource", () => {
             let eBookClass = eClassifiers.get(0) as EClass;
             expect(eBookClass.name).toBe("Book");
             expect(eBookClass.eSuperTypes.size()).toBe(1);
-            
+
             let eCirculationItemClass = eBookClass.eSuperTypes.get(0) as EClass;
             expect(eCirculationItemClass.name).toBe("CirculatingItem");
         });
@@ -124,8 +124,5 @@ describe("XMIResource", () => {
             let s = fs.readFileSync(resource.eURI);
             resource.loadFromString(s.toString());
         });
-
-        
-
     });
 });
