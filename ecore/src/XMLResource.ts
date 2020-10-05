@@ -14,6 +14,7 @@ import {
     EStructuralFeature,
     EReference,
     EPackageRegistry,
+    getEcorePackage,
     getPackageRegistry,
     EList,
     EObject,
@@ -25,7 +26,15 @@ import {
     EDiagnostic,
     EDiagnosticImpl,
     EResourceImpl,
+    EPackage,
+    isEReference,
+    isEObjectInternal,
+    EResource,
 } from "./internal";
+
+function isEObject(e: any): e is EObject {
+    return "eClass" in e;
+}
 
 function isEClass(e: EClassifier): e is EClass {
     return "isAbstract" in e;
@@ -35,7 +44,7 @@ function isEDataType(e: EClassifier): e is EDataType {
     return "isSerializable" in e;
 }
 
-enum FeatureKind {
+enum LoadFeatureKind {
     Single,
     Many,
     ManyAdd,
@@ -109,7 +118,7 @@ export class XMLResource extends EResourceImpl {
         return l.loadFromStream(rs);
     }
 
-    protected doLoadFromString(s: string){
+    protected doLoadFromString(s: string) {
         let l = this.createLoad();
         return l.loadFromString(s);
     }
@@ -189,7 +198,7 @@ export class XMLLoad {
         });
     }
 
-    loadFromString(s: string) : void {
+    loadFromString(s: string): void {
         let saxParser = new sax.SAXParser(true, {
             trim: true,
             lowercase: true,
@@ -197,7 +206,7 @@ export class XMLLoad {
             position: true,
         });
         saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t);
-        saxParser.onclosetag = (t:string) => this.onEndTag(t);
+        saxParser.onclosetag = (t: string) => this.onEndTag(t);
         saxParser.onerror = (e) => this.onError(e);
         this._parser = saxParser;
         this._parser.write(s).close();
@@ -526,7 +535,7 @@ export class XMLLoad {
         let eFeature = this.getFeature(eObject, attr.local);
         if (eFeature) {
             let kind = this.getLoadFeatureKind(eFeature);
-            if (kind == FeatureKind.Single || kind == FeatureKind.Many) {
+            if (kind == LoadFeatureKind.Single || kind == LoadFeatureKind.Many) {
                 this.setFeatureValue(eObject, eFeature, attr.value, -2);
             } else {
                 this.setValueFromId(eObject, eFeature as EReference, attr.value);
@@ -544,7 +553,7 @@ export class XMLLoad {
     ) {
         let kind = this.getLoadFeatureKind(eFeature);
         switch (kind) {
-            case FeatureKind.Single: {
+            case LoadFeatureKind.Single: {
                 let eClassifier = eFeature.eType;
                 let eDataType = eClassifier as EDataType;
                 let eFactory = eDataType.ePackage.eFactoryInstance;
@@ -555,7 +564,7 @@ export class XMLLoad {
                 }
                 break;
             }
-            case FeatureKind.Many: {
+            case LoadFeatureKind.Many: {
                 let eClassifier = eFeature.eType;
                 let eDataType = eClassifier as EDataType;
                 let eFactory = eDataType.ePackage.eFactoryInstance;
@@ -568,8 +577,8 @@ export class XMLLoad {
                 }
                 break;
             }
-            case FeatureKind.ManyAdd:
-            case FeatureKind.ManyMove:
+            case LoadFeatureKind.ManyAdd:
+            case LoadFeatureKind.ManyMove:
                 let eList = eObject.eGetResolve(eFeature, false) as EList<EObject>;
                 if (position == -1) {
                     eList.add(value);
@@ -582,7 +591,7 @@ export class XMLLoad {
                     } else {
                         eList.moveTo(position, index);
                     }
-                } else if (kind == FeatureKind.ManyAdd) {
+                } else if (kind == LoadFeatureKind.ManyAdd) {
                     eList.add(value);
                 } else {
                     eList.move(position, value);
@@ -681,19 +690,19 @@ export class XMLLoad {
         return eFeature;
     }
 
-    private getLoadFeatureKind(eFeature: EStructuralFeature): FeatureKind {
+    private getLoadFeatureKind(eFeature: EStructuralFeature): LoadFeatureKind {
         let eClassifier = eFeature.eType;
         if (eClassifier && isEDataType(eClassifier)) {
-            return eFeature.isMany ? FeatureKind.Many : FeatureKind.Single;
+            return eFeature.isMany ? LoadFeatureKind.Many : LoadFeatureKind.Single;
         } else if (eFeature.isMany) {
             let eReference = eFeature as EReference;
             let eOpposite = eReference.eOpposite;
             if (!eOpposite || eOpposite.isTransient || !eOpposite.isMany) {
-                return FeatureKind.ManyAdd;
+                return LoadFeatureKind.ManyAdd;
             }
-            return FeatureKind.ManyMove;
+            return LoadFeatureKind.ManyMove;
         }
-        return FeatureKind.Other;
+        return LoadFeatureKind.Other;
     }
 
     private isUserAttribute(attr: sax.QualifiedAttribute): boolean {
@@ -748,45 +757,44 @@ export class XMLLoad {
 }
 
 class XMLStringSegment {
-    buffer : string = "";
-    lineWidth : number = 0;
+    buffer: string = "";
+    lineWidth: number = 0;
 }
 
 class XMLString {
-    segments : XMLStringSegment[];
-	currentSegment : XMLStringSegment;
-	lineWidth :number = Number.MAX_SAFE_INTEGER;
-	depth :number = 0;
-	indentation : string = "    ";
-	indents : string[] = [""];
-	lastElementIsStart : boolean = false;
-    elementNames : string[] = [];
-    
+    segments: XMLStringSegment[];
+    currentSegment: XMLStringSegment;
+    lineWidth: number = Number.MAX_SAFE_INTEGER;
+    depth: number = 0;
+    indentation: string = "    ";
+    indents: string[] = [""];
+    lastElementIsStart: boolean = false;
+    elementNames: string[] = [];
+
     constructor() {
         this.currentSegment = new XMLStringSegment();
         this.segments = [this.currentSegment];
     }
 
-
-    write(w : stream.Writable) {
+    write(w: stream.Writable) {
         for (const segment of this.segments) {
             w.write(segment);
         }
     }
-    
-    add(s : string) {
+
+    add(s: string) {
         if (this.lineWidth != Number.MAX_SAFE_INTEGER) {
             this.currentSegment.lineWidth += s.length;
         }
         this.currentSegment.buffer += s;
     }
-    
+
     addLine() {
         this.add("\n");
         this.currentSegment.lineWidth = 0;
     }
-    
-    startElement(name : string) {
+
+    startElement(name: string) {
         if (this.lastElementIsStart) {
             this.closeStartElement();
         }
@@ -801,13 +809,13 @@ class XMLString {
             this.add(this.getElementIndentWithExtra(1));
         }
     }
-    
+
     closeStartElement() {
         this.add(">");
         this.addLine();
         this.lastElementIsStart = false;
     }
-    
+
     endElement() {
         if (this.lastElementIsStart) {
             this.endEmptyElement();
@@ -822,29 +830,29 @@ class XMLString {
             }
         }
     }
-    
+
     endEmptyElement() {
         this.removeLast();
         this.add("/>");
         this.addLine();
         this.lastElementIsStart = false;
     }
-    
-    removeLast() : string {
+
+    removeLast(): string {
         let result = this.elementNames.pop();
         if (result != "") {
             this.depth--;
         }
         return result;
     }
-    
-    addAttribute(name : string, value : string) {
-        this.startAttribute(name)
-        this.addAttributeContent(value)
-        this.endAttribute()
+
+    addAttribute(name: string, value: string) {
+        this.startAttribute(name);
+        this.addAttributeContent(value);
+        this.endAttribute();
     }
-    
-    startAttribute(name : string) {
+
+    startAttribute(name: string) {
         if (this.currentSegment.lineWidth > this.lineWidth) {
             this.addLine();
             this.add(this.getAttributeIndent());
@@ -852,22 +860,22 @@ class XMLString {
             this.add(" ");
         }
         this.add(name);
-        this.add("=\"");
+        this.add('="');
     }
-    
-    addAttributeContent(content : string) {
+
+    addAttributeContent(content: string) {
         this.add(content);
     }
-    
+
     endAttribute() {
-        this.add("\"");
+        this.add('"');
     }
-    
-    addNil(name : string) {
+
+    addNil(name: string) {
         if (this.lastElementIsStart) {
             this.closeStartElement();
         }
-    
+
         this.depth++;
         this.add(this.getElementIndent());
         this.add("<");
@@ -878,13 +886,13 @@ class XMLString {
         } else {
             this.add(" ");
         }
-        this.add("xsi:nil=\"true\"/>");
+        this.add('xsi:nil="true"/>');
         this.depth--;
         this.addLine();
         this.lastElementIsStart = false;
     }
-    
-    addContent(name : string, content : string) {
+
+    addContent(name: string, content: string) {
         if (this.lastElementIsStart) {
             this.closeStartElement();
         }
@@ -901,51 +909,682 @@ class XMLString {
         this.addLine();
         this.lastElementIsStart = false;
     }
-    
-    getElementIndent() : string {
-        return this.getElementIndentWithExtra(0)
+
+    getElementIndent(): string {
+        return this.getElementIndentWithExtra(0);
     }
-    
-    getElementIndentWithExtra(extra : number) : string {
+
+    getElementIndentWithExtra(extra: number): string {
         let nesting = this.depth + extra - 1;
-        for (let i = this.indents.length -1; i < nesting ; i++ ){
-            this.indents.push(this.indents[i]+"  ");
+        for (let i = this.indents.length - 1; i < nesting; i++) {
+            this.indents.push(this.indents[i] + "  ");
         }
         return this.indents[nesting];
     }
-    
-    getAttributeIndent() : string {
+
+    getAttributeIndent(): string {
         let nesting = this.depth + 1;
         for (let i = this.indents.length - 1; i < nesting; i++) {
-            this.indents.push(this.indents[i]+"  ");
+            this.indents.push(this.indents[i] + "  ");
         }
         return this.indents[nesting];
     }
-    
-    mark() : XMLStringSegment {
+
+    mark(): XMLStringSegment {
         let r = this.currentSegment;
         this.currentSegment = new XMLStringSegment();
         this.segments.push(this.currentSegment);
-        return r
+        return r;
     }
-    
-    resetToMark(segment : XMLStringSegment) {
+
+    resetToMark(segment: XMLStringSegment) {
         if (segment) {
             this.currentSegment = segment;
         }
     }
-};
+}
+
+enum SaveFeatureKind {
+    Transient,
+    DataTypeSingle,
+    DataTypeElementSingle,
+    DataTypeContentSingle,
+    DataTypeSingleNillable,
+    DataTypeMany,
+    ObjectContainSingle,
+    ObjectContainMany,
+    ObjectHREFSingle,
+    ObjectHREFMany,
+    ObjectContainSingleUnsettable,
+    ObjectContainManyUnsettable,
+    ObjectHREFSingleUnsettable,
+    ObjectHREFManyUnsettable,
+    ObjectElementSingle,
+    ObjectElementSingleUnsettable,
+    ObjectElementMany,
+    ObjectElementIDRefSingle,
+    ObjectElementIDRefSingleUnsettable,
+    ObjectElementIDRefMany,
+    AttributeFeatureMap,
+    ElementFeatureMap,
+    ObjectAttributeSingle,
+    ObjectAttributeMany,
+    ObjectAttributeIDRefSingle,
+    ObjectAttributeIDRefMany,
+    DataTypeAttributeMany,
+}
+
+enum SaveResourceKind {
+    Skip,
+    Same,
+    Cross,
+}
 
 export class XMLSave {
     private _resource: XMLResource;
+    private _str: XMLString = new XMLString();
+    private _packages: Map<string, string> = new Map<string, string>();
+    private _uriToPrefixes: Map<string, string[]> = new Map<string, string[]>();
+    private _prefixesToURI: Map<string, string> = new Map<string, string>();
+    private _featureKinds: Map<EStructuralFeature, number> = new Map<EStructuralFeature, number>();
+    private _namespaces: XMLNamespaces = new XMLNamespaces();
+    private _keepDefaults = false;
 
     constructor(resource: XMLResource) {
         this._resource = resource;
     }
 
     save(rs: fs.WriteStream): Promise<void> {
-        return new Promise((resolve,reject) =>{
-
+        return new Promise((resolve, reject) => {
+            let contents = this._resource.eContents();
+            if (!contents.isEmpty()) {
+                this.saveHeader();
+                let m = this.saveTopObject(contents.get(0));
+                this.resetToMark(m);
+                this.saveNamespaces();
+                this._str.write(rs);
+            }
+            resolve();
         });
+    }
+
+    private saveHeader() {
+        this._str.add('<?xml version="1.0" encoding="UTF-8"?>');
+        this._str.addLine();
+    }
+
+    private saveTopObject(eObject: EObject): XMLStringSegment {
+        let name = this.getQName(eObject.eClass());
+        this._str.startElement(name);
+        let mark = this._str.mark();
+        this.saveElementID(eObject);
+        this.saveFeatures(eObject, false);
+        return mark;
+    }
+
+    protected saveElementID(eObject: EObject) {}
+
+    private saveFeatures(eObject: EObject, attributesOnly: boolean): boolean {
+        let eAllFeatures = eObject.eClass().eAllStructuralFeatures;
+        let elementFeatures: number[];
+        let elementCount = 0;
+        let i = 0;
+
+        LOOP: for (const eFeature of eAllFeatures) {
+            // compute feature kind
+            let kind = this._featureKinds.get(eFeature);
+            if (!kind) {
+                kind = this.getSaveFeatureKind(eFeature);
+                this._featureKinds.set(eFeature, kind);
+            }
+
+            if (kind != SaveFeatureKind.Transient && this.shouldSaveFeature(eObject, eFeature)) {
+                switch (kind) {
+                    case SaveFeatureKind.DataTypeSingle: {
+                        this.saveDataTypeSingle(eObject, eFeature);
+                        continue LOOP;
+                    }
+
+                    case SaveFeatureKind.DataTypeSingleNillable: {
+                        if (!this.isNil(eObject, eFeature)) {
+                            this.saveDataTypeSingle(eObject, eFeature);
+                            continue LOOP;
+                        }
+                        break;
+                    }
+                    case SaveFeatureKind.ObjectContainManyUnsettable:
+                    case SaveFeatureKind.DataTypeMany: {
+                        if (this.isEmpty(eObject, eFeature)) {
+                            this.saveManyEmpty(eObject, eFeature);
+                            continue LOOP;
+                        }
+                        break;
+                    }
+                    case SaveFeatureKind.ObjectContainSingleUnsettable:
+                    case SaveFeatureKind.ObjectContainSingle:
+                    case SaveFeatureKind.ObjectContainMany: {
+                        break;
+                    }
+                    case SaveFeatureKind.ObjectHREFSingleUnsettable: {
+                        if (!this.isNil(eObject, eFeature)) {
+                            switch (this.getSaveResourceKindSingle(eObject, eFeature)) {
+                                case SaveResourceKind.Cross: {
+                                    break;
+                                }
+                                case SaveResourceKind.Same: {
+                                    this.saveIDRefSingle(eObject, eFeature);
+                                    continue LOOP;
+                                }
+                                default:
+                                    continue LOOP;
+                            }
+                        }
+                        break;
+                    }
+                    case SaveFeatureKind.ObjectHREFSingle: {
+                        switch (this.getSaveResourceKindSingle(eObject, eFeature)) {
+                            case SaveResourceKind.Cross: {
+                                break;
+                            }
+                            case SaveResourceKind.Same: {
+                                this.saveIDRefSingle(eObject, eFeature);
+                                continue LOOP;
+                            }
+                            default:
+                                continue LOOP;
+                        }
+                        break;
+                    }
+                    case SaveFeatureKind.ObjectHREFManyUnsettable: {
+                        if (this.isEmpty(eObject, eFeature)) {
+                            this.saveManyEmpty(eObject, eFeature);
+                            continue LOOP;
+                        } else {
+                            switch (this.getSaveResourceKindMany(eObject, eFeature)) {
+                                case SaveResourceKind.Cross: {
+                                    break;
+                                }
+                                case SaveResourceKind.Same: {
+                                    this.saveIDRefMany(eObject, eFeature);
+                                    continue LOOP;
+                                }
+                                default:
+                                    continue LOOP;
+                            }
+                        }
+                        break;
+                    }
+                    case SaveFeatureKind.ObjectHREFMany: {
+                        switch (this.getSaveResourceKindMany(eObject, eFeature)) {
+                            case SaveResourceKind.Cross: {
+                                break;
+                            }
+                            case SaveResourceKind.Same: {
+                                this.saveIDRefMany(eObject, eFeature);
+                                continue LOOP;
+                            }
+                            default:
+                                continue LOOP;
+                        }
+                        break;
+                    }
+                    default:
+                        continue LOOP;
+                }
+                if (attributesOnly) {
+                    continue LOOP;
+                }
+                if (!elementFeatures) {
+                    elementFeatures = new Array<number>(eAllFeatures.size());
+                }
+                elementFeatures[elementCount] = i;
+                elementCount++;
+            }
+            i++;
+        }
+        if (!elementFeatures) {
+            this._str.endEmptyElement();
+            return false;
+        }
+        for (let i = 0; i < elementCount; i++) {
+            let eFeature = eAllFeatures.get(elementFeatures[i]);
+            let kind = this._featureKinds.get(eFeature);
+            switch (kind) {
+                case SaveFeatureKind.DataTypeSingleNillable: {
+                    this.saveNil(eObject, eFeature);
+                    break;
+                }
+                case SaveFeatureKind.DataTypeMany: {
+                    this.saveDataTypeMany(eObject, eFeature);
+                    break;
+                }
+                case SaveFeatureKind.ObjectContainSingleUnsettable: {
+                    if (this.isNil(eObject, eFeature)) {
+                        this.saveNil(eObject, eFeature);
+                    } else {
+                        this.saveContainedSingle(eObject, eFeature);
+                    }
+                    break;
+                }
+                case SaveFeatureKind.ObjectContainSingle: {
+                    this.saveContainedSingle(eObject, eFeature);
+                    break;
+                }
+                case SaveFeatureKind.ObjectContainManyUnsettable:
+                case SaveFeatureKind.ObjectContainMany: {
+                    this.saveContainedMany(eObject, eFeature);
+                    break;
+                }
+                case SaveFeatureKind.ObjectHREFSingleUnsettable: {
+                    if (this.isNil(eObject, eFeature)) {
+                        this.saveNil(eObject, eFeature);
+                    } else {
+                        this.saveHRefSingle(eObject, eFeature);
+                    }
+                    break;
+                }
+                case SaveFeatureKind.ObjectHREFSingle: {
+                    this.saveHRefSingle(eObject, eFeature);
+                    break;
+                }
+                case SaveFeatureKind.ObjectHREFManyUnsettable:
+                case SaveFeatureKind.ObjectHREFMany: {
+                    this.saveHRefMany(eObject, eFeature);
+                    break;
+                }
+            }
+        }
+
+        this._str.endElement();
+        return true;
+    }
+
+    private saveNamespaces() {
+        let prefixes: string[] = [...this._prefixesToURI.keys()].sort();
+        for (const prefix of prefixes) {
+            this._str.addAttribute("xmlns:" + prefix, this._prefixesToURI.get(prefix));
+        }
+    }
+
+    private resetToMark(segment: XMLStringSegment) {
+        this._str.resetToMark(segment);
+    }
+
+    private saveDataTypeSingle(eObject: EObject, eFeature: EStructuralFeature) {
+        let val = eObject.eGetResolve(eFeature, false);
+        let str = this.getDataType(val, eFeature, true);
+        if (str) {
+            this._str.addAttribute(this.getFeatureQName(eFeature), str);
+        }
+    }
+
+    private saveDataTypeMany(eObject: EObject, eFeature: EStructuralFeature) {
+        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+        let d = eFeature.eType as EDataType;
+        let p = d.ePackage;
+        let f = p.eFactoryInstance;
+        let name = this.getFeatureQName(eFeature);
+        for (const value of l) {
+            if (!value) {
+                this._str.startElement(name);
+                this._str.addAttribute("xsi:nil", "true");
+                this._str.endEmptyElement();
+                this._uriToPrefixes.set(XMLConstants.xsiURI, [XMLConstants.xsiNS]);
+                this._prefixesToURI.set(XMLConstants.xsiNS, XMLConstants.xsiURI);
+            } else {
+                let str = f.convertToString(d, value);
+                this._str.addContent(name, str);
+            }
+        }
+    }
+
+    private saveManyEmpty(eObject: EObject, eFeature: EStructuralFeature) {
+        this._str.addAttribute(this.getFeatureQName(eFeature), "");
+    }
+
+    private saveEObjectSingle(eObject: EObject, eFeature: EStructuralFeature) {
+        let value = eObject.eGetResolve(eFeature, false);
+        if (value && isEObject(value)) {
+            let id = this.getHRef(value);
+            this._str.addAttribute(this.getFeatureQName(eFeature), id);
+        }
+    }
+
+    private saveEObjectMany(eObject: EObject, eFeature: EStructuralFeature) {
+        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+        let failure = false;
+        let first = true;
+        let buffer = "";
+        for (const value of l) {
+            if (value) {
+                let id = this.getHRef(value);
+                if (id == "") {
+                    failure = true;
+                } else {
+                    if (!first) {
+                        buffer += " ";
+                    }
+                    buffer += id;
+                    first = false;
+                }
+            }
+        }
+        if (!failure && buffer.length > 0) {
+            this._str.addAttribute(this.getFeatureQName(eFeature), buffer);
+        }
+    }
+
+    private saveNil(eObject: EObject, eFeature: EStructuralFeature) {
+        this._str.addNil(this.getFeatureQName(eFeature));
+    }
+
+    private saveContainedSingle(eObject: EObject, eFeature: EStructuralFeature) {
+        let value = eObject.eGetResolve(eFeature, false);
+        if (value && isEObjectInternal(value)) {
+            this.saveEObjectInternal(value, eFeature);
+        }
+    }
+
+    private saveContainedMany(eObject: EObject, eFeature: EStructuralFeature) {
+        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+        for (const o of l) {
+            if (isEObjectInternal(o)) {
+                this.saveEObjectInternal(o, eFeature);
+            }
+        }
+    }
+
+    private saveEObjectInternal(o: EObjectInternal, f: EStructuralFeature) {
+        if (o.eInternalResource() || o.eIsProxy()) {
+            this.saveHRef(o, f);
+        } else {
+            this.saveEObject(o, f);
+        }
+    }
+
+    private saveEObject(o: EObject, f: EStructuralFeature) {
+        this._str.startElement(this.getFeatureQName(f));
+        let eClass = o.eClass();
+        let eType = f.eType;
+        if (eType != eClass && eType != getEcorePackage().getEObject()) {
+            this.saveTypeAttribute(eClass);
+        }
+        this.saveElementID(o);
+        this.saveFeatures(o, false);
+    }
+
+    private saveTypeAttribute(eClass: EClass) {
+        this._str.addAttribute("xsi:type", this.getQName(eClass));
+        this._uriToPrefixes.set(XMLConstants.xsiURI, [XMLConstants.xsiNS]);
+        this._prefixesToURI.set(XMLConstants.xsiNS, XMLConstants.xsiURI);
+    }
+
+    private saveHRefSingle(eObject: EObject, eFeature: EStructuralFeature) {
+        let value = eObject.eGetResolve(eFeature, false);
+        if (value && isEObject(value)) {
+            this.saveHRef(value, eFeature);
+        }
+    }
+
+    private saveHRefMany(eObject: EObject, eFeature: EStructuralFeature) {
+        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+        for (const value of l) {
+            this.saveHRef(value, eFeature);
+        }
+    }
+
+    private saveHRef(eObject: EObject, eFeature: EStructuralFeature) {
+        let href = this.getHRef(eObject);
+        if (href != "") {
+            this._str.startElement(this.getFeatureQName(eFeature));
+            let eClass = eObject.eClass();
+            let eType = eFeature.eType;
+            if (eType && isEClass(eType) && eType != eClass && eType.isAbstract) {
+                this.saveTypeAttribute(eClass);
+            }
+            this._str.addAttribute("href", href);
+            this._str.endEmptyElement();
+        }
+    }
+
+    private saveIDRefSingle(eObject: EObject, eFeature: EStructuralFeature) {
+        let value = eObject.eGetResolve(eFeature, false);
+        if (value && isEObject(value)) {
+            let id = this.getIDRef(value);
+            if (id != "") {
+                this._str.addAttribute(this.getFeatureQName(eFeature), id);
+            }
+        }
+    }
+
+    private saveIDRefMany(eObject: EObject, eFeature: EStructuralFeature) {
+        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+        let failure = false;
+        let buffer = "";
+        let first = true;
+        for (const value of l) {
+            if (value) {
+                let id = this.getIDRef(value);
+                if (id == "") {
+                    failure = true;
+                } else {
+                    if (!first) {
+                        buffer += " ";
+                    }
+                    buffer += id;
+                    first = false;
+                }
+            }
+        }
+        if (!failure && buffer.length > 0) {
+            this._str.addAttribute(this.getFeatureQName(eFeature), buffer);
+        }
+    }
+
+    private getSaveResourceKindSingle(
+        eObject: EObject,
+        eFeature: EStructuralFeature
+    ): SaveResourceKind {
+        let value = eObject.eGetResolve(eFeature, false) as EObjectInternal;
+        if (!value) {
+            return SaveResourceKind.Skip;
+        } else if (value.eIsProxy()) {
+            return SaveResourceKind.Cross;
+        } else {
+            let resource = value.eResource();
+            if (resource == this._resource || !resource) {
+                return SaveResourceKind.Same;
+            }
+            return SaveResourceKind.Cross;
+        }
+    }
+
+    private getSaveResourceKindMany(
+        eObject: EObject,
+        eFeature: EStructuralFeature
+    ): SaveResourceKind {
+        let list = eObject.eGetResolve(eFeature, false) as EList<EObject>;
+        if (!list || list.isEmpty()) {
+            return SaveResourceKind.Skip;
+        }
+        for (const e of list) {
+            let o = e as EObjectInternal;
+            if (!o) {
+                return SaveResourceKind.Skip;
+            } else if (o.eIsProxy) {
+                return SaveResourceKind.Cross;
+            } else {
+                let resource = o.eResource();
+                if (resource && resource != this._resource) {
+                    return SaveResourceKind.Cross;
+                }
+            }
+        }
+        return SaveResourceKind.Same;
+    }
+
+    private getDataType(
+        value: any,
+        feature: EStructuralFeature,
+        isAttribute: boolean
+    ): string | null {
+        if (!value) {
+            return null;
+        } else {
+            let d = feature.eType as EDataType;
+            let p = d.ePackage;
+            let f = p.eFactoryInstance;
+            let s = f.convertToString(d, value);
+            return s;
+        }
+    }
+
+    private getHRef(eObject: EObject): string {
+        if (isEObjectInternal(eObject)) {
+            let uri = eObject.eProxyURI();
+            if (!uri) {
+                let eResource = eObject.eResource();
+                return eResource ? this.getResourceHRef(eResource, eObject) : "";
+            } else {
+                return uri.toString();
+            }
+        }
+        return "";
+    }
+
+    private getResourceHRef(resource: EResource, object: EObject): string {
+        let uri = resource.eURI;
+        uri.hash = "#" + resource.getURIFragment(object);
+        return uri.toString();
+    }
+
+    private getIDRef(eObject: EObject): string {
+        return this._resource ? "#" + this._resource.getURIFragment(eObject) : "";
+    }
+
+    private getQName(eClass: EClass): string {
+        return this.getElementQName(eClass.ePackage, eClass.name, false);
+    }
+
+    private getElementQName(ePackage: EPackage, name: string, mustHavePrefix: boolean): string {
+        let nsPrefix = this.getPrefix(ePackage, mustHavePrefix);
+        if (nsPrefix == "") {
+            return name;
+        } else if (name.length == 0) {
+            return nsPrefix;
+        } else {
+            return nsPrefix + ":" + name;
+        }
+    }
+
+    private getFeatureQName(eFeature: EStructuralFeature): string {
+        return eFeature.name;
+    }
+
+    private getPrefix(ePackage: EPackage, mustHavePrefix: boolean): string {
+        let nsPrefix = this._packages.get(ePackage.nsURI);
+        if (!nsPrefix) {
+            let found = false;
+            let prefixes = this._uriToPrefixes.get(ePackage.nsURI);
+            if (prefixes) {
+                for (const prefix of prefixes) {
+                    nsPrefix = prefix;
+                    if (!mustHavePrefix || nsPrefix.length > 0) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                nsPrefix = this._namespaces.getPrefix(ePackage.nsURI);
+                if (nsPrefix) {
+                    return nsPrefix;
+                }
+                nsPrefix = ePackage.nsPrefix;
+                if (nsPrefix.length == 0 && mustHavePrefix) {
+                    nsPrefix = "_";
+                }
+
+                if (this._prefixesToURI.has(nsPrefix)) {
+                    let currentValue = this._prefixesToURI.get(nsPrefix);
+                    if (currentValue ? currentValue != ePackage.nsURI : ePackage.nsURI) {
+                        let index = 1;
+                        while (this._prefixesToURI.has(nsPrefix + "_" + index.toString())) {
+                            index++;
+                        }
+                        nsPrefix += "_" + index.toString();
+                    }
+                }
+                this._prefixesToURI.set(nsPrefix, ePackage.nsURI);
+            }
+            this._packages.set(ePackage.nsURI, nsPrefix);
+        }
+        return nsPrefix;
+    }
+
+    shouldSaveFeature(o: EObject, f: EStructuralFeature): boolean {
+        return o.eIsSet(f) || (this._keepDefaults && f.defaultValueLiteral != "");
+    }
+
+    isNil(eObject: EObject, eFeature: EStructuralFeature): boolean {
+        return eObject.eGetResolve(eFeature, false) == null;
+    }
+
+    isEmpty(eObject: EObject, eFeature: EStructuralFeature): boolean {
+        return (eObject.eGetResolve(eFeature, false) as EList<EObject>).isEmpty();
+    }
+
+    getSaveFeatureKind(f: EStructuralFeature): SaveFeatureKind {
+        if (f.isTransient) {
+            return SaveFeatureKind.Transient;
+        }
+
+        if (isEReference(f)) {
+            if (f.isContainment) {
+                if (f.isMany) {
+                    if (f.isUnsettable) {
+                        return SaveFeatureKind.ObjectContainManyUnsettable;
+                    } else {
+                        return SaveFeatureKind.ObjectContainMany;
+                    }
+                } else {
+                    if (f.isUnsettable) {
+                        return SaveFeatureKind.ObjectContainSingleUnsettable;
+                    } else {
+                        return SaveFeatureKind.ObjectContainSingle;
+                    }
+                }
+            }
+            if (f.eOpposite && f.eOpposite.isContainment) {
+                return SaveFeatureKind.Transient;
+            }
+            if (f.isMany) {
+                if (f.isUnsettable) {
+                    return SaveFeatureKind.ObjectHREFManyUnsettable;
+                } else {
+                    return SaveFeatureKind.ObjectHREFMany;
+                }
+            } else {
+                if (f.isUnsettable) {
+                    return SaveFeatureKind.ObjectHREFSingleUnsettable;
+                } else {
+                    return SaveFeatureKind.ObjectHREFSingle;
+                }
+            }
+        } else {
+            // Attribute
+            let eType = f.eType;
+            if (isEDataType(eType))
+                if (!eType.isSerializable) {
+                    return SaveFeatureKind.Transient;
+                }
+            if (f.isMany) {
+                return SaveFeatureKind.DataTypeMany;
+            }
+            if (f.isUnsettable) {
+                return SaveFeatureKind.DataTypeSingleNillable;
+            }
+            return SaveFeatureKind.DataTypeSingle;
+        }
     }
 }
