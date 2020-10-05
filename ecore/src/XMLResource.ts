@@ -981,8 +981,8 @@ enum SaveResourceKind {
 }
 
 export class XMLSave {
-    private _resource: XMLResource;
-    private _str: XMLString = new XMLString();
+    protected _resource: XMLResource;
+    protected _str: XMLString = new XMLString();
     private _packages: Map<string, string> = new Map<string, string>();
     private _uriToPrefixes: Map<string, string[]> = new Map<string, string[]>();
     private _prefixesToURI: Map<string, string> = new Map<string, string>();
@@ -1199,7 +1199,7 @@ export class XMLSave {
         return true;
     }
 
-    private saveNamespaces() {
+    protected saveNamespaces() {
         let prefixes: string[] = [...this._prefixesToURI.keys()].sort();
         for (const prefix of prefixes) {
             this._str.addAttribute("xmlns:" + prefix, this._prefixesToURI.get(prefix));

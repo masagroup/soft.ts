@@ -15,6 +15,7 @@ class XMIConstants {
     static versionAttrib = "version";
     static uuidAttrib = "uuid";
     static typeAttrib = "type";
+    static xmlNS = "xmlns";
 }
 
 export class XMIResource extends XMLResource {
@@ -59,5 +60,14 @@ export class XMILoad extends XMLLoad {
 export class XMISave extends XMLSave {
     constructor(resource: XMIResource) {
         super(resource);
+    }
+
+    protected saveNamespaces() {
+        this._str.addAttribute(
+            XMIConstants.xmiNS + ":" + XMIConstants.versionAttrib,
+            (this._resource as XMIResource).xmiVersion
+        );
+        this._str.addAttribute(XMIConstants.xmlNS + ":" + XMIConstants.xmiNS, XMIConstants.xmiURI);
+        super.saveNamespaces();
     }
 }
