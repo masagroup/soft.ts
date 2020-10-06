@@ -134,8 +134,10 @@ describe("XMIResource", () => {
             resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
             await resource.load();
 
-            resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore2.ecore");
-            await resource.save();
+            let result = resource.saveToString();
+            let expected = fs.readFileSync(resource.eURI).toString().replace("\r\n", "\n");
+            expect(result).toBe(expected);
+
         })
 
     });
