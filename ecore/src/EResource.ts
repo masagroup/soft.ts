@@ -44,6 +44,7 @@ export interface EResource extends ENotifier {
 
     save(): Promise<void>;
     saveToStream(s: fs.WriteStream): Promise<void>;
+    saveToString() : string;
 
     attached(object: EObject): void;
     detached(object: EObject): void;

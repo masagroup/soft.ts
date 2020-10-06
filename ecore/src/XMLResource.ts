@@ -123,9 +123,14 @@ export class XMLResource extends EResourceImpl {
         return l.loadFromString(s);
     }
 
-    protected doSave(ws: fs.WriteStream): Promise<void> {
+    protected doSaveToStream(ws: fs.WriteStream): Promise<void> {
         let s = this.createSave();
-        return s.save(ws);
+        return s.saveToStream(ws);
+    }
+
+    protected doSaveToString() : string {
+        let s = this.createSave();
+        return s.saveToString();
     }
 
     protected createLoad(): XMLLoad {
@@ -776,9 +781,17 @@ class XMLString {
         this.segments = [this.currentSegment];
     }
 
+    toString() : string {
+        let result = "";
+        for (const segment of this.segments) {
+            result += segment.buffer;
+        }
+        return result;
+    }
+
     write(w: stream.Writable) {
         for (const segment of this.segments) {
-            w.write(segment);
+            w.write(segment.buffer);
         }
     }
 
@@ -994,7 +1007,7 @@ export class XMLSave {
         this._resource = resource;
     }
 
-    save(rs: fs.WriteStream): Promise<void> {
+    saveToStream(rs: fs.WriteStream): Promise<void> {
         return new Promise((resolve, reject) => {
             let contents = this._resource.eContents();
             if (!contents.isEmpty()) {
@@ -1006,6 +1019,17 @@ export class XMLSave {
             }
             resolve();
         });
+    }
+
+    saveToString() : string {
+        let contents = this._resource.eContents();
+        if (contents.isEmpty())
+            return "";
+        this.saveHeader();
+        let m = this.saveTopObject(contents.get(0));
+        this.resetToMark(m);
+        this.saveNamespaces();
+        return this._str.toString();
     }
 
     private saveHeader() {
@@ -1028,10 +1052,9 @@ export class XMLSave {
         let eAllFeatures = eObject.eClass().eAllStructuralFeatures;
         let elementFeatures: number[];
         let elementCount = 0;
-        let i = 0;
 
-        LOOP: for (const eFeature of eAllFeatures) {
-            // compute feature kind
+        LOOP: for (let i = 0 ; i < eAllFeatures.size() ; i ++) {
+            let eFeature = eAllFeatures.get(i);
             let kind = this._featureKinds.get(eFeature);
             if (!kind) {
                 kind = this.getSaveFeatureKind(eFeature);
@@ -1140,7 +1163,6 @@ export class XMLSave {
                 elementFeatures[elementCount] = i;
                 elementCount++;
             }
-            i++;
         }
         if (!elementFeatures) {
             this._str.endEmptyElement();

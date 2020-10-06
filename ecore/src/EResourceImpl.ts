@@ -309,11 +309,19 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     }
 
     saveToStream(s: fs.WriteStream): Promise<void> {
-        return this.doSave(s);
+        return this.doSaveToStream(s);
     }
 
-    protected doSave(s: fs.WriteStream): Promise<void> {
+    saveToString() : string {
+        return this.doSaveToString();
+    }
+
+    protected doSaveToStream(s: fs.WriteStream): Promise<void> {
         return null;
+    }
+
+    protected doSaveToString() : string {
+        return "";
     }
 
     attached(object: EObject): void {
