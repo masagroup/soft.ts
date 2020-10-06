@@ -198,7 +198,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
                     eContainer = internalEObject.eInternalContainer() as EObjectInternal
                 ) {
                     if (id.length == 0) {
-                        fragmentPath.push(
+                        fragmentPath.unshift(
                             eContainer.eURIFragmentSegment(
                                 internalEObject.eContainingFeature(),
                                 internalEObject
@@ -215,11 +215,11 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
                     return "/-1";
                 }
                 if (id.length == 0) {
-                    fragmentPath.push(this.getURIFragmentRootSegment(internalEObject));
+                    fragmentPath.unshift(this.getURIFragmentRootSegment(internalEObject));
                 } else {
-                    fragmentPath.push("?" + id);
+                    fragmentPath.unshift("?" + id);
                 }
-                fragmentPath.push("");
+                fragmentPath.unshift("");
                 return fragmentPath.join("/");
             }
         }
