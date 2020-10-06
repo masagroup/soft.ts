@@ -1476,7 +1476,7 @@ export class XMLSave {
 
     private getResourceHRef(resource: EResource, object: EObject): string {
         let uri = resource.eURI;
-        uri.hash = "#" + resource.getURIFragment(object);
+        uri.hash = resource.getURIFragment(object);
         return uri.toString();
     }
 
