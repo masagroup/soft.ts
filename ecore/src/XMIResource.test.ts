@@ -73,14 +73,15 @@ describe("XMIResource", () => {
             expect(eBooksReference.eReferenceType).toBe(eBookClass);
         });
 
-        test("loadStream", async () => {
-            let stream = fs.createReadStream(resource.eURI);
-            await resource.loadFromStream(stream);
-        });
-
         test("load", async () => {
             await resource.load();
         });
+
+        test("loadFromStream", async () => {
+            let stream = fs.createReadStream(resource.eURI);
+            await resource.loadFromStream(stream);
+        });
+        
     });
 
     describe("loadLibrary", () => {
@@ -124,5 +125,18 @@ describe("XMIResource", () => {
             let s = fs.readFileSync(resource.eURI);
             resource.loadFromString(s.toString());
         });
+    });
+
+    describe("saveBookStore", () => {
+
+        test("saveToString", async () => {
+            let resource = new XMIResource();
+            resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
+            await resource.load();
+
+            resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore2.ecore");
+            await resource.save();
+        })
+
     });
 });
