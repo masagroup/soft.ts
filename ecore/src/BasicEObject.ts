@@ -219,12 +219,13 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eResource(): EResource {
-        if (!this._eResource) {
+        let resource = this._eResource;
+        if (!resource) {
             if (this._eContainer) {
-                this._eResource = this._eContainer.eResource();
+                resource = this._eContainer.eResource();
             }
         }
-        return this._eResource;
+        return resource;
     }
 
     eInternalResource(): EResource {
