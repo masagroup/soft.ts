@@ -135,10 +135,23 @@ describe("XMIResource", () => {
             await resource.load();
 
             let result = resource.saveToString();
-            let expected = fs.readFileSync(resource.eURI).toString().replace("\r\n", "\n");
+            let expected = fs.readFileSync(resource.eURI).toString().replace(/\r?\n|\r/g, "\n");
+            
             expect(result).toBe(expected);
-
         })
+    });
 
+    describe("saveLibrary", () => {
+
+        test("saveToString", async () => {
+            let resource = new XMIResource();
+            resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.ecore");
+            await resource.load();
+
+            let result = resource.saveToString();
+            let expected = fs.readFileSync(resource.eURI).toString().replace(/\r?\n|\r/g, "\n");
+            
+            expect(result).toBe(expected);
+        })
     });
 });
