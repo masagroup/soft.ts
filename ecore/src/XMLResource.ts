@@ -1450,7 +1450,7 @@ export class XMLSave {
         feature: EStructuralFeature,
         isAttribute: boolean
     ): string | null {
-        if (!value) {
+        if (value == null) {
             return null;
         } else {
             let d = feature.eType as EDataType;

@@ -24,7 +24,7 @@ export class EcoreFactoryExt extends EcoreFactoryImpl {
     }
 
     createEBooleanFromString(eDataType: EDataType, literalValue: string): any {
-        return Boolean(literalValue);
+        return literalValue == "true";
     }
 
     convertEBooleanToString(eDataType: EDataType, instanceValue: any): string {
