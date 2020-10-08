@@ -1433,7 +1433,7 @@ export class XMLSave {
             let o = e as EObjectInternal;
             if (!o) {
                 return SaveResourceKind.Skip;
-            } else if (o.eIsProxy) {
+            } else if (o.eIsProxy()) {
                 return SaveResourceKind.Cross;
             } else {
                 let resource = o.eResource();
