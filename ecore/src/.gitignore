@@ -2,10 +2,15 @@
 Ecore*.ts
 E*.ts
 !Dynamic*.ts
+!*Utils.ts
 !EAdapter.ts
+!EDiag*.ts
 !ENotif*.ts
 !EObjectInternal.ts
 !EObjectList.ts
+!EPackageRegistry*.ts
+!EResource*.ts
 !ETreeIterator.ts
+!EURI*.ts
 !*Ext.ts
 !*.test.ts

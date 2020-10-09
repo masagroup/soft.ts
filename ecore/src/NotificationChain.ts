@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotificationChain } from "./ENotificationChain";
-import { ENotification } from "./ENotification";
+import { ENotification, ENotificationChain } from "./internal";
 
 export class NotificationChain implements ENotificationChain {
     private _notifications: ENotification[];
@@ -18,7 +17,7 @@ export class NotificationChain implements ENotificationChain {
     }
 
     add(notification: ENotification): boolean {
-        if (notification == null) return false;
+        if (!notification) return false;
 
         for (const n of this._notifications) {
             if (n.merge(notification)) return false;

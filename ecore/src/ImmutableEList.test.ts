@@ -6,94 +6,96 @@
 // Copyright (c) 2020 MASA Group
 //
 // *****************************************************************************
-import test from "ava";
-import { ImmutableEList, getNonDuplicates } from "./ImmutableEList";
 
-test("get", (t) => {
-    let l = new ImmutableEList([1, 2]);
-    t.is(l.get(0), 1);
-    t.is(l.get(1), 2);
-});
+import { ImmutableEList, getNonDuplicates } from "./internal";
 
-test("contains", (t) => {
-    let l = new ImmutableEList([1, 2]);
-    t.true(l.contains(1));
-    t.false(l.contains(3));
-});
+describe("ImmutableEList", () => {
+    test("get", () => {
+        let l = new ImmutableEList([1, 2]);
+        expect(l.get(0)).toBe(1);
+        expect(l.get(1)).toBe(2);
+    });
 
-test("indexOf", (t) => {
-    let l = new ImmutableEList([1, 2]);
-    t.is(l.indexOf(1), 0);
-    t.is(l.indexOf(3), -1);
-});
+    test("contains", () => {
+        let l = new ImmutableEList([1, 2]);
+        expect(l.contains(1)).toBeTruthy();
+        expect(l.contains(3)).toBeFalsy();
+    });
 
-test("isEmpty", (t) => {
-    t.true(new ImmutableEList().isEmpty());
-    t.false(new ImmutableEList([1]).isEmpty());
-});
+    test("indexOf", () => {
+        let l = new ImmutableEList([1, 2]);
+        expect(l.indexOf(1)).toBe(0);
+        expect(l.indexOf(3)).toBe(-1);
+    });
 
-test("toArray", (t) => {
-    let l = new ImmutableEList([1, 2]);
-    t.deepEqual(l.toArray(), [1, 2]);
-});
+    test("isEmpty", () => {
+        expect(new ImmutableEList().isEmpty()).toBeTruthy();
+        expect(new ImmutableEList([1]).isEmpty()).toBeFalsy();
+    });
 
-test("size", (t) => {
-    let l = new ImmutableEList([1, 2]);
-    t.is(l.size(), 2);
-});
+    test("toArray", () => {
+        let l = new ImmutableEList([1, 2]);
+        expect(l.toArray()).toEqual([1, 2]);
+    });
 
-test("insert", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.insert(0, null), { instanceOf: Error });
-});
+    test("size", () => {
+        let l = new ImmutableEList([1, 2]);
+        expect(l.size()).toBe(2);
+    });
 
-test("insertAll", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.insertAll(0, null), { instanceOf: Error });
-});
+    test("insert", () => {
+        let l = new ImmutableEList();
+        expect(() => l.insert(0, null)).toThrowError(Error);
+    });
 
-test("removeAt", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.removeAt(0), { instanceOf: Error });
-});
+    test("insertAll", () => {
+        let l = new ImmutableEList();
+        expect(() => l.insertAll(0, null)).toThrowError(Error);
+    });
 
-test("set", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.set(0, null), { instanceOf: Error });
-});
+    test("removeAt", () => {
+        let l = new ImmutableEList();
+        expect(() => l.removeAt(0)).toThrowError(Error);
+    });
 
-test("add", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.add(null), { instanceOf: Error });
-});
+    test("set", () => {
+        let l = new ImmutableEList();
+        expect(() => l.set(0, null)).toThrowError(Error);
+    });
 
-test("addAll", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.addAll(null), { instanceOf: Error });
-});
+    test("add", () => {
+        let l = new ImmutableEList();
+        expect(() => l.add(null)).toThrowError(Error);
+    });
 
-test("clear", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.clear(), { instanceOf: Error });
-});
+    test("addAll", () => {
+        let l = new ImmutableEList();
+        expect(() => l.addAll(null)).toThrowError(Error);
+    });
 
-test("remove", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.remove(null), { instanceOf: Error });
-});
+    test("clear", () => {
+        let l = new ImmutableEList();
+        expect(() => l.clear()).toThrowError(Error);
+    });
 
-test("removeAll", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.removeAll(null), { instanceOf: Error });
-});
+    test("remove", () => {
+        let l = new ImmutableEList();
+        expect(() => l.remove(null)).toThrowError(Error);
+    });
 
-test("retainAll", (t) => {
-    let l = new ImmutableEList();
-    t.throws(() => l.retainAll(null), { instanceOf: Error });
-});
+    test("removeAll", () => {
+        let l = new ImmutableEList();
+        expect(() => l.removeAll(null)).toThrowError(Error);
+    });
 
-test("getNonDuplicates", (t) => {
-    let l1 = new ImmutableEList([1, 2]);
-    let l2 = new ImmutableEList([2, 3]);
-    t.deepEqual(getNonDuplicates(l1, l2).toArray(), [3]);
+    test("retainAll", () => {
+        let l = new ImmutableEList();
+        expect(() => l.retainAll(null)).toThrowError(Error);
+    });
+
+    test("getNonDuplicates", () => {
+        let l1 = new ImmutableEList([1, 2]);
+        let l2 = new ImmutableEList([2, 3]);
+        expect(getNonDuplicates(l1, l2)).toEqual({ _v: [3] });
+    });
 });

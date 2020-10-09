@@ -7,16 +7,13 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./EObject";
-import { EList } from "./EList";
-
-export class ETreeIterator<T> implements IterableIterator<T> {
-    private _obj: T;
-    private _getChildrenIterator: (e: T) => Iterator<T>;
+export class ETreeIterator<O, T> implements IterableIterator<T> {
+    private _obj: O;
+    private _getChildrenIterator: (o: O) => Iterator<T>;
     private _data: Iterator<T>[];
     private _root: boolean;
 
-    constructor(obj: T, root: boolean, getChildrenIterator: (e: T) => Iterator<T>) {
+    constructor(obj: O, root: boolean, getChildrenIterator: (o: O) => Iterator<T>) {
         this._getChildrenIterator = getChildrenIterator;
         this._root = root;
         this._obj = obj;
@@ -28,9 +25,9 @@ export class ETreeIterator<T> implements IterableIterator<T> {
     }
 
     next(): IteratorResult<T> {
-        if (this._data == null) {
+        if (!this._data) {
             this._data = [this._getChildrenIterator(this._obj)];
-            if (this._root) return { value: this._obj, done: false };
+            if (this._root) return { value: (this._obj as any) as T, done: false };
         }
 
         if (this._data.length == 0) return { value: undefined, done: true };

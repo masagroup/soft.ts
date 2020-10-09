@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { Collection } from "./Collection";
+import { Collection } from "./internal";
 
 export interface List<E> extends Collection<E> {
     insert(index: number, e: E): boolean;

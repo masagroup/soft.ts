@@ -7,23 +7,28 @@
 //
 // *****************************************************************************
 
-import { EcoreFactoryImpl } from "./EcoreFactoryImpl";
-import { EDataType } from "./EDataType";
-import { anyFunction } from "ts-mockito";
+import { EcoreFactoryImpl, EDataType } from "./internal";
 
 export class EcoreFactoryExt extends EcoreFactoryImpl {
-    static readonly eInstance: EcoreFactoryExt = new EcoreFactoryExt();
+    private static _instanceExt: EcoreFactoryExt = null;
+
+    public static getInstance(): EcoreFactoryExt {
+        if (!this._instanceExt) {
+            this._instanceExt = new EcoreFactoryExt();
+        }
+        return this._instanceExt;
+    }
 
     protected constructor() {
         super();
     }
 
     createEBooleanFromString(eDataType: EDataType, literalValue: string): any {
-        return Boolean(literalValue);
+        return literalValue == "true";
     }
 
     convertEBooleanToString(eDataType: EDataType, instanceValue: any): string {
-        return anyFunction.toString();
+        return instanceValue.toString();
     }
 
     createECharFromString(eDataType: EDataType, literalValue: string): any {

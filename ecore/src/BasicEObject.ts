@@ -7,25 +7,29 @@
 //
 // *****************************************************************************
 
-import { BasicNotifier } from "./BasicNotifier";
-import { EClass } from "./EClass";
-import { EList } from "./EList";
-import { EObject } from "./EObject";
-import { EOperation } from "./EOperation";
-import { EReference } from "./EReference";
-import { EResource } from "./EResource";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { ENotificationChain } from "./ENOtificationChain";
-import { Notification } from "./Notification";
-import { EventType, ENotification } from "./ENotification";
-import { EObjectInternal } from "./EObjectInternal";
-import { EOPPOSITE_FEATURE_BASE } from "./Constants";
-import { EAttribute } from "./EAttribute";
-import { Adapter } from "./Adapter";
-import { ImmutableEList } from "./ImmutableEList";
-import { AbstractEList } from "./AbstractEList";
-import { EObjectList } from "./EObjectList";
-import { ETreeIterator } from "./ETreeIterator";
+import {
+    EcoreUtils,
+    ETreeIterator,
+    ENotification,
+    ENotificationChain,
+    EObject,
+    EObjectList,
+    ENotifyingList,
+    EObjectInternal,
+    EList,
+    EClass,
+    EOperation,
+    EAttribute,
+    EReference,
+    EResource,
+    EStructuralFeature,
+    ImmutableEList,
+    Adapter,
+    Notification,
+    BasicNotifier,
+    EventType,
+    EOPPOSITE_FEATURE_BASE,
+} from "./internal";
 
 export function isEReference(s: EStructuralFeature): s is EReference {
     return "eReferenceType" in s;
@@ -33,6 +37,10 @@ export function isEReference(s: EStructuralFeature): s is EReference {
 
 export function isEAttribute(s: EStructuralFeature): s is EAttribute {
     return "eAttributeType" in s;
+}
+
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
@@ -147,8 +155,7 @@ class ContentsListAdapter extends Adapter {
     }
 
     getList(): EList<EObject> {
-        if (this._list == null)
-            this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
+        if (!this._list) this._list = new ResolvedContentsList(this._obj, this._getFeatureFn);
         return this._list;
     }
 }
@@ -173,8 +180,38 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         return null;
     }
 
-    eContainer(): EObject {
+    eInternalContainer(): EObject {
         return this._eContainer;
+    }
+
+    eContainer(): EObject {
+        let eContainer = this._eContainer;
+        if (eContainer && eContainer.eIsProxy()) {
+            let resolved = this.eResolveProxy(eContainer);
+            if (resolved != eContainer) {
+                let notifications = this.eBasicRemoveFromContainer(null);
+                this._eContainer = resolved;
+                if (notifications) {
+                    notifications.dispatch();
+                }
+                if (
+                    this.eNotificationRequired &&
+                    this._eContainerFeatureID >= EOPPOSITE_FEATURE_BASE
+                ) {
+                    this.eNotify(
+                        new Notification(
+                            this,
+                            EventType.RESOLVE,
+                            this._eContainerFeatureID,
+                            eContainer,
+                            resolved
+                        )
+                    );
+                }
+            }
+            return resolved;
+        }
+        return eContainer;
     }
 
     eContainerFeatureID(): number {
@@ -182,24 +219,51 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eResource(): EResource {
-        if (this._eResource == null) {
-            if (this._eContainer != null) {
-                this._eResource = this._eContainer.eResource();
+        let resource = this._eResource;
+        if (!resource) {
+            if (this._eContainer) {
+                resource = this._eContainer.eResource();
             }
         }
+        return resource;
+    }
+
+    eInternalResource(): EResource {
         return this._eResource;
     }
 
-    eDirectResource(): EResource {
-        return this._eResource;
-    }
-
-    eSetDirectResource(eResource: EResource): void {
+    eSetInternalResource(eResource: EResource): void {
         this._eResource = eResource;
     }
 
+    eSetResource(newResource: EResource, n: ENotificationChain): ENotificationChain {
+        let notifications = n;
+        let oldResource = this.eInternalResource();
+        if (oldResource && newResource) {
+            let list = oldResource.eContents() as ENotifyingList<EObject>;
+            notifications = list.removeWithNotification(this, notifications);
+            oldResource.detached(this);
+        }
+        if (this._eContainer) {
+            if (this.eContainmentFeature().isResolveProxies) {
+                let oldContainerResource = this._eContainer.eResource();
+                if (oldContainerResource) {
+                    if (!newResource) {
+                        oldContainerResource.attached(this);
+                    } else if (!oldResource) {
+                        oldContainerResource.detached(this);
+                    }
+                }
+            } else {
+                notifications = this.eBasicRemoveFromContainer(notifications);
+                notifications = this.eBasicSetContainer(null, -1, notifications);
+            }
+        }
+        this.eSetInternalResource(newResource);
+        return notifications;
+    }
     eContainingFeature(): EStructuralFeature {
-        if (this._eContainer != null) {
+        if (this._eContainer) {
             if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
                 let feature = <EStructuralFeature>(
                     this._eContainer
@@ -226,7 +290,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         container: EObject,
         containerFeatureID: number
     ): EReference {
-        if (this._eContainer != null) {
+        if (this._eContainer) {
             if (this._eContainerFeatureID <= EOPPOSITE_FEATURE_BASE) {
                 let feature: EStructuralFeature = this._eContainer
                     .eClass()
@@ -248,7 +312,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eContents(): EList<EObject> {
-        if (this._contentsListAdapter == null)
+        if (!this._contentsListAdapter)
             this._contentsListAdapter = new ContentsListAdapter(this, function (
                 c: EClass
             ): EList<EStructuralFeature> {
@@ -258,13 +322,15 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eAllContents(): IterableIterator<EObject> {
-        return new ETreeIterator<EObject>(this, false, function (o: EObject): Iterator<EObject> {
+        return new ETreeIterator<EObject, EObject>(this, false, function (
+            o: EObject
+        ): Iterator<EObject> {
             return o.eContents()[Symbol.iterator]();
         });
     }
 
     eCrossReferences(): EList<EObject> {
-        if (this._crossReferencesListAdapter == null)
+        if (!this._crossReferencesListAdapter)
             this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
                 c: EClass
             ): EList<EStructuralFeature> {
@@ -313,7 +379,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eGetFromID(featureID: number, resolve: boolean): any {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
         return null;
@@ -330,7 +396,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eSetFromID(featureID: number, newValue: any): void {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
     }
@@ -345,7 +411,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eIsSetFromID(featureID: number): boolean {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
         return false;
@@ -362,7 +428,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eUnsetFromID(featureID: number): void {
         let feature = this.eClass().getEStructuralFeature(featureID);
-        if (feature == null) {
+        if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
     }
@@ -377,14 +443,9 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eInvokeFromID(operationID: number, args: EList<any>): any {
         let operation = this.eClass().getEOperation(operationID);
-        if (operation == null) {
+        if (!operation) {
             throw new Error("Invalid operationID: " + operationID);
         }
-    }
-
-    eSetResource(newResource: EResource, notifications: ENotificationChain): ENotificationChain {
-        this.eSetDirectResource(newResource);
-        return notifications;
     }
 
     eInverseAdd(otherEnd: EObject, featureID: number, n: ENotificationChain): ENotificationChain {
@@ -432,6 +493,37 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         let oldResource = this._eResource;
         let oldContainer = this._eContainer;
         let oldContainerFeatureID = this._eContainerFeatureID;
+
+        let newResource: EResource = null;
+        if (oldResource) {
+            if (
+                newContainer &&
+                !this.eObjectContainmentFeature(this, newContainer, newContainerFeatureID)
+                    .isResolveProxies
+            ) {
+                let list = oldResource.eContents() as ENotifyingList<EObject>;
+                notifications = list.removeWithNotification(this, notifications);
+                this.eSetInternalResource(null);
+                newResource = newContainer.eResource();
+            } else {
+                oldResource = null;
+            }
+        } else {
+            if (oldContainer) {
+                oldResource = oldContainer.eResource();
+            }
+            if (newContainer) {
+                newResource = newContainer.eResource();
+            }
+        }
+
+        if (oldResource && oldResource != newResource) {
+            oldResource.detached(this);
+        }
+
+        if (newResource && newResource && oldResource) {
+            newResource.attached(this);
+        }
 
         // basic set
         this._eContainer = newContainer;
@@ -500,11 +592,43 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eObjectForFragmentSegment(fragment: string): EObject {
-        throw new Error("Method not implemented.");
+        let index = -1;
+        if (fragment && fragment.length > 0 && isNumeric(fragment.charAt(fragment.length - 1))) {
+            index = fragment.lastIndexOf(".");
+            if (index != -1) {
+                let pos = parseInt(fragment.slice(index + 1));
+                let eFeatureName = fragment.slice(1, index);
+                let eFeature = this.getStructuralFeatureFromName(eFeatureName);
+                let list = this.eGetResolve(eFeature, false) as EList<EObject>;
+                if (pos < list.size()) {
+                    return list.get(pos);
+                }
+            }
+        }
+        if (index == -1) {
+            let eFeature = this.getStructuralFeatureFromName(fragment);
+            return this.eGetResolve(eFeature, false) as EObject;
+        }
+        return null;
     }
 
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string {
-        throw new Error("Method not implemented.");
+        let s = "@";
+        s += feature.name;
+        if (feature.isMany) {
+            let v = this.eGetResolve(feature, false);
+            let i = (v as EList<EObject>).indexOf(o);
+            s += "." + i.toString();
+        }
+        return s;
+    }
+
+    private getStructuralFeatureFromName(featureName: string): EStructuralFeature {
+        let eFeature = this.eClass().getEStructuralFeatureFromName(featureName);
+        if (!eFeature) {
+            throw new Error("The feature " + featureName + " is not a valid feature");
+        }
+        return eFeature;
     }
 
     eIsProxy(): boolean {
@@ -520,6 +644,6 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
     }
 
     eResolveProxy(proxy: EObject): EObject {
-        throw new Error("Method not implemented.");
+        return EcoreUtils.resolveInObject(proxy, this);
     }
 }

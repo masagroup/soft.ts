@@ -7,18 +7,19 @@
 //
 // *****************************************************************************
 
-import { EAttributeImpl } from "./EAttributeImpl";
-import { EDataType } from "./EDataType";
-import { EClassExt } from "./EClassExt";
-import { EcoreConstants } from "./EcoreConstants";
+import { EcoreConstants, EDataType, EClassExt, EAttributeImpl } from "./internal";
 
 export class EAttributeExt extends EAttributeImpl {
     constructor() {
         super();
     }
 
-    getEAttributeType(): EDataType {
+    get eAttributeType(): EDataType {
         return this.eType as EDataType;
+    }
+
+    basicGetEAttributeType(): EDataType {
+        return this.basicGetEType() as EDataType;
     }
 
     get isID(): boolean {

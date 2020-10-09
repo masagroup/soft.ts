@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EOperationImpl } from "./EOperationImpl";
+import { EOperationImpl } from "./internal";
 
 export class EOperationExt extends EOperationImpl {
     constructor() {

@@ -7,17 +7,20 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./EObject";
-import { EClass } from "./EClass";
-import { EResource } from "./EResource";
-import { ENotificationChain } from "./ENotificationChain";
-import { EList } from "./EList";
-import { EStructuralFeature } from "./EStructuralFeature";
+import {
+    EObject,
+    EClass,
+    EResource,
+    ENotificationChain,
+    EList,
+    EStructuralFeature,
+} from "./internal";
 
 export interface EObjectInternal extends EObject {
     eStaticClass(): EClass;
 
-    eDirectResource(): EResource;
+    eInternalResource(): EResource;
+    eInternalContainer(): EObject;
 
     eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain;
 

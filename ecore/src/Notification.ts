@@ -7,11 +7,13 @@
 //
 // *****************************************************************************
 
-import { AbstractNotification } from "./AbstractNotification";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { ENotifier } from "./ENotifier";
-import { EObject } from "./EObject";
-import { EventType } from "./ENotification";
+import {
+    EStructuralFeature,
+    ENotifier,
+    EObject,
+    EventType,
+    AbstractNotification,
+} from "./internal";
 
 export class Notification extends AbstractNotification {
     private _object: EObject;

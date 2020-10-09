@@ -7,10 +7,7 @@
 //
 // *****************************************************************************
 
-import { EList } from "./EList";
-import { ENotifier } from "./ENotifier";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { ENotificationChain } from "./ENotificationChain";
+import { EList, ENotifier, EStructuralFeature, ENotificationChain } from "./internal";
 
 export interface ENotifyingList<E> extends EList<E> {
     readonly notifier: ENotifier;

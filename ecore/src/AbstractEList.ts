@@ -7,9 +7,7 @@
 //
 // *****************************************************************************
 
-import { EList } from "./EList";
-import { Collection } from "./Collection";
-import { getNonDuplicates } from "./ImmutableEList";
+import { Collection, EList, getNonDuplicates } from "./internal";
 
 export abstract class AbstractEList<E> implements EList<E> {
     protected _isUnique: boolean;

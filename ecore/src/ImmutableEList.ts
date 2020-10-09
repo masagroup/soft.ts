@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import { Collection } from "./Collection";
-import { EList } from "./EList";
+import { Collection, EList } from "./internal";
 
 export class ImmutableEList<E> implements EList<E> {
     protected _v: E[];

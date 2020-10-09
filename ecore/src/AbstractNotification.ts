@@ -7,11 +7,14 @@
 //
 // *****************************************************************************
 
-import { ENotification, EventType } from "./ENotification";
-import { ENotifier } from "./ENotifier";
-import { EStructuralFeature } from "./EStructuralFeature";
-import { ENotificationChain } from "./ENOtificationChain";
-import { NotificationChain } from "./NotificationChain";
+import {
+    ENotifier,
+    ENotification,
+    EStructuralFeature,
+    ENotificationChain,
+    NotificationChain,
+    EventType,
+} from "./internal";
 
 export abstract class AbstractNotification implements ENotification, ENotificationChain {
     abstract readonly feature: EStructuralFeature;
@@ -120,9 +123,9 @@ export abstract class AbstractNotification implements ENotification, ENotificati
     }
 
     add(notification: ENotification): boolean {
-        if (notification == null) return false;
+        if (!notification) return false;
         if (this.merge(notification)) return false;
-        if (this._next == null) {
+        if (!this._next) {
             if (notification instanceof AbstractNotification) {
                 this._next = notification;
                 return true;
@@ -134,7 +137,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
     }
 
     dispatch(): void {
-        if (this.notifier != null && this.eventType != -1) this.notifier.eNotify(this);
-        if (this._next != null) this._next.dispatch();
+        if (this.notifier && this.eventType != -1) this.notifier.eNotify(this);
+        if (this._next) this._next.dispatch();
     }
 }

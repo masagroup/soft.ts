@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotifyingList } from "./ENotifyingList";
-import { EList } from "./EList";
+import { EList, ENotifyingList } from "./internal";
 
 export interface EObjectList<E> extends EList<E> {
     getUnResolvedList(): EList<E>;
