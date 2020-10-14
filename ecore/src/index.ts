@@ -36,6 +36,8 @@ export {
     EObjectInternal,
     isEObjectInternal,
     EObjectList,
+    EObjectImpl,
+    DynamicEObjectImpl,
     isEObjectList,
     EPackageRegistry,
     EResource,
