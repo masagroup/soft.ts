@@ -2,7 +2,8 @@
   "name": "@masagroup/ecore",
   "version": "0.0.1",
   "description": "ecore typescript library",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "index": "barrelsby --directory ./src",
     "build": "tsc",
