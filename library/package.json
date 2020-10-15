@@ -18,5 +18,13 @@
   },
   "dependencies": {
     "@masagroup/ecore": "file:../ecore"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "verbose": true,
+    "testPathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ]
   }
 }
