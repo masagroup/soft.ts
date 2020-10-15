@@ -15,6 +15,7 @@ export {
     EEnumLiteral,
     EFactory,
     EFactoryExt,
+    EFeatureMapEntry,
     EGenericType,
     EList,
     EModelElement,

@@ -5,6 +5,7 @@ E*.ts
 !*Utils.ts
 !EAdapter.ts
 !EDiag*.ts
+!EFeatureMap*.ts
 !ENotif*.ts
 !EObjectInternal.ts
 !EObjectList.ts

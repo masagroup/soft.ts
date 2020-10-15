@@ -12,6 +12,7 @@ export * from "./Constants";
 export * from "./EAdapter";
 export * from "./EcoreUtils";
 export * from "./EDiagnostic";
+export * from "./EFeatureMapEntry";
 export * from "./EList";
 export * from "./ENotification";
 export * from "./ENotificationChain";
