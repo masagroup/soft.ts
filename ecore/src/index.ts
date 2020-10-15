@@ -55,6 +55,7 @@ export {
     NotificationChain,
     getEcoreFactory,
     getEcorePackage,
+    getPackageRegistry,
     getResourceFactoryRegistry,
     isEObjectInternal,
     isEObjectList,
