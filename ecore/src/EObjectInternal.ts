@@ -73,6 +73,10 @@ export interface EObjectInternal extends EObject {
     eResolveProxy(proxy: EObject): EObject;
 }
 
-export function isEObjectInternal(o: EObject): o is EObjectInternal {
-    return o == undefined ? undefined : typeof o["eStaticClass"] === "function";
+export function isEObject(o: any): o is EObject {
+    return o == undefined ? undefined : typeof o["eClass"] === "function";
+}
+
+export function isEObjectInternal(o: any): o is EObjectInternal {
+    return o == undefined ? undefined : isEObject(o) && typeof o["eStaticClass"] === "function";
 }

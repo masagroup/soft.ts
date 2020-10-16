@@ -45,7 +45,8 @@ function isNumeric(n) {
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
 
-abstract class AbstractContentsList extends ImmutableEList<EObject>
+abstract class AbstractContentsList
+    extends ImmutableEList<EObject>
     implements EObjectList<EObject> {
     protected _obj: BasicEObject;
     protected _getFeatureFn: getFeatureFnType;

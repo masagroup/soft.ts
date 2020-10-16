@@ -44,7 +44,7 @@ export interface EResource extends ENotifier {
 
     save(): Promise<void>;
     saveToStream(s: fs.WriteStream): Promise<void>;
-    saveToString() : string;
+    saveToString(): string;
 
     attached(object: EObject): void;
     detached(object: EObject): void;
@@ -55,7 +55,6 @@ export interface EResource extends ENotifier {
     getErrors(): EList<EDiagnostic>;
     getWarnings(): EList<EDiagnostic>;
 }
-
 
 export function isEResource(o: any): o is EResource {
     return o == undefined ? undefined : typeof o["eResourceSet"] === "function";

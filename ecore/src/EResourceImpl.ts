@@ -312,7 +312,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         return this.doSaveToStream(s);
     }
 
-    saveToString() : string {
+    saveToString(): string {
         return this.doSaveToString();
     }
 
@@ -320,7 +320,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         return null;
     }
 
-    protected doSaveToString() : string {
+    protected doSaveToString(): string {
         return "";
     }
 

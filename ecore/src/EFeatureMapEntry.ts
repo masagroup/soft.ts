@@ -9,9 +9,8 @@
 
 import { EStructuralFeature } from "./internal";
 
-export interface EFeatureMapEntry  {
+export interface EFeatureMapEntry {
+    getEStructuralFeature(): EStructuralFeature;
 
-    getEStructuralFeature() : EStructuralFeature;
-
-    getValue() : any;
+    getValue(): any;
 }
