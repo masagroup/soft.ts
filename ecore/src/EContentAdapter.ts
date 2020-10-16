@@ -31,17 +31,21 @@ export class EContentAdapter extends Adapter {
     }
 
     set target(notifier: ENotifier) {
-        super.target = notifier;
-        let l: Iterable<ENotifier> = null;
-        if (isEObject(notifier)) {
-            l = notifier.eContents();
-        } else if (isEResource(notifier)) {
-            l = notifier.eContents();
-        } else if (isEResourceSet(notifier)) {
-            l = notifier.getResources();
-        }
-        for (let n of l) {
-            this.addAdapter(n);
+        if (notifier == null) {
+            this.unsetTarget(this.target);
+        } else {
+            super.target = notifier;
+            let l: Iterable<ENotifier> = null;
+            if (isEObject(notifier)) {
+                l = notifier.eContents();
+            } else if (isEResource(notifier)) {
+                l = notifier.eContents();
+            } else if (isEResourceSet(notifier)) {
+                l = notifier.getResources();
+            }
+            for (let n of l) {
+                this.addAdapter(n);
+            }
         }
     }
 
