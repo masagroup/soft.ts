@@ -59,6 +59,7 @@ export {
     getEcorePackage,
     getPackageRegistry,
     getResourceFactoryRegistry,
+    isEObject,
     isEObjectInternal,
     isEObjectList,
 } from "./internal";
