@@ -1,4 +1,5 @@
 export {
+    Adapter,
     BasicEList,
     BasicEObjectList,
     BasicNotifier,
@@ -9,6 +10,7 @@ export {
     EAttribute,
     EClass,
     EClassifier,
+    EContentAdapter,
     EDataType,
     EDiagnostic,
     EEnum,

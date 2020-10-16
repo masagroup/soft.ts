@@ -68,6 +68,7 @@ export * from "./BasicNotifier";
 export * from "./BasicEObject";
 export * from "./BasicEObjectList";
 export * from "./EObjectImpl";
+export * from "./EContentAdapter";
 export * from "./DynamicEObjectImpl";
 
 export * from "./EModelElementImpl";

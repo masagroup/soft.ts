@@ -3,7 +3,7 @@ Ecore*.ts
 E*.ts
 !Dynamic*.ts
 !*Utils.ts
-!EAdapter.ts
+!E*Adapter.ts
 !EDiag*.ts
 !EFeatureMap*.ts
 !ENotif*.ts
