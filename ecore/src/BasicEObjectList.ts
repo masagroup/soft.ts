@@ -21,8 +21,7 @@ import {
     EOPPOSITE_FEATURE_BASE,
 } from "./internal";
 
-export class BasicEObjectList<O extends EObject>
-    extends AbstractNotifyingList<O>
+export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O>
     implements EObjectList<O>, ENotifyingList<O> {
     private _owner: EObjectInternal;
     private _featureID: number;

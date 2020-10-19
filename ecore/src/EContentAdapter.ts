@@ -70,7 +70,7 @@ export class EContentAdapter extends Adapter {
         let notifier = notification.notifier;
         if (isEObject(notifier)) {
             let feature = notification.feature;
-            if (isEReference(feature) && feature.isContainment ) {
+            if (isEReference(feature) && feature.isContainment) {
                 this.handleContainment(notification);
             }
         } else if (isEResource(notifier)) {
