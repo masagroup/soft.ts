@@ -294,5 +294,38 @@ describe("EContentAdapter", () => {
             verify(mockNotification.feature).once();
             verify(mockNotification.newValue).once();
         });
+
+        test("addMany", () => {
+            let adapter = new EContentAdapter();
+            let mockNotification = mock<ENotification>();
+            let notification = instance(mockNotification);
+            let mockObject = mock<EObject>();
+            let object = instance(mockObject);
+            let mockReference = mock<EReference>();
+            let reference = instance(mockReference);
+
+            when(mockReference.isContainment).thenReturn(true);
+            when(mockReference.eReferenceType).thenReturn(null);
+
+            let children: EObject[] = [];
+            let nb = Math.floor(Math.random() * 10) + 1;
+            for (let index = 0; index < nb; index++) {
+                let mockObject = mock<EObject>();
+                let mockAdapters = mock<EList<EAdapter>>();
+                let object = instance(mockObject);
+                let adapters = instance(mockAdapters);
+
+                when(mockObject.eAdapters).thenReturn(adapters);
+                when(mockAdapters.contains(adapter)).thenReturn(false);
+                when(mockAdapters.add(adapter)).thenReturn(true);
+                children.push(object);
+            }
+            when(mockNotification.notifier).thenReturn(object);
+            when(mockNotification.eventType).thenReturn(EventType.ADD_MANY);
+            when(mockNotification.feature).thenReturn(reference);
+            when(mockNotification.newValue).thenReturn(children);
+           
+            adapter.notifyChanged(notification);
+        });
     });
 });
