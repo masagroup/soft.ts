@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { anything, instance, mock, resetCalls, verify, when } from "ts-mockito";
+import { EventType } from "./ENotification";
 import { EReference } from "./EReference";
 import { EAdapter, EAttribute, EContentAdapter, EList, ENotification, ENotifier, EObject, ImmutableEList } from "./internal";
 
@@ -75,5 +76,36 @@ describe("EContentAdapter", () => {
         verify(mockNotification.feature).once();
     });
 
+    test("notifyChangedResolve", () => {
+        let adapter = new EContentAdapter();
+        let mockNotification = mock<ENotification>();
+        let notification = instance(mockNotification);
+        let mockObject = mock<EObject>();
+        let object = instance(mockObject);
+        let mockOldObject = mock<EObject>();
+        let oldObject = instance(mockOldObject);
+        let mockOldAdapters = mock<EList<EAdapter>>();
+        let oldAdapters = instance(mockOldAdapters);
+        let mockReference = mock<EReference>();
+        let reference = instance(mockReference);
+
+        when(mockReference.isContainment).thenReturn(true);
+        when(mockReference.eReferenceType).thenReturn(null);
+        when(mockOldObject.eAdapters).thenReturn(oldAdapters);
+        when(mockOldAdapters.contains(adapter)).thenReturn(false);
+        when(mockNotification.notifier).thenReturn(object);
+        when(mockNotification.eventType).thenReturn(EventType.RESOLVE);
+        when(mockNotification.feature).thenReturn(reference);
+        when(mockNotification.oldValue).thenReturn(oldObject);
+
+	    adapter.notifyChanged(notification);
+
+        verify(mockOldAdapters.contains(adapter)).once();
+        verify(mockNotification.notifier).once();
+        verify(mockNotification.eventType).once();
+        verify(mockNotification.feature).once();
+        verify(mockNotification.oldValue).once();
+
+    });
 
 });
