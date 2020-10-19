@@ -258,5 +258,41 @@ describe("EContentAdapter", () => {
             verify(mockNotification.newValue).once();
 
         });
+
+        test("add", () => {
+            let adapter = new EContentAdapter();
+            let mockNotification = mock<ENotification>();
+            let notification = instance(mockNotification);
+            let mockObject = mock<EObject>();
+            let object = instance(mockObject);
+            let mockNewObject = mock<EObjectInternal>();
+            let newObject = instance(mockNewObject);
+            let mockNewAdapters = mock<EList<EAdapter>>();
+            let newAdapters = instance(mockNewAdapters);
+            let mockReference = mock<EReference>();
+            let reference = instance(mockReference);
+
+            when(mockReference.isContainment).thenReturn(true);
+            when(mockReference.eReferenceType).thenReturn(null);
+            when(mockNewObject.eAdapters).thenReturn(newAdapters);
+            when(mockNewAdapters.contains(adapter)).thenReturn(false);
+            when(mockNewAdapters.add(adapter)).thenReturn(true);
+            when(mockNotification.notifier).thenReturn(object);
+            when(mockNotification.eventType).thenReturn(EventType.ADD);
+            when(mockNotification.feature).thenReturn(reference);
+            when(mockNotification.newValue).thenReturn(newObject);
+
+            adapter.notifyChanged(notification);
+
+
+            verify(mockReference.isContainment).once();
+            verify(mockNewObject.eAdapters).twice();
+            verify(mockNewAdapters.contains(adapter)).once();
+            verify(mockNewAdapters.add(adapter)).once();
+            verify(mockNotification.notifier).once();
+            verify(mockNotification.eventType).once();
+            verify(mockNotification.feature).once();
+            verify(mockNotification.newValue).once();
+        });
     });
 });

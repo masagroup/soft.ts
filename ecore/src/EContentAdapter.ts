@@ -110,7 +110,7 @@ export class EContentAdapter extends Adapter {
                 break;
             }
             case EventType.ADD: {
-                this.addAdapter(notification.newValue() as ENotifier);
+                this.addAdapter(notification.newValue as ENotifier);
                 break;
             }
             case EventType.ADD_MANY: {
