@@ -327,5 +327,72 @@ describe("EContentAdapter", () => {
            
             adapter.notifyChanged(notification);
         });
+
+        test("remove", () => {
+            let adapter = new EContentAdapter();
+            let mockNotification = mock<ENotification>();
+            let notification = instance(mockNotification);
+            let mockObject = mock<EObjectInternal>();
+            let object = instance(mockObject);
+            let mockOldObject = mock<EObjectInternal>();
+            let oldObject = instance(mockOldObject);
+            let mockOldAdapters = mock<EList<EAdapter>>();
+            let oldAdapters = instance(mockOldAdapters);
+            let mockReference = mock<EReference>();
+            let reference = instance(mockReference);
+
+            when(mockReference.isContainment).thenReturn(true);
+            when(mockReference.eReferenceType).thenReturn(null);
+            when(mockOldObject.eAdapters).thenReturn(oldAdapters);
+            when(mockOldObject.eInternalResource()).thenReturn(null);
+            when(mockOldAdapters.remove(adapter)).thenReturn(true);
+            when(mockNotification.notifier).thenReturn(object);
+            when(mockNotification.eventType).thenReturn(EventType.REMOVE);
+            when(mockNotification.feature).thenReturn(reference);
+            when(mockNotification.oldValue).thenReturn(oldObject);
+
+            adapter.notifyChanged(notification);
+
+            verify(mockReference.isContainment).once();
+            verify(mockOldObject.eAdapters).once();
+            verify(mockOldObject.eInternalResource()).once();
+            verify(mockOldAdapters.remove(adapter)).once();
+            verify(mockNotification.eventType).once();
+            verify(mockNotification.feature).twice();
+            verify(mockNotification.oldValue).twice();
+        });
+
+        test("removeMany", () => {
+            let adapter = new EContentAdapter();
+            let mockNotification = mock<ENotification>();
+            let notification = instance(mockNotification);
+            let mockObject = mock<EObject>();
+            let object = instance(mockObject);
+            let mockReference = mock<EReference>();
+            let reference = instance(mockReference);
+
+            when(mockReference.isContainment).thenReturn(true);
+            when(mockReference.eReferenceType).thenReturn(null);
+
+            let children: EObject[] = [];
+            let nb = Math.floor(Math.random() * 10) + 1;
+            for (let index = 0; index < nb; index++) {
+                let mockObject = mock<EObjectInternal>();
+                let mockAdapters = mock<EList<EAdapter>>();
+                let object = instance(mockObject);
+                let adapters = instance(mockAdapters);
+
+                when(mockObject.eAdapters).thenReturn(adapters);
+                when(mockObject.eInternalResource()).thenReturn(null);
+                when(mockAdapters.remove(adapter)).thenReturn(true);
+                children.push(object);
+            }
+            when(mockNotification.notifier).thenReturn(object);
+            when(mockNotification.eventType).thenReturn(EventType.REMOVE_MANY);
+            when(mockNotification.feature).thenReturn(reference);
+            when(mockNotification.oldValue).thenReturn(children);
+           
+            adapter.notifyChanged(notification);
+        });
     });
 });
