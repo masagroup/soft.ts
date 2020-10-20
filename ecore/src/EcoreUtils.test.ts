@@ -215,5 +215,26 @@ describe("EcoreUtils", () => {
             eObject2.eSet(eAttribute2, "test2");
             expect(EcoreUtils.equals(eObject1, eObject1Copy)).toBeFalsy();
         });
+
+        test("proxy", () => {
+            let ePackage = getEcoreFactory().createEPackage();
+            let eFactory = getEcoreFactory().createEFactory();
+            let eClass = getEcoreFactory().createEClass();
+            ePackage.eFactoryInstance = eFactory;
+            ePackage.eClassifiers.add(eClass);
+
+            // the model
+            let eObject = eFactory.create(eClass);
+            (eObject as EObjectInternal).eSetProxyURI( new URL("file://test"));
+
+            let eObjectCopy = EcoreUtils.copy(eObject);
+            expect( EcoreUtils.equals(eObject,eObjectCopy)).toBeTruthy();
+        });
+
+        test("real",() =>{
+            let eClass = getEcorePackage().getEClass();
+            let eClassCopy = EcoreUtils.copy(eClass);
+            expect( EcoreUtils.equals(eClass,eClassCopy)).toBeTruthy();
+        });
     });
 });
