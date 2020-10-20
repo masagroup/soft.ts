@@ -13,6 +13,7 @@ import {
     EcoreUtils,
     EObject,
     EObjectInternal,
+    EReference,
     getEcoreFactory,
     getEcorePackage,
     ImmutableEList,
@@ -74,7 +75,7 @@ describe("EcoreUtils", () => {
             expect(EcoreUtils.copy(null)).toBeNull();
         });
 
-        test("copyAttribute", () => {
+        test("attribute", () => {
             // the meta model
             let ePackage = getEcoreFactory().createEPackage();
             let eFactory = getEcoreFactory().createEFactory();
@@ -101,7 +102,7 @@ describe("EcoreUtils", () => {
             expect(EcoreUtils.equals(eObject, eObjectCopy)).toBeFalsy();
         });
 
-        test("copyAllAttribute", () => {
+        test("allAttribute", () => {
             // the meta model
             let ePackage = getEcoreFactory().createEPackage();
             let eFactory = getEcoreFactory().createEFactory();
@@ -121,51 +122,98 @@ describe("EcoreUtils", () => {
             eObject1.eSet(eAttribute1, 2);
             eObject1.eSet(eAttribute2, "test");
 
-			let eObject2 = eFactory.create(eClass);
+            let eObject2 = eFactory.create(eClass);
             eObject2.eSet(eAttribute1, 2);
             eObject2.eSet(eAttribute2, "test2");
 
-			let list = new ImmutableEList<EObject>( [eObject1,eObject2] );
-			let listCopy = EcoreUtils.copyAll(list);
+            let list = new ImmutableEList<EObject>([eObject1, eObject2]);
+            let listCopy = EcoreUtils.copyAll(list);
             expect(EcoreUtils.equalsAll(list, listCopy)).toBeTruthy();
-		});
-		
-		test("containment", () => {
-			// the meta model
+        });
+
+        test("containment", () => {
+            // the meta model
             let ePackage = getEcoreFactory().createEPackage();
             let eFactory = getEcoreFactory().createEFactory();
-			let eClass1 = getEcoreFactory().createEClass();
-			let eClass2 = getEcoreFactory().createEClass();
+            let eClass1 = getEcoreFactory().createEClass();
+            let eClass2 = getEcoreFactory().createEClass();
             ePackage.eFactoryInstance = eFactory;
-            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1,eClass2]));
-			
-			let eAttribute1 = getEcoreFactory().createEAttribute();
+            ePackage.eClassifiers.addAll(
+                new ImmutableEList<EClass>([eClass1, eClass2])
+            );
+
+            let eAttribute1 = getEcoreFactory().createEAttribute();
             eAttribute1.name = "attribute1";
             eAttribute1.eType = getEcorePackage().getEInt();
             let eAttribute2 = getEcoreFactory().createEAttribute();
             eAttribute2.name = "attribute2";
             eAttribute2.eType = getEcorePackage().getEString();
             eClass2.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]));
-			
-			let eReference1= getEcoreFactory().createEReference();
-			eReference1.name = "reference1";
-			eReference1.isContainment = true;
-			eReference1.eType = eClass2;
-			eClass1.eStructuralFeatures.add(eReference1);
-		
-			
-			// the model
-			let eObject1 = eFactory.create(eClass1);
-			let eObject2 = eFactory.create(eClass2);
-			eObject2.eSet(eAttribute1, 2);
-			eObject2.eSet(eAttribute2, "test1");
-			eObject1.eSet(eReference1, eObject2);
-			
-			let eObject1Copy = EcoreUtils.copy(eObject1);
-			expect( EcoreUtils.equals(eObject1,eObject1Copy)).toBeTruthy();
-			
-			eObject2.eSet(eAttribute2, "test2");
-			expect( EcoreUtils.equals(eObject1,eObject1Copy)).toBeFalsy();
-		});
+
+            let eReference1 = getEcoreFactory().createEReference();
+            eReference1.name = "reference1";
+            eReference1.isContainment = true;
+            eReference1.eType = eClass2;
+            eClass1.eStructuralFeatures.add(eReference1);
+
+            // the model
+            let eObject1 = eFactory.create(eClass1);
+            let eObject2 = eFactory.create(eClass2);
+            eObject2.eSet(eAttribute1, 2);
+            eObject2.eSet(eAttribute2, "test1");
+            eObject1.eSet(eReference1, eObject2);
+
+            let eObject1Copy = EcoreUtils.copy(eObject1);
+            expect(EcoreUtils.equals(eObject1, eObject1Copy)).toBeTruthy();
+
+            eObject2.eSet(eAttribute2, "test2");
+            expect(EcoreUtils.equals(eObject1, eObject1Copy)).toBeFalsy();
+        });
+
+        test("references", () => {
+            // the meta model
+            let ePackage = getEcoreFactory().createEPackage();
+            let eFactory = getEcoreFactory().createEFactory();
+            let eClass1 = getEcoreFactory().createEClass();
+            let eClass2 = getEcoreFactory().createEClass();
+            ePackage.eFactoryInstance = eFactory;
+            ePackage.eClassifiers.addAll(
+                new ImmutableEList<EClass>([eClass1, eClass2])
+            );
+
+            let eAttribute1 = getEcoreFactory().createEAttribute();
+            eAttribute1.name = "attribute1";
+            eAttribute1.eType = getEcorePackage().getEInt();
+            let eAttribute2 = getEcoreFactory().createEAttribute();
+            eAttribute2.name = "attribute2";
+            eAttribute2.eType = getEcorePackage().getEString();
+            eClass2.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]));
+
+            let eReference1 = getEcoreFactory().createEReference();
+            eReference1.name = "reference1";
+            eReference1.isContainment = true;
+            eReference1.eType = eClass2;
+            let eReference2 = getEcoreFactory().createEReference();
+            eReference2.name = "reference2";
+            eReference2.isContainment = false;
+            eReference2.eType = eClass2;
+            eClass1.eStructuralFeatures.addAll(
+                new ImmutableEList<EReference>([eReference1, eReference2])
+            );
+
+            // the model
+            let eObject1 = eFactory.create(eClass1);
+            let eObject2 = eFactory.create(eClass2);
+            eObject2.eSet(eAttribute1, 2);
+            eObject2.eSet(eAttribute2, "test");
+            eObject1.eSet(eReference1, eObject2);
+            eObject1.eSet(eReference2, eObject2);
+
+            let eObject1Copy = EcoreUtils.copy(eObject1);
+            expect(EcoreUtils.equals(eObject1, eObject1Copy)).toBeTruthy();
+
+            eObject2.eSet(eAttribute2, "test2");
+            expect(EcoreUtils.equals(eObject1, eObject1Copy)).toBeFalsy();
+        });
     });
 });
