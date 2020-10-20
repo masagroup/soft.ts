@@ -131,7 +131,7 @@ export class DynamicEObjectImpl extends EObjectImpl {
                                 notifications
                             );
                         if (newObject)
-                            notifications = oldObject.eInverseAdd(
+                            notifications = newObject.eInverseAdd(
                                 this,
                                 EOPPOSITE_FEATURE_BASE - featureID,
                                 notifications
