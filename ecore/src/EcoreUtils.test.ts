@@ -7,24 +7,59 @@
 //
 // *****************************************************************************
 
-import { mock } from "ts-mockito";
-import { EcoreUtils, EObject, getEcoreFactory, getEcorePackage, ImmutableEList } from "./internal";
+import { instance, mock, when } from "ts-mockito";
+import { EClass, EcoreUtils, EObject, EObjectInternal, getEcoreFactory, getEcorePackage, ImmutableEList } from "./internal";
 
 describe("EcoreUtils", () => {
+    describe("equals", () => {
+        test("null", () => {
+            expect(EcoreUtils.equals(null, null)).toBeTruthy();
 
-	describe("equals", () => {
-		test("null", () => {
-			expect(EcoreUtils.equals(null,null)).toBeTruthy();
-			
-			let mockObject = mock<EObject>();
-			expect(EcoreUtils.equals(mockObject,null)).toBeFalsy();
-			expect(EcoreUtils.equals(null,mockObject)).toBeFalsy();
-		});
+            let mockObject = mock<EObject>();
+            let object = instance(mockObject);
+            expect(EcoreUtils.equals(object, null)).toBeFalsy();
+            expect(EcoreUtils.equals(null, object)).toBeFalsy();
+        });
 
-		test("", () => {
-			
+        test("proxy", () => {
+            let mockObject1 = mock<EObjectInternal>();
+            let mockObject2 = mock<EObjectInternal>();
+            let obj1 = instance(mockObject1);
+            let obj2 = instance(mockObject2);
+
+            when(mockObject1.eIsProxy()).thenReturn(true);
+            when(mockObject1.eProxyURI()).thenReturn(new URL("file://test"));
+            when(mockObject2.eProxyURI()).thenReturn(new URL("file://test"));
+            expect(EcoreUtils.equals(obj1, obj2)).toBeTruthy();
+
+            when(mockObject1.eIsProxy()).thenReturn(true);
+            when(mockObject1.eProxyURI()).thenReturn(new URL("file://test1"));
+            when(mockObject2.eProxyURI()).thenReturn(new URL("file://test2"));
+            expect(EcoreUtils.equals(obj1, obj2)).toBeFalsy();
+
+            when(mockObject1.eIsProxy()).thenReturn(true);
+            when(mockObject1.eProxyURI()).thenReturn(new URL("file://test"));
+            when(mockObject2.eProxyURI()).thenReturn(null);
+            expect(EcoreUtils.equals(obj1, obj2)).toBeFalsy();
+
+            when(mockObject1.eIsProxy()).thenReturn(false);
+            when(mockObject2.eIsProxy()).thenReturn(true);
+            expect(EcoreUtils.equals(obj1, obj2)).toBeFalsy();
 		});
-	});
+		
+		test("class", () => {
+			let mockObject1 = mock<EObjectInternal>();
+            let mockObject2 = mock<EObjectInternal>();
+            let obj1 = instance(mockObject1);
+            let obj2 = instance(mockObject2);
+			let mockClass1 = mock<EClass>();
+			let mockClass2 = mock<EClass>();
+			when(mockObject1.eIsProxy()).thenReturn(false);
+			when(mockObject1.eClass()).thenReturn(instance(mockClass1));
+            when(mockObject2.eIsProxy()).thenReturn(false);
+			when(mockObject2.eClass()).thenReturn(instance(mockClass2));
+		});
+    });
 
     describe("copy", () => {
         test("null", () => {
