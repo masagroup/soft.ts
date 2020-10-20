@@ -8,7 +8,15 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito";
-import { EClass, EcoreUtils, EObject, EObjectInternal, getEcoreFactory, getEcorePackage, ImmutableEList } from "./internal";
+import {
+    EClass,
+    EcoreUtils,
+    EObject,
+    EObjectInternal,
+    getEcoreFactory,
+    getEcorePackage,
+    ImmutableEList,
+} from "./internal";
 
 describe("EcoreUtils", () => {
     describe("equals", () => {
@@ -45,20 +53,20 @@ describe("EcoreUtils", () => {
             when(mockObject1.eIsProxy()).thenReturn(false);
             when(mockObject2.eIsProxy()).thenReturn(true);
             expect(EcoreUtils.equals(obj1, obj2)).toBeFalsy();
-		});
-		
-		test("class", () => {
-			let mockObject1 = mock<EObjectInternal>();
+        });
+
+        test("class", () => {
+            let mockObject1 = mock<EObjectInternal>();
             let mockObject2 = mock<EObjectInternal>();
             let obj1 = instance(mockObject1);
             let obj2 = instance(mockObject2);
-			let mockClass1 = mock<EClass>();
-			let mockClass2 = mock<EClass>();
-			when(mockObject1.eIsProxy()).thenReturn(false);
-			when(mockObject1.eClass()).thenReturn(instance(mockClass1));
+            let mockClass1 = mock<EClass>();
+            let mockClass2 = mock<EClass>();
+            when(mockObject1.eIsProxy()).thenReturn(false);
+            when(mockObject1.eClass()).thenReturn(instance(mockClass1));
             when(mockObject2.eIsProxy()).thenReturn(false);
-			when(mockObject2.eClass()).thenReturn(instance(mockClass2));
-		});
+            when(mockObject2.eClass()).thenReturn(instance(mockClass2));
+        });
     });
 
     describe("copy", () => {
@@ -78,7 +86,7 @@ describe("EcoreUtils", () => {
             eAttribute1.eType = getEcorePackage().getEInt();
             let eAttribute2 = getEcoreFactory().createEAttribute();
             eAttribute2.name = "attribute2";
-            eAttribute2.eType = getEcorePackage().getEInt();
+            eAttribute2.eType = getEcorePackage().getEString();
             eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]));
 
             // the model
@@ -93,6 +101,71 @@ describe("EcoreUtils", () => {
             expect(EcoreUtils.equals(eObject, eObjectCopy)).toBeFalsy();
         });
 
-        test("copyAllAttribute", () => {});
+        test("copyAllAttribute", () => {
+            // the meta model
+            let ePackage = getEcoreFactory().createEPackage();
+            let eFactory = getEcoreFactory().createEFactory();
+            let eClass = getEcoreFactory().createEClass();
+            ePackage.eFactoryInstance = eFactory;
+            ePackage.eClassifiers.add(eClass);
+            let eAttribute1 = getEcoreFactory().createEAttribute();
+            eAttribute1.name = "attribute1";
+            eAttribute1.eType = getEcorePackage().getEInt();
+            let eAttribute2 = getEcoreFactory().createEAttribute();
+            eAttribute2.name = "attribute2";
+            eAttribute2.eType = getEcorePackage().getEString();
+            eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]));
+
+            // the model
+            let eObject1 = eFactory.create(eClass);
+            eObject1.eSet(eAttribute1, 2);
+            eObject1.eSet(eAttribute2, "test");
+
+			let eObject2 = eFactory.create(eClass);
+            eObject2.eSet(eAttribute1, 2);
+            eObject2.eSet(eAttribute2, "test2");
+
+			let list = new ImmutableEList<EObject>( [eObject1,eObject2] );
+			let listCopy = EcoreUtils.copyAll(list);
+            expect(EcoreUtils.equalsAll(list, listCopy)).toBeTruthy();
+		});
+		
+		test("containment", () => {
+			// the meta model
+            let ePackage = getEcoreFactory().createEPackage();
+            let eFactory = getEcoreFactory().createEFactory();
+			let eClass1 = getEcoreFactory().createEClass();
+			let eClass2 = getEcoreFactory().createEClass();
+            ePackage.eFactoryInstance = eFactory;
+            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1,eClass2]));
+			
+			let eAttribute1 = getEcoreFactory().createEAttribute();
+            eAttribute1.name = "attribute1";
+            eAttribute1.eType = getEcorePackage().getEInt();
+            let eAttribute2 = getEcoreFactory().createEAttribute();
+            eAttribute2.name = "attribute2";
+            eAttribute2.eType = getEcorePackage().getEString();
+            eClass2.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]));
+			
+			let eReference1= getEcoreFactory().createEReference();
+			eReference1.name = "reference1";
+			eReference1.isContainment = true;
+			eReference1.eType = eClass2;
+			eClass1.eStructuralFeatures.add(eReference1);
+		
+			
+			// the model
+			let eObject1 = eFactory.create(eClass1);
+			let eObject2 = eFactory.create(eClass2);
+			eObject2.eSet(eAttribute1, 2);
+			eObject2.eSet(eAttribute2, "test1");
+			eObject1.eSet(eReference1, eObject2);
+			
+			let eObject1Copy = EcoreUtils.copy(eObject1);
+			expect( EcoreUtils.equals(eObject1,eObject1Copy)).toBeTruthy();
+			
+			eObject2.eSet(eAttribute2, "test2");
+			expect( EcoreUtils.equals(eObject1,eObject1Copy)).toBeFalsy();
+		});
     });
 });
