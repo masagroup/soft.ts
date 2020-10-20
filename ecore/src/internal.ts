@@ -118,4 +118,5 @@ export * from "./EPackageRegistryImpl";
 export * from "./EResourceFactoryRegistryImpl";
 
 export * from "./DeepCopy";
+export * from "./DeepEqual";
 export * from "./EcoreUtils";
