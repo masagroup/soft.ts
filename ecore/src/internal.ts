@@ -10,7 +10,6 @@
 export * from "./Collection";
 export * from "./Constants";
 export * from "./EAdapter";
-export * from "./EcoreUtils";
 export * from "./EDiagnostic";
 export * from "./EFeatureMapEntry";
 export * from "./EList";
@@ -117,3 +116,6 @@ export * from "./XMLResourceFactory";
 
 export * from "./EPackageRegistryImpl";
 export * from "./EResourceFactoryRegistryImpl";
+
+export * from "./DeepCopy";
+export * from "./EcoreUtils";

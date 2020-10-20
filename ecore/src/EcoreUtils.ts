@@ -14,6 +14,8 @@ import {
     EResourceSet,
     EObjectInternal,
     getPackageRegistry,
+    EList,
+    DeepCopy,
 } from "./internal";
 
 export class EcoreUtils {
@@ -77,5 +79,19 @@ export class EcoreUtils {
             }
         }
         return proxy;
+    }
+
+    static copy(eObject : EObject ) : EObject {
+        let dc = new DeepCopy(true,true);
+        let c = dc.copy(eObject);
+        dc.copyReferences();
+        return c;
+    }
+
+    static copyAll( l : EList<EObject>) :  EList<EObject> {
+        let dc = new DeepCopy(true,true);
+        let c = dc.copyAll(l);
+        dc.copyReferences();
+        return c;
     }
 }
