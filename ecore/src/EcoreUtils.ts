@@ -16,6 +16,7 @@ import {
     getPackageRegistry,
     EList,
     DeepCopy,
+    DeepEqual,
 } from "./internal";
 
 export class EcoreUtils {
@@ -81,17 +82,27 @@ export class EcoreUtils {
         return proxy;
     }
 
-    static copy(eObject : EObject ) : EObject {
-        let dc = new DeepCopy(true,true);
+    static copy(eObject: EObject): EObject {
+        let dc = new DeepCopy(true, true);
         let c = dc.copy(eObject);
         dc.copyReferences();
         return c;
     }
 
-    static copyAll( l : EList<EObject>) :  EList<EObject> {
-        let dc = new DeepCopy(true,true);
+    static copyAll(l: EList<EObject>): EList<EObject> {
+        let dc = new DeepCopy(true, true);
         let c = dc.copyAll(l);
         dc.copyReferences();
         return c;
+    }
+
+    static equals(eObj1: EObject, eObj2: EObject): boolean {
+        let dE = new DeepEqual();
+        return dE.equals(eObj1, eObj2);
+    }
+
+    static equalsAll(l1: EList<EObject>, l2: EList<EObject>): boolean {
+        let dE = new DeepEqual();
+        return dE.equalsAll(l1, l2);
     }
 }

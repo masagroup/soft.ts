@@ -195,7 +195,7 @@ describe("EContentAdapter", () => {
             when(mockNotification.feature).thenReturn(reference);
             when(mockNotification.oldValue).thenReturn(oldObject);
             when(mockNotification.newValue).thenReturn(newObject);
-        
+
             adapter.notifyChanged(notification);
 
             verify(mockReference.isContainment).once();
@@ -209,7 +209,6 @@ describe("EContentAdapter", () => {
             verify(mockNotification.feature).once();
             verify(mockNotification.oldValue).once();
             verify(mockNotification.newValue).once();
-
         });
 
         test("set", () => {
@@ -256,7 +255,6 @@ describe("EContentAdapter", () => {
             verify(mockNotification.feature).once();
             verify(mockNotification.oldValue).once();
             verify(mockNotification.newValue).once();
-
         });
 
         test("add", () => {
@@ -283,7 +281,6 @@ describe("EContentAdapter", () => {
             when(mockNotification.newValue).thenReturn(newObject);
 
             adapter.notifyChanged(notification);
-
 
             verify(mockReference.isContainment).once();
             verify(mockNewObject.eAdapters).twice();
@@ -324,7 +321,7 @@ describe("EContentAdapter", () => {
             when(mockNotification.eventType).thenReturn(EventType.ADD_MANY);
             when(mockNotification.feature).thenReturn(reference);
             when(mockNotification.newValue).thenReturn(children);
-           
+
             adapter.notifyChanged(notification);
         });
 
@@ -391,7 +388,7 @@ describe("EContentAdapter", () => {
             when(mockNotification.eventType).thenReturn(EventType.REMOVE_MANY);
             when(mockNotification.feature).thenReturn(reference);
             when(mockNotification.oldValue).thenReturn(children);
-           
+
             adapter.notifyChanged(notification);
         });
     });
