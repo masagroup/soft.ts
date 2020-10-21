@@ -21,7 +21,9 @@ export abstract class Adapter implements EAdapter {
     }
 
     unsetTarget(notifier: ENotifier) {
-        if (this.target == notifier) this.target = notifier;
+        if (this._target == notifier) {
+            this._target = null;
+        }
     }
 
     abstract notifyChanged(notification: ENotification): void;

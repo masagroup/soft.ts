@@ -10,8 +10,8 @@
 export * from "./Collection";
 export * from "./Constants";
 export * from "./EAdapter";
-export * from "./EcoreUtils";
 export * from "./EDiagnostic";
+export * from "./EFeatureMapEntry";
 export * from "./EList";
 export * from "./ENotification";
 export * from "./ENotificationChain";
@@ -67,6 +67,7 @@ export * from "./BasicNotifier";
 export * from "./BasicEObject";
 export * from "./BasicEObjectList";
 export * from "./EObjectImpl";
+export * from "./EContentAdapter";
 export * from "./DynamicEObjectImpl";
 
 export * from "./EModelElementImpl";
@@ -115,3 +116,7 @@ export * from "./XMLResourceFactory";
 
 export * from "./EPackageRegistryImpl";
 export * from "./EResourceFactoryRegistryImpl";
+
+export * from "./DeepCopy";
+export * from "./DeepEqual";
+export * from "./EcoreUtils";

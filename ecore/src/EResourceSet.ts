@@ -40,3 +40,7 @@ export interface EResourceSet extends ENotifier {
     getURIResourceMap(): Map<string, EResource>;
     setURIResourceMap(uriMap: Map<string, EResource>): void;
 }
+
+export function isEResourceSet(o: any): o is EResourceSet {
+    return o == undefined ? undefined : typeof o["getResources"] === "function";
+}

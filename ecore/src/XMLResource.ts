@@ -128,7 +128,7 @@ export class XMLResource extends EResourceImpl {
         return s.saveToStream(ws);
     }
 
-    protected doSaveToString() : string {
+    protected doSaveToString(): string {
         let s = this.createSave();
         return s.saveToString();
     }
@@ -781,7 +781,7 @@ class XMLString {
         this.segments = [this.currentSegment];
     }
 
-    toString() : string {
+    toString(): string {
         let result = "";
         for (const segment of this.segments) {
             result += segment.buffer;
@@ -1021,10 +1021,9 @@ export class XMLSave {
         });
     }
 
-    saveToString() : string {
+    saveToString(): string {
         let contents = this._resource.eContents();
-        if (contents.isEmpty())
-            return "";
+        if (contents.isEmpty()) return "";
         this.saveHeader();
         let m = this.saveTopObject(contents.get(0));
         this.resetToMark(m);
@@ -1053,7 +1052,7 @@ export class XMLSave {
         let elementFeatures: number[];
         let elementCount = 0;
 
-        LOOP: for (let i = 0 ; i < eAllFeatures.size() ; i ++) {
+        LOOP: for (let i = 0; i < eAllFeatures.size(); i++) {
             let eFeature = eAllFeatures.get(i);
             let kind = this._featureKinds.get(eFeature);
             if (!kind) {
