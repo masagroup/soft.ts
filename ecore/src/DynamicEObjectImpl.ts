@@ -234,18 +234,43 @@ export class DynamicEObjectImpl extends EObjectImpl {
 
     eIsSetFromID(featureID: number): boolean {
         let dynamicFeatureID = featureID - this.eStaticClass().getFeatureCount();
-        if (dynamicFeatureID >= 0) return this._properties[dynamicFeatureID] != null;
-        else return super.eIsSetFromID(featureID);
+        if (dynamicFeatureID >= 0) {
+            let dynamicFeature = this.eDynamicFeature(featureID);
+            if (this.isContainer(dynamicFeature)) {
+                return this.eContainerFeatureID() == featureID && this.eInternalContainer() != null;
+            }
+            else {
+                return this._properties[dynamicFeatureID] != null;
+            }
+        }
+        else {
+            return super.eIsSetFromID(featureID);
+        }
     }
 
     eUnsetFromID(featureID: number): void {
         let dynamicFeatureID = featureID - this.eStaticClass().getFeatureCount();
         if (dynamicFeatureID >= 0) {
-            let oldValue = this._properties[dynamicFeatureID];
-            this._properties[dynamicFeatureID] = null;
-            if (this.eNotificationRequired)
-                this.eNotify(new Notification(this, EventType.UNSET, featureID, oldValue, null));
-        } else super.eUnsetFromID(featureID);
+            let dynamicFeature = this.eDynamicFeature(featureID);
+            if (this.isContainer(dynamicFeature)) {
+                if (this.eInternalContainer()) {
+                    let notifications = this.eBasicRemoveFromContainer(null);
+                    notifications = this.eBasicSetContainer(null, featureID, notifications);
+                    if (notifications) {
+                        notifications.dispatch();
+                    }
+                } else if (this.eNotificationRequired) {
+                    this.eNotify( new Notification(this, EventType.SET, featureID, null, null));
+                }
+            } else {
+                let oldValue = this._properties[dynamicFeatureID];
+                this._properties[dynamicFeatureID] = null;
+                if (this.eNotificationRequired)
+                    this.eNotify(new Notification(this, EventType.UNSET, featureID, oldValue, null));
+            }
+        } else {
+            super.eUnsetFromID(featureID);
+        }
     }
 
     eBasicInverseAdd(otherEnd : EObject, featureID : number, notifications : ENotificationChain) : ENotificationChain {
