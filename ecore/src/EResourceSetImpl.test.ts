@@ -52,6 +52,26 @@ describe("EResourceSetImpl", () => {
 
         verify(mockEResource.load()).once();
     });
+    
+    test('getRegisteredResource', () => {
+        let uriResource = new URL("test://file.t");
+        let rs = new EResourceSetImpl();
+    
+        // register resource
+        let mockEResource = mock<EResourceInternal>();
+        let eResource = instance(mockEResource);
+        when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null);
+        rs.getResources().add(eResource);
+    
+        // get registered resource - no loading
+        when(mockEResource.eURI).thenReturn(uriResource);
+        expect(rs.getResource(uriResource,false)).toBe(eResource);
+    
+        // get registered resource - loading
+        when(mockEResource.isLoaded).thenReturn(false);
+        expect(rs.getResource(uriResource,true)).toBe(eResource);
+        verify(mockEResource.load()).once();
+    });
 
     test("getEObject", () => {
         let mockEResourceFactoryRegitry = mock<EResourceFactoryRegistry>();
