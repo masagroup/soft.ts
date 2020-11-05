@@ -103,7 +103,7 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
             let resource = this._uriResourceMap.get(uri.toString());
             if (resource) {
                 if (loadOnDemand && !resource.isLoaded) {
-                    resource.load();
+                    resource.loadSync();
                 }
                 return resource;
             }
@@ -114,7 +114,7 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
             let resourceURI = this._uriConverter.normalize(resource.eURI);
             if (resourceURI.toString() == normalizedURI.toString()) {
                 if (loadOnDemand && !resource.isLoaded) {
-                    resource.load();
+                    resource.loadSync();
                 }
                 if (this._uriResourceMap) {
                     this._uriResourceMap.set(uri.toString(), resource);
@@ -126,7 +126,7 @@ export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
         if (loadOnDemand) {
             let resource = this.createResource(uri);
             if (resource) {
-                resource.load();
+                resource.loadSync();
             }
             return resource;
         }

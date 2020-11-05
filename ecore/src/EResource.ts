@@ -37,6 +37,7 @@ export interface EResource extends ENotifier {
 
     load(): Promise<void>;
     loadFromStream(s: fs.ReadStream): Promise<void>;
+    loadSync();
     loadFromString(s: string): void;
 
     unload(): void;
@@ -44,6 +45,7 @@ export interface EResource extends ENotifier {
 
     save(): Promise<void>;
     saveToStream(s: fs.WriteStream): Promise<void>;
+    saveSync();
     saveToString(): string;
 
     attached(object: EObject): void;
