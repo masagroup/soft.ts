@@ -262,6 +262,46 @@ export class DynamicEObjectImpl extends EObjectImpl {
                 } else if (this.eNotificationRequired) {
                     this.eNotify( new Notification(this, EventType.SET, featureID, null, null));
                 }
+            } else if (this.isBidirectional(dynamicFeature) || this.isContains(dynamicFeature)){
+                // inverse - opposite
+                let oldValue = this._properties[dynamicFeatureID];
+                if (oldValue) {
+                    let notifications : ENotificationChain = null;
+                    let oldObject = oldValue as EObject;
+
+                    if (!this.isBidirectional(dynamicFeature)) {
+                        if (oldObject) {
+                            notifications = (oldObject as EObjectInternal).eInverseRemove(this, EOPPOSITE_FEATURE_BASE-featureID, notifications);
+                        }
+                    } else {
+                        let dynamicReference = dynamicFeature as EReference;
+                        let reverseFeature = dynamicReference.eOpposite;
+                        if (oldObject) {
+                            notifications = (oldObject as EObjectInternal).eInverseRemove(this, reverseFeature.featureID, notifications);
+                        }
+                    }
+                    // basic unset
+                    this._properties[dynamicFeatureID] = null;
+
+                    // create notification
+                    if (this.eNotificationRequired) {
+                        let eventType = EventType.SET;
+                        if (dynamicFeature.isUnsettable) {
+                            eventType = EventType.UNSET;
+                        }
+                        let notification = new Notification(this, eventType, featureID, oldValue, null);
+                        if (notifications) {
+                            notifications.add(notification);
+                        } else {
+                            notifications = notification;
+                        }
+                    }
+
+                    // notify
+                    if (notifications) {
+                        notifications.dispatch();
+                    }
+                }
             } else {
                 let oldValue = this._properties[dynamicFeatureID];
                 this._properties[dynamicFeatureID] = null;
