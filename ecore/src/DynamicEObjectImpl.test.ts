@@ -97,8 +97,21 @@ describe("DynamicEObjectImpl", () => {
         let o2 = new DynamicEObjectImpl();
         o2.setEClass(c2);
 
+        expect(o2.eIsSet(r2)).toBeFalsy();
+        expect(o1.eIsSet(r1)).toBeFalsy();
+
         o2.eSet(r2, o1);
         expect(o2.eGet(r2)).toBe(o1);
         expect(o1.eGet(r1)).toBe(o2);
+        expect(o2.eIsSet(r2)).toBeTruthy();
+        expect(o1.eIsSet(r1)).toBeTruthy();
+
+
+        o2.eUnset(r2);
+        expect(o2.eGet(r2)).toBeNull();
+        expect(o1.eGet(r1)).toBeNull();
+        expect(o2.eIsSet(r2)).toBeFalsy();
+        expect(o1.eIsSet(r1)).toBeFalsy();
+
     });
 });
