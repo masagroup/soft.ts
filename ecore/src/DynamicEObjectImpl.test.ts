@@ -106,7 +106,9 @@ describe("DynamicEObjectImpl", () => {
 
         o2.eSet(r2, o1);
         expect(o2.eGet(r2)).toBe(o1);
+        expect(o2.eGetResolve(r2,false)).toBe(o1);
         expect(o1.eGet(r1)).toBe(o2);
+        expect(o1.eGetResolve(r1,false)).toBe(o2);
         expect(o2.eIsSet(r2)).toBeTruthy();
         expect(o1.eIsSet(r1)).toBeTruthy();
 
