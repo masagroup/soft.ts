@@ -16,7 +16,7 @@ export class FileURIHandler implements EURIHandler {
     }
 
     createReadStream(uri: URL): fs.ReadStream {
-        return fs.createReadStream(uri);
+        return fs.existsSync(uri) ? fs.createReadStream(uri) : null;
     }
 
     createWriteStream(uri: URL): fs.WriteStream {
