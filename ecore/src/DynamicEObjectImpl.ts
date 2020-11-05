@@ -330,37 +330,31 @@ export class DynamicEObjectImpl extends EObjectImpl {
                     msgs = this.eBasicRemoveFromContainer(msgs);
                 }
                 return this.eBasicSetContainer(otherEnd, featureID, msgs);
-            } else if (this.isBidirectional(dynamicFeature) || this.isContains(dynamicFeature)) {
+            } else {
                 // inverse - opposite
                 let oldValue = this._properties[dynamicFeatureID];
-                let oldObject = oldValue as EObject;
-                if (oldObject != otherEnd) {
+                if (oldValue) {
                     if (!this.isBidirectional(dynamicFeature)) {
-                        if (oldObject) {
-                            notifications = (oldObject as EObjectInternal).eInverseRemove(this, EOPPOSITE_FEATURE_BASE-featureID, notifications);
-                        }
+                        notifications = (oldValue as EObjectInternal).eInverseRemove(this, EOPPOSITE_FEATURE_BASE-featureID, notifications);
                     } else {
                         let dynamicReference = dynamicFeature as EReference;
                         let reverseFeature = dynamicReference.eOpposite;
-                        if (oldObject) {
-                            notifications = (oldObject as EObjectInternal).eInverseRemove(this, reverseFeature.featureID, notifications);
-                        }
-                    }
-    
-                    // set current value
-                    this._properties[dynamicFeatureID] = otherEnd;
-    
-                    // create notification
-                    if (this.eNotificationRequired ) {
-                        let notification =  new Notification(this, EventType.SET, featureID, oldValue, otherEnd);
-                        if (notifications) {
-                            notifications.add(notification);
-                        } else {
-                            notifications = notification;
-                        }
+                        notifications = (oldValue as EObjectInternal).eInverseRemove(this, reverseFeature.featureID, notifications);
                     }
                 }
-            }
+                // set current value
+                this._properties[dynamicFeatureID] = otherEnd;
+
+                // create notification
+                if (this.eNotificationRequired ) {
+                    let notification =  new Notification(this, EventType.SET, featureID, oldValue, otherEnd);
+                    if (notifications) {
+                        notifications.add(notification);
+                    } else {
+                        notifications = notification;
+                    }
+                }
+           }
         }
         return notifications;
     }
