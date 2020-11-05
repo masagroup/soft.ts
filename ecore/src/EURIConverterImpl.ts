@@ -27,6 +27,18 @@ export class EURIConverterImpl implements EURIConverter {
         return uriHandler ? uriHandler.createWriteStream(uri) : null;
     }
 
+    readSync(uri: URL) : null | string {
+        let uriHandler = this.getURIHandler(uri);
+        return uriHandler ? uriHandler.readSync(uri) : null;
+    }
+
+    writeSync(uri: URL, s: string ) {
+        let uriHandler = this.getURIHandler(uri);
+        if ( uriHandler ) {
+            uriHandler.writeSync(uri,s);
+        }
+    }
+
     normalize(uri: URL): URL {
         return uri;
     }
