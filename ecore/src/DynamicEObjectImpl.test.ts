@@ -172,9 +172,16 @@ describe("DynamicEObjectImpl", () => {
         let oproxy = new DynamicEObjectImpl();
         oproxy.eSetProxyURI(new URL("file:///" + __dirname + "/r.txt#//@r1.1"));
     
+        expect(o3.eIsSet(r3)).toBeFalsy();
+
         o3.eSet(r3, oproxy);
         expect(o3.eGetResolve(r3, false)).toBe(oproxy);
         expect(o3.eGetResolve(r3, true)).toBe(o1c2);
+        expect(o3.eIsSet(r3)).toBeTruthy();
+
+        o3.eUnset(r3);
+        expect(o3.eGet(r3)).toBeNull();
+        expect(o3.eIsSet(r3)).toBeFalsy();
     });
 
 });
