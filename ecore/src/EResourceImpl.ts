@@ -264,6 +264,18 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
         return Promise.reject();
     }
 
+    loadSync() {
+        if (!this._isLoaded) {
+            let uriConverter = this.getURIConverter();
+            if (uriConverter) {
+                let s = uriConverter.readSync(this._uri);
+                if (s) {
+                    return this.loadFromString(s);
+                }
+            }
+        }
+    }
+
     loadFromString(s: string) {
         this.doLoadFromString(s);
         let n = this.basicSetLoaded(true, null);
@@ -310,6 +322,13 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
 
     saveToStream(s: fs.WriteStream): Promise<void> {
         return this.doSaveToStream(s);
+    }
+
+    saveSync() {
+        let uriConverter = this.getURIConverter();
+        if (uriConverter) {
+            uriConverter.writeSync(this._uri,this.saveToString());
+        }
     }
 
     saveToString(): string {

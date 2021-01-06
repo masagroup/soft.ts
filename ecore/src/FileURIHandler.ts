@@ -16,10 +16,18 @@ export class FileURIHandler implements EURIHandler {
     }
 
     createReadStream(uri: URL): fs.ReadStream {
-        return fs.createReadStream(uri);
+        return fs.existsSync(uri) ? fs.createReadStream(uri) : null;
     }
 
     createWriteStream(uri: URL): fs.WriteStream {
         return fs.createWriteStream(uri);
+    }
+
+    readSync(uri: URL) : null | string {
+        return fs.existsSync(uri) ? fs.readFileSync(uri).toString() : null;
+    }
+
+    writeSync(uri: URL, s: string ) {
+        fs.writeFileSync(uri,s);
     }
 }

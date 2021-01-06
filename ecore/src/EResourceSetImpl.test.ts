@@ -8,8 +8,7 @@
 // *****************************************************************************
 
 import { anything, instance, mock, verify, when } from "ts-mockito";
-import { EObject, EResourceFactory, EResourceFactoryRegistry, EResourceInternal } from "./index";
-import { EResourceSetImpl, EResourceImpl } from "./internal";
+import { EObject, EResourceFactory, EResourceFactoryRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl } from "./internal";
 
 describe("EResourceSetImpl", () => {
     test("constructor", () => {
@@ -50,7 +49,27 @@ describe("EResourceSetImpl", () => {
 
         expect(rs.getResource(uriResource, true)).toBe(eResource);
 
-        verify(mockEResource.load()).once();
+        verify(mockEResource.loadSync()).once();
+    });
+    
+    test('getRegisteredResource', () => {
+        let uriResource = new URL("test://file.t");
+        let rs = new EResourceSetImpl();
+    
+        // register resource
+        let mockEResource = mock<EResourceInternal>();
+        let eResource = instance(mockEResource);
+        when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null);
+        rs.getResources().add(eResource);
+    
+        // get registered resource - no loading
+        when(mockEResource.eURI).thenReturn(uriResource);
+        expect(rs.getResource(uriResource,false)).toBe(eResource);
+    
+        // get registered resource - loading
+        when(mockEResource.isLoaded).thenReturn(false);
+        expect(rs.getResource(uriResource,true)).toBe(eResource);
+        verify(mockEResource.loadSync()).once();
     });
 
     test("getEObject", () => {
@@ -74,6 +93,6 @@ describe("EResourceSetImpl", () => {
 
         expect(rs.getEObject(uriObject, true)).toBe(eObject);
 
-        verify(mockEResource.load()).once();
+        verify(mockEResource.loadSync()).once();
     });
 });

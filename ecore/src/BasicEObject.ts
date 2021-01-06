@@ -586,7 +586,7 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         if (isEReference(feature)) {
             let inverseFeature = feature.eOpposite;
             if (this._eContainer != null && inverseFeature != null)
-                return this.eInverseRemove(this, inverseFeature.featureID, notifications);
+                return (this._eContainer as EObjectInternal).eInverseRemove(this, inverseFeature.featureID, notifications);
         }
         return notifications;
     }
