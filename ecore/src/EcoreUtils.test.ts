@@ -225,16 +225,16 @@ describe("EcoreUtils", () => {
 
             // the model
             let eObject = eFactory.create(eClass);
-            (eObject as EObjectInternal).eSetProxyURI( new URL("file://test"));
+            (eObject as EObjectInternal).eSetProxyURI(new URL("file://test"));
 
             let eObjectCopy = EcoreUtils.copy(eObject);
-            expect( EcoreUtils.equals(eObject,eObjectCopy)).toBeTruthy();
+            expect(EcoreUtils.equals(eObject, eObjectCopy)).toBeTruthy();
         });
 
-        test("real",() =>{
+        test("real", () => {
             let eClass = getEcorePackage().getEClass();
             let eClassCopy = EcoreUtils.copy(eClass);
-            expect( EcoreUtils.equals(eClass,eClassCopy)).toBeTruthy();
+            expect(EcoreUtils.equals(eClass, eClassCopy)).toBeTruthy();
         });
     });
 });

@@ -125,9 +125,7 @@ export class EModelElementExt extends EModelElementImpl {
         if (isENamedElement(o)) {
             let count = 0;
             let name = o.name;
-            for (const otherObject of (this.eContents() as EObjectList<
-                EObject
-            >).getUnResolvedList()) {
+            for (const otherObject of (this.eContents() as EObjectList<EObject>).getUnResolvedList()) {
                 if (otherObject == o) {
                     break;
                 }

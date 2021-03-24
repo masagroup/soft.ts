@@ -15,9 +15,9 @@ export interface EURIConverter {
 
     createWriteStream(uri: URL): fs.WriteStream;
 
-    readSync(uri: URL) : null | string;
+    readSync(uri: URL): null | string;
 
-    writeSync(uri: URL, s: string );
+    writeSync(uri: URL, s: string);
 
     normalize(uri: URL): URL;
 

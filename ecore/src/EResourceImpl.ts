@@ -327,7 +327,7 @@ export class EResourceImpl extends BasicNotifier implements EResourceInternal {
     saveSync() {
         let uriConverter = this.getURIConverter();
         if (uriConverter) {
-            uriConverter.writeSync(this._uri,this.saveToString());
+            uriConverter.writeSync(this._uri, this.saveToString());
         }
     }
 

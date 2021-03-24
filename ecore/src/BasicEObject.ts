@@ -45,7 +45,8 @@ function isNumeric(n) {
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
 
-abstract class AbstractContentsList extends ImmutableEList<EObject>
+abstract class AbstractContentsList
+    extends ImmutableEList<EObject>
     implements EObjectList<EObject> {
     protected _obj: BasicEObject;
     protected _getFeatureFn: getFeatureFnType;
@@ -313,29 +314,33 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eContents(): EList<EObject> {
         if (!this._contentsListAdapter)
-            this._contentsListAdapter = new ContentsListAdapter(this, function (
-                c: EClass
-            ): EList<EStructuralFeature> {
-                return c.eContainmentFeatures;
-            });
+            this._contentsListAdapter = new ContentsListAdapter(
+                this,
+                function (c: EClass): EList<EStructuralFeature> {
+                    return c.eContainmentFeatures;
+                }
+            );
         return this._contentsListAdapter.getList();
     }
 
     eAllContents(): IterableIterator<EObject> {
-        return new ETreeIterator<EObject, EObject>(this, false, function (
-            o: EObject
-        ): Iterator<EObject> {
-            return o.eContents()[Symbol.iterator]();
-        });
+        return new ETreeIterator<EObject, EObject>(
+            this,
+            false,
+            function (o: EObject): Iterator<EObject> {
+                return o.eContents()[Symbol.iterator]();
+            }
+        );
     }
 
     eCrossReferences(): EList<EObject> {
         if (!this._crossReferencesListAdapter)
-            this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
-                c: EClass
-            ): EList<EStructuralFeature> {
-                return c.eCrossReferenceFeatures;
-            });
+            this._crossReferencesListAdapter = new ContentsListAdapter(
+                this,
+                function (c: EClass): EList<EStructuralFeature> {
+                    return c.eCrossReferenceFeatures;
+                }
+            );
         return this._crossReferencesListAdapter.getList();
     }
 
@@ -586,7 +591,11 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         if (isEReference(feature)) {
             let inverseFeature = feature.eOpposite;
             if (this._eContainer != null && inverseFeature != null)
-                return (this._eContainer as EObjectInternal).eInverseRemove(this, inverseFeature.featureID, notifications);
+                return (this._eContainer as EObjectInternal).eInverseRemove(
+                    this,
+                    inverseFeature.featureID,
+                    notifications
+                );
         }
         return notifications;
     }
