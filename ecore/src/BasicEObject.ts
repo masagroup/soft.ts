@@ -1,9 +1,9 @@
 // *****************************************************************************
+// Copyright(c) 2021 MASA Group
 //
-// This file is part of a MASA library or program.
-// Refer to the included end-user license agreement for restrictions.
-//
-// Copyright (c) 2020 MASA Group
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
 
@@ -45,7 +45,8 @@ function isNumeric(n) {
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
 
-abstract class AbstractContentsList extends ImmutableEList<EObject>
+abstract class AbstractContentsList
+    extends ImmutableEList<EObject>
     implements EObjectList<EObject> {
     protected _obj: BasicEObject;
     protected _getFeatureFn: getFeatureFnType;
@@ -313,29 +314,33 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
 
     eContents(): EList<EObject> {
         if (!this._contentsListAdapter)
-            this._contentsListAdapter = new ContentsListAdapter(this, function (
-                c: EClass
-            ): EList<EStructuralFeature> {
-                return c.eContainmentFeatures;
-            });
+            this._contentsListAdapter = new ContentsListAdapter(
+                this,
+                function (c: EClass): EList<EStructuralFeature> {
+                    return c.eContainmentFeatures;
+                }
+            );
         return this._contentsListAdapter.getList();
     }
 
     eAllContents(): IterableIterator<EObject> {
-        return new ETreeIterator<EObject, EObject>(this, false, function (
-            o: EObject
-        ): Iterator<EObject> {
-            return o.eContents()[Symbol.iterator]();
-        });
+        return new ETreeIterator<EObject, EObject>(
+            this,
+            false,
+            function (o: EObject): Iterator<EObject> {
+                return o.eContents()[Symbol.iterator]();
+            }
+        );
     }
 
     eCrossReferences(): EList<EObject> {
         if (!this._crossReferencesListAdapter)
-            this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
-                c: EClass
-            ): EList<EStructuralFeature> {
-                return c.eCrossReferenceFeatures;
-            });
+            this._crossReferencesListAdapter = new ContentsListAdapter(
+                this,
+                function (c: EClass): EList<EStructuralFeature> {
+                    return c.eCrossReferenceFeatures;
+                }
+            );
         return this._crossReferencesListAdapter.getList();
     }
 
@@ -586,7 +591,11 @@ export class BasicEObject extends BasicNotifier implements EObjectInternal {
         if (isEReference(feature)) {
             let inverseFeature = feature.eOpposite;
             if (this._eContainer != null && inverseFeature != null)
-                return (this._eContainer as EObjectInternal).eInverseRemove(this, inverseFeature.featureID, notifications);
+                return (this._eContainer as EObjectInternal).eInverseRemove(
+                    this,
+                    inverseFeature.featureID,
+                    notifications
+                );
         }
         return notifications;
     }

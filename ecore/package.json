@@ -1,6 +1,6 @@
 {
   "name": "@masagroup/ecore",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ecore typescript library",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -12,13 +12,13 @@
   "author": "MasaGroup",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^26.0.14",
-    "deep-equal": "^2.0.3",
-    "jest": "^26.4.2",
-    "prettier": "^2.0.5",
-    "ts-jest": "^26.3.0",
+    "@types/jest": "^26.0.21",
+    "deep-equal": "^2.0.5",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.4",
     "ts-mockito": "^2.6.1",
-    "typescript": "^4.0.2"
+    "typescript": "^4.2.3"
   },
   "jest": {
     "preset": "ts-jest",

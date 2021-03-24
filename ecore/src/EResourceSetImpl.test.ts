@@ -1,14 +1,21 @@
 // *****************************************************************************
+// Copyright(c) 2021 MASA Group
 //
-// This file is part of a MASA library or program.
-// Refer to the included end-user license agreement for restrictions.
-//
-// Copyright (c) 2020 MASA Group
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
 
 import { anything, instance, mock, verify, when } from "ts-mockito";
-import { EObject, EResourceFactory, EResourceFactoryRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl } from "./internal";
+import {
+    EObject,
+    EResourceFactory,
+    EResourceFactoryRegistry,
+    EResourceInternal,
+    EResourceSetImpl,
+    EResourceImpl,
+} from "./internal";
 
 describe("EResourceSetImpl", () => {
     test("constructor", () => {
@@ -51,24 +58,24 @@ describe("EResourceSetImpl", () => {
 
         verify(mockEResource.loadSync()).once();
     });
-    
-    test('getRegisteredResource', () => {
+
+    test("getRegisteredResource", () => {
         let uriResource = new URL("test://file.t");
         let rs = new EResourceSetImpl();
-    
+
         // register resource
         let mockEResource = mock<EResourceInternal>();
         let eResource = instance(mockEResource);
         when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null);
         rs.getResources().add(eResource);
-    
+
         // get registered resource - no loading
         when(mockEResource.eURI).thenReturn(uriResource);
-        expect(rs.getResource(uriResource,false)).toBe(eResource);
-    
+        expect(rs.getResource(uriResource, false)).toBe(eResource);
+
         // get registered resource - loading
         when(mockEResource.isLoaded).thenReturn(false);
-        expect(rs.getResource(uriResource,true)).toBe(eResource);
+        expect(rs.getResource(uriResource, true)).toBe(eResource);
         verify(mockEResource.loadSync()).once();
     });
 

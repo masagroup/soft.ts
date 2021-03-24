@@ -1,9 +1,9 @@
 // *****************************************************************************
+// Copyright(c) 2021 MASA Group
 //
-// This file is part of a MASA library or program.
-// Refer to the included end-user license agreement for restrictions.
-//
-// Copyright (c) 2020 MASA Group
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
 
@@ -27,15 +27,15 @@ export class EURIConverterImpl implements EURIConverter {
         return uriHandler ? uriHandler.createWriteStream(uri) : null;
     }
 
-    readSync(uri: URL) : null | string {
+    readSync(uri: URL): null | string {
         let uriHandler = this.getURIHandler(uri);
         return uriHandler ? uriHandler.readSync(uri) : null;
     }
 
-    writeSync(uri: URL, s: string ) {
+    writeSync(uri: URL, s: string) {
         let uriHandler = this.getURIHandler(uri);
-        if ( uriHandler ) {
-            uriHandler.writeSync(uri,s);
+        if (uriHandler) {
+            uriHandler.writeSync(uri, s);
         }
     }
 

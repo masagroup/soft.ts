@@ -1,9 +1,9 @@
 // *****************************************************************************
+// Copyright(c) 2021 MASA Group
 //
-// This file is part of a MASA library or program.
-// Refer to the included end-user license agreement for restrictions.
-//
-// Copyright (c) 2020 MASA Group
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
 
@@ -16,11 +16,13 @@ describe("ETreeIterator", () => {
         let emptyList = new ImmutableEList<EObject>();
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
-        let it = new ETreeIterator<EObject, EObject>(object, true, function (
-            o: EObject
-        ): Iterator<EObject> {
-            return emptyList[Symbol.iterator]();
-        });
+        let it = new ETreeIterator<EObject, EObject>(
+            object,
+            true,
+            function (o: EObject): Iterator<EObject> {
+                return emptyList[Symbol.iterator]();
+            }
+        );
         expect(deepEqual(it.next(), { value: object, done: false })).toBeTruthy();
         expect(deepEqual(it.next(), { value: undefined, done: true })).toBeTruthy();
     });
@@ -29,11 +31,13 @@ describe("ETreeIterator", () => {
         let emptyList = new ImmutableEList<EObject>();
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
-        let it = new ETreeIterator<EObject, EObject>(object, false, function (
-            o: EObject
-        ): Iterator<EObject> {
-            return emptyList[Symbol.iterator]();
-        });
+        let it = new ETreeIterator<EObject, EObject>(
+            object,
+            false,
+            function (o: EObject): Iterator<EObject> {
+                return emptyList[Symbol.iterator]();
+            }
+        );
         expect(deepEqual(it.next(), { value: undefined, done: true })).toBeTruthy();
     });
 
@@ -41,11 +45,13 @@ describe("ETreeIterator", () => {
         let emptyList = new ImmutableEList<EObject>();
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
-        let it = new ETreeIterator<EObject, EObject>(object, true, function (
-            o: EObject
-        ): Iterator<EObject> {
-            return emptyList[Symbol.iterator]();
-        });
+        let it = new ETreeIterator<EObject, EObject>(
+            object,
+            true,
+            function (o: EObject): Iterator<EObject> {
+                return emptyList[Symbol.iterator]();
+            }
+        );
         expect(deepEqual([...it], [object])).toBeTruthy();
     });
 
@@ -71,11 +77,13 @@ describe("ETreeIterator", () => {
         when(mockGrandChild1.eContents()).thenReturn(emptyList);
         when(mockGrandChild2.eContents()).thenReturn(emptyList);
 
-        let it = new ETreeIterator<EObject, EObject>(object, false, function (
-            o: EObject
-        ): Iterator<EObject> {
-            return o.eContents()[Symbol.iterator]();
-        });
+        let it = new ETreeIterator<EObject, EObject>(
+            object,
+            false,
+            function (o: EObject): Iterator<EObject> {
+                return o.eContents()[Symbol.iterator]();
+            }
+        );
         expect(deepEqual([...it], [child1, grandChild1, grandChild2, child2])).toBeTruthy();
     });
 });

@@ -1,9 +1,9 @@
 // *****************************************************************************
+// Copyright(c) 2021 MASA Group
 //
-// This file is part of a MASA library or program.
-// Refer to the included end-user license agreement for restrictions.
-//
-// Copyright (c) 2020 MASA Group
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
 
@@ -225,16 +225,16 @@ describe("EcoreUtils", () => {
 
             // the model
             let eObject = eFactory.create(eClass);
-            (eObject as EObjectInternal).eSetProxyURI( new URL("file://test"));
+            (eObject as EObjectInternal).eSetProxyURI(new URL("file://test"));
 
             let eObjectCopy = EcoreUtils.copy(eObject);
-            expect( EcoreUtils.equals(eObject,eObjectCopy)).toBeTruthy();
+            expect(EcoreUtils.equals(eObject, eObjectCopy)).toBeTruthy();
         });
 
-        test("real",() =>{
+        test("real", () => {
             let eClass = getEcorePackage().getEClass();
             let eClassCopy = EcoreUtils.copy(eClass);
-            expect( EcoreUtils.equals(eClass,eClassCopy)).toBeTruthy();
+            expect(EcoreUtils.equals(eClass, eClassCopy)).toBeTruthy();
         });
     });
 });
