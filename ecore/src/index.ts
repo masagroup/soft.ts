@@ -62,4 +62,7 @@ export {
     isEObject,
     isEObjectInternal,
     isEObjectList,
+    EOPPOSITE_FEATURE_BASE,
+    NO_INDEX,
+    UNBOUNDED_MULTIPLICITY,
 } from "./internal";
