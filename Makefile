@@ -1,4 +1,4 @@
-.PHONY: all ecore ecore.install ecore.generate ecore.format ecore.build ecore.test library library.install library.generate library.build library.test
+.PHONY: all ecore ecore.install ecore.generate ecore.format ecore.build ecore.test library library.install library.generate library.build library.test version
 
 all: image ecore library
 
@@ -37,6 +37,12 @@ library.build:
 
 library.test:
 	@docker run --rm -v $(pwd):/pwd -w /pwd/library masagroup/soft.ts.dev npm run test
+
+ecore.ts.version := 1.0.2
+
+version:
+	@echo "update ecore package version to $(ecore.ts.version)"
+	@sed -i 's#"version": "[0-9]*\.[0-9]*\.[0-9]*",#"version": "$(ecore.ts.version)",#g' ecore/package.json
 
 
 
