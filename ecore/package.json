@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "pretty": "prettier --write **/*.ts"
+    "pretty": "prettier --write src/**/*.ts"
   },
   "author": "MasaGroup",
   "license": "ISC",
