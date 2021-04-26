@@ -30,7 +30,7 @@ library.install:
 	@docker run --rm -v $(pwd):/pwd -w /pwd/library masagroup/soft.ts.dev npm install
 
 library.generate:
-	@docker run --rm -v $(pwd):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/library.library -o /pwd -ps /pwd/generator.properties -t !generateModule
+	@docker run --rm -v $(pwd):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/library.ecore -o /pwd -ps /pwd/generator.properties
 
 library.build:
 	@docker run --rm -v $(pwd):/pwd -w /pwd/library masagroup/soft.ts.dev npm run build
