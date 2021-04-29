@@ -64,11 +64,6 @@ ecore.test:
 	@echo "[ecore.test]"
 	@(cd ecore && $(NPM) run test)
 
-.PHONY: ecore.version
-ecore.version:
-	@echo "[ecore.version]"
-	@sed -i 's#"version": "[0-9]*\.[0-9]*\.[0-9]*",#"version": "$(ECORE_TS_VERSION)",#g' ecore/package.json
-
 .PHONY: library
 library: library.install library.generate library.build library.test
 
@@ -92,3 +87,7 @@ library.test:
 	@echo "[library.test]"
 	@(cd library && $(NPM) run test)
 
+.PHONY: versions
+versions:
+	@echo "[ecore.version]"
+	@sed -i 's#"version": "[0-9]*\.[0-9]*\.[0-9]*",#"version": "$(ECORE_TS_VERSION)",#g' ecore/package.json
