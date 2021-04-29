@@ -1,0 +1,32 @@
+name: Build and Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+    - name: Checkout TS
+      uses: actions/checkout@v2
+      with:
+        path: ts
+    - name: Checkout Models
+      uses: actions/checkout@v2
+      with:
+        repository: masagroup/soft.models
+        ref: 0105c44ad195c59872eee3fa7ad16b0bca6a37c7
+        path: models
+    - name: Build and Test
+      working-directory: ts
+      run: make
+    
