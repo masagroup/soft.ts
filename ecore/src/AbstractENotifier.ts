@@ -11,25 +11,24 @@ import { ImmutableEList } from "./ImmutableEList";
 import { EAdapter, EList, ENotification, ENotifier } from "./internal";
 
 export class AbstractENotifier implements ENotifier {
-
-    protected eBasicAdapters() : EList<EAdapter> {
-        return null
+    protected eBasicAdapters(): EList<EAdapter> {
+        return null;
     }
 
-    protected eBasicHasAdapters() : boolean {
-        let adapters = this.eBasicAdapters()
+    protected eBasicHasAdapters(): boolean {
+        let adapters = this.eBasicAdapters();
         return adapters && !adapters.isEmpty();
     }
 
     get eAdapters(): EList<EAdapter> {
-        return new ImmutableEList()
+        return new ImmutableEList();
     }
 
-    get eDeliver() : boolean {
-        return false
+    get eDeliver(): boolean {
+        return false;
     }
 
-    set eDeliver( boolean ) {
+    set eDeliver(boolean) {
         throw new Error("Unsupported operation.");
     }
 
@@ -41,9 +40,7 @@ export class AbstractENotifier implements ENotifier {
         if (this.eNotificationRequired) {
             for (const adapter of this.eBasicAdapters()) {
                 adapter.notifyChanged(notification);
-            } 
-        } 
+            }
+        }
     }
-
 }
-

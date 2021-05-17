@@ -7,69 +7,69 @@
 //
 // *****************************************************************************
 
-import { EList , EAdapter, AbstractENotifier} from "./internal";
+import { EList, EAdapter, AbstractENotifier } from "./internal";
 import { instance, mock, verify, when } from "ts-mockito";
 import { ImmutableEList } from "./ImmutableEList";
 import { ENotification } from "./ENotification";
 
 class ENotifierTest extends AbstractENotifier {
-    deliver : boolean;
-    adapters : EList<EAdapter>;
- 
+    deliver: boolean;
+    adapters: EList<EAdapter>;
+
     constructor() {
         super();
         this.deliver = false;
         this.adapters = null;
-        
     }
 
-    get eDeliver() : boolean {
-        return this.deliver
+    get eDeliver(): boolean {
+        return this.deliver;
     }
 
-    set eDeliver(eDeliver : boolean) {
-        super.eDeliver = eDeliver
-    } 
+    set eDeliver(eDeliver: boolean) {
+        super.eDeliver = eDeliver;
+    }
 
-    protected eBasicAdapters() : EList<EAdapter> {
-        return this.adapters
-    }    
+    protected eBasicAdapters(): EList<EAdapter> {
+        return this.adapters;
+    }
 }
 
-
-describe('AbstractENotifier', () => {
-    test('constructor', () => {
+describe("AbstractENotifier", () => {
+    test("constructor", () => {
         expect(new AbstractENotifier()).not.toBeNull();
     });
-    describe('eDeliver ', () => {
-        test('get', () => {
+    describe("eDeliver ", () => {
+        test("get", () => {
             let n = new AbstractENotifier();
             expect(n.eDeliver).toBeFalsy();
         });
-        test('set', () => {
+        test("set", () => {
             let n = new AbstractENotifier();
-            expect(() => { n.eDeliver = true }).toThrow(Error);
-        });        
+            expect(() => {
+                n.eDeliver = true;
+            }).toThrow(Error);
+        });
     });
-    test('eAdapters', () => {
+    test("eAdapters", () => {
         let n = new AbstractENotifier();
-        expect(n.eAdapters).not.toBeNull()
-        expect(n.eAdapters.isEmpty()).toBeTruthy()
+        expect(n.eAdapters).not.toBeNull();
+        expect(n.eAdapters.isEmpty()).toBeTruthy();
     });
-    describe('eNotificationRequired', () => {
-        test('default', () => {
+    describe("eNotificationRequired", () => {
+        test("default", () => {
             let n = new AbstractENotifier();
             expect(n.eNotificationRequired).toBeFalsy();
         });
-        test('deliver', () => {
+        test("deliver", () => {
             let n = new ENotifierTest();
             n.deliver = true;
             expect(n.eNotificationRequired).toBeFalsy();
         });
-        test('adapters', () => {
+        test("adapters", () => {
             let n = new ENotifierTest();
             let mockAdapters = mock<EList<EAdapter>>();
-            let instanceAdapters = instance(mockAdapters)
+            let instanceAdapters = instance(mockAdapters);
             n.deliver = true;
             n.adapters = instanceAdapters;
             when(mockAdapters.isEmpty()).thenReturn(true);
@@ -81,17 +81,17 @@ describe('AbstractENotifier', () => {
             verify(mockAdapters.isEmpty()).twice();
         });
     });
-    test('eNotify', () => {
+    test("eNotify", () => {
         let n = new ENotifierTest();
         let mockNotification = mock<ENotification>();
-        let notification = instance(mockNotification)
-        n.eNotify(notification)
-        
+        let notification = instance(mockNotification);
+        n.eNotify(notification);
+
         let mockAdapter = mock<EAdapter>();
-        let adapter = instance(mockAdapter)
-        n.deliver = true
-        n.adapters = new ImmutableEList<EAdapter>([adapter])
-        n.eNotify(notification)
-        verify(mockAdapter.notifyChanged(notification)).once()
+        let adapter = instance(mockAdapter);
+        n.deliver = true;
+        n.adapters = new ImmutableEList<EAdapter>([adapter]);
+        n.eNotify(notification);
+        verify(mockAdapter.notifyChanged(notification)).once();
     });
 });

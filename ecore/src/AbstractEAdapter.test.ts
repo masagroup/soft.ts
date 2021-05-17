@@ -8,9 +8,7 @@
 // *****************************************************************************
 
 import { ENotification } from "./ENotification";
-import {
-    AbstractEAdapter, ENotifier
-} from "./internal"
+import { AbstractEAdapter, ENotifier } from "./internal";
 import { instance, mock, when, verify, anything, strictEqual, objectContaining } from "ts-mockito";
 
 class EAdapterTest extends AbstractEAdapter {
@@ -19,28 +17,27 @@ class EAdapterTest extends AbstractEAdapter {
     }
 }
 
-describe('AbstractEAdapter', () => {
-    test('get', () => {
-        let a = new EAdapterTest;
-        expect(a.target).toBeNull()
+describe("AbstractEAdapter", () => {
+    test("get", () => {
+        let a = new EAdapterTest();
+        expect(a.target).toBeNull();
     });
-    test('set', () => {
-        let a = new EAdapterTest;
+    test("set", () => {
+        let a = new EAdapterTest();
         let mockNotifier = mock<ENotifier>();
         let notifier = instance(mockNotifier);
         a.target = notifier;
         expect(a.target).not.toBeNull();
         expect(a.target).toBe(notifier);
-        
     });
-    test('unset', () => {
-        let a = new EAdapterTest;
+    test("unset", () => {
+        let a = new EAdapterTest();
         let mockNotifier = mock<ENotifier>();
         let notifier = instance(mockNotifier);
-        a.unsetTarget(notifier)
+        a.unsetTarget(notifier);
         expect(a.target).toBeNull();
         a.target = notifier;
-        a.unsetTarget(notifier)
+        a.unsetTarget(notifier);
         expect(a.target).toBeNull();
     });
 });
