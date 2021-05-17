@@ -12,7 +12,7 @@ import { Collection, EList, getNonDuplicates } from "./internal";
 export abstract class AbstractEList<E> implements EList<E> {
     protected _isUnique: boolean;
 
-    constructor(isUnique: boolean = false) {
+    constructor(isUnique: boolean) {
         this._isUnique = isUnique;
     }
 
