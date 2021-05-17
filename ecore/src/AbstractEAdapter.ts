@@ -13,7 +13,7 @@ export abstract class AbstractEAdapter implements EAdapter {
     private _target: ENotifier;
 
     get target(): ENotifier {
-        return this._target;
+        return this._target ?? null;
     }
 
     set target(notifier: ENotifier) {
@@ -22,7 +22,7 @@ export abstract class AbstractEAdapter implements EAdapter {
 
     unsetTarget(notifier: ENotifier) {
         if (this._target == notifier) {
-            this._target = null;
+            delete this._target;
         }
     }
 
