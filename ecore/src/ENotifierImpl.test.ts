@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { mock, verify, instance } from "ts-mockito";
+import { mock, verify, instance, notNull } from "ts-mockito";
 import { EAdapter, ENotification, ENotifierImpl } from "./internal";
 
 describe("ENotifierImpl", () => {
@@ -16,7 +16,18 @@ describe("ENotifierImpl", () => {
         expect(n.eDeliver).toBeTruthy();
         expect(n.eAdapters.isEmpty()).toBeTruthy();
     });
-
+    test("eDeliver", () => {
+        let n = new ENotifierImpl();
+        expect(n.eDeliver).toBeTruthy();
+        n.eDeliver = false;
+        expect(n.eDeliver).toBeFalsy();
+    });
+    test('eAdapters', () => {
+        let n = new ENotifierImpl();
+        expect(n.eBasicAdapters()).toBeNull();
+        expect(n.eAdapters).not.toBeNull();
+        expect(n.eBasicAdapters()).not.toBeNull();
+    });
     test("eNotify", () => {
         // mocks
         const mockAdapter = mock<EAdapter>();
