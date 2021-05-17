@@ -57,6 +57,7 @@ export * from "./EcoreFactory";
 
 export * from "./AbstractEAdapter";
 export * from "./AbstractEList";
+export * from "./AbstractENotifier";
 export * from "./AbstractNotification";
 export * from "./Notification";
 export * from "./NotificationChain";
