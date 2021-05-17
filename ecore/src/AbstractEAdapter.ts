@@ -7,13 +7,13 @@
 //
 // *****************************************************************************
 
-import { EAdapter, ENotifier, ENotification } from "./internal";
+import { EAdapter, ENotification, ENotifier } from "./internal";
 
 export abstract class AbstractEAdapter implements EAdapter {
-    private _target: ENotifier;
+    private _target: ENotifier = null;
 
     get target(): ENotifier {
-        return this._target ?? null;
+        return this._target;
     }
 
     set target(notifier: ENotifier) {
@@ -22,7 +22,7 @@ export abstract class AbstractEAdapter implements EAdapter {
 
     unsetTarget(notifier: ENotifier) {
         if (this._target == notifier) {
-            delete this._target;
+            this._target = null;
         }
     }
 

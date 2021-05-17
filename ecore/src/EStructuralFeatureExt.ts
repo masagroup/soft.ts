@@ -7,10 +7,14 @@
 //
 // *****************************************************************************
 
-import { EStructuralFeatureImpl } from "./internal";
+import { EStructuralFeature, EStructuralFeatureImpl } from "./internal";
 
 export class EStructuralFeatureExt extends EStructuralFeatureImpl {
     constructor() {
         super();
     }
+}
+
+export function isMapType(feature: EStructuralFeature): boolean {
+    return feature.eType && feature.eType.instanceTypeName == "ecore.EMapEntry";
 }

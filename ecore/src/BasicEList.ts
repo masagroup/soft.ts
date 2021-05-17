@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { Collection, AbstractEList } from "./internal";
+import { AbstractEList, Collection } from "./internal";
 
 export class BasicEList<E> extends AbstractEList<E> {
     protected _v: E[];

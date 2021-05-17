@@ -7,10 +7,33 @@
 //
 // *****************************************************************************
 
-import { EClass, EClassifier, EReferenceImpl } from "./internal";
+import {
+    EClass,
+    EClassifier,
+    EReference,
+    EReferenceImpl,
+    EStructuralFeature,
+    isEClass,
+} from "./internal";
 
-function isEClass(e: EClassifier): e is EClass {
-    return "isAbstract" in e;
+export function isEReference(s: EStructuralFeature): s is EReference {
+    return "eReferenceType" in s;
+}
+
+export function isContainer(feature: EStructuralFeature): boolean {
+    return isEReference(feature) && feature.eOpposite && feature.eOpposite.isContainment;
+}
+
+export function isBidirectional(feature: EStructuralFeature): boolean {
+    return isEReference(feature) && feature.eOpposite != null;
+}
+
+export function isContains(feature: EStructuralFeature): boolean {
+    return isEReference(feature) && feature.isContainment;
+}
+
+export function isProxy(feature: EStructuralFeature): boolean {
+    return isEReference(feature) ? feature.isResolveProxies : false;
 }
 
 export class EReferenceExt extends EReferenceImpl {

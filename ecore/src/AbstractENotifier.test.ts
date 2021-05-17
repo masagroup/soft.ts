@@ -6,13 +6,10 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
-import { EList, EAdapter, AbstractENotifier} from "./internal";
 import { instance, mock, verify, when } from "ts-mockito";
-import { ImmutableEList } from "./ImmutableEList";
-import { ENotification } from "./ENotification";
+import { AbstractENotifier, EAdapter, EList, ENotification, ImmutableEList } from "./internal";
 
-class ENotifierTest extends AbstractENotifier {
-}
+class ENotifierTest extends AbstractENotifier {}
 
 class ENotifierTestImpl extends ENotifierTest {
     deliver: boolean;

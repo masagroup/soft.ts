@@ -30,19 +30,10 @@ import {
     isEReference,
     isEObjectInternal,
     EResource,
+    isEClass,
+    isEDataType,
+    isEObject,
 } from "./internal";
-
-function isEObject(e: any): e is EObject {
-    return "eClass" in e;
-}
-
-function isEClass(e: EClassifier): e is EClass {
-    return "isAbstract" in e;
-}
-
-function isEDataType(e: EClassifier): e is EDataType {
-    return "isSerializable" in e;
-}
 
 enum LoadFeatureKind {
     Single,

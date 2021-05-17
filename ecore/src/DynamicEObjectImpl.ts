@@ -26,7 +26,6 @@ import {
     EOPPOSITE_FEATURE_BASE,
     EObject,
     ENotifyingList,
-    isEObject,
 } from "./internal";
 
 class DynamicFeaturesAdapter extends AbstractEAdapter {

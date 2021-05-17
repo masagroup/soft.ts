@@ -7,8 +7,72 @@
 //
 // *****************************************************************************
 
-import { ImmutableEList } from "./ImmutableEList";
-import { EAdapter, EList, ENotification, ENotifier } from "./internal";
+import {
+    AbstractNotification,
+    BasicEList,
+    EAdapter,
+    EList,
+    ENotification,
+    ENotifier,
+    EStructuralFeature,
+    EventType,
+    ImmutableEList
+} from "./internal";
+
+class AbstractENotifierNotification extends AbstractNotification {
+    private _notifier: AbstractENotifier;
+
+    constructor(
+        notifier: AbstractENotifier,
+        eventType: EventType,
+        oldValue: any,
+        newValue: any,
+        position: number
+    ) {
+        super(eventType, oldValue, newValue, position);
+        this._notifier = notifier;
+    }
+
+    get feature(): EStructuralFeature {
+        return null;
+    }
+
+    get featureID(): number {
+        return -1;
+    }
+
+    get notifier(): ENotifier {
+        return this._notifier;
+    }
+}
+
+export class AbstractENotifierList extends BasicEList<EAdapter> {
+    private _notifier: AbstractENotifier;
+
+    constructor(notifier: AbstractENotifier) {
+        super([], true);
+        this._notifier = notifier;
+    }
+
+    protected didAdd(index: number, adapter: EAdapter): void {
+        adapter.target = this._notifier;
+    }
+
+    protected didRemove(index: number, adapter: EAdapter): void {
+        if (this._notifier.eDeliver) {
+            adapter.notifyChanged(
+                new AbstractENotifierNotification(
+                    this._notifier,
+                    EventType.REMOVING_ADAPTER,
+                    adapter,
+                    null,
+                    index
+                )
+            );
+        }
+        adapter.unsetTarget(this._notifier);
+    }
+}
 
 export abstract class AbstractENotifier implements ENotifier {
     protected eBasicAdapters(): EList<EAdapter> {

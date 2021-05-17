@@ -7,9 +7,8 @@
 //
 // *****************************************************************************
 
-import { ENotification } from "./ENotification";
-import { AbstractEAdapter, ENotifier } from "./internal";
-import { instance, mock, when, verify, anything, strictEqual, objectContaining } from "ts-mockito";
+import { instance, mock } from "ts-mockito";
+import { AbstractEAdapter, ENotification, ENotifier } from "./internal";
 
 class EAdapterTest extends AbstractEAdapter {
     notifyChanged(notification: ENotification): void {

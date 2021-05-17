@@ -7,7 +7,18 @@
 //
 // *****************************************************************************
 
-import { EcoreConstants, EDataType, EClassExt, EAttributeImpl } from "./internal";
+import {
+    EcoreConstants,
+    EDataType,
+    EClassExt,
+    EAttributeImpl,
+    EStructuralFeature,
+    EAttribute,
+} from "./internal";
+
+export function isEAttribute(s: EStructuralFeature): s is EAttribute {
+    return "eAttributeType" in s;
+}
 
 export class EAttributeExt extends EAttributeImpl {
     constructor() {
