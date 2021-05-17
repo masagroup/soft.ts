@@ -26,7 +26,9 @@
     "verbose": true,
     "testPathIgnorePatterns": [
       "<rootDir>/dist/"
-    ]
+    ],
+    "collectCoverage": true,
+    "coverageDirectory": "coverage"
   },
   "prettier": {
     "printWidth": 100,
