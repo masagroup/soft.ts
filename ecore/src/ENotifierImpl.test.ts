@@ -8,25 +8,13 @@
 // *****************************************************************************
 
 import { mock, verify, instance } from "ts-mockito";
-import { EAdapter, ENotification, BasicNotifier } from "./internal";
+import { EAdapter, ENotification, ENotifierImpl } from "./internal";
 
-describe("BasicNotifier", () => {
+describe("ENotifierImpl", () => {
     test("constructor", () => {
-        let n = new BasicNotifier();
+        let n = new ENotifierImpl();
         expect(n.eDeliver).toBeTruthy();
         expect(n.eAdapters.isEmpty()).toBeTruthy();
-    });
-
-    test("target", () => {
-        // mocks
-        const mockAdapter = mock<EAdapter>();
-        const adapter = instance(mockAdapter);
-
-        let n = new BasicNotifier();
-        n.eAdapters.add(adapter);
-        expect(adapter.target).toBe(n);
-        n.eAdapters.remove(adapter);
-        expect(adapter.target).toBe(null);
     });
 
     test("eNotify", () => {
@@ -37,7 +25,7 @@ describe("BasicNotifier", () => {
         const notification = instance(mockNotification);
 
         // call
-        let n = new BasicNotifier();
+        let n = new ENotifierImpl();
         n.eAdapters.add(adapter);
         n.eNotify(notification);
 

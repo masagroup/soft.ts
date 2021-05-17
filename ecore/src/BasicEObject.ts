@@ -8,22 +8,18 @@
 // *****************************************************************************
 
 import {
+    AbstractEAdapter,
+    AbstractENotifierList,
+    AbstractEObject,
+    EAdapter,
+    EClass,
+    EList,
     ENotification,
     EObject,
     EObjectList,
-    EList,
-    EClass,
     EResource,
     EStructuralFeature,
     ImmutableEList,
-    AbstractEAdapter,
-    Notification,
-    BasicNotifier,
-    EventType,
-    EOPPOSITE_FEATURE_BASE,
-    AbstractEObject,
-    EAdapter,
-    AbstractENotifierList,
 } from "./internal";
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;

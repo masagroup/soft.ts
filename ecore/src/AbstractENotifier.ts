@@ -16,7 +16,7 @@ import {
     ENotifier,
     EStructuralFeature,
     EventType,
-    ImmutableEList
+    ImmutableEList,
 } from "./internal";
 
 class AbstractENotifierNotification extends AbstractNotification {
@@ -71,6 +71,10 @@ export class AbstractENotifierList extends BasicEList<EAdapter> {
             );
         }
         adapter.unsetTarget(this._notifier);
+    }
+
+    toJson(): any {
+        return {};
     }
 }
 

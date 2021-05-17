@@ -9,11 +9,11 @@
 
 import {
     ENotification,
-    ENotificationChain, 
+    ENotificationChain,
     ENotifier,
     EStructuralFeature,
-    EventType, 
-    NotificationChain
+    EventType,
+    NotificationChain,
 } from "./internal";
 
 export abstract class AbstractNotification implements ENotification, ENotificationChain {
