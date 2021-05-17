@@ -1,5 +1,5 @@
 export {
-    Adapter,
+    AbstractEAdapter,
     BasicEList,
     BasicEObjectList,
     BasicNotifier,

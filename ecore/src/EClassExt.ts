@@ -18,12 +18,12 @@ import {
     isEAttribute,
     EClassImpl,
     ImmutableEList,
-    Adapter,
+    AbstractEAdapter,
     EventType,
     EcoreConstants,
 } from "./internal";
 
-class ESuperAdapter extends Adapter {
+class ESuperAdapter extends AbstractEAdapter {
     constructor(private _eClass: EClassExt) {
         super();
     }

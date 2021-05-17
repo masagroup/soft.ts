@@ -24,7 +24,7 @@ import {
     EResource,
     EStructuralFeature,
     ImmutableEList,
-    Adapter,
+    AbstractEAdapter,
     Notification,
     BasicNotifier,
     EventType,
@@ -136,7 +136,7 @@ class UnResolvedContentsList extends AbstractContentsList {
     }
 }
 
-class ContentsListAdapter extends Adapter {
+class ContentsListAdapter extends AbstractEAdapter {
     private _obj: BasicEObject;
     private _getFeatureFn: getFeatureFnType;
     private _list: EList<EObject>;

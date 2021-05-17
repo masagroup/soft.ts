@@ -15,7 +15,7 @@ import {
     EReference,
     EObjectImpl,
     EcoreConstants,
-    Adapter,
+    AbstractEAdapter,
     EventType,
     EStructuralFeature,
     isEAttribute,
@@ -29,7 +29,7 @@ import {
     isEObject,
 } from "./internal";
 
-class DynamicFeaturesAdapter extends Adapter {
+class DynamicFeaturesAdapter extends AbstractEAdapter {
     constructor(private _obj: DynamicEObjectImpl) {
         super();
     }

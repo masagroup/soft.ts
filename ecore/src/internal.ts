@@ -55,6 +55,7 @@ export * from "./EcoreConstants";
 export * from "./EcorePackage";
 export * from "./EcoreFactory";
 
+export * from "./AbstractEAdapter";
 export * from "./AbstractEList";
 export * from "./AbstractNotification";
 export * from "./Notification";
@@ -62,7 +63,6 @@ export * from "./NotificationChain";
 export * from "./BasicEList";
 export * from "./ImmutableEList";
 export * from "./AbstractNotifyingList";
-export * from "./Adapter";
 export * from "./BasicNotifier";
 export * from "./BasicEObject";
 export * from "./BasicEObjectList";
