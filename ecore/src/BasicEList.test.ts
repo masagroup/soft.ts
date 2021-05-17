@@ -16,6 +16,7 @@ describe("BasicEList", () => {
         expect(a.get(1)).toEqual(2);
         expect(a.get(2)).toEqual(3);
         expect(a.get(3)).toEqual(4);
+        expect(() => a.get(4)).toThrowError(RangeError);
     });
 
     test("size", () => {
@@ -66,7 +67,7 @@ describe("BasicEList", () => {
         let b = new BasicEList<number>([1, 2, 3]);
         expect(a.addAll(b)).toBeTruthy();
         expect(a.toArray()).toEqual([0, 1, 2, 3]);
-        let c = new ImmutableEList<number>([0, 1, 2])
+        let c = new ImmutableEList<number>([0, 1, 2]);
         expect(a.addAll(c)).toBeFalsy();
     });
 
@@ -116,8 +117,8 @@ describe("BasicEList", () => {
         let b = new BasicEList<number>([1, 2, 3]);
         expect(a.insertAll(0, b)).toBeTruthy();
         expect(a.toArray()).toEqual([3, 0, 1, 2]);
-        let c = new ImmutableEList<number>([0, 1, 2])
-        expect(a.insertAll(0,c)).toBeFalsy();
+        let c = new ImmutableEList<number>([0, 1, 2]);
+        expect(a.insertAll(0, c)).toBeFalsy();
     });
 
     test("remove", () => {
@@ -196,45 +197,73 @@ describe("BasicEList", () => {
         expect(a.toArray()).toEqual([3, 4, 5]);
     });
 
-    test('move_invalid_range', () => {
+    test("moveTo_invalid_range", () => {
         let a = new BasicEList<number>([2, 4, 6, 8, 10]);
         expect(() => a.moveTo(1, 7)).toThrowError(RangeError);
     });
 
-    test('move_borders', () => {
+    test("moveTo_borders", () => {
         let a = new BasicEList<number>([2, 4]);
-        a.moveTo(0, 1)
+        a.moveTo(0, 1);
         expect(a.toArray()).toEqual([4, 2]);
     });
 
-    test('move_borders_inverse', () => {
+    test("moveTo_borders_inverse", () => {
         let a = new BasicEList<number>([2, 4]);
-        a.moveTo(1, 0)
+        a.moveTo(1, 0);
         expect(a.toArray()).toEqual([4, 2]);
     });
 
-    test('move_complex', () => {
+    test("moveTo_complex", () => {
         let a = new BasicEList<number>([2, 4, 6, 8, 10]);
-        a.moveTo(0, 3)
+        a.moveTo(0, 3);
         expect(a.toArray()).toEqual([4, 6, 8, 2, 10]);
     });
 
-    test('move_complex_end', () => {
+    test("moveTo_complex_end", () => {
         let a = new BasicEList<number>([2, 4, 6, 8, 10]);
-        a.moveTo(0, 4)
+        a.moveTo(0, 4);
         expect(a.toArray()).toEqual([4, 6, 8, 10, 2]);
     });
 
-    test('move_complex_inverse', () => {
+    test("moveTo_complex_inverse", () => {
         let a = new BasicEList<number>([2, 4, 6, 8, 10]);
-        a.moveTo(3, 1)
+        a.moveTo(3, 1);
         expect(a.toArray()).toEqual([2, 8, 4, 6, 10]);
     });
 
-    test('move_nop', () => {
+    test("moveTo_nop", () => {
         let a = new BasicEList<number>([2, 4, 6, 8, 10]);
-        expect(a.moveTo(1, 1)).toBe(4)
+        expect(a.moveTo(1, 1)).toBe(4);
         expect(a.toArray()).toEqual([2, 4, 6, 8, 10]);
     });
 
+    test("move-before", () => {
+        let a = new BasicEList<number>([2, 4, 6, 8, 10]);
+        a.move(3, 4);
+        expect(a.toArray()).toEqual([2, 6, 8, 4, 10]);
+    });
+
+    test("move-after", () => {
+        let a = new BasicEList<number>([2, 4, 6, 8, 10]);
+        a.move(4, 4);
+        expect(a.toArray()).toEqual([2, 6, 8, 10, 4]);
+    });
+
+    test("move-end", () => {
+        let a = new BasicEList<number>([2, 4, 6, 8, 10]);
+        a.move(0, 4);
+        expect(a.toArray()).toEqual([4, 2, 6, 8, 10]);
+    });
+
+    test("move-same", () => {
+        let a = new BasicEList<number>([2, 4, 6, 8, 10]);
+        a.move(1, 4);
+        expect(a.toArray()).toEqual([2, 4, 6, 8, 10]);
+    });
+
+    test("move-invalid", () => {
+        let a = new BasicEList<number>([2, 4, 6, 8, 10]);
+        expect(() => a.move(1, 5)).toThrowError(Error);
+    });
 });

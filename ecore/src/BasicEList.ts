@@ -17,6 +17,10 @@ export class BasicEList<E> extends AbstractEList<E> {
         this._v = Array.from(iterable);
     }
 
+    clear(): void {
+        this.doClear();
+    }
+
     removeAt(index: number): E {
         if (index < 0 || index >= this._v.length)
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length);
@@ -28,7 +32,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     moveTo(from: number, to: number): E {
-        return this.doMove(from,to)
+        return this.doMove(from, to);
     }
 
     size(): number {
@@ -49,6 +53,13 @@ export class BasicEList<E> extends AbstractEList<E> {
         this.didSet(index, o, e);
         this.didChange();
         return o;
+    }
+
+    protected doClear(): E[] {
+        let oldData = this._v;
+        this._v = [];
+        this.didClear(oldData);
+        return oldData;
     }
 
     protected doAdd(e: E): void {

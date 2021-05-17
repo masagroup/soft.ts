@@ -173,10 +173,8 @@ export abstract class AbstractEList<E> implements EList<E> {
     }
 
     protected didClear(elements: E[]): void {
-        if (elements != null) {
-            for (let i = 0; i < elements.length; ++i) {
-                this.didRemove(i, elements[i]);
-            }
+        for (let i = 0; i < elements.length; ++i) {
+            this.didRemove(i, elements[i]);
         }
     }
 
