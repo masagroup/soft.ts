@@ -10,7 +10,7 @@
 import { ImmutableEList } from "./ImmutableEList";
 import { EAdapter, EList, ENotification, ENotifier } from "./internal";
 
-export class AbstractENotifier implements ENotifier {
+export abstract class AbstractENotifier implements ENotifier {
     protected eBasicAdapters(): EList<EAdapter> {
         return null;
     }

@@ -6,13 +6,15 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
-
-import { EList, EAdapter, AbstractENotifier } from "./internal";
+import { EList, EAdapter, AbstractENotifier} from "./internal";
 import { instance, mock, verify, when } from "ts-mockito";
 import { ImmutableEList } from "./ImmutableEList";
 import { ENotification } from "./ENotification";
 
 class ENotifierTest extends AbstractENotifier {
+}
+
+class ENotifierTestImpl extends ENotifierTest {
     deliver: boolean;
     adapters: EList<EAdapter>;
 
@@ -35,39 +37,39 @@ class ENotifierTest extends AbstractENotifier {
     }
 }
 
-describe("AbstractENotifier", () => {
+describe("ENotifierTest", () => {
     test("constructor", () => {
-        expect(new AbstractENotifier()).not.toBeNull();
+        expect(new ENotifierTest()).not.toBeNull();
     });
     describe("eDeliver ", () => {
         test("get", () => {
-            let n = new AbstractENotifier();
+            let n = new ENotifierTest();
             expect(n.eDeliver).toBeFalsy();
         });
         test("set", () => {
-            let n = new AbstractENotifier();
+            let n = new ENotifierTest();
             expect(() => {
                 n.eDeliver = true;
             }).toThrow(Error);
         });
     });
     test("eAdapters", () => {
-        let n = new AbstractENotifier();
+        let n = new ENotifierTest();
         expect(n.eAdapters).not.toBeNull();
         expect(n.eAdapters.isEmpty()).toBeTruthy();
     });
     describe("eNotificationRequired", () => {
         test("default", () => {
-            let n = new AbstractENotifier();
+            let n = new ENotifierTest();
             expect(n.eNotificationRequired).toBeFalsy();
         });
         test("deliver", () => {
-            let n = new ENotifierTest();
+            let n = new ENotifierTestImpl();
             n.deliver = true;
             expect(n.eNotificationRequired).toBeFalsy();
         });
         test("adapters", () => {
-            let n = new ENotifierTest();
+            let n = new ENotifierTestImpl();
             let mockAdapters = mock<EList<EAdapter>>();
             let instanceAdapters = instance(mockAdapters);
             n.deliver = true;
@@ -82,7 +84,7 @@ describe("AbstractENotifier", () => {
         });
     });
     test("eNotify", () => {
-        let n = new ENotifierTest();
+        let n = new ENotifierTestImpl();
         let mockNotification = mock<ENotification>();
         let notification = instance(mockNotification);
         n.eNotify(notification);
