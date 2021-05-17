@@ -28,19 +28,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     moveTo(from: number, to: number): E {
-        if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
-            throw new RangeError(
-                "Index out of bounds: from=" + from + " to=" + to + " size=" + this.size()
-            );
-        }
-        let e = this._v[from];
-        if (from != to) {
-            this._v.splice(from, 1);
-            this._v.splice(to, 0, e);
-            this.didMove(from, to, e);
-            this.didChange();
-        }
-        return e;
+        return this.doMove(from,to)
     }
 
     size(): number {
@@ -93,5 +81,21 @@ export class BasicEList<E> extends AbstractEList<E> {
             this.didChange();
         }
         return !c.isEmpty();
+    }
+
+    protected doMove(from: number, to: number): E {
+        if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
+            throw new RangeError(
+                "Index out of bounds: from=" + from + " to=" + to + " size=" + this.size()
+            );
+        }
+        let e = this._v[from];
+        if (from != to) {
+            this._v.splice(from, 1);
+            this._v.splice(to, 0, e);
+            this.didMove(from, to, e);
+            this.didChange();
+        }
+        return e;
     }
 }
