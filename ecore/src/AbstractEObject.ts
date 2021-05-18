@@ -145,8 +145,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
     eContainingFeature(): EStructuralFeature {
         let eContainer = this.eInternalContainer();
-        if (isEObjectInternal(eContainer)) {
-            let containerFeatureID = eContainer.eInternalContainerFeatureID();
+        if (eContainer) {
+            let containerFeatureID = this.eInternalContainerFeatureID();
             if (containerFeatureID <= EOPPOSITE_FEATURE_BASE) {
                 let feature = eContainer
                     .eClass()
