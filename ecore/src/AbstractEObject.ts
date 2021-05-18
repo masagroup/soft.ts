@@ -575,7 +575,78 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
+        let dynamicFeatureID = featureID - this.eStaticFeatureCount();
+        if (dynamicFeatureID < 0) {
+            this.eUnset(feature);
+        } else {
+            let properties = this.eDynamicProperties();
+            if (properties) {
+                this.eDynamicPropertiesUnset(properties, feature, dynamicFeatureID);
+            } else {
+                throw new Error("EObject doesn't define any dynamic properties");
+            }
+        }
     }
+
+    protected eDynamicPropertiesUnset(properties : EDynamicProperties, dynamicFeature : EStructuralFeature, dynamicFeatureID :number ) {
+        if (isContainer(dynamicFeature)) {
+            if (this.eInternalContainer()) {
+                let featureID = this.eClass().getFeatureID(dynamicFeature);
+                let notifications = this.eBasicRemoveFromContainer(null);
+                notifications = this.eBasicSetContainer(null, featureID, notifications);
+                if (notifications) {
+                    notifications.dispatch();
+                }
+            } else if (this.eNotificationRequired) {
+                this.eNotify(new Notification(this, EventType.SET, dynamicFeature, null, null));
+            }
+        } else if (isBidirectional(dynamicFeature) || isContains(dynamicFeature)) {
+            // inverse - opposite
+            let oldValue = properties.eDynamicGet(dynamicFeatureID);
+            if (oldValue) {
+                let notifications : ENotificationChain = null;
+                let oldObject = isEObjectInternal(oldValue) ? oldValue : null;
+                if (!isBidirectional(dynamicFeature)) {
+                    if (oldObject) {
+                        let featureID = this.eClass().getFeatureID(dynamicFeature);
+                        notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE-featureID, notifications);
+                    }
+                } else {
+                    let dynamicReference = dynamicFeature as EReference;
+                    let reverseFeature = dynamicReference.eOpposite;
+                    if (oldObject) {
+                        let featureID = oldObject.eClass().getFeatureID(reverseFeature);
+                        notifications = oldObject.eInverseRemove(this, featureID, notifications);
+                    }
+                }
+                // basic unset
+                properties.eDynamicUnset(dynamicFeatureID);
+    
+                // create notification
+                if (this.eNotificationRequired) {
+                    let eventType = dynamicFeature.isUnsettable ? EventType.UNSET :  EventType.SET;
+                    let notification = new Notification(this, eventType, dynamicFeature, oldValue, null);
+                    if (notifications) {
+                        notifications.add(notification);
+                    } else {
+                        notifications = notification;
+                    }
+                }
+    
+                // notify
+                if (notifications) {
+                    notifications.dispatch();
+                }
+            }
+        } else {
+            let oldValue = properties.eDynamicGet(dynamicFeatureID);
+            properties.eDynamicUnset(dynamicFeatureID);
+            if (this.eNotificationRequired) {
+                this.eNotify(new Notification(this, EventType.UNSET, dynamicFeature, oldValue, null))
+            }
+        }
+    }
+    
 
     eInvoke(operation: EOperation, args: EList<any>): any {
         let operationID = this.eOperationID(operation);
