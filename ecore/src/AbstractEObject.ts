@@ -262,7 +262,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
     }
 
-    eDynamicPropertiesGet(
+    protected eDynamicPropertiesGet(
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
@@ -419,7 +419,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
     }
 
-    eDynamicPropertiesSet(
+    protected eDynamicPropertiesSet(
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
@@ -539,7 +539,26 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (!feature) {
             throw new Error("Invalid featureID: " + featureID);
         }
-        return false;
+        let dynamicFeatureID = featureID - this.eStaticFeatureCount();
+        if (dynamicFeatureID < 0) {
+            return this.eIsSet(feature);
+        } else {
+            let properties = this.eDynamicProperties();
+            if (properties) {
+                return this.eDynamicPropertiesIsSet(properties, feature, dynamicFeatureID);
+            } else {
+                throw new Error("EObject doesn't define any dynamic properties");
+            }
+        }
+    }
+
+    protected eDynamicPropertiesIsSet(properties : EDynamicProperties, dynamicFeature : EStructuralFeature, dynamicFeatureID : number) : boolean {
+        if (isContainer(dynamicFeature)) {
+            let featureID = this.eClass().getFeatureID(dynamicFeature);
+            return this.eInternalContainerFeatureID() == featureID && this.eInternalContainer() != null;
+        } else {
+            return properties.eDynamicGet(dynamicFeatureID) != null;
+        }
     }
 
     eUnset(feature: EStructuralFeature): void {
