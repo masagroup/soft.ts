@@ -59,6 +59,7 @@ export class AbstractENotifierList extends BasicEList<EAdapter> {
     }
 
     protected didRemove(index: number, adapter: EAdapter): void {
+        /* istanbul ignore next */
         if (this._notifier.eDeliver) {
             adapter.notifyChanged(
                 new AbstractENotifierNotification(

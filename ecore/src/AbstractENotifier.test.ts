@@ -6,8 +6,59 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
-import { instance, mock, verify, when } from "ts-mockito";
-import { AbstractENotifier, EAdapter, EList, ENotification, ImmutableEList } from "./internal";
+import { anything, capture, deepEqual, instance, mock, verify, when } from "ts-mockito";
+import {
+    AbstractENotifier,
+    AbstractENotifierList,
+    EAdapter,
+    EList,
+    ENotification,
+    EventType,
+    ImmutableEList,
+} from "./internal";
+
+describe("AbstractENotifierList", () => {
+    let mockNotifier = mock<AbstractENotifier>();
+    let notifier = instance(mockNotifier);
+    let l: AbstractENotifierList = null;
+    beforeEach(() => {
+        l = new AbstractENotifierList(notifier);
+        expect(l).not.toBeNull();
+    });
+
+    test("add", () => {
+        let mockAdapter = mock<EAdapter>();
+        let adapter = instance(mockAdapter);
+        l.add(adapter);
+        expect(adapter.target).toBe(notifier);
+    });
+
+    test("remove", () => {
+        let mockAdapter = mock<EAdapter>();
+        let adapter = instance(mockAdapter);
+        // add adapter
+        l.add(adapter);
+        expect(adapter.target).toBe(notifier);
+
+        // remove adapter
+        l.remove(adapter);
+        verify(mockAdapter.notifyChanged(anything())).once();
+        verify(mockAdapter.unsetTarget(notifier)).once();
+        let [n] = capture(mockAdapter.notifyChanged).last();
+        expect(n).not.toBeNull();
+        expect(n.notifier).toBe(notifier);
+        expect(n.eventType).toBe(EventType.REMOVING_ADAPTER);
+        expect(n.oldValue).toBe(adapter);
+        expect(n.newValue).toBeNull();
+        expect(n.position).toBe(0);
+        expect(n.featureID).toBe(-1);
+        expect(n.feature).toBeNull();
+    });
+
+    test("toJson", () => {
+        expect(l.toJson()).toStrictEqual({});
+    });
+});
 
 class ENotifierTest extends AbstractENotifier {}
 
@@ -34,7 +85,7 @@ class ENotifierTestImpl extends ENotifierTest {
     }
 }
 
-describe("ENotifierTest", () => {
+describe("AbstractENotifier", () => {
     test("constructor", () => {
         expect(new ENotifierTest()).not.toBeNull();
     });
