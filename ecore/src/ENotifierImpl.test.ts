@@ -22,7 +22,7 @@ describe("ENotifierImpl", () => {
         n.eDeliver = false;
         expect(n.eDeliver).toBeFalsy();
     });
-    test('eAdapters', () => {
+    test("eAdapters", () => {
         let n = new ENotifierImpl();
         expect(n.eBasicAdapters()).toBeNull();
         expect(n.eAdapters).not.toBeNull();

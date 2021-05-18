@@ -419,44 +419,62 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
     }
 
-    eDynamicPropertiesSet(properties : EDynamicProperties, dynamicFeature : EStructuralFeature, dynamicFeatureID : number, newValue : any) {
+    eDynamicPropertiesSet(
+        properties: EDynamicProperties,
+        dynamicFeature: EStructuralFeature,
+        dynamicFeatureID: number,
+        newValue: any
+    ) {
         if (isContainer(dynamicFeature)) {
             // container
             let featureID = this.eClass().getFeatureID(dynamicFeature);
             let oldContainer = this.eInternalContainer();
             let newContainer = isEObjectInternal(newValue) ? newValue : null;
-            if (newContainer != oldContainer || (newContainer && this.eInternalContainerFeatureID() != featureID)) {
-                let notifications : ENotificationChain;
+            if (
+                newContainer != oldContainer ||
+                (newContainer && this.eInternalContainerFeatureID() != featureID)
+            ) {
+                let notifications: ENotificationChain;
                 if (oldContainer) {
                     notifications = this.eBasicRemoveFromContainer(notifications);
                 }
                 if (newContainer) {
                     let reverseFeature = (dynamicFeature as EReference).eOpposite;
                     let featureID = newContainer.eClass().getFeatureID(reverseFeature);
-                    notifications = newContainer.eInverseAdd(this, featureID, notifications)
+                    notifications = newContainer.eInverseAdd(this, featureID, notifications);
                 }
                 notifications = this.eBasicSetContainer(newContainer, featureID, notifications);
                 if (notifications) {
                     notifications.dispatch();
                 }
             } else if (this.eNotificationRequired) {
-                this.eNotify( new Notification(this, EventType.SET, dynamicFeature, newValue, newValue));
+                this.eNotify(
+                    new Notification(this, EventType.SET, dynamicFeature, newValue, newValue)
+                );
             }
         } else if (isBidirectional(dynamicFeature) || isContains(dynamicFeature)) {
             // inverse - opposite
             let oldValue = properties.eDynamicGet(dynamicFeatureID);
             if (oldValue != newValue) {
-                let notifications : ENotificationChain = null;
+                let notifications: ENotificationChain = null;
                 let oldObject = isEObjectInternal(oldValue) ? oldValue : null;
                 let newObject = isEObjectInternal(oldValue) ? newValue : null;
-    
+
                 if (!isBidirectional(dynamicFeature)) {
                     let featureID = this.eClass().getFeatureID(dynamicFeature);
                     if (oldObject) {
-                        notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE-featureID, notifications)
+                        notifications = oldObject.eInverseRemove(
+                            this,
+                            EOPPOSITE_FEATURE_BASE - featureID,
+                            notifications
+                        );
                     }
                     if (newObject) {
-                        notifications = newObject.eInverseAdd(this, EOPPOSITE_FEATURE_BASE-featureID, notifications)
+                        notifications = newObject.eInverseAdd(
+                            this,
+                            EOPPOSITE_FEATURE_BASE - featureID,
+                            notifications
+                        );
                     }
                 } else {
                     let dynamicReference = dynamicFeature as EReference;
@@ -471,18 +489,24 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     }
                 }
                 // basic set
-                properties.eDynamicSet(dynamicFeatureID, newValue)
-    
+                properties.eDynamicSet(dynamicFeatureID, newValue);
+
                 // create notification
                 if (this.eNotificationRequired) {
-                    let notification = new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue);
+                    let notification = new Notification(
+                        this,
+                        EventType.SET,
+                        dynamicFeature,
+                        oldValue,
+                        newValue
+                    );
                     if (notifications) {
                         notifications.add(notification);
                     } else {
                         notifications = notification;
                     }
                 }
-    
+
                 // notify
                 if (notifications) {
                     notifications.dispatch();
@@ -492,10 +516,12 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             // basic set
             let oldValue = properties.eDynamicGet(dynamicFeatureID);
             properties.eDynamicSet(dynamicFeatureID, newValue);
-    
+
             // notify
             if (this.eNotificationRequired) {
-                this.eNotify(new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue))
+                this.eNotify(
+                    new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue)
+                );
             }
         }
     }
