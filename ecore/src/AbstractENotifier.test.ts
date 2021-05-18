@@ -33,7 +33,7 @@ describe("AbstractENotifierList", () => {
         expect(adapter.target).toBe(notifier);
     });
 
-    test("remove", () => {
+    test("remove-notification", () => {
         let mockAdapter = mock<EAdapter>();
         let adapter = instance(mockAdapter);
         // add adapter
@@ -53,6 +53,20 @@ describe("AbstractENotifierList", () => {
         expect(n.position).toBe(0);
         expect(n.featureID).toBe(-1);
         expect(n.feature).toBeNull();
+    });
+
+    test("remove", () => {
+        let mockAdapter = mock<EAdapter>();
+        let adapter = instance(mockAdapter);
+        // add adapter
+        l.add(adapter);
+        expect(adapter.target).toBe(notifier);
+
+        // remove adapter
+        notifier.eDeliver = false;
+        l.remove(adapter);
+        verify(mockAdapter.notifyChanged(anything())).never();
+        verify(mockAdapter.unsetTarget(notifier)).once();
     });
 
     test("toJson", () => {
