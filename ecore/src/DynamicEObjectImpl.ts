@@ -49,7 +49,7 @@ function resize(arr: any[], newSize: number, defaultValue: any) {
     arr.length = newSize;
 }
 
-export class DynamicEObjectImpl extends EObjectImpl implements EDynamicProperties{
+export class DynamicEObjectImpl extends EObjectImpl implements EDynamicProperties {
     private _clz: EClass;
     private _properties: any[];
     private _dynamicFeaturesAdapter: DynamicFeaturesAdapter;
@@ -61,19 +61,19 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
         this._properties = [];
         this.resizeProperties();
     }
-    
-    eStaticClass() : EClass {
-        return getEcorePackage().getEObject();   
+
+    eStaticClass(): EClass {
+        return getEcorePackage().getEObject();
     }
 
-    eStaticFeatureCount() : number {
-        return 0;   
+    eStaticFeatureCount(): number {
+        return 0;
     }
 
     eClass(): EClass {
         return this._clz ? this._clz : this.eStaticClass();
     }
-    
+
     setEClass(clz: EClass) {
         if (this._clz) this._clz.eAdapters.remove(this._dynamicFeaturesAdapter);
 
@@ -83,11 +83,11 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
         if (this._clz) this._clz.eAdapters.add(this._dynamicFeaturesAdapter);
     }
 
-    eDynamicProperties() : EDynamicProperties {
+    eDynamicProperties(): EDynamicProperties {
         return this;
-    }    
+    }
 
-    eDynamicGet(dynamicFeatureID: number) : any {
+    eDynamicGet(dynamicFeatureID: number): any {
         return this._properties[dynamicFeatureID];
     }
     eDynamicSet(dynamicFeatureID: number, newValue: any): void {
@@ -104,5 +104,4 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
             null
         );
     }
-
 }

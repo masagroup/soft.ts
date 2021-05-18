@@ -952,7 +952,9 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return notifications;
     }
 
-    protected eBasicRemoveFromContainerFeature(notifications: ENotificationChain): ENotificationChain {
+    protected eBasicRemoveFromContainerFeature(
+        notifications: ENotificationChain
+    ): ENotificationChain {
         let feature = this.eClass().getEStructuralFeature(this.eInternalContainerFeatureID());
         if (isEReference(feature)) {
             let inverseFeature = feature.eOpposite;

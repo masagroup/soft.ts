@@ -1,5 +1,14 @@
+// *****************************************************************************
+// Copyright(c) 2021 MASA Group
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// *****************************************************************************
+
 import { EClassifier, EDataType } from "./internal";
 
 export function isEDataType(e: EClassifier): e is EDataType {
-    return "isSerializable" in e;
+    return e == undefined ? undefined : "isSerializable" in e;
 }

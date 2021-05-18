@@ -17,4 +17,8 @@ export class EClassifierExt extends EClassifierImpl {
     protected initClassifierID(): number {
         return this.ePackage != null ? this.ePackage.eClassifiers.indexOf(this) : -1;
     }
+
+    get defaultValue(): any {
+        return null;
+    }
 }
