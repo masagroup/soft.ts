@@ -9,8 +9,8 @@
 
 import { XMIResourceFactory } from "./internal";
 
-describe('XMIResourceFactory', () => {
-    test('create', () => {
+describe("XMIResourceFactory", () => {
+    test("create", () => {
         let f = new XMIResourceFactory();
         let url = new URL("test://resourceURI");
         let r = f.createResource(url);

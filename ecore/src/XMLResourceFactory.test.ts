@@ -9,8 +9,8 @@
 
 import { XMLResourceFactory } from "./internal";
 
-describe('XMLResourceFactory', () => {
-    test('create', () => {
+describe("XMLResourceFactory", () => {
+    test("create", () => {
         let f = new XMLResourceFactory();
         let url = new URL("test://resourceURI");
         let r = f.createResource(url);
