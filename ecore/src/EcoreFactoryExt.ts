@@ -23,75 +23,11 @@ export class EcoreFactoryExt extends EcoreFactoryImpl {
         super();
     }
 
-    createEBooleanFromString(eDataType: EDataType, literalValue: string): any {
-        return literalValue == "true";
-    }
-
-    convertEBooleanToString(eDataType: EDataType, instanceValue: any): string {
-        return instanceValue.toString();
-    }
-
-    createECharFromString(eDataType: EDataType, literalValue: string): any {
-        return literalValue.charCodeAt(0);
-    }
-
-    convertECharToString(eDataType: EDataType, instanceValue: any): string {
-        return String.fromCharCode(instanceValue);
-    }
-
     createEDateFromString(eDataType: EDataType, literalValue: string): any {
         return new Date(literalValue);
     }
 
     convertEDateToString(eDataType: EDataType, instanceValue: any): string {
         return (instanceValue as Date).toISOString();
-    }
-
-    createEDoubleFromString(eDataType: EDataType, literalValue: string): any {
-        return Number(literalValue);
-    }
-
-    convertEDoubleToString(eDataType: EDataType, instanceValue: any): string {
-        return instanceValue.toString();
-    }
-
-    createEFloatFromString(eDataType: EDataType, literalValue: string): any {
-        return Number(literalValue);
-    }
-
-    convertEFloatToString(eDataType: EDataType, instanceValue: any): string {
-        return instanceValue.toString();
-    }
-
-    createEIntFromString(eDataType: EDataType, literalValue: string): any {
-        return Number(literalValue);
-    }
-
-    convertEIntToString(eDataType: EDataType, instanceValue: any): string {
-        return instanceValue.toString();
-    }
-
-    createELongFromString(eDataType: EDataType, literalValue: string): any {
-        return Number(literalValue);
-    }
-
-    convertELongToString(eDataType: EDataType, instanceValue: any): string {
-        return instanceValue.toString();
-    }
-
-    createEShortFromString(eDataType: EDataType, literalValue: string): any {
-        return Number(literalValue);
-    }
-
-    convertEShortToString(eDataType: EDataType, instanceValue: any): string {
-        return instanceValue.toString();
-    }
-
-    createEStringFromString(eDataType: EDataType, literalValue: string): any {
-        return literalValue;
-    }
-
-    convertEStringToString(eDataType: EDataType, instanceValue: any): string {
-        return instanceValue.toString();
     }
 }
