@@ -8,24 +8,24 @@
 // *****************************************************************************
 
 import {
-    EAdapter,
-    EClassifier,
-    ENotification,
-    EventType,
-    EcoreConstants,
     AbstractEAdapter,
+    EAdapter,
+    EAttribute,
+    EClass,
+    EClassifier,
+    EcoreConstants,
+    EDataType,
+    EDataTypeInternal,
+    EEnum,
+    ENotification,
+    EOperation,
     EPackageImpl,
+    EReference,
     EResource,
     EResourceImpl,
-    EClass,
     EStructuralFeature,
-    EAttribute,
-    EReference,
-    EOperation,
-    EEnum,
-    EDataType,
+    EventType,
     getEcoreFactory,
-    EDataTypeInternal,
 } from "./internal";
 
 class EPackageExtAdapter extends AbstractEAdapter {
