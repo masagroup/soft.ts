@@ -7,18 +7,8 @@
 //
 // *****************************************************************************
 
-import { EClassifierImpl } from "./internal";
+import { EClassifier, EDataType } from "./internal";
 
-export class EClassifierExt extends EClassifierImpl {
-    constructor() {
-        super();
-    }
-
-    protected initClassifierID(): number {
-        return this.ePackage != null ? this.ePackage.eClassifiers.indexOf(this) : -1;
-    }
-
-    get defaultValue(): any {
-        return null;
-    }
+export function isEDataType(e: EClassifier): e is EDataType {
+    return e == undefined ? undefined : "isSerializable" in e;
 }

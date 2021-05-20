@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import {
-    Adapter,
+    AbstractEAdapter,
     EventType,
     ENotification,
     ENotifier,
@@ -21,7 +21,7 @@ import {
     isEResourceSet,
 } from "./internal";
 
-export class EContentAdapter extends Adapter {
+export class EContentAdapter extends AbstractEAdapter {
     notifyChanged(notification: ENotification): void {
         this.selfAdapt(notification);
     }

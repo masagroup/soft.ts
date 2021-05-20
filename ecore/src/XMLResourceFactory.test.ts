@@ -7,18 +7,14 @@
 //
 // *****************************************************************************
 
-import { EClassifierImpl } from "./internal";
+import { XMLResourceFactory } from "./internal";
 
-export class EClassifierExt extends EClassifierImpl {
-    constructor() {
-        super();
-    }
-
-    protected initClassifierID(): number {
-        return this.ePackage != null ? this.ePackage.eClassifiers.indexOf(this) : -1;
-    }
-
-    get defaultValue(): any {
-        return null;
-    }
-}
+describe('XMLResourceFactory', () => {
+    test('create', () => {
+        let f = new XMLResourceFactory();
+        let url = new URL("test://resourceURI");
+        let r = f.createResource(url);
+        expect(r).not.toBeNull();
+        expect(r.eURI).toBe(url);
+    });
+});

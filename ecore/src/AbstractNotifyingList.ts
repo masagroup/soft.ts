@@ -8,16 +8,16 @@
 // *****************************************************************************
 
 import {
+    AbstractNotification,
+    BasicEList,
     Collection,
-    ENotifier,
     ENotification,
     ENotificationChain,
+    ENotifier,
     ENotifyingList,
     EStructuralFeature,
-    AbstractNotification,
-    NotificationChain,
     EventType,
-    BasicEList,
+    NotificationChain,
 } from "./internal";
 
 export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements ENotifyingList<E> {

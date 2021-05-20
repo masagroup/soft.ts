@@ -7,10 +7,10 @@
 //
 // *****************************************************************************
 
-import { EAdapter, ENotifier, ENotification } from "./internal";
+import { EAdapter, ENotification, ENotifier } from "./internal";
 
-export abstract class Adapter implements EAdapter {
-    private _target: ENotifier;
+export abstract class AbstractEAdapter implements EAdapter {
+    private _target: ENotifier = null;
 
     get target(): ENotifier {
         return this._target;

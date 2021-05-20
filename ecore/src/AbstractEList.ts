@@ -12,7 +12,7 @@ import { Collection, EList, getNonDuplicates } from "./internal";
 export abstract class AbstractEList<E> implements EList<E> {
     protected _isUnique: boolean;
 
-    constructor(isUnique: boolean = false) {
+    constructor(isUnique: boolean) {
         this._isUnique = isUnique;
     }
 
@@ -173,10 +173,8 @@ export abstract class AbstractEList<E> implements EList<E> {
     }
 
     protected didClear(elements: E[]): void {
-        if (elements != null) {
-            for (let i = 0; i < elements.length; ++i) {
-                this.didRemove(i, elements[i]);
-            }
+        for (let i = 0; i < elements.length; ++i) {
+            this.didRemove(i, elements[i]);
         }
     }
 

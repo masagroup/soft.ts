@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { Collection, AbstractEList } from "./internal";
+import { AbstractEList, Collection } from "./internal";
 
 export class BasicEList<E> extends AbstractEList<E> {
     protected _v: E[];
@@ -15,6 +15,10 @@ export class BasicEList<E> extends AbstractEList<E> {
     constructor(iterable: Iterable<E> | ArrayLike<E> = [], isUnique: boolean = false) {
         super(isUnique);
         this._v = Array.from(iterable);
+    }
+
+    clear(): void {
+        this.doClear();
     }
 
     removeAt(index: number): E {
@@ -28,19 +32,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     moveTo(from: number, to: number): E {
-        if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
-            throw new RangeError(
-                "Index out of bounds: from=" + from + " to=" + to + " size=" + this.size()
-            );
-        }
-        let e = this._v[from];
-        if (from != to) {
-            this._v.splice(from, 1);
-            this._v.splice(to, 0, e);
-            this.didMove(from, to, e);
-            this.didChange();
-        }
-        return e;
+        return this.doMove(from, to);
     }
 
     size(): number {
@@ -61,6 +53,13 @@ export class BasicEList<E> extends AbstractEList<E> {
         this.didSet(index, o, e);
         this.didChange();
         return o;
+    }
+
+    protected doClear(): E[] {
+        let oldData = this._v;
+        this._v = [];
+        this.didClear(oldData);
+        return oldData;
     }
 
     protected doAdd(e: E): void {
@@ -93,5 +92,21 @@ export class BasicEList<E> extends AbstractEList<E> {
             this.didChange();
         }
         return !c.isEmpty();
+    }
+
+    protected doMove(from: number, to: number): E {
+        if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
+            throw new RangeError(
+                "Index out of bounds: from=" + from + " to=" + to + " size=" + this.size()
+            );
+        }
+        let e = this._v[from];
+        if (from != to) {
+            this._v.splice(from, 1);
+            this._v.splice(to, 0, e);
+            this.didMove(from, to, e);
+            this.didChange();
+        }
+        return e;
     }
 }

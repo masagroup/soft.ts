@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EObject, EStructuralFeature, EventType, Notification } from "./index";
+import { EClass, EObject, EStructuralFeature, EventType, Notification } from "./index";
 import { mock, instance, verify, when } from "ts-mockito";
 
 describe("Notification", () => {
@@ -24,6 +24,12 @@ describe("Notification", () => {
             expect(n.oldValue).toBe(1);
             expect(n.newValue).toBe(2);
             expect(n.position).toBe(-1);
+
+            let mockClass = mock<EClass>();
+            let c = instance(mockClass);
+            when(mockObject.eClass()).thenReturn(c);
+            when(mockClass.getEStructuralFeature(0)).thenReturn(f);
+            expect(n.feature).toBe(f);
         }
         {
             let n = new Notification(o, EventType.ADD, f, 1, 2, 3);
@@ -33,6 +39,26 @@ describe("Notification", () => {
             expect(n.oldValue).toBe(1);
             expect(n.newValue).toBe(2);
             expect(n.position).toBe(3);
+
+            f.featureID = 1;
+            expect(n.featureID).toBe(1);
+        }
+        {
+            let n = new Notification(o, EventType.ADD, null, 1, 2, 3);
+            expect(n.notifier).toBe(o);
+            expect(n.eventType).toBe(EventType.ADD);
+            expect(n.oldValue).toBe(1);
+            expect(n.newValue).toBe(2);
+            expect(n.position).toBe(3);
+
+            let mockClass = mock<EClass>();
+            let c = instance(mockClass);
+            when(mockObject.eClass()).thenReturn(c);
+            when(mockClass.getEStructuralFeature(0)).thenReturn(f);
+            expect(n.feature).toBeNull();
+
+            f.featureID = -1;
+            expect(n.featureID).toBe(-1);
         }
     });
 

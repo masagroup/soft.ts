@@ -16,12 +16,22 @@ import {
     EStructuralFeature,
 } from "./internal";
 
+export interface EDynamicProperties {
+    eDynamicGet(dynamicFeatureID: number): any;
+    eDynamicSet(dynamicFeatureID: number, newValue: any): void;
+    eDynamicUnset(dynamicFeatureID: number): void;
+}
+
 export interface EObjectInternal extends EObject {
     eStaticClass(): EClass;
 
+    eDynamicProperties(): EDynamicProperties;
+
     eInternalResource(): EResource;
     eInternalContainer(): EObject;
-
+    eInternalContainerFeatureID(): number;
+    eSetInternalContainer(container: EObject, containerFeatureID: number): void;
+    eSetInternalResource(resource: EResource): void;
     eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain;
 
     eInverseAdd(
@@ -76,7 +86,6 @@ export interface EObjectInternal extends EObject {
 export function isEObject(o: any): o is EObject {
     return o == undefined ? undefined : typeof o["eClass"] === "function";
 }
-
 export function isEObjectInternal(o: any): o is EObjectInternal {
     return o == undefined ? undefined : isEObject(o) && typeof o["eStaticClass"] === "function";
 }

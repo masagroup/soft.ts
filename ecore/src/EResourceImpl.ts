@@ -9,29 +9,29 @@
 
 import * as fs from "fs";
 import {
-    EURIConverter,
-    ETreeIterator,
-    EResourceSet,
-    EResourceIDManager,
-    EResource,
-    EResourceInternal,
-    EResourceConstants,
-    EStructuralFeature,
-    EObject,
-    EObjectInternal,
-    EObjectList,
-    ENotifier,
-    ENotificationChain,
-    ENotifyingList,
-    EDiagnostic,
-    EList,
     AbstractNotification,
     AbstractNotifyingList,
     BasicEList,
-    BasicNotifier,
     EcoreUtils,
-    EventType,
+    EDiagnostic,
+    EList,
+    ENotificationChain,
+    ENotifier,
+    ENotifierImpl,
+    ENotifyingList,
+    EObject,
+    EObjectInternal,
+    EObjectList,
+    EResource,
+    EResourceConstants,
+    EResourceIDManager,
+    EResourceInternal,
+    EResourceSet,
+    EStructuralFeature,
+    ETreeIterator,
+    EURIConverter,
     EURIConverterImpl,
+    EventType,
     NotificationChain,
 } from "./internal";
 
@@ -105,20 +105,15 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 }
 
-export class EResourceImpl extends BasicNotifier implements EResourceInternal {
-    private _uri: URL;
-    private _resourceIDManager: EResourceIDManager;
-    private _isLoaded: boolean;
-    private _resourceSet: EResourceSet;
-    private _contents: EList<EObject>;
-    private _errors: EList<EDiagnostic>;
-    private _warnings: EList<EDiagnostic>;
+export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
+    private _uri: URL = null;
+    private _resourceIDManager: EResourceIDManager = null;
+    private _isLoaded: boolean = false;
+    private _resourceSet: EResourceSet = null;
+    private _contents: EList<EObject> = null;
+    private _errors: EList<EDiagnostic> = null;
+    private _warnings: EList<EDiagnostic> = null;
     private static _defaultURIConverter = new EURIConverterImpl();
-
-    constructor() {
-        super();
-        this._isLoaded = false;
-    }
 
     get eURI(): URL {
         return this._uri;

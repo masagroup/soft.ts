@@ -8,15 +8,15 @@
 // *****************************************************************************
 
 import {
-    EObject,
-    EDataType,
-    EResource,
-    EResourceSet,
-    EObjectInternal,
-    getPackageRegistry,
-    EList,
     DeepCopy,
     DeepEqual,
+    EDataType,
+    EList,
+    EObject,
+    EObjectInternal,
+    EResource,
+    EResourceSet,
+    getPackageRegistry,
 } from "./internal";
 
 export class EcoreUtils {

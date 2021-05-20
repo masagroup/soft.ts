@@ -18,12 +18,17 @@ import {
     isEAttribute,
     EClassImpl,
     ImmutableEList,
-    Adapter,
+    AbstractEAdapter,
     EventType,
     EcoreConstants,
+    EClassifier,
 } from "./internal";
 
-class ESuperAdapter extends Adapter {
+export function isEClass(e: EClassifier): e is EClass {
+    return "isAbstract" in e;
+}
+
+class ESuperAdapter extends AbstractEAdapter {
     constructor(private _eClass: EClassExt) {
         super();
     }

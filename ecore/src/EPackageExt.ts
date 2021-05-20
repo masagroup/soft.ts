@@ -13,13 +13,13 @@ import {
     ENotification,
     EventType,
     EcoreConstants,
-    Adapter,
+    AbstractEAdapter,
     EPackageImpl,
     EResource,
     EResourceImpl,
 } from "./internal";
 
-class EPackageExtAdapter extends Adapter {
+class EPackageExtAdapter extends AbstractEAdapter {
     constructor(private _pack: EPackageExt) {
         super();
     }

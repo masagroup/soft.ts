@@ -8,24 +8,24 @@
 // *****************************************************************************
 
 import {
+    AbstractNotifyingList,
+    EList,
     ENotificationChain,
-    EPackageRegistry,
-    getPackageRegistry,
-    EResourceFactoryRegistry,
-    getResourceFactoryRegistry,
     ENotifier,
+    ENotifierImpl,
+    EObject,
+    EPackageRegistry,
+    EPackageRegistryImpl,
+    EResource,
+    EResourceFactoryRegistry,
     EResourceInternal,
     EResourceSet,
     EResourceSetConstants,
     EStructuralFeature,
     EURIConverter,
-    EList,
-    EObject,
-    EResource,
-    AbstractNotifyingList,
-    BasicNotifier,
     EURIConverterImpl,
-    EPackageRegistryImpl,
+    getPackageRegistry,
+    getResourceFactoryRegistry,
 } from "./internal";
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
@@ -54,7 +54,7 @@ class ResourcesList extends AbstractNotifyingList<EResource> {
     }
 }
 
-export class EResourceSetImpl extends BasicNotifier implements EResourceSet {
+export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     private _resources: EList<EResource>;
     private _uriConverter: EURIConverter;
     private _uriResourceMap: Map<string, EResource>;

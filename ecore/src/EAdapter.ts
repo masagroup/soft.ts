@@ -14,7 +14,7 @@ export interface EAdapter {
     // In general, an adapter may be shared by more than one notifier.
     target: ENotifier;
 
-    unsetTarget(notifier: ENotifier);
+    unsetTarget(notifier: ENotifier): void;
 
     // NotifyChanged Notifies that a change to some feature has occurred.
     notifyChanged(notification: ENotification): void;

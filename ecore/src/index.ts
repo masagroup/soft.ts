@@ -1,8 +1,7 @@
 export {
-    Adapter,
+    AbstractEAdapter,
     BasicEList,
     BasicEObjectList,
-    BasicNotifier,
     Collection,
     DynamicEObjectImpl,
     EAdapter,
@@ -25,6 +24,7 @@ export {
     ENotification,
     ENotificationChain,
     ENotifier,
+    ENotifierImpl,
     ENotifyingList,
     EObject,
     EObjectImpl,
