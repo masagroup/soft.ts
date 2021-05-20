@@ -24,7 +24,7 @@ export interface EDataTypeInternal extends EDataType {
     defaultValue: any;
 }
 
-export class EDataTypeExt extends EDataTypeImpl {
+export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
     private _defaultValue: any;
 
     get defaultValue(): any {
