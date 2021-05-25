@@ -18,19 +18,19 @@ class BasicEMapEntry<K, V> implements EMapEntry<K, V> {
         this._value = value;
     }
 
-    getKey(): K {
+    get key(): K {
         return this._key;
     }
 
-    setKey(newKey: K): void {
+    set key(newKey: K) {
         this._key = newKey;
     }
 
-    getValue(): V {
+    get value(): V {
         return this._value;
     }
 
-    setValue(newValue: V): void {
+    set value(newValue: V) {
         this._value = newValue;
     }
 }
@@ -59,7 +59,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
         let e = this.getEntry(key);
         if (e) {
             this.remove(e);
-            return e.getValue();
+            return e.value;
         }
         return undefined;
     }
@@ -83,7 +83,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
 
     private getEntry(key: K): EMapEntry<K, V> {
         for (const entry of this) {
-            if (entry.getKey() == key) {
+            if (entry.key == key) {
                 return entry;
             }
         }
@@ -91,11 +91,11 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     protected didAdd(index: number, e: EMapEntry<K, V>): void {
-        this._mapData.set(e.getKey(), e.getValue());
+        this._mapData.set(e.key, e.value);
     }
 
     protected didRemove(index: number, e: EMapEntry<K, V>): void {
-        this._mapData.delete(e.getKey());
+        this._mapData.delete(e.key);
     }
 
     protected didClear(elements: EMapEntry<K, V>[]): void {
@@ -103,7 +103,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     protected didSet(index: number, newE: EMapEntry<K, V>, oldE: EMapEntry<K, V>): void {
-        this._mapData.delete(oldE.getKey());
-        this._mapData.set(newE.getKey(), newE.getValue());
+        this._mapData.delete(oldE.key);
+        this._mapData.set(newE.key, newE.value);
     }
 }
