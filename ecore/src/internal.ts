@@ -13,6 +13,8 @@ export * from "./EAdapter";
 export * from "./EDiagnostic";
 export * from "./EFeatureMapEntry";
 export * from "./EList";
+export * from "./EMap";
+export * from "./EMapEntry";
 export * from "./ENotification";
 export * from "./ENotificationChain";
 export * from "./ENotifier";
@@ -57,6 +59,7 @@ export * from "./EcoreFactory";
 
 export * from "./AbstractEList";
 export * from "./BasicEList";
+export * from "./BasicEMap";
 export * from "./AbstractEAdapter";
 export * from "./AbstractNotification";
 export * from "./AbstractENotifier";
