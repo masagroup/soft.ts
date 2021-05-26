@@ -8,38 +8,31 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito";
-import { EFactory } from "./EFactory";
-import { EPackage } from "./EPackage";
-import { EClass, EMapEntry, EObject , BasicEObjectMap} from "./internal";
+import { BasicEObjectMap, EClass, EMapEntry, EObject, EPackage } from "./internal";
 
+interface EObjectEMapEntry<K, V> extends EObject, EMapEntry<K, V> {}
 
-interface EObjectEMapEntry<K,V> extends EObject , EMapEntry<K,V> {
-
-}
-
-describe('BasicEObjectMap', () => {
-    
-    test('constructor', () => {
+describe("BasicEObjectMap", () => {
+    test("constructor", () => {
         let mockClass = mock<EClass>();
         let cls = instance(mockClass);
-        expect( new BasicEObjectMap<number,string>(cls));
+        expect(new BasicEObjectMap<number, string>(cls));
     });
 
-    test('newEntry', () => {
+    test("newEntry", () => {
         let mockClass = mock<EClass>();
         let cls = instance(mockClass);
         let mockPackage = mock<EPackage>();
         let p = instance(mockPackage);
         let mockFactory = mock<EFactory>();
         let factory = instance(mockFactory);
-        let mockEntry = mock<EObjectEMapEntry<number,string>>();
+        let mockEntry = mock<EObjectEMapEntry<number, string>>();
         let entry = instance(mockEntry);
         when(mockClass.ePackage).thenReturn(p);
         when(mockPackage.eFactoryInstance).thenReturn(factory);
         when(mockFactory.create(cls)).thenReturn(entry);
-        let map = new BasicEObjectMap<number,string>(cls);
-        map.put(2,"2");
+        let map = new BasicEObjectMap<number, string>(cls);
+        map.put(2, "2");
         expect(map.getValue(2)).toBe("2");
     });
-
 });

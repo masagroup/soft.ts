@@ -7,25 +7,21 @@
 //
 // *****************************************************************************
 
-import { EClass } from "./EClass";
-import { BasicEMap, EMapEntry } from "./internal";
+import { BasicEMap, EClass, EMapEntry } from "./internal";
 
+export class BasicEObjectMap<K, V> extends BasicEMap<K, V> {
+    private _entryClass: EClass;
 
-export class BasicEObjectMap<K,V> extends BasicEMap<K,V> {
-
-    private _entryClass : EClass;
-
-    constructor(entryClass : EClass ) {
+    constructor(entryClass: EClass) {
         super();
         this._entryClass = entryClass;
     }
 
-    protected newEntry(key: K, value: V) : EMapEntry<K,V> {
+    protected newEntry(key: K, value: V): EMapEntry<K, V> {
         let eFactory = this._entryClass.ePackage.eFactoryInstance;
-	    let eEntry = eFactory.create(this._entryClass) as any as EMapEntry<K,V>;
-	    eEntry.key = key;
-	    eEntry.value = value;
-	    return eEntry
+        let eEntry = (eFactory.create(this._entryClass) as any) as EMapEntry<K, V>;
+        eEntry.key = key;
+        eEntry.value = value;
+        return eEntry;
     }
-
 }

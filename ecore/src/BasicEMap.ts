@@ -90,7 +90,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
         return undefined;
     }
 
-    protected newEntry(key: K, value: V) : EMapEntry<K,V> {
+    protected newEntry(key: K, value: V): EMapEntry<K, V> {
         return new BasicEMapEntry<K, V>(key, value);
     }
 
