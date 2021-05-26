@@ -45,7 +45,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
 
     put(key: K, value: V): void {
         this._mapData.set(key, value);
-        this.add(new BasicEMapEntry<K, V>(key, value));
+        this.add(this.newEntry(key, value));
     }
 
     getValue(key: K): V {
