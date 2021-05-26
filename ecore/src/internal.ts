@@ -70,6 +70,7 @@ export * from "./ImmutableEList";
 export * from "./AbstractNotifyingList";
 export * from "./BasicEObject";
 export * from "./BasicEObjectList";
+export * from "./BasicEObjectMap";
 export * from "./ENotifierImpl";
 export * from "./EObjectImpl";
 export * from "./EContentAdapter";

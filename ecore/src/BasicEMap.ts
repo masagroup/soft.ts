@@ -90,6 +90,10 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
         return undefined;
     }
 
+    protected newEntry(key: K, value: V) : EMapEntry<K,V> {
+        return new BasicEMapEntry<K, V>(key, value);
+    }
+
     protected didAdd(index: number, e: EMapEntry<K, V>): void {
         this._mapData.set(e.key, e.value);
     }

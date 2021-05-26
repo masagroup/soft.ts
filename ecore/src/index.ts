@@ -1,7 +1,9 @@
 export {
     AbstractEAdapter,
     BasicEList,
+    BasicEMap,
     BasicEObjectList,
+    BasicEObjectMap,
     Collection,
     DynamicEObjectImpl,
     EAdapter,
@@ -19,6 +21,8 @@ export {
     EFeatureMapEntry,
     EGenericType,
     EList,
+    EMap,
+    EMapEntry,
     EModelElement,
     ENamedElement,
     ENotification,
