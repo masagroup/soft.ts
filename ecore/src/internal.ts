@@ -110,6 +110,7 @@ export * from "./EcorePackageImpl";
 export * from "./EcoreFactoryImpl";
 export * from "./EcoreFactoryExt";
 
+export * from "./ExtendedMetaData";
 export * from "./FileURIHandler";
 export * from "./EDiagnosticImpl";
 export * from "./EURIConverterImpl";
