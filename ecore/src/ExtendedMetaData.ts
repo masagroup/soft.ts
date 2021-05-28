@@ -7,83 +7,95 @@
 //
 // *****************************************************************************
 
-import { EClass, EClassifier, ENamedElement, EPackage, EReference , EStructuralFeature, isEStructuralFeature} from "./internal";
+import {
+    EClass,
+    EClassifier,
+    ENamedElement,
+    EPackage,
+    EReference,
+    EStructuralFeature,
+    isEStructuralFeature,
+} from "./internal";
 
 const annotationURI = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
 
 export class ExtendedMetaData {
-    private _metaData : Map<any,any> = new Map<any,any>();
+    private _metaData: Map<any, any> = new Map<any, any>();
 
-    private getENamedElementExtendedMetaData(eElement : ENamedElement) : ENamedElementExtendedMetaData {
+    private getENamedElementExtendedMetaData(
+        eElement: ENamedElement
+    ): ENamedElementExtendedMetaData {
         let result = this._metaData.get(eElement);
         if (!result) {
             if (isEStructuralFeature(eElement)) {
-                result = new EStructuralFeatureExtentedMetaDataImpl(this,eElement);
+                result = new EStructuralFeatureExtentedMetaDataImpl(this, eElement);
             } else {
-                result = new ENamedElementExtendedMetaDataImpl(this,eElement);
+                result = new ENamedElementExtendedMetaDataImpl(this, eElement);
             }
-            this._metaData.set(eElement,result);
+            this._metaData.set(eElement, result);
         }
         return result;
     }
-    
-    private getEStructuralFeatureExtentedMetaData(eFeature : EStructuralFeature) : EStructuralFeatureExtentedMetaData {
+
+    private getEStructuralFeatureExtentedMetaData(
+        eFeature: EStructuralFeature
+    ): EStructuralFeatureExtentedMetaData {
         let result = this._metaData.get(eFeature);
         if (!result) {
-            result = new EStructuralFeatureExtentedMetaDataImpl(this,eFeature);
-            this._metaData.set(eFeature,result);
+            result = new EStructuralFeatureExtentedMetaDataImpl(this, eFeature);
+            this._metaData.set(eFeature, result);
         }
         return result;
     }
-    
-    private getEPackageExtentedMetaData(ePackage : EPackage) : EPackageExtentedMetaData {
+
+    private getEPackageExtentedMetaData(ePackage: EPackage): EPackageExtentedMetaData {
         let result = this._metaData.get(ePackage);
         if (!result) {
-            result = new EPackageExtentedMetaDataImpl(this,ePackage);
-            this._metaData.set(ePackage,result);
+            result = new EPackageExtentedMetaDataImpl(this, ePackage);
+            this._metaData.set(ePackage, result);
         }
         return result;
     }
-    
-    getType(ePackage : EPackage, name :string) :EClassifier {
+
+    getType(ePackage: EPackage, name: string): EClassifier {
         return this.getEPackageExtentedMetaData(ePackage).getType(name);
     }
-    
-    getName(eElement : ENamedElement) : string {
+
+    getName(eElement: ENamedElement): string {
         return this.getENamedElementExtendedMetaData(eElement).getName();
     }
-    
-    getNamespace(eFeature : EStructuralFeature) : string {
+
+    getNamespace(eFeature: EStructuralFeature): string {
         return this.getEStructuralFeatureExtentedMetaData(eFeature).getNamespace();
     }
-    
-    getDocumentRoot(ePackage : EPackage) : EClass {
+
+    getDocumentRoot(ePackage: EPackage): EClass {
         let eClassifier = this.getType(ePackage, "");
         if (eClassifier) {
             return eClassifier as EClass;
         }
         return null;
     }
-    
-    getXMLNSPrefixMapFeature(eClass : EClass) : EReference {
+
+    getXMLNSPrefixMapFeature(eClass: EClass): EReference {
         for (const eReference of eClass.eAllReferences) {
-            if (this.getName(eReference) == "xmlns:prefix" ) {
+            if (this.getName(eReference) == "xmlns:prefix") {
                 return eReference;
             }
         }
         return null;
     }
-    
-    getXSISchemaLocationMapFeature(eClass : EClass) : EReference {
+
+    getXSISchemaLocationMapFeature(eClass: EClass): EReference {
         for (const eReference of eClass.eAllReferences) {
-            if (this.getName(eReference) == "xsi:schemaLocation" ) {
+            if (this.getName(eReference) == "xsi:schemaLocation") {
                 return eReference;
             }
         }
         return null;
     }
-    
-    basicGetName(eElement : ENamedElement) : string {
+
+    basicGetName(eElement: ENamedElement): string {
         let annotation = eElement.getEAnnotation(annotationURI);
         if (annotation) {
             let name = annotation.details.getValue("name");
@@ -93,8 +105,8 @@ export class ExtendedMetaData {
         }
         return eElement.name;
     }
-    
-    basicGetNamespace(eFeature : EStructuralFeature) : string {
+
+    basicGetNamespace(eFeature: EStructuralFeature): string {
         let annotation = eFeature.getEAnnotation(annotationURI);
         if (annotation) {
             let namespace = annotation.details.getValue("namespace");
@@ -107,7 +119,6 @@ export class ExtendedMetaData {
                 } else {
                     return namespace;
                 }
-                
             }
         }
         return "";
@@ -115,15 +126,15 @@ export class ExtendedMetaData {
 }
 
 interface ENamedElementExtendedMetaData {
-	getName() : string;
+    getName(): string;
 }
 
 class ENamedElementExtendedMetaDataImpl implements ENamedElementExtendedMetaData {
-    protected _emd      : ExtendedMetaData;
-	protected _eElement : ENamedElement;
-	protected _name     : string;
+    protected _emd: ExtendedMetaData;
+    protected _eElement: ENamedElement;
+    protected _name: string;
 
-    constructor(emd : ExtendedMetaData, eElement : ENamedElement ) {
+    constructor(emd: ExtendedMetaData, eElement: ENamedElement) {
         this._emd = emd;
         this._eElement = eElement;
     }
@@ -134,62 +145,60 @@ class ENamedElementExtendedMetaDataImpl implements ENamedElementExtendedMetaData
         }
         return this._name;
     }
-	
 }
 
-
 interface EPackageExtentedMetaData {
-	getType(name : string) : EClassifier;
+    getType(name: string): EClassifier;
 }
 
 class EPackageExtentedMetaDataImpl implements EPackageExtentedMetaData {
-	protected _emd      : ExtendedMetaData;
-	protected _ePackage : EPackage;
-	protected _nameToClassifierMap : Map<string,EClassifier>;
+    protected _emd: ExtendedMetaData;
+    protected _ePackage: EPackage;
+    protected _nameToClassifierMap: Map<string, EClassifier>;
 
-    constructor(emd : ExtendedMetaData, ePackage : EPackage) {
+    constructor(emd: ExtendedMetaData, ePackage: EPackage) {
         this._emd = emd;
         this._ePackage = ePackage;
     }
 
-    getType(name : string) : EClassifier {
+    getType(name: string): EClassifier {
         let eResult = this._nameToClassifierMap?.get(name);
         if (!eResult) {
             let eClassifiers = this._ePackage.eClassifiers;
-            if (!this._nameToClassifierMap || this._nameToClassifierMap.size != eClassifiers.size() ) {
-                this._nameToClassifierMap = new Map<string,EClassifier>();
+            if (
+                !this._nameToClassifierMap ||
+                this._nameToClassifierMap.size != eClassifiers.size()
+            ) {
+                this._nameToClassifierMap = new Map<string, EClassifier>();
                 for (const eClassifier of eClassifiers) {
                     let eClassifierName = this._emd.getName(eClassifier);
-                    this._nameToClassifierMap.set(eClassifierName,eClassifier);
+                    this._nameToClassifierMap.set(eClassifierName, eClassifier);
                     if (eClassifierName == name) {
-                        eResult = eClassifier
-                        break
+                        eResult = eClassifier;
+                        break;
                     }
                 }
             }
         }
-        return eResult
+        return eResult;
     }
 }
 
 interface EStructuralFeatureExtentedMetaData extends ENamedElementExtendedMetaData {
-	getNamespace() : string
+    getNamespace(): string;
 }
 
-class EStructuralFeatureExtentedMetaDataImpl extends  ENamedElementExtendedMetaDataImpl {
-	private _namespace : string;
+class EStructuralFeatureExtentedMetaDataImpl extends ENamedElementExtendedMetaDataImpl {
+    private _namespace: string;
 
-    constructor( emd : ExtendedMetaData , eStructuralFeature : EStructuralFeature ) {
-        super(emd,eStructuralFeature);
+    constructor(emd: ExtendedMetaData, eStructuralFeature: EStructuralFeature) {
+        super(emd, eStructuralFeature);
     }
 
-    getNamespace() : string {
+    getNamespace(): string {
         if (!this._namespace) {
             this._namespace = this._emd.basicGetNamespace(this._eElement as EStructuralFeature);
         }
         return this._namespace;
     }
-
 }
-
-

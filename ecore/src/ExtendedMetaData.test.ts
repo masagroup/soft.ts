@@ -1,16 +1,22 @@
 import { instance, mock, reset, verify, when } from "ts-mockito";
 import { EReference } from "./EReference";
 import { ImmutableEList } from "./ImmutableEList";
-import { EAnnotation, EClass, EClassifier, EMap, ENamedElement, EPackage, EStructuralFeature, ExtendedMetaData } from "./internal";
-
+import {
+    EAnnotation,
+    EClass,
+    EClassifier,
+    EMap,
+    ENamedElement,
+    EPackage,
+    EStructuralFeature,
+    ExtendedMetaData,
+} from "./internal";
 
 const annotationURI = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
 
-describe('ExtendedMetaData', () => {
-    
-    describe('getName', () => {
-
-        test('no annotations ', () => {
+describe("ExtendedMetaData", () => {
+    describe("getName", () => {
+        test("no annotations ", () => {
             let emd = new ExtendedMetaData();
             let mockElement = mock<ENamedElement>();
             let element = instance(mockElement);
@@ -19,16 +25,16 @@ describe('ExtendedMetaData', () => {
             expect(emd.getName(element)).toBe("no annotations");
             expect(emd.getName(element)).toBe("no annotations");
             verify(mockElement.getEAnnotation(annotationURI)).once();
-            verify(mockElement.name).once();        
+            verify(mockElement.name).once();
         });
 
-        test('with annotations', () => {
+        test("with annotations", () => {
             let emd = new ExtendedMetaData();
             let mockFeature = mock<EStructuralFeature>();
             let feature = instance(mockFeature);
             let mockAnnotation = mock<EAnnotation>();
             let annotation = instance(mockAnnotation);
-            let mockDetails = mock<EMap<string,string>>();
+            let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
             when(mockFeature.featureID).thenReturn(-1);
             when(mockFeature.getEAnnotation(annotationURI)).thenReturn(annotation);
@@ -40,35 +46,36 @@ describe('ExtendedMetaData', () => {
             verify(mockAnnotation.details).once();
             verify(mockDetails.getValue("name")).once();
         });
-        
     });
 
-    test('getType', () => {
+    test("getType", () => {
         let emd = new ExtendedMetaData();
         let mockPackage = mock<EPackage>();
-        let ePackage = instance(mockPackage);    
+        let ePackage = instance(mockPackage);
         let mockClassifier1 = mock<EClassifier>();
         let classifier1 = instance(mockClassifier1);
         let mockClassifier2 = mock<EClassifier>();
         let classifier2 = instance(mockClassifier2);
         let mockAnnotation = mock<EAnnotation>();
         let annotation = instance(mockAnnotation);
-        let mockDetails = mock<EMap<string,string>>();
+        let mockDetails = mock<EMap<string, string>>();
         let details = instance(mockDetails);
-	
-	    when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([classifier1,classifier2]));
-	    when(mockClassifier1.getEAnnotation(annotationURI)).thenReturn(null);
+
+        when(mockPackage.eClassifiers).thenReturn(
+            new ImmutableEList<EClassifier>([classifier1, classifier2])
+        );
+        when(mockClassifier1.getEAnnotation(annotationURI)).thenReturn(null);
         when(mockClassifier1.name).thenReturn("classifier1");
         when(mockClassifier2.getEAnnotation(annotationURI)).thenReturn(annotation);
         when(mockAnnotation.details).thenReturn(details);
         when(mockDetails.getValue("name")).thenReturn("classifier2");
-        
-        expect(emd.getType(ePackage,"classifier1")).toBe(classifier1);
-        expect(emd.getType(ePackage,"classifier2")).toBe(classifier2);
+
+        expect(emd.getType(ePackage, "classifier1")).toBe(classifier1);
+        expect(emd.getType(ePackage, "classifier2")).toBe(classifier2);
     });
 
-    describe('getNamespace', () => {
-        test('empty', () => {
+    describe("getNamespace", () => {
+        test("empty", () => {
             let emd = new ExtendedMetaData();
             let mockFeature = mock<EStructuralFeature>();
             let feature = instance(mockFeature);
@@ -76,13 +83,13 @@ describe('ExtendedMetaData', () => {
             expect(emd.getNamespace(feature)).toBe("");
             expect(emd.getNamespace(feature)).toBe("");
         });
-        test('details', () => {
+        test("details", () => {
             let emd = new ExtendedMetaData();
             let mockFeature = mock<EStructuralFeature>();
             let feature = instance(mockFeature);
             let mockAnnotation = mock<EAnnotation>();
             let annotation = instance(mockAnnotation);
-            let mockDetails = mock<EMap<string,string>>();
+            let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
             when(mockFeature.getEAnnotation(annotationURI)).thenReturn(annotation);
             when(mockAnnotation.details).thenReturn(details);
@@ -90,16 +97,16 @@ describe('ExtendedMetaData', () => {
             expect(emd.getNamespace(feature)).toBe("namespace");
             expect(emd.getNamespace(feature)).toBe("namespace");
         });
-        test('package', () => {
+        test("package", () => {
             let emd = new ExtendedMetaData();
             let mockFeature = mock<EStructuralFeature>();
             let feature = instance(mockFeature);
             let mockAnnotation = mock<EAnnotation>();
             let annotation = instance(mockAnnotation);
-            let mockDetails = mock<EMap<string,string>>();
+            let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
             let mockPackage = mock<EPackage>();
-            let ePackage = instance(mockPackage);    
+            let ePackage = instance(mockPackage);
             let mockClass = mock<EClass>();
             let eClass = instance(mockClass);
             when(mockFeature.getEAnnotation(annotationURI)).thenReturn(annotation);
@@ -113,53 +120,59 @@ describe('ExtendedMetaData', () => {
         });
     });
 
-    describe('getDocumentRoot', () => {
-        test('no annotations', () => {
+    describe("getDocumentRoot", () => {
+        test("no annotations", () => {
             let emd = new ExtendedMetaData();
             let mockClass1 = mock<EClass>();
             let eClass1 = instance(mockClass1);
             let mockClass2 = mock<EClass>();
             let eClass2 = instance(mockClass2);
             let mockPackage = mock<EPackage>();
-            let ePackage = instance(mockPackage);   
-            when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([eClass1,eClass2]));
+            let ePackage = instance(mockPackage);
+            when(mockPackage.eClassifiers).thenReturn(
+                new ImmutableEList<EClassifier>([eClass1, eClass2])
+            );
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(null);
             when(mockClass1.name).thenReturn("classifier1");
             when(mockClass2.getEAnnotation(annotationURI)).thenReturn(null);
             when(mockClass2.name).thenReturn("classifier2");
             expect(emd.getDocumentRoot(ePackage)).toBeNull();
         });
-        test('with annotations but no name', () => {
+        test("with annotations but no name", () => {
             let emd = new ExtendedMetaData();
             let mockClass1 = mock<EClass>();
             let eClass1 = instance(mockClass1);
             let mockClass2 = mock<EClass>();
             let eClass2 = instance(mockClass2);
             let mockPackage = mock<EPackage>();
-            let ePackage = instance(mockPackage);   
+            let ePackage = instance(mockPackage);
             let mockAnnotation = mock<EAnnotation>();
             let annotation = instance(mockAnnotation);
-            let mockDetails = mock<EMap<string,string>>();
+            let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
-            when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([eClass1,eClass2]));
+            when(mockPackage.eClassifiers).thenReturn(
+                new ImmutableEList<EClassifier>([eClass1, eClass2])
+            );
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(annotation);
             when(mockAnnotation.details).thenReturn(details);
             when(mockDetails.getValue("name")).thenReturn(undefined);
             expect(emd.getDocumentRoot(ePackage)).toBeNull();
         });
-        test('with annotations and name', () => {
+        test("with annotations and name", () => {
             let emd = new ExtendedMetaData();
             let mockClass1 = mock<EClass>();
             let eClass1 = instance(mockClass1);
             let mockClass2 = mock<EClass>();
             let eClass2 = instance(mockClass2);
             let mockPackage = mock<EPackage>();
-            let ePackage = instance(mockPackage);   
+            let ePackage = instance(mockPackage);
             let mockAnnotation = mock<EAnnotation>();
             let annotation = instance(mockAnnotation);
-            let mockDetails = mock<EMap<string,string>>();
+            let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
-            when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([eClass1,eClass2]));
+            when(mockPackage.eClassifiers).thenReturn(
+                new ImmutableEList<EClassifier>([eClass1, eClass2])
+            );
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(null);
             when(mockClass1.name).thenReturn("classifier1");
             when(mockClass2.getEAnnotation(annotationURI)).thenReturn(annotation);
@@ -169,8 +182,8 @@ describe('ExtendedMetaData', () => {
         });
     });
 
-    describe('getXMLNSPrefixMapFeature', () => {
-        test('no prefix', () => {
+    describe("getXMLNSPrefixMapFeature", () => {
+        test("no prefix", () => {
             let emd = new ExtendedMetaData();
             let mockClass = mock<EClass>();
             let eClass = instance(mockClass);
@@ -182,7 +195,7 @@ describe('ExtendedMetaData', () => {
             expect(emd.getXMLNSPrefixMapFeature(eClass)).toBeNull();
         });
 
-        test('prefix', () => {
+        test("prefix", () => {
             let emd = new ExtendedMetaData();
             let mockClass = mock<EClass>();
             let eClass = instance(mockClass);
@@ -195,8 +208,8 @@ describe('ExtendedMetaData', () => {
         });
     });
 
-    describe('getXSISchemaLocationMapFeature', () => {
-        test('no schema', () => {
+    describe("getXSISchemaLocationMapFeature", () => {
+        test("no schema", () => {
             let emd = new ExtendedMetaData();
             let mockClass = mock<EClass>();
             let eClass = instance(mockClass);
@@ -208,7 +221,7 @@ describe('ExtendedMetaData', () => {
             expect(emd.getXSISchemaLocationMapFeature(eClass)).toBeNull();
         });
 
-        test('schema', () => {
+        test("schema", () => {
             let emd = new ExtendedMetaData();
             let mockClass = mock<EClass>();
             let eClass = instance(mockClass);
@@ -220,8 +233,4 @@ describe('ExtendedMetaData', () => {
             expect(emd.getXSISchemaLocationMapFeature(eClass)).toBe(eReference);
         });
     });
-
-
 });
-
-
