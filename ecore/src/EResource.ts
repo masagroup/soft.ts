@@ -35,18 +35,18 @@ export interface EResource extends ENotifier {
     eContents(): EList<EObject>;
     eAllContents(): IterableIterator<EObject>;
 
-    load(): Promise<void>;
-    loadFromStream(s: fs.ReadStream): Promise<void>;
-    loadSync(): void;
-    loadFromString(s: string): void;
+    load(options?: Map<string, any>): Promise<void>;
+    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void>;
+    loadSync(options?: Map<string, any>): void;
+    loadFromString(s: string, options?: Map<string, any>): void;
 
     unload(): void;
     readonly isLoaded: boolean;
 
-    save(): Promise<void>;
-    saveToStream(s: fs.WriteStream): Promise<void>;
-    saveSync(): void;
-    saveToString(): string;
+    save(options?: Map<string, any>): Promise<void>;
+    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void>;
+    saveSync(options?: Map<string, any>): void;
+    saveToString(options?: Map<string, any>): string;
 
     attached(object: EObject): void;
     detached(object: EObject): void;

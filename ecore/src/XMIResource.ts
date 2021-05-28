@@ -32,18 +32,18 @@ export class XMIResourceImpl extends XMLResourceImpl implements XMIResource {
         this._xmiVersion = v;
     }
 
-    protected createLoad(): XMLLoad {
-        return new XMILoad(this);
+    protected createLoad(options: Map<string, any>): XMLLoad {
+        return new XMILoad(this, options);
     }
 
-    protected createSave(): XMLSave {
-        return new XMISave(this);
+    protected createSave(options: Map<string, any>): XMLSave {
+        return new XMISave(this, options);
     }
 }
 
 export class XMILoad extends XMLLoad {
-    constructor(resource: XMIResource) {
-        super(resource);
+    constructor(resource: XMIResource, options: Map<string, any>) {
+        super(resource, options);
         this._notFeatures.push(
             { uri: XMIConstants.xmiURI, local: XMIConstants.typeAttrib },
             { uri: XMIConstants.xmiURI, local: XMIConstants.versionAttrib },
@@ -69,8 +69,8 @@ export class XMILoad extends XMLLoad {
 }
 
 export class XMISave extends XMLSave {
-    constructor(resource: XMIResource) {
-        super(resource);
+    constructor(resource: XMIResource, options: Map<string, any>) {
+        super(resource, options);
     }
 
     protected saveNamespaces() {

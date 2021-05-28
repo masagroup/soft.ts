@@ -10,6 +10,7 @@
 import * as fs from "fs";
 import * as sax from "sax";
 import * as stream from "stream";
+import { ExtendedMetaData } from "./ExtendedMetaData";
 import {
     EStructuralFeature,
     EReference,
@@ -129,32 +130,32 @@ export class XMLResourceImpl extends EResourceImpl implements XMLResource {
         this._encoding = v;
     }
 
-    protected doLoadFromStream(rs: fs.ReadStream): Promise<void> {
-        let l = this.createLoad();
+    protected doLoadFromStream(rs: fs.ReadStream, options: Map<string, any>): Promise<void> {
+        let l = this.createLoad(options);
         return l.loadFromStream(rs);
     }
 
-    protected doLoadFromString(s: string) {
-        let l = this.createLoad();
+    protected doLoadFromString(s: string, options: Map<string, any>) {
+        let l = this.createLoad(options);
         return l.loadFromString(s);
     }
 
-    protected doSaveToStream(ws: fs.WriteStream): Promise<void> {
-        let s = this.createSave();
+    protected doSaveToStream(ws: fs.WriteStream, options: Map<string, any>): Promise<void> {
+        let s = this.createSave(options);
         return s.saveToStream(ws);
     }
 
-    protected doSaveToString(): string {
-        let s = this.createSave();
+    protected doSaveToString(options: Map<string, any>): string {
+        let s = this.createSave(options);
         return s.saveToString();
     }
 
-    protected createLoad(): XMLLoad {
-        return new XMLLoad(this);
+    protected createLoad(options: Map<string, any>): XMLLoad {
+        return new XMLLoad(this, options);
     }
 
-    protected createSave(): XMLSave {
-        return new XMLSave(this);
+    protected createSave(options: Map<string, any>): XMLSave {
+        return new XMLSave(this, options);
     }
 }
 
@@ -182,6 +183,7 @@ export class XMLLoad {
     protected _attributes: { [key: string]: sax.QualifiedAttribute } = null;
     protected _namespaces: XMLNamespaces = new XMLNamespaces();
     protected _uriToFactories: Map<string, EFactory> = new Map<string, EFactory>();
+    protected _prefixesToURI: Map<string, string> = new Map<string, string>();
     protected _objects: EObject[] = [];
     protected _sameDocumentProxies: EObject[] = [];
     protected _notFeatures: { uri: string; local: string }[] = [
@@ -196,7 +198,7 @@ export class XMLLoad {
     protected _references: XMLReference[] = [];
     protected _packageRegistry: EPackageRegistry;
 
-    constructor(resource: XMLResource) {
+    constructor(resource: XMLResource, options: Map<string, any>) {
         this._resource = resource;
         this._packageRegistry = this._resource.eResourceSet()
             ? this._resource.eResourceSet().getPackageRegistry()
@@ -1022,7 +1024,7 @@ export class XMLSave {
     private _namespaces: XMLNamespaces = new XMLNamespaces();
     private _keepDefaults = false;
 
-    constructor(resource: XMLResource) {
+    constructor(resource: XMLResource, options: Map<string, any>) {
         this._resource = resource;
     }
 
