@@ -8,11 +8,11 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EAttribute, EClass, EClassifier, EPackage, EReference, XMIResource } from "./internal";
+import { EAttribute, EClass, EClassifier, EPackage, EReference, XMIResourceImpl } from "./internal";
 
 describe("XMIResource", () => {
     describe("loadBookStore", () => {
-        let resource = new XMIResource();
+        let resource = new XMIResourceImpl();
         resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
 
         beforeEach(() => {
@@ -84,7 +84,7 @@ describe("XMIResource", () => {
     });
 
     describe("loadLibrary", () => {
-        let resource = new XMIResource();
+        let resource = new XMIResourceImpl();
         resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.ecore");
 
         beforeEach(() => {
@@ -128,7 +128,7 @@ describe("XMIResource", () => {
 
     describe("saveBookStore", () => {
         test("saveToString", async () => {
-            let resource = new XMIResource();
+            let resource = new XMIResourceImpl();
             resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
             await resource.load();
 
@@ -144,7 +144,7 @@ describe("XMIResource", () => {
 
     describe("saveLibrary", () => {
         test("saveToString", async () => {
-            let resource = new XMIResource();
+            let resource = new XMIResourceImpl();
             resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.ecore");
             await resource.load();
 

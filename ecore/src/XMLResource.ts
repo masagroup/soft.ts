@@ -106,7 +106,29 @@ export class XMLNamespaces {
     }
 }
 
-export class XMLResource extends EResourceImpl {
+export interface XMLResource extends EResource {
+    xmlVersion: string;
+    encoding: string;
+}
+
+export class XMLResourceImpl extends EResourceImpl implements XMLResource {
+    private _xmlVersion: string = "1.0";
+    private _encoding: string = "UTF-8";
+
+    public get xmlVersion(): string {
+        return this._xmlVersion;
+    }
+    public set xmlVersion(v: string) {
+        this._xmlVersion = v;
+    }
+
+    public get encoding(): string {
+        return this._encoding;
+    }
+    public set encoding(v: string) {
+        this._encoding = v;
+    }
+
     protected doLoadFromStream(rs: fs.ReadStream): Promise<void> {
         let l = this.createLoad();
         return l.loadFromStream(rs);

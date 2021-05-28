@@ -7,11 +7,11 @@
 //
 // *****************************************************************************
 
-import { EResource, EResourceFactory, XMIResource } from "./internal";
+import { EResource, EResourceFactory, XMIResourceImpl } from "./internal";
 
 export class XMIResourceFactory implements EResourceFactory {
     createResource(uri: URL): EResource {
-        let r = new XMIResource();
+        let r = new XMIResourceImpl();
         r.eURI = uri;
         return r;
     }

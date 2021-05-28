@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EObject, XMLResource, XMLLoad, XMLSave } from "./internal";
+import { EObject, XMLResource, XMLResourceImpl, XMLLoad, XMLSave } from "./internal";
 
 class XMIConstants {
     static xmiURI = "http://www.omg.org/XMI";
@@ -18,8 +18,19 @@ class XMIConstants {
     static xmlNS = "xmlns";
 }
 
-export class XMIResource extends XMLResource {
-    xmiVersion: string = "";
+export interface XMIResource extends XMLResource {
+    xmiVersion: string;
+}
+
+export class XMIResourceImpl extends XMLResourceImpl implements XMIResource {
+    private _xmiVersion: string = "";
+
+    public get xmiVersion(): string {
+        return this._xmiVersion;
+    }
+    public set xmiVersion(v: string) {
+        this._xmiVersion = v;
+    }
 
     protected createLoad(): XMLLoad {
         return new XMILoad(this);
