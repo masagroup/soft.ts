@@ -27,7 +27,7 @@ export class ETreeIterator<O, T> implements IterableIterator<T> {
     next(): IteratorResult<T> {
         if (!this._data) {
             this._data = [this._getChildrenIterator(this._obj)];
-            if (this._root) return { value: (this._obj as any) as T, done: false };
+            if (this._root) return { value: this._obj as any as T, done: false };
         }
 
         if (this._data.length == 0) return { value: undefined, done: true };
