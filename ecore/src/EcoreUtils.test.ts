@@ -138,9 +138,7 @@ describe("EcoreUtils", () => {
             let eClass1 = getEcoreFactory().createEClass();
             let eClass2 = getEcoreFactory().createEClass();
             ePackage.eFactoryInstance = eFactory;
-            ePackage.eClassifiers.addAll(
-                new ImmutableEList<EClass>([eClass1, eClass2])
-            );
+            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1, eClass2]));
 
             let eAttribute1 = getEcoreFactory().createEAttribute();
             eAttribute1.name = "attribute1";
@@ -177,9 +175,7 @@ describe("EcoreUtils", () => {
             let eClass1 = getEcoreFactory().createEClass();
             let eClass2 = getEcoreFactory().createEClass();
             ePackage.eFactoryInstance = eFactory;
-            ePackage.eClassifiers.addAll(
-                new ImmutableEList<EClass>([eClass1, eClass2])
-            );
+            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1, eClass2]));
 
             let eAttribute1 = getEcoreFactory().createEAttribute();
             eAttribute1.name = "attribute1";

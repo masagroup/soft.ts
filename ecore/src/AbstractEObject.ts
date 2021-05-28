@@ -198,13 +198,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     abstract eCrossReferences(): EList<EObject>;
 
     eAllContents(): IterableIterator<EObject> {
-        return new ETreeIterator<EObject, EObject>(
-            this,
-            false,
-            function (o: EObject): Iterator<EObject> {
-                return o.eContents()[Symbol.iterator]();
-            }
-        );
+        return new ETreeIterator<EObject, EObject>(this, false, function (
+            o: EObject
+        ): Iterator<EObject> {
+            return o.eContents()[Symbol.iterator]();
+        });
     }
 
     eFeatureID(feature: EStructuralFeature): number {

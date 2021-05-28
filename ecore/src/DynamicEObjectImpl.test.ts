@@ -157,9 +157,7 @@ describe("DynamicEObjectImpl", () => {
 
         expect(o1.eGet(r1)).not.toBeNull();
         let o1cs = o1.eGet(r1) as EList<EObject>;
-        o1cs.addAll(
-            new ImmutableEList<EObject>([o1c1, o1c2])
-        );
+        o1cs.addAll(new ImmutableEList<EObject>([o1c1, o1c2]));
 
         let o3 = new DynamicEObjectImpl();
         o3.setEClass(c3);
@@ -167,9 +165,7 @@ describe("DynamicEObjectImpl", () => {
         // add to resource to enable proxy resolution
         let resource = new EResourceImpl();
         resource.eURI = new URL("file:///" + __dirname + "/r.txt");
-        resource.eContents().addAll(
-            new ImmutableEList<EObject>([o1, o3])
-        );
+        resource.eContents().addAll(new ImmutableEList<EObject>([o1, o3]));
 
         let resourceSet = new EResourceSetImpl();
         resourceSet.getResources().add(resource);

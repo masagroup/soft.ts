@@ -50,7 +50,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     protected doSet(index: number, e: E): E {
         let o = this._v[index];
         this._v[index] = e;
-        this.didSet(index, o, e);
+        this.didSet(index, e, o);
         this.didChange();
         return o;
     }

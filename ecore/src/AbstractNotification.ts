@@ -137,7 +137,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
     }
 
     dispatch(): void {
-        if (this.notifier && this.eventType != -1) this.notifier.eNotify(this);
+        if (this.notifier) this.notifier.eNotify(this);
         if (this._next) this._next.dispatch();
     }
 }

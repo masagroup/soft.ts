@@ -77,7 +77,10 @@ export class XMLNamespaces {
         if (this._namespacesSize > this._namespaces.length) {
             this._namespaces.push({ prefix: prefix, uri: uri });
         } else {
-            this._namespaces[this._namespacesSize] = { prefix: prefix, uri: uri };
+            this._namespaces[this._namespacesSize] = {
+                prefix: prefix,
+                uri: uri,
+            };
         }
         return false;
     }
@@ -162,7 +165,10 @@ export class XMLLoad {
     protected _notFeatures: { uri: string; local: string }[] = [
         { uri: XMLConstants.xsiURI, local: XMLConstants.typeAttrib },
         { uri: XMLConstants.xsiURI, local: XMLConstants.schemaLocationAttrib },
-        { uri: XMLConstants.xsiURI, local: XMLConstants.noNamespaceSchemaLocationAttrib },
+        {
+            uri: XMLConstants.xsiURI,
+            local: XMLConstants.noNamespaceSchemaLocationAttrib,
+        },
     ];
     protected _isResolveDeferred: boolean = false;
     protected _references: XMLReference[] = [];
@@ -241,9 +247,9 @@ export class XMLLoad {
         );
     }
 
-    private setAttributes(attributes: {
+    private setAttributes(attributes: { [key: string]: sax.QualifiedAttribute }): {
         [key: string]: sax.QualifiedAttribute;
-    }): { [key: string]: sax.QualifiedAttribute } {
+    } {
         let oldAttributes = this._attributes;
         this._attributes = attributes;
         return oldAttributes;

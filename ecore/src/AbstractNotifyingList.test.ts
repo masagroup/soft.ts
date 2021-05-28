@@ -113,9 +113,7 @@ describe("AbstractNotifyingList", () => {
 
     test("addAll", () => {
         let l = new NotifyingListTest<number>();
-        l.addAll(
-            new ImmutableEList<number>([2, 3])
-        );
+        l.addAll(new ImmutableEList<number>([2, 3]));
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -131,9 +129,7 @@ describe("AbstractNotifyingList", () => {
         ).once();
         expect(l.toArray()).toEqual([2, 3]);
 
-        l.addAll(
-            new ImmutableEList<number>([4])
-        );
+        l.addAll(new ImmutableEList<number>([4]));
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({

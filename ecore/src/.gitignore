@@ -6,6 +6,7 @@ E*.ts
 !E*Adapter.ts
 !EDiag*.ts
 !EFeatureMap*.ts
+!EMap*.ts
 !ENotif*.ts
 !EObjectInternal.ts
 !EObjectList.ts
