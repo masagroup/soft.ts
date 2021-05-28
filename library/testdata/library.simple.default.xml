@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library xmlns="http:///org/eclipse/emf/examples/library/library.ecore/1.0.0" address="My Library Adress" name="My Library">
+  <employees address="adress" first-name="First Name" last-name="Last Name"/>
+</library>

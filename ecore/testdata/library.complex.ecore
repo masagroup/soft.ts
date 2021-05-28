@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="library" nsURI="http:///org/eclipse/emf/examples/library/library.ecore/1.0.0" nsPrefix="lib">
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentRoot">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name"/>
+      <details key="kind" value="mixed"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xMLNSPrefixMap" upperBound="-1" transient="true" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="xmlns:prefix"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xSISchemaLocation" upperBound="-1" transient="true" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="xsi:schemaLocation"/>
+      </eAnnotations>
+      <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="#//Library" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="library"/>
+        <details key="kind" value="element"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Book" eSuperTypes="#//CirculatingItem">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="title">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -14,33 +41,55 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="writers" upperBound="-1" eType="#//Writer" transient="true" derived="true" containment="true" resolveProxies="false">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="writers" upperBound="-1" eType="#//Writer" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="group" value="#people"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1" eType="#//Employee" transient="true" derived="true" containment="true" resolveProxies="false">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1" eType="#//Employee" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="group" value="#people"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="borrowers" upperBound="-1" eType="#//Borrower" transient="true" derived="true" containment="true" resolveProxies="false">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="borrowers" upperBound="-1" eType="#//Borrower" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="group" value="#people"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stock" ordered="false" upperBound="-1" eType="#//Item" containment="true" resolveProxies="false"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false" upperBound="-1" eType="#//Book" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stock" ordered="false" upperBound="-1" eType="#//Item" transient="true" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" ordered="false" upperBound="-1" eType="#//Book" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="branches" upperBound="-1" eType="#//Library" containment="true" eOpposite="#//Library/parentBranch"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="parentBranch" eType="#//Library" eOpposite="#//Library/branches"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="people" upperBound="-1">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentBranch" eType="#//Library" eOpposite="#//Library/branches">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="parent-branch"/>
+        <details key="kind" value="element"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="people" upperBound="-1" transient="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="group"/>
       </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EFeatureMapEntry"/>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownerPdg" eType="#//Person" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="owner-pdg"/>
+        <details key="kind" value="element"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Writer" eSuperTypes="#//Person">
+    <eAnnotations source="http://net.masagroup/soft/2018/GenCpp">
+      <details key="extension" value="true"/>
+    </eAnnotations>
+    <eAnnotations source="http://net.masagroup/soft/2019/GenGo">
+      <details key="extension" value="true"/>
+    </eAnnotations>
+    <eAnnotations source="http://net.masagroup/soft/2020/GenTS">
+      <details key="extension" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" volatile="true" transient="true">
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
@@ -53,6 +102,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="publicationDate">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="publication-date"/>
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eStructuralFeatures>
   </eClassifiers>
@@ -68,6 +121,10 @@
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="issuesPerYear" lowerBound="1">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="issues-per-year"/>
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eStructuralFeatures>
   </eClassifiers>
@@ -76,6 +133,10 @@
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minutesLength" lowerBound="1">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="minutes-length"/>
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="damaged">
@@ -94,9 +155,17 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Person" eSuperTypes="#//Addressable">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" lowerBound="1">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="first-name"/>
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" lowerBound="1">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="last-name"/>
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
       <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eStructuralFeatures>
   </eClassifiers>

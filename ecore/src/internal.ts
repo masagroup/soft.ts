@@ -118,9 +118,11 @@ export * from "./EResourceImpl";
 export * from "./EResourceSetImpl";
 
 export * from "./XMLResource";
+export * from "./XMLResourceFactory";
+export * from "./XMLProcessor";
 export * from "./XMIResource";
 export * from "./XMIResourceFactory";
-export * from "./XMLResourceFactory";
+export * from "./XMIProcessor";
 
 export * from "./EPackageRegistryImpl";
 export * from "./EResourceFactoryRegistryImpl";
