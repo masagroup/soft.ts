@@ -10,30 +10,32 @@
 import * as fs from "fs";
 import * as sax from "sax";
 import * as stream from "stream";
-import { ExtendedMetaData } from "./ExtendedMetaData";
 import {
-    EStructuralFeature,
-    EReference,
-    EPackageRegistry,
-    getEcorePackage,
-    getPackageRegistry,
-    EList,
-    EObject,
-    EObjectInternal,
-    EFactory,
     EClass,
     EClassifier,
+    EcoreUtils,
     EDataType,
     EDiagnostic,
     EDiagnosticImpl,
-    EResourceImpl,
+    EFactory,
+    EList,
+    EMap,
+    EObject,
+    EObjectInternal,
     EPackage,
-    isEReference,
-    isEObjectInternal,
+    EPackageRegistry,
+    EReference,
     EResource,
+    EResourceImpl,
+    EStructuralFeature,
+    ExtendedMetaData,
+    getEcorePackage,
+    getPackageRegistry,
     isEClass,
     isEDataType,
     isEObject,
+    isEObjectInternal,
+    isEReference,
 } from "./internal";
 
 enum LoadFeatureKind {
@@ -176,15 +178,25 @@ type XMLReference = {
     pos: number;
 };
 
+export const OPTION_EXTENDED_META_DATA = "EXTENDED_META_DATA";
+export const OPTION_SUPPRESS_DOCUMENT_ROOT = "OPTION_SUPPRESS_DOCUMENT_ROOT";
+export const OPTION_IDREF_RESOLUTION_DEFERRED = "OPTION_IDREF_RESOLUTION_DEFERRED";
+export const OPTION_ID_ATTRIBUTE_NAME = "OPTION_ID_ATTRIBUTE_NAME";
+export const OPTION_ROOT_OBJECTS = "OPTION_ROOT_OBJECTS";
+
+const LOAD_OBJECT_TYPE = "object";
+const LOAD_ERROR_TYPE = "error";
+
 export class XMLLoad {
     protected _resource: XMLResource;
     protected _parser: sax.SAXParser;
-    protected _elements: string[] = [];
     protected _attributes: { [key: string]: sax.QualifiedAttribute } = null;
     protected _namespaces: XMLNamespaces = new XMLNamespaces();
     protected _uriToFactories: Map<string, EFactory> = new Map<string, EFactory>();
     protected _prefixesToURI: Map<string, string> = new Map<string, string>();
+    protected _elements: string[] = [];
     protected _objects: EObject[] = [];
+    protected _types: any[] = [];
     protected _sameDocumentProxies: EObject[] = [];
     protected _notFeatures: { uri: string; local: string }[] = [
         { uri: XMLConstants.xsiURI, local: XMLConstants.typeAttrib },
@@ -195,14 +207,27 @@ export class XMLLoad {
         },
     ];
     protected _isResolveDeferred: boolean = false;
+    protected _isSuppressDocumentRoot: boolean = false;
     protected _references: XMLReference[] = [];
     protected _packageRegistry: EPackageRegistry;
+    protected _extendedMetaData: ExtendedMetaData;
+    protected _idAttributeName: string;
+    protected _textBuilder: String;
 
     constructor(resource: XMLResource, options: Map<string, any>) {
         this._resource = resource;
         this._packageRegistry = this._resource.eResourceSet()
             ? this._resource.eResourceSet().getPackageRegistry()
             : getPackageRegistry();
+        if (options) {
+            this._idAttributeName = options.get(OPTION_ID_ATTRIBUTE_NAME);
+            this._isSuppressDocumentRoot = options.get(OPTION_SUPPRESS_DOCUMENT_ROOT);
+            this._isResolveDeferred = options.get(OPTION_IDREF_RESOLUTION_DEFERRED) === true;
+            this._extendedMetaData = options.get(OPTION_EXTENDED_META_DATA);
+        }
+        if (!this._extendedMetaData) {
+            this._extendedMetaData = new ExtendedMetaData();
+        }
     }
 
     loadFromStream(rs: fs.ReadStream): Promise<void> {
@@ -215,6 +240,7 @@ export class XMLLoad {
             });
             saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t));
             saxStream.on("closetag", (t) => this.onEndTag(t));
+            saxStream.on("text", (t) => this.onText(t));
             saxStream.on("error", (e) => this.onError(e));
             saxStream.on("end", () => {
                 resolve();
@@ -233,12 +259,14 @@ export class XMLLoad {
         });
         saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t);
         saxParser.onclosetag = (t: string) => this.onEndTag(t);
+        saxParser.ontext = (t: string) => this.onText(t);
         saxParser.onerror = (e) => this.onError(e);
         this._parser = saxParser;
         this._parser.write(s).close();
     }
 
     onStartTag(tag: sax.QualifiedTag) {
+        this._elements.push(tag.local);
         this.setAttributes(tag.attributes);
         this._namespaces.pushContext();
         this.handlePrefixMapping();
@@ -249,9 +277,38 @@ export class XMLLoad {
     }
 
     onEndTag(tagName: string) {
-        this._objects.pop();
-        if (this._objects.length == 0) {
+        this._elements.pop();
+
+        let eRoot: EObject = null;
+        let eObject: EObject = null;
+        if (this._objects.length > 0) {
+            eRoot = this._objects[0];
+            eObject = this._objects.pop();
+        }
+
+        let eType = this._types.pop();
+        if (this._textBuilder) {
+            if (eType === LOAD_OBJECT_TYPE) {
+                if (this._textBuilder.length > 0) {
+                    this.handleProxy(eObject, this._textBuilder.toString());
+                }
+            } else if (eType !== LOAD_ERROR_TYPE) {
+                if (eObject == null && this._objects.length > 0) {
+                    eObject = this._objects[this._objects.length - 1];
+                }
+                this.setFeatureValue(
+                    eObject,
+                    eType as EStructuralFeature,
+                    this._textBuilder.toString(),
+                    -1
+                );
+            }
+        }
+        this._textBuilder = null;
+
+        if (this._elements.length == 0) {
             this.handleReferences();
+            this.recordSchemaLocations(eRoot);
         }
 
         let context = this._namespaces.popContext();
@@ -259,6 +316,8 @@ export class XMLLoad {
             this._uriToFactories.delete(element.uri);
         });
     }
+
+    onText(text: string): void {}
 
     onError(err: Error) {
         this.error(
@@ -304,7 +363,29 @@ export class XMLLoad {
 
     private startPrefixMapping(prefix: string, uri: string) {
         this._namespaces.declarePrefix(prefix, uri);
+        if (this._prefixesToURI.has(prefix)) {
+            let index = 1;
+            while (this._prefixesToURI.has(prefix + "_" + index)) {
+                index++;
+            }
+            prefix += "_" + index;
+        }
+        this._prefixesToURI.set(prefix, uri);
         this._uriToFactories.delete(uri);
+    }
+
+    private recordSchemaLocations(eObject: EObject) {
+        if (this._extendedMetaData && eObject) {
+            let xmlnsPrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(
+                eObject.eClass()
+            );
+            if (xmlnsPrefixMapFeature) {
+                let m = eObject.eGet(xmlnsPrefixMapFeature) as EMap<string, string>;
+                for (let [key, value] of this._prefixesToURI) {
+                    m.put(key, value);
+                }
+            }
+        }
     }
 
     private handleSchemaLocation(): void {
@@ -329,11 +410,14 @@ export class XMLLoad {
 
     protected handleXSINoNamespaceSchemaLocation(loc: string): void {}
 
+    protected getXSIType(): string {
+        return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib);
+    }
+
     private processElement(uri: string, local: string) {
         if (this._objects.length == 0) {
-            let eObject = this.createObject(uri, local);
+            let eObject = this.createTopObject(uri, local);
             if (eObject) {
-                this._objects.push(eObject);
                 this._resource.eContents().add(eObject);
             }
         } else {
@@ -341,7 +425,138 @@ export class XMLLoad {
         }
     }
 
-    private handleFeature(space: string, local: string) {
+    private validateObject(eObject: EObject, uri: string, typeName: string) {
+        if (!eObject) {
+            this.error(
+                new EDiagnosticImpl(
+                    "Class {'" + uri + +"':'" + typeName + "}' not found",
+                    this._resource.eURI.toString(),
+                    this._parser.line,
+                    this._parser.column
+                )
+            );
+        }
+    }
+
+    private processObject(eObject: EObject) {
+        if (eObject) {
+            this._objects.push(eObject);
+            this._types.push(LOAD_OBJECT_TYPE);
+        } else {
+            this._types.push(LOAD_ERROR_TYPE);
+        }
+    }
+
+    private createTopObject(uri: string, local: string): EObject {
+        let eFactory = this.getFactoryForURI(uri);
+        if (eFactory) {
+            let ePackage = eFactory.ePackage;
+            if (this._extendedMetaData && this._extendedMetaData.getDocumentRoot(ePackage)) {
+                let eClass = this._extendedMetaData.getDocumentRoot(ePackage);
+                // add document root to object list & handle its features
+                let eObject = this.createObjectWithFactory(eFactory, eClass, false);
+                this.processObject(eObject);
+                this.handleFeature(uri, local);
+                if (this._isSuppressDocumentRoot) {
+                    // remove document root from object list
+                    this._objects.splice(0, 1);
+                    // remove type info from type list
+                    this._types.splice(0, 1);
+                    if (this._objects.length > 0) {
+                        eObject = this._objects[0];
+                        // remove new object from its container ( document root )
+                        EcoreUtils.remove(eObject);
+                    }
+                }
+                return eObject;
+            } else {
+                let eType = this.getType(ePackage, local);
+                let eObject = this.createObjectWithFactory(eFactory, eType);
+                this.validateObject(eObject, uri, local);
+                this.processObject(eObject);
+                return eObject;
+            }
+        } else {
+            let prefix = this._namespaces.getPrefix(uri);
+            if (prefix) this.handleUnknownPackage(prefix);
+            else this.handleUnknownURI(uri);
+            return null;
+        }
+    }
+
+    private createObjectWithFactory(
+        eFactory: EFactory,
+        eType: EClassifier,
+        handleAttributes: boolean = true
+    ): EObject {
+        if (eFactory) {
+            if (isEClass(eType) && !eType.isAbstract) {
+                let eObject = eFactory.create(eType);
+                if (eObject && handleAttributes) {
+                    this.handleAttributes(eObject);
+                }
+                return eObject;
+            }
+        }
+        return null;
+    }
+
+    private createObjectFromFeatureType(eObject: EObject, eFeature: EStructuralFeature): EObject {
+        let eResult: EObject = null;
+        if (eFeature?.eType) {
+            let eType = eFeature.eType;
+            let eFactory = eType.ePackage.eFactoryInstance;
+            eResult = this.createObjectWithFactory(eFactory, eType);
+        }
+        if (eResult) {
+            this.setFeatureValue(eObject, eFeature, eResult, -1);
+        }
+        this.processObject(eResult);
+        return eResult;
+    }
+
+    private createObjectFromTypeName(
+        eObject: EObject,
+        qname: string,
+        eFeature: EStructuralFeature
+    ): EObject {
+        let prefix = "";
+        let local = qname;
+        let index = qname.indexOf(":");
+        if (index != -1) {
+            prefix = qname.slice(0, index);
+            local = qname.slice(index + 1);
+        }
+
+        let uri = this._namespaces.getURI(prefix);
+        let eFactory = this.getFactoryForURI(uri);
+        if (!eFactory) {
+            this.handleUnknownPackage(prefix);
+            return null;
+        }
+
+        let eType = this.getType(eFactory.ePackage, local);
+        let eResult = this.createObjectWithFactory(eFactory, eType);
+        this.validateObject(eResult, uri, local);
+        if (eResult) {
+            this.setFeatureValue(eObject, eFeature, eResult, -1);
+        }
+        this.processObject(eResult);
+        return eResult;
+    }
+
+    private getFactoryForURI(uri: string): EFactory {
+        let factory = this._uriToFactories.get(uri);
+        if (factory == undefined) {
+            factory = this._packageRegistry.getFactory(uri);
+            if (factory) {
+                this._uriToFactories.set(uri, factory);
+            }
+        }
+        return factory;
+    }
+
+    private handleFeature(uri: string, local: string) {
         let eObject: EObject = null;
         if (this._objects.length > 0) {
             eObject = this._objects[this._objects.length - 1];
@@ -350,16 +565,24 @@ export class XMLLoad {
         if (eObject) {
             let eFeature = this.getFeature(eObject, local);
             if (eFeature) {
-                let xsiType = this.getXSIType();
-                if (xsiType) {
-                    this.createObjectFromTypeName(eObject, xsiType, eFeature);
+                let featureKind = this.getLoadFeatureKind(eFeature);
+                if (featureKind == LoadFeatureKind.Single || featureKind == LoadFeatureKind.Many) {
+                    this._textBuilder = new String();
+                    this._types.push(eFeature);
+                    this._objects.push(null);
                 } else {
-                    this.createObjectFromFeatureType(eObject, eFeature);
+                    let xsiType = this.getXSIType();
+                    if (xsiType) {
+                        this.createObjectFromTypeName(eObject, xsiType, eFeature);
+                    } else {
+                        this.createObjectFromFeatureType(eObject, eFeature);
+                    }
                 }
             } else {
                 this.handleUnknownFeature(local);
             }
         } else {
+            this._types.push(LOAD_ERROR_TYPE);
             this.handleUnknownFeature(local);
         }
     }
@@ -443,102 +666,30 @@ export class XMLLoad {
         }
     }
 
-    protected getXSIType(): string {
-        return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib);
-    }
-
-    private createObject(uri: string, local: string): EObject {
-        let eFactory = this.getFactoryForURI(uri);
-        if (eFactory) {
-            let ePackage = eFactory.ePackage;
-            let eType = ePackage.getEClassifier(local);
-            return this.createObjectWithFactory(eFactory, eType);
-        } else {
-            let prefix = this._namespaces.getPrefix(uri);
-            if (prefix) this.handleUnknownPackage(prefix);
-            else this.handleUnknownURI(uri);
-            return null;
-        }
-    }
-
-    private createObjectWithFactory(eFactory: EFactory, eType: EClassifier): EObject {
-        if (eFactory) {
-            if (isEClass(eType) && !eType.isAbstract) {
-                let eObject = eFactory.create(eType);
-                if (eObject) {
-                    this.handleAttributes(eObject);
-                }
-                return eObject;
-            }
-        }
-        return null;
-    }
-
-    private createObjectFromFeatureType(eObject: EObject, eFeature: EStructuralFeature): EObject {
-        let eResult: EObject = null;
-        if (eFeature && eFeature.eType) {
-            let eType = eFeature.eType;
-            let eFactory = eType.ePackage.eFactoryInstance;
-            eResult = this.createObjectWithFactory(eFactory, eType);
-        }
-        if (eResult) {
-            this.setFeatureValue(eObject, eFeature, eResult, -1);
-            this._objects.push(eResult);
-        }
-        return eResult;
-    }
-
-    private createObjectFromTypeName(
-        eObject: EObject,
-        qname: string,
-        eFeature: EStructuralFeature
-    ): EObject {
-        let prefix = "";
-        let local = qname;
-        let index = qname.indexOf(":");
-        if (index != -1) {
-            prefix = qname.slice(0, index);
-            local = qname.slice(index + 1);
-        }
-
-        let uri = this._namespaces.getURI(prefix);
-        let eFactory = this.getFactoryForURI(uri);
-        if (!eFactory) {
-            this.handleUnknownPackage(prefix);
-            return null;
-        }
-
-        let eType = eFactory.ePackage.getEClassifier(local);
-        let eResult = this.createObjectWithFactory(eFactory, eType);
-        if (eResult) {
-            this.setFeatureValue(eObject, eFeature, eResult, -1);
-            this._objects.push(eResult);
-        }
-        return eResult;
-    }
-
-    private getFactoryForURI(uri: string): EFactory {
-        let factory = this._uriToFactories.get(uri);
-        if (factory == undefined) {
-            factory = this._packageRegistry.getFactory(uri);
-            if (factory) {
-                this._uriToFactories.set(uri, factory);
-            }
-        }
-        return factory;
-    }
-
     protected handleAttributes(eObject: EObject) {
         if (this._attributes) {
             for (let i in this._attributes) {
                 let attr = this._attributes[i];
-                if (attr.local == XMLConstants.href) {
+                if (attr.local == this._idAttributeName) {
+                    // let idManager = this._resource.eResourceIDManager;
+                    // idManager.setID(eObject,attr.value);
+                } else if (attr.local == XMLConstants.href) {
                     this.handleProxy(eObject, attr.value);
                 } else if (attr.prefix != XMLConstants.xmlNS && this.isUserAttribute(attr)) {
                     this.setAttributeValue(eObject, attr);
                 }
             }
         }
+    }
+
+    private isUserAttribute(attr: sax.QualifiedAttribute): boolean {
+        for (const i in this._notFeatures) {
+            let feature = this._notFeatures[i];
+            if (feature.uri == attr.uri && feature.local == attr.local) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private handleProxy(eProxy: EObject, id: string): void {
@@ -548,6 +699,13 @@ export class XMLLoad {
         } catch {
             return;
         }
+
+        // resolve reference uri
+        if (!uri.protocol) {
+            uri = new URL(id, this._resource.eURI);
+        }
+
+        // set object proxy uri
         (eProxy as EObjectInternal).eSetProxyURI(uri);
 
         let ndx = id.indexOf("#");
@@ -713,7 +871,18 @@ export class XMLLoad {
     private getFeature(eObject: EObject, name: string): EStructuralFeature {
         let eClass = eObject.eClass();
         let eFeature = eClass.getEStructuralFeatureFromName(name);
+        if (!eFeature && this._extendedMetaData) {
+            for (const eFeature of eClass.eAllStructuralFeatures) {
+                if (name === this._extendedMetaData.getName(eFeature)) return eFeature;
+            }
+        }
         return eFeature;
+    }
+
+    private getType(ePackage: EPackage, local: string): EClassifier {
+        return this._extendedMetaData
+            ? this._extendedMetaData.getType(ePackage, local)
+            : ePackage.getEClassifier(local);
     }
 
     private getLoadFeatureKind(eFeature: EStructuralFeature): LoadFeatureKind {
@@ -731,15 +900,6 @@ export class XMLLoad {
         return LoadFeatureKind.Other;
     }
 
-    private isUserAttribute(attr: sax.QualifiedAttribute): boolean {
-        for (const i in this._notFeatures) {
-            let feature = this._notFeatures[i];
-            if (feature.uri == attr.uri && feature.local == attr.local) {
-                return false;
-            }
-        }
-        return true;
-    }
     private handleUnknownFeature(name: string) {
         this.error(
             new EDiagnosticImpl(
