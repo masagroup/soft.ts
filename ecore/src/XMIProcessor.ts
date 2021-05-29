@@ -10,7 +10,7 @@
 import { EPackage, EResourceSet, XMLProcessor } from "./internal";
 
 export class XMIProcessor extends XMLProcessor {
-    constructor(input : EPackage[] | EResourceSet) {
-        super(input);
+    constructor(resourceSet?: EResourceSet) {
+        super(resourceSet ? resourceSet : []);
     }
 }

@@ -7,7 +7,17 @@
 //
 // *****************************************************************************
 
-import { XMLNamespaces } from "./internal";
+import * as fs from "fs";
+import {
+    EAttribute,
+    EClass,
+    EFactoryExt,
+    EPackage,
+    EResource,
+    XMIProcessor,
+    XMLNamespaces,
+    XMLProcessor,
+} from "./internal";
 
 describe("XMLNamespaces", () => {
     test("constructor", () => {
@@ -69,5 +79,59 @@ describe("XMLNamespaces", () => {
         expect(n.declarePrefix("prefix", "uri2")).toBeFalsy();
         expect(n.getPrefix("uri2")).toBe("prefix");
         expect(n.getURI("prefix")).toBe("uri2");
+    });
+});
+
+function loadPackage(filename: string): EPackage {
+    let xmiProcessor = new XMIProcessor();
+    let uri = new URL("file:///" + __dirname + "/../testdata/" + filename);
+    let resource = xmiProcessor.loadSync(uri);
+    expect(resource.isLoaded).toBeTruthy();
+    expect(resource.getErrors().isEmpty()).toBeTruthy();
+    expect(resource.eContents().isEmpty()).toBeFalsy();
+    let ePackage = resource.eContents().get(0) as EPackage;
+    ePackage.eFactoryInstance = new EFactoryExt();
+    return ePackage;
+}
+
+describe("XMLResource", () => {
+    describe("load.library.noroot", () => {
+        let ePackage = loadPackage("library.noroot.ecore");
+        expect(ePackage).not.toBeNull();
+        let xmlProcessor = new XMLProcessor([ePackage]);
+        expect(xmlProcessor).not.toBeNull();
+        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.xml");
+        let resource: EResource = null;
+
+        afterEach(() => {
+            expect(resource).not.toBeNull();
+            expect(resource.isLoaded).toBeTruthy();
+            expect(resource.getErrors().isEmpty()).toBeTruthy();
+            expect(resource.getWarnings().isEmpty()).toBeTruthy();
+
+            let eLibraryClass = ePackage.getEClassifier("Library") as EClass;
+            expect(eLibraryClass).not.toBeNull();
+            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName(
+                "name"
+            ) as EAttribute;
+            expect(eLibraryNameAttribute).not.toBeNull();
+
+            // check library name
+            let eLibrary = resource.eContents().get(0);
+            expect(eLibrary.eGet(eLibraryNameAttribute)).toBe("My Library");
+        });
+
+        test("load", async () => {
+            resource = await xmlProcessor.load(resourceURI);
+        });
+
+        test("loadFromStream", async () => {
+            let stream = fs.createReadStream(resourceURI);
+            resource = await xmlProcessor.loadFromStream(stream);
+        });
+
+        test("loadSync", () => {
+            resource = xmlProcessor.loadSync(resourceURI);
+        });
     });
 });

@@ -8,17 +8,17 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito";
-import { EPackage, XMLProcessor, EResourceSet,  } from "./internal";
+import { EPackage, XMLProcessor, EResourceSet } from "./internal";
 
-describe('XMLProcessor', () => {
-    test('constructor.packages', () => {
+describe("XMLProcessor", () => {
+    test("constructor.packages", () => {
         let mockPackage = mock<EPackage>();
         let ePackage = instance(mockPackage);
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
     });
 
-    test('constructor.resourceset', () => {
+    test("constructor.resourceset", () => {
         let mockPackage = mock<EPackage>();
         let ePackage = instance(mockPackage);
         let mockEResourceSet = mock<EResourceSet>();

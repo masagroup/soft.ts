@@ -8,7 +8,15 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EAttribute, EClass, EClassifier, EPackage, EReference, isEReference, XMIResourceImpl } from "./internal";
+import {
+    EAttribute,
+    EClass,
+    EClassifier,
+    EPackage,
+    EReference,
+    isEReference,
+    XMIResourceImpl,
+} from "./internal";
 
 describe("XMIResource", () => {
     describe("load.library.simple", () => {
@@ -33,7 +41,9 @@ describe("XMIResource", () => {
             expect(ePackage).not.toBeNull();
             expect(ePackage.name).toBe("library");
             expect(ePackage.nsPrefix).toBe("lib");
-            expect(ePackage.nsURI).toBe("http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0");
+            expect(ePackage.nsURI).toBe(
+                "http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0"
+            );
 
             let eClassifiers = ePackage.eClassifiers;
             expect(eClassifiers.size()).toBe(2);
@@ -103,7 +113,7 @@ describe("XMIResource", () => {
 
             let ePackage = contents.get(0) as EPackage;
             expect(ePackage).not.toBeNull();
-           
+
             let eClassifiers = ePackage.eClassifiers;
             let eBook = eClassifiers.get(0) as EClassifier;
             expect(eBook).not.toBeNull();
@@ -157,10 +167,12 @@ describe("XMIResource", () => {
             let eDocumentRootClass = eClassifiers.get(0) as EClass;
             expect(eDocumentRootClass).not.toBeNull();
             expect(eDocumentRootClass.name).toBe("DocumentRoot");
-            
-            let eXMNLSPrefixFeature = eDocumentRootClass.getEStructuralFeatureFromName("xMLNSPrefixMap") as EReference;
-	        expect(eXMNLSPrefixFeature).not.toBeNull();
-            
+
+            let eXMNLSPrefixFeature = eDocumentRootClass.getEStructuralFeatureFromName(
+                "xMLNSPrefixMap"
+            ) as EReference;
+            expect(eXMNLSPrefixFeature).not.toBeNull();
+
             let eType = eXMNLSPrefixFeature.eType;
             expect(eType).not.toBeNull();
             expect(eType.name).toBe("EStringToStringMapEntry");

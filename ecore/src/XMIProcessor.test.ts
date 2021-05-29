@@ -8,17 +8,16 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito";
-import { EPackage, XMIProcessor, EResourceSet,  } from "./internal";
+import { EPackage, XMIProcessor, EResourceSet } from "./internal";
 
-describe('XMIProcessor', () => {
-    test('constructor.packages', () => {
-        let mockPackage = mock<EPackage>();
-        let ePackage = instance(mockPackage);
-        let xmlProcessor = new XMIProcessor([ePackage]);
+describe("XMIProcessor", () => {
+    test("constructor.no.resourceset", () => {
+        let xmlProcessor = new XMIProcessor();
         expect(xmlProcessor).not.toBeNull();
+        expect(xmlProcessor.getResourceSet()).not.toBeNull();
     });
 
-    test('constructor.resourceset', () => {
+    test("constructor.resourceset", () => {
         let mockPackage = mock<EPackage>();
         let mockEResourceSet = mock<EResourceSet>();
         let eResourceSet = instance(mockEResourceSet);
