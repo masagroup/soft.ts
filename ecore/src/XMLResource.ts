@@ -20,6 +20,7 @@ import {
     EFactory,
     EList,
     EMap,
+    ENamedElement,
     EObject,
     EObjectInternal,
     EPackage,
@@ -949,7 +950,8 @@ class XMLStringSegment {
 
 class XMLString {
     segments: XMLStringSegment[];
-    currentSegment: XMLStringSegment;
+    currentSegment: XMLStringSegment = null;
+    firstElementMark: XMLStringSegment = null;
     lineWidth: number = Number.MAX_SAFE_INTEGER;
     depth: number = 0;
     indentation: string = "    ";
@@ -999,9 +1001,10 @@ class XMLString {
             this.add("<");
             this.add(name);
             this.lastElementIsStart = true;
-        } else {
-            this.add(this.getElementIndentWithExtra(1));
-        }
+            if (this.firstElementMark == null ) {
+                this.firstElementMark = this.mark()
+            }
+        } 
     }
 
     closeStartElement() {
@@ -1131,6 +1134,10 @@ class XMLString {
         return r;
     }
 
+    resetToFirstElementMark() {
+        this.resetToMark(this.firstElementMark);
+    }
+
     resetToMark(segment: XMLStringSegment) {
         if (segment) {
             this.currentSegment = segment;
@@ -1174,6 +1181,15 @@ enum SaveResourceKind {
     Cross,
 }
 
+function stringFormat(template: string, ...args: any[]) {
+    return template.replace(/{(\d+)}/g, function (match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+    });
+};
+
 export class XMLSave {
     protected _resource: XMLResource;
     protected _str: XMLString = new XMLString();
@@ -1181,52 +1197,110 @@ export class XMLSave {
     private _uriToPrefixes: Map<string, string[]> = new Map<string, string[]>();
     private _prefixesToURI: Map<string, string> = new Map<string, string>();
     private _featureKinds: Map<EStructuralFeature, number> = new Map<EStructuralFeature, number>();
-    private _namespaces: XMLNamespaces = new XMLNamespaces();
     private _keepDefaults = false;
+    private _idAttributeName : string;
+    private _roots : EList<EObject>;
+    private _extendedMetaData : ExtendedMetaData;
 
     constructor(resource: XMLResource, options: Map<string, any>) {
         this._resource = resource;
+        if (options) {
+            this._idAttributeName = options.get(OPTION_ID_ATTRIBUTE_NAME);
+            this._roots = options.get(OPTION_ROOT_OBJECTS);
+            this._extendedMetaData = options.get(OPTION_EXTENDED_META_DATA);
+        }
+        if (!this._extendedMetaData) {
+            this._extendedMetaData = new ExtendedMetaData();
+        }
     }
 
     saveToStream(rs: fs.WriteStream): Promise<void> {
         return new Promise((resolve, reject) => {
-            let contents = this._resource.eContents();
-            if (!contents.isEmpty()) {
-                this.saveHeader();
-                let m = this.saveTopObject(contents.get(0));
-                this.resetToMark(m);
-                this.saveNamespaces();
-                this._str.write(rs);
-            }
+            this.saveContents();
+            this._str.write(rs);
             resolve();
         });
     }
 
     saveToString(): string {
-        let contents = this._resource.eContents();
-        if (contents.isEmpty()) return "";
-        this.saveHeader();
-        let m = this.saveTopObject(contents.get(0));
-        this.resetToMark(m);
-        this.saveNamespaces();
+        this.saveContents();
         return this._str.toString();
     }
 
+    private saveContents() {
+        let contents = this._roots;
+        if (!contents) contents = this._resource.eContents();
+        if (contents.isEmpty()) return;
+
+        // header
+        this.saveHeader();
+
+        // top object
+        let eObject = contents.get(0);
+
+        // initialize prefixes if any in top
+        if (this._extendedMetaData) {
+            let eClass = eObject.eClass();
+            let ePrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(eClass);
+            if (ePrefixMapFeature) {
+                let m = eObject.eGet(ePrefixMapFeature) as Map<string,string>;
+                this.setPrefixToNamespace(m);
+            }
+        }
+
+        // object
+        this.saveTopObject(eObject);
+
+        // namespaces
+        this._str.resetToFirstElementMark();
+        this.saveNamespaces();
+    }
+
     private saveHeader() {
-        this._str.add('<?xml version="1.0" encoding="UTF-8"?>');
+        this._str.add(stringFormat('<?xml version="{0}" encoding="{1}"?>',this._resource.xmlVersion,this._resource.encoding));
         this._str.addLine();
     }
 
-    private saveTopObject(eObject: EObject): XMLStringSegment {
-        let name = this.getQName(eObject.eClass());
-        this._str.startElement(name);
-        let mark = this._str.mark();
+    private saveTopObject(eObject: EObject) {
+        let eClass = eObject.eClass();
+        if (!this._extendedMetaData || this._extendedMetaData.getDocumentRoot(eClass.ePackage) != eClass) {
+            let rootFeature = this.getRootFeature(eClass);
+            let name = rootFeature ? this.getFeatureQName(rootFeature) : this.getClassQName(eClass);
+            this._str.startElement(name);
+        } else {
+            this._str.startElement("");
+        }
         this.saveElementID(eObject);
         this.saveFeatures(eObject, false);
-        return mark;
     }
 
-    protected saveElementID(eObject: EObject) {}
+    private getRootFeature(eClassifier : EClassifier) : EStructuralFeature {
+        if (this._extendedMetaData) {
+            while (eClassifier) {
+                let eClass = this._extendedMetaData.getDocumentRoot(eClassifier.ePackage);
+                if (eClass) {
+                    for (const eFeature of eClass.eStructuralFeatures) {
+                        if (eFeature.eType == eClassifier && eFeature.isChangeable)
+                            return eFeature;
+                    }
+                }
+                if (isEClass(eClassifier)) {
+                    let eSuperTypes = eClassifier.eSuperTypes;
+                    if (eSuperTypes.isEmpty())
+                        eClassifier = null;
+                    else
+                        eClassifier = eSuperTypes.get(0);
+                } else {
+                    eClassifier = null;
+                }
+            }
+        }
+        return null;
+    }
+
+    protected saveElementID(eObject: EObject) {
+
+    }
 
     private saveFeatures(eObject: EObject, attributesOnly: boolean): boolean {
         let eAllFeatures = eObject.eClass().eAllStructuralFeatures;
@@ -1408,10 +1482,6 @@ export class XMLSave {
         }
     }
 
-    private resetToMark(segment: XMLStringSegment) {
-        this._str.resetToMark(segment);
-    }
-
     private saveDataTypeSingle(eObject: EObject, eFeature: EStructuralFeature) {
         let val = eObject.eGetResolve(eFeature, false);
         let str = this.getDataType(val, eFeature, true);
@@ -1516,7 +1586,7 @@ export class XMLSave {
     }
 
     private saveTypeAttribute(eClass: EClass) {
-        this._str.addAttribute("xsi:type", this.getQName(eClass));
+        this._str.addAttribute("xsi:type", this.getClassQName(eClass));
         this._uriToPrefixes.set(XMLConstants.xsiURI, [XMLConstants.xsiNS]);
         this._prefixesToURI.set(XMLConstants.xsiNS, XMLConstants.xsiURI);
     }
@@ -1664,28 +1734,47 @@ export class XMLSave {
         return this._resource ? "#" + this._resource.getURIFragment(eObject) : "";
     }
 
-    private getQName(eClass: EClass): string {
-        return this.getElementQName(eClass.ePackage, eClass.name, false);
+    private getClassQName(eClass : EClass) : string {
+        return this.getElementQName(eClass.ePackage, this.getXmlName(eClass), false);
     }
-
-    private getElementQName(ePackage: EPackage, name: string, mustHavePrefix: boolean): string {
-        let nsPrefix = this.getPrefix(ePackage, mustHavePrefix);
-        if (nsPrefix == "") {
-            return name;
-        } else if (name.length == 0) {
-            return nsPrefix;
+    
+    private getFeatureQName(eFeature : EStructuralFeature) : string {
+        if (this._extendedMetaData) {
+            let name = this._extendedMetaData.getName(eFeature);
+            let namespace = this._extendedMetaData.getNamespace(eFeature);
+            let ePackage = this.getPackageForSpace(namespace);
+            if (ePackage) {
+                return this.getElementQName(ePackage, name, false);
+            } else {
+                return name;
+            }
         } else {
-            return nsPrefix + ":" + name;
+            return eFeature.name;
         }
     }
-
-    private getFeatureQName(eFeature: EStructuralFeature): string {
-        return eFeature.name;
+    
+    private getElementQName(ePackage : EPackage, name : string, mustHavePrefix : boolean) :string {
+        let nsPrefix = this.getPrefix(ePackage, mustHavePrefix);
+        if (nsPrefix == "") {
+            return name
+        } else if (name.length == 0) {
+            return nsPrefix
+        } else {
+            return nsPrefix + ":" + name
+        }
+    }
+    
+    private getXmlName(eElement : ENamedElement) : string {
+        if (this._extendedMetaData) {
+            return this._extendedMetaData.getName(eElement);
+        }
+        return eElement.name;
     }
 
     private getPrefix(ePackage: EPackage, mustHavePrefix: boolean): string {
         let nsPrefix = this._packages.get(ePackage.nsURI);
         if (!nsPrefix) {
+            let nsURI = ePackage.nsURI
             let found = false;
             let prefixes = this._uriToPrefixes.get(ePackage.nsURI);
             if (prefixes) {
@@ -1698,10 +1787,6 @@ export class XMLSave {
                 }
             }
             if (!found) {
-                nsPrefix = this._namespaces.getPrefix(ePackage.nsURI);
-                if (nsPrefix) {
-                    return nsPrefix;
-                }
                 nsPrefix = ePackage.nsPrefix;
                 if (nsPrefix.length == 0 && mustHavePrefix) {
                     nsPrefix = "_";
@@ -1724,19 +1809,44 @@ export class XMLSave {
         return nsPrefix;
     }
 
-    shouldSaveFeature(o: EObject, f: EStructuralFeature): boolean {
+    private setPrefixToNamespace(prefixToNamespaceMap : Map<string,string>) {
+        for (let [prefix,nsURI] of prefixToNamespaceMap) {
+            let ePackage = this.getPackageForSpace(nsURI);
+            if (ePackage) {
+                this._packages.set(ePackage.nsURI,prefix);
+            }
+            this._prefixesToURI.set(prefix,nsURI);
+            if (this._uriToPrefixes.has(nsURI)) {
+                let prefixes = this._uriToPrefixes.get(nsURI);
+                prefixes.push(prefix);
+                this._uriToPrefixes.set(nsURI,prefixes);  
+            } else {
+                this._uriToPrefixes.set(nsURI,[]);  
+            }
+        }
+    }
+
+    private getPackageForSpace(nsURI : string) : EPackage {
+        let packageRegistry = getPackageRegistry();
+        if (this._resource.eResourceSet()) {
+            packageRegistry = this._resource.eResourceSet().getPackageRegistry();
+        }
+        return packageRegistry.getPackage(nsURI);
+    }
+
+    private shouldSaveFeature(o: EObject, f: EStructuralFeature): boolean {
         return o.eIsSet(f) || (this._keepDefaults && f.defaultValueLiteral != "");
     }
 
-    isNil(eObject: EObject, eFeature: EStructuralFeature): boolean {
+    private isNil(eObject: EObject, eFeature: EStructuralFeature): boolean {
         return eObject.eGetResolve(eFeature, false) == null;
     }
 
-    isEmpty(eObject: EObject, eFeature: EStructuralFeature): boolean {
+    private isEmpty(eObject: EObject, eFeature: EStructuralFeature): boolean {
         return (eObject.eGetResolve(eFeature, false) as EList<EObject>).isEmpty();
     }
 
-    getSaveFeatureKind(f: EStructuralFeature): SaveFeatureKind {
+    private getSaveFeatureKind(f: EStructuralFeature): SaveFeatureKind {
         if (f.isTransient) {
             return SaveFeatureKind.Transient;
         }

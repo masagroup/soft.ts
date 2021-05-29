@@ -8,16 +8,19 @@
 // *****************************************************************************
 
 import * as fs from "fs";
+import { ExtendedMetaData } from "./ExtendedMetaData";
 import {
     EAttribute,
     EClass,
     EFactoryExt,
+    EList,
     EPackage,
     EResource,
     XMIProcessor,
     XMLNamespaces,
     XMLProcessor,
 } from "./internal";
+import { OPTION_EXTENDED_META_DATA } from "./XMLResource";
 
 describe("XMLNamespaces", () => {
     test("constructor", () => {
@@ -94,6 +97,11 @@ function loadPackage(filename: string): EPackage {
     return ePackage;
 }
 
+
+class Test {
+    l : EList<string>;
+}
+
 describe("XMLResource", () => {
     describe("load.library.noroot", () => {
         let ePackage = loadPackage("library.noroot.ecore");
@@ -133,5 +141,62 @@ describe("XMLResource", () => {
         test("loadSync", () => {
             resource = xmlProcessor.loadSync(resourceURI);
         });
+    });
+
+    describe("save.library.noroot", () => {
+        let ePackage = loadPackage("library.noroot.ecore");
+        expect(ePackage).not.toBeNull();
+        let xmlProcessor = new XMLProcessor([ePackage]);
+        expect(xmlProcessor).not.toBeNull();
+        let originURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.xml");
+        let resultURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.result.xml");
+        let resource = xmlProcessor.loadSync(originURI);
+        resource.eURI = resultURI;
+
+        test('saveToString', () => {
+            const expected = fs.readFileSync(originURI)
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
+            const result = xmlProcessor.saveToString(resource);
+            expect(result).toBe(expected);
+        });
+
+        test('saveWithOptions', () => {
+            const expected = fs.readFileSync(originURI)
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
+            const result = xmlProcessor.saveToString(resource, new Map<string,any>([[OPTION_EXTENDED_META_DATA, new ExtendedMetaData()]]));
+            expect(result).toBe(expected);
+        });
+    });
+
+    describe('load.library.complex', () => {
+        let ePackage = loadPackage("library.complex.ecore");
+        expect(ePackage).not.toBeNull();
+        let xmlProcessor = new XMLProcessor([ePackage]);
+        expect(xmlProcessor).not.toBeNull();
+        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
+        let resource: EResource = null;
+
+        afterEach(() => {
+            expect(resource).not.toBeNull();
+            expect(resource.isLoaded).toBeTruthy();
+            expect(resource.getErrors().isEmpty()).toBeTruthy();
+            expect(resource.getWarnings().isEmpty()).toBeTruthy();
+        });
+
+        test("load", async () => {
+            resource = await xmlProcessor.load(resourceURI);
+        });
+
+        test("loadFromStream", async () => {
+            let stream = fs.createReadStream(resourceURI);
+            resource = await xmlProcessor.loadFromStream(stream);
+        });
+
+        test("loadSync", () => {
+            resource = xmlProcessor.loadSync(resourceURI);
+        });
+
     });
 });

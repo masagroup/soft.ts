@@ -309,7 +309,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         if (uriConverter) {
             let s = uriConverter.createWriteStream(this._uri);
             if (s) {
-                return this.saveToStream(s, options);
+                return new Promise<void>((resolve,reject) => {
+                    this.saveToStream(s,options).then( () => resolve() ).catch( reason => reject(reason) ).finally( () => s.end() );
+                })
             }
         }
         return Promise.reject();
