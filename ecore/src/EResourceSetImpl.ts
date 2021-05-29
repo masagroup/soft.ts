@@ -123,6 +123,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             }
         }
 
+        let ePackage = this.getPackageRegistry().getPackage(uri.toString());
+        if (ePackage) return ePackage.eResource();
+
         if (loadOnDemand) {
             let resource = this.createResource(uri);
             if (resource) {
