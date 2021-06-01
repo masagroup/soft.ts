@@ -244,7 +244,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 }
             }
         }
-        return Promise.reject();
+        return Promise.resolve();
     }
 
     loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void> {
@@ -256,7 +256,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 }
             });
         }
-        return Promise.reject();
+        return Promise.resolve();
     }
 
     loadSync(options?: Map<string, any>) {
