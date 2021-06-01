@@ -1243,7 +1243,7 @@ export class XMLSave {
             let eClass = eObject.eClass();
             let ePrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(eClass);
             if (ePrefixMapFeature) {
-                let m = eObject.eGet(ePrefixMapFeature) as Map<string,string>;
+                let m = eObject.eGet(ePrefixMapFeature) as EMap<string,string>;
                 this.setPrefixToNamespace(m);
             }
         }
@@ -1809,8 +1809,10 @@ export class XMLSave {
         return nsPrefix;
     }
 
-    private setPrefixToNamespace(prefixToNamespaceMap : Map<string,string>) {
-        for (let [prefix,nsURI] of prefixToNamespaceMap) {
+    private setPrefixToNamespace(prefixToNamespaceMap : EMap<string,string>) {
+        for (const mapEntry of prefixToNamespaceMap) {
+            let prefix = mapEntry.key;
+            let nsURI = mapEntry.value;
             let ePackage = this.getPackageForSpace(nsURI);
             if (ePackage) {
                 this._packages.set(ePackage.nsURI,prefix);
