@@ -7,13 +7,12 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore"
+import * as ecore from "@masagroup/ecore";
 import * as fs from "fs";
 import { getLibraryPackage } from "./internal";
 
-describe("Library",() => {
-
-    test("load.simple.default",async () => {
+describe("Library", () => {
+    test("load.simple.default", async () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
         let fileURI = new URL("file:///" + __dirname + "/../testdata/library.simple.default.xml");
         let resource = await xmlProcessor.load(fileURI);
@@ -23,7 +22,7 @@ describe("Library",() => {
         expect(resource.getWarnings().isEmpty()).toBeTruthy();
     });
 
-    test("save.simple.default",() => {
+    test("save.simple.default", () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
         let fileURI = new URL("file:///" + __dirname + "/../testdata/library.simple.default.xml");
         let resource = xmlProcessor.loadSync(fileURI);
@@ -31,13 +30,14 @@ describe("Library",() => {
 
         // save it
         let result = xmlProcessor.saveToString(resource);
-        const expected = fs.readFileSync(fileURI)
-        .toString()
-        .replace(/\r?\n|\r/g, "\n");
+        const expected = fs
+            .readFileSync(fileURI)
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
         expect(result).toBe(expected);
     });
 
-    test("save.simple.prefix",() => {
+    test("save.simple.prefix", () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
         let fileURI = new URL("file:///" + __dirname + "/../testdata/library.simple.prefix.xml");
         let resource = xmlProcessor.loadSync(fileURI);
@@ -45,9 +45,10 @@ describe("Library",() => {
 
         // save it
         let result = xmlProcessor.saveToString(resource);
-        const expected = fs.readFileSync(fileURI)
-        .toString()
-        .replace(/\r?\n|\r/g, "\n");
+        const expected = fs
+            .readFileSync(fileURI)
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
         expect(result).toBe(expected);
     });
 
@@ -59,10 +60,10 @@ describe("Library",() => {
 
         // save it
         let result = xmlProcessor.saveToString(resource);
-        const expected = fs.readFileSync(fileURI)
-        .toString()
-        .replace(/\r?\n|\r/g, "\n");
+        const expected = fs
+            .readFileSync(fileURI)
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
         expect(result).toBe(expected);
     });
-
 });
