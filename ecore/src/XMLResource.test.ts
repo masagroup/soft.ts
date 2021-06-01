@@ -97,9 +97,8 @@ function loadPackage(filename: string): EPackage {
     return ePackage;
 }
 
-
 class Test {
-    l : EList<string>;
+    l: EList<string>;
 }
 
 describe("XMLResource", () => {
@@ -153,24 +152,29 @@ describe("XMLResource", () => {
         let resource = xmlProcessor.loadSync(originURI);
         resource.eURI = resultURI;
 
-        test('saveToString', () => {
-            const expected = fs.readFileSync(originURI)
-            .toString()
-            .replace(/\r?\n|\r/g, "\n");
+        test("saveToString", () => {
+            const expected = fs
+                .readFileSync(originURI)
+                .toString()
+                .replace(/\r?\n|\r/g, "\n");
             const result = xmlProcessor.saveToString(resource);
             expect(result).toBe(expected);
         });
 
-        test('saveWithOptions', () => {
-            const expected = fs.readFileSync(originURI)
-            .toString()
-            .replace(/\r?\n|\r/g, "\n");
-            const result = xmlProcessor.saveToString(resource, new Map<string,any>([[OPTION_EXTENDED_META_DATA, new ExtendedMetaData()]]));
+        test("saveWithOptions", () => {
+            const expected = fs
+                .readFileSync(originURI)
+                .toString()
+                .replace(/\r?\n|\r/g, "\n");
+            const result = xmlProcessor.saveToString(
+                resource,
+                new Map<string, any>([[OPTION_EXTENDED_META_DATA, new ExtendedMetaData()]])
+            );
             expect(result).toBe(expected);
         });
     });
 
-    describe('load.library.complex', () => {
+    describe("load.library.complex", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
@@ -197,17 +201,21 @@ describe("XMLResource", () => {
         test("loadSync", () => {
             resource = xmlProcessor.loadSync(resourceURI);
         });
-
     });
 
-    describe('load.library.complex.options', () => {
+    describe("load.library.complex.options", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.noroot.xml");
+        let resourceURI = new URL(
+            "file:///" + __dirname + "/../testdata/library.complex.noroot.xml"
+        );
         let resource: EResource = null;
-        let options = new Map<string,any>([[OPTION_EXTENDED_META_DATA,new ExtendedMetaData()],[OPTION_SUPPRESS_DOCUMENT_ROOT, true]])
+        let options = new Map<string, any>([
+            [OPTION_EXTENDED_META_DATA, new ExtendedMetaData()],
+            [OPTION_SUPPRESS_DOCUMENT_ROOT, true],
+        ]);
 
         afterEach(() => {
             expect(resource).not.toBeNull();
@@ -228,39 +236,39 @@ describe("XMLResource", () => {
         });
 
         test("load", async () => {
-            resource = await xmlProcessor.load(resourceURI,options);
+            resource = await xmlProcessor.load(resourceURI, options);
         });
 
         test("loadFromStream", async () => {
             let stream = fs.createReadStream(resourceURI);
-            resource = await xmlProcessor.loadFromStream(stream,options);
+            resource = await xmlProcessor.loadFromStream(stream, options);
         });
 
         test("loadSync", () => {
-            resource = xmlProcessor.loadSync(resourceURI,options);
+            resource = xmlProcessor.loadSync(resourceURI, options);
         });
     });
 
-    describe('save.library.complex', () => {
+    describe("save.library.complex", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
         let originURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
         let resource = xmlProcessor.loadSync(originURI);
-        
-        test('saveToString', () => {
-            const expected = fs.readFileSync(originURI)
-            .toString()
-            .replace(/\r?\n|\r/g, "\n");
+
+        test("saveToString", () => {
+            const expected = fs
+                .readFileSync(originURI)
+                .toString()
+                .replace(/\r?\n|\r/g, "\n");
             const result = xmlProcessor.saveToString(resource);
             expect(result).toBe(expected);
         });
     });
 
-    describe('save.library.complex.sub', () => {
-        test('saveToString', () => {
-
+    describe("save.library.complex.sub", () => {
+        test("saveToString", () => {
             let ePackage = loadPackage("library.complex.ecore");
             expect(ePackage).not.toBeNull();
             let xmlProcessor = new XMLProcessor([ePackage]);
@@ -280,9 +288,10 @@ describe("XMLResource", () => {
             eNewResource.eContents().add(eObject);
             // save it
             let result = xmlProcessor.saveToString(eNewResource);
-            const expected = fs.readFileSync(subURI)
-            .toString()
-            .replace(/\r?\n|\r/g, "\n");
+            const expected = fs
+                .readFileSync(subURI)
+                .toString()
+                .replace(/\r?\n|\r/g, "\n");
             expect(result).toBe(expected);
         });
     });

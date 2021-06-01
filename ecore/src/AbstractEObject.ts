@@ -358,8 +358,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     private eDynamicPropertiesCreateMap(feature: EStructuralFeature): any {
-        let eClass = feature.eType as EClass
-        return new BasicEObjectMap<any,any>(eClass);
+        let eClass = feature.eType as EClass;
+        return new BasicEObjectMap<any, any>(eClass);
     }
 
     private eDynamicPropertiesCreateList(feature: EStructuralFeature): any {
@@ -974,7 +974,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
 
         let index = -1;
-        if (uriSegment && uriSegment.length > 0 && isNumeric(uriSegment.charAt(uriSegment.length - 1))) {
+        if (
+            uriSegment &&
+            uriSegment.length > 0 &&
+            isNumeric(uriSegment.charAt(uriSegment.length - 1))
+        ) {
             index = uriSegment.lastIndexOf(".");
             if (index != -1) {
                 let pos = parseInt(uriSegment.slice(index + 1));

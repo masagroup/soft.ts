@@ -1001,10 +1001,10 @@ class XMLString {
             this.add("<");
             this.add(name);
             this.lastElementIsStart = true;
-            if (this.firstElementMark == null ) {
-                this.firstElementMark = this.mark()
+            if (this.firstElementMark == null) {
+                this.firstElementMark = this.mark();
             }
-        } 
+        }
     }
 
     closeStartElement() {
@@ -1183,12 +1183,9 @@ enum SaveResourceKind {
 
 function stringFormat(template: string, ...args: any[]) {
     return template.replace(/{(\d+)}/g, function (match, number) {
-        return typeof args[number] != 'undefined'
-            ? args[number]
-            : match
-            ;
+        return typeof args[number] != "undefined" ? args[number] : match;
     });
-};
+}
 
 export class XMLSave {
     protected _resource: XMLResource;
@@ -1198,9 +1195,9 @@ export class XMLSave {
     private _prefixesToURI: Map<string, string> = new Map<string, string>();
     private _featureKinds: Map<EStructuralFeature, number> = new Map<EStructuralFeature, number>();
     private _keepDefaults = false;
-    private _idAttributeName : string;
-    private _roots : EList<EObject>;
-    private _extendedMetaData : ExtendedMetaData;
+    private _idAttributeName: string;
+    private _roots: EList<EObject>;
+    private _extendedMetaData: ExtendedMetaData;
 
     constructor(resource: XMLResource, options: Map<string, any>) {
         this._resource = resource;
@@ -1243,7 +1240,7 @@ export class XMLSave {
             let eClass = eObject.eClass();
             let ePrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(eClass);
             if (ePrefixMapFeature) {
-                let m = eObject.eGet(ePrefixMapFeature) as EMap<string,string>;
+                let m = eObject.eGet(ePrefixMapFeature) as EMap<string, string>;
                 this.setPrefixToNamespace(m);
             }
         }
@@ -1257,13 +1254,22 @@ export class XMLSave {
     }
 
     private saveHeader() {
-        this._str.add(stringFormat('<?xml version="{0}" encoding="{1}"?>',this._resource.xmlVersion,this._resource.encoding));
+        this._str.add(
+            stringFormat(
+                '<?xml version="{0}" encoding="{1}"?>',
+                this._resource.xmlVersion,
+                this._resource.encoding
+            )
+        );
         this._str.addLine();
     }
 
     private saveTopObject(eObject: EObject) {
         let eClass = eObject.eClass();
-        if (!this._extendedMetaData || this._extendedMetaData.getDocumentRoot(eClass.ePackage) != eClass) {
+        if (
+            !this._extendedMetaData ||
+            this._extendedMetaData.getDocumentRoot(eClass.ePackage) != eClass
+        ) {
             let rootFeature = this.getRootFeature(eClass);
             let name = rootFeature ? this.getFeatureQName(rootFeature) : this.getClassQName(eClass);
             this._str.startElement(name);
@@ -1274,22 +1280,19 @@ export class XMLSave {
         this.saveFeatures(eObject, false);
     }
 
-    private getRootFeature(eClassifier : EClassifier) : EStructuralFeature {
+    private getRootFeature(eClassifier: EClassifier): EStructuralFeature {
         if (this._extendedMetaData) {
             while (eClassifier) {
                 let eClass = this._extendedMetaData.getDocumentRoot(eClassifier.ePackage);
                 if (eClass) {
                     for (const eFeature of eClass.eStructuralFeatures) {
-                        if (eFeature.eType == eClassifier && eFeature.isChangeable)
-                            return eFeature;
+                        if (eFeature.eType == eClassifier && eFeature.isChangeable) return eFeature;
                     }
                 }
                 if (isEClass(eClassifier)) {
                     let eSuperTypes = eClassifier.eSuperTypes;
-                    if (eSuperTypes.isEmpty())
-                        eClassifier = null;
-                    else
-                        eClassifier = eSuperTypes.get(0);
+                    if (eSuperTypes.isEmpty()) eClassifier = null;
+                    else eClassifier = eSuperTypes.get(0);
                 } else {
                     eClassifier = null;
                 }
@@ -1298,9 +1301,7 @@ export class XMLSave {
         return null;
     }
 
-    protected saveElementID(eObject: EObject) {
-
-    }
+    protected saveElementID(eObject: EObject) {}
 
     private saveFeatures(eObject: EObject, attributesOnly: boolean): boolean {
         let eAllFeatures = eObject.eClass().eAllStructuralFeatures;
@@ -1479,8 +1480,7 @@ export class XMLSave {
         let prefixes: string[] = [...this._prefixesToURI.keys()].sort();
         for (const prefix of prefixes) {
             let attribute = "xmlns";
-            if (prefix.length > 0 )
-                attribute += ":" + prefix;
+            if (prefix.length > 0) attribute += ":" + prefix;
             this._str.addAttribute(attribute, this._prefixesToURI.get(prefix));
         }
     }
@@ -1737,11 +1737,11 @@ export class XMLSave {
         return this._resource ? "#" + this._resource.getURIFragment(eObject) : "";
     }
 
-    private getClassQName(eClass : EClass) : string {
+    private getClassQName(eClass: EClass): string {
         return this.getElementQName(eClass.ePackage, this.getXmlName(eClass), false);
     }
-    
-    private getFeatureQName(eFeature : EStructuralFeature) : string {
+
+    private getFeatureQName(eFeature: EStructuralFeature): string {
         if (this._extendedMetaData) {
             let name = this._extendedMetaData.getName(eFeature);
             let namespace = this._extendedMetaData.getNamespace(eFeature);
@@ -1755,19 +1755,19 @@ export class XMLSave {
             return eFeature.name;
         }
     }
-    
-    private getElementQName(ePackage : EPackage, name : string, mustHavePrefix : boolean) :string {
+
+    private getElementQName(ePackage: EPackage, name: string, mustHavePrefix: boolean): string {
         let nsPrefix = this.getPrefix(ePackage, mustHavePrefix);
         if (nsPrefix == "") {
-            return name
+            return name;
         } else if (name.length == 0) {
-            return nsPrefix
+            return nsPrefix;
         } else {
-            return nsPrefix + ":" + name
+            return nsPrefix + ":" + name;
         }
     }
-    
-    private getXmlName(eElement : ENamedElement) : string {
+
+    private getXmlName(eElement: ENamedElement): string {
         if (this._extendedMetaData) {
             return this._extendedMetaData.getName(eElement);
         }
@@ -1776,8 +1776,8 @@ export class XMLSave {
 
     private getPrefix(ePackage: EPackage, mustHavePrefix: boolean): string {
         let nsPrefix = this._packages.get(ePackage.nsURI);
-        if (nsPrefix === undefined ) {
-            let nsURI = ePackage.nsURI
+        if (nsPrefix === undefined) {
+            let nsURI = ePackage.nsURI;
             let found = false;
             let prefixes = this._uriToPrefixes.get(ePackage.nsURI);
             if (prefixes) {
@@ -1812,26 +1812,26 @@ export class XMLSave {
         return nsPrefix;
     }
 
-    private setPrefixToNamespace(prefixToNamespaceMap : EMap<string,string>) {
+    private setPrefixToNamespace(prefixToNamespaceMap: EMap<string, string>) {
         for (const mapEntry of prefixToNamespaceMap) {
             let prefix = mapEntry.key;
             let nsURI = mapEntry.value;
             let ePackage = this.getPackageForSpace(nsURI);
             if (ePackage) {
-                this._packages.set(ePackage.nsURI,prefix);
+                this._packages.set(ePackage.nsURI, prefix);
             }
-            this._prefixesToURI.set(prefix,nsURI);
+            this._prefixesToURI.set(prefix, nsURI);
             if (this._uriToPrefixes.has(nsURI)) {
                 let prefixes = this._uriToPrefixes.get(nsURI);
                 prefixes.push(prefix);
-                this._uriToPrefixes.set(nsURI,prefixes);  
+                this._uriToPrefixes.set(nsURI, prefixes);
             } else {
-                this._uriToPrefixes.set(nsURI,[]);  
+                this._uriToPrefixes.set(nsURI, []);
             }
         }
     }
 
-    private getPackageForSpace(nsURI : string) : EPackage {
+    private getPackageForSpace(nsURI: string): EPackage {
         let packageRegistry = getPackageRegistry();
         if (this._resource.eResourceSet()) {
             packageRegistry = this._resource.eResourceSet().getPackageRegistry();
