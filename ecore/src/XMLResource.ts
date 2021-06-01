@@ -1478,7 +1478,10 @@ export class XMLSave {
     protected saveNamespaces() {
         let prefixes: string[] = [...this._prefixesToURI.keys()].sort();
         for (const prefix of prefixes) {
-            this._str.addAttribute("xmlns:" + prefix, this._prefixesToURI.get(prefix));
+            let attribute = "xmlns";
+            if (prefix.length > 0 )
+                attribute += ":" + prefix;
+            this._str.addAttribute(attribute, this._prefixesToURI.get(prefix));
         }
     }
 
@@ -1773,7 +1776,7 @@ export class XMLSave {
 
     private getPrefix(ePackage: EPackage, mustHavePrefix: boolean): string {
         let nsPrefix = this._packages.get(ePackage.nsURI);
-        if (!nsPrefix) {
+        if (nsPrefix === undefined ) {
             let nsURI = ePackage.nsURI
             let found = false;
             let prefixes = this._uriToPrefixes.get(ePackage.nsURI);
