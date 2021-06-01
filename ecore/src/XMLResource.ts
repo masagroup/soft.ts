@@ -1310,7 +1310,7 @@ export class XMLSave {
         LOOP: for (let i = 0; i < eAllFeatures.size(); i++) {
             let eFeature = eAllFeatures.get(i);
             let kind = this._featureKinds.get(eFeature);
-            if (!kind) {
+            if (kind === undefined) {
                 kind = this.getSaveFeatureKind(eFeature);
                 this._featureKinds.set(eFeature, kind);
             }
