@@ -20,7 +20,7 @@ import {
     XMLNamespaces,
     XMLProcessor,
 } from "./internal";
-import { OPTION_EXTENDED_META_DATA } from "./XMLResource";
+import { OPTION_EXTENDED_META_DATA, OPTION_SUPPRESS_DOCUMENT_ROOT } from "./XMLResource";
 
 describe("XMLNamespaces", () => {
     test("constructor", () => {
@@ -198,5 +198,46 @@ describe("XMLResource", () => {
             resource = xmlProcessor.loadSync(resourceURI);
         });
 
+    });
+
+    describe('load.library.complex.options', () => {
+        let ePackage = loadPackage("library.complex.ecore");
+        expect(ePackage).not.toBeNull();
+        let xmlProcessor = new XMLProcessor([ePackage]);
+        expect(xmlProcessor).not.toBeNull();
+        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.noroot.xml");
+        let resource: EResource = null;
+        let options = new Map<string,any>([[OPTION_EXTENDED_META_DATA,new ExtendedMetaData()],[OPTION_SUPPRESS_DOCUMENT_ROOT, true]])
+
+        afterEach(() => {
+            expect(resource).not.toBeNull();
+            expect(resource.isLoaded).toBeTruthy();
+            expect(resource.getErrors().isEmpty()).toBeTruthy();
+            expect(resource.getWarnings().isEmpty()).toBeTruthy();
+
+            let eLibraryClass = ePackage.getEClassifier("Library") as EClass;
+            expect(eLibraryClass).not.toBeNull();
+            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName(
+                "name"
+            ) as EAttribute;
+            expect(eLibraryNameAttribute).not.toBeNull();
+
+            // check library name
+            let eLibrary = resource.eContents().get(0);
+            expect(eLibrary.eGet(eLibraryNameAttribute)).toBe("My Library");
+        });
+
+        test("load", async () => {
+            resource = await xmlProcessor.load(resourceURI,options);
+        });
+
+        test("loadFromStream", async () => {
+            let stream = fs.createReadStream(resourceURI);
+            resource = await xmlProcessor.loadFromStream(stream,options);
+        });
+
+        test("loadSync", () => {
+            resource = xmlProcessor.loadSync(resourceURI,options);
+        });
     });
 });
