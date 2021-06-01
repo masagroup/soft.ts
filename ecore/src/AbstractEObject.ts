@@ -458,7 +458,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             if (oldValue != newValue) {
                 let notifications: ENotificationChain = null;
                 let oldObject = isEObjectInternal(oldValue) ? oldValue : null;
-                let newObject = isEObjectInternal(oldValue) ? newValue : null;
+                let newObject = isEObjectInternal(newValue) ? newValue : null;
 
                 if (!isBidirectional(dynamicFeature)) {
                     let featureID = this.eClass().getFeatureID(dynamicFeature);
@@ -892,7 +892,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             oldResource.detached(this);
         }
 
-        if (newResource && newResource && oldResource) {
+        if (newResource && newResource != oldResource) {
             newResource.attached(this);
         }
 
