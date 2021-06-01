@@ -256,7 +256,34 @@ describe("XMLResource", () => {
             const result = xmlProcessor.saveToString(resource);
             expect(result).toBe(expected);
         });
+    });
 
+    describe('save.library.complex.sub', () => {
+        test('saveToString', () => {
 
+            let ePackage = loadPackage("library.complex.ecore");
+            expect(ePackage).not.toBeNull();
+            let xmlProcessor = new XMLProcessor([ePackage]);
+            expect(xmlProcessor).not.toBeNull();
+            let originURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
+            let eResource = xmlProcessor.loadSync(originURI);
+
+            let eObject = eResource.getEObject("//@library/@employees.0");
+            expect(eObject).not.toBeNull();
+            let eContainer = eObject.eContainer();
+            expect(eContainer).not.toBeNull();
+
+            // create a new resource
+            let subURI = new URL("file:///" + __dirname + "/../testdata/library.complex.sub.xml");
+            let eNewResource = eResource.eResourceSet().createResource(subURI);
+            // add object to new resource
+            eNewResource.eContents().add(eObject);
+            // save it
+            let result = xmlProcessor.saveToString(eNewResource);
+            const expected = fs.readFileSync(subURI)
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
+            expect(result).toBe(expected);
+        });
     });
 });
