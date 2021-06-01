@@ -240,4 +240,23 @@ describe("XMLResource", () => {
             resource = xmlProcessor.loadSync(resourceURI,options);
         });
     });
+
+    describe('save.library.complex', () => {
+        let ePackage = loadPackage("library.complex.ecore");
+        expect(ePackage).not.toBeNull();
+        let xmlProcessor = new XMLProcessor([ePackage]);
+        expect(xmlProcessor).not.toBeNull();
+        let originURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
+        let resource = xmlProcessor.loadSync(originURI);
+        
+        test('saveToString', () => {
+            const expected = fs.readFileSync(originURI)
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
+            const result = xmlProcessor.saveToString(resource);
+            expect(result).toBe(expected);
+        });
+
+
+    });
 });
