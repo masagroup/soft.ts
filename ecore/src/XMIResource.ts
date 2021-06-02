@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EObject, XMLResource, XMLLoad, XMLSave } from "./internal";
+import { EObject, XMLResource, XMLResourceImpl, XMLLoad, XMLSave } from "./internal";
 
 class XMIConstants {
     static xmiURI = "http://www.omg.org/XMI";
@@ -18,21 +18,32 @@ class XMIConstants {
     static xmlNS = "xmlns";
 }
 
-export class XMIResource extends XMLResource {
-    xmiVersion: string = "";
+export interface XMIResource extends XMLResource {
+    xmiVersion: string;
+}
 
-    protected createLoad(): XMLLoad {
-        return new XMILoad(this);
+export class XMIResourceImpl extends XMLResourceImpl implements XMIResource {
+    private _xmiVersion: string = "";
+
+    public get xmiVersion(): string {
+        return this._xmiVersion;
+    }
+    public set xmiVersion(v: string) {
+        this._xmiVersion = v;
     }
 
-    protected createSave(): XMLSave {
-        return new XMISave(this);
+    protected createLoad(options: Map<string, any>): XMLLoad {
+        return new XMILoad(this, options);
+    }
+
+    protected createSave(options: Map<string, any>): XMLSave {
+        return new XMISave(this, options);
     }
 }
 
 export class XMILoad extends XMLLoad {
-    constructor(resource: XMIResource) {
-        super(resource);
+    constructor(resource: XMIResource, options: Map<string, any>) {
+        super(resource, options);
         this._notFeatures.push(
             { uri: XMIConstants.xmiURI, local: XMIConstants.typeAttrib },
             { uri: XMIConstants.xmiURI, local: XMIConstants.versionAttrib },
@@ -58,8 +69,8 @@ export class XMILoad extends XMLLoad {
 }
 
 export class XMISave extends XMLSave {
-    constructor(resource: XMIResource) {
-        super(resource);
+    constructor(resource: XMIResource, options: Map<string, any>) {
+        super(resource, options);
     }
 
     protected saveNamespaces() {

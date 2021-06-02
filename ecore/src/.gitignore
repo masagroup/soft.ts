@@ -14,5 +14,6 @@ E*.ts
 !EResource*.ts
 !ETreeIterator.ts
 !EURI*.ts
+!Extended*.ts
 !*Ext.ts
 !*.test.ts

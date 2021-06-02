@@ -11,6 +11,7 @@ import {
     AbstractENotifier,
     BasicEList,
     BasicEObjectList,
+    BasicEObjectMap,
     EClass,
     EcoreUtils,
     EDynamicProperties,
@@ -357,7 +358,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     private eDynamicPropertiesCreateMap(feature: EStructuralFeature): any {
-        return null;
+        let eClass = feature.eType as EClass;
+        return new BasicEObjectMap<any, any>(eClass);
     }
 
     private eDynamicPropertiesCreateList(feature: EStructuralFeature): any {
@@ -456,7 +458,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             if (oldValue != newValue) {
                 let notifications: ENotificationChain = null;
                 let oldObject = isEObjectInternal(oldValue) ? oldValue : null;
-                let newObject = isEObjectInternal(oldValue) ? newValue : null;
+                let newObject = isEObjectInternal(newValue) ? newValue : null;
 
                 if (!isBidirectional(dynamicFeature)) {
                     let featureID = this.eClass().getFeatureID(dynamicFeature);
@@ -890,7 +892,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             oldResource.detached(this);
         }
 
-        if (newResource && newResource && oldResource) {
+        if (newResource && newResource != oldResource) {
             newResource.attached(this);
         }
 
@@ -965,18 +967,22 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return notifications;
     }
 
-    eObjectForFragmentSegment(fragment: string): EObject {
-        let lastIndex = fragment.length - 1;
-        if (lastIndex == -1 || fragment[0] != "@") {
-            throw new Error("Expecting @ at index 0 of '" + fragment + "'");
+    eObjectForFragmentSegment(uriSegment: string): EObject {
+        let lastIndex = uriSegment.length - 1;
+        if (lastIndex == -1 || uriSegment[0] != "@") {
+            throw new Error("Expecting @ at index 0 of '" + uriSegment + "'");
         }
 
         let index = -1;
-        if (fragment && fragment.length > 0 && isNumeric(fragment.charAt(fragment.length - 1))) {
-            index = fragment.lastIndexOf(".");
+        if (
+            uriSegment &&
+            uriSegment.length > 0 &&
+            isNumeric(uriSegment.charAt(uriSegment.length - 1))
+        ) {
+            index = uriSegment.lastIndexOf(".");
             if (index != -1) {
-                let pos = parseInt(fragment.slice(index + 1));
-                let eFeatureName = fragment.slice(1, index);
+                let pos = parseInt(uriSegment.slice(index + 1));
+                let eFeatureName = uriSegment.slice(1, index);
                 let eFeature = this.getStructuralFeatureFromName(eFeatureName);
                 let list = this.eGetResolve(eFeature, false) as EList<EObject>;
                 if (pos < list.size()) {
@@ -985,7 +991,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
         }
         if (index == -1) {
-            let eFeature = this.getStructuralFeatureFromName(fragment);
+            let eFeature = this.getStructuralFeatureFromName(uriSegment.slice(1));
             return this.eGetResolve(eFeature, false) as EObject;
         }
         return null;

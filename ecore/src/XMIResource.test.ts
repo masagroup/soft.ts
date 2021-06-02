@@ -8,12 +8,20 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EAttribute, EClass, EClassifier, EPackage, EReference, XMIResource } from "./internal";
+import {
+    EAttribute,
+    EClass,
+    EClassifier,
+    EPackage,
+    EReference,
+    isEReference,
+    XMIResourceImpl,
+} from "./internal";
 
 describe("XMIResource", () => {
-    describe("loadBookStore", () => {
-        let resource = new XMIResource();
-        resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
+    describe("load.library.simple", () => {
+        let resource = new XMIResourceImpl();
+        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.simple.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -31,16 +39,18 @@ describe("XMIResource", () => {
 
             let ePackage = contents.get(0) as EPackage;
             expect(ePackage).not.toBeNull();
-            expect(ePackage.name).toBe("BookStorePackage");
-            expect(ePackage.nsPrefix).toBe("bookStore");
-            expect(ePackage.nsURI).toBe("http:///com.ibm.dynamic.example.bookStore.ecore");
+            expect(ePackage.name).toBe("library");
+            expect(ePackage.nsPrefix).toBe("lib");
+            expect(ePackage.nsURI).toBe(
+                "http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0"
+            );
 
             let eClassifiers = ePackage.eClassifiers;
             expect(eClassifiers.size()).toBe(2);
 
             let eBookStore = eClassifiers.get(0) as EClassifier;
             expect(eBookStore).not.toBeNull();
-            expect(eBookStore.name).toBe("BookStore");
+            expect(eBookStore.name).toBe("Library");
 
             let eBookStoreClass = eBookStore as EClass;
             expect(eBookStoreClass).not.toBeNull();
@@ -83,9 +93,60 @@ describe("XMIResource", () => {
         });
     });
 
-    describe("loadLibrary", () => {
-        let resource = new XMIResource();
-        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.ecore");
+    describe("load.library.noroot", () => {
+        let resource = new XMIResourceImpl();
+        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.ecore");
+
+        beforeEach(() => {
+            resource.unload();
+            expect(resource.isLoaded).toBeFalsy();
+        });
+
+        afterEach(() => {
+            expect(resource.isLoaded).toBeTruthy();
+            expect(resource.getErrors().isEmpty()).toBeTruthy();
+            expect(resource.getWarnings().isEmpty()).toBeTruthy();
+            expect(resource.xmiVersion).toBe("2.0");
+
+            let contents = resource.eContents();
+            expect(contents.size()).toBe(1);
+
+            let ePackage = contents.get(0) as EPackage;
+            expect(ePackage).not.toBeNull();
+
+            let eClassifiers = ePackage.eClassifiers;
+            let eBook = eClassifiers.get(0) as EClassifier;
+            expect(eBook).not.toBeNull();
+            expect(eBook.name).toBe("Book");
+
+            let eBookClass = eBook as EClass;
+            expect(eBookClass).not.toBeNull();
+            let eSuperTypes = eBookClass.eSuperTypes;
+            expect(eSuperTypes.size()).toBe(1);
+            let eCirculatingItemClass = eSuperTypes.get(0);
+            expect(eCirculatingItemClass.name).toBe("CirculatingItem");
+
+            let eWriterClass = eClassifiers.get(2) as EClass;
+            expect(eWriterClass).not.toBeNull();
+            expect(eWriterClass.eAnnotations.isEmpty()).toBeFalsy();
+            let eAnnotation = eWriterClass.getEAnnotation("http://net.masagroup/soft/2020/GenTS");
+            expect(eAnnotation).not.toBeNull();
+            expect(eAnnotation.details.getValue("extension")).toBe("true");
+        });
+
+        test("load", async () => {
+            await resource.load();
+        });
+
+        test("loadFromStream", async () => {
+            let stream = fs.createReadStream(resource.eURI);
+            await resource.loadFromStream(stream);
+        });
+    });
+
+    describe("load.library.complex", () => {
+        let resource = new XMIResourceImpl();
+        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.complex.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -103,12 +164,19 @@ describe("XMIResource", () => {
             let ePackage = contents.get(0) as EPackage;
             let eClassifiers = ePackage.eClassifiers;
 
-            let eBookClass = eClassifiers.get(0) as EClass;
-            expect(eBookClass.name).toBe("Book");
-            expect(eBookClass.eSuperTypes.size()).toBe(1);
+            let eDocumentRootClass = eClassifiers.get(0) as EClass;
+            expect(eDocumentRootClass).not.toBeNull();
+            expect(eDocumentRootClass.name).toBe("DocumentRoot");
 
-            let eCirculationItemClass = eBookClass.eSuperTypes.get(0) as EClass;
-            expect(eCirculationItemClass.name).toBe("CirculatingItem");
+            let eXMNLSPrefixFeature = eDocumentRootClass.getEStructuralFeatureFromName(
+                "xMLNSPrefixMap"
+            ) as EReference;
+            expect(eXMNLSPrefixFeature).not.toBeNull();
+
+            let eType = eXMNLSPrefixFeature.eType;
+            expect(eType).not.toBeNull();
+            expect(eType.name).toBe("EStringToStringMapEntry");
+            expect(eType.eIsProxy()).toBeFalsy();
         });
 
         test("load", async () => {
@@ -126,10 +194,10 @@ describe("XMIResource", () => {
         });
     });
 
-    describe("saveBookStore", () => {
+    describe("save.library.simple", () => {
         test("saveToString", async () => {
-            let resource = new XMIResource();
-            resource.eURI = new URL("file:///" + __dirname + "/../testdata/bookStore.ecore");
+            let resource = new XMIResourceImpl();
+            resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.simple.ecore");
             await resource.load();
 
             let result = resource.saveToString();
@@ -142,10 +210,10 @@ describe("XMIResource", () => {
         });
     });
 
-    describe("saveLibrary", () => {
+    describe("save.library.complex", () => {
         test("saveToString", async () => {
-            let resource = new XMIResource();
-            resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.ecore");
+            let resource = new XMIResourceImpl();
+            resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.complex.ecore");
             await resource.load();
 
             let result = resource.saveToString();

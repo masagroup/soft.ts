@@ -65,7 +65,7 @@ ecore.test:
 	@(cd ecore && $(NPM) run test)
 
 .PHONY: library
-library: library.install library.generate library.build library.test
+library: library.install library.generate library.format library.build library.test
 
 .PHONY: library.install
 library.install:
@@ -76,6 +76,11 @@ library.install:
 library.generate:
 	@echo "[library.generate]"
 	@$(call GENERATE,library.ecore,)
+
+.PHONY: library.format
+library.format:
+	@echo "[library.format]"
+	@(cd library && $(NPM) run pretty)
 
 .PHONY: library.build
 library.build:

@@ -234,56 +234,56 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return this._warnings;
     }
 
-    load(): Promise<void> {
+    load(options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter();
             if (uriConverter) {
                 let s = uriConverter.createReadStream(this._uri);
                 if (s) {
-                    return this.loadFromStream(s);
+                    return this.loadFromStream(s, options);
                 }
             }
         }
-        return Promise.reject();
+        return Promise.resolve();
     }
 
-    loadFromStream(s: fs.ReadStream): Promise<void> {
+    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
-            return this.doLoadFromStream(s).then(() => {
+            return this.doLoadFromStream(s, options).then(() => {
                 let n = this.basicSetLoaded(true, null);
                 if (n) {
                     n.dispatch();
                 }
             });
         }
-        return Promise.reject();
+        return Promise.resolve();
     }
 
-    loadSync() {
+    loadSync(options?: Map<string, any>) {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter();
             if (uriConverter) {
                 let s = uriConverter.readSync(this._uri);
                 if (s) {
-                    return this.loadFromString(s);
+                    return this.loadFromString(s, options);
                 }
             }
         }
     }
 
-    loadFromString(s: string) {
-        this.doLoadFromString(s);
+    loadFromString(s: string, options?: Map<string, any>) {
+        this.doLoadFromString(s, options);
         let n = this.basicSetLoaded(true, null);
         if (n) {
             n.dispatch();
         }
     }
 
-    protected doLoadFromStream(s: fs.ReadStream): Promise<void> {
+    protected doLoadFromStream(s: fs.ReadStream, options: Map<string, any>): Promise<void> {
         return null;
     }
 
-    protected doLoadFromString(s: string): void {
+    protected doLoadFromString(s: string, options: Map<string, any>): void {
         return null;
     }
 
@@ -304,37 +304,42 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._resourceIDManager?.clear();
     }
 
-    save(): Promise<void> {
+    save(options?: Map<string, any>): Promise<void> {
         let uriConverter = this.getURIConverter();
         if (uriConverter) {
             let s = uriConverter.createWriteStream(this._uri);
             if (s) {
-                return this.saveToStream(s);
+                return new Promise<void>((resolve, reject) => {
+                    this.saveToStream(s, options)
+                        .then(() => resolve())
+                        .catch((reason) => reject(reason))
+                        .finally(() => s.end());
+                });
             }
         }
         return Promise.reject();
     }
 
-    saveToStream(s: fs.WriteStream): Promise<void> {
-        return this.doSaveToStream(s);
+    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void> {
+        return this.doSaveToStream(s, options);
     }
 
-    saveSync() {
+    saveSync(options?: Map<string, any>) {
         let uriConverter = this.getURIConverter();
         if (uriConverter) {
-            uriConverter.writeSync(this._uri, this.saveToString());
+            uriConverter.writeSync(this._uri, this.saveToString(options));
         }
     }
 
-    saveToString(): string {
-        return this.doSaveToString();
+    saveToString(options?: Map<string, any>): string {
+        return this.doSaveToString(options);
     }
 
-    protected doSaveToStream(s: fs.WriteStream): Promise<void> {
+    protected doSaveToStream(s: fs.WriteStream, options: Map<string, any>): Promise<void> {
         return null;
     }
 
-    protected doSaveToString(): string {
+    protected doSaveToString(options: Map<string, any>): string {
         return "";
     }
 

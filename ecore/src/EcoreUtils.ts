@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { isEObjectInternal } from "./EObjectInternal";
 import {
     DeepCopy,
     DeepEqual,
@@ -104,5 +105,24 @@ export class EcoreUtils {
     static equalsAll(l1: EList<EObject>, l2: EList<EObject>): boolean {
         let dE = new DeepEqual();
         return dE.equalsAll(l1, l2);
+    }
+
+    static remove(eObject: EObject) {
+        if (isEObjectInternal(eObject)) {
+            let eContainer = eObject.eInternalContainer();
+            let eFeature = eObject.eContainmentFeature();
+            if (eContainer && eFeature) {
+                if (eFeature.isMany) {
+                    let l = eContainer.eGet(eFeature) as EList<EObject>;
+                    l.remove(eObject);
+                } else {
+                    eContainer.eUnset(eFeature);
+                }
+            }
+            let eResource = eObject.eInternalResource();
+            if (eResource) {
+                eResource.eContents().remove(eObject);
+            }
+        }
     }
 }

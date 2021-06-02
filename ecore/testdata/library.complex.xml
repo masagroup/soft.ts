@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library xmlns="http:///org/eclipse/emf/examples/library/library.ecore/1.0.0" address="My Library Adress" name="My Library">
+  <employees address="Adress 0" first-name="First Name 0" last-name="Last Name 0"/>
+  <employees address="Adress 1" first-name="First Name 1" last-name="Last Name 1" manager="#//@library/@employees.0"/>
+  <employees address="Adress 2" first-name="First Name 2" last-name="Last Name 2" manager="#//@library/@employees.0"/>
+  <employees address="Adress 3" first-name="First Name 3" last-name="Last Name 3" manager="#//@library/@employees.0"/>
+  <employees address="Adress 4" first-name="First Name 4" last-name="Last Name 4" manager="#//@library/@employees.2"/>
+  <employees address="Adress 5" first-name="First Name 5" last-name="Last Name 5" manager="#//@library/@employees.0"/>
+  <employees address="Adress 6" first-name="First Name 6" last-name="Last Name 6" manager="#//@library/@employees.4"/>
+  <employees address="Adress 7" first-name="First Name 7" last-name="Last Name 7" manager="#//@library/@employees.6"/>
+  <employees address="Adress 8" first-name="First Name 8" last-name="Last Name 8" manager="#//@library/@employees.5"/>
+  <employees address="Adress 9" first-name="First Name 9" last-name="Last Name 9" manager="#//@library/@employees.8"/>
+</library>
