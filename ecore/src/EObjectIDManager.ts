@@ -9,7 +9,7 @@
 
 import { EObject } from "./internal";
 
-export interface EResourceIDManager {
+export interface EObjectIDManager {
     clear(): void;
 
     register(object: EObject): void;

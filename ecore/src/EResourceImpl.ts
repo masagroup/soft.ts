@@ -24,7 +24,7 @@ import {
     EObjectList,
     EResource,
     EResourceConstants,
-    EResourceIDManager,
+    EObjectIDManager,
     EResourceInternal,
     EResourceSet,
     EStructuralFeature,
@@ -107,7 +107,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
 
 export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _uri: URL = null;
-    private _resourceIDManager: EResourceIDManager = null;
+    private _objectIDManager: EObjectIDManager = null;
     private _isLoaded: boolean = false;
     private _resourceSet: EResourceSet = null;
     private _contents: EList<EObject> = null;
@@ -136,12 +136,12 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    get eResourceIDManager() {
-        return this._resourceIDManager;
+    get eObjectIDManager() {
+        return this._objectIDManager;
     }
 
-    set eResourceIDManager(eResourceIDManager: EResourceIDManager) {
-        this._resourceIDManager = eResourceIDManager;
+    set eObjectIDManager(eObjectIDManager: EObjectIDManager) {
+        this._objectIDManager = eObjectIDManager;
     }
 
     get isLoaded() {
@@ -301,7 +301,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._contents = null;
         this._errors = null;
         this._warnings = null;
-        this._resourceIDManager?.clear();
+        this._objectIDManager?.clear();
     }
 
     save(options?: Map<string, any>): Promise<void> {
@@ -344,11 +344,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     attached(object: EObject): void {
-        if (this._resourceIDManager) this._resourceIDManager.register(object);
+        if (this._objectIDManager) this._objectIDManager.register(object);
     }
 
     detached(object: EObject): void {
-        if (this._resourceIDManager) this._resourceIDManager.unRegister(object);
+        if (this._objectIDManager) this._objectIDManager.unRegister(object);
     }
 
     basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain {
@@ -406,7 +406,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     private getObjectByID(id: string): EObject {
-        if (this._resourceIDManager) return this._resourceIDManager.getEObject(id);
+        if (this._objectIDManager) return this._objectIDManager.getEObject(id);
 
         for (const eObject of this.eAllContentsResolve(false)) {
             let objectID = EcoreUtils.getEObjectID(eObject);
