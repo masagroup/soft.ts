@@ -158,7 +158,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     eAllContents(): IterableIterator<EObject> {
-        return this.eAllContentsResolve(true);
+        return this.eAllContentsResolve(this, true);
     }
 
     getEObject(uriFragment: string): EObject {
@@ -345,11 +345,33 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return "";
     }
 
+    protected isAttachedDetachedRequired(): boolean {
+        return this._objectIDManager != null;
+    }
+
     attached(object: EObject): void {
+        if (this.isAttachedDetachedRequired()) {
+            this.doAttached(object);
+            for (const eChild of this.eAllContentsResolve(object, false)) {
+                this.doAttached(eChild);
+            }
+        }
+    }
+
+    protected doAttached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.register(object);
     }
 
     detached(object: EObject): void {
+        if (this.isAttachedDetachedRequired()) {
+            this.doDetached(object);
+            for (const eChild of this.eAllContentsResolve(object, false)) {
+                this.doDetached(eChild);
+            }
+        }
+    }
+
+    protected doDetached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.unRegister(object);
     }
 
@@ -399,8 +421,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return notifications;
     }
 
-    private eAllContentsResolve(resolve: boolean): IterableIterator<EObject> {
-        return new ETreeIterator<any, EObject>(this, false, function (o: any): Iterator<EObject> {
+    private eAllContentsResolve(root: any, resolve: boolean): IterableIterator<EObject> {
+        return new ETreeIterator<any, EObject>(root, false, function (o: any): Iterator<EObject> {
             let contents: EList<EObject> = o.eContents();
             if (!resolve) contents = (contents as EObjectList<EObject>).getUnResolvedList();
             return contents[Symbol.iterator]();
@@ -410,7 +432,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private getObjectByID(id: string): EObject {
         if (this._objectIDManager) return this._objectIDManager.getEObject(id);
 
-        for (const eObject of this.eAllContentsResolve(false)) {
+        for (const eObject of this.eAllContentsResolve(this, false)) {
             let objectID = EcoreUtils.getEObjectID(eObject);
             if (id == objectID) return eObject;
         }
