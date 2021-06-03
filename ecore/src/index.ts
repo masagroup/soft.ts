@@ -59,6 +59,8 @@ export {
     EURIHandler,
     EventType,
     ExtendedMetaData,
+    IncrementalIDManager,
+    UniqueIDManager,
     getEcoreFactory,
     getEcorePackage,
     getPackageRegistry,

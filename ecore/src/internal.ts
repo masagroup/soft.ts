@@ -117,6 +117,7 @@ export * from "./EURIConverterImpl";
 export * from "./EResourceImpl";
 export * from "./EResourceSetImpl";
 export * from "./IncrementalIDManager";
+export * from "./UniqueIDManager";
 
 export * from "./XMLResource";
 export * from "./XMLResourceFactory";
