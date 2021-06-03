@@ -7,15 +7,14 @@
 //
 // *****************************************************************************
 
-
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 import { EObject, EObjectIDManager } from "./internal";
 
 export class UniqueIDManager implements EObjectIDManager {
     private _detachedToID: Map<EObject, string> = new Map<EObject, string>();
     private _objectToID: Map<EObject, string> = new Map<EObject, string>();
     private _idToObject: Map<string, EObject> = new Map<string, EObject>();
-    
+
     private newID(): string {
         return uuid();
     }
@@ -74,6 +73,4 @@ export class UniqueIDManager implements EObjectIDManager {
     getDetachedID(eObject: EObject): any {
         return this._detachedToID.get(eObject);
     }
-
-    
 }

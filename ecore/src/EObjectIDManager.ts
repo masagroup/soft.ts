@@ -15,7 +15,7 @@ export interface EObjectIDManager {
     register(object: EObject): void;
     unRegister(object: EObject): void;
 
-    setID(object: EObject, newID : any) : void;
+    setID(object: EObject, newID: any): void;
 
     getID(object: EObject): any;
     getEObject(id: any): EObject;

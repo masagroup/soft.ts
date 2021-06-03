@@ -10,9 +10,8 @@
 import { instance, mock } from "ts-mockito";
 import { EObject, UniqueIDManager } from "./internal";
 
-describe('IncrementalIDManager', () => {
-
-    test('register', () => {
+describe("IncrementalIDManager", () => {
+    test("register", () => {
         let m = new UniqueIDManager();
         let mockObject = mock<EObject>();
         let eObject = instance(mockObject);
@@ -25,7 +24,7 @@ describe('IncrementalIDManager', () => {
         expect(m.getEObject(id)).toBe(eObject);
     });
 
-    test('unregister', () => {
+    test("unregister", () => {
         let m = new UniqueIDManager();
         let mockObject = mock<EObject>();
         let eObject = instance(mockObject);
@@ -35,7 +34,7 @@ describe('IncrementalIDManager', () => {
         m.register(eObject);
         let id = m.getID(eObject);
         expect(id).not.toBeUndefined();
-        
+
         m.unRegister(eObject);
         expect(m.getID(eObject)).toBeUndefined();
         expect(m.getDetachedID(eObject)).toBe(id);
@@ -45,32 +44,30 @@ describe('IncrementalIDManager', () => {
         expect(m.getDetachedID(eObject)).toBeUndefined();
     });
 
-    test('set', () => {
+    test("set", () => {
         let m = new UniqueIDManager();
         let mockObject = mock<EObject>();
         let eObject = instance(mockObject);
 
-        m.setID(eObject,2);
+        m.setID(eObject, 2);
         expect(m.getID(eObject)).toBe("2");
 
-        m.setID(eObject,null);
+        m.setID(eObject, null);
         expect(m.getID(eObject)).toBeUndefined();
 
         m.setID(eObject, "2");
         expect(m.getID(eObject)).toBe("2");
     });
 
-    test('clear', () => {
+    test("clear", () => {
         let m = new UniqueIDManager();
         let mockObject = mock<EObject>();
         let eObject = instance(mockObject);
 
-        m.setID(eObject,2);
+        m.setID(eObject, 2);
         expect(m.getID(eObject)).toBe("2");
 
         m.clear();
         expect(m.getID(eObject)).toBeUndefined();
     });
-
-    
 });

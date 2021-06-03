@@ -74,6 +74,4 @@ export class IncrementalIDManager implements EObjectIDManager {
     getDetachedID(eObject: EObject): any {
         return this._detachedToID.get(eObject);
     }
-
-    
 }

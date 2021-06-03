@@ -183,7 +183,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         } else {
             let internalEObject = eObject as EObjectInternal;
             if (internalEObject.eInternalResource() == this) {
-                return "/" + this.getURIFragmentRootSegment(eObject);
+                id = this.getIDForObject(eObject);
+                return id.length > 0 ? id : "/" + this.getURIFragmentRootSegment(eObject);
             } else {
                 let fragmentPath: string[] = [];
                 let isContained = false;
@@ -192,6 +193,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     eContainer != null;
                     eContainer = internalEObject.eInternalContainer() as EObjectInternal
                 ) {
+                    id = this.getIDForObject(eObject);
                     if (id.length == 0) {
                         fragmentPath.unshift(
                             eContainer.eURIFragmentSegment(
@@ -414,6 +416,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
 
         return null;
+    }
+
+    private getIDForObject(eObject: EObject): string {
+        let id = this._objectIDManager?.getID(eObject);
+        return id !== undefined && id !== null ? String(id) : EcoreUtils.getEObjectID(eObject);
     }
 
     private getObjectByPath(uriFragmentPath: string[]): EObject {

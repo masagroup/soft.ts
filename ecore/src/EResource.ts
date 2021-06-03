@@ -7,14 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    ENotifier,
-    EObject,
-    EList,
-    EResourceSet,
-    EDiagnostic,
-    EObjectIDManager,
-} from "./internal";
+import { ENotifier, EObject, EList, EResourceSet, EDiagnostic, EObjectIDManager } from "./internal";
 import * as fs from "fs";
 
 export class EResourceConstants {
