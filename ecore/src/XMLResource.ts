@@ -672,8 +672,8 @@ export class XMLLoad {
             for (let i in this._attributes) {
                 let attr = this._attributes[i];
                 if (attr.local == this._idAttributeName) {
-                    // let idManager = this._resource.eResourceIDManager;
-                    // idManager.setID(eObject,attr.value);
+                    let idManager = this._resource.eObjectIDManager;
+                    if (idManager) idManager.setID(eObject, attr.value);
                 } else if (attr.local == XMLConstants.href) {
                     this.handleProxy(eObject, attr.value);
                 } else if (attr.prefix != XMLConstants.xmlNS && this.isUserAttribute(attr)) {
@@ -1301,7 +1301,14 @@ export class XMLSave {
         return null;
     }
 
-    protected saveElementID(eObject: EObject) {}
+    protected saveElementID(eObject: EObject) {
+        if (this._idAttributeName && this._resource.eObjectIDManager) {
+            let id = this._resource.eObjectIDManager.getID(eObject);
+            if (id) {
+                this._str.addAttribute(this._idAttributeName, String(id));
+            }
+        }
+    }
 
     private saveFeatures(eObject: EObject, attributesOnly: boolean): boolean {
         let eAllFeatures = eObject.eClass().eAllStructuralFeatures;

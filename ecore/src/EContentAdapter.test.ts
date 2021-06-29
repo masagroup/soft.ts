@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { anything, instance, mock, resetCalls, verify, when } from "ts-mockito";
+import { instance, mock, resetCalls, verify, when } from "ts-mockito";
 import {
     EAdapter,
     EAttribute,

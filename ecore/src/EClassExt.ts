@@ -8,20 +8,20 @@
 // *****************************************************************************
 
 import {
-    EClass,
-    EStructuralFeature,
-    EOperation,
-    EAttribute,
-    EReference,
-    ENotification,
-    isEReference,
-    isEAttribute,
-    EClassImpl,
-    ImmutableEList,
     AbstractEAdapter,
-    EventType,
-    EcoreConstants,
+    EAttribute,
+    EClass,
     EClassifier,
+    EClassImpl,
+    EcoreConstants,
+    ENotification,
+    EOperation,
+    EReference,
+    EStructuralFeature,
+    EventType,
+    ImmutableEList,
+    isEAttribute,
+    isEReference,
 } from "./internal";
 
 export function isEClass(e: EClassifier): e is EClass {

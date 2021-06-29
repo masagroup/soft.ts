@@ -24,7 +24,7 @@ import {
     EObjectList,
     EResource,
     EResourceConstants,
-    EResourceIDManager,
+    EObjectIDManager,
     EResourceInternal,
     EResourceSet,
     EStructuralFeature,
@@ -107,7 +107,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
 
 export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _uri: URL = null;
-    private _resourceIDManager: EResourceIDManager = null;
+    private _objectIDManager: EObjectIDManager = null;
     private _isLoaded: boolean = false;
     private _resourceSet: EResourceSet = null;
     private _contents: EList<EObject> = null;
@@ -136,12 +136,12 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    get eResourceIDManager() {
-        return this._resourceIDManager;
+    get eObjectIDManager() {
+        return this._objectIDManager;
     }
 
-    set eResourceIDManager(eResourceIDManager: EResourceIDManager) {
-        this._resourceIDManager = eResourceIDManager;
+    set eObjectIDManager(eObjectIDManager: EObjectIDManager) {
+        this._objectIDManager = eObjectIDManager;
     }
 
     get isLoaded() {
@@ -158,7 +158,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     eAllContents(): IterableIterator<EObject> {
-        return this.eAllContentsResolve(true);
+        return this.eAllContentsResolve(this, true);
     }
 
     getEObject(uriFragment: string): EObject {
@@ -183,7 +183,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         } else {
             let internalEObject = eObject as EObjectInternal;
             if (internalEObject.eInternalResource() == this) {
-                return "/" + this.getURIFragmentRootSegment(eObject);
+                id = this.getIDForObject(eObject);
+                return id.length > 0 ? id : "/" + this.getURIFragmentRootSegment(eObject);
             } else {
                 let fragmentPath: string[] = [];
                 let isContained = false;
@@ -192,6 +193,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     eContainer != null;
                     eContainer = internalEObject.eInternalContainer() as EObjectInternal
                 ) {
+                    id = this.getIDForObject(eObject);
                     if (id.length == 0) {
                         fragmentPath.unshift(
                             eContainer.eURIFragmentSegment(
@@ -301,7 +303,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._contents = null;
         this._errors = null;
         this._warnings = null;
-        this._resourceIDManager?.clear();
+        this._objectIDManager?.clear();
     }
 
     save(options?: Map<string, any>): Promise<void> {
@@ -343,12 +345,34 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return "";
     }
 
+    protected isAttachedDetachedRequired(): boolean {
+        return this._objectIDManager != null;
+    }
+
     attached(object: EObject): void {
-        if (this._resourceIDManager) this._resourceIDManager.register(object);
+        if (this.isAttachedDetachedRequired()) {
+            this.doAttached(object);
+            for (const eChild of this.eAllContentsResolve(object, false)) {
+                this.doAttached(eChild);
+            }
+        }
+    }
+
+    protected doAttached(object: EObject): void {
+        if (this._objectIDManager) this._objectIDManager.register(object);
     }
 
     detached(object: EObject): void {
-        if (this._resourceIDManager) this._resourceIDManager.unRegister(object);
+        if (this.isAttachedDetachedRequired()) {
+            this.doDetached(object);
+            for (const eChild of this.eAllContentsResolve(object, false)) {
+                this.doDetached(eChild);
+            }
+        }
+    }
+
+    protected doDetached(object: EObject): void {
+        if (this._objectIDManager) this._objectIDManager.unRegister(object);
     }
 
     basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain {
@@ -397,8 +421,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return notifications;
     }
 
-    private eAllContentsResolve(resolve: boolean): IterableIterator<EObject> {
-        return new ETreeIterator<any, EObject>(this, false, function (o: any): Iterator<EObject> {
+    private eAllContentsResolve(root: any, resolve: boolean): IterableIterator<EObject> {
+        return new ETreeIterator<any, EObject>(root, false, function (o: any): Iterator<EObject> {
             let contents: EList<EObject> = o.eContents();
             if (!resolve) contents = (contents as EObjectList<EObject>).getUnResolvedList();
             return contents[Symbol.iterator]();
@@ -406,14 +430,19 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     private getObjectByID(id: string): EObject {
-        if (this._resourceIDManager) return this._resourceIDManager.getEObject(id);
+        if (this._objectIDManager) return this._objectIDManager.getEObject(id);
 
-        for (const eObject of this.eAllContentsResolve(false)) {
+        for (const eObject of this.eAllContentsResolve(this, false)) {
             let objectID = EcoreUtils.getEObjectID(eObject);
             if (id == objectID) return eObject;
         }
 
         return null;
+    }
+
+    private getIDForObject(eObject: EObject): string {
+        let id = this._objectIDManager?.getID(eObject);
+        return id !== undefined && id !== null ? String(id) : EcoreUtils.getEObjectID(eObject);
     }
 
     private getObjectByPath(uriFragmentPath: string[]): EObject {

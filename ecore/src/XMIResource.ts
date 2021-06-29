@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EObject, XMLResource, XMLResourceImpl, XMLLoad, XMLSave } from "./internal";
+import { EObject, XMLLoad, XMLResource, XMLResourceImpl, XMLSave } from "./internal";
 
 class XMIConstants {
     static xmiURI = "http://www.omg.org/XMI";

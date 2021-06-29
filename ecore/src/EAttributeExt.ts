@@ -8,12 +8,12 @@
 // *****************************************************************************
 
 import {
+    EAttribute,
+    EAttributeImpl,
+    EClassExt,
     EcoreConstants,
     EDataType,
-    EClassExt,
-    EAttributeImpl,
     EStructuralFeature,
-    EAttribute,
 } from "./internal";
 
 export function isEAttribute(s: EStructuralFeature): s is EAttribute {

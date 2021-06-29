@@ -8,11 +8,11 @@
 // *****************************************************************************
 
 import {
-    EStructuralFeature,
+    AbstractNotification,
     ENotifier,
     EObject,
+    EStructuralFeature,
     EventType,
-    AbstractNotification,
 } from "./internal";
 
 export class Notification extends AbstractNotification {

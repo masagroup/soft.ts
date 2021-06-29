@@ -15,7 +15,6 @@ import {
     EObjectList,
     EReference,
     ImmutableEList,
-    isEObjectInternal,
     isEObject,
 } from "./internal";
 

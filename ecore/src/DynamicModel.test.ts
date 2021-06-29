@@ -8,15 +8,15 @@
 // *****************************************************************************
 
 import {
-    EFactory,
-    EPackage,
-    EClass,
     EAttribute,
+    EClass,
+    EFactory,
+    EList,
+    EObject,
+    EPackage,
     EReference,
     getEcoreFactory,
     getEcorePackage,
-    EObject,
-    EList,
     UNBOUNDED_MULTIPLICITY,
 } from "./internal";
 

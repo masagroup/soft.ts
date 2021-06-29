@@ -7,16 +7,16 @@
 //
 // *****************************************************************************
 
-import { mock, verify, instance, when } from "ts-mockito";
+import { instance, mock, when } from "ts-mockito";
 import {
-    EOperation,
-    ImmutableEList,
     EAttributeExt,
-    EReferenceExt,
-    EOperationExt,
     EClassExt,
-    getEcorePackage,
+    EOperation,
+    EOperationExt,
+    EReferenceExt,
     getEcoreFactory,
+    getEcorePackage,
+    ImmutableEList,
 } from "./internal";
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {

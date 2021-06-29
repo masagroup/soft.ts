@@ -9,8 +9,8 @@
     "test": "jest",
     "pretty": "prettier --write src/**/*.ts"
   },
-  "author": "MasaGroup",
-  "license": "ISC",
+  "author": "MASA Group",
+  "license": "MPL-2.0",
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "deep-equal": "^2.0.5",
@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@types/sax": "^1.2.1",
+    "@types/uuid": "^8.3.0",
     "sax": "^1.2.4"
   }
 }

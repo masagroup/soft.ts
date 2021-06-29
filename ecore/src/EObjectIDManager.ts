@@ -9,12 +9,16 @@
 
 import { EObject } from "./internal";
 
-export interface EResourceIDManager {
+export interface EObjectIDManager {
     clear(): void;
 
     register(object: EObject): void;
     unRegister(object: EObject): void;
 
-    getID(object: EObject): string;
-    getEObject(id: string): EObject;
+    setID(object: EObject, newID: any): void;
+
+    getID(object: EObject): any;
+    getEObject(id: any): EObject;
+
+    getDetachedID(object: EObject): any;
 }

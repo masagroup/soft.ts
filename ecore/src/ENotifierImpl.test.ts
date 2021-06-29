@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { mock, verify, instance, notNull } from "ts-mockito";
+import { instance, mock, verify } from "ts-mockito";
 import { EAdapter, ENotification, ENotifierImpl } from "./internal";
 
 describe("ENotifierImpl", () => {

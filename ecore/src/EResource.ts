@@ -7,14 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    ENotifier,
-    EObject,
-    EList,
-    EResourceSet,
-    EDiagnostic,
-    EResourceIDManager,
-} from "./internal";
+import { ENotifier, EObject, EList, EResourceSet, EDiagnostic, EObjectIDManager } from "./internal";
 import * as fs from "fs";
 
 export class EResourceConstants {
@@ -29,7 +22,7 @@ export class EResourceConstants {
 
 export interface EResource extends ENotifier {
     eURI: URL;
-    eResourceIDManager: EResourceIDManager;
+    eObjectIDManager: EObjectIDManager;
 
     eResourceSet(): EResourceSet;
     eContents(): EList<EObject>;

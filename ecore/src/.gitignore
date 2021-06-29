@@ -10,6 +10,7 @@ E*.ts
 !ENotif*.ts
 !EObjectInternal.ts
 !EObjectList.ts
+!EObjectIDManager.ts
 !EPackageRegistry*.ts
 !EResource*.ts
 !ETreeIterator.ts
