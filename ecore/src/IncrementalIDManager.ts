@@ -60,6 +60,7 @@ export class IncrementalIDManager implements EObjectIDManager {
         }
         if (newID !== undefined) {
             this._idToObject.set(newID, eObject);
+            this._currentID = Math.max(newID+1, this._currentID)
         }
     }
 
