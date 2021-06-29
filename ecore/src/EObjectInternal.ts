@@ -8,11 +8,11 @@
 // *****************************************************************************
 
 import {
-    EObject,
     EClass,
-    EResource,
-    ENotificationChain,
     EList,
+    ENotificationChain,
+    EObject,
+    EResource,
     EStructuralFeature,
 } from "./internal";
 

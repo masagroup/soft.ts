@@ -9,11 +9,11 @@
 
 import {
     AbstractEAdapter,
-    EventType,
     ENotification,
     ENotifier,
     EResourceConstants,
     EResourceSetConstants,
+    EventType,
     isEObject,
     isEObjectInternal,
     isEReference,

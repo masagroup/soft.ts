@@ -7,8 +7,8 @@
 //
 // *****************************************************************************
 
-import { ENotifier, ENotification, EventType, NotificationChain } from "./internal";
-import { mock, instance, when, verify } from "ts-mockito";
+import { instance, mock, verify, when } from "ts-mockito";
+import { ENotification, ENotifier, EventType, NotificationChain } from "./internal";
 
 describe("NotificationChain", () => {
     test("constructor", () => {

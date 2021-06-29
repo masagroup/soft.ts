@@ -8,15 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import {
-    EAttribute,
-    EClass,
-    EClassifier,
-    EPackage,
-    EReference,
-    isEReference,
-    XMIResourceImpl,
-} from "./internal";
+import { EAttribute, EClass, EClassifier, EPackage, EReference, XMIResourceImpl } from "./internal";
 
 describe("XMIResource", () => {
     describe("load.library.simple", () => {

@@ -7,27 +7,15 @@
 //
 // *****************************************************************************
 
-import { getEcorePackage } from "./EcorePackage";
-import { EDynamicProperties } from "./EObjectInternal";
 import {
-    ENotification,
-    ENotificationChain,
-    EObjectInternal,
-    EClass,
-    EReference,
-    EObjectImpl,
-    EcoreConstants,
     AbstractEAdapter,
+    EClass,
+    EcoreConstants,
+    EDynamicProperties,
+    ENotification,
+    EObjectImpl,
     EventType,
-    EStructuralFeature,
-    isEAttribute,
-    isEReference,
-    BasicEList,
-    BasicEObjectList,
-    Notification,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    ENotifyingList,
+    getEcorePackage,
 } from "./internal";
 
 class DynamicFeaturesAdapter extends AbstractEAdapter {

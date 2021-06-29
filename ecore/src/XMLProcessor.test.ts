@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito";
-import { EPackage, XMLProcessor, EResourceSet } from "./internal";
+import { EPackage, EResourceSet, XMLProcessor } from "./internal";
 
 describe("XMLProcessor", () => {
     test("constructor.packages", () => {

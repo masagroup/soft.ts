@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotifier, ENotification } from "./internal";
+import { ENotification, ENotifier } from "./internal";
 
 export interface EAdapter {
     // the target from which the adapter receives notification.

@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import * as fs from "fs";
 import {
     EPackage,
     EResource,
@@ -17,7 +18,6 @@ import {
     isEResourceSet,
     OPTION_EXTENDED_META_DATA,
 } from "./internal";
-import * as fs from "fs";
 
 export class XMLProcessor {
     private _extendMetaData: ExtendedMetaData = new ExtendedMetaData();

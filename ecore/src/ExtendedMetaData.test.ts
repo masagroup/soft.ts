@@ -1,6 +1,4 @@
-import { instance, mock, reset, verify, when } from "ts-mockito";
-import { EReference } from "./EReference";
-import { ImmutableEList } from "./ImmutableEList";
+import { instance, mock, verify, when } from "ts-mockito";
 import {
     EAnnotation,
     EClass,
@@ -8,8 +6,10 @@ import {
     EMap,
     ENamedElement,
     EPackage,
+    EReference,
     EStructuralFeature,
     ExtendedMetaData,
+    ImmutableEList,
 } from "./internal";
 
 const annotationURI = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";

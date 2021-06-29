@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EList, EAdapter, ENotification } from "./internal";
+import { EAdapter, EList, ENotification } from "./internal";
 
 export interface ENotifier {
     // list of the adapters associated with this notifier.

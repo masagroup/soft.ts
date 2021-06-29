@@ -7,14 +7,14 @@
 //
 // *****************************************************************************
 
-import { mock, verify, instance, when } from "ts-mockito";
+import { instance, mock, verify, when } from "ts-mockito";
 import {
+    BasicEObjectList,
     EClass,
     EObject,
     EObjectInternal,
     EObjectList,
     EStructuralFeature,
-    BasicEObjectList,
 } from "./internal";
 
 describe("BasicEObjectList", () => {
