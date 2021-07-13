@@ -22,12 +22,4 @@ export class EcoreFactoryExt extends EcoreFactoryImpl {
     protected constructor() {
         super();
     }
-
-    createEDateFromString(eDataType: EDataType, literalValue: string): any {
-        return new Date(literalValue);
-    }
-
-    convertEDateToString(eDataType: EDataType, instanceValue: any): string {
-        return (instanceValue as Date).toISOString();
-    }
 }

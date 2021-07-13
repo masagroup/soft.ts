@@ -73,7 +73,7 @@ export class AbstractENotifierList extends BasicEList<EAdapter> {
         adapter.unsetTarget(this._notifier);
     }
 
-    toJson(): any {
+    toJSON(): any {
         return {};
     }
 }

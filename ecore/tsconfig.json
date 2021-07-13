@@ -4,6 +4,7 @@
     "target": "es2017",
     "sourceMap": true,
     "declaration": true,
+    "stripInternal": true,
     "outDir": "dist",
   },
   "include": [
