@@ -310,6 +310,9 @@ describe("AbstractNotifyingList", () => {
         ).thenReturn(true);
         l.removeWithNotification(1, l.chain);
         expect(l.toArray()).toEqual([]);
+
+        reset(l.mockChain);
+        l.removeWithNotification(2, l.chain);
     });
 
     test("setWithNotification", () => {
