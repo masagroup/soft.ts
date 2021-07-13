@@ -144,6 +144,22 @@ describe("BasicEObjectList", () => {
             verify(mockOwner.eResolveProxy(object)).once();
             verify(mockObject.eIsProxy()).once();
         }
+        // with proxy and containment
+        {
+            let l = new BasicEObjectList(owner, 1, 2, true, false, false, true, false);
+            const mockObject = mock<EObjectInternal>();
+            const object = instance(mockObject);
+            l.add(object);
+
+            const mockResolved = mock<EObjectInternal>();
+            const resolved = instance(mockResolved);
+            when(mockOwner.eResolveProxy(object)).thenReturn(resolved);
+            when(mockObject.eIsProxy()).thenReturn(true);
+            expect(l.get(0)).toBe(resolved);
+
+            verify(mockOwner.eResolveProxy(object)).once();
+            verify(mockObject.eIsProxy()).once();
+        }
     });
 
     test("unresolved", () => {
@@ -244,5 +260,21 @@ describe("BasicEObjectList", () => {
 
         // check that invalid range is supported
         expect(() => u.set(1, object)).toThrow(RangeError);
+    });
+
+    test("toJSON", () => {
+        const mockOwner = mock<EObjectInternal>();
+        const owner = instance(mockOwner);
+        when(mockOwner.eDeliver).thenReturn(false);
+        let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false);
+        expect(l.toJSON()).toEqual({
+            _featureID: 1,
+            _inverseFeatureID: 2,
+            _containment: false,
+            _inverse: false,
+            _opposite: false,
+            _proxies: true,
+            _unset: false,
+        });
     });
 });
