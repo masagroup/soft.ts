@@ -232,7 +232,6 @@ describe("AbstractNotifyingList", () => {
         expect(l.toArray()).toEqual([1, 4, 5, 2, 3]);
 
         expect(l.insertAll(0, new ImmutableEList())).toBeFalsy();
-
     });
 
     test("set", () => {

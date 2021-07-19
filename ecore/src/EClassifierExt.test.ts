@@ -7,17 +7,15 @@
 //
 // *****************************************************************************
 
-import { EClassifierExt , EPackageExt} from "./internal";
+import { EClassifierExt, EPackageExt } from "./internal";
 
-describe('EClassifierExt', () => {
+describe("EClassifierExt", () => {
+    test("classifierID", () => {
+        let c = new EClassifierExt();
+        expect(c.classifierID).toEqual(-1);
 
-    test('classifierID', () => {
-        let c = new EClassifierExt()
-        expect(c.classifierID).toEqual(-1)
-
-        let p = new EPackageExt()
-        p.eClassifiers.add(c)
-        expect(c.classifierID).toEqual(0)
+        let p = new EPackageExt();
+        p.eClassifiers.add(c);
+        expect(c.classifierID).toEqual(0);
     });
-
 });

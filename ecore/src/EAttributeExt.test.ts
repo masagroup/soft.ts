@@ -11,9 +11,9 @@ import { instance, mock } from "ts-mockito";
 import { EDataType } from "./EDataType";
 import { EAttributeExt, EClassifier } from "./internal";
 
-describe('EAttributeExt', () => {
-    test('basicGetEAttributeType', () => {
-        let a = new EAttributeExt()
+describe("EAttributeExt", () => {
+    test("basicGetEAttributeType", () => {
+        let a = new EAttributeExt();
         expect(a.basicGetEAttributeType()).toBeNull();
 
         let mockDataType = mock<EDataType>();
