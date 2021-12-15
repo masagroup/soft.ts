@@ -15,7 +15,7 @@ jobs:
     - name: Install Node
       uses: actions/setup-node@v2
       with:
-        node-version: 14.16.1
+        node-version: 17.2.0
     - name: Checkout TS
       uses: actions/checkout@v2
       with:
