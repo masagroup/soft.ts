@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { instance, mock, objectContaining, verify, when } from "ts-mockito";
+import { instance, mock, objectContaining, reset, verify, when } from "ts-mockito";
 import {
     AbstractNotifyingList,
     EAdapter,
@@ -199,7 +199,7 @@ describe("AbstractNotifyingList", () => {
 
     test("insertAll", () => {
         let l = new NotifyingListTest<number>();
-        l.insertAll(0, new ImmutableEList([1, 2, 3]));
+        expect(l.insertAll(0, new ImmutableEList([1, 2, 3]))).toBeTruthy();
         verify(
             l.mockNotifier.eNotify(
                 objectContaining({
@@ -230,6 +230,8 @@ describe("AbstractNotifyingList", () => {
             )
         ).once();
         expect(l.toArray()).toEqual([1, 4, 5, 2, 3]);
+
+        expect(l.insertAll(0, new ImmutableEList())).toBeFalsy();
     });
 
     test("set", () => {
@@ -307,6 +309,9 @@ describe("AbstractNotifyingList", () => {
         ).thenReturn(true);
         l.removeWithNotification(1, l.chain);
         expect(l.toArray()).toEqual([]);
+
+        reset(l.mockChain);
+        l.removeWithNotification(2, l.chain);
     });
 
     test("setWithNotification", () => {

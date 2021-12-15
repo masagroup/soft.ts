@@ -69,8 +69,8 @@ describe("AbstractENotifierList", () => {
         verify(mockAdapter.unsetTarget(notifier)).once();
     });
 
-    test("toJson", () => {
-        expect(l.toJson()).toStrictEqual({});
+    test("toJSON", () => {
+        expect(l.toJSON()).toStrictEqual({});
     });
 });
 

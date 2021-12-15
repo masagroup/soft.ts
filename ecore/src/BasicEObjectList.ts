@@ -182,4 +182,16 @@ export class BasicEObjectList<O extends EObject>
             ? <O>(<EObjectInternal>this._owner).eResolveProxy(o)
             : o;
     }
+
+    toJSON(): any {
+        return {
+            _featureID: this._featureID,
+            _inverseFeatureID: this._inverseFeatureID,
+            _containment: this._containment,
+            _inverse: this._inverse,
+            _opposite: this._opposite,
+            _proxies: this._proxies,
+            _unset: this._unset,
+        };
+    }
 }
