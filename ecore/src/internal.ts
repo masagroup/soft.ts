@@ -68,6 +68,7 @@ export * from "./Notification";
 export * from "./NotificationChain";
 export * from "./ImmutableEList";
 export * from "./AbstractNotifyingList";
+export * from "./BasicEDataTypeList";
 export * from "./BasicEObject";
 export * from "./BasicEObjectList";
 export * from "./BasicEObjectMap";

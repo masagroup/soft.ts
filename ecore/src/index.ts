@@ -2,6 +2,7 @@ export {
     AbstractEAdapter,
     BasicEList,
     BasicEMap,
+    BasicEDataTypeList,
     BasicEObjectList,
     BasicEObjectMap,
     Collection,
