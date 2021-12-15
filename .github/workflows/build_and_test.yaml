@@ -28,5 +28,5 @@ jobs:
         path: models
     - name: Build and Test
       working-directory: ts
-      run: sudo make
+      run: sudo make ci
     

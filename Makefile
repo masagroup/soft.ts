@@ -36,8 +36,14 @@ endif
 .PHONY: all
 all: ecore library
 
+.PHONY: ci
+ci: ecore.ci library.ci
+
 .PHONY: ecore
 ecore: ecore.install ecore.generate ecore.format ecore.build ecore.test
+
+.PHONY: ecore.ci
+ecore.ci: ecore.install ecore.generate ecore.build ecore.test
 
 .PHONY: ecore.install
 ecore.install:
@@ -66,6 +72,10 @@ ecore.test:
 
 .PHONY: library
 library: library.install library.generate library.format library.build library.test
+
+.PHONY: library.ci
+ecore.ci: library.install library.generate library.build library.test
+
 
 .PHONY: library.install
 library.install:
@@ -96,3 +106,4 @@ library.test:
 versions:
 	@echo "[ecore.version]"
 	@sed -i 's#"version": "[0-9]*\.[0-9]*\.[0-9]*",#"version": "$(ECORE_TS_VERSION)",#g' ecore/package.json
+
