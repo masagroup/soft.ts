@@ -9,6 +9,7 @@
 //
 // *****************************************************************************
 
+import * as deepEqual from "deep-equal";
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito";
 import * as ecore from "@masagroup/ecore";
 import {
@@ -206,6 +207,11 @@ describe("BookImpl", () => {
         expect(notification.position).toBe(-1);
     });
 
+    test("getTableOfContents", () => {
+        let o = new BookImpl();
+        expect(o.tableOfContents).not.toBeNull();
+    });
+
     test("getTitle", () => {
         let o = new BookImpl();
         // get default value
@@ -239,6 +245,9 @@ describe("BookImpl", () => {
         expect(o.eGetFromID(LibraryConstants.BOOK__AUTHOR, true)).toStrictEqual(o.author);
         expect(o.eGetFromID(LibraryConstants.BOOK__CATEGORY, true)).toStrictEqual(o.category);
         expect(o.eGetFromID(LibraryConstants.BOOK__PAGES, true)).toStrictEqual(o.pages);
+        expect(o.eGetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS, true)).toStrictEqual(
+            o.tableOfContents
+        );
         expect(o.eGetFromID(LibraryConstants.BOOK__TITLE, true)).toStrictEqual(o.title);
     });
 
@@ -264,6 +273,12 @@ describe("BookImpl", () => {
             expect(o.eGetFromID(LibraryConstants.BOOK__PAGES, false)).toBe(value);
         }
         {
+            let l = new ecore.ImmutableEList<string>();
+            o.eSetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS, l);
+            expect(o.tableOfContents.isEmpty()).toBeTruthy();
+        }
+
+        {
             let value = "Test String";
             o.eSetFromID(LibraryConstants.BOOK__TITLE, value);
             expect(o.eGetFromID(LibraryConstants.BOOK__TITLE, false)).toBe(value);
@@ -276,6 +291,7 @@ describe("BookImpl", () => {
         expect(o.eIsSetFromID(LibraryConstants.BOOK__AUTHOR)).toBeFalsy();
         expect(o.eIsSetFromID(LibraryConstants.BOOK__CATEGORY)).toBeFalsy();
         expect(o.eIsSetFromID(LibraryConstants.BOOK__PAGES)).toBeFalsy();
+        expect(o.eIsSetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS)).toBeFalsy();
         expect(o.eIsSetFromID(LibraryConstants.BOOK__TITLE)).toBeFalsy();
     });
 
@@ -295,6 +311,13 @@ describe("BookImpl", () => {
             o.eUnsetFromID(LibraryConstants.BOOK__PAGES);
             let v = o.eGetFromID(LibraryConstants.BOOK__PAGES, false);
             expect(v).toBe(100);
+        }
+        {
+            o.eUnsetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS);
+            let v = o.eGetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS, false);
+            expect(v).not.toBeNull();
+            let l = v as ecore.EList<string>;
+            expect(l.isEmpty()).toBeTruthy();
         }
         {
             o.eUnsetFromID(LibraryConstants.BOOK__TITLE);
