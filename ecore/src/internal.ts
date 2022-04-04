@@ -120,6 +120,16 @@ export * from "./EResourceSetImpl";
 export * from "./IncrementalIDManager";
 export * from "./UniqueIDManager";
 
+export * from "./EResourceCodec";
+export * from "./EResourceEncoder";
+export * from "./EResourceDecoder";
+export * from "./EResourceCodecRegistry";
+export * from "./EResourceCodecRegistryImpl";
+export * from "./XMLCodec";
+export * from "./XMICodec";
+export * from "./NoCodec";
+export * from "./BinaryCodec";
+
 export * from "./XMLResource";
 export * from "./XMLResourceFactory";
 export * from "./XMLProcessor";
