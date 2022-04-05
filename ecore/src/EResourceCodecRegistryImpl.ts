@@ -14,10 +14,10 @@ export class EResourceCodecRegistryImpl implements EResourceCodecRegistry {
     public static getInstance(): EResourceCodecRegistryImpl {
         if (!this._instance) {
             this._instance = new EResourceCodecRegistryImpl();
-            this._instance._extensionToCodec["ecore"] = new XMICodec();
-            this._instance._extensionToCodec["xml"] = new XMLCodec();
-            this._instance._extensionToCodec["bin"] = new BinaryCodec();
-            this._instance._protocolToCodec["memory"] = new NoCodec();
+            this._instance._extensionToCodec.set("ecore",new XMICodec());
+            this._instance._extensionToCodec.set("xml",new XMLCodec());
+            this._instance._extensionToCodec.set("bin",new BinaryCodec());
+            this._instance._protocolToCodec.set("memory",new NoCodec());
         }
         return this._instance;
     }

@@ -265,9 +265,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter();
             if (uriConverter) {
-                let s = uriConverter.readSync(this._uri);
-                if (s) {
-                    return this.loadFromString(s, options);
+                let b = uriConverter.readSync(this._uri);
+                if (b) {
+                    return this.loadFromString(b.toString(), options);
                 }
             }
         }

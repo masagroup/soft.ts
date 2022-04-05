@@ -64,6 +64,7 @@ export {
     getEcorePackage,
     getPackageRegistry,
     getResourceFactoryRegistry,
+    getResourceCodecRegistry,
     ImmutableEList,
     IncrementalIDManager,
     isEAttribute,

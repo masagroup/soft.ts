@@ -23,11 +23,11 @@ export class FileURIHandler implements EURIHandler {
         return fs.createWriteStream(uri);
     }
 
-    readSync(uri: URL): null | string {
-        return fs.existsSync(uri) ? fs.readFileSync(uri).toString() : null;
+    readSync(uri: URL): null | string | Buffer {
+        return fs.existsSync(uri) ? fs.readFileSync(uri) : null;
     }
 
-    writeSync(uri: URL, s: string) {
+    writeSync(uri: URL, s: string | Buffer): void {
         fs.writeFileSync(uri, s);
     }
 }
