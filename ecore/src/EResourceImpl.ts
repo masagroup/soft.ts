@@ -8,6 +8,8 @@
 // *****************************************************************************
 
 import * as fs from "fs";
+import { getResourceCodecRegistry } from "./EResourceCodecRegistry";
+import { EResourceEncoder } from "./EResourceEncoder";
 import {
     AbstractNotification,
     AbstractNotifyingList,
@@ -33,6 +35,9 @@ import {
     EURIConverterImpl,
     EventType,
     NotificationChain,
+    EResourceDecoder,
+    EResourceCodecRegistry,
+    EDiagnosticImpl,
 } from "./internal";
 
 class ResourceNotification extends AbstractNotification {
@@ -251,12 +256,43 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
-            return this.doLoadFromStream(s, options).then(() => {
-                let n = this.basicSetLoaded(true, null);
-                if (n) {
-                    n.dispatch();
+            let codecs = this.getCodecRegistry();
+            let codec = codecs.getCodec(this._uri);
+            if (codec) {
+                let decoder = codec.newDecoder(this, options);
+                if (decoder) {
+                    return this.doLoadFromStream(decoder, s).then(() => {
+                        let n = this.basicSetLoaded(true, null);
+                        if (n) {
+                            n.dispatch();
+                        }
+                    });
+                } else {
+                    let errors = this.getErrors();
+                    errors.clear();
+                    errors.add(
+                        new EDiagnosticImpl(
+                            "Unable to create decoder for '" + this._uri.toString() + "'",
+                            this._uri.toString(),
+                            0,
+                            0
+                        )
+                    );
+                    return Promise.resolve();
                 }
-            });
+            } else {
+                let errors = this.getErrors();
+                errors.clear();
+                errors.add(
+                    new EDiagnosticImpl(
+                        "Unable to find codec for '" + this._uri.toString() + "'",
+                        this._uri.toString(),
+                        0,
+                        0
+                    )
+                );
+                return Promise.resolve();
+            }
         }
         return Promise.resolve();
     }
@@ -274,19 +310,55 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     loadFromString(s: string, options?: Map<string, any>) {
-        this.doLoadFromString(s, options);
-        let n = this.basicSetLoaded(true, null);
-        if (n) {
-            n.dispatch();
+        if (!this._isLoaded) {
+            let codecs = this.getCodecRegistry();
+            let codec = codecs.getCodec(this._uri);
+            if (codec) {
+                let decoder = codec.newDecoder(this, options);
+                if (decoder) {
+                    this.doLoadFromString(decoder, s);
+                    let n = this.basicSetLoaded(true, null);
+                    if (n) {
+                        n.dispatch();
+                    }
+                } else {
+                    let errors = this.getErrors();
+                    errors.clear();
+                    errors.add(
+                        new EDiagnosticImpl(
+                            "Unable to create decoder for '" + this._uri.toString() + "'",
+                            this._uri.toString(),
+                            0,
+                            0
+                        )
+                    );
+                }
+            } else {
+                let errors = this.getErrors();
+                errors.clear();
+                errors.add(
+                    new EDiagnosticImpl(
+                        "Unable to find codec for '" + this._uri.toString() + "'",
+                        this._uri.toString(),
+                        0,
+                        0
+                    )
+                );
+            }
         }
     }
 
-    protected doLoadFromStream(s: fs.ReadStream, options: Map<string, any>): Promise<void> {
-        return null;
+    protected doLoadFromStream(decoder: EResourceDecoder, s: fs.ReadStream): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            decoder
+                .decodeAsync(s)
+                .then(() => resolve())
+                .catch((reason) => reject(reason));
+        });
     }
 
-    protected doLoadFromString(s: string, options: Map<string, any>): void {
-        return null;
+    protected doLoadFromString(decoder: EResourceDecoder, s: string): void {
+        decoder.decode(Buffer.from(s));
     }
 
     unload(): void {
@@ -323,26 +395,107 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void> {
-        return this.doSaveToStream(s, options);
+        let codecs = this.getCodecRegistry();
+        let codec = codecs.getCodec(this._uri);
+        if (codec) {
+            let encoder = codec.newEncoder(this, options);
+            if (encoder) {
+                return this.doSaveToStream(encoder, s);
+            } else {
+                let errors = this.getErrors();
+                errors.clear();
+                errors.add(
+                    new EDiagnosticImpl(
+                        "Unable to create decoder for '" + this._uri.toString() + "'",
+                        this._uri.toString(),
+                        0,
+                        0
+                    )
+                );
+            }
+        } else {
+            let errors = this.getErrors();
+            errors.clear();
+            errors.add(
+                new EDiagnosticImpl(
+                    "Unable to find codec for '" + this._uri.toString() + "'",
+                    this._uri.toString(),
+                    0,
+                    0
+                )
+            );
+        }
+        return Promise.reject();
     }
 
     saveSync(options?: Map<string, any>) {
         let uriConverter = this.getURIConverter();
         if (uriConverter) {
-            uriConverter.writeSync(this._uri, this.saveToString(options));
+            uriConverter.writeSync(this._uri, this.saveToBuffer(options));
         }
     }
 
     saveToString(options?: Map<string, any>): string {
-        return this.doSaveToString(options);
+        let buffer = this.saveToBuffer();
+        return buffer ? buffer.toString() : "";
     }
 
-    protected doSaveToStream(s: fs.WriteStream, options: Map<string, any>): Promise<void> {
+    private saveToBuffer(options?: Map<string, any>): Buffer {
+        let codecs = this.getCodecRegistry();
+        let codec = codecs.getCodec(this._uri);
+        if (codec) {
+            let encoder = codec.newEncoder(this, options);
+            if (encoder) {
+                return this.doSaveToBuffer(encoder);
+            } else {
+                let errors = this.getErrors();
+                errors.clear();
+                errors.add(
+                    new EDiagnosticImpl(
+                        "Unable to create decoder for '" + this._uri.toString() + "'",
+                        this._uri.toString(),
+                        0,
+                        0
+                    )
+                );
+            }
+        } else {
+            let errors = this.getErrors();
+            errors.clear();
+            errors.add(
+                new EDiagnosticImpl(
+                    "Unable to find codec for '" + this._uri.toString() + "'",
+                    this._uri.toString(),
+                    0,
+                    0
+                )
+            );
+        }
         return null;
     }
 
-    protected doSaveToString(options: Map<string, any>): string {
-        return "";
+    protected doSaveToStream(encoder: EResourceEncoder, s: fs.WriteStream): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            encoder
+                .encodeAsync(this, s)
+                .then((r) => {
+                    if (r.ok) {
+                        resolve();
+                    } else {
+                        reject(r.val);
+                    }
+                })
+                .catch((reason) => reject(reason))
+                .finally(() => s.end());
+        });
+    }
+
+    protected doSaveToBuffer(encoder: EResourceEncoder): Buffer {
+        let r = encoder.encode(this);
+        if (r.ok) {
+            return Buffer.from(r.val);
+        }
+        return null;
     }
 
     protected isAttachedDetachedRequired(): boolean {
@@ -482,5 +635,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return this._resourceSet
             ? this._resourceSet.getURIConverter()
             : EResourceImpl._defaultURIConverter;
+    }
+
+    private getCodecRegistry(): EResourceCodecRegistry {
+        return this._resourceSet
+            ? this._resourceSet.getCodecRegistry()
+            : getResourceCodecRegistry();
     }
 }

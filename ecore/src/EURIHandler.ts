@@ -16,7 +16,7 @@ export interface EURIHandler {
 
     createWriteStream(uri: URL): fs.WriteStream;
 
-    readSync(uri: URL): null | string | Buffer;
+    readSync(uri: URL): null | Buffer;
 
-    writeSync(uri: URL, s: string | Buffer): void;
+    writeSync(uri: URL, s: Buffer): void;
 }

@@ -25,8 +25,6 @@ export * from "./EObjectList";
 export * from "./EObjectIDManager";
 export * from "./EPackageRegistry";
 export * from "./EResource";
-export * from "./EResourceFactory";
-export * from "./EResourceFactoryRegistry";
 export * from "./EResourceInternal";
 export * from "./EResourceSet";
 export * from "./ETreeIterator";
@@ -126,19 +124,17 @@ export * from "./EResourceDecoder";
 export * from "./EResourceCodecRegistry";
 export * from "./EResourceCodecRegistryImpl";
 export * from "./XMLCodec";
+export * from "./XMLEncoder";
+export * from "./XMLDecoder";
+export * from "./XMLNamespaces";
 export * from "./XMICodec";
 export * from "./NoCodec";
 export * from "./BinaryCodec";
 
-export * from "./XMLResource";
-export * from "./XMLResourceFactory";
 export * from "./XMLProcessor";
-export * from "./XMIResource";
-export * from "./XMIResourceFactory";
 export * from "./XMIProcessor";
 
 export * from "./EPackageRegistryImpl";
-export * from "./EResourceFactoryRegistryImpl";
 
 export * from "./DeepCopy";
 export * from "./DeepEqual";

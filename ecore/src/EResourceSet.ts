@@ -14,7 +14,7 @@ import {
     EObject,
     EURIConverter,
     EPackageRegistry,
-    EResourceFactoryRegistry,
+    EResourceCodecRegistry,
 } from "./internal";
 
 export class EResourceSetConstants {
@@ -34,8 +34,8 @@ export interface EResourceSet extends ENotifier {
     getPackageRegistry(): EPackageRegistry;
     setPackageRegistry(packageRegistry: EPackageRegistry): void;
 
-    geResourceFactoryRegistry(): EResourceFactoryRegistry;
-    setResourceFactoryRegistry(resourceFactoryRegistry: EResourceFactoryRegistry): void;
+    getCodecRegistry(): EResourceCodecRegistry;
+    setCodecRegistry(resourceCodecRegistry: EResourceCodecRegistry): void;
 
     getURIResourceMap(): Map<string, EResource>;
     setURIResourceMap(uriMap: Map<string, EResource>): void;

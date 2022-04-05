@@ -7,8 +7,11 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./internal";
-
-export interface EResourceFactory {
-    createResource(uri: URL): EResource;
+export class XMIConstants {
+    static xmiURI = "http://www.omg.org/XMI";
+    static xmiNS = "xmi";
+    static versionAttrib = "version";
+    static uuidAttrib = "uuid";
+    static typeAttrib = "type";
+    static xmlNS = "xmlns";
 }

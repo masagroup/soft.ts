@@ -7,12 +7,12 @@
 //
 // *****************************************************************************
 
-import { EResource, EResourceFactory, XMIResourceImpl } from "./internal";
-
-export class XMIResourceFactory implements EResourceFactory {
-    createResource(uri: URL): EResource {
-        let r = new XMIResourceImpl();
-        r.eURI = uri;
-        return r;
-    }
+export class XMLConstants {
+    static href = "href";
+    static typeAttrib = "type";
+    static schemaLocationAttrib = "schemaLocation";
+    static noNamespaceSchemaLocationAttrib = "noNamespaceSchemaLocation";
+    static xsiURI = "http://www.w3.org/2001/XMLSchema-instance";
+    static xsiNS = "xsi";
+    static xmlNS = "xmlns";
 }

@@ -7,6 +7,8 @@
 //
 // *****************************************************************************
 
+import { EResourceCodecRegistryImpl } from "./EResourceCodecRegistryImpl";
+import { EResourceImpl } from "./EResourceImpl";
 import {
     AbstractNotifyingList,
     EList,
@@ -17,7 +19,7 @@ import {
     EPackageRegistry,
     EPackageRegistryImpl,
     EResource,
-    EResourceFactoryRegistry,
+    EResourceCodecRegistry,
     EResourceInternal,
     EResourceSet,
     EResourceSetConstants,
@@ -25,7 +27,7 @@ import {
     EURIConverter,
     EURIConverterImpl,
     getPackageRegistry,
-    getResourceFactoryRegistry,
+    getResourceCodecRegistry,
 } from "./internal";
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
@@ -58,14 +60,14 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     private _resources: EList<EResource>;
     private _uriConverter: EURIConverter;
     private _uriResourceMap: Map<string, EResource>;
-    private _resourceFactoryRegistry: EResourceFactoryRegistry;
+    private _resourceCodecRegistry: EResourceCodecRegistry;
     private _packageRegistry: EPackageRegistry;
 
     constructor() {
         super();
         this._resources = new ResourcesList(this);
         this._uriConverter = new EURIConverterImpl();
-        this._resourceFactoryRegistry = getResourceFactoryRegistry();
+        this._resourceCodecRegistry = new EResourceCodecRegistryImpl(getResourceCodecRegistry());
         this._packageRegistry = new EPackageRegistryImpl(getPackageRegistry());
         this._uriResourceMap = null;
     }
@@ -78,12 +80,12 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         this._packageRegistry = packageRegistry;
     }
 
-    geResourceFactoryRegistry(): EResourceFactoryRegistry {
-        return this._resourceFactoryRegistry;
+    getCodecRegistry(): EResourceCodecRegistry {
+        return this._resourceCodecRegistry;
     }
 
-    setResourceFactoryRegistry(resourceFactoryRegistry: EResourceFactoryRegistry): void {
-        this._resourceFactoryRegistry = resourceFactoryRegistry;
+    setCodecRegistry(resourceCodecRegistry: EResourceCodecRegistry): void {
+        this._resourceCodecRegistry = resourceCodecRegistry;
     }
 
     getURIResourceMap(): Map<string, EResource> {
@@ -138,13 +140,10 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     }
 
     createResource(uri: URL): EResource {
-        let resourceFactory = this._resourceFactoryRegistry.getFactory(uri);
-        if (resourceFactory) {
-            let resource = resourceFactory.createResource(uri);
-            this._resources.add(resource);
-            return resource;
-        }
-        return null;
+        let resource = new EResourceImpl();
+        resource.eURI = uri;
+        this._resources.add(resource);
+        return resource;
     }
 
     getEObject(uri: URL, loadOnDemand: boolean): EObject {
