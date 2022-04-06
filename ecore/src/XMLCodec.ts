@@ -18,16 +18,16 @@ export class XMLOptions {
     static EXTENDED_META_DATA = "EXTENDED_META_DATA";
     static SUPPRESS_DOCUMENT_ROOT = "SUPPRESS_DOCUMENT_ROOT";
     static DEFERRED_REFERENCE_RESOLUTION = "DEFERRED_REFERENCE_RESOLUTION";
-    static DEFERRED_ROOT_ATTACHMENT      = "DEFERRED_ROOT_ATTACHMENT";
+    static DEFERRED_ROOT_ATTACHMENT = "DEFERRED_ROOT_ATTACHMENT";
     static ID_ATTRIBUTE_NAME = "ID_ATTRIBUTE_NAME";
     static ROOT_OBJECTS = "ROOT_OBJECTS";
 }
 
 export class XMLCodec implements EResourceCodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
-        return new XMLEncoder(eContext,options);
+        return new XMLEncoder(eContext, options);
     }
     newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
-        return new XMLDecoder(eContext,options);
+        return new XMLDecoder(eContext, options);
     }
 }

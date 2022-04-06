@@ -84,8 +84,8 @@ export class XMLDecoder implements EResourceDecoder {
     protected _text: string;
     protected _xmlVersion: string;
     protected _encoding: string;
-    private   _attachFn: (eObject : EObject) => void;
-    private   _errorFn: (eDiagnostic : EDiagnostic) => void;
+    private _attachFn: (eObject: EObject) => void;
+    private _errorFn: (eDiagnostic: EDiagnostic) => void;
 
     constructor(resource: EResource, options: Map<string, any>) {
         this._resource = resource;
@@ -95,10 +95,11 @@ export class XMLDecoder implements EResourceDecoder {
         if (options) {
             this._idAttributeName = options.get(XMLOptions.ID_ATTRIBUTE_NAME);
             this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT);
-            this._isResolveDeferred = options.get(XMLOptions.DEFERRED_REFERENCE_RESOLUTION) === true;
+            this._isResolveDeferred =
+                options.get(XMLOptions.DEFERRED_REFERENCE_RESOLUTION) === true;
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA);
             if (options.get(XMLOptions.DEFERRED_ROOT_ATTACHMENT) === true) {
-                this._deferred = []
+                this._deferred = [];
             }
         }
         if (!this._extendedMetaData) {
@@ -125,13 +126,13 @@ export class XMLDecoder implements EResourceDecoder {
     decode(buffer: BufferSource): Result<EResource, Error> {
         // create parser and configure decoder
         this._parser = this.createSAXParser();
-        this._attachFn = function (eObject : EObject) : void {
+        this._attachFn = function (eObject: EObject): void {
             this._resource.eContents().add(eObject);
-        }
-        this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+        };
+        this._errorFn = function (eDiagnostic: EDiagnostic): void {
             this._resource.getErrors().add(eDiagnostic);
-        }
-        
+        };
+
         // parse buffer
         this._parser.write(buffer.toString()).close();
 
@@ -144,18 +145,18 @@ export class XMLDecoder implements EResourceDecoder {
         // create parser and configure decoder
         this._parser = this.createSAXParser();
 
-        var error : Error;
-        var object : EObject;
-        this._attachFn = function (eObject : EObject) : void {
+        var error: Error;
+        var object: EObject;
+        this._attachFn = function (eObject: EObject): void {
             if (!object) {
                 object = eObject;
             }
-        }
-        this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+        };
+        this._errorFn = function (eDiagnostic: EDiagnostic): void {
             if (!error) {
                 error = eDiagnostic;
             }
-        }
+        };
 
         // parse buffer
         this._parser.write(buffer.toString()).close();
@@ -164,7 +165,7 @@ export class XMLDecoder implements EResourceDecoder {
         return error ? Err(error) : Ok(object);
     }
 
-    private createSAXParser() : sax.SAXParser {
+    private createSAXParser(): sax.SAXParser {
         // configure parser
         let saxParser = new sax.SAXParser(true, {
             trim: true,
@@ -182,16 +183,16 @@ export class XMLDecoder implements EResourceDecoder {
 
     decodeAsync(stream: fs.ReadStream): Promise<Result<EResource, Error>> {
         return new Promise<Result<EResource, Error>>((resolve, reject) => {
-            this._attachFn = function (eObject : EObject) : void {
+            this._attachFn = function (eObject: EObject): void {
                 this._resource.eContents().add(eObject);
-            }
-            this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+            };
+            this._errorFn = function (eDiagnostic: EDiagnostic): void {
                 this._resource.getErrors().add(eDiagnostic);
-            }
-            let saxStream = this.createSAXStream( () => {
+            };
+            let saxStream = this.createSAXStream(() => {
                 let errors = this._resource.getErrors();
                 resolve(errors.isEmpty() ? Ok(this._resource) : Err(errors.get(0)));
-            })
+            });
             this._parser = (saxStream as any)["_parser"];
             stream.pipe(saxStream);
         });
@@ -199,27 +200,27 @@ export class XMLDecoder implements EResourceDecoder {
 
     decodeObjectAsync(stream: fs.ReadStream): Promise<Result<EObject, Error>> {
         return new Promise<Result<EObject, Error>>((resolve, reject) => {
-            var error : Error;
-            var object : EObject;
-            this._attachFn = function (eObject : EObject) : void {
+            var error: Error;
+            var object: EObject;
+            this._attachFn = function (eObject: EObject): void {
                 if (!object) {
                     object = eObject;
                 }
-            }
-            this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+            };
+            this._errorFn = function (eDiagnostic: EDiagnostic): void {
                 if (!error) {
                     error = eDiagnostic;
                 }
-            }
-            let saxStream = this.createSAXStream( () => {
+            };
+            let saxStream = this.createSAXStream(() => {
                 resolve(error ? Err(error) : Ok(object));
-            })
+            });
             this._parser = (saxStream as any)["_parser"];
             stream.pipe(saxStream);
         });
     }
 
-    private createSAXStream( end : () => void ) : sax.SAXStream {
+    private createSAXStream(end: () => void): sax.SAXStream {
         let saxStream = new sax.SAXStream(true, {
             trim: true,
             lowercase: true,
@@ -237,20 +238,20 @@ export class XMLDecoder implements EResourceDecoder {
 
     private onProcessingInstruction(node: { name: string; body: string }) {
         if (node.name == "xml") {
-            let ver = this.procInst("version",node.body);
+            let ver = this.procInst("version", node.body);
             if (ver != "") {
                 this._xmlVersion = ver;
             }
 
-            let encoding = this.procInst("encoding",node.body);
+            let encoding = this.procInst("encoding", node.body);
             if (encoding != "") {
                 this._encoding = encoding;
             }
         }
     }
 
-    private procInst( param : string , s : string ) : string {
-        let regexp = new RegExp( param + "=\"([^\"]*)\"","g");
+    private procInst(param: string, s: string): string {
+        let regexp = new RegExp(param + '="([^"]*)"', "g");
         let match = regexp.exec(s);
         return match.length == 0 ? "" : match[1];
     }
@@ -286,21 +287,16 @@ export class XMLDecoder implements EResourceDecoder {
                 if (eObject == null && this._objects.length > 0) {
                     eObject = this._objects[this._objects.length - 1];
                 }
-                this.setFeatureValue(
-                    eObject,
-                    eType as EStructuralFeature,
-                    this._text,
-                    -1
-                );
+                this.setFeatureValue(eObject, eType as EStructuralFeature, this._text, -1);
             }
         }
         delete this._text;
-        
+
         if (this._elements.length == 0) {
             if (this._deferred) {
-                this._deferred.forEach( (element) => {
+                this._deferred.forEach((element) => {
                     this._resource.eContents().add(element);
-                })
+                });
             }
             this.handleReferences();
             this.recordSchemaLocations(eRoot);
@@ -418,9 +414,9 @@ export class XMLDecoder implements EResourceDecoder {
             let eObject = this.createTopObject(uri, local);
             if (eObject) {
                 if (this._deferred) {
-                    this._deferred.push(eObject)
+                    this._deferred.push(eObject);
                 } else {
-                    this._attachFn(eObject)
+                    this._attachFn(eObject);
                 }
             }
         } else {

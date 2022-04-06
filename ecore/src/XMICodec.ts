@@ -16,9 +16,9 @@ import { XMIEncoder } from "./XMIEncoder";
 
 export class XMICodec implements EResourceCodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
-        return new XMIEncoder(eContext,options);
+        return new XMIEncoder(eContext, options);
     }
     newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
-        return new XMIDecoder(eContext,options);
+        return new XMIDecoder(eContext, options);
     }
 }

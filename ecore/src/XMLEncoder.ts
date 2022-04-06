@@ -91,7 +91,7 @@ export class XMLEncoder implements EResourceEncoder {
     private _extendedMetaData: ExtendedMetaData;
     private _xmlVersion: string;
     private _encoding: string;
-    private _errorFn: (eDiagnostic : EDiagnostic) => void;
+    private _errorFn: (eDiagnostic: EDiagnostic) => void;
 
     constructor(resource: EResource, options: Map<string, any>) {
         this._resource = resource;
@@ -124,22 +124,22 @@ export class XMLEncoder implements EResourceEncoder {
     }
 
     encode(eResource: EResource): Result<Uint8Array, Error> {
-        this._errorFn = (diagnostic :EDiagnostic) => {
-            this._resource.getErrors().add(diagnostic)
-        }
-        let contents = this._roots
+        this._errorFn = (diagnostic: EDiagnostic) => {
+            this._resource.getErrors().add(diagnostic);
+        };
+        let contents = this._roots;
         if (!contents) {
             contents = this._resource.eContents();
         }
         if (contents.isEmpty()) {
-            return Ok(new Uint8Array())
+            return Ok(new Uint8Array());
         }
         this.encodeTopObject(contents.get(0));
 
         let errors = this._resource.getErrors();
-        if (errors.isEmpty()) { 
+        if (errors.isEmpty()) {
             let r = this._str.toString();
-            let e = new TextEncoder().encode(r)
+            let e = new TextEncoder().encode(r);
             return Ok(e);
         } else {
             return Err(errors.get(0));
@@ -147,16 +147,16 @@ export class XMLEncoder implements EResourceEncoder {
     }
 
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
-        var error : Error
-        this._errorFn = (diagnostic :EDiagnostic) => {
-            error = diagnostic
-        }
+        var error: Error;
+        this._errorFn = (diagnostic: EDiagnostic) => {
+            error = diagnostic;
+        };
         this.encodeTopObject(eObject);
         if (error) {
             return Err(error);
         } else {
             let r = this._str.toString();
-            let e = new TextEncoder().encode(r)
+            let e = new TextEncoder().encode(r);
             return Ok(e);
         }
     }
@@ -166,8 +166,8 @@ export class XMLEncoder implements EResourceEncoder {
             let result = this.encode(eResource);
             if (result.ok) {
                 s.write(result.val);
-            } 
-            resolve(result)
+            }
+            resolve(result);
         });
     }
 
@@ -176,12 +176,12 @@ export class XMLEncoder implements EResourceEncoder {
             let result = this.encodeObject(eObject);
             if (result.ok) {
                 s.write(result.val);
-            } 
-            resolve(result)
+            }
+            resolve(result);
         });
     }
 
-    private encodeTopObject(eObject : EObject) {
+    private encodeTopObject(eObject: EObject) {
         // header
         this.saveHeader();
 

@@ -24,7 +24,7 @@ describe("XMIResource", () => {
             expect(resource.isLoaded).toBeTruthy();
             expect(resource.getErrors().isEmpty()).toBeTruthy();
             expect(resource.getWarnings().isEmpty()).toBeTruthy();
-           
+
             let contents = resource.eContents();
             expect(contents.size()).toBe(1);
 
@@ -97,7 +97,7 @@ describe("XMIResource", () => {
             expect(resource.isLoaded).toBeTruthy();
             expect(resource.getErrors().isEmpty()).toBeTruthy();
             expect(resource.getWarnings().isEmpty()).toBeTruthy();
-           
+
             let contents = resource.eContents();
             expect(contents.size()).toBe(1);
 

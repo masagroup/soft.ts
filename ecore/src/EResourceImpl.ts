@@ -110,14 +110,14 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 
     protected didAdd(index: number, e: EObject): void {
-        super.didAdd(index,e);
-        if (index == this.size()-1) {
+        super.didAdd(index, e);
+        if (index == this.size() - 1) {
             this.loaded();
         }
     }
 
     protected didRemove(index: number, e: EObject): void {
-        super.didRemove(index,e);
+        super.didRemove(index, e);
         if (this.size() == 0) {
             this.unloaded();
         }
@@ -128,7 +128,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
         this.unloaded();
     }
 
-    private loaded() : void {
+    private loaded(): void {
         if (!this._resource.isLoaded) {
             let n = this._resource.basicSetLoaded(true, null);
             if (n) {
@@ -137,7 +137,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
         }
     }
 
-    private unloaded() : void {
+    private unloaded(): void {
         if (this._resource.isLoaded) {
             let n = this._resource.basicSetLoaded(false, null);
             if (n) {
@@ -356,14 +356,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             if (uriConverter) {
                 let buffer = uriConverter.readSync(this._uri);
                 if (buffer) {
-                    this.loadFromBuffer(buffer,options);
+                    this.loadFromBuffer(buffer, options);
                 }
             }
         }
     }
 
     loadFromString(s: string, options?: Map<string, any>) {
-        this.loadFromBuffer(Buffer.from(s),options);
+        this.loadFromBuffer(Buffer.from(s), options);
     }
 
     private loadFromBuffer(buffer: Buffer, options?: Map<string, any>) {
