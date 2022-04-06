@@ -23,6 +23,7 @@ import {
     XMLProcessor,
 } from "./internal";
 import { XMLDecoder } from "./XMLDecoder";
+import { XMLEncoder } from "./XMLEncoder";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
@@ -193,37 +194,34 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let eBookClass = ePackage.getEClassifier("Book") as EClass;
         expect(eBookClass).not.toBeNull();
-	    let eBookNameAttribute = eBookClass.getEStructuralFeatureFromName("name") as EAttribute;
+        let eBookNameAttribute = eBookClass.getEStructuralFeatureFromName("name") as EAttribute;
         expect(eBookNameAttribute).not.toBeNull();
-	
-        let eResourceSet = new EResourceSetImpl()
+
+        let eResourceSet = new EResourceSetImpl();
         eResourceSet.getPackageRegistry().registerPackage(ePackage);
         let eResource = eResourceSet.createResource(new URL("file://$tmp.xml"));
-        let eObject : EObject = null;
+        let eObject: EObject = null;
 
         let eObjectURI = new URL("file:///" + __dirname + "/../testdata/book.simple.xml");
-        let decoder = new XMLDecoder(eResource,null);
+        let decoder = new XMLDecoder(eResource, null);
 
         test("decodeObject", () => {
             let buffer = fs.readFileSync(eObjectURI);
             let result = decoder.decodeObject(buffer);
-            if (result.ok)
-                eObject = result.val
+            if (result.ok) eObject = result.val;
         });
 
         test("decodeObjectAsync", async () => {
             let stream = fs.createReadStream(eObjectURI);
             let result = await decoder.decodeObjectAsync(stream);
-            if (result.ok)
-                eObject = result.val
+            if (result.ok) eObject = result.val;
         });
 
         afterEach(() => {
             expect(eObject).not.toBeNull();
             expect(eObject.eGet(eBookNameAttribute)).toBe("Book 1");
         });
-
-    })
+    });
 
     describe("save.library.complex", () => {
         let ePackage = loadPackage("library.complex.ecore");
@@ -269,6 +267,45 @@ describe("XMLResource", () => {
                 .toString()
                 .replace(/\r?\n|\r/g, "\n");
             expect(result).toBe(expected);
+        });
+    });
+
+    describe("save.object", () => {
+        let ePackage = loadPackage("library.simple.ecore");
+        expect(ePackage).not.toBeNull();
+        let eBookClass = ePackage.getEClassifier("Book") as EClass;
+        expect(eBookClass).not.toBeNull();
+        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.simple.xml");
+        let xmlProcessor = new XMLProcessor([ePackage]);
+        let eResource = xmlProcessor.loadSync(resourceURI);
+        expect(eResource.getErrors().isEmpty()).toBeTruthy();
+
+        // retrieve second book
+        let libraryClass = ePackage.getEClassifier("Library") as EClass;
+        expect(libraryClass).not.toBeNull();
+        let libraryBooksFeature = libraryClass.getEStructuralFeatureFromName("books");
+        expect(libraryBooksFeature).not.toBeNull();
+
+        expect(eResource.eContents().size()).toBe(1);
+        let eLibrary = eResource.eContents().get(0);
+        expect(eLibrary).not.toBeNull();
+
+        let eBooks = eLibrary.eGet(libraryBooksFeature) as EList<EObject>;
+        expect(eBooks).not.toBeNull();
+        expect(eBooks.size()).toBe(4);
+        let eBook = eBooks.get(1);
+
+        let xmlEncoder = new XMLEncoder(eResource, null);
+        let expected = fs
+            .readFileSync(new URL("file:///" + __dirname + "/../testdata/book.simple.xml"))
+            .toString()
+            .replace(/\r?\n|\r/g, "\n");
+
+        test("encodeObject", () => {
+            let result = xmlEncoder.encodeObject(eBook);
+            if (result.ok) {
+                expect(new TextDecoder().decode(Buffer.from(result.val))).toBe(expected);
+            }
         });
     });
 });
