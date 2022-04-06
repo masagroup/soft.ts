@@ -236,7 +236,23 @@ export class XMLDecoder implements EResourceDecoder {
     }
 
     private onProcessingInstruction(node: { name: string; body: string }) {
+        if (node.name == "xml") {
+            let ver = this.procInst("version",node.body);
+            if (ver != "") {
+                this._xmlVersion = ver;
+            }
 
+            let encoding = this.procInst("encoding",node.body);
+            if (encoding != "") {
+                this._encoding = encoding;
+            }
+        }
+    }
+
+    private procInst( param : string , s : string ) : string {
+        let regexp = new RegExp( param + "=\"([^\"]*)\"","g");
+        let match = regexp.exec(s);
+        return match.length == 0 ? "" : match[1];
     }
 
     private onStartTag(tag: sax.QualifiedTag) {
