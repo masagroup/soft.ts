@@ -9,7 +9,7 @@
 
 import * as fs from "fs";
 import * as sax from "sax";
-import { Ok, Result } from "ts-results";
+import { Err, Ok, Result } from "ts-results";
 import {
     EClass,
     EClassifier,
@@ -63,6 +63,7 @@ export class XMLDecoder implements EResourceDecoder {
     protected _uriToFactories: Map<string, EFactory> = new Map<string, EFactory>();
     protected _prefixesToURI: Map<string, string> = new Map<string, string>();
     protected _elements: string[] = [];
+    protected _deferred: EObject[];
     protected _objects: EObject[] = [];
     protected _types: any[] = [];
     protected _sameDocumentProxies: EObject[] = [];
@@ -80,9 +81,11 @@ export class XMLDecoder implements EResourceDecoder {
     protected _packageRegistry: EPackageRegistry;
     protected _extendedMetaData: ExtendedMetaData;
     protected _idAttributeName: string;
-    protected _textBuilder: String;
+    protected _text: string;
     protected _xmlVersion: string;
     protected _encoding: string;
+    private   _attachFn: (eObject : EObject) => void;
+    private   _errorFn: (eDiagnostic : EDiagnostic) => void;
 
     constructor(resource: EResource, options: Map<string, any>) {
         this._resource = resource;
@@ -92,8 +95,11 @@ export class XMLDecoder implements EResourceDecoder {
         if (options) {
             this._idAttributeName = options.get(XMLOptions.ID_ATTRIBUTE_NAME);
             this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT);
-            this._isResolveDeferred = options.get(XMLOptions.IDREF_RESOLUTION_DEFERRED) === true;
+            this._isResolveDeferred = options.get(XMLOptions.DEFERRED_REFERENCE_RESOLUTION) === true;
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA);
+            if (options.get(XMLOptions.DEFERRED_ROOT_ATTACHMENT) === true) {
+                this._deferred = []
+            }
         }
         if (!this._extendedMetaData) {
             this._extendedMetaData = new ExtendedMetaData();
@@ -117,6 +123,7 @@ export class XMLDecoder implements EResourceDecoder {
     }
 
     decode(buffer: BufferSource): Result<EResource, Error> {
+        // configure parser
         let saxParser = new sax.SAXParser(true, {
             trim: true,
             lowercase: true,
@@ -128,8 +135,22 @@ export class XMLDecoder implements EResourceDecoder {
         saxParser.ontext = (t: string) => this.onText(t);
         saxParser.onerror = (e) => this.onError(e);
         this._parser = saxParser;
+        this._attachFn = function (eObject : EObject) : void {
+            this._resource.eContents().add(eObject);
+        }
+        this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+            this._resource.getErrors().add(eDiagnostic);
+        }
+        
+        // parse buffer
         this._parser.write(buffer.toString()).close();
-        return Ok(this._resource);
+
+        // check errors
+        let errors = this._resource.getErrors();
+        if (errors.isEmpty())
+            return Ok(this._resource);
+        else
+            return Err(errors.get(0))
     }
 
     decodeObject(buffer: BufferSource): Result<EObject, Error> {
@@ -149,7 +170,11 @@ export class XMLDecoder implements EResourceDecoder {
             saxStream.on("text", (t) => this.onText(t));
             saxStream.on("error", (e) => this.onError(e));
             saxStream.on("end", () => {
-                resolve(Ok(this._resource));
+                let errors = this._resource.getErrors();
+                if (errors.isEmpty())
+                    resolve(Ok(this._resource));
+                else
+                    resolve(Err(errors.get(0)));
             });
             stream.pipe(saxStream);
             this._parser = (saxStream as any)["_parser"];
@@ -182,10 +207,10 @@ export class XMLDecoder implements EResourceDecoder {
         }
 
         let eType = this._types.pop();
-        if (this._textBuilder) {
+        if (this._text) {
             if (eType === LOAD_OBJECT_TYPE) {
-                if (this._textBuilder.length > 0) {
-                    this.handleProxy(eObject, this._textBuilder.toString());
+                if (this._text.length > 0) {
+                    this.handleProxy(eObject, this._text);
                 }
             } else if (eType !== LOAD_ERROR_TYPE) {
                 if (eObject == null && this._objects.length > 0) {
@@ -194,14 +219,19 @@ export class XMLDecoder implements EResourceDecoder {
                 this.setFeatureValue(
                     eObject,
                     eType as EStructuralFeature,
-                    this._textBuilder.toString(),
+                    this._text,
                     -1
                 );
             }
         }
-        this._textBuilder = null;
-
+        delete this._text;
+        
         if (this._elements.length == 0) {
+            if (this._deferred) {
+                this._deferred.forEach( (element) => {
+                    this._resource.eContents().add(element);
+                })
+            }
             this.handleReferences();
             this.recordSchemaLocations(eRoot);
         }
@@ -212,7 +242,11 @@ export class XMLDecoder implements EResourceDecoder {
         });
     }
 
-    onText(text: string): void {}
+    onText(text: string): void {
+        if (this._text) {
+            this._text += text;
+        }
+    }
 
     onError(err: Error) {
         this.error(
@@ -313,7 +347,11 @@ export class XMLDecoder implements EResourceDecoder {
         if (this._objects.length == 0) {
             let eObject = this.createTopObject(uri, local);
             if (eObject) {
-                this._resource.eContents().add(eObject);
+                if (this._deferred) {
+                    this._deferred.push(eObject)
+                } else {
+                    this._attachFn(eObject)
+                }
             }
         } else {
             this.handleFeature(uri, local);
@@ -462,7 +500,7 @@ export class XMLDecoder implements EResourceDecoder {
             if (eFeature) {
                 let featureKind = this.getLoadFeatureKind(eFeature);
                 if (featureKind == LoadFeatureKind.Single || featureKind == LoadFeatureKind.Many) {
-                    this._textBuilder = new String();
+                    this._text = "";
                     this._types.push(eFeature);
                     this._objects.push(null);
                 } else {
@@ -829,10 +867,6 @@ export class XMLDecoder implements EResourceDecoder {
     }
 
     private error(diagnostic: EDiagnostic) {
-        this._resource.getErrors().add(diagnostic);
-    }
-
-    private warning(diagnostic: EDiagnostic) {
-        this._resource.getWarnings().add(diagnostic);
+        this._errorFn(diagnostic);
     }
 }
