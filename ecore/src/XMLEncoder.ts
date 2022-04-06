@@ -8,11 +8,12 @@
 // *****************************************************************************
 
 import { WriteStream } from "fs";
-import { Ok, Result } from "ts-results";
+import { Err, Ok, Result } from "ts-results";
 import {
     EClass,
     EClassifier,
     EDataType,
+    EDiagnostic,
     EList,
     EMap,
     ENamedElement,
@@ -90,6 +91,7 @@ export class XMLEncoder implements EResourceEncoder {
     private _extendedMetaData: ExtendedMetaData;
     private _xmlVersion: string;
     private _encoding: string;
+    private _errorFn: (eDiagnostic : EDiagnostic) => void;
 
     constructor(resource: EResource, options: Map<string, any>) {
         this._resource = resource;
@@ -122,38 +124,66 @@ export class XMLEncoder implements EResourceEncoder {
     }
 
     encode(eResource: EResource): Result<Uint8Array, Error> {
-        this.saveContents();
-        return Ok(new TextEncoder().encode(this._str.toString()));
+        this._errorFn = (diagnostic :EDiagnostic) => {
+            this._resource.getErrors().add(diagnostic)
+        }
+        let contents = this._roots
+        if (!contents) {
+            contents = this._resource.eContents();
+        }
+        if (contents.isEmpty()) {
+            return Ok(new Uint8Array())
+        }
+        this.encodeTopObject(contents.get(0));
+
+        let errors = this._resource.getErrors();
+        if (errors.isEmpty()) { 
+            let r = this._str.toString();
+            let e = new TextEncoder().encode(r)
+            return Ok(e);
+        } else {
+            return Err(errors.get(0));
+        }
     }
 
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
-        throw new Error("Method not implemented.");
+        var error : Error
+        this._errorFn = (diagnostic :EDiagnostic) => {
+            error = diagnostic
+        }
+        this.encodeTopObject(eObject);
+        if (error) {
+            return Err(error);
+        } else {
+            let r = this._str.toString();
+            let e = new TextEncoder().encode(r)
+            return Ok(e);
+        }
     }
 
     encodeAsync(eResource: EResource, s: WriteStream): Promise<Result<Uint8Array, Error>> {
         return new Promise((resolve, reject) => {
-            this.saveContents();
-            let r = this._str.toString();
-            let encoded = new TextEncoder().encode(r);
-            s.write(encoded);
-            resolve(Ok(encoded));
+            let result = this.encode(eResource);
+            if (result.ok) {
+                s.write(result.val);
+            } 
+            resolve(result)
         });
     }
 
     encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Result<Uint8Array, Error>> {
-        throw new Error("Method not implemented.");
+        return new Promise((resolve, reject) => {
+            let result = this.encodeObject(eObject);
+            if (result.ok) {
+                s.write(result.val);
+            } 
+            resolve(result)
+        });
     }
 
-    private saveContents() {
-        let contents = this._roots;
-        if (!contents) contents = this._resource.eContents();
-        if (contents.isEmpty()) return;
-
+    private encodeTopObject(eObject : EObject) {
         // header
         this.saveHeader();
-
-        // top object
-        let eObject = contents.get(0);
 
         // initialize prefixes if any in top
         if (this._extendedMetaData) {
