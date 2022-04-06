@@ -35,6 +35,7 @@ export interface EResource extends ENotifier {
 
     unload(): void;
     readonly isLoaded: boolean;
+    readonly isLoading: boolean;
 
     save(options?: Map<string, any>): Promise<void>;
     saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void>;

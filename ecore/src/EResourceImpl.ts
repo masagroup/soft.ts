@@ -114,6 +114,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _uri: URL = null;
     private _objectIDManager: EObjectIDManager = null;
     private _isLoaded: boolean = false;
+    private _isLoading: boolean = false;
     private _resourceSet: EResourceSet = null;
     private _contents: EList<EObject> = null;
     private _errors: EList<EDiagnostic> = null;
@@ -151,6 +152,10 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     get isLoaded() {
         return this._isLoaded;
+    }
+
+    get isLoading() {
+        return this._isLoading;
     }
 
     eResourceSet(): EResourceSet {
@@ -261,11 +266,13 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             if (codec) {
                 let decoder = codec.newDecoder(this, options);
                 if (decoder) {
+                    this._isLoading = true;
+                    let n = this.basicSetLoaded(true, null);
                     return this.doLoadFromStream(decoder, s).then(() => {
-                        let n = this.basicSetLoaded(true, null);
                         if (n) {
                             n.dispatch();
                         }
+                        this._isLoading = false;
                     });
                 } else {
                     let errors = this.getErrors();
@@ -297,30 +304,45 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return Promise.resolve();
     }
 
+    protected doLoadFromStream(decoder: EResourceDecoder, s: fs.ReadStream): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            decoder
+                .decodeAsync(s)
+                .then(() => resolve())
+                .catch((reason) => reject(reason));
+        });
+    }
+
     loadSync(options?: Map<string, any>) {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter();
             if (uriConverter) {
-                let b = uriConverter.readSync(this._uri);
-                if (b) {
-                    return this.loadFromString(b.toString(), options);
+                let buffer = uriConverter.readSync(this._uri);
+                if (buffer) {
+                    this.loadFromBuffer(buffer,options);
                 }
             }
         }
     }
 
     loadFromString(s: string, options?: Map<string, any>) {
+        this.loadFromBuffer(Buffer.from(s),options);
+    }
+
+    private loadFromBuffer(buffer: Buffer, options?: Map<string, any>) {
         if (!this._isLoaded) {
             let codecs = this.getCodecRegistry();
             let codec = codecs.getCodec(this._uri);
             if (codec) {
                 let decoder = codec.newDecoder(this, options);
                 if (decoder) {
-                    this.doLoadFromString(decoder, s);
+                    this._isLoading = true;
                     let n = this.basicSetLoaded(true, null);
+                    this.doLoadFromBuffer(decoder, buffer);
                     if (n) {
                         n.dispatch();
                     }
+                    this._isLoading = false;
                 } else {
                     let errors = this.getErrors();
                     errors.clear();
@@ -348,17 +370,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    protected doLoadFromStream(decoder: EResourceDecoder, s: fs.ReadStream): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            decoder
-                .decodeAsync(s)
-                .then(() => resolve())
-                .catch((reason) => reject(reason));
-        });
-    }
-
-    protected doLoadFromString(decoder: EResourceDecoder, s: string): void {
-        decoder.decode(Buffer.from(s));
+    protected doLoadFromBuffer(decoder: EResourceDecoder, buffer: Buffer): void {
+        decoder.decode(buffer);
     }
 
     unload(): void {
