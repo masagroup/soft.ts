@@ -123,18 +123,8 @@ export class XMLDecoder implements EResourceDecoder {
     }
 
     decode(buffer: BufferSource): Result<EResource, Error> {
-        // configure parser
-        let saxParser = new sax.SAXParser(true, {
-            trim: true,
-            lowercase: true,
-            xmlns: true,
-            position: true,
-        });
-        saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t);
-        saxParser.onclosetag = (t: string) => this.onEndTag(t);
-        saxParser.ontext = (t: string) => this.onText(t);
-        saxParser.onerror = (e) => this.onError(e);
-        this._parser = saxParser;
+        // create parser and configure decoder
+        this._parser = this.createSAXParser();
         this._attachFn = function (eObject : EObject) : void {
             this._resource.eContents().add(eObject);
         }
@@ -147,42 +137,100 @@ export class XMLDecoder implements EResourceDecoder {
 
         // check errors
         let errors = this._resource.getErrors();
-        if (errors.isEmpty())
-            return Ok(this._resource);
-        else
-            return Err(errors.get(0))
+        return errors.isEmpty() ? Ok(this._resource) : Err(errors.get(0));
     }
 
     decodeObject(buffer: BufferSource): Result<EObject, Error> {
-        throw new Error("Method not implemented.");
+        // create parser and configure decoder
+        this._parser = this.createSAXParser();
+
+        var error : Error;
+        var object : EObject;
+        this._attachFn = function (eObject : EObject) : void {
+            if (!object) {
+                object = eObject;
+            }
+        }
+        this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+            if (!error) {
+                error = eDiagnostic;
+            }
+        }
+
+        // parse buffer
+        this._parser.write(buffer.toString()).close();
+
+        // check error
+        return error ? Err(error) : Ok(object);
+    }
+
+    private createSAXParser() : sax.SAXParser {
+        // configure parser
+        let saxParser = new sax.SAXParser(true, {
+            trim: true,
+            lowercase: true,
+            xmlns: true,
+            position: true,
+        });
+        saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t);
+        saxParser.onclosetag = (t: string) => this.onEndTag(t);
+        saxParser.ontext = (t: string) => this.onText(t);
+        saxParser.onerror = (e) => this.onError(e);
+        return saxParser;
     }
 
     decodeAsync(stream: fs.ReadStream): Promise<Result<EResource, Error>> {
         return new Promise<Result<EResource, Error>>((resolve, reject) => {
-            let saxStream = new sax.SAXStream(true, {
-                trim: true,
-                lowercase: true,
-                xmlns: true,
-                position: true,
-            });
-            saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t));
-            saxStream.on("closetag", (t) => this.onEndTag(t));
-            saxStream.on("text", (t) => this.onText(t));
-            saxStream.on("error", (e) => this.onError(e));
-            saxStream.on("end", () => {
+            this._attachFn = function (eObject : EObject) : void {
+                this._resource.eContents().add(eObject);
+            }
+            this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+                this._resource.getErrors().add(eDiagnostic);
+            }
+            let saxStream = this.createSAXStream( () => {
                 let errors = this._resource.getErrors();
-                if (errors.isEmpty())
-                    resolve(Ok(this._resource));
-                else
-                    resolve(Err(errors.get(0)));
-            });
-            stream.pipe(saxStream);
+                resolve(errors.isEmpty() ? Ok(this._resource) : Err(errors.get(0)));
+            })
             this._parser = (saxStream as any)["_parser"];
+            stream.pipe(saxStream);
         });
     }
 
     decodeObjectAsync(stream: fs.ReadStream): Promise<Result<EObject, Error>> {
-        throw new Error("Method not implemented.");
+        return new Promise<Result<EObject, Error>>((resolve, reject) => {
+            var error : Error;
+            var object : EObject;
+            this._attachFn = function (eObject : EObject) : void {
+                if (!object) {
+                    object = eObject;
+                }
+            }
+            this._errorFn = function (eDiagnostic : EDiagnostic) : void {
+                if (!error) {
+                    error = eDiagnostic;
+                }
+            }
+            let saxStream = this.createSAXStream( () => {
+                resolve(error ? Err(error) : Ok(object));
+            })
+            this._parser = (saxStream as any)["_parser"];
+            stream.pipe(saxStream);
+        });
+    }
+
+    private createSAXStream( end : () => void ) : sax.SAXStream {
+        let saxStream = new sax.SAXStream(true, {
+            trim: true,
+            lowercase: true,
+            xmlns: true,
+            position: true,
+        });
+        saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t));
+        saxStream.on("closetag", (t) => this.onEndTag(t));
+        saxStream.on("text", (t) => this.onText(t));
+        saxStream.on("error", (e) => this.onError(e));
+        saxStream.on("end", end);
+        return saxStream;
     }
 
     onStartTag(tag: sax.QualifiedTag) {
