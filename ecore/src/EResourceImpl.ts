@@ -71,9 +71,9 @@ class ResourceNotification extends AbstractNotification {
 }
 
 class ResourceContents extends AbstractNotifyingList<EObject> implements EObjectList<EObject> {
-    private _resource: EResource;
+    private _resource: EResourceImpl;
 
-    constructor(resource: EResource) {
+    constructor(resource: EResourceImpl) {
         super();
         this._resource = resource;
     }
@@ -107,6 +107,43 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
         this._resource.detached(eObject);
         let n = (eObject as EObjectInternal).eSetResource(null, notifications);
         return n;
+    }
+
+    protected didAdd(index: number, e: EObject): void {
+        super.didAdd(index,e);
+        if (index == this.size()-1) {
+            this.loaded();
+        }
+    }
+
+    protected didRemove(index: number, e: EObject): void {
+        super.didRemove(index,e);
+        if (this.size() == 0) {
+            this.unloaded();
+        }
+    }
+
+    protected didClear(elements: EObject[]): void {
+        super.didClear(elements);
+        this.unloaded();
+    }
+
+    private loaded() : void {
+        if (!this._resource.isLoaded) {
+            let n = this._resource.basicSetLoaded(true, null);
+            if (n) {
+                n.dispatch();
+            }
+        }
+    }
+
+    private unloaded() : void {
+        if (this._resource.isLoaded) {
+            let n = this._resource.basicSetLoaded(false, null);
+            if (n) {
+                n.dispatch();
+            }
+        }
     }
 }
 
