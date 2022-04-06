@@ -8,18 +8,21 @@
 // *****************************************************************************
 
 import * as fs from "fs";
+import { EResourceSetImpl } from "./EResourceSetImpl";
 import { ExtendedMetaData } from "./ExtendedMetaData";
 import {
     EAttribute,
     EClass,
     EFactoryExt,
     EList,
+    EObject,
     EPackage,
     EResource,
     XMIProcessor,
     XMLOptions,
     XMLProcessor,
 } from "./internal";
+import { XMLDecoder } from "./XMLDecoder";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
@@ -184,6 +187,43 @@ describe("XMLResource", () => {
             resource = xmlProcessor.loadSync(resourceURI, options);
         });
     });
+
+    describe("load.object", () => {
+        let ePackage = loadPackage("library.simple.ecore");
+        expect(ePackage).not.toBeNull();
+        let eBookClass = ePackage.getEClassifier("Book") as EClass;
+        expect(eBookClass).not.toBeNull();
+	    let eBookNameAttribute = eBookClass.getEStructuralFeatureFromName("name") as EAttribute;
+        expect(eBookNameAttribute).not.toBeNull();
+	
+        let eResourceSet = new EResourceSetImpl()
+        eResourceSet.getPackageRegistry().registerPackage(ePackage);
+        let eResource = eResourceSet.createResource(new URL("file://$tmp.xml"));
+        let eObject : EObject = null;
+
+        let eObjectURI = new URL("file:///" + __dirname + "/../testdata/book.simple.xml");
+        let decoder = new XMLDecoder(eResource,null);
+
+        test("decodeObject", () => {
+            let buffer = fs.readFileSync(eObjectURI);
+            let result = decoder.decodeObject(buffer);
+            if (result.ok)
+                eObject = result.val
+        });
+
+        test("decodeObjectAsync", async () => {
+            let stream = fs.createReadStream(eObjectURI);
+            let result = await decoder.decodeObjectAsync(stream);
+            if (result.ok)
+                eObject = result.val
+        });
+
+        afterEach(() => {
+            expect(eObject).not.toBeNull();
+            expect(eObject.eGet(eBookNameAttribute)).toBe("Book 1");
+        });
+
+    })
 
     describe("save.library.complex", () => {
         let ePackage = loadPackage("library.complex.ecore");
