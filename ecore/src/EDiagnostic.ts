@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-export interface EDiagnostic {
+export interface EDiagnostic extends Error {
     readonly message: string;
     readonly location: string;
     readonly line: number;

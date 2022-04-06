@@ -22,6 +22,10 @@ export class EDiagnosticImpl implements EDiagnostic {
         this._column = column;
     }
 
+    get name() : string {
+        return "EDiagnostic"
+    }
+
     get message(): string {
         return this._message;
     }
