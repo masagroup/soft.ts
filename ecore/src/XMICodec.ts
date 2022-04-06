@@ -11,12 +11,14 @@ import { EResource } from "./EResource";
 import { EResourceCodec } from "./EResourceCodec";
 import { EResourceDecoder } from "./EResourceDecoder";
 import { EResourceEncoder } from "./EResourceEncoder";
+import { XMIDecoder } from "./XMIDecoder";
+import { XMIEncoder } from "./XMIEncoder";
 
 export class XMICodec implements EResourceCodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
-        throw new Error("Method not implemented.");
+        return new XMIEncoder(eContext,options);
     }
     newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
-        throw new Error("Method not implemented.");
+        return new XMIDecoder(eContext,options);
     }
 }

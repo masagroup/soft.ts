@@ -11,6 +11,8 @@ import { EResource } from "./EResource";
 import { EResourceCodec } from "./EResourceCodec";
 import { EResourceDecoder } from "./EResourceDecoder";
 import { EResourceEncoder } from "./EResourceEncoder";
+import { XMLDecoder } from "./XMLDecoder";
+import { XMLEncoder } from "./XMLEncoder";
 
 export class XMLOptions {
     static EXTENDED_META_DATA = "EXTENDED_META_DATA";
@@ -23,9 +25,9 @@ export class XMLOptions {
 
 export class XMLCodec implements EResourceCodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
-        throw new Error("Method not implemented.");
+        return new XMLEncoder(eContext,options);
     }
     newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
-        throw new Error("Method not implemented.");
+        return new XMLDecoder(eContext,options);
     }
 }
