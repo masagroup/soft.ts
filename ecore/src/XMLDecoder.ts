@@ -176,6 +176,7 @@ export class XMLDecoder implements EResourceDecoder {
         saxParser.onclosetag = (t: string) => this.onEndTag(t);
         saxParser.ontext = (t: string) => this.onText(t);
         saxParser.onerror = (e) => this.onError(e);
+        saxParser.onprocessinginstruction = (n) => this.onProcessingInstruction(n);
         return saxParser;
     }
 
@@ -225,6 +226,7 @@ export class XMLDecoder implements EResourceDecoder {
             xmlns: true,
             position: true,
         });
+        saxStream.on("processinginstruction", (n) => this.onProcessingInstruction(n));
         saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t));
         saxStream.on("closetag", (t) => this.onEndTag(t));
         saxStream.on("text", (t) => this.onText(t));
@@ -233,7 +235,11 @@ export class XMLDecoder implements EResourceDecoder {
         return saxStream;
     }
 
-    onStartTag(tag: sax.QualifiedTag) {
+    private onProcessingInstruction(node: { name: string; body: string }) {
+
+    }
+
+    private onStartTag(tag: sax.QualifiedTag) {
         this._elements.push(tag.local);
         this.setAttributes(tag.attributes);
         this._namespaces.pushContext();
@@ -244,7 +250,7 @@ export class XMLDecoder implements EResourceDecoder {
         this.processElement(tag.uri, tag.local);
     }
 
-    onEndTag(tagName: string) {
+    private onEndTag(tagName: string) {
         this._elements.pop();
 
         let eRoot: EObject = null;
@@ -290,13 +296,13 @@ export class XMLDecoder implements EResourceDecoder {
         });
     }
 
-    onText(text: string): void {
+    private onText(text: string): void {
         if (this._text) {
             this._text += text;
         }
     }
 
-    onError(err: Error) {
+    private onError(err: Error) {
         this.error(
             new EDiagnosticImpl(
                 err.message,
