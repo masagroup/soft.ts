@@ -70,6 +70,7 @@ export {
     IncrementalIDManager,
     isEAttribute,
     isEObject,
+    isEEnum,
     isEObjectInternal,
     isEObjectList,
     isEReference,

@@ -19,6 +19,7 @@ import {
     EEnum,
     ENotification,
     EOperation,
+    EPackage,
     EPackageImpl,
     EReference,
     EResource,
@@ -27,6 +28,10 @@ import {
     EventType,
     getEcoreFactory,
 } from "./internal";
+
+export function isEPackage(o: any): o is EPackage {
+    return o == undefined ? undefined : "nsURI" in o;
+}
 
 class EPackageExtAdapter extends AbstractEAdapter {
     constructor(private _pack: EPackageExt) {

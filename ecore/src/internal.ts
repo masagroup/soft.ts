@@ -92,6 +92,7 @@ export * from "./EClassExt";
 export * from "./EDataTypeImpl";
 export * from "./EDataTypeExt";
 export * from "./EEnumImpl";
+export * from "./EEnumExt";
 export * from "./EEnumLiteralImpl";
 export * from "./EFactoryImpl";
 export * from "./EFactoryExt";
