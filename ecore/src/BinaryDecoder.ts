@@ -69,6 +69,7 @@ export class BinaryDecoder implements EResourceDecoder {
     private _packageData : PackageData[] = [];
     private _baseURI : URL;
     private _uris : URL[] = [];
+    private _enumLiterals : string[] = [];
 
     constructor(eContext: EResource, options: Map<string, any>) {
         this._resource = eContext;
@@ -178,6 +179,55 @@ export class BinaryDecoder implements EResourceDecoder {
         }
     }
 
+    private decodeEObjects(list : EList<EObject>) {
+        let size = this.decodeNumber();
+        let objects = [];
+        for (let i = 0; i < size; i++) {
+            objects.push(this.decodeEObject());
+        }
+    
+        // If the list is empty, we need to add all the objects,
+        // otherwise, the reference is bidirectional and the list is at least partially populated.
+        let existingSize = list.size();
+        if (existingSize == 0) {
+            list.addAll(new ImmutableEList<EObject>(objects));
+        } else {
+            let indices = new Array(existingSize);
+            let duplicateCount = 0;
+            let existingObjects = [...list.toArray()];
+        LOOP:
+            for (let i = 0; i < size; i++) {
+                let o = objects[i];
+                let count = duplicateCount;
+                for (let j = 0; j < existingSize; j++) {
+                    let existing = existingObjects[j]
+                    if (existing == o) {
+                        if (duplicateCount != count) {
+                            list.moveTo(count, duplicateCount);
+                        }
+                        indices[duplicateCount] = i
+                        duplicateCount++
+                        existingObjects[j] = null
+                        continue LOOP
+                    } else if (existing) {
+                        count++
+                    }
+                }
+                objects[i-duplicateCount] = o
+            }
+    
+            size -= existingSize
+            list.addAll(new ImmutableEList<EObject>(objects))
+            for (let i = 0; i < existingSize; i++) {
+                let newPosition = indices[i];
+                let oldPosition = size + i;
+                if (newPosition != oldPosition) {
+                    list.moveTo(oldPosition, newPosition);
+                }
+            }
+        }
+    }
+
     private decodeClass() : ClassData {
         let ePackageData = this.decodePackage();
 	    let id = this.decodeNumber();
@@ -225,63 +275,72 @@ export class BinaryDecoder implements EResourceDecoder {
         case BinaryFeatureKind.bfkObjectProxy:
         case BinaryFeatureKind.bfkObjectContainment:
         case BinaryFeatureKind.bfkObjectContainmentProxy:
-            eObject.eSetFromID(featureData.featureID, this.decodeObject());
+            eObject.eSetFromID(featureData.featureID, this.decodeEObject());
             break;
         case BinaryFeatureKind.bfkObjectList:
         case BinaryFeatureKind.bfkObjectListProxy:
         case BinaryFeatureKind.bfkObjectContainmentList:
-        case BinaryFeatureKind.bfkObjectContainmentListProxy:
+        case BinaryFeatureKind.bfkObjectContainmentListProxy: {
             let l = eObject.eGetFromID(featureData.featureID, false,false) as EList<any>;
-            this.decodeObjects(l);
+            this.decodeEObjects(l);
             break;
+        }
         case BinaryFeatureKind.bfkData:
+        {
             let valueStr = this.decodeString();
             let value = featureData.eFactory.createFromString(featureData.eDataType, valueStr);
             eObject.eSetFromID(featureData.featureID, value);
             break;
-        case BinaryFeatureKind.bfkDataList:
-            size := d.decodeInt()
-            values := []interface{}{}
-            for i := 0; i < size; i++ {
-                valueStr := d.decodeString()
-                value := featureData.eFactory.CreateFromString(featureData.eDataType, valueStr)
-                values = append(values, value)
+        }
+        case BinaryFeatureKind.bfkDataList: 
+        {
+            let size = this.decodeNumber()
+            let values = []
+            for (let i = 0; i < size; i++) {
+                let valueStr = this.decodeString();
+                let value = featureData.eFactory.createFromString(featureData.eDataType, valueStr);
+                values.push(value);
             }
-            l := eObject.EGetResolve(featureData.eFeature, false).(EList)
-            l.AddAll(NewBasicEList(values))
-        case bfkEnum:
-            var valueStr string
-            id := d.decodeInt()
-            if len(d.enumLiterals) <= id {
-                valueStr = d.decodeString()
-                d.enumLiterals = append(d.enumLiterals, valueStr)
+            let l = eObject.eGetResolve(featureData.eFeature, false) as EList<any>;
+            l.addAll( new ImmutableEList<any>(values));
+            break;
+        }
+        case BinaryFeatureKind.bfkEnum: 
+        {
+            var valueStr : string
+            let id = this.decodeNumber()
+            if (this._enumLiterals.length <= id) {
+                let valueStr = this.decodeString();
+                this._enumLiterals.push(valueStr);
             } else {
-                valueStr = d.enumLiterals[id]
+                valueStr = this._enumLiterals[id];
             }
-            value := featureData.eFactory.CreateFromString(featureData.eDataType, valueStr)
-            eObject.ESetFromID(featureData.featureID, value)
-        case bfkDate:
-            eObject.ESetFromID(featureData.featureID, d.decodeDate())
-        case bfkFloat64:
-            eObject.ESetFromID(featureData.featureID, d.decodeFloat64())
-        case bfkFloat32:
-            eObject.ESetFromID(featureData.featureID, d.decodeFloat32())
-        case bfkInt:
-            eObject.ESetFromID(featureData.featureID, d.decodeInt())
-        case bfkInt64:
-            eObject.ESetFromID(featureData.featureID, d.decodeInt64())
-        case bfkInt32:
-            eObject.ESetFromID(featureData.featureID, d.decodeInt32())
-        case bfkInt16:
-            eObject.ESetFromID(featureData.featureID, d.decodeInt16())
-        case bfkByte:
-            eObject.ESetFromID(featureData.featureID, d.decodeByte())
-        case bfkBool:
-            eObject.ESetFromID(featureData.featureID, d.decodeBool())
-        case bfkString:
-            eObject.ESetFromID(featureData.featureID, d.decodeString())
-        case bfkByteArray:
-            eObject.ESetFromID(featureData.featureID, d.decodeBytes())
+            let value = featureData.eFactory.createFromString(featureData.eDataType, valueStr);
+            eObject.eSetFromID(featureData.featureID, value);
+            break;
+        }
+            
+        case BinaryFeatureKind.bfkDate:
+            eObject.eSetFromID(featureData.featureID, this.decodeDate())
+            break;
+        case BinaryFeatureKind.bfkByte:
+        case BinaryFeatureKind.bfkInt:
+        case BinaryFeatureKind.bfkInt16:
+        case BinaryFeatureKind.bfkInt32:
+        case BinaryFeatureKind.bfkInt64:
+        case BinaryFeatureKind.bfkFloat32:
+        case BinaryFeatureKind.bfkFloat64:
+            eObject.eSetFromID(featureData.featureID, this.decodeNumber())
+            break;
+        case BinaryFeatureKind.bfkBool:
+            eObject.eSetFromID(featureData.featureID, this.decodeBoolean())
+            break;
+        case BinaryFeatureKind.bfkString:
+            eObject.eSetFromID(featureData.featureID, this.decodeString())
+            break;
+        case BinaryFeatureKind.bfkByteArray:
+            eObject.eSetFromID(featureData.featureID, this.decodeBytes())
+            break;
         }
     }
 
@@ -486,6 +545,24 @@ export class BinaryDecoder implements EResourceDecoder {
             return this.readU32();
         }
         throw new Error(`invalid code type byte: ${prettyByte(c)} decoding string/bytes length`);
+    }
+
+    private decodeDate() : Date {
+        let code = this.readU8();
+        if (code == -1) {
+            return null;
+        }
+
+        if ( code == (MsgPack.FixedArrayLow|2)) {
+            let s = this.decodeNumber();
+            let ns = this.decodeNumber(); 
+            return new Date(s*1000 + ns/1000000);
+        }
+
+        if ( MsgPack.isString(code) ) {
+            let s = this.string(code);
+            throw new Error('not supported')
+        }
     }
 
     private readU8() : number {
