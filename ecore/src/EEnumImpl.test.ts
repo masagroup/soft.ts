@@ -44,17 +44,17 @@ describe("EEnumImpl", () => {
         expect(o.eLiterals).not.toBeNull();
     });
 
-    test("GetEEnumLiteralByName", () => {
-        let o = new EEnumImpl();
-        expect(() => o.GetEEnumLiteralByName("")).toThrow(Error);
-    });
-    test("GetEEnumLiteralByValue", () => {
-        let o = new EEnumImpl();
-        expect(() => o.GetEEnumLiteralByValue(0)).toThrow(Error);
-    });
     test("getEEnumLiteralByLiteral", () => {
         let o = new EEnumImpl();
         expect(() => o.getEEnumLiteralByLiteral("")).toThrow(Error);
+    });
+    test("getEEnumLiteralByName", () => {
+        let o = new EEnumImpl();
+        expect(() => o.getEEnumLiteralByName("")).toThrow(Error);
+    });
+    test("getEEnumLiteralByValue", () => {
+        let o = new EEnumImpl();
+        expect(() => o.getEEnumLiteralByValue(0)).toThrow(Error);
     });
 
     test("eGetFromID", () => {

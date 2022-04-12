@@ -7,9 +7,9 @@ import { EResourceEncoder } from "./EResourceEncoder";
 
 export class BinaryCodec implements EResourceCodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
-        return new BinaryEncoder(eContext,options);
+        return new BinaryEncoder(eContext, options);
     }
     newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
-        return new BinaryDecoder(eContext,options);
+        return new BinaryDecoder(eContext, options);
     }
 }

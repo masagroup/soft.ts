@@ -1,6 +1,5 @@
 import { EFactoryExt, EPackage, XMIProcessor, XMLProcessor } from "./internal";
 
-
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
     let uri = new URL("file:///" + __dirname + "/../testdata/" + filename);
@@ -13,8 +12,8 @@ function loadPackage(filename: string): EPackage {
     return ePackage;
 }
 
-describe('BinaryCodec', () => {
-    test('load.complex', () => {
+describe("BinaryCodec", () => {
+    test("load.complex", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);

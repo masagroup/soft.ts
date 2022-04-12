@@ -4,9 +4,8 @@ import { EObject } from "./EObject";
 import { EResource } from "./EResource";
 import { EResourceEncoder } from "./EResourceEncoder";
 
-
 export class BinaryEncoder implements EResourceEncoder {
-    private _resource : EResource;
+    private _resource: EResource;
 
     constructor(eContext: EResource, options: Map<string, any>) {
         this._resource = eContext;
@@ -24,5 +23,4 @@ export class BinaryEncoder implements EResourceEncoder {
     encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Result<Uint8Array, Error>> {
         throw new Error("Method not implemented.");
     }
-
 }
