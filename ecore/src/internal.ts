@@ -94,6 +94,7 @@ export * from "./EDataTypeExt";
 export * from "./EEnumImpl";
 export * from "./EEnumExt";
 export * from "./EEnumLiteralImpl";
+export * from "./EEnumLiteralExt";
 export * from "./EFactoryImpl";
 export * from "./EFactoryExt";
 export * from "./EOperationImpl";
