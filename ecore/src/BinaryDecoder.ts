@@ -1,21 +1,22 @@
 import { ReadStream } from "fs";
 import { Err, Ok, Result } from "ts-results";
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind";
-import { isEAttribute } from "./EAttributeExt";
-import { EList } from "./EList";
-import { EObjectInternal } from "./EObjectInternal";
+import { EDiagnosticImpl } from "./EDiagnosticImpl";
 import {
     EClass,
     EcoreUtils,
     EDataType,
     EFactory,
+    EList,
     EObject,
+    EObjectInternal,
     EPackage,
     EResource,
     EResourceDecoder,
     EStructuralFeature,
     getPackageRegistry,
     ImmutableEList,
+    isEAttribute,
     isEClass,
     isEPackage,
 } from "./internal";
@@ -109,6 +110,16 @@ export class BinaryDecoder implements EResourceDecoder {
             this._resource.eContents().addAll(new ImmutableEList(objects));
             return Ok(this._resource);
         } catch (e) {
+            switch (e.constructor) {
+                case Error: {
+                    let err = e as Error;
+                    this._resource
+                        .getErrors()
+                        .add(
+                            new EDiagnosticImpl(err.message, this._resource.eURI.toString(), -1, -1)
+                        );
+                }
+            }
             return Err(e);
         }
     }
@@ -326,7 +337,7 @@ export class BinaryDecoder implements EResourceDecoder {
                 var valueStr: string;
                 let id = this.decodeNumber();
                 if (this._enumLiterals.length <= id) {
-                    let valueStr = this.decodeString();
+                    valueStr = this.decodeString();
                     this._enumLiterals.push(valueStr);
                 } else {
                     valueStr = this._enumLiterals[id];
