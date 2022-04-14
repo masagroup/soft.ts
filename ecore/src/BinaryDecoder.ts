@@ -133,7 +133,14 @@ export class BinaryDecoder implements EResourceDecoder {
     }
 
     decodeObject(buffer: BufferSource): Result<EObject, Error> {
-        throw new Error("Method not implemented.");
+        try {
+            this.setBuffer(buffer);
+            this.decodeSignature();
+            this.decodeVersion();
+            return Ok(this.decodeEObject());
+        } catch (e) {
+            return Err(e);
+        }
     }
 
     decodeAsync(stream: ReadStream): Promise<Result<EResource, Error>> {
