@@ -54,6 +54,14 @@ function arraysAreEqual(a: Uint8Array, b: Uint8Array) {
     return a.every((val, i) => val === b[i]);
 }
 
+function uncomplement(val: number, bitwidth: number) {
+    var isnegative = val & (1 << (bitwidth - 1));
+    var boundary = 1 << bitwidth;
+    var minval = -boundary;
+    var mask = boundary - 1;
+    return isnegative ? minval + (val & mask) : val;
+}
+
 const binaryVersion = 0;
 const binarySignature = Uint8Array.from([137, 101, 109, 102, 10, 13, 26, 10]);
 
@@ -491,7 +499,7 @@ export class BinaryDecoder implements EResourceDecoder {
             return 0;
         }
         if (MsgPack.isFixedNum(code)) {
-            return code;
+            return uncomplement(code, 8);
         }
         switch (code) {
             case MsgPack.Uint8:
