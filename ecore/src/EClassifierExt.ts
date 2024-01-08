@@ -23,10 +23,10 @@ export class EClassifierExt extends EClassifierImpl {
     }
 
     get instanceTypeName(): string {
-        return this.instanceClassName
+        return this.instanceClassName;
     }
 
     set instanceTypeName(newInstanceTypeName: string) {
-        this.instanceClassName = newInstanceTypeName
+        this.instanceClassName = newInstanceTypeName;
     }
 }
