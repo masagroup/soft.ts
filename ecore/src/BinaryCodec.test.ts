@@ -93,8 +93,8 @@ describe("BinaryCodec", () => {
         // check book date
         let date = eBook.eGet(eBookDateAttribute) as Date;
         expect(date).not.toBeNull();
-        //assert.Equal(t, time.Date(2015, time.September, 6, 4, 24, 46, 0, time.UTC), *date)
-
+        expect(date).toEqual( new Date("2015-09-06 04:24:46 +0000 UTC") )
+     
         // check book category
         let category = eBook.eGet(eBookCategoryAttribute);
         expect(category).toBe(2);
