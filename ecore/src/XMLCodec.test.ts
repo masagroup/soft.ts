@@ -8,8 +8,6 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EResourceSetImpl } from "./EResourceSetImpl";
-import { ExtendedMetaData } from "./ExtendedMetaData";
 import {
     EAttribute,
     EClass,
@@ -18,12 +16,14 @@ import {
     EObject,
     EPackage,
     EResource,
+    EResourceSetImpl,
+    ExtendedMetaData,
     XMIProcessor,
+    XMLDecoder,
+    XMLEncoder,
     XMLOptions,
     XMLProcessor,
 } from "./internal";
-import { XMLDecoder } from "./XMLDecoder";
-import { XMLEncoder } from "./XMLEncoder";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();

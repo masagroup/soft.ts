@@ -1,11 +1,11 @@
 import { ReadStream } from "fs";
 import { Err, Ok, Result } from "ts-results";
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind";
-import { EDiagnosticImpl } from "./EDiagnosticImpl";
 import {
     EClass,
     EcoreUtils,
     EDataType,
+    EDiagnosticImpl,
     EFactory,
     EList,
     EObject,

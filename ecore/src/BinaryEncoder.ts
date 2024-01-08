@@ -1,8 +1,7 @@
 import { WriteStream } from "fs";
 import { Result } from "ts-results";
-import { EObject } from "./EObject";
-import { EResource } from "./EResource";
-import { EResourceEncoder } from "./EResourceEncoder";
+import { EObject, EResource, EResourceEncoder } from "./internal";
+
 
 export class BinaryEncoder implements EResourceEncoder {
     private _resource: EResource;
