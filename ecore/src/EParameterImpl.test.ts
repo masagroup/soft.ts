@@ -55,7 +55,7 @@ describe("EParameterImpl", () => {
         let o = new EParameterImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.EPARAMETER__EOPERATION, true)).toStrictEqual(
-            o.eOperation
+            o.eOperation,
         );
     });
 
@@ -89,7 +89,7 @@ describe("EParameterImpl", () => {
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
             when(
-                mockValue.eInverseRemove(o, EcoreConstants.EOPERATION__EPARAMETERS, null)
+                mockValue.eInverseRemove(o, EcoreConstants.EOPERATION__EPARAMETERS, null),
             ).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EPARAMETER__EOPERATION, null);
             expect(o.eOperation).toBe(other);

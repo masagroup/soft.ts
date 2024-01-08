@@ -206,28 +206,28 @@ describe("EPackageImpl", () => {
         let o = new EPackageImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, true)).toStrictEqual(
-            o.eClassifiers
+            o.eClassifiers,
         );
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, false),
-                (o.eClassifiers as EObjectList<EClassifier>).getUnResolvedList()
-            )
+                (o.eClassifiers as EObjectList<EClassifier>).getUnResolvedList(),
+            ),
         ).toBeTruthy();
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, true)).toStrictEqual(
-            o.eFactoryInstance
+            o.eFactoryInstance,
         );
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, true)).toStrictEqual(
-            o.eSubPackages
+            o.eSubPackages,
         );
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, false),
-                (o.eSubPackages as EObjectList<EPackage>).getUnResolvedList()
-            )
+                (o.eSubPackages as EObjectList<EPackage>).getUnResolvedList(),
+            ),
         ).toBeTruthy();
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUPER_PACKAGE, true)).toStrictEqual(
-            o.eSuperPackage
+            o.eSuperPackage,
         );
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, true)).toStrictEqual(o.nsPrefix);
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_URI, true)).toStrictEqual(o.nsURI);
@@ -242,7 +242,7 @@ describe("EPackageImpl", () => {
             let value = instance(mockValue);
             let l = new ImmutableEList<EClassifier>([value]);
             when(
-                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())
+                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything()),
             ).thenReturn(null);
 
             // set list with new contents
@@ -251,7 +251,7 @@ describe("EPackageImpl", () => {
             expect(o.eClassifiers.size()).toBe(1);
             expect(o.eClassifiers.get(0)).toBe(value);
             verify(
-                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())
+                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything()),
             ).once();
         }
 
@@ -259,7 +259,7 @@ describe("EPackageImpl", () => {
             let mockValue = mock<EFactoryInternal>();
             let value = instance(mockValue);
             when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(
-                null
+                null,
             );
             o.eSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, value);
             expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, false)).toBe(value);
@@ -271,7 +271,7 @@ describe("EPackageImpl", () => {
             let value = instance(mockValue);
             let l = new ImmutableEList<EPackage>([value]);
             when(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())
+                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything()),
             ).thenReturn(null);
 
             // set list with new contents
@@ -280,7 +280,7 @@ describe("EPackageImpl", () => {
             expect(o.eSubPackages.size()).toBe(1);
             expect(o.eSubPackages.get(0)).toBe(value);
             verify(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())
+                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything()),
             ).once();
         }
 
@@ -344,7 +344,7 @@ describe("EPackageImpl", () => {
         let o = new EPackageImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
         expect(() =>
-            o.eInvokeFromID(EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING, null)
+            o.eInvokeFromID(EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING, null),
         ).toThrow(Error);
     });
 
@@ -376,8 +376,8 @@ describe("EPackageImpl", () => {
                 mockValue.eInverseRemove(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,
-                    null
-                )
+                    null,
+                ),
             ).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null);
             expect(o.eFactoryInstance).toBe(other);
@@ -403,7 +403,7 @@ describe("EPackageImpl", () => {
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
             when(
-                mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ESUB_PACKAGES, null)
+                mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ESUB_PACKAGES, null),
             ).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, null);
             expect(o.eSuperPackage).toBe(other);
@@ -424,7 +424,7 @@ describe("EPackageImpl", () => {
             let mockValue = mock<EClassifierInternal>();
             let value = instance(mockValue);
             when(
-                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())
+                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything()),
             ).thenReturn(null);
 
             o.eClassifiers.add(value);
@@ -445,7 +445,7 @@ describe("EPackageImpl", () => {
             let mockValue = mock<EPackageInternal>();
             let value = instance(mockValue);
             when(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())
+                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything()),
             ).thenReturn(null);
 
             o.eSubPackages.add(value);

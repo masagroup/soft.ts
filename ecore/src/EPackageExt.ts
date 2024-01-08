@@ -84,7 +84,7 @@ export class EPackageExt extends EPackageImpl {
         name: string,
         instanceTypeName: string,
         isAbstract: boolean,
-        isInterface: boolean
+        isInterface: boolean,
     ) {
         eClass.name = name;
         eClass.isAbstract = isAbstract;
@@ -105,7 +105,7 @@ export class EPackageExt extends EPackageImpl {
         isUnSettable: boolean,
         isUnique: boolean,
         isDerived: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
         aFeature.name = name;
         aFeature.eType = aClassifier;
@@ -135,7 +135,7 @@ export class EPackageExt extends EPackageImpl {
         isUnique: boolean,
         isDerived: boolean,
         isOrdered: boolean,
-        isID: boolean
+        isID: boolean,
     ) {
         this.initEStructuralFeature(
             aAttribute,
@@ -150,7 +150,7 @@ export class EPackageExt extends EPackageImpl {
             isUnSettable,
             isUnique,
             isDerived,
-            isOrdered
+            isOrdered,
         );
         aAttribute.isID = isID;
     }
@@ -171,7 +171,7 @@ export class EPackageExt extends EPackageImpl {
         isUnSettable: boolean,
         isUnique: boolean,
         isDerived: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
         this.initEStructuralFeature(
             aReference,
@@ -186,7 +186,7 @@ export class EPackageExt extends EPackageImpl {
             isUnSettable,
             isUnique,
             isDerived,
-            isOrdered
+            isOrdered,
         );
         aReference.isContainment = isContainment;
         aReference.isResolveProxies = isResolveProxies;
@@ -200,7 +200,7 @@ export class EPackageExt extends EPackageImpl {
         lowerBound: number,
         upperBound: number,
         isUnique: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
         aOperation.name = name;
         aOperation.eType = aType;
@@ -217,7 +217,7 @@ export class EPackageExt extends EPackageImpl {
         lowerBound: number,
         upperBound: number,
         isUnique: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
         let parameter = getEcoreFactory().createEParameterFromContainer(aOperation);
         parameter.name = name;
@@ -238,7 +238,7 @@ export class EPackageExt extends EPackageImpl {
         name: string,
         instanceTypeName: string,
         defaultValue: string,
-        isSerializable: boolean
+        isSerializable: boolean,
     ) {
         this.initEClassifier(aDataType, name, instanceTypeName);
         aDataType.isSerializable = isSerializable;
@@ -246,7 +246,7 @@ export class EPackageExt extends EPackageImpl {
             let aDataTypeInternal = aDataType as EDataTypeInternal;
             aDataTypeInternal.defaultValue = this.eFactoryInstance.createFromString(
                 aDataType,
-                defaultValue
+                defaultValue,
             );
         }
     }

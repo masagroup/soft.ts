@@ -20,7 +20,7 @@ export class XMIDecoder extends XMLDecoder {
         this._notFeatures.push(
             { uri: XMIConstants.xmiURI, local: XMIConstants.typeAttrib },
             { uri: XMIConstants.xmiURI, local: XMIConstants.versionAttrib },
-            { uri: XMIConstants.xmiURI, local: XMIConstants.uuidAttrib }
+            { uri: XMIConstants.xmiURI, local: XMIConstants.uuidAttrib },
         );
     }
 

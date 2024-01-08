@@ -20,7 +20,7 @@ describe("FileURIHandler", () => {
     test("createReadStream", () => {
         let uriHandler = new FileURIHandler();
         let s = uriHandler.createReadStream(
-            new URL("file:///" + __dirname + "/../testdata/read-stream.txt")
+            new URL("file:///" + __dirname + "/../testdata/read-stream.txt"),
         );
         expect(s).not.toBeNull();
     });
@@ -28,7 +28,7 @@ describe("FileURIHandler", () => {
     test("createWriteStream", () => {
         let uriHandler = new FileURIHandler();
         let s = uriHandler.createWriteStream(
-            new URL("file:///" + __dirname + "/../testdata/write-stream.txt")
+            new URL("file:///" + __dirname + "/../testdata/write-stream.txt"),
         );
         expect(s).not.toBeNull();
     });

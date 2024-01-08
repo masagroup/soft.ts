@@ -65,13 +65,13 @@ export class EcoreUtils {
                 let proxyURIStr = proxyURI.toString();
                 let ndxHash = proxyURIStr.lastIndexOf("#");
                 let ePackage = getPackageRegistry().getPackage(
-                    ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr
+                    ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr,
                 );
                 if (ePackage) {
                     let eResource = ePackage.eResource();
                     if (eResource) {
                         resolved = eResource.getEObject(
-                            ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : ""
+                            ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "",
                         );
                     }
                 }

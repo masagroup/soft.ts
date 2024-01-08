@@ -42,7 +42,7 @@ export class BasicEObjectList<O extends EObject>
         inverse: boolean,
         opposite: boolean,
         proxies: boolean,
-        unset: boolean
+        unset: boolean,
     ) {
         super();
         this._owner = owner;
@@ -127,7 +127,7 @@ export class BasicEObjectList<O extends EObject>
                 return internal.eInverseAdd(
                     this._owner,
                     EOPPOSITE_FEATURE_BASE - this._featureID,
-                    notifications
+                    notifications,
                 );
             }
         }
@@ -143,7 +143,7 @@ export class BasicEObjectList<O extends EObject>
                 return internal.eInverseRemove(
                     this._owner,
                     EOPPOSITE_FEATURE_BASE - this._featureID,
-                    notifications
+                    notifications,
                 );
             }
         }
@@ -171,7 +171,7 @@ export class BasicEObjectList<O extends EObject>
                 EventType.RESOLVE,
                 object,
                 resolved,
-                index
+                index,
             );
         }
         return resolved;

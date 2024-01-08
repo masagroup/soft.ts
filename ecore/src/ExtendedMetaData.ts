@@ -23,7 +23,7 @@ export class ExtendedMetaData {
     private _metaData: Map<any, any> = new Map<any, any>();
 
     private getENamedElementExtendedMetaData(
-        eElement: ENamedElement
+        eElement: ENamedElement,
     ): ENamedElementExtendedMetaData {
         let result = this._metaData.get(eElement);
         if (!result) {
@@ -38,7 +38,7 @@ export class ExtendedMetaData {
     }
 
     private getEStructuralFeatureExtentedMetaData(
-        eFeature: EStructuralFeature
+        eFeature: EStructuralFeature,
     ): EStructuralFeatureExtentedMetaData {
         let result = this._metaData.get(eFeature);
         if (!result) {

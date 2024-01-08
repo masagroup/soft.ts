@@ -89,7 +89,7 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
         resize(
             this._properties,
             this.eClass().getFeatureCount() - this.eStaticClass().getFeatureCount(),
-            null
+            null,
         );
     }
 }

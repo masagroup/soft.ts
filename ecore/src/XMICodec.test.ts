@@ -33,7 +33,7 @@ describe("XMIResource", () => {
             expect(ePackage.name).toBe("library");
             expect(ePackage.nsPrefix).toBe("lib");
             expect(ePackage.nsURI).toBe(
-                "http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0"
+                "http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0",
             );
 
             let eClassifiers = ePackage.eClassifiers;
@@ -159,7 +159,7 @@ describe("XMIResource", () => {
             expect(eDocumentRootClass.name).toBe("DocumentRoot");
 
             let eXMNLSPrefixFeature = eDocumentRootClass.getEStructuralFeatureFromName(
-                "xMLNSPrefixMap"
+                "xMLNSPrefixMap",
             ) as EReference;
             expect(eXMNLSPrefixFeature).not.toBeNull();
 

@@ -264,34 +264,34 @@ describe("EStructuralFeatureImpl", () => {
         let o = new EStructuralFeatureImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, true)).toStrictEqual(
-            o.isChangeable
+            o.isChangeable,
         );
         expect(() => o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, true)).toThrow(
-            Error
+            Error,
         );
         expect(() =>
-            o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, false)
+            o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, false),
         ).toThrow(Error);
         expect(
-            o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, true)
+            o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, true),
         ).toStrictEqual(o.defaultValueLiteral);
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, true)).toStrictEqual(
-            o.isDerived
+            o.isDerived,
         );
         expect(
-            o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, true)
+            o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, true),
         ).toStrictEqual(o.eContainingClass);
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, true)).toStrictEqual(
-            o.featureID
+            o.featureID,
         );
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, true)).toStrictEqual(
-            o.isTransient
+            o.isTransient,
         );
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, true)).toStrictEqual(
-            o.isUnsettable
+            o.isUnsettable,
         );
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, true)).toStrictEqual(
-            o.isVolatile
+            o.isVolatile,
         );
     });
 
@@ -304,13 +304,13 @@ describe("EStructuralFeatureImpl", () => {
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, false)).toBe(value);
         }
         expect(() => o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, null)).toThrow(
-            Error
+            Error,
         );
         {
             let value = "Test String";
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, value);
             expect(
-                o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, false)
+                o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, false),
             ).toBe(value);
         }
         {
@@ -345,10 +345,10 @@ describe("EStructuralFeatureImpl", () => {
         expect(() => o.eIsSetFromID(-1)).toThrow(Error);
         expect(o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE)).toBeFalsy();
         expect(() => o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE)).toThrow(
-            Error
+            Error,
         );
         expect(
-            o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL)
+            o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL),
         ).toBeFalsy();
         expect(o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED)).toBeFalsy();
         expect(o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS)).toBeFalsy();
@@ -368,7 +368,7 @@ describe("EStructuralFeatureImpl", () => {
         }
         {
             expect(() => o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE)).toThrow(
-                Error
+                Error,
             );
         }
         {
@@ -407,7 +407,7 @@ describe("EStructuralFeatureImpl", () => {
         let o = new EStructuralFeatureImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
         expect(() =>
-            o.eInvokeFromID(EcoreConstants.ESTRUCTURAL_FEATURE__GET_CONTAINER_CLASS, null)
+            o.eInvokeFromID(EcoreConstants.ESTRUCTURAL_FEATURE__GET_CONTAINER_CLASS, null),
         ).toThrow(Error);
     });
 
@@ -435,7 +435,7 @@ describe("EStructuralFeatureImpl", () => {
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
             when(
-                mockValue.eInverseRemove(o, EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, null)
+                mockValue.eInverseRemove(o, EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, null),
             ).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, null);
             expect(o.eContainingClass).toBe(other);
@@ -457,7 +457,7 @@ describe("EStructuralFeatureImpl", () => {
             o.eBasicInverseRemove(
                 value,
                 EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
-                null
+                null,
             );
         }
     });

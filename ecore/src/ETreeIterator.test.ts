@@ -17,7 +17,7 @@ describe("ETreeIterator", () => {
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
         let it = new ETreeIterator<EObject, EObject>(object, true, function (
-            o: EObject
+            o: EObject,
         ): Iterator<EObject> {
             return emptyList[Symbol.iterator]();
         });
@@ -30,7 +30,7 @@ describe("ETreeIterator", () => {
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
         let it = new ETreeIterator<EObject, EObject>(object, false, function (
-            o: EObject
+            o: EObject,
         ): Iterator<EObject> {
             return emptyList[Symbol.iterator]();
         });
@@ -42,7 +42,7 @@ describe("ETreeIterator", () => {
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
         let it = new ETreeIterator<EObject, EObject>(object, true, function (
-            o: EObject
+            o: EObject,
         ): Iterator<EObject> {
             return emptyList[Symbol.iterator]();
         });
@@ -63,14 +63,14 @@ describe("ETreeIterator", () => {
         let grandChild2 = instance<EObject>(mockGrandChild2);
         when(mockObject.eContents()).thenReturn(new ImmutableEList<EObject>([child1, child2]));
         when(mockChild1.eContents()).thenReturn(
-            new ImmutableEList<EObject>([grandChild1, grandChild2])
+            new ImmutableEList<EObject>([grandChild1, grandChild2]),
         );
         when(mockChild2.eContents()).thenReturn(emptyList);
         when(mockGrandChild1.eContents()).thenReturn(emptyList);
         when(mockGrandChild2.eContents()).thenReturn(emptyList);
 
         let it = new ETreeIterator<EObject, EObject>(object, false, function (
-            o: EObject
+            o: EObject,
         ): Iterator<EObject> {
             return o.eContents()[Symbol.iterator]();
         });

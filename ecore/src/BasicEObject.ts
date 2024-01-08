@@ -194,7 +194,7 @@ export class BasicEObject extends AbstractEObject {
     eContents(): EList<EObject> {
         if (!this._contentsListAdapter)
             this._contentsListAdapter = new ContentsListAdapter(this, function (
-                c: EClass
+                c: EClass,
             ): EList<EStructuralFeature> {
                 return c.eContainmentFeatures;
             });
@@ -204,7 +204,7 @@ export class BasicEObject extends AbstractEObject {
     eCrossReferences(): EList<EObject> {
         if (!this._crossReferencesListAdapter)
             this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
-                c: EClass
+                c: EClass,
             ): EList<EStructuralFeature> {
                 return c.eCrossReferenceFeatures;
             });

@@ -30,7 +30,7 @@ export class XMIEncoder extends XMLEncoder {
     protected saveNamespaces() {
         this._str.addAttribute(
             XMIConstants.xmiNS + ":" + XMIConstants.versionAttrib,
-            this._xmiVersion
+            this._xmiVersion,
         );
         this._str.addAttribute(XMIConstants.xmlNS + ":" + XMIConstants.xmiNS, XMIConstants.xmiURI);
         super.saveNamespaces();

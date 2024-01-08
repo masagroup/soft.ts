@@ -71,7 +71,7 @@ describe("EFactoryImpl", () => {
 
         // set value
         when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(
-            null
+            null,
         );
         when(mockValue.eResource()).thenReturn(resource);
         o.ePackage = value;
@@ -96,11 +96,11 @@ describe("EFactoryImpl", () => {
         reset(mockValue);
         reset(mockResource);
         when(
-            mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
+            mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null),
         ).thenReturn(null);
         when(mockValue.eResource()).thenReturn(resource);
         when(mockOther.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(
-            null
+            null,
         );
         when(mockOther.eResource()).thenReturn(otherResource);
         o.ePackage = other;
@@ -172,14 +172,14 @@ describe("EFactoryImpl", () => {
             when(mockValue.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
             when(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
+                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null),
             ).thenReturn(null);
             o.eSetFromID(EcoreConstants.EFACTORY__EPACKAGE, value);
             expect(o.eGetFromID(EcoreConstants.EFACTORY__EPACKAGE, false)).toBe(value);
             verify(mockValue.eIsProxy()).once();
             verify(mockValue.eResource()).once();
             verify(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
+                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null),
             ).once();
         }
     });
@@ -203,11 +203,11 @@ describe("EFactoryImpl", () => {
         let o = new EFactoryImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
         expect(() =>
-            o.eInvokeFromID(EcoreConstants.EFACTORY__CONVERT_TO_STRING_EDATATYPE_EJAVAOBJECT, null)
+            o.eInvokeFromID(EcoreConstants.EFACTORY__CONVERT_TO_STRING_EDATATYPE_EJAVAOBJECT, null),
         ).toThrow(Error);
         expect(() => o.eInvokeFromID(EcoreConstants.EFACTORY__CREATE_ECLASS, null)).toThrow(Error);
         expect(() =>
-            o.eInvokeFromID(EcoreConstants.EFACTORY__CREATE_FROM_STRING_EDATATYPE_ESTRING, null)
+            o.eInvokeFromID(EcoreConstants.EFACTORY__CREATE_FROM_STRING_EDATATYPE_ESTRING, null),
         ).toThrow(Error);
     });
 
@@ -235,7 +235,7 @@ describe("EFactoryImpl", () => {
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
             when(
-                mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
+                mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null),
             ).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EFACTORY__EPACKAGE, null);
             expect(o.ePackage).toBe(other);

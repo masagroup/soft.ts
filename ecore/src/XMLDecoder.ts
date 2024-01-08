@@ -320,8 +320,8 @@ export class XMLDecoder implements EResourceDecoder {
                 err.message,
                 this._resource.eURI.toString(),
                 this._parser.line,
-                this._parser.column
-            )
+                this._parser.column,
+            ),
         );
     }
 
@@ -372,7 +372,7 @@ export class XMLDecoder implements EResourceDecoder {
     private recordSchemaLocations(eObject: EObject) {
         if (this._extendedMetaData && eObject) {
             let xmlnsPrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(
-                eObject.eClass()
+                eObject.eClass(),
             );
             if (xmlnsPrefixMapFeature) {
                 let m = eObject.eGet(xmlnsPrefixMapFeature) as EMap<string, string>;
@@ -386,7 +386,7 @@ export class XMLDecoder implements EResourceDecoder {
     private handleSchemaLocation(): void {
         let xsiSchemaLocation = this.getAttributeValue(
             XMLConstants.xsiURI,
-            XMLConstants.schemaLocationAttrib
+            XMLConstants.schemaLocationAttrib,
         );
         if (xsiSchemaLocation) {
             this.handleXSISchemaLocation(xsiSchemaLocation);
@@ -394,7 +394,7 @@ export class XMLDecoder implements EResourceDecoder {
 
         let xsiNoNamespaceSchemaLocation = this.getAttributeValue(
             XMLConstants.xsiURI,
-            XMLConstants.noNamespaceSchemaLocationAttrib
+            XMLConstants.noNamespaceSchemaLocationAttrib,
         );
         if (xsiNoNamespaceSchemaLocation) {
             this.handleXSINoNamespaceSchemaLocation(xsiSchemaLocation);
@@ -431,8 +431,8 @@ export class XMLDecoder implements EResourceDecoder {
                     "Class {'" + uri + +"':'" + typeName + "}' not found",
                     this._resource.eURI.toString(),
                     this._parser.line,
-                    this._parser.column
-                )
+                    this._parser.column,
+                ),
             );
         }
     }
@@ -486,7 +486,7 @@ export class XMLDecoder implements EResourceDecoder {
     private createObjectWithFactory(
         eFactory: EFactory,
         eType: EClassifier,
-        handleAttributes: boolean = true
+        handleAttributes: boolean = true,
     ): EObject {
         if (eFactory) {
             if (isEClass(eType) && !eType.isAbstract) {
@@ -517,7 +517,7 @@ export class XMLDecoder implements EResourceDecoder {
     private createObjectFromTypeName(
         eObject: EObject,
         qname: string,
-        eFeature: EStructuralFeature
+        eFeature: EStructuralFeature,
     ): EObject {
         let prefix = "";
         let local = qname;
@@ -592,7 +592,7 @@ export class XMLDecoder implements EResourceDecoder {
                 let eOpposite = eReference.eOpposite;
                 if (eOpposite && eOpposite.isChangeable && eProxy.eIsSet(eReference)) {
                     let resolvedObject = this._resource.getEObject(
-                        (eProxy as EObjectInternal).eProxyURI().href.slice(1)
+                        (eProxy as EObjectInternal).eProxyURI().href.slice(1),
                     );
                     if (resolvedObject) {
                         let proxyHolder: EObject = null;
@@ -658,8 +658,8 @@ export class XMLDecoder implements EResourceDecoder {
                         "Unresolved reference '" + reference.id + "'",
                         this._resource.eURI.toString(),
                         this._parser.line,
-                        this._parser.column
-                    )
+                        this._parser.column,
+                    ),
                 );
             }
         }
@@ -732,7 +732,7 @@ export class XMLDecoder implements EResourceDecoder {
         eObject: EObject,
         eFeature: EStructuralFeature,
         value: any,
-        position: number
+        position: number,
     ) {
         let kind = this.getLoadFeatureKind(eFeature);
         switch (kind) {
@@ -905,8 +905,8 @@ export class XMLDecoder implements EResourceDecoder {
                 "Feature " + name + " not found",
                 this._resource.eURI?.toString(),
                 this._parser.column,
-                this._parser.line
-            )
+                this._parser.line,
+            ),
         );
     }
 
@@ -916,8 +916,8 @@ export class XMLDecoder implements EResourceDecoder {
                 "Package " + name + " not found",
                 this._resource.eURI?.toString(),
                 this._parser.column,
-                this._parser.line
-            )
+                this._parser.line,
+            ),
         );
     }
 
@@ -927,8 +927,8 @@ export class XMLDecoder implements EResourceDecoder {
                 "URI " + name + " not found",
                 this._resource.eURI?.toString(),
                 this._parser.column,
-                this._parser.line
-            )
+                this._parser.line,
+            ),
         );
     }
 

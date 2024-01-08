@@ -151,7 +151,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eAnnotations).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEAnnotationFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEAnnotationFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -167,7 +167,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eStructuralFeatures).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEAttributeFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEAttributeFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -179,7 +179,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eStructuralFeatures).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEAttributeFromContainerAndClassID(container, 0)
+            EcoreFactoryImpl.getInstance().createEAttributeFromContainerAndClassID(container, 0),
         ).not.toBeNull();
     });
     test("createEClass", () => {
@@ -204,7 +204,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eClassifiers).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEClassFromContainerAndClassID(container, 0)
+            EcoreFactoryImpl.getInstance().createEClassFromContainerAndClassID(container, 0),
         ).not.toBeNull();
     });
     test("createEDataType", () => {
@@ -219,7 +219,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eClassifiers).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEDataTypeFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEDataTypeFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -231,7 +231,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eClassifiers).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEDataTypeFromContainerAndClassID(container, 0)
+            EcoreFactoryImpl.getInstance().createEDataTypeFromContainerAndClassID(container, 0),
         ).not.toBeNull();
     });
     test("createEEnum", () => {
@@ -256,7 +256,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eClassifiers).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEEnumFromContainerAndClassID(container, 0)
+            EcoreFactoryImpl.getInstance().createEEnumFromContainerAndClassID(container, 0),
         ).not.toBeNull();
     });
     test("createEEnumLiteral", () => {
@@ -271,7 +271,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eLiterals).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEEnumLiteralFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEEnumLiteralFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -283,7 +283,7 @@ describe("EcoreFactoryImpl", () => {
         let mockContainer = mock<EPackage>();
         let container = instance(mockContainer);
         expect(
-            EcoreFactoryImpl.getInstance().createEFactoryFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEFactoryFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -307,7 +307,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eOperations).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEOperationFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEOperationFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -319,7 +319,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eOperations).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEOperationFromContainerAndClassID(container, 0)
+            EcoreFactoryImpl.getInstance().createEOperationFromContainerAndClassID(container, 0),
         ).not.toBeNull();
     });
     test("createEPackage", () => {
@@ -334,7 +334,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eSubPackages).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEPackageFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEPackageFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -350,7 +350,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eParameters).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEParameterFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEParameterFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -366,7 +366,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eStructuralFeatures).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEReferenceFromContainer(container)
+            EcoreFactoryImpl.getInstance().createEReferenceFromContainer(container),
         ).not.toBeNull();
     });
 
@@ -378,7 +378,7 @@ describe("EcoreFactoryImpl", () => {
         when(mockList.add(anything())).thenReturn(true);
         when(mockContainer.eStructuralFeatures).thenReturn(list);
         expect(
-            EcoreFactoryImpl.getInstance().createEReferenceFromContainerAndClassID(container, 0)
+            EcoreFactoryImpl.getInstance().createEReferenceFromContainerAndClassID(container, 0),
         ).not.toBeNull();
     });
     test("createEStringToStringMapEntry", () => {
@@ -400,7 +400,7 @@ describe("EcoreFactoryImpl", () => {
         let eDataType = instance(mockDataType);
         when(mockDataType.classifierID).thenReturn(-1);
         expect(() => EcoreFactoryImpl.getInstance().convertToString(eDataType, null)).toThrow(
-            Error
+            Error,
         );
     });
     test("createEBigDecimalFromString", () => {
@@ -540,7 +540,7 @@ describe("EcoreFactoryImpl", () => {
         let eDataType = instance(mockDataType);
         when(mockDataType.classifierID).thenReturn(EcoreConstants.EDATE);
         expect(factory.createFromString(eDataType, "2020-05-12T17:33:10.770Z")).toEqual(
-            new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))
+            new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770)),
         );
     });
     test("convertEDateToString", () => {
@@ -549,7 +549,7 @@ describe("EcoreFactoryImpl", () => {
         let eDataType = instance(mockDataType);
         when(mockDataType.classifierID).thenReturn(EcoreConstants.EDATE);
         expect(
-            factory.convertToString(eDataType, new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770)))
+            factory.convertToString(eDataType, new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))),
         ).toStrictEqual("2020-05-12T17:33:10.770Z");
     });
     test("createEDoubleFromString", () => {

@@ -194,7 +194,7 @@ describe("EcoreUtils", () => {
             eReference2.isContainment = false;
             eReference2.eType = eClass2;
             eClass1.eStructuralFeatures.addAll(
-                new ImmutableEList<EReference>([eReference1, eReference2])
+                new ImmutableEList<EReference>([eReference1, eReference2]),
             );
 
             // the model

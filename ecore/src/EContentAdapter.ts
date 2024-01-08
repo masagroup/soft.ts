@@ -127,7 +127,7 @@ export class EContentAdapter extends AbstractEAdapter {
                     this.removeAdapterWithChecks(
                         notification.oldValue as ENotifier,
                         checkContainer,
-                        checkResource
+                        checkResource,
                     );
                 }
                 break;
@@ -161,7 +161,7 @@ export class EContentAdapter extends AbstractEAdapter {
     private removeAdapterWithChecks(
         notifier: ENotifier,
         checkContainer: boolean,
-        checkResource: boolean
+        checkResource: boolean,
     ): void {
         if (notifier) {
             if (checkContainer || checkResource) {

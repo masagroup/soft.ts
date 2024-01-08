@@ -67,7 +67,7 @@ describe("EDataTypeImpl", () => {
         let o = new EDataTypeImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, true)).toStrictEqual(
-            o.isSerializable
+            o.isSerializable,
         );
     });
 

@@ -62,7 +62,7 @@ describe("ExtendedMetaData", () => {
         let details = instance(mockDetails);
 
         when(mockPackage.eClassifiers).thenReturn(
-            new ImmutableEList<EClassifier>([classifier1, classifier2])
+            new ImmutableEList<EClassifier>([classifier1, classifier2]),
         );
         when(mockClassifier1.getEAnnotation(annotationURI)).thenReturn(null);
         when(mockClassifier1.name).thenReturn("classifier1");
@@ -130,7 +130,7 @@ describe("ExtendedMetaData", () => {
             let mockPackage = mock<EPackage>();
             let ePackage = instance(mockPackage);
             when(mockPackage.eClassifiers).thenReturn(
-                new ImmutableEList<EClassifier>([eClass1, eClass2])
+                new ImmutableEList<EClassifier>([eClass1, eClass2]),
             );
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(null);
             when(mockClass1.name).thenReturn("classifier1");
@@ -151,7 +151,7 @@ describe("ExtendedMetaData", () => {
             let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
             when(mockPackage.eClassifiers).thenReturn(
-                new ImmutableEList<EClassifier>([eClass1, eClass2])
+                new ImmutableEList<EClassifier>([eClass1, eClass2]),
             );
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(annotation);
             when(mockAnnotation.details).thenReturn(details);
@@ -171,7 +171,7 @@ describe("ExtendedMetaData", () => {
             let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
             when(mockPackage.eClassifiers).thenReturn(
-                new ImmutableEList<EClassifier>([eClass1, eClass2])
+                new ImmutableEList<EClassifier>([eClass1, eClass2]),
             );
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(null);
             when(mockClass1.name).thenReturn("classifier1");

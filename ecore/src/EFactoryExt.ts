@@ -36,7 +36,7 @@ export class EFactoryExt extends EFactoryImpl {
                         literalValue +
                         "' is not a valid enumerator of '" +
                         eDataType.name +
-                        "'"
+                        "'",
                 );
             }
             return result.value;
@@ -67,7 +67,7 @@ export class EFactoryExt extends EFactoryImpl {
                         instanceValue +
                         "' is not a valid enumerator of '" +
                         eDataType.name +
-                        "'"
+                        "'",
                 );
             }
             return result.literal;

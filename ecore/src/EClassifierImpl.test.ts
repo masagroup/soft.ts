@@ -161,22 +161,22 @@ describe("EClassifierImpl", () => {
         let o = new EClassifierImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, true)).toStrictEqual(
-            o.classifierID
+            o.classifierID,
         );
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE, true)).toThrow(Error);
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE, false)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__EPACKAGE, true)).toStrictEqual(o.ePackage);
         expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, true)).toStrictEqual(
-            o.instanceClass
+            o.instanceClass,
         );
         expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, true)).toStrictEqual(
-            o.instanceClassName
+            o.instanceClassName,
         );
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, true)).toThrow(
-            Error
+            Error,
         );
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, false)).toThrow(
-            Error
+            Error,
         );
     });
 
@@ -197,11 +197,11 @@ describe("EClassifierImpl", () => {
             let value = "Test String";
             o.eSetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, value);
             expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, false)).toBe(
-                value
+                value,
             );
         }
         expect(() => o.eSetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, null)).toThrow(
-            Error
+            Error,
         );
     });
 
@@ -236,7 +236,7 @@ describe("EClassifierImpl", () => {
         }
         {
             expect(() => o.eUnsetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME)).toThrow(
-                Error
+                Error,
             );
         }
     });
@@ -245,7 +245,7 @@ describe("EClassifierImpl", () => {
         let o = new EClassifierImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
         expect(() =>
-            o.eInvokeFromID(EcoreConstants.ECLASSIFIER__IS_INSTANCE_EJAVAOBJECT, null)
+            o.eInvokeFromID(EcoreConstants.ECLASSIFIER__IS_INSTANCE_EJAVAOBJECT, null),
         ).toThrow(Error);
     });
 
@@ -273,7 +273,7 @@ describe("EClassifierImpl", () => {
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
             when(
-                mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ECLASSIFIERS, null)
+                mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ECLASSIFIERS, null),
             ).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.ECLASSIFIER__EPACKAGE, null);
             expect(o.ePackage).toBe(other);

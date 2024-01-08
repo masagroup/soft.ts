@@ -37,13 +37,13 @@ export interface EObjectInternal extends EObject {
     eInverseAdd(
         otherEnd: EObject,
         featureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain;
 
     eInverseRemove(
         otherEnd: EObject,
         featureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain;
 
     eDerivedFeatureID(container: EObject, featureID: number): number;
@@ -63,13 +63,13 @@ export interface EObjectInternal extends EObject {
     eBasicInverseAdd(
         otherEnd: EObject,
         featureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain;
 
     eBasicInverseRemove(
         otherEnd: EObject,
         featureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain;
 
     eObjectForFragmentSegment(fragment: string): EObject;

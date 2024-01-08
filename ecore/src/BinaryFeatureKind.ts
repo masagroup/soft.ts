@@ -81,5 +81,5 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
             return BinaryFeatureKind.bfkData;
         }
     }
-    return -1;
+    return null;
 }

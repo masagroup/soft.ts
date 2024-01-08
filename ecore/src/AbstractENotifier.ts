@@ -27,7 +27,7 @@ class AbstractENotifierNotification extends AbstractNotification {
         eventType: EventType,
         oldValue: any,
         newValue: any,
-        position: number
+        position: number,
     ) {
         super(eventType, oldValue, newValue, position);
         this._notifier = notifier;
@@ -66,8 +66,8 @@ export class AbstractENotifierList extends BasicEList<EAdapter> {
                     EventType.REMOVING_ADAPTER,
                     adapter,
                     null,
-                    index
-                )
+                    index,
+                ),
             );
         }
         adapter.unsetTarget(this._notifier);

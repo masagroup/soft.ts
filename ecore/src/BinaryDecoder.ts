@@ -23,7 +23,7 @@ import {
 import * as MsgPack from "./MsgPack";
 
 function ensureUint8Array(
-    buffer: ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer
+    buffer: ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer,
 ): Uint8Array {
     if (buffer instanceof Uint8Array) {
         return buffer;
@@ -124,7 +124,12 @@ export class BinaryDecoder implements EResourceDecoder {
                     this._resource
                         .getErrors()
                         .add(
-                            new EDiagnosticImpl(err.message, this._resource.eURI.toString(), -1, -1)
+                            new EDiagnosticImpl(
+                                err.message,
+                                this._resource.eURI.toString(),
+                                -1,
+                                -1,
+                            ),
                         );
                 }
             }
@@ -340,7 +345,7 @@ export class BinaryDecoder implements EResourceDecoder {
                     let valueStr = this.decodeString();
                     let value = featureData.eFactory.createFromString(
                         featureData.eDataType,
-                        valueStr
+                        valueStr,
                     );
                     values.push(value);
                 }
@@ -406,7 +411,7 @@ export class BinaryDecoder implements EResourceDecoder {
         let eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName);
         if (!eFeature)
             throw new Error(
-                `Unable to find feature ${eFeatureName} in ${eClassData.eClass.name} EClass`
+                `Unable to find feature ${eFeatureName} in ${eClassData.eClass.name} EClass`,
             );
         let featureData = new FeatureData();
         featureData.eFeature = eFeature;

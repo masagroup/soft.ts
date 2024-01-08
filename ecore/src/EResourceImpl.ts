@@ -50,7 +50,7 @@ class ResourceNotification extends AbstractNotification {
         eventType: EventType,
         oldValue: any,
         newValue: any,
-        position: number = -1
+        position: number = -1,
     ) {
         super(eventType, oldValue, newValue, position);
         this._notifier = notifier;
@@ -102,7 +102,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
 
     protected inverseRemove(
         eObject: EObject,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain {
         this._resource.detached(eObject);
         let n = (eObject as EObjectInternal).eSetResource(null, notifications);
@@ -173,8 +173,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     EventType.SET,
                     oldURI,
                     uri,
-                    -1
-                )
+                    -1,
+                ),
             );
         }
     }
@@ -245,8 +245,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         fragmentPath.unshift(
                             eContainer.eURIFragmentSegment(
                                 internalEObject.eContainingFeature(),
-                                internalEObject
-                            )
+                                internalEObject,
+                            ),
                         );
                     }
                     internalEObject = eContainer;
@@ -319,8 +319,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                             "Unable to create decoder for '" + this._uri.toString() + "'",
                             this._uri.toString(),
                             0,
-                            0
-                        )
+                            0,
+                        ),
                     );
                     return Promise.resolve();
                 }
@@ -332,8 +332,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to find codec for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0
-                    )
+                        0,
+                    ),
                 );
                 return Promise.resolve();
             }
@@ -388,8 +388,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                             "Unable to create decoder for '" + this._uri.toString() + "'",
                             this._uri.toString(),
                             0,
-                            0
-                        )
+                            0,
+                        ),
                     );
                 }
             } else {
@@ -400,8 +400,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to find codec for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0
-                    )
+                        0,
+                    ),
                 );
             }
         }
@@ -459,8 +459,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to create decoder for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0
-                    )
+                        0,
+                    ),
                 );
             }
         } else {
@@ -471,8 +471,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     "Unable to find codec for '" + this._uri.toString() + "'",
                     this._uri.toString(),
                     0,
-                    0
-                )
+                    0,
+                ),
             );
         }
         return Promise.reject();
@@ -505,8 +505,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to create decoder for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0
-                    )
+                        0,
+                    ),
                 );
             }
         } else {
@@ -517,8 +517,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     "Unable to find codec for '" + this._uri.toString() + "'",
                     this._uri.toString(),
                     0,
-                    0
-                )
+                    0,
+                ),
             );
         }
         return null;
@@ -592,8 +592,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     EResourceConstants.RESOURCE__IS_LOADED,
                     EventType.SET,
                     oldLoaded,
-                    this._isLoaded
-                )
+                    this._isLoaded,
+                ),
             );
         }
         return notifications;
@@ -617,8 +617,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     EResourceConstants.RESOURCE__RESOURCE_SET,
                     EventType.SET,
                     oldResourseSet,
-                    this._resourceSet
-                )
+                    this._resourceSet,
+                ),
             );
         }
         return notifications;

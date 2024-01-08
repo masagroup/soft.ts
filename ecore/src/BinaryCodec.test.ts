@@ -44,13 +44,13 @@ describe("BinaryCodec", () => {
         let eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass;
         expect(eDocumentRootClass).not.toBeNull();
         let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName(
-            "library"
+            "library",
         ) as EReference;
         expect(eDocumentRootLibraryFeature).not.toBeNull();
         let eLibraryClass = ePackage.getEClassifier("Library") as EClass;
         expect(eLibraryClass).not.toBeNull();
         let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName(
-            "name"
+            "name",
         ) as EAttribute;
         expect(eLibraryNameAttribute).not.toBeNull();
 
@@ -63,7 +63,7 @@ describe("BinaryCodec", () => {
 
         // book class and attributes
         let eLibraryBooksRefeference = eLibraryClass.getEStructuralFeatureFromName(
-            "books"
+            "books",
         ) as EReference;
         expect(eLibraryBooksRefeference).not.toBeNull();
         let eBookClass = ePackage.getEClassifier("Book") as EClass;
@@ -71,11 +71,11 @@ describe("BinaryCodec", () => {
         let eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName("title") as EAttribute;
         expect(eBookTitleAttribute).not.toBeNull();
         let eBookDateAttribute = eBookClass.getEStructuralFeatureFromName(
-            "publicationDate"
+            "publicationDate",
         ) as EAttribute;
         expect(eBookDateAttribute).not.toBeNull();
         let eBookCategoryAttribute = eBookClass.getEStructuralFeatureFromName(
-            "category"
+            "category",
         ) as EAttribute;
         expect(eBookCategoryAttribute).not.toBeNull();
         let eBookAuthorReference = eBookClass.getEStructuralFeatureFromName("author") as EAttribute;
@@ -106,7 +106,7 @@ describe("BinaryCodec", () => {
         let eWriterClass = ePackage.getEClassifier("Writer") as EClass;
         expect(eWriterClass).not.toBeNull();
         let eWriterNameAttribute = eWriterClass.getEStructuralFeatureFromName(
-            "firstName"
+            "firstName",
         ) as EAttribute;
         expect(eWriterNameAttribute).not.toBeNull();
         expect(author.eGet(eWriterNameAttribute)).toBe("First Name 0");
@@ -121,7 +121,7 @@ describe("BinaryCodec", () => {
         let eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass;
         expect(eDocumentRootClass).not.toBeNull();
         let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName(
-            "library"
+            "library",
         ) as EReference;
         expect(eDocumentRootLibraryFeature).not.toBeNull();
 

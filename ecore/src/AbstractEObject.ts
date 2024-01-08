@@ -91,8 +91,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                             EventType.RESOLVE,
                             containerFeatureID,
                             eContainer,
-                            resolved
-                        )
+                            resolved,
+                        ),
                     );
                 }
             }
@@ -155,7 +155,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 return feature;
             } else {
                 let reference = this.eClass().getEStructuralFeature(
-                    containerFeatureID
+                    containerFeatureID,
                 ) as EReference;
                 return reference.eOpposite;
             }
@@ -167,14 +167,14 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return this.eObjectContainmentFeature(
             this,
             this.eInternalContainer(),
-            this.eInternalContainerFeatureID()
+            this.eInternalContainerFeatureID(),
         );
     }
 
     private eObjectContainmentFeature(
         o: EObject,
         container: EObject,
-        containerFeatureID: number
+        containerFeatureID: number,
     ): EReference {
         if (container) {
             if (containerFeatureID <= EOPPOSITE_FEATURE_BASE) {
@@ -200,7 +200,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
     eAllContents(): IterableIterator<EObject> {
         return new ETreeIterator<EObject, EObject>(this, false, function (
-            o: EObject
+            o: EObject,
         ): Iterator<EObject> {
             return o.eContents()[Symbol.iterator]();
         });
@@ -265,7 +265,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        resolve: boolean
+        resolve: boolean,
     ): any {
         if (isContainer(dynamicFeature)) {
             let featureID = this.eClass().getFeatureID(dynamicFeature);
@@ -301,7 +301,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                     notifications = oldObject.eInverseRemove(
                                         this,
                                         EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications
+                                        notifications,
                                     );
                                 }
                                 if (newValue) {
@@ -309,7 +309,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                     notifications = newObject.eInverseAdd(
                                         this,
                                         EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications
+                                        notifications,
                                     );
                                 }
                             } else {
@@ -321,7 +321,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                     notifications = oldObject.eInverseRemove(
                                         this,
                                         featureID,
-                                        notifications
+                                        notifications,
                                     );
                                 }
                                 if (newValue) {
@@ -330,7 +330,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                     notifications = newObject.eInverseAdd(
                                         this,
                                         featureID,
-                                        notifications
+                                        notifications,
                                     );
                                 }
                             }
@@ -345,8 +345,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                     EventType.RESOLVE,
                                     dynamicFeature,
                                     oldValue,
-                                    newValue
-                                )
+                                    newValue,
+                                ),
                             );
                         }
                     }
@@ -386,7 +386,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 inverse,
                 opposite,
                 feature.isResolveProxies,
-                feature.isUnsettable
+                feature.isUnsettable,
             );
         }
         return null;
@@ -423,7 +423,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        newValue: any
+        newValue: any,
     ) {
         if (isContainer(dynamicFeature)) {
             // container
@@ -449,7 +449,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 }
             } else if (this.eNotificationRequired) {
                 this.eNotify(
-                    new Notification(this, EventType.SET, dynamicFeature, newValue, newValue)
+                    new Notification(this, EventType.SET, dynamicFeature, newValue, newValue),
                 );
             }
         } else if (isBidirectional(dynamicFeature) || isContains(dynamicFeature)) {
@@ -466,14 +466,14 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         notifications = oldObject.eInverseRemove(
                             this,
                             EOPPOSITE_FEATURE_BASE - featureID,
-                            notifications
+                            notifications,
                         );
                     }
                     if (newObject) {
                         notifications = newObject.eInverseAdd(
                             this,
                             EOPPOSITE_FEATURE_BASE - featureID,
-                            notifications
+                            notifications,
                         );
                     }
                 } else {
@@ -498,7 +498,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         EventType.SET,
                         dynamicFeature,
                         oldValue,
-                        newValue
+                        newValue,
                     );
                     if (notifications) {
                         notifications.add(notification);
@@ -520,7 +520,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             // notify
             if (this.eNotificationRequired) {
                 this.eNotify(
-                    new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue)
+                    new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue),
                 );
             }
         }
@@ -555,7 +555,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     protected eDynamicPropertiesIsSet(
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
-        dynamicFeatureID: number
+        dynamicFeatureID: number,
     ): boolean {
         if (isContainer(dynamicFeature)) {
             let featureID = this.eClass().getFeatureID(dynamicFeature);
@@ -597,7 +597,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     protected eDynamicPropertiesUnset(
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
-        dynamicFeatureID: number
+        dynamicFeatureID: number,
     ) {
         if (isContainer(dynamicFeature)) {
             if (this.eInternalContainer()) {
@@ -622,7 +622,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         notifications = oldObject.eInverseRemove(
                             this,
                             EOPPOSITE_FEATURE_BASE - featureID,
-                            notifications
+                            notifications,
                         );
                     }
                 } else {
@@ -644,7 +644,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         eventType,
                         dynamicFeature,
                         oldValue,
-                        null
+                        null,
                     );
                     if (notifications) {
                         notifications.add(notification);
@@ -663,7 +663,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             properties.eDynamicUnset(dynamicFeatureID);
             if (this.eNotificationRequired) {
                 this.eNotify(
-                    new Notification(this, EventType.UNSET, dynamicFeature, oldValue, null)
+                    new Notification(this, EventType.UNSET, dynamicFeature, oldValue, null),
                 );
             }
         }
@@ -697,7 +697,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     eBasicInverseAdd(
         otherEnd: EObject,
         featureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain {
         let feature = this.eClass().getEStructuralFeature(featureID);
         let dynamicFeatureID = featureID - this.eStaticFeatureCount();
@@ -709,7 +709,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     otherEnd,
                     feature,
                     dynamicFeatureID,
-                    notifications
+                    notifications,
                 );
             } else {
                 throw new Error("EObject doesn't define any dynamic properties");
@@ -723,7 +723,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         otherEnd: EObject,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain {
         if (dynamicFeature.isMany) {
             let value = properties.eDynamicGet(dynamicFeatureID);
@@ -750,7 +750,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     notifications = oldObject.eInverseRemove(
                         this,
                         EOPPOSITE_FEATURE_BASE - featureID,
-                        notifications
+                        notifications,
                     );
                 } else if (isBidirectional(dynamicFeature)) {
                     let dynamicReference = dynamicFeature as EReference;
@@ -770,7 +770,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     EventType.SET,
                     dynamicFeature,
                     oldValue,
-                    otherEnd
+                    otherEnd,
                 );
                 if (notifications) {
                     notifications.add(notification);
@@ -785,7 +785,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     eInverseRemove(
         otherEnd: EObject,
         featureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain {
         return featureID >= 0
             ? this.eBasicInverseRemove(otherEnd, featureID, notifications)
@@ -795,7 +795,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     eBasicInverseRemove(
         otherEnd: EObject,
         featureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain {
         let feature = this.eClass().getEStructuralFeature(featureID);
         let dynamicFeatureID = featureID - this.eStaticFeatureCount();
@@ -807,7 +807,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     otherEnd,
                     feature,
                     dynamicFeatureID,
-                    notifications
+                    notifications,
                 );
             } else {
                 throw new Error("EObject doesn't define any dynamic properties");
@@ -821,7 +821,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         otherEnd: EObject,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain {
         if (dynamicFeature.isMany) {
             let value = properties.eDynamicGet(dynamicFeatureID);
@@ -843,7 +843,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     EventType.SET,
                     dynamicFeature,
                     oldValue,
-                    null
+                    null,
                 );
                 if (notifications) {
                     notifications.add(notification);
@@ -858,7 +858,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     protected eBasicSetContainer(
         newContainer: EObject,
         newContainerFeatureID: number,
-        n: ENotificationChain
+        n: ENotificationChain,
     ): ENotificationChain {
         let notifications = n;
         let oldResource = this.eInternalResource();
@@ -911,7 +911,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     EventType.SET,
                     oldContainerFeatureID,
                     oldContainer,
-                    null
+                    null,
                 );
                 if (notifications != null) {
                     notifications.add(notification);
@@ -925,7 +925,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     EventType.SET,
                     newContainerFeatureID,
                     oldContainerFeatureID == newContainerFeatureID ? oldContainer : null,
-                    newContainer
+                    newContainer,
                 );
                 if (notifications != null) {
                     notifications.add(notification);
@@ -946,14 +946,14 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 return eContainer.eInverseRemove(
                     this,
                     EOPPOSITE_FEATURE_BASE - this.eInternalContainerFeatureID(),
-                    notifications
+                    notifications,
                 );
         }
         return notifications;
     }
 
     protected eBasicRemoveFromContainerFeature(
-        notifications: ENotificationChain
+        notifications: ENotificationChain,
     ): ENotificationChain {
         let feature = this.eClass().getEStructuralFeature(this.eInternalContainerFeatureID());
         if (isEReference(feature)) {

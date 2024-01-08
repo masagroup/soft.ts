@@ -81,7 +81,7 @@ describe("EClassExt", () => {
         let eReference2 = new EReferenceExt();
 
         eClass.eStructuralFeatures.addAll(
-            new ImmutableEList([eAttribute1, eReference1, eAttribute2, eReference2])
+            new ImmutableEList([eAttribute1, eReference1, eAttribute2, eReference2]),
         );
 
         // feature ids
@@ -285,7 +285,7 @@ describe("EClassExt", () => {
         eReference2.name = "ref2";
 
         eClass.eStructuralFeatures.addAll(
-            new ImmutableEList([eReference0, eReference1, eReference2])
+            new ImmutableEList([eReference0, eReference1, eReference2]),
         );
 
         expect(eClass.eContainmentFeatures.toArray()).toEqual([eReference1]);

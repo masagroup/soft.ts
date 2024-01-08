@@ -141,7 +141,7 @@ describe("EEnumLiteralImpl", () => {
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__EENUM, true)).toStrictEqual(o.eEnum);
         expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__INSTANCE, true)).toStrictEqual(
-            o.instance
+            o.instance,
         );
         expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__LITERAL, true)).toStrictEqual(o.literal);
         expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__VALUE, true)).toStrictEqual(o.value);
@@ -220,7 +220,7 @@ describe("EEnumLiteralImpl", () => {
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
             when(mockValue.eInverseRemove(o, EcoreConstants.EENUM__ELITERALS, null)).thenReturn(
-                null
+                null,
             );
             o.eBasicInverseAdd(other, EcoreConstants.EENUM_LITERAL__EENUM, null);
             expect(o.eEnum).toBe(other);

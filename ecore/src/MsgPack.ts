@@ -177,8 +177,8 @@ const sharedTextEncoder = TEXT_ENCODING_AVAILABLE ? new TextEncoder() : undefine
 export const TEXT_ENCODER_THRESHOLD = !TEXT_ENCODING_AVAILABLE
     ? UINT32_MAX
     : typeof process !== "undefined" && process?.env?.["TEXT_ENCODING"] !== "force"
-    ? 200
-    : 0;
+      ? 200
+      : 0;
 
 function utf8EncodeTEencode(str: string, output: Uint8Array, outputOffset: number): void {
     output.set(sharedTextEncoder!.encode(str), outputOffset);
@@ -247,8 +247,8 @@ const sharedTextDecoder = TEXT_ENCODING_AVAILABLE ? new TextDecoder() : null;
 export const TEXT_DECODER_THRESHOLD = !TEXT_ENCODING_AVAILABLE
     ? UINT32_MAX
     : typeof process !== "undefined" && process?.env?.["TEXT_DECODER"] !== "force"
-    ? 200
-    : 0;
+      ? 200
+      : 0;
 
 export function utf8DecodeTD(bytes: Uint8Array, inputOffset: number, byteLength: number): string {
     const stringBytes = bytes.subarray(inputOffset, inputOffset + byteLength);

@@ -205,7 +205,7 @@ export class XMLEncoder implements EResourceEncoder {
 
     private saveHeader() {
         this._str.add(
-            stringFormat('<?xml version="{0}" encoding="{1}"?>', this._xmlVersion, this._encoding)
+            stringFormat('<?xml version="{0}" encoding="{1}"?>', this._xmlVersion, this._encoding),
         );
         this._str.addLine();
     }
@@ -611,7 +611,7 @@ export class XMLEncoder implements EResourceEncoder {
 
     private getSaveResourceKindSingle(
         eObject: EObject,
-        eFeature: EStructuralFeature
+        eFeature: EStructuralFeature,
     ): SaveResourceKind {
         let value = eObject.eGetResolve(eFeature, false) as EObjectInternal;
         if (!value) {
@@ -629,7 +629,7 @@ export class XMLEncoder implements EResourceEncoder {
 
     private getSaveResourceKindMany(
         eObject: EObject,
-        eFeature: EStructuralFeature
+        eFeature: EStructuralFeature,
     ): SaveResourceKind {
         let list = eObject.eGetResolve(eFeature, false) as EList<EObject>;
         if (!list || list.isEmpty()) {
@@ -654,7 +654,7 @@ export class XMLEncoder implements EResourceEncoder {
     private getDataType(
         value: any,
         feature: EStructuralFeature,
-        isAttribute: boolean
+        isAttribute: boolean,
     ): string | null {
         if (value == null) {
             return null;

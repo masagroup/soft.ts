@@ -48,13 +48,13 @@ describe("ETypeParameterImpl", () => {
         let o = new ETypeParameterImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.ETYPE_PARAMETER__EBOUNDS, true)).toStrictEqual(
-            o.eBounds
+            o.eBounds,
         );
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ETYPE_PARAMETER__EBOUNDS, false),
-                (o.eBounds as EObjectList<EGenericType>).getUnResolvedList()
-            )
+                (o.eBounds as EObjectList<EGenericType>).getUnResolvedList(),
+            ),
         ).toBeTruthy();
     });
 
@@ -70,8 +70,8 @@ describe("ETypeParameterImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS,
-                    anything()
-                )
+                    anything(),
+                ),
             ).thenReturn(null);
 
             // set list with new contents
@@ -83,8 +83,8 @@ describe("ETypeParameterImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS,
-                    anything()
-                )
+                    anything(),
+                ),
             ).once();
         }
     });
@@ -124,8 +124,8 @@ describe("ETypeParameterImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS,
-                    anything()
-                )
+                    anything(),
+                ),
             ).thenReturn(null);
 
             o.eBounds.add(value);
