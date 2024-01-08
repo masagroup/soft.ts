@@ -21,4 +21,12 @@ export class EClassifierExt extends EClassifierImpl {
     get defaultValue(): any {
         return null;
     }
+
+    get instanceTypeName(): string {
+        return this.instanceClassName
+    }
+
+    set instanceTypeName(newInstanceTypeName: string) {
+        this.instanceClassName = newInstanceTypeName
+    }
 }
