@@ -606,7 +606,7 @@ export class BinaryDecoder implements EResourceDecoder {
 
         if (MsgPack.isString(code)) {
             let s = this.string(code);
-            throw new Error("decodeDate string format not supported");
+            return new Date(s);
         }
 
         let [extID, extLen] = this.extHeader(code);
