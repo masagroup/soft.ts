@@ -53,7 +53,7 @@ ecore.install:
 .PHONY: ecore.generate
 ecore.generate:
 	@echo "[ecore.generate]"
-	@$(call GENERATE,ecore.ecore,-t !generateModule)
+	@$(call GENERATE,ecore.ecore,-t generateModel -t generateTests)
 
 .PHONY: ecore.format
 ecore.format:
