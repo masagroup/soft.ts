@@ -21,7 +21,8 @@ import {
     isEPackage,
 } from "./internal";
 import * as MsgPack from "./MsgPack";
-import {toArray } from "stream-to-array"
+
+var toArray = require("stream-to-array");
 
 function ensureUint8Array(
     buffer: ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer,
@@ -150,50 +151,52 @@ export class BinaryDecoder implements EDecoder {
     }
 
     decodeAsync(stream: ReadStream): Promise<EResource> {
-        return new Promise<EResource>(function(resolve,reject){
-            toArray(stream, function(err : Error, arr : Buffer[]){
+        let decoder = this;
+        return new Promise<EResource>((resolve, reject) => {
+            toArray(stream, function (err: Error, arr: Buffer[]) {
                 if (err != null) {
-                    reject(err)
+                    reject(err);
                 } else {
                     try {
-                        this.setBuffer(Buffer.concat(arr));
-                        this.decodeSignature();
-                        this.decodeVersion();
+                        decoder.setBuffer(Buffer.concat(arr));
+                        decoder.decodeSignature();
+                        decoder.decodeVersion();
                         // objects
-                        let size = this.decodeNumber();
+                        let size = decoder.decodeNumber();
                         let objects = [];
                         for (let i = 0; i < size; i++) {
-                            objects.push(this.decodeEObject());
+                            objects.push(decoder.decodeEObject());
                         }
 
                         // add objects to resource
-                        this._resource.eContents().addAll(new ImmutableEList(objects));
-                        resolve(this._resource)
-                    } catch( err ) {
-                        reject(err)
+                        decoder._resource.eContents().addAll(new ImmutableEList(objects));
+                        resolve(decoder._resource);
+                    } catch (err) {
+                        reject(err);
                     }
                 }
-            })
-        })
+            });
+        });
     }
 
     decodeObjectAsync(stream: ReadStream): Promise<EObject> {
-        return new Promise<EObject>(function(resolve,reject){
-            toArray(stream, function(err: Error, arr : Buffer[]){
+        let decoder = this;
+        return new Promise<EObject>((resolve, reject) => {
+            toArray(stream, function (err: Error, arr: Buffer[]) {
                 if (err != null) {
-                    reject(err)
+                    reject(err);
                 } else {
                     try {
-                        this.setBuffer(Buffer.concat(arr));
-                        this.decodeSignature();
-                        this.decodeVersion();
-                        resolve(this.decodeEObject())
-                    } catch( err ) {
-                        reject(err)
+                        decoder.setBuffer(Buffer.concat(arr));
+                        decoder.decodeSignature();
+                        decoder.decodeVersion();
+                        resolve(decoder.decodeEObject());
+                    } catch (err) {
+                        reject(err);
                     }
                 }
-            })
-        })
+            });
+        });
     }
 
     private setBuffer(buffer: ArrayLike<number> | BufferSource): void {

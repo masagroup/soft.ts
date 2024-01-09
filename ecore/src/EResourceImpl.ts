@@ -684,8 +684,6 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     private getCodecRegistry(): ECodecRegistry {
-        return this._resourceSet
-            ? this._resourceSet.getCodecRegistry()
-            : getCodecRegistry();
+        return this._resourceSet ? this._resourceSet.getCodecRegistry() : getCodecRegistry();
     }
 }

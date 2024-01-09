@@ -192,9 +192,9 @@ export class XMLDecoder implements EDecoder {
             let saxStream = this.createSAXStream(() => {
                 let errors = this._resource.getErrors();
                 if (errors.isEmpty()) {
-                    resolve(this._resource)
+                    resolve(this._resource);
                 } else {
-                    reject(errors.get(0))
+                    reject(errors.get(0));
                 }
             });
             this._parser = (saxStream as any)["_parser"];
@@ -218,9 +218,9 @@ export class XMLDecoder implements EDecoder {
             };
             let saxStream = this.createSAXStream(() => {
                 if (error) {
-                    reject(error)
+                    reject(error);
                 } else {
-                    resolve(object)
+                    resolve(object);
                 }
             });
             this._parser = (saxStream as any)["_parser"];
