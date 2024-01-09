@@ -23,9 +23,7 @@ function loadPackage(filename: string): EPackage {
     expect(resource.isLoaded).toBeTruthy();
     expect(resource.getErrors().isEmpty()).toBeTruthy();
     expect(resource.eContents().isEmpty()).toBeFalsy();
-    let ePackage = resource.eContents().get(0) as EPackage;
-    ePackage.eFactoryInstance = new EFactoryExt();
-    return ePackage;
+    return resource.eContents().get(0) as EPackage;
 }
 
 describe("BinaryCodec", () => {
