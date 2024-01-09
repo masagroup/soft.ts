@@ -21,6 +21,7 @@ import {
     isEPackage,
 } from "./internal";
 import * as MsgPack from "./MsgPack";
+import {toArray } from "stream-to-array"
 
 function ensureUint8Array(
     buffer: ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer,
@@ -149,11 +150,50 @@ export class BinaryDecoder implements EDecoder {
     }
 
     decodeAsync(stream: ReadStream): Promise<EResource> {
-        throw new Error("Method not implemented.");
+        return new Promise<EResource>(function(resolve,reject){
+            toArray(stream, function(err : Error, arr : Buffer[]){
+                if (err != null) {
+                    reject(err)
+                } else {
+                    try {
+                        this.setBuffer(Buffer.concat(arr));
+                        this.decodeSignature();
+                        this.decodeVersion();
+                        // objects
+                        let size = this.decodeNumber();
+                        let objects = [];
+                        for (let i = 0; i < size; i++) {
+                            objects.push(this.decodeEObject());
+                        }
+
+                        // add objects to resource
+                        this._resource.eContents().addAll(new ImmutableEList(objects));
+                        resolve(this._resource)
+                    } catch( err ) {
+                        reject(err)
+                    }
+                }
+            })
+        })
     }
 
     decodeObjectAsync(stream: ReadStream): Promise<EObject> {
-        throw new Error("Method not implemented.");
+        return new Promise<EObject>(function(resolve,reject){
+            toArray(stream, function(err: Error, arr : Buffer[]){
+                if (err != null) {
+                    reject(err)
+                } else {
+                    try {
+                        this.setBuffer(Buffer.concat(arr));
+                        this.decodeSignature();
+                        this.decodeVersion();
+                        resolve(this.decodeEObject())
+                    } catch( err ) {
+                        reject(err)
+                    }
+                }
+            })
+        })
     }
 
     private setBuffer(buffer: ArrayLike<number> | BufferSource): void {
