@@ -1,13 +1,13 @@
 import { EResource } from "./EResource";
-import { EResourceCodec } from "./EResourceCodec";
-import { EResourceDecoder } from "./EResourceDecoder";
-import { EResourceEncoder } from "./EResourceEncoder";
+import { ECodec } from "./ECodec";
+import { EDecoder } from "./EDecoder";
+import { EEncoder } from "./EEncoder";
 
-export class NoCodec implements EResourceCodec {
-    newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
+export class NoCodec implements ECodec {
+    newEncoder(eContext: EResource, options?: Map<string, any>): EEncoder {
         return null;
     }
-    newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
+    newDecoder(eContext: EResource, options?: Map<string, any>): EDecoder {
         return null;
     }
 }

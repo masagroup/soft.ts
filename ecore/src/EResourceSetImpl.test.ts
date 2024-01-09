@@ -10,8 +10,8 @@
 import { anything, instance, mock, verify, when } from "ts-mockito";
 import {
     EObject,
-    EResourceCodec,
-    EResourceCodecRegistry,
+    ECodec,
+    ECodecRegistry,
     EResourceInternal,
     EResourceSetImpl,
     EResourceImpl,

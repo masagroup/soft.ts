@@ -7,11 +7,11 @@
 //
 // *****************************************************************************
 
-import { getResourceCodecRegistry } from "./index";
+import { getCodecRegistry } from "./index";
 
-describe("EResourceCodecRegistry", () => {
+describe("ECodecRegistry", () => {
     test("singleton ", () => {
-        let r = getResourceCodecRegistry();
+        let r = getCodecRegistry();
         expect(r).not.toBeNull();
         expect(r.getExtensionToCodecMap().size).toBe(3);
     });

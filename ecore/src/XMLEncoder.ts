@@ -21,7 +21,7 @@ import {
     EObjectInternal,
     EPackage,
     EResource,
-    EResourceEncoder,
+    EEncoder,
     EStructuralFeature,
     ExtendedMetaData,
     getEcorePackage,
@@ -78,7 +78,7 @@ function stringFormat(template: string, ...args: any[]) {
     });
 }
 
-export class XMLEncoder implements EResourceEncoder {
+export class XMLEncoder implements EEncoder {
     protected _resource: EResource;
     protected _str: XMLString = new XMLString();
     private _packages: Map<string, string> = new Map<string, string>();
@@ -161,23 +161,27 @@ export class XMLEncoder implements EResourceEncoder {
         }
     }
 
-    encodeAsync(eResource: EResource, s: WriteStream): Promise<Result<Uint8Array, Error>> {
+    encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
         return new Promise((resolve, reject) => {
             let result = this.encode(eResource);
             if (result.ok) {
                 s.write(result.val);
+                resolve(result.val);
+            } else {
+                reject(result.err);
             }
-            resolve(result);
         });
     }
 
-    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Result<Uint8Array, Error>> {
+    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
         return new Promise((resolve, reject) => {
             let result = this.encodeObject(eObject);
             if (result.ok) {
                 s.write(result.val);
+                resolve(result.val);
+            } else {
+                reject(result.err);
             }
-            resolve(result);
         });
     }
 

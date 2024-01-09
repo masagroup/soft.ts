@@ -26,7 +26,7 @@ import {
     EPackageRegistry,
     EReference,
     EResource,
-    EResourceDecoder,
+    EDecoder,
     EStructuralFeature,
     ExtendedMetaData,
     getPackageRegistry,
@@ -55,7 +55,7 @@ enum LoadFeatureKind {
     Other,
 }
 
-export class XMLDecoder implements EResourceDecoder {
+export class XMLDecoder implements EDecoder {
     protected _resource: EResource;
     protected _parser: sax.SAXParser;
     protected _attributes: { [key: string]: sax.QualifiedAttribute } = null;
@@ -181,8 +181,8 @@ export class XMLDecoder implements EResourceDecoder {
         return saxParser;
     }
 
-    decodeAsync(stream: fs.ReadStream): Promise<Result<EResource, Error>> {
-        return new Promise<Result<EResource, Error>>((resolve, reject) => {
+    decodeAsync(stream: fs.ReadStream): Promise<EResource> {
+        return new Promise<EResource>((resolve, reject) => {
             this._attachFn = function (eObject: EObject): void {
                 this._resource.eContents().add(eObject);
             };
@@ -191,15 +191,19 @@ export class XMLDecoder implements EResourceDecoder {
             };
             let saxStream = this.createSAXStream(() => {
                 let errors = this._resource.getErrors();
-                resolve(errors.isEmpty() ? Ok(this._resource) : Err(errors.get(0)));
+                if (errors.isEmpty()) {
+                    resolve(this._resource)
+                } else {
+                    reject(errors.get(0))
+                }
             });
             this._parser = (saxStream as any)["_parser"];
             stream.pipe(saxStream);
         });
     }
 
-    decodeObjectAsync(stream: fs.ReadStream): Promise<Result<EObject, Error>> {
-        return new Promise<Result<EObject, Error>>((resolve, reject) => {
+    decodeObjectAsync(stream: fs.ReadStream): Promise<EObject> {
+        return new Promise<EObject>((resolve, reject) => {
             var error: Error;
             var object: EObject;
             this._attachFn = function (eObject: EObject): void {
@@ -213,7 +217,11 @@ export class XMLDecoder implements EResourceDecoder {
                 }
             };
             let saxStream = this.createSAXStream(() => {
-                resolve(error ? Err(error) : Ok(object));
+                if (error) {
+                    reject(error)
+                } else {
+                    resolve(object)
+                }
             });
             this._parser = (saxStream as any)["_parser"];
             stream.pipe(saxStream);

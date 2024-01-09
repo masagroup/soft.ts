@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EResourceCodecRegistryImpl } from "./EResourceCodecRegistryImpl";
+import { ECodecRegistryImpl } from "./ECodecRegistryImpl";
 import { EResourceImpl } from "./EResourceImpl";
 import {
     AbstractNotifyingList,
@@ -19,7 +19,7 @@ import {
     EPackageRegistry,
     EPackageRegistryImpl,
     EResource,
-    EResourceCodecRegistry,
+    ECodecRegistry,
     EResourceInternal,
     EResourceSet,
     EResourceSetConstants,
@@ -27,7 +27,7 @@ import {
     EURIConverter,
     EURIConverterImpl,
     getPackageRegistry,
-    getResourceCodecRegistry,
+    getCodecRegistry,
 } from "./internal";
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
@@ -60,14 +60,14 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     private _resources: EList<EResource>;
     private _uriConverter: EURIConverter;
     private _uriResourceMap: Map<string, EResource>;
-    private _resourceCodecRegistry: EResourceCodecRegistry;
+    private _resourceCodecRegistry: ECodecRegistry;
     private _packageRegistry: EPackageRegistry;
 
     constructor() {
         super();
         this._resources = new ResourcesList(this);
         this._uriConverter = new EURIConverterImpl();
-        this._resourceCodecRegistry = new EResourceCodecRegistryImpl(getResourceCodecRegistry());
+        this._resourceCodecRegistry = new ECodecRegistryImpl(getCodecRegistry());
         this._packageRegistry = new EPackageRegistryImpl(getPackageRegistry());
         this._uriResourceMap = null;
     }
@@ -80,11 +80,11 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         this._packageRegistry = packageRegistry;
     }
 
-    getCodecRegistry(): EResourceCodecRegistry {
+    getCodecRegistry(): ECodecRegistry {
         return this._resourceCodecRegistry;
     }
 
-    setCodecRegistry(resourceCodecRegistry: EResourceCodecRegistry): void {
+    setCodecRegistry(resourceCodecRegistry: ECodecRegistry): void {
         this._resourceCodecRegistry = resourceCodecRegistry;
     }
 

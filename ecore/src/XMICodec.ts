@@ -8,17 +8,17 @@
 // *****************************************************************************
 
 import { EResource } from "./EResource";
-import { EResourceCodec } from "./EResourceCodec";
-import { EResourceDecoder } from "./EResourceDecoder";
-import { EResourceEncoder } from "./EResourceEncoder";
+import { ECodec } from "./ECodec";
+import { EDecoder } from "./EDecoder";
+import { EEncoder } from "./EEncoder";
 import { XMIDecoder } from "./XMIDecoder";
 import { XMIEncoder } from "./XMIEncoder";
 
-export class XMICodec implements EResourceCodec {
-    newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
+export class XMICodec implements ECodec {
+    newEncoder(eContext: EResource, options?: Map<string, any>): EEncoder {
         return new XMIEncoder(eContext, options);
     }
-    newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
+    newDecoder(eContext: EResource, options?: Map<string, any>): EDecoder {
         return new XMIDecoder(eContext, options);
     }
 }

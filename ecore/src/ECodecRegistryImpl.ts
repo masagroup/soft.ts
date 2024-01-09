@@ -1,19 +1,19 @@
 import { BinaryCodec } from "./BinaryCodec";
-import { EResourceCodec } from "./EResourceCodec";
-import { EResourceCodecRegistry } from "./EResourceCodecRegistry";
+import { ECodec } from "./ECodec";
+import { ECodecRegistry } from "./ECodecRegistry";
 import { NoCodec } from "./NoCodec";
 import { XMICodec } from "./XMICodec";
 import { XMLCodec } from "./XMLCodec";
 
-export class EResourceCodecRegistryImpl implements EResourceCodecRegistry {
-    private _protocolToCodec: Map<string, EResourceCodec>;
-    private _extensionToCodec: Map<string, EResourceCodec>;
-    private _delegate: EResourceCodecRegistry;
-    private static _instance: EResourceCodecRegistryImpl = null;
+export class ECodecRegistryImpl implements ECodecRegistry {
+    private _protocolToCodec: Map<string, ECodec>;
+    private _extensionToCodec: Map<string, ECodec>;
+    private _delegate: ECodecRegistry;
+    private static _instance: ECodecRegistryImpl = null;
 
-    public static getInstance(): EResourceCodecRegistryImpl {
+    public static getInstance(): ECodecRegistryImpl {
         if (!this._instance) {
-            this._instance = new EResourceCodecRegistryImpl();
+            this._instance = new ECodecRegistryImpl();
             this._instance._extensionToCodec.set("ecore", new XMICodec());
             this._instance._extensionToCodec.set("xml", new XMLCodec());
             this._instance._extensionToCodec.set("bin", new BinaryCodec());
@@ -22,13 +22,13 @@ export class EResourceCodecRegistryImpl implements EResourceCodecRegistry {
         return this._instance;
     }
 
-    public constructor(delegate?: EResourceCodecRegistry) {
-        this._protocolToCodec = new Map<string, EResourceCodec>();
-        this._extensionToCodec = new Map<string, EResourceCodec>();
+    public constructor(delegate?: ECodecRegistry) {
+        this._protocolToCodec = new Map<string, ECodec>();
+        this._extensionToCodec = new Map<string, ECodec>();
         this._delegate = delegate;
     }
 
-    getCodec(uri: URL): EResourceCodec {
+    getCodec(uri: URL): ECodec {
         let factory = this._protocolToCodec.get(uri.protocol);
         if (factory) {
             return factory;
@@ -51,11 +51,11 @@ export class EResourceCodecRegistryImpl implements EResourceCodecRegistry {
         return null;
     }
 
-    getProtocolToCodecMap(): Map<string, EResourceCodec> {
+    getProtocolToCodecMap(): Map<string, ECodec> {
         return this._protocolToCodec;
     }
 
-    getExtensionToCodecMap(): Map<string, EResourceCodec> {
+    getExtensionToCodecMap(): Map<string, ECodec> {
         return this._extensionToCodec;
     }
 }

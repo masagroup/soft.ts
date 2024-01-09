@@ -213,8 +213,7 @@ describe("XMLResource", () => {
 
         test("decodeObjectAsync", async () => {
             let stream = fs.createReadStream(eObjectURI);
-            let result = await decoder.decodeObjectAsync(stream);
-            if (result.ok) eObject = result.val;
+            eObject = await decoder.decodeObjectAsync(stream);
         });
 
         afterEach(() => {

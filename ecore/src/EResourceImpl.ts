@@ -8,8 +8,8 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { getResourceCodecRegistry } from "./EResourceCodecRegistry";
-import { EResourceEncoder } from "./EResourceEncoder";
+import { getCodecRegistry } from "./ECodecRegistry";
+import { EEncoder } from "./EEncoder";
 import {
     AbstractNotification,
     AbstractNotifyingList,
@@ -35,8 +35,8 @@ import {
     EURIConverterImpl,
     EventType,
     NotificationChain,
-    EResourceDecoder,
-    EResourceCodecRegistry,
+    EDecoder,
+    ECodecRegistry,
     EDiagnosticImpl,
 } from "./internal";
 
@@ -341,7 +341,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return Promise.resolve();
     }
 
-    protected doLoadFromStream(decoder: EResourceDecoder, s: fs.ReadStream): Promise<void> {
+    protected doLoadFromStream(decoder: EDecoder, s: fs.ReadStream): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             decoder
                 .decodeAsync(s)
@@ -407,7 +407,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    protected doLoadFromBuffer(decoder: EResourceDecoder, buffer: Buffer): void {
+    protected doLoadFromBuffer(decoder: EDecoder, buffer: Buffer): void {
         decoder.decode(buffer);
     }
 
@@ -524,23 +524,19 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return null;
     }
 
-    protected doSaveToStream(encoder: EResourceEncoder, s: fs.WriteStream): Promise<void> {
+    protected doSaveToStream(encoder: EEncoder, s: fs.WriteStream): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             encoder
                 .encodeAsync(this, s)
                 .then((r) => {
-                    if (r.ok) {
-                        resolve();
-                    } else {
-                        reject(r.val);
-                    }
+                    resolve();
                 })
                 .catch((reason) => reject(reason))
                 .finally(() => s.end());
         });
     }
 
-    protected doSaveToBuffer(encoder: EResourceEncoder): Buffer {
+    protected doSaveToBuffer(encoder: EEncoder): Buffer {
         let r = encoder.encode(this);
         if (r.ok) {
             return Buffer.from(r.val);
@@ -687,9 +683,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             : EResourceImpl._defaultURIConverter;
     }
 
-    private getCodecRegistry(): EResourceCodecRegistry {
+    private getCodecRegistry(): ECodecRegistry {
         return this._resourceSet
             ? this._resourceSet.getCodecRegistry()
-            : getResourceCodecRegistry();
+            : getCodecRegistry();
     }
 }

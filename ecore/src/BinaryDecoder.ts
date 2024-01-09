@@ -12,7 +12,7 @@ import {
     EObjectInternal,
     EPackage,
     EResource,
-    EResourceDecoder,
+    EDecoder,
     EStructuralFeature,
     getPackageRegistry,
     ImmutableEList,
@@ -84,7 +84,7 @@ class FeatureData {
     eDataType: EDataType;
 }
 
-export class BinaryDecoder implements EResourceDecoder {
+export class BinaryDecoder implements EDecoder {
     private _resource: EResource;
     private _bytes: Uint8Array;
     private _view: DataView;
@@ -148,11 +148,11 @@ export class BinaryDecoder implements EResourceDecoder {
         }
     }
 
-    decodeAsync(stream: ReadStream): Promise<Result<EResource, Error>> {
+    decodeAsync(stream: ReadStream): Promise<EResource> {
         throw new Error("Method not implemented.");
     }
 
-    decodeObjectAsync(stream: ReadStream): Promise<Result<EObject, Error>> {
+    decodeObjectAsync(stream: ReadStream): Promise<EObject> {
         throw new Error("Method not implemented.");
     }
 

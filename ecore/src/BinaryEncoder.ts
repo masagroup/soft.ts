@@ -1,8 +1,8 @@
 import { WriteStream } from "fs";
 import { Result } from "ts-results";
-import { EObject, EResource, EResourceEncoder } from "./internal";
+import { EObject, EResource, EEncoder } from "./internal";
 
-export class BinaryEncoder implements EResourceEncoder {
+export class BinaryEncoder implements EEncoder {
     private _resource: EResource;
 
     constructor(eContext: EResource, options: Map<string, any>) {
@@ -15,10 +15,10 @@ export class BinaryEncoder implements EResourceEncoder {
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
         throw new Error("Method not implemented.");
     }
-    encodeAsync(eResource: EResource, s: WriteStream): Promise<Result<Uint8Array, Error>> {
+    encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
         throw new Error("Method not implemented.");
     }
-    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Result<Uint8Array, Error>> {
+    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
         throw new Error("Method not implemented.");
     }
 }

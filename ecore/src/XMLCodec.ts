@@ -8,9 +8,9 @@
 // *****************************************************************************
 
 import { EResource } from "./EResource";
-import { EResourceCodec } from "./EResourceCodec";
-import { EResourceDecoder } from "./EResourceDecoder";
-import { EResourceEncoder } from "./EResourceEncoder";
+import { ECodec } from "./ECodec";
+import { EDecoder } from "./EDecoder";
+import { EEncoder } from "./EEncoder";
 import { XMLDecoder } from "./XMLDecoder";
 import { XMLEncoder } from "./XMLEncoder";
 
@@ -23,11 +23,11 @@ export class XMLOptions {
     static ROOT_OBJECTS = "ROOT_OBJECTS";
 }
 
-export class XMLCodec implements EResourceCodec {
-    newEncoder(eContext: EResource, options?: Map<string, any>): EResourceEncoder {
+export class XMLCodec implements ECodec {
+    newEncoder(eContext: EResource, options?: Map<string, any>): EEncoder {
         return new XMLEncoder(eContext, options);
     }
-    newDecoder(eContext: EResource, options?: Map<string, any>): EResourceDecoder {
+    newDecoder(eContext: EResource, options?: Map<string, any>): EDecoder {
         return new XMLDecoder(eContext, options);
     }
 }
