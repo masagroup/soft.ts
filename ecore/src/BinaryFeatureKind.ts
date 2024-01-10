@@ -1,7 +1,4 @@
-import { isEAttribute } from "./EAttributeExt";
-import { isEDataType } from "./EDataTypeExt";
-import { isEEnum } from "./EEnumExt";
-import { EStructuralFeature, isEReference } from "./internal";
+import { EStructuralFeature, isEReference, isEEnum, isEAttribute, isEDataType } from "./internal";
 
 export enum BinaryFeatureKind {
     bfkObjectContainer,
@@ -68,14 +65,33 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
 
             switch (eDataType.instanceTypeName) {
                 case "number":
+                case "java.lang.Double":
+                case "java.lang.Float":
+                case "java.lang.Integer":
+                case "java.lang.Long":
+                case "java.lang.Short":
+                case "java.math.BigInteger":
+                case "double":
+                case "float":
+                case "int":
+                case "int64":
+                case "int32":
+                case "int16":
+                case "short":
+                case "long":
                     return BinaryFeatureKind.bfkNumber;
                 case "bool":
+                case "boolean":
+                case "java.lang.Boolean":
                     return BinaryFeatureKind.bfkBool;
                 case "string":
+                case "java.lang.String":
                     return BinaryFeatureKind.bfkString;
                 case "Uint8Array":
+                case "java.util.ByteArray":
                     return BinaryFeatureKind.bfkByteArray;
                 case "Date":
+                case "java.util.Date":
                     return BinaryFeatureKind.bfkDate;
             }
             return BinaryFeatureKind.bfkData;

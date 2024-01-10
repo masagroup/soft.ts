@@ -1,5 +1,19 @@
 import { BinaryDecoder } from "./BinaryDecoder";
-import { EAttribute, EClass, EClassifier, EList, EObject, EPackage, EReference, EResource, EResourceImpl, EResourceSetImpl, UniqueIDManager, XMIProcessor, XMLProcessor } from "./internal";
+import {
+    EAttribute,
+    EClass,
+    EClassifier,
+    EList,
+    EObject,
+    EPackage,
+    EReference,
+    EResource,
+    EResourceImpl,
+    EResourceSetImpl,
+    UniqueIDManager,
+    XMIProcessor,
+    XMLProcessor,
+} from "./internal";
 
 import * as fs from "fs";
 
@@ -15,7 +29,6 @@ function loadPackage(filename: string): EPackage {
 
 describe("BinaryDecoder", () => {
     describe("complex", () => {
-
         // package
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
@@ -41,9 +54,9 @@ describe("BinaryDecoder", () => {
             "name",
         ) as EAttribute;
         expect(eLibraryNameAttribute).not.toBeNull();
-        
+
         let decoder = new BinaryDecoder(eResource, null);
-        let resource : EResource = null;
+        let resource: EResource = null;
 
         afterEach(() => {
             expect(resource).toEqual(eResource);
@@ -62,7 +75,9 @@ describe("BinaryDecoder", () => {
             expect(eLibraryBooksRefeference).not.toBeNull();
             let eBookClass = ePackage.getEClassifier("Book") as EClass;
             expect(eBookClass).not.toBeNull();
-            let eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName("title") as EAttribute;
+            let eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName(
+                "title",
+            ) as EAttribute;
             expect(eBookTitleAttribute).not.toBeNull();
             let eBookDateAttribute = eBookClass.getEStructuralFeatureFromName(
                 "publicationDate",
@@ -72,7 +87,9 @@ describe("BinaryDecoder", () => {
                 "category",
             ) as EAttribute;
             expect(eBookCategoryAttribute).not.toBeNull();
-            let eBookAuthorReference = eBookClass.getEStructuralFeatureFromName("author") as EAttribute;
+            let eBookAuthorReference = eBookClass.getEStructuralFeatureFromName(
+                "author",
+            ) as EAttribute;
             expect(eBookAuthorReference).not.toBeNull();
 
             // retrive book
@@ -108,8 +125,8 @@ describe("BinaryDecoder", () => {
 
         test("decode", () => {
             let s = fs.readFileSync(resourceURI);
-            let result = decoder.decode(s)
-            expect(result.ok).toBeTruthy()
+            let result = decoder.decode(s);
+            expect(result.ok).toBeTruthy();
             resource = result.unwrap();
         });
 
@@ -118,9 +135,8 @@ describe("BinaryDecoder", () => {
             resource = await decoder.decodeAsync(stream);
         });
     });
-    
-    describe('complex.id', () => {
-        
+
+    describe("complex.id", () => {
         let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.id.bin");
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
@@ -128,7 +144,9 @@ describe("BinaryDecoder", () => {
         // retrieve document root class , library class & library name attribute
         let eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass;
         expect(eDocumentRootClass).not.toBeNull();
-        let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName("library") as EReference;
+        let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName(
+            "library",
+        ) as EReference;
         expect(eDocumentRootLibraryFeature).not.toBeNull();
 
         let eResource = new EResourceImpl();
@@ -139,9 +157,9 @@ describe("BinaryDecoder", () => {
         let eResourceSet = new EResourceSetImpl();
         eResourceSet.getResources().add(eResource);
         eResourceSet.getPackageRegistry().registerPackage(ePackage);
-        
+
         let decoder = new BinaryDecoder(eResource, null);
-        let resource : EResource = null;
+        let resource: EResource = null;
 
         afterEach(() => {
             expect(resource).toEqual(eResource);
@@ -155,11 +173,10 @@ describe("BinaryDecoder", () => {
             expect(idManager.getID(eLibrary)).toBe("d13pf-ypXLeIySkWAX03JcP-TbA=");
         });
 
-        
         test("decode", () => {
             let s = fs.readFileSync(resourceURI);
-            let result = decoder.decode(s)
-            expect(result.ok).toBeTruthy()
+            let result = decoder.decode(s);
+            expect(result.ok).toBeTruthy();
             resource = result.unwrap();
         });
 
@@ -167,6 +184,5 @@ describe("BinaryDecoder", () => {
             let stream = fs.createReadStream(resourceURI);
             resource = await decoder.decodeAsync(stream);
         });
-        
     });
 });
