@@ -15,33 +15,25 @@ describe("BinaryFeatureKind", () => {
         when(mockReference.isContainment).thenReturn(true);
         when(mockReference.isResolveProxies).thenReturn(true);
         when(mockReference.isMany).thenReturn(true);
-        expect(getBinaryCodecFeatureKind(reference)).toEqual(
-            BinaryFeatureKind.bfkObjectContainmentListProxy,
-        );
+        expect(getBinaryCodecFeatureKind(reference)).toEqual(BinaryFeatureKind.bfkObjectContainmentListProxy);
 
         when(mockReference.eReferenceType).thenReturn(null);
         when(mockReference.isContainment).thenReturn(true);
         when(mockReference.isResolveProxies).thenReturn(true);
         when(mockReference.isMany).thenReturn(false);
-        expect(getBinaryCodecFeatureKind(reference)).toEqual(
-            BinaryFeatureKind.bfkObjectContainmentProxy,
-        );
+        expect(getBinaryCodecFeatureKind(reference)).toEqual(BinaryFeatureKind.bfkObjectContainmentProxy);
 
         when(mockReference.eReferenceType).thenReturn(null);
         when(mockReference.isContainment).thenReturn(true);
         when(mockReference.isResolveProxies).thenReturn(false);
         when(mockReference.isMany).thenReturn(true);
-        expect(getBinaryCodecFeatureKind(reference)).toEqual(
-            BinaryFeatureKind.bfkObjectContainmentList,
-        );
+        expect(getBinaryCodecFeatureKind(reference)).toEqual(BinaryFeatureKind.bfkObjectContainmentList);
 
         when(mockReference.eReferenceType).thenReturn(null);
         when(mockReference.isContainment).thenReturn(true);
         when(mockReference.isResolveProxies).thenReturn(false);
         when(mockReference.isMany).thenReturn(false);
-        expect(getBinaryCodecFeatureKind(reference)).toEqual(
-            BinaryFeatureKind.bfkObjectContainment,
-        );
+        expect(getBinaryCodecFeatureKind(reference)).toEqual(BinaryFeatureKind.bfkObjectContainment);
 
         when(mockReference.eReferenceType).thenReturn(null);
         when(mockReference.isContainment).thenReturn(false);
@@ -53,9 +45,7 @@ describe("BinaryFeatureKind", () => {
         when(mockReference.isContainment).thenReturn(false);
         when(mockReference.isContainer).thenReturn(true);
         when(mockReference.isResolveProxies).thenReturn(true);
-        expect(getBinaryCodecFeatureKind(reference)).toEqual(
-            BinaryFeatureKind.bfkObjectContainerProxy,
-        );
+        expect(getBinaryCodecFeatureKind(reference)).toEqual(BinaryFeatureKind.bfkObjectContainerProxy);
 
         when(mockReference.eReferenceType).thenReturn(null);
         when(mockReference.isContainment).thenReturn(false);

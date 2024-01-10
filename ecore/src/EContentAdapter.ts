@@ -124,11 +124,7 @@ export class EContentAdapter extends AbstractEAdapter {
                 if (notification.oldValue) {
                     let checkContainer = isEResource(notification.notifier);
                     let checkResource = notification.feature != null;
-                    this.removeAdapterWithChecks(
-                        notification.oldValue as ENotifier,
-                        checkContainer,
-                        checkResource,
-                    );
+                    this.removeAdapterWithChecks(notification.oldValue as ENotifier, checkContainer, checkResource);
                 }
                 break;
             }
@@ -158,27 +154,17 @@ export class EContentAdapter extends AbstractEAdapter {
         }
     }
 
-    private removeAdapterWithChecks(
-        notifier: ENotifier,
-        checkContainer: boolean,
-        checkResource: boolean,
-    ): void {
+    private removeAdapterWithChecks(notifier: ENotifier, checkContainer: boolean, checkResource: boolean): void {
         if (notifier) {
             if (checkContainer || checkResource) {
                 if (isEObjectInternal(notifier)) {
                     if (checkResource) {
-                        if (
-                            notifier.eInternalResource() &&
-                            notifier.eInternalResource().eAdapters.contains(this)
-                        ) {
+                        if (notifier.eInternalResource() && notifier.eInternalResource().eAdapters.contains(this)) {
                             return;
                         }
                     }
                     if (checkContainer) {
-                        if (
-                            notifier.eInternalContainer() &&
-                            notifier.eInternalResource().eAdapters.contains(this)
-                        ) {
+                        if (notifier.eInternalContainer() && notifier.eInternalResource().eAdapters.contains(this)) {
                             return;
                         }
                     }

@@ -86,11 +86,7 @@ export class XMLProcessor {
         return resource.save(options);
     }
 
-    saveToStream(
-        resource: EResource,
-        s: fs.WriteStream,
-        options?: Map<string, any>,
-    ): Promise<void> {
+    saveToStream(resource: EResource, s: fs.WriteStream, options?: Map<string, any>): Promise<void> {
         return resource.saveToStream(s, options);
     }
 

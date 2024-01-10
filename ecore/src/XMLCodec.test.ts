@@ -58,9 +58,7 @@ describe("XMLResource", () => {
 
             let eLibraryClass = ePackage.getEClassifier("Library") as EClass;
             expect(eLibraryClass).not.toBeNull();
-            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName(
-                "name",
-            ) as EAttribute;
+            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute;
             expect(eLibraryNameAttribute).not.toBeNull();
 
             // check library name
@@ -148,9 +146,7 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let resourceURI = new URL(
-            "file:///" + __dirname + "/../testdata/library.complex.noroot.xml",
-        );
+        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.noroot.xml");
         let resource: EResource = null;
         let options = new Map<string, any>([
             [XMLOptions.EXTENDED_META_DATA, new ExtendedMetaData()],
@@ -165,9 +161,7 @@ describe("XMLResource", () => {
 
             let eLibraryClass = ePackage.getEClassifier("Library") as EClass;
             expect(eLibraryClass).not.toBeNull();
-            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName(
-                "name",
-            ) as EAttribute;
+            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute;
             expect(eLibraryNameAttribute).not.toBeNull();
 
             // check library name

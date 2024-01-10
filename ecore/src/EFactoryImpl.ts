@@ -71,13 +71,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
             }
         } else if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EFACTORY__EPACKAGE,
-                    newEPackage,
-                    newEPackage,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.EFACTORY__EPACKAGE, newEPackage, newEPackage),
             );
         }
     }
@@ -164,11 +158,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EFACTORY__EPACKAGE: {
                 let msgs = notifications;
@@ -183,11 +173,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EFACTORY__EPACKAGE: {
                 return this.basicSetEPackage(null, notifications);

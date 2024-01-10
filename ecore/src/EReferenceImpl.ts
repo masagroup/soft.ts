@@ -88,13 +88,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         this._eOpposite = newEOpposite;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EREFERENCE__EOPPOSITE,
-                    oldEOpposite,
-                    newEOpposite,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite),
             );
         }
     }

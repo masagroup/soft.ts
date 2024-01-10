@@ -92,12 +92,8 @@ describe("EStringToStringMapEntryImpl", () => {
     test("eGetFromID", () => {
         let o = new EStringToStringMapEntryImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, true)).toStrictEqual(
-            o.key,
-        );
-        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, true)).toStrictEqual(
-            o.value,
-        );
+        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, true)).toStrictEqual(o.key);
+        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, true)).toStrictEqual(o.value);
     });
 
     test("eSetFromID", () => {
@@ -106,16 +102,12 @@ describe("EStringToStringMapEntryImpl", () => {
         {
             let value = "Test String";
             o.eSetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, value);
-            expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, false)).toBe(
-                value,
-            );
+            expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, false)).toBe(value);
         }
         {
             let value = "Test String";
             o.eSetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, value);
-            expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, false)).toBe(
-                value,
-            );
+            expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, false)).toBe(value);
         }
     });
 

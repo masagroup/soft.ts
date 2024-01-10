@@ -65,22 +65,14 @@ export class EParameterImpl extends ETypedElementExt implements EParameter {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EPARAMETER__EOPERATION: {
                 let msgs = notifications;
                 if (this.eContainer() != null) {
                     msgs = this.eBasicRemoveFromContainer(msgs);
                 }
-                return this.eBasicSetContainer(
-                    otherEnd,
-                    EcoreConstants.EPARAMETER__EOPERATION,
-                    msgs,
-                );
+                return this.eBasicSetContainer(otherEnd, EcoreConstants.EPARAMETER__EOPERATION, msgs);
             }
             default: {
                 return super.eBasicInverseAdd(otherEnd, featureID, notifications);
@@ -88,18 +80,10 @@ export class EParameterImpl extends ETypedElementExt implements EParameter {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EPARAMETER__EOPERATION: {
-                return this.eBasicSetContainer(
-                    null,
-                    EcoreConstants.EPARAMETER__EOPERATION,
-                    notifications,
-                );
+                return this.eBasicSetContainer(null, EcoreConstants.EPARAMETER__EOPERATION, notifications);
             }
             default: {
                 return super.eBasicInverseRemove(otherEnd, featureID, notifications);

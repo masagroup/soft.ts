@@ -44,15 +44,11 @@ describe("BinaryDecoder", () => {
         // retrieve document root class , library class & library name attribute
         let eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass;
         expect(eDocumentRootClass).not.toBeNull();
-        let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName(
-            "library",
-        ) as EReference;
+        let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName("library") as EReference;
         expect(eDocumentRootLibraryFeature).not.toBeNull();
         let eLibraryClass = ePackage.getEClassifier("Library") as EClass;
         expect(eLibraryClass).not.toBeNull();
-        let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName(
-            "name",
-        ) as EAttribute;
+        let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute;
         expect(eLibraryNameAttribute).not.toBeNull();
 
         let decoder = new BinaryDecoder(eResource, null);
@@ -69,27 +65,17 @@ describe("BinaryDecoder", () => {
             expect(eLibrary.eGet(eLibraryNameAttribute)).toBe("My Library");
 
             // book class and attributes
-            let eLibraryBooksRefeference = eLibraryClass.getEStructuralFeatureFromName(
-                "books",
-            ) as EReference;
+            let eLibraryBooksRefeference = eLibraryClass.getEStructuralFeatureFromName("books") as EReference;
             expect(eLibraryBooksRefeference).not.toBeNull();
             let eBookClass = ePackage.getEClassifier("Book") as EClass;
             expect(eBookClass).not.toBeNull();
-            let eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName(
-                "title",
-            ) as EAttribute;
+            let eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName("title") as EAttribute;
             expect(eBookTitleAttribute).not.toBeNull();
-            let eBookDateAttribute = eBookClass.getEStructuralFeatureFromName(
-                "publicationDate",
-            ) as EAttribute;
+            let eBookDateAttribute = eBookClass.getEStructuralFeatureFromName("publicationDate") as EAttribute;
             expect(eBookDateAttribute).not.toBeNull();
-            let eBookCategoryAttribute = eBookClass.getEStructuralFeatureFromName(
-                "category",
-            ) as EAttribute;
+            let eBookCategoryAttribute = eBookClass.getEStructuralFeatureFromName("category") as EAttribute;
             expect(eBookCategoryAttribute).not.toBeNull();
-            let eBookAuthorReference = eBookClass.getEStructuralFeatureFromName(
-                "author",
-            ) as EAttribute;
+            let eBookAuthorReference = eBookClass.getEStructuralFeatureFromName("author") as EAttribute;
             expect(eBookAuthorReference).not.toBeNull();
 
             // retrive book
@@ -116,9 +102,7 @@ describe("BinaryDecoder", () => {
 
             let eWriterClass = ePackage.getEClassifier("Writer") as EClass;
             expect(eWriterClass).not.toBeNull();
-            let eWriterNameAttribute = eWriterClass.getEStructuralFeatureFromName(
-                "firstName",
-            ) as EAttribute;
+            let eWriterNameAttribute = eWriterClass.getEStructuralFeatureFromName("firstName") as EAttribute;
             expect(eWriterNameAttribute).not.toBeNull();
             expect(author.eGet(eWriterNameAttribute)).toBe("First Name 0");
         });
@@ -144,9 +128,7 @@ describe("BinaryDecoder", () => {
         // retrieve document root class , library class & library name attribute
         let eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass;
         expect(eDocumentRootClass).not.toBeNull();
-        let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName(
-            "library",
-        ) as EReference;
+        let eDocumentRootLibraryFeature = eDocumentRootClass.getEStructuralFeatureFromName("library") as EReference;
         expect(eDocumentRootLibraryFeature).not.toBeNull();
 
         let eResource = new EResourceImpl();

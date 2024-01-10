@@ -7,15 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    ENotifier,
-    EResource,
-    EList,
-    EObject,
-    EURIConverter,
-    EPackageRegistry,
-    ECodecRegistry,
-} from "./internal";
+import { ENotifier, EResource, EList, EObject, EURIConverter, EPackageRegistry, ECodecRegistry } from "./internal";
 
 export class EResourceSetConstants {
     public static readonly RESOURCE_SET__RESOURCES: number = 0;

@@ -305,30 +305,18 @@ describe("EGenericTypeImpl", () => {
     test("eGetFromID", () => {
         let o = new EGenericTypeImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, true)).toStrictEqual(
-            o.eClassifier,
-        );
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, true)).toStrictEqual(
-            o.eLowerBound,
-        );
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, true)).toStrictEqual(
-            o.eRawType,
-        );
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, true)).toStrictEqual(
-            o.eTypeArguments,
-        );
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, true)).toStrictEqual(o.eClassifier);
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, true)).toStrictEqual(o.eLowerBound);
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, true)).toStrictEqual(o.eRawType);
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, true)).toStrictEqual(o.eTypeArguments);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, false),
                 (o.eTypeArguments as EObjectList<EGenericType>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER, true)).toStrictEqual(
-            o.eTypeParameter,
-        );
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, true)).toStrictEqual(
-            o.eUpperBound,
-        );
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER, true)).toStrictEqual(o.eTypeParameter);
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, true)).toStrictEqual(o.eUpperBound);
     });
 
     test("eSetFromID", () => {
@@ -457,9 +445,7 @@ describe("EGenericTypeImpl", () => {
     test("eInvokeFromID", () => {
         let o = new EGenericTypeImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.EGENERIC_TYPE__IS_INSTANCE_EJAVAOBJECT, null),
-        ).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.EGENERIC_TYPE__IS_INSTANCE_EJAVAOBJECT, null)).toThrow(Error);
     });
 
     test("eBasicInverseRemove", () => {

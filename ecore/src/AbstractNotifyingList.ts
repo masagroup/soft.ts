@@ -30,9 +30,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
     }
 
     get isNotificationRequired(): boolean {
-        return (
-            this.notifier != null && this.notifier.eDeliver && !this.notifier.eAdapters.isEmpty()
-        );
+        return this.notifier != null && this.notifier.eDeliver && !this.notifier.eAdapters.isEmpty();
     }
 
     addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
@@ -50,11 +48,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         return notifications;
     }
 
-    setWithNotification(
-        index: number,
-        e: E,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    setWithNotification(index: number, e: E, notifications: ENotificationChain): ENotificationChain {
         let old = this.doSet(index, e);
         return this.createAndAddNotification(notifications, EventType.SET, old, e, index);
     }
@@ -104,12 +98,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         }
         this.createAndDispatchNotificationFn(notifications, () => {
             if (c.size() == 1) {
-                return this.createNotification(
-                    EventType.ADD,
-                    null,
-                    c[Symbol.iterator]().next().value,
-                    index,
-                );
+                return this.createNotification(EventType.ADD, null, c[Symbol.iterator]().next().value, index);
             } else {
                 return this.createNotification(EventType.ADD_MANY, null, c.toArray(), index);
             }
@@ -123,13 +112,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
             let notifications: ENotificationChain = null;
             notifications = this.inverseRemove(oldObject, notifications);
             notifications = this.inverseAdd(newObject, notifications);
-            this.createAndDispatchNotification(
-                notifications,
-                EventType.SET,
-                oldObject,
-                newObject,
-                index,
-            );
+            this.createAndDispatchNotification(notifications, EventType.SET, oldObject, newObject, index);
         }
         return oldObject;
     }

@@ -7,14 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    EClass,
-    EList,
-    ENotificationChain,
-    EObject,
-    EResource,
-    EStructuralFeature,
-} from "./internal";
+import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature } from "./internal";
 
 export interface EDynamicProperties {
     eDynamicGet(dynamicFeatureID: number): any;
@@ -34,17 +27,9 @@ export interface EObjectInternal extends EObject {
     eSetInternalResource(resource: EResource): void;
     eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain;
 
-    eInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain;
+    eInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
 
-    eInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain;
+    eInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
 
     eDerivedFeatureID(container: EObject, featureID: number): number;
 
@@ -60,17 +45,9 @@ export interface EObjectInternal extends EObject {
 
     eInvokeFromID(operationID: number, args: EList<any>): any;
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain;
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain;
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
 
     eObjectForFragmentSegment(fragment: string): EObject;
 

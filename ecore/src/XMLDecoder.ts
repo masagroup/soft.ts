@@ -95,8 +95,7 @@ export class XMLDecoder implements EDecoder {
         if (options) {
             this._idAttributeName = options.get(XMLOptions.ID_ATTRIBUTE_NAME);
             this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT);
-            this._isResolveDeferred =
-                options.get(XMLOptions.DEFERRED_REFERENCE_RESOLUTION) === true;
+            this._isResolveDeferred = options.get(XMLOptions.DEFERRED_REFERENCE_RESOLUTION) === true;
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA);
             if (options.get(XMLOptions.DEFERRED_ROOT_ATTACHMENT) === true) {
                 this._deferred = [];
@@ -324,12 +323,7 @@ export class XMLDecoder implements EDecoder {
 
     private onError(err: Error) {
         this.error(
-            new EDiagnosticImpl(
-                err.message,
-                this._resource.eURI.toString(),
-                this._parser.line,
-                this._parser.column,
-            ),
+            new EDiagnosticImpl(err.message, this._resource.eURI.toString(), this._parser.line, this._parser.column),
         );
     }
 
@@ -379,9 +373,7 @@ export class XMLDecoder implements EDecoder {
 
     private recordSchemaLocations(eObject: EObject) {
         if (this._extendedMetaData && eObject) {
-            let xmlnsPrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(
-                eObject.eClass(),
-            );
+            let xmlnsPrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(eObject.eClass());
             if (xmlnsPrefixMapFeature) {
                 let m = eObject.eGet(xmlnsPrefixMapFeature) as EMap<string, string>;
                 for (let [key, value] of this._prefixesToURI) {
@@ -392,10 +384,7 @@ export class XMLDecoder implements EDecoder {
     }
 
     private handleSchemaLocation(): void {
-        let xsiSchemaLocation = this.getAttributeValue(
-            XMLConstants.xsiURI,
-            XMLConstants.schemaLocationAttrib,
-        );
+        let xsiSchemaLocation = this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.schemaLocationAttrib);
         if (xsiSchemaLocation) {
             this.handleXSISchemaLocation(xsiSchemaLocation);
         }
@@ -491,11 +480,7 @@ export class XMLDecoder implements EDecoder {
         }
     }
 
-    private createObjectWithFactory(
-        eFactory: EFactory,
-        eType: EClassifier,
-        handleAttributes: boolean = true,
-    ): EObject {
+    private createObjectWithFactory(eFactory: EFactory, eType: EClassifier, handleAttributes: boolean = true): EObject {
         if (eFactory) {
             if (isEClass(eType) && !eType.isAbstract) {
                 let eObject = eFactory.create(eType);
@@ -522,11 +507,7 @@ export class XMLDecoder implements EDecoder {
         return eResult;
     }
 
-    private createObjectFromTypeName(
-        eObject: EObject,
-        qname: string,
-        eFeature: EStructuralFeature,
-    ): EObject {
+    private createObjectFromTypeName(eObject: EObject, qname: string, eFeature: EStructuralFeature): EObject {
         let prefix = "";
         let local = qname;
         let index = qname.indexOf(":");
@@ -736,12 +717,7 @@ export class XMLDecoder implements EDecoder {
         }
     }
 
-    private setFeatureValue(
-        eObject: EObject,
-        eFeature: EStructuralFeature,
-        value: any,
-        position: number,
-    ) {
+    private setFeatureValue(eObject: EObject, eFeature: EStructuralFeature, value: any, position: number) {
         let kind = this.getLoadFeatureKind(eFeature);
         switch (kind) {
             case LoadFeatureKind.Single: {

@@ -188,9 +188,7 @@ function utf8EncodeTEencodeInto(str: string, output: Uint8Array, outputOffset: n
     sharedTextEncoder!.encodeInto(str, output.subarray(outputOffset));
 }
 
-export const utf8EncodeTE = sharedTextEncoder?.encodeInto
-    ? utf8EncodeTEencodeInto
-    : utf8EncodeTEencode;
+export const utf8EncodeTE = sharedTextEncoder?.encodeInto ? utf8EncodeTEencodeInto : utf8EncodeTEencode;
 
 const CHUNK_SIZE = 0x1_000;
 

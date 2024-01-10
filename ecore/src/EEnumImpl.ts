@@ -141,11 +141,7 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
                 let list = this.eLiterals as ENotifyingList<EEnumLiteral>;
@@ -158,11 +154,7 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
                 let list = this.eLiterals as ENotifyingList<EEnumLiteral>;

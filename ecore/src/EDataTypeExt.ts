@@ -7,14 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    EClassifier,
-    EcoreConstants,
-    EDataType,
-    EDataTypeImpl,
-    EventType,
-    Notification,
-} from "./internal";
+import { EClassifier, EcoreConstants, EDataType, EDataTypeImpl, EventType, Notification } from "./internal";
 
 export function isEDataType(e: EClassifier): e is EDataType {
     return e == undefined ? undefined : "isSerializable" in e;

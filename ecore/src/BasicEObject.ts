@@ -24,10 +24,7 @@ import {
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
 
-abstract class AbstractContentsList
-    extends ImmutableEList<EObject>
-    implements EObjectList<EObject>
-{
+abstract class AbstractContentsList extends ImmutableEList<EObject> implements EObjectList<EObject> {
     protected _obj: BasicEObject;
     protected _getFeatureFn: getFeatureFnType;
     private _initialized = false;
@@ -193,9 +190,7 @@ export class BasicEObject extends AbstractEObject {
 
     eContents(): EList<EObject> {
         if (!this._contentsListAdapter)
-            this._contentsListAdapter = new ContentsListAdapter(this, function (
-                c: EClass,
-            ): EList<EStructuralFeature> {
+            this._contentsListAdapter = new ContentsListAdapter(this, function (c: EClass): EList<EStructuralFeature> {
                 return c.eContainmentFeatures;
             });
         return this._contentsListAdapter.getList();

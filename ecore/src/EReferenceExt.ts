@@ -7,14 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    EClass,
-    EClassifier,
-    EReference,
-    EReferenceImpl,
-    EStructuralFeature,
-    isEClass,
-} from "./internal";
+import { EClass, EClassifier, EReference, EReferenceImpl, EStructuralFeature, isEClass } from "./internal";
 
 export function isEReference(s: EStructuralFeature): s is EReference {
     return "eReferenceType" in s;

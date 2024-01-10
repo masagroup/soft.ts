@@ -62,15 +62,7 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
         let oldIsID = this._isID;
         this._isID = newIsID;
         if (this.eNotificationRequired) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EATTRIBUTE__ID,
-                    oldIsID,
-                    newIsID,
-                ),
-            );
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EATTRIBUTE__ID, oldIsID, newIsID));
         }
     }
 

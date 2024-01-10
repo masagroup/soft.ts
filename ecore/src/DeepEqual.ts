@@ -53,10 +53,7 @@ export class DeepEqual {
         if (eObj1.eIsProxy()) {
             let eURI1 = (eObj1 as EObjectInternal).eProxyURI();
             let eURI2 = (eObj2 as EObjectInternal).eProxyURI();
-            if (
-                (eURI1 == null && eURI2 == null) ||
-                (eURI1 && eURI2 && eURI1.toString() == eURI2.toString())
-            ) {
+            if ((eURI1 == null && eURI2 == null) || (eURI1 && eURI2 && eURI1.toString() == eURI2.toString())) {
                 this._objects.set(eObj1, eObj2);
                 this._objects.set(eObj2, eObj1);
                 return true;

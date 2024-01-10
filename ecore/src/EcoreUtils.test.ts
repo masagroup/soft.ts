@@ -193,9 +193,7 @@ describe("EcoreUtils", () => {
             eReference2.name = "reference2";
             eReference2.isContainment = false;
             eReference2.eType = eClass2;
-            eClass1.eStructuralFeatures.addAll(
-                new ImmutableEList<EReference>([eReference1, eReference2]),
-            );
+            eClass1.eStructuralFeatures.addAll(new ImmutableEList<EReference>([eReference1, eReference2]));
 
             // the model
             let eObject1 = eFactory.create(eClass1);

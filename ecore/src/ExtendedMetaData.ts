@@ -22,9 +22,7 @@ const annotationURI = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
 export class ExtendedMetaData {
     private _metaData: Map<any, any> = new Map<any, any>();
 
-    private getENamedElementExtendedMetaData(
-        eElement: ENamedElement,
-    ): ENamedElementExtendedMetaData {
+    private getENamedElementExtendedMetaData(eElement: ENamedElement): ENamedElementExtendedMetaData {
         let result = this._metaData.get(eElement);
         if (!result) {
             if (isEStructuralFeature(eElement)) {
@@ -37,9 +35,7 @@ export class ExtendedMetaData {
         return result;
     }
 
-    private getEStructuralFeatureExtentedMetaData(
-        eFeature: EStructuralFeature,
-    ): EStructuralFeatureExtentedMetaData {
+    private getEStructuralFeatureExtentedMetaData(eFeature: EStructuralFeature): EStructuralFeatureExtentedMetaData {
         let result = this._metaData.get(eFeature);
         if (!result) {
             result = new EStructuralFeatureExtentedMetaDataImpl(this, eFeature);
@@ -165,10 +161,7 @@ class EPackageExtentedMetaDataImpl implements EPackageExtentedMetaData {
         let eResult = this._nameToClassifierMap?.get(name);
         if (!eResult) {
             let eClassifiers = this._ePackage.eClassifiers;
-            if (
-                !this._nameToClassifierMap ||
-                this._nameToClassifierMap.size != eClassifiers.size()
-            ) {
+            if (!this._nameToClassifierMap || this._nameToClassifierMap.size != eClassifiers.size()) {
                 this._nameToClassifierMap = new Map<string, EClassifier>();
                 for (const eClassifier of eClassifiers) {
                     let eClassifierName = this._emd.getName(eClassifier);

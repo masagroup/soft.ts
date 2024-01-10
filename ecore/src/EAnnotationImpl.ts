@@ -82,8 +82,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     set eModelElement(newEModelElement: EModelElement) {
         if (
             newEModelElement != this.eInternalContainer() ||
-            (newEModelElement != null &&
-                this.eContainerFeatureID() != EcoreConstants.EANNOTATION__EMODEL_ELEMENT)
+            (newEModelElement != null && this.eContainerFeatureID() != EcoreConstants.EANNOTATION__EMODEL_ELEMENT)
         ) {
             let notifications: ENotificationChain = null;
             if (this.eInternalContainer() != null) {
@@ -113,15 +112,8 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         }
     }
 
-    basicSetEModelElement(
-        newEModelElement: EModelElement,
-        msgs: ENotificationChain,
-    ): ENotificationChain {
-        return this.eBasicSetContainer(
-            newEModelElement,
-            EcoreConstants.EANNOTATION__EMODEL_ELEMENT,
-            msgs,
-        );
+    basicSetEModelElement(newEModelElement: EModelElement, msgs: ENotificationChain): ENotificationChain {
+        return this.eBasicSetContainer(newEModelElement, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, msgs);
     }
 
     // get the value of references
@@ -143,13 +135,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         this._source = newSource;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EANNOTATION__SOURCE,
-                    oldSource,
-                    newSource,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__SOURCE, oldSource, newSource),
             );
         }
     }
@@ -291,11 +277,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__EMODEL_ELEMENT: {
                 let msgs = notifications;
@@ -310,11 +292,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
                 let list = this.contents as ENotifyingList<EObject>;

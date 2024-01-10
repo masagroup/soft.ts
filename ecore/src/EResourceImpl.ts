@@ -100,10 +100,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
         return n;
     }
 
-    protected inverseRemove(
-        eObject: EObject,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    protected inverseRemove(eObject: EObject, notifications: ENotificationChain): ENotificationChain {
         this._resource.detached(eObject);
         let n = (eObject as EObjectInternal).eSetResource(null, notifications);
         return n;
@@ -167,14 +164,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._uri = uri;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new ResourceNotification(
-                    this,
-                    EResourceConstants.RESOURCE__URI,
-                    EventType.SET,
-                    oldURI,
-                    uri,
-                    -1,
-                ),
+                new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1),
             );
         }
     }
@@ -243,10 +233,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     id = this.getIDForObject(eObject);
                     if (id.length == 0) {
                         fragmentPath.unshift(
-                            eContainer.eURIFragmentSegment(
-                                internalEObject.eContainingFeature(),
-                                internalEObject,
-                            ),
+                            eContainer.eURIFragmentSegment(internalEObject.eContainingFeature(), internalEObject),
                         );
                     }
                     internalEObject = eContainer;
@@ -646,8 +633,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     private getObjectByPath(uriFragmentPath: string[]): EObject {
         let eObject: EObject = null;
-        if (!uriFragmentPath || uriFragmentPath.length == 0)
-            eObject = this.getObjectForRootSegment("");
+        if (!uriFragmentPath || uriFragmentPath.length == 0) eObject = this.getObjectForRootSegment("");
         else eObject = this.getObjectForRootSegment(uriFragmentPath[0]);
 
         for (let i = 1; i < uriFragmentPath.length && eObject != null; i++)
@@ -678,9 +664,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     private getURIConverter(): EURIConverter {
-        return this._resourceSet
-            ? this._resourceSet.getURIConverter()
-            : EResourceImpl._defaultURIConverter;
+        return this._resourceSet ? this._resourceSet.getURIConverter() : EResourceImpl._defaultURIConverter;
     }
 
     private getCodecRegistry(): ECodecRegistry {

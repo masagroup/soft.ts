@@ -51,9 +51,7 @@ describe("EModelElementImpl", () => {
     test("eGetFromID", () => {
         let o = new EModelElementImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, true)).toStrictEqual(
-            o.eAnnotations,
-        );
+        expect(o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, true)).toStrictEqual(o.eAnnotations);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, false),
@@ -70,18 +68,14 @@ describe("EModelElementImpl", () => {
             let mockValue = mock<EAnnotationInternal>();
             let value = instance(mockValue);
             let l = new ImmutableEList<EAnnotation>([value]);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).thenReturn(null);
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, l);
             // checks
             expect(o.eAnnotations.size()).toBe(1);
             expect(o.eAnnotations.get(0)).toBe(value);
-            verify(
-                mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything()),
-            ).once();
+            verify(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).once();
         }
     });
 
@@ -106,9 +100,7 @@ describe("EModelElementImpl", () => {
     test("eInvokeFromID", () => {
         let o = new EModelElementImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.EMODEL_ELEMENT__GET_EANNOTATION_ESTRING, null),
-        ).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.EMODEL_ELEMENT__GET_EANNOTATION_ESTRING, null)).toThrow(Error);
     });
 
     test("eBasicInverseAdd", () => {
@@ -141,9 +133,7 @@ describe("EModelElementImpl", () => {
             // initialize list with a mock object
             let mockValue = mock<EAnnotationInternal>();
             let value = instance(mockValue);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).thenReturn(null);
 
             o.eAnnotations.add(value);
 

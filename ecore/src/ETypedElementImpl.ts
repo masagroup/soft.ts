@@ -79,13 +79,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         this._eType = newEType;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ETYPED_ELEMENT__ETYPE,
-                    oldEType,
-                    newEType,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType),
             );
         }
     }
@@ -98,15 +92,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     // unSetEType unset the value of _eType
     unSetEType(): void {
         if (this.eNotificationRequired) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.UNSET,
-                    EcoreConstants.ETYPED_ELEMENT__ETYPE,
-                    null,
-                    null,
-                ),
-            );
+            this.eNotify(new Notification(this, EventType.UNSET, EcoreConstants.ETYPED_ELEMENT__ETYPE, null, null));
         }
     }
 
@@ -153,13 +139,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         this._isUnique = newIsUnique;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ETYPED_ELEMENT__UNIQUE,
-                    oldIsUnique,
-                    newIsUnique,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldIsUnique, newIsUnique),
             );
         }
     }

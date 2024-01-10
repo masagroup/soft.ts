@@ -243,20 +243,14 @@ describe("ETypedElementImpl", () => {
         let o = new ETypedElementImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE, true)).toStrictEqual(o.eType);
-        expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, true)).toStrictEqual(
-            o.lowerBound,
-        );
+        expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, true)).toStrictEqual(o.lowerBound);
         expect(() => o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__MANY, true)).toThrow(Error);
         expect(() => o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__MANY, false)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ORDERED, true)).toStrictEqual(
-            o.isOrdered,
-        );
+        expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ORDERED, true)).toStrictEqual(o.isOrdered);
         expect(() => o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__REQUIRED, true)).toThrow(Error);
         expect(() => o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__REQUIRED, false)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UNIQUE, true)).toStrictEqual(o.isUnique);
-        expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, true)).toStrictEqual(
-            o.upperBound,
-        );
+        expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, true)).toStrictEqual(o.upperBound);
     });
 
     test("eSetFromID", () => {

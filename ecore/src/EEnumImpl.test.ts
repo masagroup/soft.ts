@@ -77,18 +77,14 @@ describe("EEnumImpl", () => {
             let mockValue = mock<EEnumLiteralInternal>();
             let value = instance(mockValue);
             let l = new ImmutableEList<EEnumLiteral>([value]);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).thenReturn(null);
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EENUM__ELITERALS, l);
             // checks
             expect(o.eLiterals.size()).toBe(1);
             expect(o.eLiterals.get(0)).toBe(value);
-            verify(
-                mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything()),
-            ).once();
+            verify(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).once();
         }
     });
 
@@ -113,15 +109,9 @@ describe("EEnumImpl", () => {
     test("eInvokeFromID", () => {
         let o = new EEnumImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_BY_LITERAL_ESTRING, null),
-        ).toThrow(Error);
-        expect(() => o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_EINT, null)).toThrow(
-            Error,
-        );
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_ESTRING, null),
-        ).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_BY_LITERAL_ESTRING, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_EINT, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_ESTRING, null)).toThrow(Error);
     });
 
     test("eBasicInverseAdd", () => {
@@ -154,9 +144,7 @@ describe("EEnumImpl", () => {
             // initialize list with a mock object
             let mockValue = mock<EEnumLiteralInternal>();
             let value = instance(mockValue);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).thenReturn(null);
 
             o.eLiterals.add(value);
 

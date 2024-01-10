@@ -24,9 +24,7 @@ import * as MsgPack from "./MsgPack";
 
 var toArray = require("stream-to-array");
 
-function ensureUint8Array(
-    buffer: ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer,
-): Uint8Array {
+function ensureUint8Array(buffer: ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer): Uint8Array {
     if (buffer instanceof Uint8Array) {
         return buffer;
     } else if (ArrayBuffer.isView(buffer)) {
@@ -125,14 +123,7 @@ export class BinaryDecoder implements EDecoder {
                     let err = e as Error;
                     this._resource
                         .getErrors()
-                        .add(
-                            new EDiagnosticImpl(
-                                err.message,
-                                this._resource.eURI.toString(),
-                                -1,
-                                -1,
-                            ),
-                        );
+                        .add(new EDiagnosticImpl(err.message, this._resource.eURI.toString(), -1, -1));
                 }
             }
             return Err(e);
@@ -337,9 +328,7 @@ export class BinaryDecoder implements EDecoder {
 
             // retrieve package
             let eResourceSet = this._resource.eResourceSet();
-            let packageRegistry = eResourceSet
-                ? eResourceSet.getPackageRegistry()
-                : getPackageRegistry();
+            let packageRegistry = eResourceSet ? eResourceSet.getPackageRegistry() : getPackageRegistry();
             let ePackage = packageRegistry.getPackage(nsURI);
             if (!ePackage) {
                 let eObject = eResourceSet.getEObject(uri, true);
@@ -386,10 +375,7 @@ export class BinaryDecoder implements EDecoder {
                 let values = [];
                 for (let i = 0; i < size; i++) {
                     let valueStr = this.decodeString();
-                    let value = featureData.eFactory.createFromString(
-                        featureData.eDataType,
-                        valueStr,
-                    );
+                    let value = featureData.eFactory.createFromString(featureData.eDataType, valueStr);
                     values.push(value);
                 }
                 let l = eObject.eGetResolve(featureData.eFeature, false) as EList<any>;
@@ -452,10 +438,7 @@ export class BinaryDecoder implements EDecoder {
     private newFeatureData(eClassData: ClassData, featureID: number): FeatureData {
         let eFeatureName = this.decodeString();
         let eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName);
-        if (!eFeature)
-            throw new Error(
-                `Unable to find feature ${eFeatureName} in ${eClassData.eClass.name} EClass`,
-            );
+        if (!eFeature) throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.name} EClass`);
         let featureData = new FeatureData();
         featureData.eFeature = eFeature;
         featureData.featureID = featureID;

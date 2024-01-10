@@ -224,45 +224,35 @@ describe("EClassImpl", () => {
         let o = new EClassImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.ECLASS__ABSTRACT, true)).toStrictEqual(o.isAbstract);
-        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_ATTRIBUTES, true)).toStrictEqual(
-            o.eAllAttributes,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_ATTRIBUTES, true)).toStrictEqual(o.eAllAttributes);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_ATTRIBUTES, false),
                 (o.eAllAttributes as EObjectList<EAttribute>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_CONTAINMENTS, true)).toStrictEqual(
-            o.eAllContainments,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_CONTAINMENTS, true)).toStrictEqual(o.eAllContainments);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_CONTAINMENTS, false),
                 (o.eAllContainments as EObjectList<EReference>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_CROSS_REFERENCES, true)).toStrictEqual(
-            o.eAllCrossReferences,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_CROSS_REFERENCES, true)).toStrictEqual(o.eAllCrossReferences);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_CROSS_REFERENCES, false),
                 (o.eAllCrossReferences as EObjectList<EReference>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_OPERATIONS, true)).toStrictEqual(
-            o.eAllOperations,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_OPERATIONS, true)).toStrictEqual(o.eAllOperations);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_OPERATIONS, false),
                 (o.eAllOperations as EObjectList<EOperation>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_REFERENCES, true)).toStrictEqual(
-            o.eAllReferences,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_REFERENCES, true)).toStrictEqual(o.eAllReferences);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_REFERENCES, false),
@@ -278,9 +268,7 @@ describe("EClassImpl", () => {
                 (o.eAllStructuralFeatures as EObjectList<EStructuralFeature>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_SUPER_TYPES, true)).toStrictEqual(
-            o.eAllSuperTypes,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_SUPER_TYPES, true)).toStrictEqual(o.eAllSuperTypes);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_SUPER_TYPES, false),
@@ -294,9 +282,7 @@ describe("EClassImpl", () => {
                 (o.eAttributes as EObjectList<EAttribute>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__ECONTAINMENT_FEATURES, true)).toStrictEqual(
-            o.eContainmentFeatures,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__ECONTAINMENT_FEATURES, true)).toStrictEqual(o.eContainmentFeatures);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__ECONTAINMENT_FEATURES, false),
@@ -328,18 +314,14 @@ describe("EClassImpl", () => {
                 (o.eReferences as EObjectList<EReference>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, true)).toStrictEqual(
-            o.eStructuralFeatures,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, true)).toStrictEqual(o.eStructuralFeatures);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, false),
                 (o.eStructuralFeatures as EObjectList<EStructuralFeature>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.ECLASS__ESUPER_TYPES, true)).toStrictEqual(
-            o.eSuperTypes,
-        );
+        expect(o.eGetFromID(EcoreConstants.ECLASS__ESUPER_TYPES, true)).toStrictEqual(o.eSuperTypes);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__ESUPER_TYPES, false),
@@ -362,18 +344,14 @@ describe("EClassImpl", () => {
             let mockValue = mock<EOperationInternal>();
             let value = instance(mockValue);
             let l = new ImmutableEList<EOperation>([value]);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything())).thenReturn(null);
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.ECLASS__EOPERATIONS, l);
             // checks
             expect(o.eOperations.size()).toBe(1);
             expect(o.eOperations.get(0)).toBe(value);
-            verify(
-                mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything()),
-            ).once();
+            verify(mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything())).once();
         }
 
         {
@@ -382,11 +360,7 @@ describe("EClassImpl", () => {
             let value = instance(mockValue);
             let l = new ImmutableEList<EStructuralFeature>([value]);
             when(
-                mockValue.eInverseAdd(
-                    o,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
-                    anything(),
-                ),
+                mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything()),
             ).thenReturn(null);
 
             // set list with new contents
@@ -394,13 +368,7 @@ describe("EClassImpl", () => {
             // checks
             expect(o.eStructuralFeatures.size()).toBe(1);
             expect(o.eStructuralFeatures.get(0)).toBe(value);
-            verify(
-                mockValue.eInverseAdd(
-                    o,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
-                    anything(),
-                ),
-            ).once();
+            verify(mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything())).once();
         }
 
         {
@@ -485,36 +453,16 @@ describe("EClassImpl", () => {
     test("eInvokeFromID", () => {
         let o = new EClassImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
-        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_EOPERATION_EINT, null)).toThrow(
-            Error,
-        );
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_EINT, null),
-        ).toThrow(Error);
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_ESTRING, null),
-        ).toThrow(Error);
-        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_FEATURE_COUNT, null)).toThrow(
-            Error,
-        );
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.ECLASS__GET_FEATURE_ID_ESTRUCTURALFEATURE, null),
-        ).toThrow(Error);
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.ECLASS__GET_FEATURE_TYPE_ESTRUCTURALFEATURE, null),
-        ).toThrow(Error);
-        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_OPERATION_COUNT, null)).toThrow(
-            Error,
-        );
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.ECLASS__GET_OPERATION_ID_EOPERATION, null),
-        ).toThrow(Error);
-        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_OVERRIDE_EOPERATION, null)).toThrow(
-            Error,
-        );
-        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__IS_SUPER_TYPE_OF_ECLASS, null)).toThrow(
-            Error,
-        );
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_EOPERATION_EINT, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_EINT, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_ESTRING, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_FEATURE_COUNT, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_FEATURE_ID_ESTRUCTURALFEATURE, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_FEATURE_TYPE_ESTRUCTURALFEATURE, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_OPERATION_COUNT, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_OPERATION_ID_EOPERATION, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__GET_OVERRIDE_EOPERATION, null)).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.ECLASS__IS_SUPER_TYPE_OF_ECLASS, null)).toThrow(Error);
     });
 
     test("eBasicInverseAdd", () => {
@@ -553,9 +501,7 @@ describe("EClassImpl", () => {
             // initialize list with a mock object
             let mockValue = mock<EOperationInternal>();
             let value = instance(mockValue);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything())).thenReturn(null);
 
             o.eOperations.add(value);
 
@@ -570,11 +516,7 @@ describe("EClassImpl", () => {
             let mockValue = mock<EStructuralFeatureInternal>();
             let value = instance(mockValue);
             when(
-                mockValue.eInverseAdd(
-                    o,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
-                    anything(),
-                ),
+                mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything()),
             ).thenReturn(null);
 
             o.eStructuralFeatures.add(value);

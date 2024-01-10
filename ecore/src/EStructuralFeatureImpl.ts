@@ -391,22 +391,14 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS: {
                 let msgs = notifications;
                 if (this.eContainer() != null) {
                     msgs = this.eBasicRemoveFromContainer(msgs);
                 }
-                return this.eBasicSetContainer(
-                    otherEnd,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
-                    msgs,
-                );
+                return this.eBasicSetContainer(otherEnd, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, msgs);
             }
             default: {
                 return super.eBasicInverseAdd(otherEnd, featureID, notifications);
@@ -414,11 +406,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS: {
                 return this.eBasicSetContainer(

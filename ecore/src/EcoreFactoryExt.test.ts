@@ -17,18 +17,12 @@ describe("EcoreFactoryExt", () => {
         when(mockEDataType.classifierID).thenReturn(EcoreConstants.EDATE);
 
         {
-            let date = EcoreFactoryExt.getInstance().createFromString(
-                eDataType,
-                "2020-05-12T17:33:10.770Z",
-            );
+            let date = EcoreFactoryExt.getInstance().createFromString(eDataType, "2020-05-12T17:33:10.770Z");
             let expected = new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770));
             expect(date).toEqual(expected);
         }
         {
-            let date = EcoreFactoryExt.getInstance().createFromString(
-                eDataType,
-                "2007-06-02T10:26:13.000Z",
-            );
+            let date = EcoreFactoryExt.getInstance().createFromString(eDataType, "2007-06-02T10:26:13.000Z");
             let expected = new Date(Date.UTC(2007, 5, 2, 10, 26, 13));
             expect(date).toEqual(expected);
         }

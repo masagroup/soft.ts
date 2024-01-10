@@ -258,22 +258,14 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASSIFIER__EPACKAGE: {
                 let msgs = notifications;
                 if (this.eContainer() != null) {
                     msgs = this.eBasicRemoveFromContainer(msgs);
                 }
-                return this.eBasicSetContainer(
-                    otherEnd,
-                    EcoreConstants.ECLASSIFIER__EPACKAGE,
-                    msgs,
-                );
+                return this.eBasicSetContainer(otherEnd, EcoreConstants.ECLASSIFIER__EPACKAGE, msgs);
             }
             default: {
                 return super.eBasicInverseAdd(otherEnd, featureID, notifications);
@@ -281,18 +273,10 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASSIFIER__EPACKAGE: {
-                return this.eBasicSetContainer(
-                    null,
-                    EcoreConstants.ECLASSIFIER__EPACKAGE,
-                    notifications,
-                );
+                return this.eBasicSetContainer(null, EcoreConstants.ECLASSIFIER__EPACKAGE, notifications);
             }
             default: {
                 return super.eBasicInverseRemove(otherEnd, featureID, notifications);

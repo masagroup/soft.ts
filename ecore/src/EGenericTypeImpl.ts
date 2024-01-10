@@ -131,10 +131,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         }
     }
 
-    basicSetELowerBound(
-        newELowerBound: EGenericType,
-        msgs: ENotificationChain,
-    ): ENotificationChain {
+    basicSetELowerBound(newELowerBound: EGenericType, msgs: ENotificationChain): ENotificationChain {
         let oldELowerBound = this._eLowerBound;
         this._eLowerBound = newELowerBound;
         let notifications = msgs;
@@ -249,10 +246,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         }
     }
 
-    basicSetEUpperBound(
-        newEUpperBound: EGenericType,
-        msgs: ENotificationChain,
-    ): ENotificationChain {
+    basicSetEUpperBound(newEUpperBound: EGenericType, msgs: ENotificationChain): ENotificationChain {
         let oldEUpperBound = this._eUpperBound;
         this._eUpperBound = newEUpperBound;
         let notifications = msgs;
@@ -417,11 +411,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND: {
                 return this.basicSetELowerBound(null, notifications);

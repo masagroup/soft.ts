@@ -7,14 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    EAttribute,
-    EAttributeImpl,
-    EClassExt,
-    EcoreConstants,
-    EDataType,
-    EStructuralFeature,
-} from "./internal";
+import { EAttribute, EAttributeImpl, EClassExt, EcoreConstants, EDataType, EStructuralFeature } from "./internal";
 
 export function isEAttribute(s: EStructuralFeature): s is EAttribute {
     return "eAttributeType" in s;

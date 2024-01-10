@@ -16,9 +16,7 @@ describe("ETreeIterator", () => {
         let emptyList = new ImmutableEList<EObject>();
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
-        let it = new ETreeIterator<EObject, EObject>(object, true, function (
-            o: EObject,
-        ): Iterator<EObject> {
+        let it = new ETreeIterator<EObject, EObject>(object, true, function (o: EObject): Iterator<EObject> {
             return emptyList[Symbol.iterator]();
         });
         expect(deepEqual(it.next(), { value: object, done: false })).toBeTruthy();
@@ -29,9 +27,7 @@ describe("ETreeIterator", () => {
         let emptyList = new ImmutableEList<EObject>();
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
-        let it = new ETreeIterator<EObject, EObject>(object, false, function (
-            o: EObject,
-        ): Iterator<EObject> {
+        let it = new ETreeIterator<EObject, EObject>(object, false, function (o: EObject): Iterator<EObject> {
             return emptyList[Symbol.iterator]();
         });
         expect(deepEqual(it.next(), { value: undefined, done: true })).toBeTruthy();
@@ -41,9 +37,7 @@ describe("ETreeIterator", () => {
         let emptyList = new ImmutableEList<EObject>();
         let mockObject = mock<EObject>();
         let object = instance<EObject>(mockObject);
-        let it = new ETreeIterator<EObject, EObject>(object, true, function (
-            o: EObject,
-        ): Iterator<EObject> {
+        let it = new ETreeIterator<EObject, EObject>(object, true, function (o: EObject): Iterator<EObject> {
             return emptyList[Symbol.iterator]();
         });
         expect(deepEqual([...it], [object])).toBeTruthy();
@@ -62,16 +56,12 @@ describe("ETreeIterator", () => {
         let grandChild1 = instance<EObject>(mockGrandChild1);
         let grandChild2 = instance<EObject>(mockGrandChild2);
         when(mockObject.eContents()).thenReturn(new ImmutableEList<EObject>([child1, child2]));
-        when(mockChild1.eContents()).thenReturn(
-            new ImmutableEList<EObject>([grandChild1, grandChild2]),
-        );
+        when(mockChild1.eContents()).thenReturn(new ImmutableEList<EObject>([grandChild1, grandChild2]));
         when(mockChild2.eContents()).thenReturn(emptyList);
         when(mockGrandChild1.eContents()).thenReturn(emptyList);
         when(mockGrandChild2.eContents()).thenReturn(emptyList);
 
-        let it = new ETreeIterator<EObject, EObject>(object, false, function (
-            o: EObject,
-        ): Iterator<EObject> {
+        let it = new ETreeIterator<EObject, EObject>(object, false, function (o: EObject): Iterator<EObject> {
             return o.eContents()[Symbol.iterator]();
         });
         expect(deepEqual([...it], [child1, grandChild1, grandChild2, child2])).toBeTruthy();

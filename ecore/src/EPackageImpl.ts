@@ -80,11 +80,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                 );
             }
             if (isEObjectInternal(newEFactoryInstance)) {
-                notifications = newEFactoryInstance.eInverseAdd(
-                    this,
-                    EcoreConstants.EFACTORY__EPACKAGE,
-                    notifications,
-                );
+                notifications = newEFactoryInstance.eInverseAdd(this, EcoreConstants.EFACTORY__EPACKAGE, notifications);
             }
             notifications = this.basicSetEFactoryInstance(newEFactoryInstance, notifications);
             if (notifications != null) {
@@ -93,10 +89,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         }
     }
 
-    basicSetEFactoryInstance(
-        newEFactoryInstance: EFactory,
-        msgs: ENotificationChain,
-    ): ENotificationChain {
+    basicSetEFactoryInstance(newEFactoryInstance: EFactory, msgs: ENotificationChain): ENotificationChain {
         let oldEFactoryInstance = this._eFactoryInstance;
         this._eFactoryInstance = newEFactoryInstance;
         let notifications = msgs;
@@ -144,13 +137,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         this._nsPrefix = newNsPrefix;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EPACKAGE__NS_PREFIX,
-                    oldNsPrefix,
-                    newNsPrefix,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_PREFIX, oldNsPrefix, newNsPrefix),
             );
         }
     }
@@ -165,15 +152,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         let oldNsURI = this._nsURI;
         this._nsURI = newNsURI;
         if (this.eNotificationRequired) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EPACKAGE__NS_URI,
-                    oldNsURI,
-                    newNsURI,
-                ),
-            );
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_URI, oldNsURI, newNsURI));
         }
     }
 
@@ -328,11 +307,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
                 let list = this.eClassifiers as ENotifyingList<EClassifier>;
@@ -360,11 +335,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                 if (this.eContainer() != null) {
                     msgs = this.eBasicRemoveFromContainer(msgs);
                 }
-                return this.eBasicSetContainer(
-                    otherEnd,
-                    EcoreConstants.EPACKAGE__ESUPER_PACKAGE,
-                    msgs,
-                );
+                return this.eBasicSetContainer(otherEnd, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, msgs);
             }
             default: {
                 return super.eBasicInverseAdd(otherEnd, featureID, notifications);
@@ -372,11 +343,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
                 let list = this.eClassifiers as ENotifyingList<EClassifier>;
@@ -392,11 +359,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                 return list.removeWithNotification(end, notifications);
             }
             case EcoreConstants.EPACKAGE__ESUPER_PACKAGE: {
-                return this.eBasicSetContainer(
-                    null,
-                    EcoreConstants.EPACKAGE__ESUPER_PACKAGE,
-                    notifications,
-                );
+                return this.eBasicSetContainer(null, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, notifications);
             }
             default: {
                 return super.eBasicInverseRemove(otherEnd, featureID, notifications);

@@ -61,9 +61,7 @@ describe("ExtendedMetaData", () => {
         let mockDetails = mock<EMap<string, string>>();
         let details = instance(mockDetails);
 
-        when(mockPackage.eClassifiers).thenReturn(
-            new ImmutableEList<EClassifier>([classifier1, classifier2]),
-        );
+        when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([classifier1, classifier2]));
         when(mockClassifier1.getEAnnotation(annotationURI)).thenReturn(null);
         when(mockClassifier1.name).thenReturn("classifier1");
         when(mockClassifier2.getEAnnotation(annotationURI)).thenReturn(annotation);
@@ -129,9 +127,7 @@ describe("ExtendedMetaData", () => {
             let eClass2 = instance(mockClass2);
             let mockPackage = mock<EPackage>();
             let ePackage = instance(mockPackage);
-            when(mockPackage.eClassifiers).thenReturn(
-                new ImmutableEList<EClassifier>([eClass1, eClass2]),
-            );
+            when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([eClass1, eClass2]));
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(null);
             when(mockClass1.name).thenReturn("classifier1");
             when(mockClass2.getEAnnotation(annotationURI)).thenReturn(null);
@@ -150,9 +146,7 @@ describe("ExtendedMetaData", () => {
             let annotation = instance(mockAnnotation);
             let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
-            when(mockPackage.eClassifiers).thenReturn(
-                new ImmutableEList<EClassifier>([eClass1, eClass2]),
-            );
+            when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([eClass1, eClass2]));
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(annotation);
             when(mockAnnotation.details).thenReturn(details);
             when(mockDetails.getValue("name")).thenReturn(undefined);
@@ -170,9 +164,7 @@ describe("ExtendedMetaData", () => {
             let annotation = instance(mockAnnotation);
             let mockDetails = mock<EMap<string, string>>();
             let details = instance(mockDetails);
-            when(mockPackage.eClassifiers).thenReturn(
-                new ImmutableEList<EClassifier>([eClass1, eClass2]),
-            );
+            when(mockPackage.eClassifiers).thenReturn(new ImmutableEList<EClassifier>([eClass1, eClass2]));
             when(mockClass1.getEAnnotation(annotationURI)).thenReturn(null);
             when(mockClass1.name).thenReturn("classifier1");
             when(mockClass2.getEAnnotation(annotationURI)).thenReturn(annotation);

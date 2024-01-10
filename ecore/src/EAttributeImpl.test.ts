@@ -75,9 +75,7 @@ describe("EAttributeImpl", () => {
         let o = new EAttributeImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(() => o.eGetFromID(EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE, true)).toThrow(Error);
-        expect(() => o.eGetFromID(EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE, false)).toThrow(
-            Error,
-        );
+        expect(() => o.eGetFromID(EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE, false)).toThrow(Error);
         expect(o.eGetFromID(EcoreConstants.EATTRIBUTE__ID, true)).toStrictEqual(o.isID);
     });
 

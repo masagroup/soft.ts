@@ -246,10 +246,7 @@ export class EPackageExt extends EPackageImpl {
         aDataType.isSerializable = isSerializable;
         if (defaultValue.length > 0) {
             let aDataTypeInternal = aDataType as EDataTypeInternal;
-            aDataTypeInternal.defaultValue = this.eFactoryInstance.createFromString(
-                aDataType,
-                defaultValue,
-            );
+            aDataTypeInternal.defaultValue = this.eFactoryInstance.createFromString(aDataType, defaultValue);
         }
     }
 

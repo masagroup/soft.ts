@@ -205,30 +205,22 @@ describe("EPackageImpl", () => {
     test("eGetFromID", () => {
         let o = new EPackageImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, true)).toStrictEqual(
-            o.eClassifiers,
-        );
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, true)).toStrictEqual(o.eClassifiers);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, false),
                 (o.eClassifiers as EObjectList<EClassifier>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, true)).toStrictEqual(
-            o.eFactoryInstance,
-        );
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, true)).toStrictEqual(
-            o.eSubPackages,
-        );
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, true)).toStrictEqual(o.eFactoryInstance);
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, true)).toStrictEqual(o.eSubPackages);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, false),
                 (o.eSubPackages as EObjectList<EPackage>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUPER_PACKAGE, true)).toStrictEqual(
-            o.eSuperPackage,
-        );
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUPER_PACKAGE, true)).toStrictEqual(o.eSuperPackage);
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, true)).toStrictEqual(o.nsPrefix);
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_URI, true)).toStrictEqual(o.nsURI);
     });
@@ -241,26 +233,20 @@ describe("EPackageImpl", () => {
             let mockValue = mock<EClassifierInternal>();
             let value = instance(mockValue);
             let l = new ImmutableEList<EClassifier>([value]);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).thenReturn(null);
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, l);
             // checks
             expect(o.eClassifiers.size()).toBe(1);
             expect(o.eClassifiers.get(0)).toBe(value);
-            verify(
-                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything()),
-            ).once();
+            verify(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).once();
         }
 
         {
             let mockValue = mock<EFactoryInternal>();
             let value = instance(mockValue);
-            when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(
-                null,
-            );
+            when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null);
             o.eSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, value);
             expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, false)).toBe(value);
             verify(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).once();
@@ -270,18 +256,14 @@ describe("EPackageImpl", () => {
             let mockValue = mock<EPackageInternal>();
             let value = instance(mockValue);
             let l = new ImmutableEList<EPackage>([value]);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).thenReturn(null);
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, l);
             // checks
             expect(o.eSubPackages.size()).toBe(1);
             expect(o.eSubPackages.get(0)).toBe(value);
-            verify(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything()),
-            ).once();
+            verify(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).once();
         }
 
         {
@@ -343,9 +325,7 @@ describe("EPackageImpl", () => {
     test("eInvokeFromID", () => {
         let o = new EPackageImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING, null),
-        ).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING, null)).toThrow(Error);
     });
 
     test("eBasicInverseAdd", () => {
@@ -373,11 +353,7 @@ describe("EPackageImpl", () => {
             let mockOther = mock<EFactoryInternal>();
             let other = instance(mockOther);
             when(
-                mockValue.eInverseRemove(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,
-                    null,
-                ),
+                mockValue.eInverseRemove(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null),
             ).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null);
             expect(o.eFactoryInstance).toBe(other);
@@ -402,9 +378,7 @@ describe("EPackageImpl", () => {
             when(mockOther.eResource()).thenReturn(null);
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
-            when(
-                mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ESUB_PACKAGES, null),
-            ).thenReturn(null);
+            when(mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ESUB_PACKAGES, null)).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, null);
             expect(o.eSuperPackage).toBe(other);
         }
@@ -423,9 +397,7 @@ describe("EPackageImpl", () => {
             // initialize list with a mock object
             let mockValue = mock<EClassifierInternal>();
             let value = instance(mockValue);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).thenReturn(null);
 
             o.eClassifiers.add(value);
 
@@ -444,9 +416,7 @@ describe("EPackageImpl", () => {
             // initialize list with a mock object
             let mockValue = mock<EPackageInternal>();
             let value = instance(mockValue);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).thenReturn(null);
 
             o.eSubPackages.add(value);
 

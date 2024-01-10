@@ -182,9 +182,7 @@ describe("EReferenceImpl", () => {
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINER, true)).toThrow(Error);
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINER, false)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, true)).toStrictEqual(
-            o.isContainment,
-        );
+        expect(o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, true)).toStrictEqual(o.isContainment);
         expect(o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, true)).toStrictEqual(o.eKeys);
         expect(
             deepEqual(
@@ -194,12 +192,8 @@ describe("EReferenceImpl", () => {
         ).toBeTruthy();
         expect(o.eGetFromID(EcoreConstants.EREFERENCE__EOPPOSITE, true)).toStrictEqual(o.eOpposite);
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__EREFERENCE_TYPE, true)).toThrow(Error);
-        expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__EREFERENCE_TYPE, false)).toThrow(
-            Error,
-        );
-        expect(o.eGetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, true)).toStrictEqual(
-            o.isResolveProxies,
-        );
+        expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__EREFERENCE_TYPE, false)).toThrow(Error);
+        expect(o.eGetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, true)).toStrictEqual(o.isResolveProxies);
     });
 
     test("eSetFromID", () => {

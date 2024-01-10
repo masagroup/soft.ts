@@ -80,9 +80,7 @@ describe("EClassExt", () => {
         let eReference1 = new EReferenceExt();
         let eReference2 = new EReferenceExt();
 
-        eClass.eStructuralFeatures.addAll(
-            new ImmutableEList([eAttribute1, eReference1, eAttribute2, eReference2]),
-        );
+        eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eReference1, eAttribute2, eReference2]));
 
         // feature ids
         expect(eClass.getFeatureCount()).toBe(4);
@@ -101,12 +99,7 @@ describe("EClassExt", () => {
         expect(eClass.getFeatureID(eReference2)).toBe(3);
 
         // collections
-        expect(eClass.eAllStructuralFeatures.toArray()).toEqual([
-            eAttribute1,
-            eReference1,
-            eAttribute2,
-            eReference2,
-        ]);
+        expect(eClass.eAllStructuralFeatures.toArray()).toEqual([eAttribute1, eReference1, eAttribute2, eReference2]);
         expect(eClass.eAllAttributes.toArray()).toEqual([eAttribute1, eAttribute2]);
         expect(eClass.eAllReferences.toArray()).toEqual([eReference1, eReference2]);
         expect(eClass.eAttributes.toArray()).toEqual([eAttribute1, eAttribute2]);
@@ -150,12 +143,7 @@ describe("EClassExt", () => {
         expect(eSuperClass.eAllReferences.toArray()).toEqual([eReference2]);
         expect(eSuperClass.eReferences.toArray()).toEqual([eReference2]);
 
-        expect(eClass.eAllStructuralFeatures.toArray()).toEqual([
-            eAttribute2,
-            eReference2,
-            eAttribute1,
-            eReference1,
-        ]);
+        expect(eClass.eAllStructuralFeatures.toArray()).toEqual([eAttribute2, eReference2, eAttribute1, eReference1]);
         expect(eClass.eAllAttributes.toArray()).toEqual([eAttribute2, eAttribute1]);
         expect(eClass.eAttributes.toArray()).toEqual([eAttribute1]);
         expect(eClass.eAllReferences.toArray()).toEqual([eReference2, eReference1]);
@@ -284,9 +272,7 @@ describe("EClassExt", () => {
         let eReference2 = new EReferenceExt();
         eReference2.name = "ref2";
 
-        eClass.eStructuralFeatures.addAll(
-            new ImmutableEList([eReference0, eReference1, eReference2]),
-        );
+        eClass.eStructuralFeatures.addAll(new ImmutableEList([eReference0, eReference1, eReference2]));
 
         expect(eClass.eContainmentFeatures.toArray()).toEqual([eReference1]);
         expect(eClass.eCrossReferenceFeatures.toArray()).toEqual([eReference0, eReference2]);

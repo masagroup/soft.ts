@@ -54,9 +54,7 @@ describe("EParameterImpl", () => {
     test("eGetFromID", () => {
         let o = new EParameterImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.EPARAMETER__EOPERATION, true)).toStrictEqual(
-            o.eOperation,
-        );
+        expect(o.eGetFromID(EcoreConstants.EPARAMETER__EOPERATION, true)).toStrictEqual(o.eOperation);
     });
 
     test("eIsSetFromID", () => {
@@ -88,9 +86,7 @@ describe("EParameterImpl", () => {
             when(mockOther.eResource()).thenReturn(null);
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
-            when(
-                mockValue.eInverseRemove(o, EcoreConstants.EOPERATION__EPARAMETERS, null),
-            ).thenReturn(null);
+            when(mockValue.eInverseRemove(o, EcoreConstants.EOPERATION__EPARAMETERS, null)).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EPARAMETER__EOPERATION, null);
             expect(o.eOperation).toBe(other);
         }

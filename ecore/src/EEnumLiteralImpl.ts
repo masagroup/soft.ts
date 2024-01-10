@@ -65,13 +65,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         this._instance = newInstance;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EENUM_LITERAL__INSTANCE,
-                    oldInstance,
-                    newInstance,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__INSTANCE, oldInstance, newInstance),
             );
         }
     }
@@ -87,13 +81,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         this._literal = newLiteral;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EENUM_LITERAL__LITERAL,
-                    oldLiteral,
-                    newLiteral,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__LITERAL, oldLiteral, newLiteral),
             );
         }
     }
@@ -109,13 +97,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         this._value = newValue;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EENUM_LITERAL__VALUE,
-                    oldValue,
-                    newValue,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__VALUE, oldValue, newValue),
             );
         }
     }
@@ -200,11 +182,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EENUM_LITERAL__EENUM: {
                 let msgs = notifications;
@@ -219,18 +197,10 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EENUM_LITERAL__EENUM: {
-                return this.eBasicSetContainer(
-                    null,
-                    EcoreConstants.EENUM_LITERAL__EENUM,
-                    notifications,
-                );
+                return this.eBasicSetContainer(null, EcoreConstants.EENUM_LITERAL__EENUM, notifications);
             }
             default: {
                 return super.eBasicInverseRemove(otherEnd, featureID, notifications);

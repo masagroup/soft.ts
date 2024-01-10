@@ -40,11 +40,7 @@ export class DeepCopy {
                     }
                 }
                 for (const eReference of eClass.eReferences) {
-                    if (
-                        eReference.isChangeable &&
-                        !eReference.isDerived &&
-                        eReference.isContainment
-                    ) {
+                    if (eReference.isChangeable && !eReference.isDerived && eReference.isContainment) {
                         this.copyContainment(eReference, eObject, copyEObject);
                     }
                 }

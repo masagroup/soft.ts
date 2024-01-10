@@ -230,22 +230,14 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EOPERATION__ECONTAINING_CLASS: {
                 let msgs = notifications;
                 if (this.eContainer() != null) {
                     msgs = this.eBasicRemoveFromContainer(msgs);
                 }
-                return this.eBasicSetContainer(
-                    otherEnd,
-                    EcoreConstants.EOPERATION__ECONTAINING_CLASS,
-                    msgs,
-                );
+                return this.eBasicSetContainer(otherEnd, EcoreConstants.EOPERATION__ECONTAINING_CLASS, msgs);
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
                 let list = this.eParameters as ENotifyingList<EParameter>;
@@ -258,18 +250,10 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EOPERATION__ECONTAINING_CLASS: {
-                return this.eBasicSetContainer(
-                    null,
-                    EcoreConstants.EOPERATION__ECONTAINING_CLASS,
-                    notifications,
-                );
+                return this.eBasicSetContainer(null, EcoreConstants.EOPERATION__ECONTAINING_CLASS, notifications);
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
                 let list = this.eParameters as ENotifyingList<EParameter>;

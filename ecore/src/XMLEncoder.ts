@@ -208,18 +208,13 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveHeader() {
-        this._str.add(
-            stringFormat('<?xml version="{0}" encoding="{1}"?>', this._xmlVersion, this._encoding),
-        );
+        this._str.add(stringFormat('<?xml version="{0}" encoding="{1}"?>', this._xmlVersion, this._encoding));
         this._str.addLine();
     }
 
     private saveTopObject(eObject: EObject) {
         let eClass = eObject.eClass();
-        if (
-            !this._extendedMetaData ||
-            this._extendedMetaData.getDocumentRoot(eClass.ePackage) != eClass
-        ) {
+        if (!this._extendedMetaData || this._extendedMetaData.getDocumentRoot(eClass.ePackage) != eClass) {
             let rootFeature = this.getRootFeature(eClass);
             let name = rootFeature ? this.getFeatureQName(rootFeature) : this.getClassQName(eClass);
             this._str.startElement(name);
@@ -613,10 +608,7 @@ export class XMLEncoder implements EEncoder {
         }
     }
 
-    private getSaveResourceKindSingle(
-        eObject: EObject,
-        eFeature: EStructuralFeature,
-    ): SaveResourceKind {
+    private getSaveResourceKindSingle(eObject: EObject, eFeature: EStructuralFeature): SaveResourceKind {
         let value = eObject.eGetResolve(eFeature, false) as EObjectInternal;
         if (!value) {
             return SaveResourceKind.Skip;
@@ -631,10 +623,7 @@ export class XMLEncoder implements EEncoder {
         }
     }
 
-    private getSaveResourceKindMany(
-        eObject: EObject,
-        eFeature: EStructuralFeature,
-    ): SaveResourceKind {
+    private getSaveResourceKindMany(eObject: EObject, eFeature: EStructuralFeature): SaveResourceKind {
         let list = eObject.eGetResolve(eFeature, false) as EList<EObject>;
         if (!list || list.isEmpty()) {
             return SaveResourceKind.Skip;
@@ -655,11 +644,7 @@ export class XMLEncoder implements EEncoder {
         return SaveResourceKind.Same;
     }
 
-    private getDataType(
-        value: any,
-        feature: EStructuralFeature,
-        isAttribute: boolean,
-    ): string | null {
+    private getDataType(value: any, feature: EStructuralFeature, isAttribute: boolean): string | null {
         if (value == null) {
             return null;
         } else {

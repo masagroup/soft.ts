@@ -70,9 +70,7 @@ export class EcoreUtils {
                 if (ePackage) {
                     let eResource = ePackage.eResource();
                     if (eResource) {
-                        resolved = eResource.getEObject(
-                            ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "",
-                        );
+                        resolved = eResource.getEObject(ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "");
                     }
                 }
             }

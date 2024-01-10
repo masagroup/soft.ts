@@ -114,30 +114,22 @@ describe("EOperationImpl", () => {
     test("eGetFromID", () => {
         let o = new EOperationImpl();
         expect(() => o.eGetFromID(-1, true)).toThrow(Error);
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__ECONTAINING_CLASS, true)).toStrictEqual(
-            o.eContainingClass,
-        );
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, true)).toStrictEqual(
-            o.eExceptions,
-        );
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__ECONTAINING_CLASS, true)).toStrictEqual(o.eContainingClass);
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, true)).toStrictEqual(o.eExceptions);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, false),
                 (o.eExceptions as EObjectList<EClassifier>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, true)).toStrictEqual(
-            o.eParameters,
-        );
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, true)).toStrictEqual(o.eParameters);
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, false),
                 (o.eParameters as EObjectList<EParameter>).getUnResolvedList(),
             ),
         ).toBeTruthy();
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__OPERATION_ID, true)).toStrictEqual(
-            o.operationID,
-        );
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__OPERATION_ID, true)).toStrictEqual(o.operationID);
     });
 
     test("eSetFromID", () => {
@@ -162,18 +154,14 @@ describe("EOperationImpl", () => {
             let mockValue = mock<EParameterInternal>();
             let value = instance(mockValue);
             let l = new ImmutableEList<EParameter>([value]);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).thenReturn(null);
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EOPERATION__EPARAMETERS, l);
             // checks
             expect(o.eParameters.size()).toBe(1);
             expect(o.eParameters.get(0)).toBe(value);
-            verify(
-                mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything()),
-            ).once();
+            verify(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).once();
         }
 
         {
@@ -219,9 +207,7 @@ describe("EOperationImpl", () => {
     test("eInvokeFromID", () => {
         let o = new EOperationImpl();
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error);
-        expect(() =>
-            o.eInvokeFromID(EcoreConstants.EOPERATION__IS_OVERRIDE_OF_EOPERATION, null),
-        ).toThrow(Error);
+        expect(() => o.eInvokeFromID(EcoreConstants.EOPERATION__IS_OVERRIDE_OF_EOPERATION, null)).toThrow(Error);
     });
 
     test("eBasicInverseAdd", () => {
@@ -247,9 +233,7 @@ describe("EOperationImpl", () => {
             when(mockOther.eResource()).thenReturn(null);
             when(mockOther.eIsProxy()).thenReturn(false);
             when(mockValue.eResource()).thenReturn(null);
-            when(mockValue.eInverseRemove(o, EcoreConstants.ECLASS__EOPERATIONS, null)).thenReturn(
-                null,
-            );
+            when(mockValue.eInverseRemove(o, EcoreConstants.ECLASS__EOPERATIONS, null)).thenReturn(null);
             o.eBasicInverseAdd(other, EcoreConstants.EOPERATION__ECONTAINING_CLASS, null);
             expect(o.eContainingClass).toBe(other);
         }
@@ -279,9 +263,7 @@ describe("EOperationImpl", () => {
             // initialize list with a mock object
             let mockValue = mock<EParameterInternal>();
             let value = instance(mockValue);
-            when(
-                mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything()),
-            ).thenReturn(null);
+            when(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).thenReturn(null);
 
             o.eParameters.add(value);
 

@@ -41,13 +41,9 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                 switch (notification.eventType) {
                     case EventType.SET:
                     case EventType.UNSET: {
-                        if (
-                            this.notifier == notification.notifier &&
-                            this.featureID == notification.featureID
-                        ) {
+                        if (this.notifier == notification.notifier && this.featureID == notification.featureID) {
                             this.newValue = notification.newValue;
-                            if (notification.eventType == EventType.SET)
-                                this.eventType = EventType.SET;
+                            if (notification.eventType == EventType.SET) this.eventType = EventType.SET;
                             return true;
                         }
                         break;
@@ -58,10 +54,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
             case EventType.REMOVE: {
                 switch (notification.eventType) {
                     case EventType.REMOVE: {
-                        if (
-                            this.notifier == notification.notifier &&
-                            this.featureID == notification.featureID
-                        ) {
+                        if (this.notifier == notification.notifier && this.featureID == notification.featureID) {
                             this.eventType = EventType.REMOVE_MANY;
                             let originalPosition = this.position;
                             let notificationPosition = notification.position;
@@ -86,10 +79,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
             case EventType.REMOVE_MANY: {
                 switch (notification.eventType) {
                     case EventType.REMOVE: {
-                        if (
-                            this.notifier == notification.notifier &&
-                            this.featureID == notification.featureID
-                        ) {
+                        if (this.notifier == notification.notifier && this.featureID == notification.featureID) {
                             let notificationPosition = notification.position;
                             let positions: number[] = this.newValue || [];
                             let newPositions: number[] = new Array(positions.length + 1);
@@ -106,8 +96,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                             oldValue.splice(index, 0, notification.oldValue);
 
                             newPositions[index] = notificationPosition;
-                            while (++index < positions.length + 1)
-                                newPositions[index] = positions[index - 1];
+                            while (++index < positions.length + 1) newPositions[index] = positions[index - 1];
 
                             this.oldValue = oldValue;
                             this.newValue = newPositions;

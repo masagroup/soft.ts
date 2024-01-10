@@ -60,9 +60,7 @@ export class BasicEObjectList<O extends EObject>
     }
 
     get feature(): EStructuralFeature {
-        return this._owner != null
-            ? this._owner.eClass().getEStructuralFeature(this._featureID)
-            : null;
+        return this._owner != null ? this._owner.eClass().getEStructuralFeature(this._featureID) : null;
     }
 
     get featureID(): number {
@@ -124,11 +122,7 @@ export class BasicEObjectList<O extends EObject>
             if (this._opposite) {
                 return internal.eInverseAdd(this._owner, this._inverseFeatureID, notifications);
             } else {
-                return internal.eInverseAdd(
-                    this._owner,
-                    EOPPOSITE_FEATURE_BASE - this._featureID,
-                    notifications,
-                );
+                return internal.eInverseAdd(this._owner, EOPPOSITE_FEATURE_BASE - this._featureID, notifications);
             }
         }
         return notifications;
@@ -140,11 +134,7 @@ export class BasicEObjectList<O extends EObject>
             if (this._opposite) {
                 return internal.eInverseRemove(this._owner, this._inverseFeatureID, notifications);
             } else {
-                return internal.eInverseRemove(
-                    this._owner,
-                    EOPPOSITE_FEATURE_BASE - this._featureID,
-                    notifications,
-                );
+                return internal.eInverseRemove(this._owner, EOPPOSITE_FEATURE_BASE - this._featureID, notifications);
             }
         }
         return notifications;
@@ -163,24 +153,15 @@ export class BasicEObjectList<O extends EObject>
             if (this._containment) {
                 notifications = this.inverseRemove(object, notifications);
                 let resolvedInternal = this.forceCast<EObjectInternal>(resolved);
-                if (resolvedInternal != null)
-                    notifications = this.inverseAdd(resolved, notifications);
+                if (resolvedInternal != null) notifications = this.inverseAdd(resolved, notifications);
             }
-            this.createAndDispatchNotification(
-                notifications,
-                EventType.RESOLVE,
-                object,
-                resolved,
-                index,
-            );
+            this.createAndDispatchNotification(notifications, EventType.RESOLVE, object, resolved, index);
         }
         return resolved;
     }
 
     private resolveProxy(o: O): O {
-        return this._proxies && o.eIsProxy()
-            ? <O>(<EObjectInternal>this._owner).eResolveProxy(o)
-            : o;
+        return this._proxies && o.eIsProxy() ? <O>(<EObjectInternal>this._owner).eResolveProxy(o) : o;
     }
 
     toJSON(): any {

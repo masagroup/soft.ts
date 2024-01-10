@@ -24,9 +24,7 @@ export class BasicEDataTypeList<E> extends AbstractNotifyingList<E> {
     }
 
     get feature(): EStructuralFeature {
-        return this._owner != null
-            ? this._owner.eClass().getEStructuralFeature(this._featureID)
-            : null;
+        return this._owner != null ? this._owner.eClass().getEStructuralFeature(this._featureID) : null;
     }
 
     get featureID(): number {

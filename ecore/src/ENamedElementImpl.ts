@@ -51,15 +51,7 @@ export class ENamedElementImpl extends EModelElementExt implements ENamedElement
         let oldName = this._name;
         this._name = newName;
         if (this.eNotificationRequired) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ENAMED_ELEMENT__NAME,
-                    oldName,
-                    newName,
-                ),
-            );
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ENAMED_ELEMENT__NAME, oldName, newName));
         }
     }
 

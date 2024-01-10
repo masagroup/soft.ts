@@ -191,13 +191,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         this._isAbstract = newIsAbstract;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ECLASS__ABSTRACT,
-                    oldIsAbstract,
-                    newIsAbstract,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldIsAbstract, newIsAbstract),
             );
         }
     }
@@ -213,13 +207,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         this._isInterface = newIsInterface;
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ECLASS__INTERFACE,
-                    oldIsInterface,
-                    newIsInterface,
-                ),
+                new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldIsInterface, newIsInterface),
             );
         }
     }
@@ -645,9 +633,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
                 return this.eAllReferences != null && this.eAllReferences.size() != 0;
             }
             case EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES: {
-                return (
-                    this.eAllStructuralFeatures != null && this.eAllStructuralFeatures.size() != 0
-                );
+                return this.eAllStructuralFeatures != null && this.eAllStructuralFeatures.size() != 0;
             }
             case EcoreConstants.ECLASS__EALL_SUPER_TYPES: {
                 return this.eAllSuperTypes != null && this.eAllSuperTypes.size() != 0;
@@ -659,9 +645,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
                 return this.eContainmentFeatures != null && this.eContainmentFeatures.size() != 0;
             }
             case EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES: {
-                return (
-                    this.eCrossReferenceFeatures != null && this.eCrossReferenceFeatures.size() != 0
-                );
+                return this.eCrossReferenceFeatures != null && this.eCrossReferenceFeatures.size() != 0;
             }
             case EcoreConstants.ECLASS__EID_ATTRIBUTE: {
                 return this._eIDAttribute != null;
@@ -725,11 +709,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         }
     }
 
-    eBasicInverseAdd(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASS__EOPERATIONS: {
                 let list = this.eOperations as ENotifyingList<EOperation>;
@@ -747,11 +727,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         }
     }
 
-    eBasicInverseRemove(
-        otherEnd: EObject,
-        featureID: number,
-        notifications: ENotificationChain,
-    ): ENotificationChain {
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASS__EOPERATIONS: {
                 let list = this.eOperations as ENotifyingList<EOperation>;
