@@ -20,30 +20,12 @@ import {
     isEClass,
     isEPackage,
 } from "./internal";
-import * as MsgPack from "./MsgPack";
+import { ensureUint8Array , createDataView} from "./utils/TypedArray";
+import { utf8Decode } from "./utils/UTF8";
+import * as MsgPack from "./utils/MsgPack"
 
 var toArray = require("stream-to-array");
 
-function ensureUint8Array(buffer: ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer): Uint8Array {
-    if (buffer instanceof Uint8Array) {
-        return buffer;
-    } else if (ArrayBuffer.isView(buffer)) {
-        return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-    } else if (buffer instanceof ArrayBuffer) {
-        return new Uint8Array(buffer);
-    } else {
-        // ArrayLike<number>
-        return Uint8Array.from(buffer);
-    }
-}
-
-function createDataView(buffer: ArrayLike<number> | ArrayBufferView | ArrayBuffer): DataView {
-    if (buffer instanceof ArrayBuffer) {
-        return new DataView(buffer);
-    }
-    const bufferView = ensureUint8Array(buffer);
-    return new DataView(bufferView.buffer, bufferView.byteOffset, bufferView.byteLength);
-}
 
 function prettyByte(byte: number): string {
     return `${byte < 0 ? "-" : ""}0x${Math.abs(byte).toString(16).padStart(2, "0")}`;
@@ -573,11 +555,7 @@ export class BinaryDecoder implements EDecoder {
         let len = this.bytesLen(code);
         let str = "";
         if (len > 0) {
-            if (len > MsgPack.TEXT_DECODER_THRESHOLD) {
-                str = MsgPack.utf8DecodeTD(this._bytes, this._pos, len);
-            } else {
-                str = MsgPack.utf8DecodeJs(this._bytes, this._pos, len);
-            }
+            str = utf8Decode(this._bytes, this._pos, len);
         }
         this._pos += len;
         return str;
