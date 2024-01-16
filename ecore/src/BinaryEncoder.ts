@@ -10,6 +10,9 @@ const binaryVersion = 0;
 const binarySignature = Uint8Array.from([137, 101, 109, 102, 10, 13, 26, 10]);
 const initialBufferSize = 2048;
 
+const TIMESTAMP32_MAX_SEC = 0x100000000 - 1; // 32-bit unsigned int
+const TIMESTAMP64_MAX_SEC = 0x400000000 - 1; // 34-bit unsigned int
+
 enum CheckType {
     CheckNothing,
     CheckDirectResource,
@@ -198,6 +201,50 @@ export class BinaryEncoder implements EEncoder {
         this._pos += byteLength
     }
 
+    private encodeDate(object: Date) {
+        // convert to time spec
+        const msec = object.getTime();
+        let sec = Math.floor(msec / 1e3);
+        let nsec = (msec - sec * 1e3) * 1e6;
+
+        // Normalizes sec, nsec to ensure nsec is unsigned.
+        const nsecInSec = Math.floor(nsec / 1e9);
+        sec = sec + nsecInSec
+        nsec = nsec - nsecInSec * 1e9
+
+        // encode date as byte array
+        let bytes: Uint8Array;
+        let view : DataView;
+        if (sec >= 0 && nsec >= 0 && sec <= TIMESTAMP64_MAX_SEC) {
+            // Here sec >= 0 && nsec >= 0
+            if (nsec === 0 && sec <= TIMESTAMP32_MAX_SEC) {
+                // timestamp 32 = { sec32 (unsigned) }
+                bytes = new Uint8Array(4);
+                view = new DataView(bytes.buffer);
+                view.setUint32(0, sec);
+            } else {
+                // timestamp 64 = { nsec30 (unsigned), sec34 (unsigned) }
+                const secHigh = sec / 0x100000000;
+                const secLow = sec & 0xffffffff;
+                bytes = new Uint8Array(8);
+                view = new DataView(bytes.buffer);
+                // nsec30 | secHigh2
+                view.setUint32(0, (nsec << 2) | (secHigh & 0x3));
+                // secLow32
+                view.setUint32(4, secLow);
+            }
+        } else {
+            // timestamp 96 = { nsec32 (unsigned), sec64 (signed) }
+            bytes = new Uint8Array(12);
+            view = new DataView(bytes.buffer);
+            view.setUint32(0, nsec);
+            setInt64(view, 4, sec);
+        }
+
+        // write date as extension -1
+        this.writeExt(-1,bytes)
+    }
+
     private writeU8(value: number) {
         this.ensureBufferSizeToWrite(1);
         this._view.setUint8(this._pos, value);
@@ -283,6 +330,46 @@ export class BinaryEncoder implements EEncoder {
             this.writeU32(byteLength);
         } else {
             throw new Error(`Too long string: ${byteLength} bytes in UTF-8`);
+        }
+    }
+
+    private writeExt(type: number, data: Uint8Array)
+    {
+        switch (data.length)
+        {
+            case 1:
+                this.writeU8(MsgPack.FixExt1)
+                break;
+            case 2:
+                this.writeU8(MsgPack.FixExt2)
+                break;
+            case 4:
+                this.writeU8(MsgPack.FixExt4)
+                break;
+            case 8:
+                this.writeU8(MsgPack.FixExt8)
+                break;
+            case 16:
+                this.writeU8(MsgPack.FixExt16)
+                break;
+            default:
+                if (data.length <  0x100)
+                {
+                    this.writeU8(MsgPack.Ext8);
+                    this.writeU8(data.length)
+                }
+                else if (data.length < 0x10000)
+                {
+                    this.writeU8(MsgPack.Ext16);
+                    this.writeU16(data.length)
+                }
+                else if (data.length < 0x100000000)
+                {
+                    // ext 32
+                    this.writeU8(MsgPack.Ext32);
+                    this.writeU32(data.length);
+                }
+                else throw new Error(`ext (${type}) data too large to encode (length > 2^32 - 1)`);
         }
     }
 
@@ -450,58 +537,69 @@ export class BinaryEncoder implements EEncoder {
             }
             let value = eObject.eGetFromID(featureID, false, false)
             switch (featureData.featureKind) {
-            case BinaryFeatureKind.bfkObject:
-            case BinaryFeatureKind.bfkObjectContainment:
-                this.encodeEObject(value as EObject, CheckType.CheckNothing)
-                break;
-            case BinaryFeatureKind.bfkObjectContainerProxy:
-                this.encodeEObject(value as EObject, CheckType.CheckResource)
-                break;
-            case BinaryFeatureKind.bfkObjectContainmentProxy:
-                this.encodeEObject(value as EObject, CheckType.CheckDirectResource)
-            case BinaryFeatureKind.bfkObjectProxy:
-                this.encodeEObject(value as EObject, CheckType.CheckResource)
-            case BinaryFeatureKind.bfkObjectList:
-            case BinaryFeatureKind.bfkObjectContainmentList:
-                this.encodeEObjects(value as EList<EObject>, CheckType.CheckNothing)
-            case BinaryFeatureKind.bfkObjectContainmentListProxy:
-                this.encodeEObjects(value as EList<EObject>, CheckType.CheckDirectResource)
-            case BinaryFeatureKind.bfkObjectListProxy:
-                this.encodeEObjects(value as EList<EObject>, CheckType.CheckResource)
-            case BinaryFeatureKind.bfkData:
-                let valueStr = featureData.factory.convertToString(featureData.dataType, value)
-                this.encodeString(valueStr)
-            case BinaryFeatureKind.bfkDataList:
-                let l = value as EList<any>
-                this.encodeNumber(l.size())
-                for ( const value of l ) {
+                case BinaryFeatureKind.bfkObject:
+                case BinaryFeatureKind.bfkObjectContainment:
+                    this.encodeEObject(value as EObject, CheckType.CheckNothing)
+                    break;
+                case BinaryFeatureKind.bfkObjectContainerProxy:
+                    this.encodeEObject(value as EObject, CheckType.CheckResource)
+                    break;
+                case BinaryFeatureKind.bfkObjectContainmentProxy:
+                    this.encodeEObject(value as EObject, CheckType.CheckDirectResource)
+                    break;
+                case BinaryFeatureKind.bfkObjectProxy:
+                    this.encodeEObject(value as EObject, CheckType.CheckResource)
+                    break;
+                case BinaryFeatureKind.bfkObjectList:
+                case BinaryFeatureKind.bfkObjectContainmentList:
+                    this.encodeEObjects(value as EList<EObject>, CheckType.CheckNothing)
+                    break;
+                case BinaryFeatureKind.bfkObjectContainmentListProxy:
+                    this.encodeEObjects(value as EList<EObject>, CheckType.CheckDirectResource)
+                    break;
+                case BinaryFeatureKind.bfkObjectListProxy:
+                    this.encodeEObjects(value as EList<EObject>, CheckType.CheckResource)
+                    break;
+                case BinaryFeatureKind.bfkData:
                     let valueStr = featureData.factory.convertToString(featureData.dataType, value)
                     this.encodeString(valueStr)
-                }
-            case BinaryFeatureKind.bfkEnum:
-                let literalStr = featureData.factory.convertToString(featureData.dataType, value)
-                if (this._enumLiteralToIDMap.has(literalStr)) {
-                    let enumID = this._enumLiteralToIDMap.get(literalStr)
-                    this.encodeNumber(enumID)
-                } else {
-                    let enumID = this._enumLiteralToIDMap.size
-                    this._enumLiteralToIDMap.set(literalStr,enumID)
-                    this.encodeNumber(enumID)
-                    this.encodeString(literalStr)
-                }
-            case BinaryFeatureKind.bfkDate:
-                //this.encodeDate(value as Date)
-                throw new Error("Date  serialization not implemented")
-            case BinaryFeatureKind.bfkNumber:
-                this.encodeNumber(value as number)
-            case BinaryFeatureKind.bfkBool:
-                this.encodeBoolean(value as boolean)
-            case BinaryFeatureKind.bfkString:
-                this.encodeString(value as string)
-            case BinaryFeatureKind.bfkByteArray:
-                this.encodeBytes(value as Uint8Array)
-            default:
-                throw new Error(`feature with feature kind '${featureData.featureKind}' is not supported`)
+                    break;
+                case BinaryFeatureKind.bfkDataList:
+                    let l = value as EList<any>
+                    this.encodeNumber(l.size())
+                    for (const value of l) {
+                        let valueStr = featureData.factory.convertToString(featureData.dataType, value)
+                        this.encodeString(valueStr)
+                    }
+                    break;
+                case BinaryFeatureKind.bfkEnum:
+                    let literalStr = featureData.factory.convertToString(featureData.dataType, value)
+                    if (this._enumLiteralToIDMap.has(literalStr)) {
+                        let enumID = this._enumLiteralToIDMap.get(literalStr)
+                        this.encodeNumber(enumID)
+                    } else {
+                        let enumID = this._enumLiteralToIDMap.size
+                        this._enumLiteralToIDMap.set(literalStr, enumID)
+                        this.encodeNumber(enumID)
+                        this.encodeString(literalStr)
+                    }
+                    break;
+                case BinaryFeatureKind.bfkDate:
+                    this.encodeDate(value as Date)
+                case BinaryFeatureKind.bfkNumber:
+                    this.encodeNumber(value as number)
+                    break;
+                case BinaryFeatureKind.bfkBool:
+                    this.encodeBoolean(value as boolean)
+                    break;
+                case BinaryFeatureKind.bfkString:
+                    this.encodeString(value as string)
+                    break;
+                case BinaryFeatureKind.bfkByteArray:
+                    this.encodeBytes(value as Uint8Array)
+                    break;
+                default:
+                    throw new Error(`feature with feature kind '${featureData.featureKind}' is not supported`)
             }
         }
     }
