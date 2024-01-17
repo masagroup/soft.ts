@@ -168,7 +168,7 @@ export class XMLEncoder implements EEncoder {
                 s.write(result.val);
                 resolve(result.val);
             } else {
-                reject(result.err);
+                reject(result.val);
             }
         });
     }
@@ -180,7 +180,7 @@ export class XMLEncoder implements EEncoder {
                 s.write(result.val);
                 resolve(result.val);
             } else {
-                reject(result.err);
+                reject(result.val);
             }
         });
     }

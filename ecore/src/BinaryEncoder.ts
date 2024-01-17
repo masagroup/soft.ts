@@ -355,6 +355,7 @@ export class BinaryEncoder implements EEncoder {
         }
 
     }
+
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
         try {
             this.reinitializeState()
@@ -366,10 +367,28 @@ export class BinaryEncoder implements EEncoder {
             return Err(err)
         }
     }
+
     encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
-        throw new Error("Method not implemented.");
+        return new Promise<Uint8Array>((resolve, reject) => {
+            let r = this.encode(eResource)
+            if (r.ok) {
+                s.write(r.val)
+                resolve(r.val)
+            } else {
+                reject(r.val)
+            }
+        })
     }
+
     encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
-        throw new Error("Method not implemented.");
+        return new Promise<Uint8Array>((resolve, reject) => {
+            let r = this.encodeObject(eObject)
+            if (r.ok) {
+                s.write(r.val)
+                resolve(r.val)
+            } else {
+                reject(r.val)
+            }
+        })
     }
 }
