@@ -27,7 +27,7 @@ export class Encoder {
     private _bytes: Uint8Array;
 
     constructor(options?: EncoderOptions) {
-        this._extensionCodec = options?.extensionCodec ?? (ExtensionCodec.defaultCodec as ExtensionCodecType);
+        this._extensionCodec = options?.extensionCodec ?? ExtensionCodec.defaultCodec;
         this._initialBufferSize = options?.initialBufferSize ?? DEFAULT_INITIAL_BUFFER_SIZE;
         this._pos = 0;
         this._view = new DataView(new ArrayBuffer(this._initialBufferSize));
