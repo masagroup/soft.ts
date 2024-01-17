@@ -20,28 +20,13 @@ import {
     isEClass,
     isEPackage,
 } from "./internal";
-import { ensureUint8Array , createDataView} from "./msgpack/TypedArray";
-import { utf8Decode } from "./msgpack/UTF8";
-import * as MsgPack from "./msgpack/Types"
+import { Decoder } from "./msgpack/Decoder";
 
 var toArray = require("stream-to-array");
-
-
-function prettyByte(byte: number): string {
-    return `${byte < 0 ? "-" : ""}0x${Math.abs(byte).toString(16).padStart(2, "0")}`;
-}
 
 function arraysAreEqual(a: Uint8Array, b: Uint8Array) {
     if (a.byteLength !== b.byteLength) return false;
     return a.every((val, i) => val === b[i]);
-}
-
-function uncomplement(val: number, bitwidth: number) {
-    var isnegative = val & (1 << (bitwidth - 1));
-    var boundary = 1 << bitwidth;
-    var minval = -boundary;
-    var mask = boundary - 1;
-    return isnegative ? minval + (val & mask) : val;
 }
 
 const binaryVersion = 0;
@@ -68,9 +53,7 @@ class FeatureData {
 
 export class BinaryDecoder implements EDecoder {
     private _resource: EResource;
-    private _bytes: Uint8Array;
-    private _view: DataView;
-    private _pos: number;
+    private _decoder: Decoder;
     private _objects: EObject[] = [];
     private _isResolveProxies: boolean = false;
     private _packageData: PackageData[] = [];
@@ -90,7 +73,7 @@ export class BinaryDecoder implements EDecoder {
             this.decodeVersion();
 
             // objects
-            let size = this.decodeNumber();
+            let size = this._decoder.decodeNumber();
             let objects = [];
             for (let i = 0; i < size; i++) {
                 objects.push(this.decodeEObject());
@@ -173,9 +156,7 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private setBuffer(buffer: ArrayLike<number> | BufferSource): void {
-        this._bytes = ensureUint8Array(buffer);
-        this._view = createDataView(this._bytes);
-        this._pos = 0;
+        this._decoder = new Decoder(buffer)
     }
 
     private decodeSignature() {
@@ -456,276 +437,28 @@ export class BinaryDecoder implements EDecoder {
         }
     }
 
-    private decodeBoolean(): boolean {
-        let code = this.readU8();
-        return this.bool(code);
-    }
-
-    private bool(code: number): boolean {
-        switch (code) {
-            case MsgPack.True:
-                return true;
-            case MsgPack.False:
-                return false;
-        }
-        throw new Error(`Unrecognized type byte: ${prettyByte(code)}`);
-    }
-
     private decodeAny(): any {
-        let code = this.readU8();
-        if (MsgPack.isFixedNum(code)) {
-            return code;
-        }
-        if (MsgPack.isFixedString(code)) {
-            return this.string(code);
-        }
+        return this._decoder.decode()
+    }
 
-        switch (code) {
-            case MsgPack.Nil:
-                return null;
-            case MsgPack.False:
-            case MsgPack.True:
-                return this.bool(code);
-            case MsgPack.Float:
-            case MsgPack.Double:
-            case MsgPack.Uint8:
-            case MsgPack.Uint16:
-            case MsgPack.Uint32:
-            case MsgPack.Uint64:
-            case MsgPack.Int8:
-            case MsgPack.Int16:
-            case MsgPack.Int32:
-            case MsgPack.Int64:
-                return this.number(code);
-            case MsgPack.Bin8:
-            case MsgPack.Bin16:
-            case MsgPack.Bin32:
-                return this.bytes(code);
-            case MsgPack.Str8:
-            case MsgPack.Str16:
-            case MsgPack.Str32:
-                return this.string(code);
-        }
-        throw new Error(`Unrecognized type byte: ${prettyByte(code)} decoding any`);
+    private decodeBoolean(): boolean {
+        return this._decoder.decodeBoolean()
     }
 
     private decodeNumber(): number {
-        let code = this.readU8();
-        return this.number(code);
-    }
-
-    private number(code: number): number {
-        if (code === MsgPack.Nil) {
-            return 0;
-        }
-        if (MsgPack.isFixedNum(code)) {
-            return uncomplement(code, 8);
-        }
-        switch (code) {
-            case MsgPack.Uint8:
-                return this.readU8();
-            case MsgPack.Int8:
-                return this.readI8();
-            case MsgPack.Uint16:
-                return this.readU16();
-            case MsgPack.Int16:
-                return this.readI16();
-            case MsgPack.Uint32:
-                return this.readU32();
-            case MsgPack.Int32:
-                return this.readI32();
-            case MsgPack.Uint64:
-                return this.readU64();
-            case MsgPack.Int64:
-                return this.readI64();
-            case MsgPack.Float:
-                return this.readF32();
-            case MsgPack.Double:
-                return this.readF64();
-        }
-        throw new Error(`Unrecognized type byte: ${prettyByte(code)}`);
+        return this._decoder.decodeNumber()
     }
 
     private decodeString(): string {
-        let code = this.readU8();
-        return this.string(code);
-    }
-
-    private string(code: number): string {
-        let len = this.bytesLen(code);
-        let str = "";
-        if (len > 0) {
-            str = utf8Decode(this._bytes, this._pos, len);
-        }
-        this._pos += len;
-        return str;
+        return this._decoder.decodeString()
     }
 
     private decodeBytes(): Uint8Array {
-        let code = this.readU8();
-        return this.bytes(code);
+        return this._decoder.decodeBinary()
     }
 
-    private bytes(code: number): Uint8Array {
-        let len = this.bytesLen(code);
-        let bytes = this._bytes.subarray(this._pos, this._pos + len);
-        this._pos += len;
-        return bytes;
+    private decodeDate() : Date {
+        return this._decoder.decode() as Date
     }
 
-    private bytesLen(c: number): number {
-        if (c == MsgPack.Nil) {
-            return -1;
-        }
-
-        if (MsgPack.isFixedString(c)) {
-            return c & MsgPack.FixedStrMask;
-        }
-
-        switch (c) {
-            case MsgPack.Str8:
-            case MsgPack.Bin8:
-                return this.readU8();
-            case MsgPack.Str16:
-            case MsgPack.Bin16:
-                return this.readU16();
-            case MsgPack.Str32:
-            case MsgPack.Bin32:
-                return this.readU32();
-        }
-        throw new Error(`invalid code type byte: ${prettyByte(c)} decoding string/bytes length`);
-    }
-
-    private decodeDate(): Date {
-        let code = this.readU8();
-        if (code == -1) {
-            return null;
-        }
-
-        if (code == (MsgPack.FixedArrayLow | 2)) {
-            let s = this.decodeNumber();
-            let ns = this.decodeNumber();
-            return new Date(s * 1000 + ns / 1000000);
-        }
-
-        if (MsgPack.isString(code)) {
-            let s = this.string(code);
-            return new Date(s);
-        }
-
-        let [extID, extLen] = this.extHeader(code);
-        if (extID !== -1) {
-            return new Date();
-        }
-
-        switch (extLen) {
-            case 4:
-                let sec = this.readU32();
-                return new Date(sec * 1000);
-            case 8:
-                const lo = this.readU32();
-                const hi = this.readU32();
-                // seconds: hi + (lo&0x3)*0x100000000
-                // nanoseconds: lo>>2 == lo/4
-                return new Date((hi + (lo & 0x3) * 0x100000000) * 1000 + lo / 4000000);
-            case 12:
-                const ns = this.readU32();
-                const s = this.readI64();
-                return new Date(s * 1000 + ns / 1000000);
-        }
-        return null;
-    }
-
-    private extHeader(c: number): [number, number] {
-        let extLen = this.parseExtLen(c);
-        let extID = this.readI8();
-        return [extID, extLen];
-    }
-
-    private parseExtLen(c: number): number {
-        switch (c) {
-            case MsgPack.FixExt1:
-                return 1;
-            case MsgPack.FixExt2:
-                return 2;
-            case MsgPack.FixExt4:
-                return 4;
-            case MsgPack.FixExt8:
-                return 8;
-            case MsgPack.FixExt16:
-                return 16;
-            case MsgPack.Ext8:
-                return this.readU8();
-            case MsgPack.Ext16:
-                return this.readU16();
-            case MsgPack.Ext32:
-                return this.readU32();
-            default:
-                return 0;
-        }
-    }
-
-    private readU8(): number {
-        const value = this._view.getUint8(this._pos);
-        this._pos++;
-        return value;
-    }
-
-    private readI8(): number {
-        const value = this._view.getInt8(this._pos);
-        this._pos++;
-        return value;
-    }
-
-    private readU16(): number {
-        const value = this._view.getUint16(this._pos);
-        this._pos += 2;
-        return value;
-    }
-
-    private readI16(): number {
-        const value = this._view.getInt16(this._pos);
-        this._pos += 2;
-        return value;
-    }
-
-    private readU32(): number {
-        const value = this._view.getUint32(this._pos);
-        this._pos += 4;
-        return value;
-    }
-
-    private readI32(): number {
-        const value = this._view.getInt32(this._pos);
-        this._pos += 4;
-        return value;
-    }
-
-    private readU64(): number {
-        const high = this._view.getUint32(this._pos);
-        const low = this._view.getUint32(this._pos + 4);
-        const value = high * 0x1_0000_0000 + low;
-        this._pos += 8;
-        return value;
-    }
-
-    private readI64(): number {
-        const high = this._view.getInt32(this._pos);
-        const low = this._view.getUint32(this._pos + 4);
-        const value = high * 0x1_0000_0000 + low;
-        this._pos += 8;
-        return value;
-    }
-
-    private readF32(): number {
-        const value = this._view.getFloat32(this._pos);
-        this._pos += 4;
-        return value;
-    }
-
-    private readF64(): number {
-        const value = this._view.getFloat64(this._pos);
-        this._pos += 8;
-        return value;
-    }
 }

@@ -2,16 +2,10 @@ import { WriteStream } from "fs";
 import { Err, Ok, Result } from "ts-results";
 import { EObject, EResource, EEncoder, EPackage, EClass, EDataType, EFactory, EList, EObjectInternal, EcoreUtils, EStructuralFeature, isEReference, isEAttribute, EReference, EAttribute } from "./internal";
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind";
-import { ensureUint8Array } from "./msgpack/TypedArray";
-import * as MsgPack from "./msgpack/Types";
-import { utf8Count, utf8Encode } from "./msgpack/UTF8";
+import { Encoder } from "./msgpack/Encoder";
 
 const binaryVersion = 0;
 const binarySignature = Uint8Array.from([137, 101, 109, 102, 10, 13, 26, 10]);
-const initialBufferSize = 2048;
-
-const TIMESTAMP32_MAX_SEC = 0x100000000 - 1; // 32-bit unsigned int
-const TIMESTAMP64_MAX_SEC = 0x400000000 - 1; // 34-bit unsigned int
 
 enum CheckType {
     CheckNothing,
@@ -44,24 +38,9 @@ class FeatureData {
     isTransient: boolean;
 }
 
-function setUint64(view: DataView, offset: number, value: number): void {
-    const high = value / 0x1_0000_0000;
-    const low = value; // high bits are truncated by DataView
-    view.setUint32(offset, high);
-    view.setUint32(offset + 4, low);
-}
-
-function setInt64(view: DataView, offset: number, value: number): void {
-    const high = Math.floor(value / 0x1_0000_0000);
-    const low = value; // high bits are truncated by DataView
-    view.setUint32(offset, high);
-    view.setUint32(offset + 4, low);
-}
-
 export class BinaryEncoder implements EEncoder {
     private _resource: EResource;
     private _objectRoot: EObject;
-    private _baseURI: URL;
     private _objectToID: Map<EObject, number> = new Map<EObject, number>;
     private _classDataMap: Map<EClass, ClassData> = new Map<EClass, ClassData>;
     private _packageDataMap: Map<EPackage, PackageData> = new Map<EPackage, PackageData>;
@@ -69,317 +48,35 @@ export class BinaryEncoder implements EEncoder {
     private _enumLiteralToIDMap: Map<string, number> = new Map<string, number>;
     private _version: number = binaryVersion;
     private _isIDAttributeEncoded: boolean = false;
-    private _pos: number = 0;
-    private _view: DataView;
-    private _bytes: Uint8Array;
+    private _encoder: Encoder;
 
 
     constructor(eContext: EResource, options: Map<string, any>) {
         this._resource = eContext;
-        this._view = new DataView(new ArrayBuffer(initialBufferSize));
-        this._bytes = new Uint8Array(this._view.buffer)
-    }
-
-    private reinitializeState() {
-        this._pos = 0;
-    }
-
-    private ensureBufferSizeToWrite(sizeToWrite: number) {
-        const requiredSize = this._pos + sizeToWrite;
-        if (this._view.byteLength < requiredSize) {
-            this.resizeBuffer(requiredSize * 2);
-        }
-    }
-
-    private encodeAny(object: any) {
-        if (object == null) {
-            this.encodeNil();
-        } else if (typeof object === "boolean") {
-            this.encodeBoolean(object)
-        } else if (typeof object === "number") {
-            this.encodeNumber(object)
-        } else if (typeof object === "string") {
-            this.encodeString(object)
-        } else if (ArrayBuffer.isView(object)) {
-            this.encodeBytes(object)
-        }
-        // TODO
-        // add Date and Extension
-    }
-
-    private encodeNil() {
-        this.writeU8(MsgPack.Nil);
     }
 
     private encodeBoolean(object: boolean) {
-        if (object === false) {
-            this.writeU8(MsgPack.False);
-        } else {
-            this.writeU8(MsgPack.True);
-        }
+        this._encoder.encodeBoolean(object)
     }
 
     private encodeNumber(object: number) {
-        if (Number.isSafeInteger(object)) {
-            if (object >= 0) {
-                if (object < 0x80) {
-                    // positive fixint
-                    this.writeU8(object);
-                } else if (object < 0x100) {
-                    // uint 8
-                    this.writeU8(MsgPack.Uint8);
-                    this.writeU8(object);
-                } else if (object < 0x10000) {
-                    // uint 16
-                    this.writeU8(MsgPack.Uint16);
-                    this.writeU16(object);
-                } else if (object < 0x100000000) {
-                    // uint 32
-                    this.writeU8(MsgPack.Uint32);
-                    this.writeU32(object);
-                } else {
-                    // uint 64
-                    this.writeU8(MsgPack.Uint64);
-                    this.writeU64(object);
-                }
-            } else {
-                if (object >= -0x20) {
-                    // negative fixint
-                    this.writeU8(MsgPack.NegFixedNumLow | (object + 0x20));
-                } else if (object >= -0x80) {
-                    // int 8
-                    this.writeU8(MsgPack.Int8);
-                    this.writeI8(object);
-                } else if (object >= -0x8000) {
-                    // int 16
-                    this.writeU8(MsgPack.Int16);
-                    this.writeI16(object);
-                } else if (object >= -0x80000000) {
-                    // int 32
-                    this.writeU8(MsgPack.Int32);
-                    this.writeI32(object);
-                } else {
-                    // int 64
-                    this.writeU8(MsgPack.Int64);
-                    this.writeI64(object);
-                }
-            }
-        } else {
-            // float 64
-            this.writeU8(MsgPack.Double)
-            this.writeF64(object)
-        }
+        this._encoder.encodeNumber(object)
     }
 
     private encodeBytes(object: ArrayBufferView) {
-        const size = object.byteLength;
-        if (size < 0x100) {
-            // bin 8
-            this.writeU8(0xc4);
-            this.writeU8(size);
-        } else if (size < 0x10000) {
-            // bin 16
-            this.writeU8(0xc5);
-            this.writeU16(size);
-        } else if (size < 0x100000000) {
-            // bin 32
-            this.writeU8(0xc6);
-            this.writeU32(size);
-        } else {
-            throw new Error(`Too large binary: ${size}`);
-        }
-        const bytes = ensureUint8Array(object);
-        this.writeU8a(bytes);
+        this._encoder.encodeBinary(object)
     }
 
     private encodeString(object: string) {
-        const maxHeaderSize = 1 + 4
-        const byteLength = utf8Count(object)
-        this.ensureBufferSizeToWrite(maxHeaderSize + byteLength)
-        this.writeStringHeader(byteLength)
-        utf8Encode(object, this._bytes, this._pos)
-        this._pos += byteLength
+        this._encoder.encodeString(object)
     }
 
     private encodeDate(object: Date) {
-        // convert to time spec
-        const msec = object.getTime();
-        let sec = Math.floor(msec / 1e3);
-        let nsec = (msec - sec * 1e3) * 1e6;
-
-        // Normalizes sec, nsec to ensure nsec is unsigned.
-        const nsecInSec = Math.floor(nsec / 1e9);
-        sec = sec + nsecInSec
-        nsec = nsec - nsecInSec * 1e9
-
-        // encode date as byte array
-        let bytes: Uint8Array;
-        let view : DataView;
-        if (sec >= 0 && nsec >= 0 && sec <= TIMESTAMP64_MAX_SEC) {
-            // Here sec >= 0 && nsec >= 0
-            if (nsec === 0 && sec <= TIMESTAMP32_MAX_SEC) {
-                // timestamp 32 = { sec32 (unsigned) }
-                bytes = new Uint8Array(4);
-                view = new DataView(bytes.buffer);
-                view.setUint32(0, sec);
-            } else {
-                // timestamp 64 = { nsec30 (unsigned), sec34 (unsigned) }
-                const secHigh = sec / 0x100000000;
-                const secLow = sec & 0xffffffff;
-                bytes = new Uint8Array(8);
-                view = new DataView(bytes.buffer);
-                // nsec30 | secHigh2
-                view.setUint32(0, (nsec << 2) | (secHigh & 0x3));
-                // secLow32
-                view.setUint32(4, secLow);
-            }
-        } else {
-            // timestamp 96 = { nsec32 (unsigned), sec64 (signed) }
-            bytes = new Uint8Array(12);
-            view = new DataView(bytes.buffer);
-            view.setUint32(0, nsec);
-            setInt64(view, 4, sec);
-        }
-
-        // write date as extension -1
-        this.writeExt(-1,bytes)
+        this._encoder.encode(object)
     }
 
-    private writeU8(value: number) {
-        this.ensureBufferSizeToWrite(1);
-        this._view.setUint8(this._pos, value);
-        this._pos++;
-    }
-
-    private writeU8a(values: ArrayLike<number>) {
-        const size = values.length;
-        this.ensureBufferSizeToWrite(size);
-        this._bytes.set(values, this._pos);
-        this._pos += size;
-    }
-
-    private writeI8(value: number) {
-        this.ensureBufferSizeToWrite(1);
-        this._view.setInt8(this._pos, value);
-        this._pos++;
-    }
-
-    private writeU16(value: number) {
-        this.ensureBufferSizeToWrite(2);
-        this._view.setUint16(this._pos, value);
-        this._pos += 2;
-    }
-
-    private writeI16(value: number) {
-        this.ensureBufferSizeToWrite(2);
-        this._view.setInt16(this._pos, value);
-        this._pos += 2;
-    }
-
-    private writeU32(value: number) {
-        this.ensureBufferSizeToWrite(4);
-        this._view.setUint32(this._pos, value);
-        this._pos += 4;
-    }
-
-    private writeI32(value: number) {
-        this.ensureBufferSizeToWrite(4);
-        this._view.setInt32(this._pos, value);
-        this._pos += 4;
-    }
-
-    private writeF32(value: number) {
-        this.ensureBufferSizeToWrite(4);
-        this._view.setFloat32(this._pos, value);
-        this._pos += 4;
-    }
-
-    private writeF64(value: number) {
-        this.ensureBufferSizeToWrite(8);
-        this._view.setFloat64(this._pos, value);
-        this._pos += 8;
-    }
-
-    private writeU64(value: number) {
-        this.ensureBufferSizeToWrite(8);
-        setUint64(this._view, this._pos, value);
-        this._pos += 8;
-    }
-
-    private writeI64(value: number) {
-        this.ensureBufferSizeToWrite(8);
-        setInt64(this._view, this._pos, value);
-        this._pos += 8;
-    }
-
-    private writeStringHeader(byteLength: number) {
-        if (byteLength < 32) {
-            // fixstr
-            this.writeU8(0xa0 + byteLength);
-        } else if (byteLength < 0x100) {
-            // str 8
-            this.writeU8(0xd9);
-            this.writeU8(byteLength);
-        } else if (byteLength < 0x10000) {
-            // str 16
-            this.writeU8(0xda);
-            this.writeU16(byteLength);
-        } else if (byteLength < 0x100000000) {
-            // str 32
-            this.writeU8(0xdb);
-            this.writeU32(byteLength);
-        } else {
-            throw new Error(`Too long string: ${byteLength} bytes in UTF-8`);
-        }
-    }
-
-    private writeExt(type: number, data: Uint8Array)
-    {
-        switch (data.length)
-        {
-            case 1:
-                this.writeU8(MsgPack.FixExt1)
-                break;
-            case 2:
-                this.writeU8(MsgPack.FixExt2)
-                break;
-            case 4:
-                this.writeU8(MsgPack.FixExt4)
-                break;
-            case 8:
-                this.writeU8(MsgPack.FixExt8)
-                break;
-            case 16:
-                this.writeU8(MsgPack.FixExt16)
-                break;
-            default:
-                if (data.length <  0x100)
-                {
-                    this.writeU8(MsgPack.Ext8);
-                    this.writeU8(data.length)
-                }
-                else if (data.length < 0x10000)
-                {
-                    this.writeU8(MsgPack.Ext16);
-                    this.writeU16(data.length)
-                }
-                else if (data.length < 0x100000000)
-                {
-                    // ext 32
-                    this.writeU8(MsgPack.Ext32);
-                    this.writeU32(data.length);
-                }
-                else throw new Error(`ext (${type}) data too large to encode (length > 2^32 - 1)`);
-        }
-    }
-
-    private resizeBuffer(newSize: number) {
-        const newBuffer = new ArrayBuffer(newSize);
-        const newBytes = new Uint8Array(newBuffer);
-        const newView = new DataView(newBuffer);
-        newBytes.set(this._bytes);
-        this._view = newView;
-        this._bytes = newBytes;
+    private encodeAny(object: any) {
+        this._encoder.encode(object)
     }
 
     private encodeSignature() {
@@ -642,25 +339,29 @@ export class BinaryEncoder implements EEncoder {
         return -1
     }
 
+    private reinitializeState() {
+        this._encoder = new Encoder()
+    }
+
     encode(eResource: EResource): Result<Uint8Array, Error> {
-        this.reinitializeState()
         try {
+            this.reinitializeState()
             this.encodeSignature()
             this.encodeVersion()
             this.encodeEObjects(eResource.eContents(), CheckType.CheckContainer)
-            return Ok(this._bytes.subarray(0, this._pos))
+            return Ok(this._encoder.bytes())
         } catch (err) {
             return Err(err)
         }
 
     }
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
-        this.reinitializeState()
         try {
+            this.reinitializeState()
             this.encodeSignature()
             this.encodeVersion()
             this.encodeEObject(eObject, CheckType.CheckContainer)
-            return Ok(this._bytes.subarray(0, this._pos))
+            return Ok(this._encoder.bytes())
         } catch (err) {
             return Err(err)
         }
