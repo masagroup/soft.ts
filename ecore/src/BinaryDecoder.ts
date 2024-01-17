@@ -20,9 +20,9 @@ import {
     isEClass,
     isEPackage,
 } from "./internal";
-import { ensureUint8Array , createDataView} from "./utils/TypedArray";
-import { utf8Decode } from "./utils/UTF8";
-import * as MsgPack from "./utils/MsgPack"
+import { ensureUint8Array , createDataView} from "./msgpack/TypedArray";
+import { utf8Decode } from "./msgpack/UTF8";
+import * as MsgPack from "./msgpack/Types"
 
 var toArray = require("stream-to-array");
 

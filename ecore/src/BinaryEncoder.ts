@@ -2,9 +2,9 @@ import { WriteStream } from "fs";
 import { Err, Ok, Result } from "ts-results";
 import { EObject, EResource, EEncoder, EPackage, EClass, EDataType, EFactory, EList, EObjectInternal, EcoreUtils, EStructuralFeature, isEReference, isEAttribute, EReference, EAttribute } from "./internal";
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind";
-import { ensureUint8Array } from "./utils/TypedArray";
-import * as MsgPack from "./utils/MsgPack";
-import { utf8Count, utf8Encode } from "./utils/UTF8";
+import { ensureUint8Array } from "./msgpack/TypedArray";
+import * as MsgPack from "./msgpack/Types";
+import { utf8Count, utf8Encode } from "./msgpack/UTF8";
 
 const binaryVersion = 0;
 const binarySignature = Uint8Array.from([137, 101, 109, 102, 10, 13, 26, 10]);
