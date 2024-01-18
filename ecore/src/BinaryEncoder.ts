@@ -51,7 +51,7 @@ export class BinaryEncoder implements EEncoder {
     private _encoder: Encoder;
 
 
-    constructor(eContext: EResource, options: Map<string, any>) {
+    constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext;
     }
 
@@ -133,7 +133,7 @@ export class BinaryEncoder implements EEncoder {
                         saveFeatureValues = false
                     } else {
                         let eResource = eObjectInternal.eInternalResource();
-                        if (eResource != this._resource || (this._objectRoot != null && !EcoreUtils.isAncestor(this._objectRoot, eObjectInternal))) {
+                        if (eResource != null && (eResource != this._resource || (this._objectRoot != null && !EcoreUtils.isAncestor(this._objectRoot, eObjectInternal)))) {
                             this.encodeNumber(-2)
                             this.encodeURIWithFragment(eResource.eURI, eResource.getURIFragment(eObjectInternal))
                             saveFeatureValues = false

@@ -61,7 +61,7 @@ export class BinaryDecoder implements EDecoder {
     private _uris: URL[] = [];
     private _enumLiterals: string[] = [];
 
-    constructor(eContext: EResource, options: Map<string, any>) {
+    constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext;
         this._baseURI = this._resource.eURI;
     }
