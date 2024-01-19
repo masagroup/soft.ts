@@ -19,11 +19,16 @@ describe('URI', () => {
     });
 
     test('authority', () => {
-        expect(new URI("http:///file.text").authority()).toEqual("")
-        expect(new URI("http:/file.text").authority()).toEqual("")
+        expect(new URI("file:///file.text").authority()).toEqual("")
+        expect(new URI("file:/file.text").authority()).toEqual("")
         expect(new URI("http://host/file.text").authority()).toEqual("host")
         expect(new URI("http://host:10/file.text").authority()).toEqual("host:10")
         expect(new URI("http://userinfo@host:10/file.text").authority()).toEqual("userinfo@host:10")
+    });
+
+    test('relativize', () => {
+        expect(new URI("http://host:10020/path/").relativize(new URI("http://host:10020/path/path2"))).toEqual(new URI("path2"))
+        expect(new URI("testdata/path2").relativize(new URI("testdata/path1"))).toEqual(new URI("path1"))
     });
 
 });

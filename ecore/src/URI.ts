@@ -13,16 +13,12 @@ export class URI extends URL {
     }
 
     authority(): string {
-        let h = this.host
-        if (!h) {
+        if (!this.host) {
             return ""
         }
         let hostIndex = this.href.indexOf(this.host)
         let first = this.username ? this.href.indexOf(this.username) : hostIndex
         let last = hostIndex + this.host.length
-        if (this.port) {
-            last += this.port.length + 1
-        }
         return this.href.slice(first, last)
     }
 
@@ -105,7 +101,9 @@ export class URI extends URL {
                 return ref
             }
         }
-        let result = new URI("")
+        let result = new URI("http://empty.text")
+        result.protocol = ""
+        result.host = ""
         result.pathname = cp.substring(0, bp.length)
         result.search = ref.search
         result.hash = ref.hash
