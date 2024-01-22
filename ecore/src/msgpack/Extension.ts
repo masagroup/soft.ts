@@ -1,17 +1,13 @@
 import { dateExtension } from "./Date";
 
-
 export class ExtData {
     constructor(
-      readonly type: number,
-      readonly data: Uint8Array,
+        readonly type: number,
+        readonly data: Uint8Array,
     ) {}
-  }
+}
 
-export type ExtensionDecoderType = (
-    data: Uint8Array,
-    extensionType: number,
-) => unknown;
+export type ExtensionDecoderType = (data: Uint8Array, extensionType: number) => unknown;
 
 export type ExtensionEncoderType = (input: unknown) => Uint8Array | null;
 

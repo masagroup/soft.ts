@@ -156,7 +156,7 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private setBuffer(buffer: ArrayLike<number> | BufferSource): void {
-        this._decoder = new Decoder(buffer)
+        this._decoder = new Decoder(buffer);
     }
 
     private decodeSignature() {
@@ -438,27 +438,26 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private decodeAny(): any {
-        return this._decoder.decode()
+        return this._decoder.decode();
     }
 
     private decodeBoolean(): boolean {
-        return this._decoder.decodeBoolean()
+        return this._decoder.decodeBoolean();
     }
 
     private decodeNumber(): number {
-        return this._decoder.decodeNumber()
+        return this._decoder.decodeNumber();
     }
 
     private decodeString(): string {
-        return this._decoder.decodeString()
+        return this._decoder.decodeString();
     }
 
     private decodeBytes(): Uint8Array {
-        return this._decoder.decodeBinary()
+        return this._decoder.decodeBinary();
     }
 
-    private decodeDate() : Date {
-        return this._decoder.decode() as Date
+    private decodeDate(): Date {
+        return this._decoder.decode() as Date;
     }
-
 }

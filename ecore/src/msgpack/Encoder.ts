@@ -1,7 +1,7 @@
 import { ExtData, ExtensionCodec, ExtensionCodecType } from "./Extension";
 import { setInt64, setUint64 } from "./Int";
 import { ensureUint8Array } from "./TypedArray";
-import * as Types from "./Types"
+import * as Types from "./Types";
 import { utf8Count, utf8Encode } from "./UTF8";
 
 export const DEFAULT_INITIAL_BUFFER_SIZE = 2048;
@@ -11,10 +11,10 @@ export type EncoderOptions = Partial<
         extensionCodec: ExtensionCodecType;
 
         /**
-        * The initial size of the internal buffer.
-        *
-        * Defaults to 2048.
-        */
+         * The initial size of the internal buffer.
+         *
+         * Defaults to 2048.
+         */
         initialBufferSize: number;
     }>
 >;
@@ -35,18 +35,18 @@ export class Encoder {
     }
 
     bytes(): Uint8Array {
-        return this._bytes.subarray(0, this._pos)
+        return this._bytes.subarray(0, this._pos);
     }
 
     encode(object: unknown) {
         if (object == null) {
             this.encodeNil();
         } else if (typeof object === "boolean") {
-            this.encodeBoolean(object)
+            this.encodeBoolean(object);
         } else if (typeof object === "number") {
-            this.encodeNumber(object)
+            this.encodeNumber(object);
         } else if (typeof object === "string") {
-            this.encodeString(object)
+            this.encodeString(object);
         } else {
             this.encodeObject(object);
         }
@@ -111,8 +111,8 @@ export class Encoder {
             }
         } else {
             // float 64
-            this.writeU8(Types.Double)
-            this.writeF64(object)
+            this.writeU8(Types.Double);
+            this.writeF64(object);
         }
     }
 
@@ -138,12 +138,12 @@ export class Encoder {
     }
 
     encodeString(object: string) {
-        const maxHeaderSize = 1 + 4
-        const byteLength = utf8Count(object)
-        this.ensureBufferSizeToWrite(maxHeaderSize + byteLength)
-        this.writeStringHeader(byteLength)
-        utf8Encode(object, this._bytes, this._pos)
-        this._pos += byteLength
+        const maxHeaderSize = 1 + 4;
+        const byteLength = utf8Count(object);
+        this.ensureBufferSizeToWrite(maxHeaderSize + byteLength);
+        this.writeStringHeader(byteLength);
+        utf8Encode(object, this._bytes, this._pos);
+        this._pos += byteLength;
     }
 
     private encodeObject(object: unknown) {
@@ -160,38 +160,35 @@ export class Encoder {
     }
 
     private encodeExtension(ext: ExtData) {
-        let size = ext.data.length
+        let size = ext.data.length;
         switch (size) {
             case 1:
-                this.writeU8(Types.FixExt1)
+                this.writeU8(Types.FixExt1);
                 break;
             case 2:
-                this.writeU8(Types.FixExt2)
+                this.writeU8(Types.FixExt2);
                 break;
             case 4:
-                this.writeU8(Types.FixExt4)
+                this.writeU8(Types.FixExt4);
                 break;
             case 8:
-                this.writeU8(Types.FixExt8)
+                this.writeU8(Types.FixExt8);
                 break;
             case 16:
-                this.writeU8(Types.FixExt16)
+                this.writeU8(Types.FixExt16);
                 break;
             default:
                 if (size < 0x100) {
                     this.writeU8(Types.Ext8);
-                    this.writeU8(size)
-                }
-                else if (size < 0x10000) {
+                    this.writeU8(size);
+                } else if (size < 0x10000) {
                     this.writeU8(Types.Ext16);
-                    this.writeU16(size)
-                }
-                else if (size < 0x100000000) {
+                    this.writeU16(size);
+                } else if (size < 0x100000000) {
                     // ext 32
                     this.writeU8(Types.Ext32);
                     this.writeU32(size);
-                }
-                else throw new Error(`ext (${ext.type}) data too large to encode (length > 2^32 - 1)`);
+                } else throw new Error(`ext (${ext.type}) data too large to encode (length > 2^32 - 1)`);
         }
         this.writeI8(ext.type);
         this.writeU8a(ext.data);
@@ -294,5 +291,4 @@ export class Encoder {
         this._view = newView;
         this._bytes = newBytes;
     }
-
 }

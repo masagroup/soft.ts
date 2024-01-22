@@ -1,146 +1,323 @@
+export type URIParts = Partial<
+    Readonly<{
+        scheme: string;
+        user: string;
+        host: string;
+        port: string;
+        path: string;
+        query: string;
+        fragment: string;
+    }>
+>;
 
+var uriRegExp = new RegExp(
+    "(([a-zA-Z][a-zA-Z0-9+.-]*):)?" + // scheme:
+        "([^?#]*)" + // authority and path
+        "(?:\\?([^#]*))?" + // ?query
+        "(?:#(.*))?",
+); // #fragment
+var authorityAndPathRegExp = new RegExp("^//([^/]*)(/.*)?$");
+var authorityRegExp = new RegExp(
+    "(?:([^@:]*)(?::([^@]*))?@)?" + // username, password
+        "(\\[[^\\]]*\\]|[^\\[:]*)" + // host (IP-literal (e.g. '['+IPv6+']',dotted-IPv4, or named host)
+        "(?::(\\d*))?",
+); // port)
 
+function parseURI(uri: string): URIParts {
+    let uriMatchs = uriRegExp.exec(uri);
+    if (!uriMatchs) {
+        throw new Error(`invalid uri: ${uri}`);
+    }
+    let scheme = uriMatchs[2] ?? "";
+    let path = "";
+    let host = "";
+    let port = "";
+    let user = "";
+    let authorityAndPath = uriMatchs[3] ?? "";
+    let authorityAndPathMatches = authorityAndPathRegExp.exec(authorityAndPath);
+    if (!authorityAndPathMatches) {
+        path = authorityAndPath;
+    } else {
+        let authority = authorityAndPathMatches[1];
+        let authorityMatches = authorityRegExp.exec(authority);
+        if (!authorityMatches) {
+            throw new Error(`invalid authority: ${authority}`);
+        }
+        if (authorityMatches[1]) {
+            user = authorityMatches[1];
+            if (authorityMatches[2]) {
+                user += authorityMatches[2];
+            }
+        }
+        host = authorityMatches[3] ?? "";
+        port = authorityMatches[4] ?? "";
+        path = authorityAndPathMatches[2] ?? "";
+    }
+    return {
+        scheme: scheme,
+        user: user,
+        host: host,
+        port: port,
+        path: path,
+        query: uriMatchs[4] ?? "",
+        fragment: uriMatchs[5] ?? "",
+    };
+}
 
-export class URI extends URL {
-
-
-    isOpaque(): boolean {
-        return !this.pathname
+function serializeURI(parts: URIParts): string {
+    if (!parts) {
+        return "";
+    }
+    let uri = "";
+    if (parts.scheme) {
+        uri += parts.scheme;
+    }
+    if (parts.user || parts.host || parts.port) {
+        if (parts.scheme) {
+            uri += "://";
+        }
+        if (parts.user) {
+            uri += parts.user + "@";
+        }
+        if (parts.host) {
+            uri += parts.host;
+        } else {
+            throw new Error("host must be defined");
+        }
+        if (parts.port) {
+            uri += ":" + parts.port;
+        }
+    } else {
+        if (parts.scheme) {
+            if (parts.path || parts.query || parts.fragment) {
+                uri += ":";
+            } else {
+                throw new Error("path or query or fragment host must be defined");
+            }
+        }
+    }
+    if (parts.path) {
+        let path = parts.path;
+        // if the URI is not opaque and the path is not already prefixed
+        // with a '/', add one.
+        if (parts.host && parts.path && parts.path.charAt(0) != "/") {
+            uri += "/";
+        }
+        uri += path;
+    }
+    if (parts.query) {
+        uri += "?" + parts.query;
+    }
+    if (parts.fragment) {
+        uri += "#" + parts.fragment;
     }
 
-    isAbsolute() : boolean {
-        return !this.protocol
+    return uri;
+}
+
+export class URI {
+    private static emptyURI = new URI();
+
+    readonly scheme: string;
+    readonly user: string;
+    readonly host: string;
+    readonly port: string;
+    readonly path: string;
+    readonly query: string;
+    readonly fragment: string;
+    readonly rawURI: string;
+
+    constructor(input?: URIParts | string) {
+        var parts: URIParts;
+        if (typeof input === "string") {
+            parts = parseURI(input);
+        } else {
+            parts = input;
+        }
+        this.scheme = parts?.scheme ?? "";
+        this.user = parts?.user ?? "";
+        this.host = parts?.host ?? "";
+        this.port = parts?.port ?? "";
+        this.path = parts?.path ?? "";
+        this.query = parts?.query ?? "";
+        this.fragment = parts?.fragment ?? "";
+        this.rawURI = serializeURI(parts);
+    }
+
+    toString(): string {
+        return this.rawURI;
+    }
+
+    isOpaque(): boolean {
+        return !this.path;
+    }
+
+    isAbsolute(): boolean {
+        return !this.scheme;
+    }
+
+    isEmpty(): boolean {
+        return this == URI.emptyURI;
     }
 
     authority(): string {
         if (!this.host) {
-            return ""
+            return "";
         }
-        let hostIndex = this.href.indexOf(this.host)
-        let first = this.username ? this.href.indexOf(this.username) : hostIndex
-        let last = hostIndex + this.host.length
-        return this.href.slice(first, last)
+        let authority = "";
+        if (this.user) {
+            authority = this.user + "@";
+        }
+        authority += this.host;
+        if (this.port) {
+            authority += ":" + this.port;
+        }
+        return authority;
     }
 
     normalize(): URI {
         if (this.isOpaque()) {
-            return this
+            return this;
         }
-
-        let np = normalize(this.pathname)
-        if (np == this.pathname) {
-            return this
+        let np = normalize(this.path);
+        if (np == this.path) {
+            return this;
         }
-
-        let result = new URI(this)
-        result.pathname = np
-        return result
+        return new URI({
+            scheme: this.scheme,
+            user: this.user,
+            host: this.host,
+            port: this.port,
+            path: np,
+            query: this.query,
+            fragment: this.fragment,
+        });
     }
-
 
     resolve(ref: URI): URI {
         // check if opaque first
         if (ref.isOpaque() || this.isOpaque()) {
-            return ref
+            return ref;
         }
 
-        let refAuthority = ref.authority()
+        let refAuthority = ref.authority();
         // Reference to current document (lone fragment)
-        if (!ref.protocol && !refAuthority && !ref.pathname && !ref.hash && !ref.search) {
-            if (!this.hash || ref.hash == this.hash) {
-                return this
+        if (!ref.scheme && !refAuthority && !ref.path && !ref.fragment && !ref.query) {
+            if (!this.fragment || ref.fragment == this.fragment) {
+                return this;
             }
-
-            let result = new URI(this)
-            result.hash = ref.hash
-            return result
+            return new URI({ fragment: ref.fragment });
         }
 
         // ref is absolute
-        if (ref.protocol) {
-            return ref
+        if (ref.scheme) {
+            return ref;
         }
 
         // no authority
         if (!refAuthority) {
-            let pathname = ref.pathname
-            if (!pathname || pathname[0] != '/') {
-                pathname = resolvePath(this.pathname, ref.pathname, this.isAbsolute())
+            let path = ref.path;
+            if (!path || path[0] != "/") {
+                path = resolvePath(this.path, ref.path, this.isAbsolute());
             }
-            let result = new URI(this)
-            result.pathname = pathname
-            result.search = ref.search
-            result.hash = ref.hash
-            return result
+            return new URI({
+                scheme: this.scheme,
+                user: this.user,
+                host: this.host,
+                port: this.port,
+                path: path,
+                query: ref.query,
+                fragment: ref.fragment,
+            });
         } else {
-            let result = new URI(ref)
-            result.protocol = this.protocol
-            return result
+            return new URI({
+                scheme: this.scheme,
+                user: ref.user,
+                host: ref.host,
+                port: ref.port,
+                path: ref.path,
+                query: ref.query,
+                fragment: ref.fragment,
+            });
         }
     }
 
-    relativize(ref :URI) : URI {
+    relativize(ref: URI): URI {
         // check if opaque
         if (ref.isOpaque() || this.isOpaque()) {
-            return ref
+            return ref;
         }
-    
-        if (this.protocol != this.protocol || this.authority() != ref.authority()) {
-            return ref
+
+        if (this.scheme != this.scheme || this.authority() != ref.authority()) {
+            return ref;
         }
-    
-        let bp = normalize(this.pathname)
-        let cp = normalize(ref.pathname)
+
+        let bp = normalize(this.path);
+        let cp = normalize(ref.path);
         if (bp != cp) {
-            let i = bp.lastIndexOf("/")
+            let i = bp.lastIndexOf("/");
             if (i != -1) {
-                bp = bp.substring(0,i+1)
+                bp = bp.substring(0, i + 1);
             }
 
             if (!cp.startsWith(bp)) {
-                return ref
+                return ref;
             }
         }
-        let result = new URI("http://empty.text")
-        result.protocol = ""
-        result.host = ""
-        result.pathname = cp.substring(0, bp.length)
-        result.search = ref.search
-        result.hash = ref.hash
-        return result
+        return new URI({ path: cp.substring(bp.length), query: ref.query, fragment: ref.fragment });
     }
 
+    trimFragment(): URI {
+        return new URI({
+            scheme: this.scheme,
+            user: this.user,
+            host: this.host,
+            port: this.port,
+            path: this.path,
+            query: this.query,
+        });
+    }
 
+    trimQuery(): URI {
+        return new URI({
+            scheme: this.scheme,
+            user: this.user,
+            host: this.host,
+            port: this.port,
+            path: this.path,
+            fragment: this.fragment,
+        });
+    }
 }
 
 function normalize(path: string): string {
-    let buffer = Buffer.from(path)
+    let buffer = Buffer.from(path);
 
     // Does this path need normalization?
-    let ns = needsNormalization(buffer) // Number of segments
+    let ns = needsNormalization(buffer); // Number of segments
     if (ns < 0) {
         // Nope -- just return it
-        return path
+        return path;
     }
 
-    let segs = new Array<number>(ns)
-    split(buffer, segs)
+    let segs = new Array<number>(ns);
+    split(buffer, segs);
 
     // Remove dots
-    removeDots(buffer, segs)
+    removeDots(buffer, segs);
 
     // Prevent scheme-name confusion
-    maybeAddLeadingDot(buffer, segs)
+    maybeAddLeadingDot(buffer, segs);
 
     // Join the remaining segments and return the result
-    let newSize = join(buffer, segs)
-    let newBuffer = buffer.subarray(0, newSize)
-    return newBuffer.toString()
+    let newSize = join(buffer, segs);
+    let newBuffer = buffer.subarray(0, newSize);
+    return newBuffer.toString();
 }
 
-const SLASH = 47
-const DOT = 46
-const COLON = 58
+const SLASH = 47;
+const DOT = 46;
+const COLON = 58;
 
 // The following algorithm for path normalization avoids the creation of a
 // string object for each segment, as well as the use of a string buffer to
@@ -162,51 +339,54 @@ const COLON = 58
 // This method takes a string argument rather than a char array so that
 // this test can be performed without invoking path.toCharArray().
 function needsNormalization(path: Buffer): number {
-    let normal = true
-    let ns = 0                  // Number of segments
-    let end = path.length - 1   // Index of last char in path
-    let p = 0                   // Index of next char in path
+    let normal = true;
+    let ns = 0; // Number of segments
+    let end = path.length - 1; // Index of last char in path
+    let p = 0; // Index of next char in path
 
     // Skip initial slashes
     while (p <= end) {
         if (path[p] != SLASH) {
-            break
+            break;
         }
-        p++
+        p++;
     }
 
     if (p > 1) {
-        normal = false
+        normal = false;
     }
 
     // Scan segments
     while (p <= end) {
         // Looking at "." or ".." ?
-        if ((path[p] == DOT) && ((p == end) || ((path[p + 1] == SLASH) || ((path[p + 1] == DOT) && ((p + 1 == end) || (path[p + 2] == SLASH)))))) {
-            normal = false
+        if (
+            path[p] == DOT &&
+            (p == end || path[p + 1] == SLASH || (path[p + 1] == DOT && (p + 1 == end || path[p + 2] == SLASH)))
+        ) {
+            normal = false;
         }
-        ns++
+        ns++;
 
         // Find beginning of next segment
         while (p <= end) {
-            let c = path[p]
-            p++
+            let c = path[p];
+            p++;
             if (c != SLASH) {
-                continue
+                continue;
             }
 
             // Skip redundant slashes
             while (p <= end) {
                 if (path[p] != SLASH) {
-                    break
+                    break;
                 }
-                normal = false
-                p++
+                normal = false;
+                p++;
             }
-            break
+            break;
         }
     }
-    return normal ? -1 : ns
+    return normal ? -1 : ns;
 }
 
 // Split the given path into segments, replacing slashes with nulls and
@@ -221,43 +401,43 @@ function needsNormalization(path: Buffer): number {
 //	All slashes in path replaced by '\0'
 //	segs[i] == Index of first char in segment i (0 <= i < segs.length)
 function split(path: Buffer, segs: Array<number>) {
-    let end = path.length - 1 // Index of last char in path
-    let p = 0               // Index of next char in path
-    let i = 0               // Index of current segment
+    let end = path.length - 1; // Index of last char in path
+    let p = 0; // Index of next char in path
+    let i = 0; // Index of current segment
 
     // Skip initial slashes
     while (p <= end) {
         if (path[p] != SLASH) {
-            break
+            break;
         }
-        path[p] = 0
-        p++
+        path[p] = 0;
+        p++;
     }
 
     while (p <= end) {
         // Note start of segment
-        segs[i] = p
-        p++
-        i++
+        segs[i] = p;
+        p++;
+        i++;
         // Find beginning of next segment
         while (p <= end) {
-            let c = path[p]
-            p++
+            let c = path[p];
+            p++;
             if (c != SLASH) {
-                continue
+                continue;
             }
 
-            path[p - 1] = 0
+            path[p - 1] = 0;
 
             // Skip redundant slashes
             while (p <= end) {
                 if (path[p] != SLASH) {
-                    break
+                    break;
                 }
-                path[p] = 0
-                p++
+                path[p] = 0;
+                p++;
             }
-            break
+            break;
         }
     }
 }
@@ -265,52 +445,52 @@ function split(path: Buffer, segs: Array<number>) {
 // Remove "." segments from the given path, and remove segment pairs
 // consisting of a non-".." segment followed by a ".." segment.
 function removeDots(path: Buffer, segs: Array<number>) {
-    let ns = segs.length
-    let end = path.length - 1
+    let ns = segs.length;
+    let end = path.length - 1;
     for (let i = 0; i < ns; i++) {
-        let dots = 0 // Number of dots found (0, 1, or 2)
+        let dots = 0; // Number of dots found (0, 1, or 2)
 
         // Find next occurrence of "." or ".."
         for (let ok = true; ok; ok = i < ns) {
-            let p = segs[i]
+            let p = segs[i];
             if (path[p] == DOT) {
                 if (p == end) {
-                    dots = 1
-                    break
+                    dots = 1;
+                    break;
                 } else if (path[p + 1] == 0) {
-                    dots = 1
-                    break
-                } else if ((path[p + 1] == DOT) && ((p + 1 == end) || (path[p + 2] == 0))) {
-                    dots = 2
-                    break
+                    dots = 1;
+                    break;
+                } else if (path[p + 1] == DOT && (p + 1 == end || path[p + 2] == 0)) {
+                    dots = 2;
+                    break;
                 }
             }
-            i++
+            i++;
         }
 
-        if ((i > ns) || (dots == 0)) {
-            break
+        if (i > ns || dots == 0) {
+            break;
         }
 
         if (dots == 1) {
             // Remove this occurrence of "."
-            segs[i] = -1
+            segs[i] = -1;
         } else {
             // If there is a preceding non-".." segment, remove both that
             // segment and this occurrence of ".."; otherwise, leave this
             // ".." segment as-is.
-            var j: number
+            var j: number;
             for (j = i - 1; j >= 0; j--) {
                 if (segs[j] != -1) {
-                    break
+                    break;
                 }
             }
 
             if (j >= 0) {
-                let q = segs[j]
-                if (!((path[q] == DOT) && (path[q + 1] == DOT) && (path[q + 2] == 0))) {
-                    segs[i] = -1
-                    segs[j] = -1
+                let q = segs[j];
+                if (!(path[q] == DOT && path[q + 1] == DOT && path[q + 2] == 0)) {
+                    segs[i] = -1;
+                    segs[j] = -1;
                 }
             }
         }
@@ -322,38 +502,38 @@ function removeDots(path: Buffer, segs: Array<number>) {
 function maybeAddLeadingDot(path: Buffer, segs: Array<number>) {
     if (path[0] == 0) {
         // The path is absolute
-        return
+        return;
     }
 
-    let ns = segs.length
-    let f = 0 // Index of first segment
+    let ns = segs.length;
+    let f = 0; // Index of first segment
     while (f < ns) {
         if (segs[f] >= 0) {
-            break
+            break;
         }
-        f++
+        f++;
     }
 
     if (f >= ns || f == 0) {
         // The path is empty, or else the original first segment survived,
         // in which case we already know that no leading "." is needed
-        return
+        return;
     }
-    let p = segs[f]
+    let p = segs[f];
     while (p < path.length && path[p] != COLON && path[p] != 0) {
-        p++
+        p++;
     }
 
     if (p >= path.length || path[p] == 0) {
         // No colon in first segment, so no "." needed
-        return
+        return;
     }
 
     // At this point we know that the first segment is unused,
     // hence we can insert a "." segment at that position
-    path[0] = DOT
-    path[1] = 0
-    segs[0] = 0
+    path[0] = DOT;
+    path[1] = 0;
+    segs[0] = 0;
 }
 
 // Join the segments in the given path according to the given segment-index
@@ -370,62 +550,62 @@ function maybeAddLeadingDot(path: Buffer, segs: Array<number>) {
 //
 //	path[0] .. path[return value] == Resulting path
 function join(path: Buffer, segs: ArrayLike<number>): number {
-    let ns = segs.length      // Number of segments
-    let end = path.length - 1 // Index of last char in path
-    let p = 0               // Index of next path char to write
+    let ns = segs.length; // Number of segments
+    let end = path.length - 1; // Index of last char in path
+    let p = 0; // Index of next path char to write
     if (path[p] == 0) {
         // Restore initial slash for absolute paths
-        path[p] = SLASH
-        p++
+        path[p] = SLASH;
+        p++;
     }
     for (let i = 0; i < ns; i++) {
-        let q = segs[i] // Current segment
+        let q = segs[i]; // Current segment
         if (q == -1) {
             // Ignore this segment
-            continue
+            continue;
         }
 
         if (p == q) {
             // We're already at this segment, so just skip to its end
             while (p <= end && path[p] != 0) {
-                p++
+                p++;
             }
 
             if (p <= end) {
                 // Preserve trailing slash
-                path[p] = SLASH
-                p++
+                path[p] = SLASH;
+                p++;
             }
         } else if (p < q) {
             // Copy q down to p
             while (q <= end && path[q] != 0) {
-                path[p] = path[q]
-                p++
-                q++
+                path[p] = path[q];
+                p++;
+                q++;
             }
             if (q <= end) {
                 // Preserve trailing slash
-                path[p] = SLASH
-                p++
+                path[p] = SLASH;
+                p++;
             }
         }
     }
-    return p
+    return p;
 }
 
-function resolvePath(base : string, child : string, isAbsolute : boolean) : string {
-	let i = base.lastIndexOf('/')
-	let cn = child.length
-	var path : string
-	if (cn == 0) {
-		if (i >= 0) {
-			path = base.substring(0,i+1)
-		}
-	} else {
-		if (i >= 0) {
-			path = path + base.substring(0,i+1)
-		}
-		path = path + child
-	}
-	return normalize(path)
+function resolvePath(base: string, child: string, isAbsolute: boolean): string {
+    let i = base.lastIndexOf("/");
+    let cn = child.length;
+    let path = "";
+    if (cn == 0) {
+        if (i >= 0) {
+            path = base.substring(0, i + 1);
+        }
+    } else {
+        if (i >= 0) {
+            path = path + base.substring(0, i + 1);
+        }
+        path = path + child;
+    }
+    return normalize(path);
 }

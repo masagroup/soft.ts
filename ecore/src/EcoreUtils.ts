@@ -125,63 +125,61 @@ export class EcoreUtils {
         }
     }
 
-    static getAncestor(eObject :EObject, eClass :EClass) : EObject {
-        let eCurrent = eObject
-        while (eCurrent != null && eCurrent.eClass() != eClass) {
-            eCurrent = eCurrent.eContainer()
-        }
-        return eCurrent
-    }
-    
-    static isAncestor(eAncestor :EObject, eObject :EObject) :boolean {
+    static getAncestor(eObject: EObject, eClass: EClass): EObject {
         let eCurrent = eObject;
-        while(eCurrent != null && eCurrent != eAncestor) {
-            eCurrent = eCurrent.eContainer()
+        while (eCurrent != null && eCurrent.eClass() != eClass) {
+            eCurrent = eCurrent.eContainer();
         }
-        return eCurrent == eAncestor
+        return eCurrent;
     }
 
-    static getURI(eObject : EObject) : URL {
+    static isAncestor(eAncestor: EObject, eObject: EObject): boolean {
+        let eCurrent = eObject;
+        while (eCurrent != null && eCurrent != eAncestor) {
+            eCurrent = eCurrent.eContainer();
+        }
+        return eCurrent == eAncestor;
+    }
+
+    static getURI(eObject: EObject): URL {
         if (eObject.eIsProxy()) {
-            return (eObject as EObjectInternal).eProxyURI()
+            return (eObject as EObjectInternal).eProxyURI();
         } else {
-            let resource = eObject.eResource()
+            let resource = eObject.eResource();
             if (resource) {
-                return new URL(resource.eURI.toString()+ "#" + resource.getURIFragment(eObject))
+                return new URL(resource.eURI.toString() + "#" + resource.getURIFragment(eObject));
             } else {
-                let id = EcoreUtils.getEObjectID(eObject)
+                let id = EcoreUtils.getEObjectID(eObject);
                 if (id.length == 0) {
-                    return new URL("#//" + EcoreUtils.getRelativeURIFragmentPath(null,eObject,false))
+                    return new URL("#//" + EcoreUtils.getRelativeURIFragmentPath(null, eObject, false));
                 } else {
-                    return new URL("#"+id)
+                    return new URL("#" + id);
                 }
             }
         }
     }
 
-    static getRelativeURIFragmentPath(ancestor : EObject, descendant : EObject, resolve :boolean) : string {
+    static getRelativeURIFragmentPath(ancestor: EObject, descendant: EObject, resolve: boolean): string {
         if (ancestor == descendant) {
-            return ""
+            return "";
         }
-        let eObject = descendant
-        let eContainer = eObject.eContainer()
-        let visited = new Set<EObject>()
-        let paths = []
-        while ( eContainer != null && !visited.has(eObject)) {
-            visited.add(eObject)
-            let path = (eContainer as EObjectInternal).eURIFragmentSegment(eObject.eContainingFeature(),eObject)
-            paths.slice().unshift( path)
-            eObject = eContainer
+        let eObject = descendant;
+        let eContainer = eObject.eContainer();
+        let visited = new Set<EObject>();
+        let paths = [];
+        while (eContainer != null && !visited.has(eObject)) {
+            visited.add(eObject);
+            let path = (eContainer as EObjectInternal).eURIFragmentSegment(eObject.eContainingFeature(), eObject);
+            paths.slice().unshift(path);
+            eObject = eContainer;
             if (eContainer == ancestor) {
-                break
+                break;
             }
-            eContainer = eObject.eContainer()
+            eContainer = eObject.eContainer();
         }
         if (eObject != ancestor && ancestor != null) {
-            throw Error("The ancestor not found")
+            throw Error("The ancestor not found");
         }
-        return paths.join("/")
+        return paths.join("/");
     }
-
-
 }

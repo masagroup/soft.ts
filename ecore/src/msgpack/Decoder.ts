@@ -1,6 +1,6 @@
 import { ExtensionCodec, ExtensionCodecType } from "./Extension";
 import { createDataView, ensureUint8Array } from "./TypedArray";
-import * as Types from "./Types"
+import * as Types from "./Types";
 import { utf8Decode } from "./UTF8";
 
 function prettyByte(byte: number): string {
@@ -77,11 +77,10 @@ export class Decoder {
             case Types.Ext8:
             case Types.Ext16:
             case Types.Ext32:
-                return this.decodeExt(code)
+                return this.decodeExt(code);
         }
         throw new Error(`Unrecognized type byte: ${prettyByte(code)} decoding any`);
     }
-
 
     decodeBoolean(): boolean {
         let code = this.readU8();
@@ -97,7 +96,6 @@ export class Decoder {
         }
         throw new Error(`Unrecognized type byte: ${prettyByte(code)}`);
     }
-
 
     decodeNumber(): number {
         let code = this.readU8();
@@ -186,11 +184,11 @@ export class Decoder {
         throw new Error(`invalid code type byte: ${prettyByte(c)} decoding string/bytes length`);
     }
 
-    private decodeExt(c : number) {
+    private decodeExt(c: number) {
         let extLen = this.parseExtLen(c);
         let extID = this.readI8();
-        const data = this._bytes.subarray(this._pos,this._pos+extLen);
-        this._pos += extLen
+        const data = this._bytes.subarray(this._pos, this._pos + extLen);
+        this._pos += extLen;
         return this._extensionCodec.decode(data, extID);
     }
 
@@ -280,5 +278,4 @@ export class Decoder {
         this._pos += 8;
         return value;
     }
-
 }

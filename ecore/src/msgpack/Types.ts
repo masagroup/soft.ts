@@ -1,4 +1,3 @@
-
 export const PosFixedNumHigh = 0x7f;
 export const NegFixedNumLow = 0xe0;
 
@@ -83,4 +82,3 @@ export function isFixedExt(c: number): boolean {
 export function isExt(c: number): boolean {
     return isFixedExt(c) || c == Ext8 || c == Ext16 || c == Ext32;
 }
-
