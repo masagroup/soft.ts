@@ -141,3 +141,4 @@ export * from "./EPackageRegistryImpl";
 export * from "./DeepCopy";
 export * from "./DeepEqual";
 export * from "./EcoreUtils";
+export * from "./URI";

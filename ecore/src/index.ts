@@ -87,4 +87,5 @@ export {
     XMLCodec,
     XMLOptions,
     XMLProcessor,
+    URI,
 } from "./internal";
