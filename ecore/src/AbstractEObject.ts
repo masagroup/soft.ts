@@ -37,6 +37,7 @@ import {
     isMapType,
     isProxy,
     Notification,
+    URI,
 } from "./internal";
 
 function isNumeric(n) {
@@ -50,8 +51,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     abstract eSetInternalContainer(container: EObject, containerFeatureID: number): void;
     abstract eSetInternalResource(resource: EResource): void;
     abstract eIsProxy(): boolean;
-    abstract eProxyURI(): URL;
-    abstract eSetProxyURI(uri: URL): void;
+    abstract eProxyURI(): URI;
+    abstract eSetProxyURI(uri: URI): void;
 
     eDynamicProperties(): EDynamicProperties {
         return null;

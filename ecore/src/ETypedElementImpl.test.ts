@@ -27,6 +27,7 @@ import {
     EcoreConstants,
     EventType,
     Notification,
+    URI,
     getEcorePackage,
     isEObjectList,
 } from "./internal";
@@ -68,7 +69,7 @@ describe("ETypedElementImpl", () => {
         verify(mockValue.eIsProxy()).once();
 
         // get a resolved value
-        let mockURI = new URL("test:///file.t");
+        let mockURI = new URI("test:///uri");
         let mockResolved = mock<EClassifierInternal>();
         let resolved = instance(mockResolved);
         when(mockResolved.eProxyURI()).thenReturn(null);

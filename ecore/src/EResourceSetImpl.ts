@@ -28,6 +28,7 @@ import {
     EURIConverterImpl,
     getPackageRegistry,
     getCodecRegistry,
+    URI,
 } from "./internal";
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
@@ -100,7 +101,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         return this._resources;
     }
 
-    getResource(uri: URL, loadOnDemand: boolean): EResource {
+    getResource(uri: URI, loadOnDemand: boolean): EResource {
         if (this._uriResourceMap) {
             let resource = this._uriResourceMap.get(uri.toString());
             if (resource) {
@@ -139,17 +140,17 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         return null;
     }
 
-    createResource(uri: URL): EResource {
+    createResource(uri: URI): EResource {
         let resource = new EResourceImpl();
         resource.eURI = uri;
         this._resources.add(resource);
         return resource;
     }
 
-    getEObject(uri: URL, loadOnDemand: boolean): EObject {
+    getEObject(uri: URI, loadOnDemand: boolean): EObject {
         let uriStr = uri.toString();
         let ndxHash = uriStr.lastIndexOf("#");
-        let resource = this.getResource(ndxHash != -1 ? new URL(uriStr.slice(0, ndxHash)) : uri, loadOnDemand);
+        let resource = this.getResource(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand);
         return resource ? resource.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "") : null;
     }
 

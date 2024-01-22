@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { anything, instance, mock, verify, when } from "ts-mockito";
-import { EObject, ECodec, ECodecRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl } from "./internal";
+import { EObject, ECodec, ECodecRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl, URI } from "./internal";
 
 describe("EResourceSetImpl", () => {
     test("constructor", () => {
@@ -35,7 +35,7 @@ describe("EResourceSetImpl", () => {
     test("getResource", () => {});
 
     test("getRegisteredResource", () => {
-        let uriResource = new URL("test://file.t");
+        let uriResource = new URI("test://file.t");
         let rs = new EResourceSetImpl();
 
         // register resource

@@ -34,6 +34,7 @@ import {
     EventType,
     ImmutableEList,
     Notification,
+    URI,
     getEcorePackage,
     isEObjectList,
 } from "./internal";

@@ -34,6 +34,7 @@ import {
     isEDataType,
     XMLNamespaces,
     XMLOptions,
+    URI,
 } from "./internal";
 import { XMLConstants } from "./XMLConstants";
 
@@ -580,9 +581,7 @@ export class XMLDecoder implements EDecoder {
             for (const eReference of eProxy.eClass().eAllReferences) {
                 let eOpposite = eReference.eOpposite;
                 if (eOpposite && eOpposite.isChangeable && eProxy.eIsSet(eReference)) {
-                    let resolvedObject = this._resource.getEObject(
-                        (eProxy as EObjectInternal).eProxyURI().href.slice(1),
-                    );
+                    let resolvedObject = this._resource.getEObject((eProxy as EObjectInternal).eProxyURI().fragment);
                     if (resolvedObject) {
                         let proxyHolder: EObject = null;
                         if (eReference.isMany) {
@@ -681,16 +680,21 @@ export class XMLDecoder implements EDecoder {
     }
 
     private handleProxy(eProxy: EObject, id: string): void {
-        let uri: URL = null;
+        let resourceURI = this._resource.eURI;
+        if (!resourceURI) {
+            return
+        }
+
+        let uri: URI = null;
         try {
-            uri = new URL(id);
+            uri = new URI(id);
         } catch {
             return;
         }
 
         // resolve reference uri
-        if (!uri.protocol) {
-            uri = new URL(id, this._resource.eURI);
+        if (!uri.isAbsolute()) {
+            uri = resourceURI.resolve(uri);
         }
 
         // set object proxy uri

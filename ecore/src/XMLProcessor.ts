@@ -16,6 +16,7 @@ import {
     ExtendedMetaData,
     getEcorePackage,
     isEResourceSet,
+    URI,
     XMLOptions,
 } from "./internal";
 
@@ -39,7 +40,7 @@ export class XMLProcessor {
         return this._resourceSet;
     }
 
-    load(uri: URL, options?: Map<string, any>): Promise<EResource> {
+    load(uri: URI, options?: Map<string, any>): Promise<EResource> {
         let rs = this.getResourceSet();
         let r = rs.createResource(uri);
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]]);
@@ -58,7 +59,7 @@ export class XMLProcessor {
 
     loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<EResource> {
         let rs = this.getResourceSet();
-        let r = rs.createResource(new URL("file:///*.xml"));
+        let r = rs.createResource(new URI("file:///*.xml"));
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]]);
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())]);
 
@@ -73,7 +74,7 @@ export class XMLProcessor {
         });
     }
 
-    loadSync(uri: URL, options?: Map<string, any>): EResource {
+    loadSync(uri: URI, options?: Map<string, any>): EResource {
         let rs = this.getResourceSet();
         let r = rs.createResource(uri);
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]]);

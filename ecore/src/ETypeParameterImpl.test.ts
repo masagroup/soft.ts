@@ -27,6 +27,7 @@ import {
     ETypeParameterImpl,
     EcoreConstants,
     ImmutableEList,
+    URI,
     getEcorePackage,
     isEObjectList,
 } from "./internal";

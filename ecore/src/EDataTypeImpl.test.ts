@@ -26,6 +26,7 @@ import {
     EcoreConstants,
     EventType,
     Notification,
+    URI,
     getEcorePackage,
     isEObjectList,
 } from "./internal";

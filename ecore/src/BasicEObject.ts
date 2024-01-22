@@ -20,6 +20,7 @@ import {
     EResource,
     EStructuralFeature,
     ImmutableEList,
+    URI,
 } from "./internal";
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>;
@@ -142,7 +143,7 @@ export class BasicEObject extends AbstractEObject {
     private _eResource: EResource = null;
     private _eContainer: EObject = null;
     private _eContainerFeatureID: number = -1;
-    private _eProxyURI: URL = null;
+    private _eProxyURI: URI = null;
     private _contentsListAdapter: ContentsListAdapter = null;
     private _crossReferencesListAdapter: ContentsListAdapter = null;
     private _adapters: EList<EAdapter> = null;
@@ -210,11 +211,11 @@ export class BasicEObject extends AbstractEObject {
         return this._eProxyURI != null;
     }
 
-    eProxyURI(): URL {
+    eProxyURI(): URI {
         return this._eProxyURI;
     }
 
-    eSetProxyURI(uri: URL): void {
+    eSetProxyURI(uri: URI): void {
         this._eProxyURI = uri;
     }
 }

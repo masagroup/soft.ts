@@ -38,6 +38,7 @@ import {
     EDecoder,
     ECodecRegistry,
     EDiagnosticImpl,
+    URI,
 } from "./internal";
 
 class ResourceNotification extends AbstractNotification {
@@ -145,7 +146,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
 }
 
 export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
-    private _uri: URL = null;
+    private _uri: URI = null;
     private _objectIDManager: EObjectIDManager = null;
     private _isLoaded: boolean = false;
     private _isLoading: boolean = false;
@@ -155,11 +156,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _warnings: EList<EDiagnostic> = null;
     private static _defaultURIConverter = new EURIConverterImpl();
 
-    get eURI(): URL {
+    get eURI(): URI {
         return this._uri;
     }
 
-    set eURI(uri: URL) {
+    set eURI(uri: URI) {
         let oldURI = this._uri;
         this._uri = uri;
         if (this.eNotificationRequired) {

@@ -8,20 +8,20 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EList, EURIHandler } from "./internal";
+import { EList, EURIHandler, URI } from "./internal";
 
 export interface EURIConverter {
-    createReadStream(uri: URL): fs.ReadStream;
+    createReadStream(uri: URI): fs.ReadStream;
 
-    createWriteStream(uri: URL): fs.WriteStream;
+    createWriteStream(uri: URI): fs.WriteStream;
 
-    readSync(uri: URL): null | Buffer;
+    readSync(uri: URI): null | Buffer;
 
-    writeSync(uri: URL, s: Buffer): void;
+    writeSync(uri: URI, s: Buffer): void;
 
-    normalize(uri: URL): URL;
+    normalize(uri: URI): URI;
 
-    getURIHandler(uri: URL): EURIHandler;
+    getURIHandler(uri: URI): EURIHandler;
 
     getURIHandlers(): EList<EURIHandler>;
 }

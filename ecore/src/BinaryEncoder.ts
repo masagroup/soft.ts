@@ -16,6 +16,7 @@ import {
     isEAttribute,
     EReference,
     EAttribute,
+    URI,
 } from "./internal";
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind";
 import { Encoder } from "./msgpack/Encoder";
@@ -56,6 +57,7 @@ class FeatureData {
 
 export class BinaryEncoder implements EEncoder {
     private _resource: EResource;
+    private _baseURI : URI;
     private _objectRoot: EObject;
     private _objectToID: Map<EObject, number> = new Map<EObject, number>();
     private _classDataMap: Map<EClass, ClassData> = new Map<EClass, ClassData>();
@@ -68,6 +70,7 @@ export class BinaryEncoder implements EEncoder {
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext;
+        this._baseURI = this._resource?.eURI;
     }
 
     private encodeBoolean(object: boolean) {
@@ -217,19 +220,15 @@ export class BinaryEncoder implements EEncoder {
         return eClassData;
     }
 
-    private encodeURI(uri: URL) {
+    private encodeURI(uri: URI) {
         if (uri == null) {
             this.encodeNumber(-1);
         } else {
-            let uriStr = uri.toString();
-            let ndx = uriStr.indexOf("#");
-            let trimmed: string = ndx != -1 ? (ndx > 0 ? uriStr.slice(0, ndx - 1) : "") : uriStr;
-            let fragment: string = ndx != -1 ? (ndx > 0 ? uriStr.slice(ndx + 1) : "") : "";
-            this.encodeURIWithFragment(new URL(trimmed), fragment);
+            this.encodeURIWithFragment(uri.trimFragment(), uri.fragment);
         }
     }
 
-    private encodeURIWithFragment(uri: URL, fragment: string) {
+    private encodeURIWithFragment(uri: URI, fragment: string) {
         if (uri == null) {
             this.encodeNumber(-1);
         } else {
@@ -240,10 +239,14 @@ export class BinaryEncoder implements EEncoder {
                 let id = this._uriToIDMap.size;
                 this._uriToIDMap.set(uriStr, id);
                 this.encodeNumber(id);
-                this.encodeString(uri.toString());
+                this.encodeString(this.relativizeURI(uri).toString());
             }
             this.encodeString(fragment);
         }
+    }
+
+    private relativizeURI(uri : URI) : URI {
+        return this._baseURI ? this._baseURI.relativize(uri): uri;
     }
 
     private encodeFeatureValue(eObject: EObjectInternal, featureID: number, featureData: FeatureData) {

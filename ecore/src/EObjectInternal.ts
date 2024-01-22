@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature } from "./internal";
+import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature, URI } from "./internal";
 
 export interface EDynamicProperties {
     eDynamicGet(dynamicFeatureID: number): any;
@@ -53,9 +53,9 @@ export interface EObjectInternal extends EObject {
 
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string;
 
-    eProxyURI(): URL;
+    eProxyURI(): URI;
 
-    eSetProxyURI(uri: URL): void;
+    eSetProxyURI(uri: URI): void;
 
     eResolveProxy(proxy: EObject): EObject;
 }

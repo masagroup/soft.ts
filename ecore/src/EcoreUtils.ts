@@ -18,6 +18,7 @@ import {
     EObjectInternal,
     EResource,
     EResourceSet,
+    URI,
     getPackageRegistry,
 } from "./internal";
 
@@ -141,19 +142,20 @@ export class EcoreUtils {
         return eCurrent == eAncestor;
     }
 
-    static getURI(eObject: EObject): URL {
+    static getURI(eObject: EObject): URI {
         if (eObject.eIsProxy()) {
             return (eObject as EObjectInternal).eProxyURI();
         } else {
             let resource = eObject.eResource();
             if (resource) {
-                return new URL(resource.eURI.toString() + "#" + resource.getURIFragment(eObject));
+                let uri = resource.eURI;
+                return new URI({ scheme: uri.scheme, host: uri.host, port: uri.port, user: uri.user, path: uri.path, query: uri.query, fragment: resource.getURIFragment(eObject) })
             } else {
                 let id = EcoreUtils.getEObjectID(eObject);
                 if (id.length == 0) {
-                    return new URL("#//" + EcoreUtils.getRelativeURIFragmentPath(null, eObject, false));
+                    return new URI({ fragment: "//" + EcoreUtils.getRelativeURIFragmentPath(null, eObject, false) });
                 } else {
-                    return new URL("#" + id);
+                    return new URI({ fragment: id });
                 }
             }
         }

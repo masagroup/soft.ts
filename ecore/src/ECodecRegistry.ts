@@ -1,7 +1,7 @@
-import { ECodec, ECodecRegistryImpl } from "./internal";
+import { ECodec, ECodecRegistryImpl, URI } from "./internal";
 
 export interface ECodecRegistry {
-    getCodec(url: URL): ECodec;
+    getCodec(url: URI): ECodec;
     getProtocolToCodecMap(): Map<string, ECodec>;
     getExtensionToCodecMap(): Map<string, ECodec>;
 }

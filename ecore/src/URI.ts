@@ -23,7 +23,16 @@ var authorityRegExp = new RegExp(
         "(?::(\\d*))?",
 ); // port)
 
-function parseURI(uri: string): URIParts {
+export function uriToFilePath(uri : URI) : string {
+    let path = uri.normalize().path
+    if (process.platform == "win32" && path[0] == "/") {
+        path = path.slice(1)
+    }
+    return path
+}
+
+function parseURI(u: string): URIParts {
+    let uri = u.replace(/\\/g,"/")
     let uriMatchs = uriRegExp.exec(uri);
     if (!uriMatchs) {
         throw new Error(`invalid uri: ${uri}`);
@@ -70,12 +79,9 @@ function serializeURI(parts: URIParts): string {
     }
     let uri = "";
     if (parts.scheme) {
-        uri += parts.scheme;
+        uri += parts.scheme + "://";
     }
     if (parts.user || parts.host || parts.port) {
-        if (parts.scheme) {
-            uri += "://";
-        }
         if (parts.user) {
             uri += parts.user + "@";
         }
@@ -86,14 +92,6 @@ function serializeURI(parts: URIParts): string {
         }
         if (parts.port) {
             uri += ":" + parts.port;
-        }
-    } else {
-        if (parts.scheme) {
-            if (parts.path || parts.query || parts.fragment) {
-                uri += ":";
-            } else {
-                throw new Error("path or query or fragment host must be defined");
-            }
         }
     }
     if (parts.path) {

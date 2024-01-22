@@ -19,6 +19,7 @@ import {
     isEAttribute,
     isEClass,
     isEPackage,
+    URI,
 } from "./internal";
 import { Decoder } from "./msgpack/Decoder";
 
@@ -57,8 +58,8 @@ export class BinaryDecoder implements EDecoder {
     private _objects: EObject[] = [];
     private _isResolveProxies: boolean = false;
     private _packageData: PackageData[] = [];
-    private _baseURI: URL;
-    private _uris: URL[] = [];
+    private _baseURI: URI;
+    private _uris: URI[] = [];
     private _enumLiterals: string[] = [];
 
     constructor(eContext: EResource, options?: Map<string, any>) {
@@ -413,28 +414,30 @@ export class BinaryDecoder implements EDecoder {
         return featureData;
     }
 
-    private decodeURI(): URL {
+    private decodeURI(): URI {
         let id = this.decodeNumber();
         if (id == -1) return null;
         else {
-            var uri: URL;
+            var uri: URI;
             if (this._uris.length <= id) {
                 // build uri
                 let uriStr = this.decodeString();
                 if (uriStr == "") {
                     uri = this._baseURI;
-                } else if (this._baseURI) {
-                    uri = new URL(uriStr, this._baseURI.toString());
                 } else {
-                    uri = new URL(uriStr);
-                }
+                    uri = this.resolveURI(new URI(uriStr));
+                } 
                 // add it to the uri array
                 this._uris.push(uri);
             } else {
                 uri = this._uris[id];
             }
-            return new URL(uri.toString() + "#" + this.decodeString());
+            return new URI(uri.toString() + "#" + this.decodeString());
         }
+    }
+
+    private resolveURI( uri : URI ): URI {
+        return this._baseURI ? this._baseURI.resolve(uri) : uri;
     }
 
     private decodeAny(): any {

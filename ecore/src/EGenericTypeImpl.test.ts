@@ -31,6 +31,7 @@ import {
     EventType,
     ImmutableEList,
     Notification,
+    URI,
     getEcorePackage,
     isEObjectList,
 } from "./internal";
@@ -74,7 +75,7 @@ describe("EGenericTypeImpl", () => {
         verify(mockValue.eIsProxy()).once();
 
         // get a resolved value
-        let mockURI = new URL("test:///file.t");
+        let mockURI = new URI("test:///uri");
         let mockResolved = mock<EClassifierInternal>();
         let resolved = instance(mockResolved);
         when(mockResolved.eProxyURI()).thenReturn(null);
@@ -194,7 +195,7 @@ describe("EGenericTypeImpl", () => {
         verify(mockValue.eIsProxy()).once();
 
         // get a resolved value
-        let mockURI = new URL("test:///file.t");
+        let mockURI = new URI("test:///uri");
         let mockResolved = mock<EClassifierInternal>();
         let resolved = instance(mockResolved);
         when(mockResolved.eProxyURI()).thenReturn(null);

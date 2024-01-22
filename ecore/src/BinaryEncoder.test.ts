@@ -1,11 +1,11 @@
 import { BinaryEncoder } from "./BinaryEncoder";
-import { EPackage, XMIProcessor, XMLProcessor } from "./internal";
+import { EPackage, URI, XMIProcessor, XMLProcessor } from "./internal";
 import * as fs from "fs";
 import * as url from "url";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
-    let uri = new URL("file:///" + __dirname + "/../testdata/" + filename);
+    let uri = new URI("file:///" + __dirname + "/../testdata/" + filename);
     let resource = xmiProcessor.loadSync(uri);
     expect(resource.isLoaded).toBeTruthy();
     expect(resource.getErrors().isEmpty()).toBeTruthy();
@@ -20,9 +20,9 @@ describe("BinaryEncoder", () => {
         // expect(ePackage).not.toBeNull();
         // let resourceURI = url.pathToFileURL("testdata/library.complex.xml")
         // let t = resourceURI.toString()
-        // //let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
-        // //let resourceURI = new URL("file://testdata/library.complex.xml");
-        // let expectedURI = new URL("file:///" + __dirname + "/../testdata/library.complex.bin")
+        // //let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.xml");
+        // //let resourceURI = new URI("file://testdata/library.complex.xml");
+        // let expectedURI = new URI("file:///" + __dirname + "/../testdata/library.complex.bin")
         // let xmlProcessor = new XMLProcessor([ePackage]);
         // let eResource = xmlProcessor.loadSync(resourceURI)
         // expect(eResource.isLoaded).toBeTruthy();

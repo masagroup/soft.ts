@@ -23,6 +23,7 @@ import {
     EResourceSet,
     ETypedElement,
     EcoreConstants,
+    URI,
     getEcorePackage,
     isEObjectList,
 } from "./internal";

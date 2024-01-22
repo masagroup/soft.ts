@@ -14,7 +14,7 @@ import { getLibraryPackage } from "./internal";
 describe("Library", () => {
     test("load.simple.default", async () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new URL("file:///" + __dirname + "/../testdata/library.simple.default.xml");
+        let fileURI = new URI("file:///" + __dirname + "/../testdata/library.simple.default.xml");
         let resource = await xmlProcessor.load(fileURI);
         expect(resource).not.toBeNull();
         expect(resource.isLoaded).toBeTruthy();
@@ -24,7 +24,7 @@ describe("Library", () => {
 
     test("save.simple.default", () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new URL("file:///" + __dirname + "/../testdata/library.simple.default.xml");
+        let fileURI = new URI("file:///" + __dirname + "/../testdata/library.simple.default.xml");
         let resource = xmlProcessor.loadSync(fileURI);
         expect(resource).not.toBeNull();
 
@@ -39,7 +39,7 @@ describe("Library", () => {
 
     test("save.simple.prefix", () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new URL("file:///" + __dirname + "/../testdata/library.simple.prefix.xml");
+        let fileURI = new URI("file:///" + __dirname + "/../testdata/library.simple.prefix.xml");
         let resource = xmlProcessor.loadSync(fileURI);
         expect(resource).not.toBeNull();
 
@@ -54,7 +54,7 @@ describe("Library", () => {
 
     test("save.complex", async () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
+        let fileURI = new URI("file:///" + __dirname + "/../testdata/library.complex.xml");
         let resource = xmlProcessor.loadSync(fileURI);
         expect(resource).not.toBeNull();
 

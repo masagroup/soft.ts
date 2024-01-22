@@ -17,6 +17,7 @@ import {
     getEcoreFactory,
     getEcorePackage,
     ImmutableEList,
+    URI,
 } from "./internal";
 
 describe("EcoreUtils", () => {
@@ -37,17 +38,17 @@ describe("EcoreUtils", () => {
             let obj2 = instance(mockObject2);
 
             when(mockObject1.eIsProxy()).thenReturn(true);
-            when(mockObject1.eProxyURI()).thenReturn(new URL("file://test"));
-            when(mockObject2.eProxyURI()).thenReturn(new URL("file://test"));
+            when(mockObject1.eProxyURI()).thenReturn(new URI("file://test"));
+            when(mockObject2.eProxyURI()).thenReturn(new URI("file://test"));
             expect(EcoreUtils.equals(obj1, obj2)).toBeTruthy();
 
             when(mockObject1.eIsProxy()).thenReturn(true);
-            when(mockObject1.eProxyURI()).thenReturn(new URL("file://test1"));
-            when(mockObject2.eProxyURI()).thenReturn(new URL("file://test2"));
+            when(mockObject1.eProxyURI()).thenReturn(new URI("file://test1"));
+            when(mockObject2.eProxyURI()).thenReturn(new URI("file://test2"));
             expect(EcoreUtils.equals(obj1, obj2)).toBeFalsy();
 
             when(mockObject1.eIsProxy()).thenReturn(true);
-            when(mockObject1.eProxyURI()).thenReturn(new URL("file://test"));
+            when(mockObject1.eProxyURI()).thenReturn(new URI("file://test"));
             when(mockObject2.eProxyURI()).thenReturn(null);
             expect(EcoreUtils.equals(obj1, obj2)).toBeFalsy();
 
@@ -219,7 +220,7 @@ describe("EcoreUtils", () => {
 
             // the model
             let eObject = eFactory.create(eClass);
-            (eObject as EObjectInternal).eSetProxyURI(new URL("file://test"));
+            (eObject as EObjectInternal).eSetProxyURI(new URI("file://test"));
 
             let eObjectCopy = EcoreUtils.copy(eObject);
             expect(EcoreUtils.equals(eObject, eObjectCopy)).toBeTruthy();

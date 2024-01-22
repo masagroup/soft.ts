@@ -27,6 +27,7 @@ import {
     EResourceSet,
     EcoreConstants,
     ImmutableEList,
+    URI,
     getEcorePackage,
     isEObjectList,
 } from "./internal";

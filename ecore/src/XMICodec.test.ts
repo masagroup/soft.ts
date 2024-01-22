@@ -8,12 +8,12 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl } from "./internal";
+import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, URI, uriToFilePath } from "./internal";
 
-describe("XMIResource", () => {
+describe("XMICodec", () => {
     describe("load.library.simple", () => {
         let resource = new EResourceImpl();
-        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.simple.ecore");
+        resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.simple.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -77,14 +77,15 @@ describe("XMIResource", () => {
         });
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(resource.eURI);
+            let path = uriToFilePath(resource.eURI);
+            let stream = fs.createReadStream(path);
             await resource.loadFromStream(stream);
         });
     });
 
     describe("load.library.noroot", () => {
         let resource = new EResourceImpl();
-        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.ecore");
+        resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.noroot.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -127,14 +128,15 @@ describe("XMIResource", () => {
         });
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(resource.eURI);
+            let path = uriToFilePath(resource.eURI);
+            let stream = fs.createReadStream(path);
             await resource.loadFromStream(stream);
         });
     });
 
     describe("load.library.complex", () => {
         let resource = new EResourceImpl();
-        resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.complex.ecore");
+        resource.eURI= new URI("file:///" + __dirname + "/../testdata/library.complex.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -170,25 +172,27 @@ describe("XMIResource", () => {
         });
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(resource.eURI);
+            let path = uriToFilePath(resource.eURI);
+            let stream = fs.createReadStream(path);
             await resource.loadFromStream(stream);
         });
 
         test("loadFromString", () => {
-            let s = fs.readFileSync(resource.eURI);
-            resource.loadFromString(s.toString());
+            let path = uriToFilePath(resource.eURI);
+            let buffer = fs.readFileSync(path);
+            resource.loadFromString(buffer.toString());
         });
     });
 
     describe("save.library.simple", () => {
         test("saveToString", async () => {
             let resource = new EResourceImpl();
-            resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.simple.ecore");
+            resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.simple.ecore");
             await resource.load();
 
             let result = resource.saveToString();
             let expected = fs
-                .readFileSync(resource.eURI)
+                .readFileSync(uriToFilePath(resource.eURI))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n");
 
@@ -199,12 +203,12 @@ describe("XMIResource", () => {
     describe("save.library.complex", () => {
         test("saveToString", async () => {
             let resource = new EResourceImpl();
-            resource.eURI = new URL("file:///" + __dirname + "/../testdata/library.complex.ecore");
+            resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.complex.ecore");
             await resource.load();
 
             let result = resource.saveToString();
             let expected = fs
-                .readFileSync(resource.eURI)
+                .readFileSync(uriToFilePath(resource.eURI))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n");
 

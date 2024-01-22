@@ -32,6 +32,8 @@ import {
     isEObjectInternal,
     isEReference,
     XMLOptions,
+    EDiagnosticImpl,
+    URI,
 } from "./internal";
 import { XMLConstants } from "./XMLConstants";
 import { XMLString } from "./XMLString";
@@ -661,18 +663,32 @@ export class XMLEncoder implements EEncoder {
             let uri = eObject.eProxyURI();
             if (!uri) {
                 let eResource = eObject.eResource();
-                return eResource ? this.getResourceHRef(eResource, eObject) : "";
-            } else {
-                return uri.toString();
-            }
+                if (!eResource) {
+                    if (this._resource && this._resource.eObjectIDManager) {
+                        uri = this.getResourceHRef(this._resource, eObject)
+                    } else {
+                        this.handleDanglingHREF(eObject);
+                        return "";
+                    }
+                }
+            } 
+            uri = this._resource.eURI.relativize(uri)
+            return uri.toString()
         }
         return "";
     }
 
-    private getResourceHRef(resource: EResource, object: EObject): string {
-        let uri = resource.eURI;
-        uri.hash = resource.getURIFragment(object);
-        return uri.toString();
+    private handleDanglingHREF(eObject : EObject) {
+        this.error( new EDiagnosticImpl("Object is not contained in a resource.", this._resource.eURI.toString(), 0, 0))
+    }
+
+    private error(d : EDiagnostic) {
+        this._errorFn(d)
+    }
+
+    private getResourceHRef(resource: EResource, object: EObject): URI {
+        let uri = resource.eURI
+        return new URI( { scheme : uri.scheme, user : uri.user, host : uri.host, port : uri.port, path: uri.path , query : uri.query , fragment: resource.getURIFragment(object)} );
     }
 
     private getIDRef(eObject: EObject): string {

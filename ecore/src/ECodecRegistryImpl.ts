@@ -4,6 +4,7 @@ import { ECodecRegistry } from "./ECodecRegistry";
 import { NoCodec } from "./NoCodec";
 import { XMICodec } from "./XMICodec";
 import { XMLCodec } from "./XMLCodec";
+import { URI } from "./internal";
 
 export class ECodecRegistryImpl implements ECodecRegistry {
     private _protocolToCodec: Map<string, ECodec>;
@@ -28,14 +29,14 @@ export class ECodecRegistryImpl implements ECodecRegistry {
         this._delegate = delegate;
     }
 
-    getCodec(uri: URL): ECodec {
-        let factory = this._protocolToCodec.get(uri.protocol);
+    getCodec(uri: URI): ECodec {
+        let factory = this._protocolToCodec.get(uri.scheme);
         if (factory) {
             return factory;
         }
-        let ndx = uri.pathname.lastIndexOf(".");
+        let ndx = uri.path.lastIndexOf(".");
         if (ndx != -1) {
-            let extension = uri.pathname.slice(ndx + 1);
+            let extension = uri.path.slice(ndx + 1);
             factory = this._extensionToCodec.get(extension);
             if (factory) {
                 return factory;

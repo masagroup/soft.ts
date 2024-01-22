@@ -8,7 +8,7 @@ describe("URI", () => {
         expect(uri.port).toBe("");
         expect(uri.path).toBe("/path");
         expect(uri.fragment).toBe("fragment");
-        expect(uri.toString()).toBe("file:/path#fragment");
+        expect(uri.toString()).toBe("file:///path#fragment");
     });
 
     test("constructor-host", () => {

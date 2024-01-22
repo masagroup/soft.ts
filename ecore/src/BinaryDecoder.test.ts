@@ -10,16 +10,18 @@ import {
     EResource,
     EResourceImpl,
     EResourceSetImpl,
+    URI,
     UniqueIDManager,
     XMIProcessor,
     XMLProcessor,
+    uriToFilePath,
 } from "./internal";
 
 import * as fs from "fs";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
-    let uri = new URL("file:///" + __dirname + "/../testdata/" + filename);
+    let uri = new URI("file:///" + __dirname + "/../testdata/" + filename);
     let resource = xmiProcessor.loadSync(uri);
     expect(resource.isLoaded).toBeTruthy();
     expect(resource.getErrors().isEmpty()).toBeTruthy();
@@ -32,7 +34,7 @@ describe("BinaryDecoder", () => {
         // package
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
-        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.bin");
+        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.bin");
 
         // context
         let eResource = new EResourceImpl();
@@ -108,20 +110,22 @@ describe("BinaryDecoder", () => {
         });
 
         test("decode", () => {
-            let s = fs.readFileSync(resourceURI);
+            let path = uriToFilePath(resourceURI)
+            let s = fs.readFileSync(path);
             let result = decoder.decode(s);
             expect(result.ok).toBeTruthy();
             resource = result.unwrap();
         });
 
         test("decodeAsync", async () => {
-            let stream = fs.createReadStream(resourceURI);
+            let path = uriToFilePath(resourceURI)
+            let stream = fs.createReadStream(path);
             resource = await decoder.decodeAsync(stream);
         });
     });
 
     describe("complex.id", () => {
-        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.id.bin");
+        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.id.bin");
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
 
@@ -156,14 +160,16 @@ describe("BinaryDecoder", () => {
         });
 
         test("decode", () => {
-            let s = fs.readFileSync(resourceURI);
+            let path = uriToFilePath(resourceURI)
+            let s = fs.readFileSync(path);
             let result = decoder.decode(s);
             expect(result.ok).toBeTruthy();
             resource = result.unwrap();
         });
 
         test("decodeAsync", async () => {
-            let stream = fs.createReadStream(resourceURI);
+            let path = uriToFilePath(resourceURI)
+            let stream = fs.createReadStream(path);
             resource = await decoder.decodeAsync(stream);
         });
     });

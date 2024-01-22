@@ -7,25 +7,30 @@
 //
 // *****************************************************************************
 
-import { FileURIHandler } from "./internal";
+import { FileURIHandler, URI } from "./internal";
+import * as url from "url";
 
 describe("FileURIHandler", () => {
     test("canHandle", () => {
         let uriHandler = new FileURIHandler();
-
-        expect(uriHandler.canHandle(new URL("file://test"))).toBeTruthy();
-        expect(uriHandler.canHandle(new URL("http://test"))).toBeFalsy();
+        expect(uriHandler.canHandle(new URI("file://test"))).toBeTruthy();
+        expect(uriHandler.canHandle(new URI("http://test"))).toBeFalsy();
     });
 
     test("createReadStream", () => {
+        let resourceURI = url.pathToFileURL("testdata/library.complex.xml")
+        let t = resourceURI.toString()
+
         let uriHandler = new FileURIHandler();
-        let s = uriHandler.createReadStream(new URL("file:///" + __dirname + "/../testdata/read-stream.txt"));
+        let uri = new URI("file:///" + __dirname + "/../testdata/read-stream.txt")
+        let s = uriHandler.createReadStream(uri);
         expect(s).not.toBeNull();
     });
 
     test("createWriteStream", () => {
         let uriHandler = new FileURIHandler();
-        let s = uriHandler.createWriteStream(new URL("file:///" + __dirname + "/../testdata/write-stream.txt"));
+        let uri = new URI("file:///" + __dirname + "/../testdata/write-stream.txt")
+        let s = uriHandler.createWriteStream(uri);
         expect(s).not.toBeNull();
     });
 });

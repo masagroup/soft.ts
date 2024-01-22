@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs";
-import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList } from "./internal";
+import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal";
 
 export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>;
@@ -17,33 +17,33 @@ export class EURIConverterImpl implements EURIConverter {
         this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()]);
     }
 
-    createReadStream(uri: URL): fs.ReadStream {
+    createReadStream(uri: URI): fs.ReadStream {
         let uriHandler = this.getURIHandler(uri);
         return uriHandler ? uriHandler.createReadStream(uri) : null;
     }
 
-    createWriteStream(uri: URL): fs.WriteStream {
+    createWriteStream(uri: URI): fs.WriteStream {
         let uriHandler = this.getURIHandler(uri);
         return uriHandler ? uriHandler.createWriteStream(uri) : null;
     }
 
-    readSync(uri: URL): null | Buffer {
+    readSync(uri: URI): null | Buffer {
         let uriHandler = this.getURIHandler(uri);
         return uriHandler ? uriHandler.readSync(uri) : null;
     }
 
-    writeSync(uri: URL, s: Buffer): void {
+    writeSync(uri: URI, s: Buffer): void {
         let uriHandler = this.getURIHandler(uri);
         if (uriHandler) {
             uriHandler.writeSync(uri, s);
         }
     }
 
-    normalize(uri: URL): URL {
+    normalize(uri: URI): URI {
         return uri;
     }
 
-    getURIHandler(uri: URL): EURIHandler {
+    getURIHandler(uri: URI): EURIHandler {
         for (const uriHandler of this._uriHandlers) {
             if (uriHandler.canHandle(uri)) {
                 return uriHandler;

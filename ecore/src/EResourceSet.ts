@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotifier, EResource, EList, EObject, EURIConverter, EPackageRegistry, ECodecRegistry } from "./internal";
+import { ENotifier, EResource, EList, EObject, EURIConverter, EPackageRegistry, ECodecRegistry, URI } from "./internal";
 
 export class EResourceSetConstants {
     public static readonly RESOURCE_SET__RESOURCES: number = 0;
@@ -15,10 +15,10 @@ export class EResourceSetConstants {
 
 export interface EResourceSet extends ENotifier {
     getResources(): EList<EResource>;
-    getResource(uri: URL, loadOnDemand: boolean): EResource;
-    createResource(uri: URL): EResource;
+    getResource(uri: URI, loadOnDemand: boolean): EResource;
+    createResource(uri: URI): EResource;
 
-    getEObject(uri: URL, loadOnDemand: boolean): EObject;
+    getEObject(uri: URI, loadOnDemand: boolean): EObject;
 
     getURIConverter(): EURIConverter;
     setURIConverter(uriConverter: EURIConverter): void;

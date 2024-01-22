@@ -60,7 +60,7 @@ describe("BookImpl", () => {
         verify(mockValue.eIsProxy()).once();
 
         // get a resolved value
-        let mockURI = new URL("test:///file.t");
+        let mockURI = new URI("test:///file.t");
         let mockResolved = mock<WriterInternal>();
         let resolved = instance(mockResolved);
         when(mockResolved.eProxyURI()).thenReturn(null);

@@ -19,6 +19,7 @@ import {
     ImmutableEList,
     EResourceImpl,
     EResourceSetImpl,
+    URI,
 } from "./internal";
 
 describe("DynamicEObjectImpl", () => {
@@ -164,14 +165,14 @@ describe("DynamicEObjectImpl", () => {
 
         // add to resource to enable proxy resolution
         let resource = new EResourceImpl();
-        resource.eURI = new URL("file:///" + __dirname + "/r.txt");
+        resource.eURI = new URI("file:///" + __dirname + "/r.txt");
         resource.eContents().addAll(new ImmutableEList<EObject>([o1, o3]));
 
         let resourceSet = new EResourceSetImpl();
         resourceSet.getResources().add(resource);
 
         let oproxy = new DynamicEObjectImpl();
-        oproxy.eSetProxyURI(new URL("file:///" + __dirname + "/r.txt#//@r1.1"));
+        oproxy.eSetProxyURI(new URI("file:///" + __dirname + "/r.txt#//@r1.1"));
 
         expect(o3.eIsSet(r3)).toBeFalsy();
 

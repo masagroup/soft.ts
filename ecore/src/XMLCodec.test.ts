@@ -18,16 +18,18 @@ import {
     EResource,
     EResourceSetImpl,
     ExtendedMetaData,
+    URI,
     XMIProcessor,
     XMLDecoder,
     XMLEncoder,
     XMLOptions,
     XMLProcessor,
+    uriToFilePath,
 } from "./internal";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
-    let uri = new URL("file:///" + __dirname + "/../testdata/" + filename);
+    let uri = new URI("file:///" + __dirname + "/../testdata/" + filename);
     let resource = xmiProcessor.loadSync(uri);
     expect(resource.isLoaded).toBeTruthy();
     expect(resource.getErrors().isEmpty()).toBeTruthy();
@@ -47,7 +49,7 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.xml");
+        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.noroot.xml");
         let resource: EResource = null;
 
         afterEach(() => {
@@ -71,7 +73,8 @@ describe("XMLResource", () => {
         });
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(resourceURI);
+            let path = uriToFilePath(resourceURI)
+            let stream = fs.createReadStream(path);
             resource = await xmlProcessor.loadFromStream(stream);
         });
 
@@ -85,14 +88,14 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let originURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.xml");
-        let resultURI = new URL("file:///" + __dirname + "/../testdata/library.noroot.result.xml");
+        let originURI = new URI("file:///" + __dirname + "/../testdata/library.noroot.xml");
+        let resultURI = new URI("file:///" + __dirname + "/../testdata/library.noroot.result.xml");
         let resource = xmlProcessor.loadSync(originURI);
         resource.eURI = resultURI;
 
         test("saveToString", () => {
             const expected = fs
-                .readFileSync(originURI)
+                .readFileSync(uriToFilePath(originURI))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n");
             const result = xmlProcessor.saveToString(resource);
@@ -101,7 +104,7 @@ describe("XMLResource", () => {
 
         test("saveWithOptions", () => {
             const expected = fs
-                .readFileSync(originURI)
+                .readFileSync(uriToFilePath(originURI))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n");
             const result = xmlProcessor.saveToString(
@@ -117,7 +120,7 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
+        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.xml");
         let resource: EResource = null;
 
         afterEach(() => {
@@ -132,7 +135,7 @@ describe("XMLResource", () => {
         });
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(resourceURI);
+            let stream = fs.createReadStream(uriToFilePath(resourceURI));
             resource = await xmlProcessor.loadFromStream(stream);
         });
 
@@ -146,7 +149,7 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.complex.noroot.xml");
+        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.noroot.xml");
         let resource: EResource = null;
         let options = new Map<string, any>([
             [XMLOptions.EXTENDED_META_DATA, new ExtendedMetaData()],
@@ -174,7 +177,7 @@ describe("XMLResource", () => {
         });
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(resourceURI);
+            let stream = fs.createReadStream(uriToFilePath(resourceURI));
             resource = await xmlProcessor.loadFromStream(stream, options);
         });
 
@@ -193,20 +196,22 @@ describe("XMLResource", () => {
 
         let eResourceSet = new EResourceSetImpl();
         eResourceSet.getPackageRegistry().registerPackage(ePackage);
-        let eResource = eResourceSet.createResource(new URL("file://$tmp.xml"));
+        let eResource = eResourceSet.createResource(new URI("file://$tmp.xml"));
         let eObject: EObject = null;
 
-        let eObjectURI = new URL("file:///" + __dirname + "/../testdata/book.simple.xml");
+        let eObjectURI = new URI("file:///" + __dirname + "/../testdata/book.simple.xml");
         let decoder = new XMLDecoder(eResource, null);
 
         test("decodeObject", () => {
-            let buffer = fs.readFileSync(eObjectURI);
+            let path = uriToFilePath(eObjectURI);
+            let buffer = fs.readFileSync(path);
             let result = decoder.decodeObject(buffer);
             if (result.ok) eObject = result.val;
         });
 
         test("decodeObjectAsync", async () => {
-            let stream = fs.createReadStream(eObjectURI);
+            let path = uriToFilePath(eObjectURI);
+            let stream = fs.createReadStream(path);
             eObject = await decoder.decodeObjectAsync(stream);
         });
 
@@ -221,12 +226,12 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let originURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
+        let originURI = new URI("file:///" + __dirname + "/../testdata/library.complex.xml");
         let resource = xmlProcessor.loadSync(originURI);
 
         test("saveToString", () => {
             const expected = fs
-                .readFileSync(originURI)
+                .readFileSync(uriToFilePath(originURI))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n");
             const result = xmlProcessor.saveToString(resource);
@@ -240,7 +245,7 @@ describe("XMLResource", () => {
             expect(ePackage).not.toBeNull();
             let xmlProcessor = new XMLProcessor([ePackage]);
             expect(xmlProcessor).not.toBeNull();
-            let originURI = new URL("file:///" + __dirname + "/../testdata/library.complex.xml");
+            let originURI = new URI("file:///" + __dirname + "/../testdata/library.complex.xml");
             let eResource = xmlProcessor.loadSync(originURI);
 
             let eObject = eResource.getEObject("//@library/@employees.0");
@@ -249,14 +254,14 @@ describe("XMLResource", () => {
             expect(eContainer).not.toBeNull();
 
             // create a new resource
-            let subURI = new URL("file:///" + __dirname + "/../testdata/library.complex.sub.xml");
+            let subURI = new URI("file:///" + __dirname + "/../testdata/library.complex.sub.xml");
             let eNewResource = eResource.eResourceSet().createResource(subURI);
             // add object to new resource
             eNewResource.eContents().add(eObject);
             // save it
             let result = xmlProcessor.saveToString(eNewResource);
             const expected = fs
-                .readFileSync(subURI)
+                .readFileSync(uriToFilePath(subURI))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n");
             expect(result).toBe(expected);
@@ -268,7 +273,7 @@ describe("XMLResource", () => {
         expect(ePackage).not.toBeNull();
         let eBookClass = ePackage.getEClassifier("Book") as EClass;
         expect(eBookClass).not.toBeNull();
-        let resourceURI = new URL("file:///" + __dirname + "/../testdata/library.simple.xml");
+        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.simple.xml");
         let xmlProcessor = new XMLProcessor([ePackage]);
         let eResource = xmlProcessor.loadSync(resourceURI);
         expect(eResource.getErrors().isEmpty()).toBeTruthy();
@@ -290,7 +295,7 @@ describe("XMLResource", () => {
 
         let xmlEncoder = new XMLEncoder(eResource, null);
         let expected = fs
-            .readFileSync(new URL("file:///" + __dirname + "/../testdata/book.simple.xml"))
+            .readFileSync(__dirname + "/../testdata/book.simple.xml")
             .toString()
             .replace(/\r?\n|\r/g, "\n");
 

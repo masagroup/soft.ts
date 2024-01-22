@@ -28,6 +28,7 @@ import {
     EStructuralFeature,
     EventType,
     getEcoreFactory,
+    URI,
 } from "./internal";
 
 export function isEPackage(o: any): o is EPackage {
@@ -73,7 +74,7 @@ export class EPackageExt extends EPackageImpl {
     protected createResource(): EResource {
         let resource = this.eResource();
         if (!resource) {
-            let uri = new URL(this.nsURI);
+            let uri = new URI(this.nsURI);
             resource = new EResourceImpl();
             resource.eURI = uri;
             resource.eContents().add(this);
