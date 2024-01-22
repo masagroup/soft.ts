@@ -23,16 +23,16 @@ var authorityRegExp = new RegExp(
         "(?::(\\d*))?",
 ); // port)
 
-export function uriToFilePath(uri : URI) : string {
-    let path = uri.normalize().path
+export function uriToFilePath(uri: URI): string {
+    let path = uri.normalize().path;
     if (process.platform == "win32" && path[0] == "/") {
-        path = path.slice(1)
+        path = path.slice(1);
     }
-    return path
+    return path;
 }
 
 function parseURI(u: string): URIParts {
-    let uri = u.replace(/\\/g,"/")
+    let uri = u.replace(/\\/g, "/");
     let uriMatchs = uriRegExp.exec(uri);
     if (!uriMatchs) {
         throw new Error(`invalid uri: ${uri}`);

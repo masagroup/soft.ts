@@ -426,7 +426,7 @@ export class BinaryDecoder implements EDecoder {
                     uri = this._baseURI;
                 } else {
                     uri = this.resolveURI(new URI(uriStr));
-                } 
+                }
                 // add it to the uri array
                 this._uris.push(uri);
             } else {
@@ -436,7 +436,7 @@ export class BinaryDecoder implements EDecoder {
         }
     }
 
-    private resolveURI( uri : URI ): URI {
+    private resolveURI(uri: URI): URI {
         return this._baseURI ? this._baseURI.resolve(uri) : uri;
     }
 

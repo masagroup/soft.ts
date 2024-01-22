@@ -88,4 +88,6 @@ export {
     XMLOptions,
     XMLProcessor,
     URI,
+    URIParts,
+    uriToFilePath,
 } from "./internal";

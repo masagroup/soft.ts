@@ -18,18 +18,18 @@ describe("FileURIHandler", () => {
     });
 
     test("createReadStream", () => {
-        let resourceURI = url.pathToFileURL("testdata/library.complex.xml")
-        let t = resourceURI.toString()
+        let resourceURI = url.pathToFileURL("testdata/library.complex.xml");
+        let t = resourceURI.toString();
 
         let uriHandler = new FileURIHandler();
-        let uri = new URI("file:///" + __dirname + "/../testdata/read-stream.txt")
+        let uri = new URI("file:///" + __dirname + "/../testdata/read-stream.txt");
         let s = uriHandler.createReadStream(uri);
         expect(s).not.toBeNull();
     });
 
     test("createWriteStream", () => {
         let uriHandler = new FileURIHandler();
-        let uri = new URI("file:///" + __dirname + "/../testdata/write-stream.txt")
+        let uri = new URI("file:///" + __dirname + "/../testdata/write-stream.txt");
         let s = uriHandler.createWriteStream(uri);
         expect(s).not.toBeNull();
     });

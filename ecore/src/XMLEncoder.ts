@@ -665,30 +665,38 @@ export class XMLEncoder implements EEncoder {
                 let eResource = eObject.eResource();
                 if (!eResource) {
                     if (this._resource && this._resource.eObjectIDManager) {
-                        uri = this.getResourceHRef(this._resource, eObject)
+                        uri = this.getResourceHRef(this._resource, eObject);
                     } else {
                         this.handleDanglingHREF(eObject);
                         return "";
                     }
                 }
-            } 
-            uri = this._resource.eURI.relativize(uri)
-            return uri.toString()
+            }
+            uri = this._resource.eURI.relativize(uri);
+            return uri.toString();
         }
         return "";
     }
 
-    private handleDanglingHREF(eObject : EObject) {
-        this.error( new EDiagnosticImpl("Object is not contained in a resource.", this._resource.eURI.toString(), 0, 0))
+    private handleDanglingHREF(eObject: EObject) {
+        this.error(new EDiagnosticImpl("Object is not contained in a resource.", this._resource.eURI.toString(), 0, 0));
     }
 
-    private error(d : EDiagnostic) {
-        this._errorFn(d)
+    private error(d: EDiagnostic) {
+        this._errorFn(d);
     }
 
     private getResourceHRef(resource: EResource, object: EObject): URI {
-        let uri = resource.eURI
-        return new URI( { scheme : uri.scheme, user : uri.user, host : uri.host, port : uri.port, path: uri.path , query : uri.query , fragment: resource.getURIFragment(object)} );
+        let uri = resource.eURI;
+        return new URI({
+            scheme: uri.scheme,
+            user: uri.user,
+            host: uri.host,
+            port: uri.port,
+            path: uri.path,
+            query: uri.query,
+            fragment: resource.getURIFragment(object),
+        });
     }
 
     private getIDRef(eObject: EObject): string {

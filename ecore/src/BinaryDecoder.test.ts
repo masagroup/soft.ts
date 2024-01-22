@@ -110,7 +110,7 @@ describe("BinaryDecoder", () => {
         });
 
         test("decode", () => {
-            let path = uriToFilePath(resourceURI)
+            let path = uriToFilePath(resourceURI);
             let s = fs.readFileSync(path);
             let result = decoder.decode(s);
             expect(result.ok).toBeTruthy();
@@ -118,7 +118,7 @@ describe("BinaryDecoder", () => {
         });
 
         test("decodeAsync", async () => {
-            let path = uriToFilePath(resourceURI)
+            let path = uriToFilePath(resourceURI);
             let stream = fs.createReadStream(path);
             resource = await decoder.decodeAsync(stream);
         });
@@ -160,7 +160,7 @@ describe("BinaryDecoder", () => {
         });
 
         test("decode", () => {
-            let path = uriToFilePath(resourceURI)
+            let path = uriToFilePath(resourceURI);
             let s = fs.readFileSync(path);
             let result = decoder.decode(s);
             expect(result.ok).toBeTruthy();
@@ -168,7 +168,7 @@ describe("BinaryDecoder", () => {
         });
 
         test("decodeAsync", async () => {
-            let path = uriToFilePath(resourceURI)
+            let path = uriToFilePath(resourceURI);
             let stream = fs.createReadStream(path);
             resource = await decoder.decodeAsync(stream);
         });

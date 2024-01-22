@@ -136,7 +136,7 @@ describe("XMICodec", () => {
 
     describe("load.library.complex", () => {
         let resource = new EResourceImpl();
-        resource.eURI= new URI("file:///" + __dirname + "/../testdata/library.complex.ecore");
+        resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.complex.ecore");
 
         beforeEach(() => {
             resource.unload();

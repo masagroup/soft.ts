@@ -57,7 +57,7 @@ class FeatureData {
 
 export class BinaryEncoder implements EEncoder {
     private _resource: EResource;
-    private _baseURI : URI;
+    private _baseURI: URI;
     private _objectRoot: EObject;
     private _objectToID: Map<EObject, number> = new Map<EObject, number>();
     private _classDataMap: Map<EClass, ClassData> = new Map<EClass, ClassData>();
@@ -245,8 +245,8 @@ export class BinaryEncoder implements EEncoder {
         }
     }
 
-    private relativizeURI(uri : URI) : URI {
-        return this._baseURI ? this._baseURI.relativize(uri): uri;
+    private relativizeURI(uri: URI): URI {
+        return this._baseURI ? this._baseURI.relativize(uri) : uri;
     }
 
     private encodeFeatureValue(eObject: EObjectInternal, featureID: number, featureData: FeatureData) {

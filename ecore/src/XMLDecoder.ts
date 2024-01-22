@@ -682,7 +682,7 @@ export class XMLDecoder implements EDecoder {
     private handleProxy(eProxy: EObject, id: string): void {
         let resourceURI = this._resource.eURI;
         if (!resourceURI) {
-            return
+            return;
         }
 
         let uri: URI = null;

@@ -73,7 +73,7 @@ describe("XMLResource", () => {
         });
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resourceURI)
+            let path = uriToFilePath(resourceURI);
             let stream = fs.createReadStream(path);
             resource = await xmlProcessor.loadFromStream(stream);
         });

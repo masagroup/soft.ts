@@ -149,7 +149,15 @@ export class EcoreUtils {
             let resource = eObject.eResource();
             if (resource) {
                 let uri = resource.eURI;
-                return new URI({ scheme: uri.scheme, host: uri.host, port: uri.port, user: uri.user, path: uri.path, query: uri.query, fragment: resource.getURIFragment(eObject) })
+                return new URI({
+                    scheme: uri.scheme,
+                    host: uri.host,
+                    port: uri.port,
+                    user: uri.user,
+                    path: uri.path,
+                    query: uri.query,
+                    fragment: resource.getURIFragment(eObject),
+                });
             } else {
                 let id = EcoreUtils.getEObjectID(eObject);
                 if (id.length == 0) {
