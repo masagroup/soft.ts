@@ -50,7 +50,7 @@ describe("EmployeeImpl", () => {
         verify(mockValue.eIsProxy()).once();
 
         // get a resolved value
-        let mockURI = new URI("test:///file.t");
+        let mockURI = new ecore.URI("test:///uri");
         let mockResolved = mock<EmployeeInternal>();
         let resolved = instance(mockResolved);
         when(mockResolved.eProxyURI()).thenReturn(null);
