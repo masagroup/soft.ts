@@ -4,7 +4,7 @@ import * as fs from "fs";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
-    let uri = new URI("file:///" + __dirname + "/../testdata/" + filename);
+    let uri = new URI("testdata/" + filename);
     let resource = xmiProcessor.loadSync(uri);
     expect(resource.isLoaded).toBeTruthy();
     expect(resource.getErrors().isEmpty()).toBeTruthy();
@@ -16,8 +16,8 @@ describe("BinaryEncoder", () => {
     test("complex", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
-        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.xml");
-        let expectedURI = new URI("file:///" + __dirname + "/../testdata/library.complex.bin")
+        let resourceURI = new URI("testdata/library.complex.xml");
+        let expectedURI = new URI("testdata/library.complex.bin")
         let xmlProcessor = new XMLProcessor([ePackage]);
         let eResource = xmlProcessor.loadSync(resourceURI)
         expect(eResource.isLoaded).toBeTruthy();
@@ -30,4 +30,6 @@ describe("BinaryEncoder", () => {
         let result = Buffer.from(r.unwrap()).toString()
         expect(result).toBe(expected);
     });
+
+    
 });

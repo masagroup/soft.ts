@@ -122,6 +122,7 @@ export class BinaryEncoder implements EEncoder {
 
             // object id
             let objectID = this._objectToID.size;
+            this._objectToID.set(eObject,objectID)
             this.encodeNumber(objectID);
 
             // object class
@@ -188,6 +189,7 @@ export class BinaryEncoder implements EEncoder {
                     }
                 }
             }
+            this.encodeNumber(0)
         }
     }
 
@@ -198,6 +200,7 @@ export class BinaryEncoder implements EEncoder {
         } else {
             ePackageData = new PackageData();
             ePackageData.id = this._packageDataMap.size;
+            ePackageData.classData = new Array(ePackage.eClassifiers.size());
             this.encodeNumber(ePackageData.id);
             this.encodeString(ePackage.nsURI);
             this.encodeURI(EcoreUtils.getURI(ePackage));
@@ -307,6 +310,7 @@ export class BinaryEncoder implements EEncoder {
                     break;
                 case BinaryFeatureKind.bfkDate:
                     this.encodeDate(value as Date);
+                    break;
                 case BinaryFeatureKind.bfkNumber:
                     this.encodeNumber(value as number);
                     break;
