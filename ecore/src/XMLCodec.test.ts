@@ -118,9 +118,28 @@ describe("XMLResource", () => {
     describe("load.library.complex", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
+        let eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass;
+        expect(eDocumentRootClass).not.toBeNull();
+        let eLibraryAttribure = eDocumentRootClass.getEStructuralFeatureFromName("library")
+        expect(eLibraryAttribure).not.toBeNull();
+        let eLibraryClass = ePackage.getEClassifier("Library") as EClass;
+        expect(eLibraryClass).not.toBeNull();
+        let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute;
+        expect(eLibraryNameAttribute).not.toBeNull();
+        let eLibraryBooksReference = eLibraryClass.getEStructuralFeatureFromName("books") as EAttribute;
+        expect(eLibraryBooksReference).not.toBeNull();
+        let eBookClass = ePackage.getEClassifier("Book") as EClass;
+        expect(eBookClass).not.toBeNull();
+        let eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName("title") as EAttribute;
+        expect(eBookTitleAttribute).not.toBeNull();
+        let eBookDateAttribute = eBookClass.getEStructuralFeatureFromName("publicationDate") as EAttribute;
+        expect(eBookDateAttribute).not.toBeNull();
+        let eBookCopiesAttribute = eBookClass.getEStructuralFeatureFromName("copies") as EAttribute;
+        expect(eBookCopiesAttribute).not.toBeNull();
+        
         let xmlProcessor = new XMLProcessor([ePackage]);
         expect(xmlProcessor).not.toBeNull();
-        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.xml");
+        let resourceURI = new URI("testdata/library.complex.xml");
         let resource: EResource = null;
 
         afterEach(() => {
@@ -128,6 +147,24 @@ describe("XMLResource", () => {
             expect(resource.isLoaded).toBeTruthy();
             expect(resource.getErrors().isEmpty()).toBeTruthy();
             expect(resource.getWarnings().isEmpty()).toBeTruthy();
+            
+            let eDocumentRoot = resource.eContents().get(0);
+
+            // check library name
+            let eLibrary = eDocumentRoot.eGet(eLibraryAttribure) as EClass
+            expect(eLibrary).not.toBeNull();
+            expect(eLibrary.eGet(eLibraryNameAttribute)).toBe("My Library");
+
+            // books
+            let books  = eLibrary.eGet(eLibraryBooksReference) as EList<any>
+            expect(books).not.toBeNull();
+            expect(books.size()).toBe(2);
+
+            // book
+            let book = books.get(0);
+            expect(book.eGet(eBookTitleAttribute)).toBe("Title 0")
+            expect(book.eGet(eBookCopiesAttribute)).toBe(4)
+            expect(book.eGet(eBookDateAttribute)).toStrictEqual(new Date(Date.UTC(2015, 8, 6, 4, 24, 46, 0)))
         });
 
         test("load", async () => {

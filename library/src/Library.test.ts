@@ -14,9 +14,7 @@ import { getLibraryPackage } from "./internal";
 describe("Library", () => {
     test("load.simple.default", async () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new ecore.URI(
-            "file:///" + __dirname + "/../testdata/library.simple.default.xml"
-        );
+        let fileURI = new ecore.URI("testdata/library.simple.default.xml");
         let resource = await xmlProcessor.load(fileURI);
         expect(resource).not.toBeNull();
         expect(resource.isLoaded).toBeTruthy();

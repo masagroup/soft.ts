@@ -12,7 +12,7 @@ import { EURIHandler, URI, uriToFilePath } from "./internal";
 
 export class FileURIHandler implements EURIHandler {
     canHandle(uri: URI): boolean {
-        return uri.scheme == "file" || (!uri.scheme && uri.host && !uri.query);
+        return uri.scheme == "file" || (!uri.scheme && !uri.host && !uri.query);
     }
 
     createReadStream(uri: URI): fs.ReadStream {

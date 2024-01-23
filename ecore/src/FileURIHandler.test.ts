@@ -8,28 +8,39 @@
 // *****************************************************************************
 
 import { FileURIHandler, URI } from "./internal";
-import * as url from "url";
 
 describe("FileURIHandler", () => {
     test("canHandle", () => {
         let uriHandler = new FileURIHandler();
         expect(uriHandler.canHandle(new URI("file://test"))).toBeTruthy();
         expect(uriHandler.canHandle(new URI("http://test"))).toBeFalsy();
+        expect(uriHandler.canHandle(new URI("testdata/test"))).toBeTruthy();
     });
 
-    test("createReadStream", () => {
-        let resourceURI = url.pathToFileURL("testdata/library.complex.xml");
-        let t = resourceURI.toString();
-
+    test("createReadStream-Absolute", () => {
         let uriHandler = new FileURIHandler();
         let uri = new URI("file:///" + __dirname + "/../testdata/read-stream.txt");
         let s = uriHandler.createReadStream(uri);
         expect(s).not.toBeNull();
     });
 
-    test("createWriteStream", () => {
+    test("createReadStream-Relative", () => {
+        let uriHandler = new FileURIHandler();
+        let uri = new URI("testdata/read-stream.txt");
+        let s = uriHandler.createReadStream(uri);
+        expect(s).not.toBeNull();
+    });
+
+    test("createWriteStream-Absolute", () => {
         let uriHandler = new FileURIHandler();
         let uri = new URI("file:///" + __dirname + "/../testdata/write-stream.txt");
+        let s = uriHandler.createWriteStream(uri);
+        expect(s).not.toBeNull();
+    });
+
+    test("createWriteStream-Relative", () => {
+        let uriHandler = new FileURIHandler();
+        let uri = new URI("testdata/write-stream.txt");
         let s = uriHandler.createWriteStream(uri);
         expect(s).not.toBeNull();
     });
