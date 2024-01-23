@@ -132,6 +132,8 @@ export * from "./XMLNamespaces";
 export * from "./XMICodec";
 export * from "./NoCodec";
 export * from "./BinaryCodec";
+export * from "./BinaryEncoder";
+export * from "./BinaryDecoder";
 
 export * from "./XMLProcessor";
 export * from "./XMIProcessor";

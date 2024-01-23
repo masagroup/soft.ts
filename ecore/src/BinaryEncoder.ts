@@ -17,6 +17,7 @@ import {
     EReference,
     EAttribute,
     URI,
+    BinaryOptions,
 } from "./internal";
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind";
 import { Encoder } from "./msgpack/Encoder";
@@ -71,6 +72,7 @@ export class BinaryEncoder implements EEncoder {
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext;
         this._baseURI = this._resource?.eURI;
+        this._isIDAttributeEncoded = options?.get(BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE) ?? false;
     }
 
     private encodeBoolean(object: boolean) {

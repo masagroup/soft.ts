@@ -21,7 +21,7 @@ import * as fs from "fs";
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor();
-    let uri = new URI("file:///" + __dirname + "/../testdata/" + filename);
+    let uri = new URI("testdata/" + filename);
     let resource = xmiProcessor.loadSync(uri);
     expect(resource.isLoaded).toBeTruthy();
     expect(resource.getErrors().isEmpty()).toBeTruthy();
@@ -34,7 +34,7 @@ describe("BinaryDecoder", () => {
         // package
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
-        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.bin");
+        let resourceURI = new URI("testdata/library.complex.bin");
 
         // context
         let eResource = new EResourceImpl();
@@ -125,7 +125,7 @@ describe("BinaryDecoder", () => {
     });
 
     describe("complex.id", () => {
-        let resourceURI = new URI("file:///" + __dirname + "/../testdata/library.complex.id.bin");
+        let resourceURI = new URI("testdata/library.complex.id.bin");
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
 

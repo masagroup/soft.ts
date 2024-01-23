@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library xmlns="http:///org/eclipse/emf/examples/library/library.ecore/1.0.0" id="d13pf-ypXLeIySkWAX03JcP-TbA=" address="My Library Adress" name="My Library">
+  <writers id="6za3LSmxsIKoNGM-ntMmMnuxE80=" address="Adress 0" first-name="First Name 0" last-name="Last Name 0" books="#gTHMlBXaFg23nqjkQClAdj7SFcQ= #1rHMaOSOCq8oTdHv6C2m3Wyi740="/>
+  <employees id="zDKaBdJQTXPG1NKJN606XUMo9c0=" address="Adress 0" first-name="First Name 0" last-name="Last Name 0"/>
+  <employees id="0ALl8xV4z8R40s83abovpJZHzDc=" address="Adress 1" first-name="First Name 1" last-name="Last Name 1" manager="#zDKaBdJQTXPG1NKJN606XUMo9c0="/>
+  <books id="gTHMlBXaFg23nqjkQClAdj7SFcQ=" publication-date="2015-09-06T04:24:46Z" copies="4" title="Title 0" pages="336" category="Biography" author="#6za3LSmxsIKoNGM-ntMmMnuxE80="/>
+  <books id="1rHMaOSOCq8oTdHv6C2m3Wyi740=" publication-date="2015-09-07T04:24:46Z" copies="3" title="Title 1" pages="337" author="#6za3LSmxsIKoNGM-ntMmMnuxE80="/>
+</library>
