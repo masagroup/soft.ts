@@ -61,6 +61,15 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
         this._defaultValueFactory = null; // reset default value
         super.defaultValueLiteral = newDefaultValueLiteral;
     }
+
+    get featureID(): number {
+        return this._featureID
+    }
+
+    // set the value of featureID
+    set featureID(newFeatureID: number) {
+        this._featureID = newFeatureID;
+    }
 }
 
 export function isMapType(feature: EStructuralFeature): boolean {

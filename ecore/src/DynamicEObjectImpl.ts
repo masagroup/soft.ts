@@ -14,23 +14,11 @@ import {
     EDynamicProperties,
     ENotification,
     EObjectImpl,
+    EOperation,
+    EStructuralFeature,
     EventType,
     getEcorePackage,
 } from "./internal";
-
-class DynamicFeaturesAdapter extends AbstractEAdapter {
-    constructor(private _obj: DynamicEObjectImpl) {
-        super();
-    }
-
-    notifyChanged(notification: ENotification): void {
-        if (notification.eventType != EventType.REMOVING_ADAPTER) {
-            if (notification.featureID == EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES) {
-                this._obj.resizeProperties();
-            }
-        }
-    }
-}
 
 function resize(arr: any[], newSize: number, defaultValue: any) {
     while (newSize > arr.length) arr.push(defaultValue);
@@ -40,12 +28,10 @@ function resize(arr: any[], newSize: number, defaultValue: any) {
 export class DynamicEObjectImpl extends EObjectImpl implements EDynamicProperties {
     private _clz: EClass;
     private _properties: any[];
-    private _dynamicFeaturesAdapter: DynamicFeaturesAdapter;
 
     constructor() {
         super();
         this._clz = null;
-        this._dynamicFeaturesAdapter = new DynamicFeaturesAdapter(this);
         this._properties = [];
         this.resizeProperties();
     }
@@ -63,13 +49,13 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
     }
 
     setEClass(clz: EClass) {
-        if (this._clz) this._clz.eAdapters.remove(this._dynamicFeaturesAdapter);
-
-        this._clz = clz;
-        this.resizeProperties();
-
-        if (this._clz) this._clz.eAdapters.add(this._dynamicFeaturesAdapter);
+        if (this._clz !== clz) {
+            this._clz = clz;
+            this.resizeProperties();
+        }
     }
+
+    
 
     eDynamicProperties(): EDynamicProperties {
         return this;
@@ -83,6 +69,14 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
     }
     eDynamicUnset(dynamicFeatureID: number): void {
         this._properties[dynamicFeatureID] = null;
+    }
+
+    eFeatureID(feature: EStructuralFeature): number {
+        return this._clz.getFeatureID(feature);
+    }
+
+    eOperationID(operation : EOperation) : number {
+        return this._clz.getOperationID(operation)  ;
     }
 
     resizeProperties(): void {

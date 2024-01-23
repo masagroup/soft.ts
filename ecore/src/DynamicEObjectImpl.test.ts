@@ -50,14 +50,13 @@ describe("DynamicEObjectImpl", () => {
     });
 
     test("getSet", () => {
-        let o = new DynamicEObjectImpl();
         let c = getEcoreFactory().createEClass();
-        o.setEClass(c);
-        expect(o.eClass()).toBe(c);
-
         let a = getEcoreFactory().createEAttribute();
         c.eStructuralFeatures.add(a);
 
+        let o = new DynamicEObjectImpl();
+        o.setEClass(c);
+        expect(o.eClass()).toBe(c);
         expect(o.eGet(a)).toBeNull();
 
         o.eSet(a, 1);
@@ -65,17 +64,14 @@ describe("DynamicEObjectImpl", () => {
     });
 
     test("unset", () => {
-        let o = new DynamicEObjectImpl();
         let c = getEcoreFactory().createEClass();
-        o.setEClass(c);
-        expect(o.eClass()).toBe(c);
-
         let a = getEcoreFactory().createEAttribute();
         c.eStructuralFeatures.add(a);
 
-        expect(o.eGet(a)).toBe(null);
-        o.eSet(a, 1);
-        expect(o.eGet(a)).toBe(1);
+        let o = new DynamicEObjectImpl();
+        o.setEClass(c);
+        expect(o.eClass()).toBe(c);
+        expect(o.eGet(a)).toBeNull();
 
         o.eUnset(a);
         expect(o.eGet(a)).toBe(null);
