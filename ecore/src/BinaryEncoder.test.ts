@@ -50,6 +50,10 @@ describe("BinaryEncoder", () => {
         expect(eResource.getErrors().isEmpty()).toBeTruthy();
         expect(eResource.eContents().isEmpty()).toBeFalsy();
 
+        let eDocumentRoot = eResource.eContents().get(0);
+        expect(eDocumentRoot).not.toBeNull();
+        expect(idManager.setID(eDocumentRoot,"h0Rz1FjVeBXUgaW3OzT2frUce90=")).toBeUndefined();
+
         let e = new BinaryEncoder(eResource, new Map<string,any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
         let r = e.encode(eResource)
         expect(r.ok).toBeTruthy()
