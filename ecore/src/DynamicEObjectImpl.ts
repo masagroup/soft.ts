@@ -55,8 +55,6 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
         }
     }
 
-    
-
     eDynamicProperties(): EDynamicProperties {
         return this;
     }
@@ -75,8 +73,8 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
         return this._clz.getFeatureID(feature);
     }
 
-    eOperationID(operation : EOperation) : number {
-        return this._clz.getOperationID(operation)  ;
+    eOperationID(operation: EOperation): number {
+        return this._clz.getOperationID(operation);
     }
 
     resizeProperties(): void {

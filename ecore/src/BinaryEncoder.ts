@@ -124,7 +124,7 @@ export class BinaryEncoder implements EEncoder {
 
             // object id
             let objectID = this._objectToID.size;
-            this._objectToID.set(eObject,objectID)
+            this._objectToID.set(eObject, objectID);
             this.encodeNumber(objectID);
 
             // object class
@@ -191,7 +191,7 @@ export class BinaryEncoder implements EEncoder {
                     }
                 }
             }
-            this.encodeNumber(0)
+            this.encodeNumber(0);
         }
     }
 

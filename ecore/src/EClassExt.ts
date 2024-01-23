@@ -133,7 +133,7 @@ export class EClassExt extends EClassImpl {
     }
 
     getFeatureID(feature: EStructuralFeature): number {
-        let features = this.eAllStructuralFeatures
+        let features = this.eAllStructuralFeatures;
         let featureID = feature.featureID;
         if (featureID != -1) {
             for (; featureID < features.size(); featureID++) {

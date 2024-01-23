@@ -1,5 +1,16 @@
 import { BinaryEncoder } from "./BinaryEncoder";
-import { BinaryOptions, EPackage, EResourceImpl, EResourceSetImpl, URI, UniqueIDManager, XMIProcessor, XMLOptions, XMLProcessor, uriToFilePath } from "./internal";
+import {
+    BinaryOptions,
+    EPackage,
+    EResourceImpl,
+    EResourceSetImpl,
+    URI,
+    UniqueIDManager,
+    XMIProcessor,
+    XMLOptions,
+    XMLProcessor,
+    uriToFilePath,
+} from "./internal";
 import * as fs from "fs";
 
 function loadPackage(filename: string): EPackage {
@@ -17,26 +28,26 @@ describe("BinaryEncoder", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
         let resourceURI = new URI("testdata/library.complex.xml");
-        let expectedURI = new URI("testdata/library.complex.bin")
+        let expectedURI = new URI("testdata/library.complex.bin");
         let xmlProcessor = new XMLProcessor([ePackage]);
-        let eResource = xmlProcessor.loadSync(resourceURI)
+        let eResource = xmlProcessor.loadSync(resourceURI);
         expect(eResource.isLoaded).toBeTruthy();
         expect(eResource.getErrors().isEmpty()).toBeTruthy();
         expect(eResource.eContents().isEmpty()).toBeFalsy();
-        let e = new BinaryEncoder(eResource)
-        let r = e.encode(eResource)
-        expect(r.ok).toBeTruthy()
-        let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()
-        let result = Buffer.from(r.unwrap()).toString()
+        let e = new BinaryEncoder(eResource);
+        let r = e.encode(eResource);
+        expect(r.ok).toBeTruthy();
+        let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString();
+        let result = Buffer.from(r.unwrap()).toString();
         expect(result).toBe(expected);
     });
 
-    test('complexWithID', () => {
+    test("complexWithID", () => {
         let ePackage = loadPackage("library.complex.ecore");
         expect(ePackage).not.toBeNull();
         let resourceURI = new URI("testdata/library.complex.id.xml");
-        let expectedURI = new URI("testdata/library.complex.id.bin")
-        
+        let expectedURI = new URI("testdata/library.complex.id.bin");
+
         let eResource = new EResourceImpl();
         let idManager = new UniqueIDManager();
         eResource.eObjectIDManager = idManager;
@@ -45,23 +56,20 @@ describe("BinaryEncoder", () => {
         let eResourceSet = new EResourceSetImpl();
         eResourceSet.getResources().add(eResource);
         eResourceSet.getPackageRegistry().registerPackage(ePackage);
-        eResource.loadSync( new Map<string,any>([[XMLOptions.ID_ATTRIBUTE_NAME,"id"]]))
+        eResource.loadSync(new Map<string, any>([[XMLOptions.ID_ATTRIBUTE_NAME, "id"]]));
         expect(eResource.isLoaded).toBeTruthy();
         expect(eResource.getErrors().isEmpty()).toBeTruthy();
         expect(eResource.eContents().isEmpty()).toBeFalsy();
 
         let eDocumentRoot = eResource.eContents().get(0);
         expect(eDocumentRoot).not.toBeNull();
-        expect(idManager.setID(eDocumentRoot,"h0Rz1FjVeBXUgaW3OzT2frUce90=")).toBeUndefined();
+        expect(idManager.setID(eDocumentRoot, "h0Rz1FjVeBXUgaW3OzT2frUce90=")).toBeUndefined();
 
-        let e = new BinaryEncoder(eResource, new Map<string,any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
-        let r = e.encode(eResource)
-        expect(r.ok).toBeTruthy()
-        let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()
-        let result = Buffer.from(r.unwrap()).toString()
+        let e = new BinaryEncoder(eResource, new Map<string, any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]));
+        let r = e.encode(eResource);
+        expect(r.ok).toBeTruthy();
+        let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString();
+        let result = Buffer.from(r.unwrap()).toString();
         expect(result).toBe(expected);
-
     });
-
-    
 });

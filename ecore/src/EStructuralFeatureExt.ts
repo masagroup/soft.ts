@@ -63,7 +63,7 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
     }
 
     get featureID(): number {
-        return this._featureID
+        return this._featureID;
     }
 
     // set the value of featureID
