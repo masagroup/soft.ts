@@ -13,7 +13,7 @@ import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, U
 describe("XMICodec", () => {
     describe("load.library.simple", () => {
         let resource = new EResourceImpl();
-        resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.simple.ecore");
+        resource.eURI = new URI("testdata/library.simple.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -85,7 +85,7 @@ describe("XMICodec", () => {
 
     describe("load.library.noroot", () => {
         let resource = new EResourceImpl();
-        resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.noroot.ecore");
+        resource.eURI = new URI("testdata/library.noroot.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -136,7 +136,7 @@ describe("XMICodec", () => {
 
     describe("load.library.complex", () => {
         let resource = new EResourceImpl();
-        resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.complex.ecore");
+        resource.eURI = new URI("testdata/library.complex.ecore");
 
         beforeEach(() => {
             resource.unload();
@@ -187,7 +187,7 @@ describe("XMICodec", () => {
     describe("save.library.simple", () => {
         test("saveToString", async () => {
             let resource = new EResourceImpl();
-            resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.simple.ecore");
+            resource.eURI = new URI("testdata/library.simple.ecore");
             await resource.load();
 
             let result = resource.saveToString();
@@ -203,7 +203,7 @@ describe("XMICodec", () => {
     describe("save.library.complex", () => {
         test("saveToString", async () => {
             let resource = new EResourceImpl();
-            resource.eURI = new URI("file:///" + __dirname + "/../testdata/library.complex.ecore");
+            resource.eURI = new URI("testdata/library.complex.ecore");
             await resource.load();
 
             let result = resource.saveToString();

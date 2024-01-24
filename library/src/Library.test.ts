@@ -24,9 +24,7 @@ describe("Library", () => {
 
     test("save.simple.default", () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new ecore.URI(
-            "file:///" + __dirname + "/../testdata/library.simple.default.xml"
-        );
+        let fileURI = new ecore.URI("testdata/library.simple.default.xml");
         let resource = xmlProcessor.loadSync(fileURI);
         expect(resource).not.toBeNull();
 
@@ -41,9 +39,7 @@ describe("Library", () => {
 
     test("save.simple.prefix", () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new ecore.URI(
-            "file:///" + __dirname + "/../testdata/library.simple.prefix.xml"
-        );
+        let fileURI = new ecore.URI("testdata/library.simple.prefix.xml");
         let resource = xmlProcessor.loadSync(fileURI);
         expect(resource).not.toBeNull();
 
@@ -58,7 +54,7 @@ describe("Library", () => {
 
     test("save.complex", async () => {
         let xmlProcessor = new ecore.XMLProcessor([getLibraryPackage()]);
-        let fileURI = new ecore.URI("file:///" + __dirname + "/../testdata/library.complex.xml");
+        let fileURI = new ecore.URI("testdata/library.complex.xml");
         let resource = xmlProcessor.loadSync(fileURI);
         expect(resource).not.toBeNull();
 
