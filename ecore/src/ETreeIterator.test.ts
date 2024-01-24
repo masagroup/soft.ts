@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import * as deepEqual from "deep-equal"
+import deepEqual from "deep-equal"
 import { mock, instance, when } from "ts-mockito"
 import { EObject, ETreeIterator, ImmutableEList } from "./internal"
 
