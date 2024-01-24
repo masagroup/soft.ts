@@ -9,21 +9,21 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Addressable, Book, Borrower, Employee, Item, Person, Writer } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Addressable, Book, Borrower, Employee, Item, Person, Writer } from "./internal"
 
 export interface Library extends Addressable {
     // Attributes
-    name: string;
-    readonly people: ecore.EList<any>;
+    name: string
+    readonly people: ecore.EList<any>
 
     // References
-    readonly writers: ecore.EList<Writer>;
-    readonly employees: ecore.EList<Employee>;
-    readonly borrowers: ecore.EList<Borrower>;
-    readonly stock: ecore.EList<Item>;
-    readonly books: ecore.EList<Book>;
-    readonly branches: ecore.EList<Library>;
-    parentBranch: Library;
-    proprietary: Person;
+    readonly writers: ecore.EList<Writer>
+    readonly employees: ecore.EList<Employee>
+    readonly borrowers: ecore.EList<Borrower>
+    readonly stock: ecore.EList<Item>
+    readonly books: ecore.EList<Book>
+    readonly branches: ecore.EList<Library>
+    parentBranch: Library
+    proprietary: Person
 }

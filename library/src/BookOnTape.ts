@@ -9,10 +9,10 @@
 //
 // *****************************************************************************
 
-import { AudioVisualItem, Person, Writer } from "./internal";
+import { AudioVisualItem, Person, Writer } from "./internal"
 
 export interface BookOnTape extends AudioVisualItem {
     // References
-    reader: Person;
-    author: Writer;
+    reader: Person
+    author: Writer
 }

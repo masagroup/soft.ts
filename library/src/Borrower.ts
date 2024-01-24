@@ -9,10 +9,10 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Lendable, Person } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Lendable, Person } from "./internal"
 
 export interface Borrower extends Person {
     // References
-    readonly borrowed: ecore.EList<Lendable>;
+    readonly borrowed: ecore.EList<Lendable>
 }

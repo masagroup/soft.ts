@@ -9,10 +9,10 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { AudioVisualItem, Person } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { AudioVisualItem, Person } from "./internal"
 
 export interface VideoCassette extends AudioVisualItem {
     // References
-    readonly cast: ecore.EList<Person>;
+    readonly cast: ecore.EList<Person>
 }

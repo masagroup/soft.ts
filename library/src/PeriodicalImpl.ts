@@ -9,32 +9,32 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Item, ItemImpl, LibraryConstants, Periodical, getLibraryPackage } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Item, ItemImpl, LibraryConstants, Periodical, getLibraryPackage } from "./internal"
 
 export class PeriodicalImpl extends ItemImpl implements Periodical {
-    protected _title: string;
-    protected _issuesPerYear: number;
+    protected _title: string
+    protected _issuesPerYear: number
 
     constructor() {
-        super();
-        this._issuesPerYear = 0;
-        this._title = "";
+        super()
+        this._issuesPerYear = 0
+        this._title = ""
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getPeriodical();
+        return getLibraryPackage().getPeriodical()
     }
 
     // get the value of issuesPerYear
     get issuesPerYear(): number {
-        return this._issuesPerYear;
+        return this._issuesPerYear
     }
 
     // set the value of issuesPerYear
     set issuesPerYear(newIssuesPerYear: number) {
-        let oldIssuesPerYear = this._issuesPerYear;
-        this._issuesPerYear = newIssuesPerYear;
+        let oldIssuesPerYear = this._issuesPerYear
+        this._issuesPerYear = newIssuesPerYear
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -44,19 +44,19 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
                     oldIssuesPerYear,
                     newIssuesPerYear
                 )
-            );
+            )
         }
     }
 
     // get the value of title
     get title(): string {
-        return this._title;
+        return this._title
     }
 
     // set the value of title
     set title(newTitle: string) {
-        let oldTitle = this._title;
-        this._title = newTitle;
+        let oldTitle = this._title
+        this._title = newTitle
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -66,20 +66,20 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
                     oldTitle,
                     newTitle
                 )
-            );
+            )
         }
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.PERIODICAL__ISSUES_PER_YEAR: {
-                return this.issuesPerYear;
+                return this.issuesPerYear
             }
             case LibraryConstants.PERIODICAL__TITLE: {
-                return this.title;
+                return this.title
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -87,15 +87,15 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.PERIODICAL__ISSUES_PER_YEAR: {
-                this.issuesPerYear = newValue as number;
-                break;
+                this.issuesPerYear = newValue as number
+                break
             }
             case LibraryConstants.PERIODICAL__TITLE: {
-                this.title = newValue as string;
-                break;
+                this.title = newValue as string
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -103,15 +103,15 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.PERIODICAL__ISSUES_PER_YEAR: {
-                this.issuesPerYear = 0;
-                break;
+                this.issuesPerYear = 0
+                break
             }
             case LibraryConstants.PERIODICAL__TITLE: {
-                this.title = "";
-                break;
+                this.title = ""
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -119,13 +119,13 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.PERIODICAL__ISSUES_PER_YEAR: {
-                return this._issuesPerYear != 0;
+                return this._issuesPerYear != 0
             }
             case LibraryConstants.PERIODICAL__TITLE: {
-                return this._title != "";
+                return this._title != ""
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }

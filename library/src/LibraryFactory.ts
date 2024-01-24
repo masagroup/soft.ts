@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 import {
     Addressable,
     AudioVisualItem,
@@ -28,31 +28,31 @@ import {
     Person,
     VideoCassette,
     Writer,
-} from "./internal";
+} from "./internal"
 
 export interface LibraryFactory extends ecore.EFactory {
-    createBook(): Book;
+    createBook(): Book
 
-    createBookIndex(): BookIndex;
+    createBookIndex(): BookIndex
 
-    createBookOnTape(): BookOnTape;
+    createBookOnTape(): BookOnTape
 
-    createBorrower(): Borrower;
+    createBorrower(): Borrower
 
-    createDocumentRoot(): DocumentRoot;
+    createDocumentRoot(): DocumentRoot
 
-    createEmployee(): Employee;
+    createEmployee(): Employee
 
-    createLibrary(): Library;
-    createLibraryFromContainer(eContainer: Library): Library;
+    createLibrary(): Library
+    createLibraryFromContainer(eContainer: Library): Library
 
-    createPerson(): Person;
+    createPerson(): Person
 
-    createVideoCassette(): VideoCassette;
+    createVideoCassette(): VideoCassette
 
-    createWriter(): Writer;
+    createWriter(): Writer
 }
 
 export function getLibraryFactory(): LibraryFactory {
-    return LibraryFactoryImpl.getInstance();
+    return LibraryFactoryImpl.getInstance()
 }

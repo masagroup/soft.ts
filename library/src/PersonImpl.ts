@@ -9,34 +9,34 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Addressable, LibraryConstants, Person, getLibraryPackage } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Addressable, LibraryConstants, Person, getLibraryPackage } from "./internal"
 
 export class PersonImpl extends ecore.EObjectImpl implements Person {
-    protected _address: string;
-    protected _firstName: string;
-    protected _lastName: string;
+    protected _firstName: string
+    protected _address: string
+    protected _lastName: string
 
     constructor() {
-        super();
-        this._address = "";
-        this._firstName = "";
-        this._lastName = "";
+        super()
+        this._address = ""
+        this._firstName = ""
+        this._lastName = ""
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getPerson();
+        return getLibraryPackage().getPerson()
     }
 
     // get the value of address
     get address(): string {
-        return this._address;
+        return this._address
     }
 
     // set the value of address
     set address(newAddress: string) {
-        let oldAddress = this._address;
-        this._address = newAddress;
+        let oldAddress = this._address
+        this._address = newAddress
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -46,19 +46,19 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
                     oldAddress,
                     newAddress
                 )
-            );
+            )
         }
     }
 
     // get the value of firstName
     get firstName(): string {
-        return this._firstName;
+        return this._firstName
     }
 
     // set the value of firstName
     set firstName(newFirstName: string) {
-        let oldFirstName = this._firstName;
-        this._firstName = newFirstName;
+        let oldFirstName = this._firstName
+        this._firstName = newFirstName
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -68,19 +68,19 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
                     oldFirstName,
                     newFirstName
                 )
-            );
+            )
         }
     }
 
     // get the value of lastName
     get lastName(): string {
-        return this._lastName;
+        return this._lastName
     }
 
     // set the value of lastName
     set lastName(newLastName: string) {
-        let oldLastName = this._lastName;
-        this._lastName = newLastName;
+        let oldLastName = this._lastName
+        this._lastName = newLastName
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -90,23 +90,23 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
                     oldLastName,
                     newLastName
                 )
-            );
+            )
         }
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.PERSON__ADDRESS: {
-                return this.address;
+                return this.address
             }
             case LibraryConstants.PERSON__FIRST_NAME: {
-                return this.firstName;
+                return this.firstName
             }
             case LibraryConstants.PERSON__LAST_NAME: {
-                return this.lastName;
+                return this.lastName
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -114,19 +114,19 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.PERSON__ADDRESS: {
-                this.address = newValue as string;
-                break;
+                this.address = newValue as string
+                break
             }
             case LibraryConstants.PERSON__FIRST_NAME: {
-                this.firstName = newValue as string;
-                break;
+                this.firstName = newValue as string
+                break
             }
             case LibraryConstants.PERSON__LAST_NAME: {
-                this.lastName = newValue as string;
-                break;
+                this.lastName = newValue as string
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -134,19 +134,19 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.PERSON__ADDRESS: {
-                this.address = "";
-                break;
+                this.address = ""
+                break
             }
             case LibraryConstants.PERSON__FIRST_NAME: {
-                this.firstName = "";
-                break;
+                this.firstName = ""
+                break
             }
             case LibraryConstants.PERSON__LAST_NAME: {
-                this.lastName = "";
-                break;
+                this.lastName = ""
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -154,16 +154,16 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.PERSON__ADDRESS: {
-                return this._address != "";
+                return this._address != ""
             }
             case LibraryConstants.PERSON__FIRST_NAME: {
-                return this._firstName != "";
+                return this._firstName != ""
             }
             case LibraryConstants.PERSON__LAST_NAME: {
-                return this._lastName != "";
+                return this._lastName != ""
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }

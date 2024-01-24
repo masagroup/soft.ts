@@ -9,9 +9,9 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 
 export interface Item extends ecore.EObject {
     // Attributes
-    publicationDate: Date;
+    publicationDate: Date
 }

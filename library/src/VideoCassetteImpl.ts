@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 import {
     AudioVisualItem,
     AudioVisualItemImpl,
@@ -17,18 +17,18 @@ import {
     Person,
     VideoCassette,
     getLibraryPackage,
-} from "./internal";
+} from "./internal"
 
 export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCassette {
-    protected _cast: ecore.EList<Person>;
+    protected _cast: ecore.EList<Person>
 
     constructor() {
-        super();
-        this._cast = null;
+        super()
+        this._cast = null
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getVideoCassette();
+        return getLibraryPackage().getVideoCassette()
     }
 
     // get the value of cast
@@ -43,22 +43,18 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
                 false,
                 true,
                 false
-            );
+            )
         }
-        return this._cast;
+        return this._cast
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.VIDEO_CASSETTE__CAST: {
-                let list = this.cast;
-                if (!resolve) {
-                    if (ecore.isEObjectList(list)) return list.getUnResolvedList();
-                }
-                return list;
+                return !resolve && ecore.isEObjectList(this.cast) ? this.cast.getUnResolvedList() : this.cast
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -66,12 +62,12 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.VIDEO_CASSETTE__CAST: {
-                this.cast.clear();
-                this.cast.addAll(newValue as ecore.EList<Person>);
-                break;
+                this.cast.clear()
+                this.cast.addAll(newValue as ecore.EList<Person>)
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -79,11 +75,11 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.VIDEO_CASSETTE__CAST: {
-                this.cast.clear();
-                break;
+                this.cast.clear()
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -91,10 +87,10 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.VIDEO_CASSETTE__CAST: {
-                return this.cast != null && this.cast.size() != 0;
+                return this.cast != null && this.cast.size() != 0
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }

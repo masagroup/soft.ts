@@ -9,10 +9,10 @@
 //
 // *****************************************************************************
 
-import { Addressable } from "./internal";
+import { Addressable } from "./internal"
 
 export interface Person extends Addressable {
     // Attributes
-    firstName: string;
-    lastName: string;
+    firstName: string
+    lastName: string
 }

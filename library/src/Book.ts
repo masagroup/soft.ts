@@ -9,18 +9,18 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { BookCategory, BookIndex, CirculatingItem, Writer } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { BookCategory, BookIndex, CirculatingItem, Writer } from "./internal"
 
 export interface Book extends CirculatingItem {
     // Attributes
-    title: string;
-    pages: number;
-    category: BookCategory;
-    unSetCategory(): void;
-    readonly tableOfContents: ecore.EList<string>;
+    title: string
+    pages: number
+    category: BookCategory
+    unSetCategory(): void
+    readonly tableOfContents: ecore.EList<string>
 
     // References
-    author: Writer;
-    readonly indexes: ecore.EMap<string, number>;
+    author: Writer
+    readonly indexes: ecore.EMap<string, number>
 }

@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Borrower, Item, Lendable } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Borrower, Item, Lendable } from "./internal"
 
 export interface CirculatingItem extends Item, Lendable {}

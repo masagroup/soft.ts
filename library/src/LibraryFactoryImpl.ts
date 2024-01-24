@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 import {
     Addressable,
     AudioVisualItem,
@@ -42,120 +42,120 @@ import {
     WriterExt,
     bookCategoryFromString,
     bookCategoryToString,
-} from "./internal";
+} from "./internal"
 
 export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFactory {
-    private static _instance: LibraryFactoryImpl = null;
+    private static _instance: LibraryFactoryImpl = null
 
     public static getInstance(): LibraryFactoryImpl {
         if (!this._instance) {
-            this._instance = new LibraryFactoryImpl();
+            this._instance = new LibraryFactoryImpl()
         }
-        return this._instance;
+        return this._instance
     }
 
     protected constructor() {
-        super();
+        super()
     }
 
     create(eClass: ecore.EClass): ecore.EObject {
         switch (eClass.classifierID) {
             case LibraryConstants.BOOK:
-                return this.createBook();
+                return this.createBook()
             case LibraryConstants.BOOK_INDEX:
-                return this.createBookIndex();
+                return this.createBookIndex()
             case LibraryConstants.LIBRARY:
-                return this.createLibrary();
+                return this.createLibrary()
             case LibraryConstants.WRITER:
-                return this.createWriter();
+                return this.createWriter()
             case LibraryConstants.BOOK_ON_TAPE:
-                return this.createBookOnTape();
+                return this.createBookOnTape()
             case LibraryConstants.VIDEO_CASSETTE:
-                return this.createVideoCassette();
+                return this.createVideoCassette()
             case LibraryConstants.BORROWER:
-                return this.createBorrower();
+                return this.createBorrower()
             case LibraryConstants.PERSON:
-                return this.createPerson();
+                return this.createPerson()
             case LibraryConstants.EMPLOYEE:
-                return this.createEmployee();
+                return this.createEmployee()
             case LibraryConstants.DOCUMENT_ROOT:
-                return this.createDocumentRoot();
+                return this.createDocumentRoot()
             default:
-                throw new Error("create: " + eClass.classifierID + " not found");
+                throw new Error("create: " + eClass.classifierID + " not found")
         }
     }
 
     createBook(): Book {
-        return new BookImpl();
+        return new BookImpl()
     }
 
     createBookIndex(): BookIndex {
-        return new BookIndexImpl();
+        return new BookIndexImpl()
     }
 
     createLibrary(): Library {
-        return new LibraryImpl();
+        return new LibraryImpl()
     }
 
     createLibraryFromContainer(eContainer: Library): Library {
-        let element = new LibraryImpl();
+        let element = new LibraryImpl()
         if (eContainer != null) {
-            eContainer.branches.add(element);
+            eContainer.branches.add(element)
         }
-        return element;
+        return element
     }
 
     createWriter(): Writer {
-        return new WriterExt();
+        return new WriterExt()
     }
 
     createBookOnTape(): BookOnTape {
-        return new BookOnTapeImpl();
+        return new BookOnTapeImpl()
     }
 
     createVideoCassette(): VideoCassette {
-        return new VideoCassetteImpl();
+        return new VideoCassetteImpl()
     }
 
     createBorrower(): Borrower {
-        return new BorrowerImpl();
+        return new BorrowerImpl()
     }
 
     createPerson(): Person {
-        return new PersonImpl();
+        return new PersonImpl()
     }
 
     createEmployee(): Employee {
-        return new EmployeeImpl();
+        return new EmployeeImpl()
     }
 
     createDocumentRoot(): DocumentRoot {
-        return new DocumentRootImpl();
+        return new DocumentRootImpl()
     }
 
     createFromString(eDataType: ecore.EDataType, literalValue: string): any {
         switch (eDataType.classifierID) {
             case LibraryConstants.BOOK_CATEGORY:
-                return this.createBookCategoryFromString(eDataType, literalValue);
+                return this.createBookCategoryFromString(eDataType, literalValue)
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier");
+                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
         }
     }
 
     convertToString(eDataType: ecore.EDataType, instanceValue: any): string {
         switch (eDataType.classifierID) {
             case LibraryConstants.BOOK_CATEGORY:
-                return this.convertBookCategoryToString(eDataType, instanceValue);
+                return this.convertBookCategoryToString(eDataType, instanceValue)
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier");
+                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
         }
     }
 
     createBookCategoryFromString(eDataType: ecore.EDataType, literalValue: string): any {
-        return bookCategoryFromString(literalValue);
+        return bookCategoryFromString(literalValue)
     }
 
     convertBookCategoryToString(eDataType: ecore.EDataType, instanceValue: any): string {
-        return bookCategoryToString(instanceValue as BookCategory);
+        return bookCategoryToString(instanceValue as BookCategory)
     }
 }

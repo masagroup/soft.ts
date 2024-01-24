@@ -9,27 +9,27 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Employee, LibraryConstants, Person, PersonImpl, getLibraryPackage } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Employee, LibraryConstants, Person, PersonImpl, getLibraryPackage } from "./internal"
 
 export class EmployeeImpl extends PersonImpl implements Employee {
-    protected _manager: Employee;
+    protected _manager: Employee
 
     constructor() {
-        super();
-        this._manager = null;
+        super()
+        this._manager = null
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getEmployee();
+        return getLibraryPackage().getEmployee()
     }
 
     // get the value of manager
     get manager(): Employee {
         if (this._manager != null && this._manager.eIsProxy()) {
-            let oldManager = this._manager;
-            let newManager = this.eResolveProxy(oldManager) as Employee;
-            this._manager = newManager;
+            let oldManager = this._manager
+            let newManager = this.eResolveProxy(oldManager) as Employee
+            this._manager = newManager
             if (newManager != oldManager) {
                 if (this.eNotificationRequired) {
                     this.eNotify(
@@ -40,17 +40,17 @@ export class EmployeeImpl extends PersonImpl implements Employee {
                             oldManager,
                             newManager
                         )
-                    );
+                    )
                 }
             }
         }
-        return this._manager;
+        return this._manager
     }
 
     // set the value of manager
     set manager(newManager: Employee) {
-        let oldManager = this._manager;
-        this._manager = newManager;
+        let oldManager = this._manager
+        this._manager = newManager
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -60,25 +60,22 @@ export class EmployeeImpl extends PersonImpl implements Employee {
                     oldManager,
                     newManager
                 )
-            );
+            )
         }
     }
 
     // get the basic value of manager with no proxy resolution
     basicGetManager(): Employee {
-        return this._manager;
+        return this._manager
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.EMPLOYEE__MANAGER: {
-                if (resolve) {
-                    return this.manager;
-                }
-                return this.basicGetManager();
+                return resolve ? this.manager : this.basicGetManager()
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -86,11 +83,11 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.EMPLOYEE__MANAGER: {
-                this.manager = newValue as Employee;
-                break;
+                this.manager = newValue as Employee
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -98,11 +95,11 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.EMPLOYEE__MANAGER: {
-                this.manager = null;
-                break;
+                this.manager = null
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -110,10 +107,10 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.EMPLOYEE__MANAGER: {
-                return this._manager != null;
+                return this._manager != null
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }

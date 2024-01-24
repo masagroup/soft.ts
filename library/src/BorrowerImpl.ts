@@ -9,26 +9,19 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import {
-    Borrower,
-    Lendable,
-    LibraryConstants,
-    Person,
-    PersonImpl,
-    getLibraryPackage,
-} from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Borrower, Lendable, LibraryConstants, Person, PersonImpl, getLibraryPackage } from "./internal"
 
 export class BorrowerImpl extends PersonImpl implements Borrower {
-    protected _borrowed: ecore.EList<Lendable>;
+    protected _borrowed: ecore.EList<Lendable>
 
     constructor() {
-        super();
-        this._borrowed = null;
+        super()
+        this._borrowed = null
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getBorrower();
+        return getLibraryPackage().getBorrower()
     }
 
     // get the value of borrowed
@@ -43,22 +36,20 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
                 true,
                 true,
                 false
-            );
+            )
         }
-        return this._borrowed;
+        return this._borrowed
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                let list = this.borrowed;
-                if (!resolve) {
-                    if (ecore.isEObjectList(list)) return list.getUnResolvedList();
-                }
-                return list;
+                return !resolve && ecore.isEObjectList(this.borrowed)
+                    ? this.borrowed.getUnResolvedList()
+                    : this.borrowed
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -66,12 +57,12 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                this.borrowed.clear();
-                this.borrowed.addAll(newValue as ecore.EList<Lendable>);
-                break;
+                this.borrowed.clear()
+                this.borrowed.addAll(newValue as ecore.EList<Lendable>)
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -79,11 +70,11 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                this.borrowed.clear();
-                break;
+                this.borrowed.clear()
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -91,10 +82,10 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                return this.borrowed != null && this.borrowed.size() != 0;
+                return this.borrowed != null && this.borrowed.size() != 0
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }
@@ -106,12 +97,12 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                let list = this.borrowed as ecore.ENotifyingList<Lendable>;
-                let end = otherEnd as Lendable;
-                return list.addWithNotification(end, notifications);
+                let list = this.borrowed as ecore.ENotifyingList<Lendable>
+                let end = otherEnd as Lendable
+                return list.addWithNotification(end, notifications)
             }
             default: {
-                return super.eBasicInverseAdd(otherEnd, featureID, notifications);
+                return super.eBasicInverseAdd(otherEnd, featureID, notifications)
             }
         }
     }
@@ -123,12 +114,12 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                let list = this.borrowed as ecore.ENotifyingList<Lendable>;
-                let end = otherEnd as Lendable;
-                return list.removeWithNotification(end, notifications);
+                let list = this.borrowed as ecore.ENotifyingList<Lendable>
+                let end = otherEnd as Lendable
+                return list.removeWithNotification(end, notifications)
             }
             default: {
-                return super.eBasicInverseRemove(otherEnd, featureID, notifications);
+                return super.eBasicInverseRemove(otherEnd, featureID, notifications)
             }
         }
     }

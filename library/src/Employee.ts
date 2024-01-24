@@ -9,9 +9,9 @@
 //
 // *****************************************************************************
 
-import { Person } from "./internal";
+import { Person } from "./internal"
 
 export interface Employee extends Person {
     // References
-    manager: Employee;
+    manager: Employee
 }

@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 import {
     Book,
     BookCategory,
@@ -19,35 +19,35 @@ import {
     LibraryConstants,
     Writer,
     getLibraryPackage,
-} from "./internal";
+} from "./internal"
 
 export class BookImpl extends CirculatingItemImpl implements Book {
-    protected _title: string;
-    protected _indexes: ecore.EMap<string, number>;
-    protected _tableOfContents: ecore.EList<string>;
-    protected _author: Writer;
-    protected _category: BookCategory;
-    protected _pages: number;
+    protected _indexes: ecore.EMap<string, number>
+    protected _category: BookCategory
+    protected _author: Writer
+    protected _title: string
+    protected _pages: number
+    protected _tableOfContents: ecore.EList<string>
 
     constructor() {
-        super();
-        this._author = null;
-        this._category = BookCategory.MYSTERY;
-        this._indexes = null;
-        this._pages = 100;
-        this._title = "";
+        super()
+        this._author = null
+        this._category = BookCategory.MYSTERY
+        this._indexes = null
+        this._pages = 100
+        this._title = ""
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getBook();
+        return getLibraryPackage().getBook()
     }
 
     // get the value of author
     get author(): Writer {
         if (this._author != null && this._author.eIsProxy()) {
-            let oldAuthor = this._author;
-            let newAuthor = this.eResolveProxy(oldAuthor) as Writer;
-            this._author = newAuthor;
+            let oldAuthor = this._author
+            let newAuthor = this.eResolveProxy(oldAuthor) as Writer
+            this._author = newAuthor
             if (newAuthor != oldAuthor) {
                 if (this.eNotificationRequired) {
                     this.eNotify(
@@ -58,48 +58,40 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                             oldAuthor,
                             newAuthor
                         )
-                    );
+                    )
                 }
             }
         }
-        return this._author;
+        return this._author
     }
 
     // set the value of author
     set author(newAuthor: Writer) {
-        let oldAuthor = this._author;
+        let oldAuthor = this._author
         if (newAuthor != oldAuthor) {
-            let notifications: ecore.ENotificationChain = null;
+            let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldAuthor)) {
-                notifications = oldAuthor.eInverseRemove(
-                    this,
-                    LibraryConstants.WRITER__BOOKS,
-                    notifications
-                );
+                notifications = oldAuthor.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, notifications)
             }
             if (ecore.isEObjectInternal(newAuthor)) {
-                notifications = newAuthor.eInverseAdd(
-                    this,
-                    LibraryConstants.WRITER__BOOKS,
-                    notifications
-                );
+                notifications = newAuthor.eInverseAdd(this, LibraryConstants.WRITER__BOOKS, notifications)
             }
-            notifications = this.basicSetAuthor(newAuthor, notifications);
+            notifications = this.basicSetAuthor(newAuthor, notifications)
             if (notifications != null) {
-                notifications.dispatch();
+                notifications.dispatch()
             }
         }
     }
 
     // get the basic value of author with no proxy resolution
     basicGetAuthor(): Writer {
-        return this._author;
+        return this._author
     }
 
     basicSetAuthor(newAuthor: Writer, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
-        let oldAuthor = this._author;
-        this._author = newAuthor;
-        let notifications = msgs;
+        let oldAuthor = this._author
+        this._author = newAuthor
+        let notifications = msgs
         if (this.eNotificationRequired) {
             let notification = new ecore.Notification(
                 this,
@@ -107,25 +99,25 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 LibraryConstants.BOOK__AUTHOR,
                 oldAuthor,
                 newAuthor
-            );
+            )
             if (notifications != null) {
-                notifications.add(notification);
+                notifications.add(notification)
             } else {
-                notifications = notification;
+                notifications = notification
             }
         }
-        return notifications;
+        return notifications
     }
 
     // get the value of category
     get category(): BookCategory {
-        return this._category;
+        return this._category
     }
 
     // set the value of category
     set category(newCategory: BookCategory) {
-        let oldCategory = this._category;
-        this._category = newCategory;
+        let oldCategory = this._category
+        this._category = newCategory
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -135,7 +127,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                     oldCategory,
                     newCategory
                 )
-            );
+            )
         }
     }
 
@@ -143,111 +135,81 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     unSetCategory(): void {
         if (this.eNotificationRequired) {
             this.eNotify(
-                new ecore.Notification(
-                    this,
-                    ecore.EventType.UNSET,
-                    LibraryConstants.BOOK__CATEGORY,
-                    null,
-                    null
-                )
-            );
+                new ecore.Notification(this, ecore.EventType.UNSET, LibraryConstants.BOOK__CATEGORY, null, null)
+            )
         }
     }
 
     // get the value of indexes
     get indexes(): ecore.EMap<string, number> {
         if (this._indexes == null) {
-            this._indexes = new ecore.BasicEObjectMap<string, number>(
-                getLibraryPackage().getBookIndex()
-            );
+            this._indexes = new ecore.BasicEObjectMap<string, number>(getLibraryPackage().getBookIndex())
         }
-        return this._indexes;
+        return this._indexes
     }
 
     // get the value of pages
     get pages(): number {
-        return this._pages;
+        return this._pages
     }
 
     // set the value of pages
     set pages(newPages: number) {
-        let oldPages = this._pages;
-        this._pages = newPages;
+        let oldPages = this._pages
+        this._pages = newPages
         if (this.eNotificationRequired) {
             this.eNotify(
-                new ecore.Notification(
-                    this,
-                    ecore.EventType.SET,
-                    LibraryConstants.BOOK__PAGES,
-                    oldPages,
-                    newPages
-                )
-            );
+                new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK__PAGES, oldPages, newPages)
+            )
         }
     }
 
     // get the value of tableOfContents
     get tableOfContents(): ecore.EList<string> {
         if (this._tableOfContents == null) {
-            this._tableOfContents = new ecore.BasicEDataTypeList<string>(
-                this,
-                LibraryConstants.BOOK__TABLE_OF_CONTENTS
-            );
+            this._tableOfContents = new ecore.BasicEDataTypeList<string>(this, LibraryConstants.BOOK__TABLE_OF_CONTENTS)
         }
-        return this._tableOfContents;
+        return this._tableOfContents
     }
 
     // get the value of title
     get title(): string {
-        return this._title;
+        return this._title
     }
 
     // set the value of title
     set title(newTitle: string) {
-        let oldTitle = this._title;
-        this._title = newTitle;
+        let oldTitle = this._title
+        this._title = newTitle
         if (this.eNotificationRequired) {
             this.eNotify(
-                new ecore.Notification(
-                    this,
-                    ecore.EventType.SET,
-                    LibraryConstants.BOOK__TITLE,
-                    oldTitle,
-                    newTitle
-                )
-            );
+                new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK__TITLE, oldTitle, newTitle)
+            )
         }
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                if (resolve) {
-                    return this.author;
-                }
-                return this.basicGetAuthor();
+                return resolve ? this.author : this.basicGetAuthor()
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                return this.category;
+                return this.category
             }
             case LibraryConstants.BOOK__INDEXES: {
-                let list = this.indexes;
-                if (!resolve) {
-                    if (ecore.isEObjectList(list)) return list.getUnResolvedList();
-                }
-                return list;
+                return !resolve && ecore.isEObjectList(this.indexes) ? this.indexes.getUnResolvedList() : this.indexes
             }
             case LibraryConstants.BOOK__PAGES: {
-                return this.pages;
+                return this.pages
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                return this.tableOfContents;
+                return this.tableOfContents
             }
             case LibraryConstants.BOOK__TITLE: {
-                return this.title;
+                return this.title
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -255,33 +217,33 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                this.author = newValue as Writer;
-                break;
+                this.author = newValue as Writer
+                break
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                this.category = newValue as BookCategory;
-                break;
+                this.category = newValue as BookCategory
+                break
             }
             case LibraryConstants.BOOK__INDEXES: {
-                this.indexes.clear();
-                this.indexes.addAll(newValue as ecore.EList<ecore.EMapEntry<string, number>>);
-                break;
+                this.indexes.clear()
+                this.indexes.addAll(newValue as ecore.EList<ecore.EMapEntry<string, number>>)
+                break
             }
             case LibraryConstants.BOOK__PAGES: {
-                this.pages = newValue as number;
-                break;
+                this.pages = newValue as number
+                break
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                this.tableOfContents.clear();
-                this.tableOfContents.addAll(newValue as ecore.EList<string>);
-                break;
+                this.tableOfContents.clear()
+                this.tableOfContents.addAll(newValue as ecore.EList<string>)
+                break
             }
             case LibraryConstants.BOOK__TITLE: {
-                this.title = newValue as string;
-                break;
+                this.title = newValue as string
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -289,31 +251,31 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                this.author = null;
-                break;
+                this.author = null
+                break
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                this.unSetCategory();
-                break;
+                this.unSetCategory()
+                break
             }
             case LibraryConstants.BOOK__INDEXES: {
-                this.indexes.clear();
-                break;
+                this.indexes.clear()
+                break
             }
             case LibraryConstants.BOOK__PAGES: {
-                this.pages = 100;
-                break;
+                this.pages = 100
+                break
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                this.tableOfContents.clear();
-                break;
+                this.tableOfContents.clear()
+                break
             }
             case LibraryConstants.BOOK__TITLE: {
-                this.title = "";
-                break;
+                this.title = ""
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -321,25 +283,25 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                return this._author != null;
+                return this._author != null
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                return this._category != BookCategory.MYSTERY;
+                return this._category != BookCategory.MYSTERY
             }
             case LibraryConstants.BOOK__INDEXES: {
-                return this.indexes != null && this.indexes.size() != 0;
+                return this.indexes != null && this.indexes.size() != 0
             }
             case LibraryConstants.BOOK__PAGES: {
-                return this._pages != 100;
+                return this._pages != 100
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                return this.tableOfContents != null && this.tableOfContents.size() != 0;
+                return this.tableOfContents != null && this.tableOfContents.size() != 0
             }
             case LibraryConstants.BOOK__TITLE: {
-                return this._title != "";
+                return this._title != ""
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }
@@ -351,14 +313,14 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                let msgs = notifications;
+                let msgs = notifications
                 if (ecore.isEObjectInternal(this.author)) {
-                    msgs = this.author.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, msgs);
+                    msgs = this.author.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, msgs)
                 }
-                return this.basicSetAuthor(otherEnd as Writer, msgs);
+                return this.basicSetAuthor(otherEnd as Writer, msgs)
             }
             default: {
-                return super.eBasicInverseAdd(otherEnd, featureID, notifications);
+                return super.eBasicInverseAdd(otherEnd, featureID, notifications)
             }
         }
     }
@@ -370,10 +332,10 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                return this.basicSetAuthor(null, notifications);
+                return this.basicSetAuthor(null, notifications)
             }
             default: {
-                return super.eBasicInverseRemove(otherEnd, featureID, notifications);
+                return super.eBasicInverseRemove(otherEnd, featureID, notifications)
             }
         }
     }

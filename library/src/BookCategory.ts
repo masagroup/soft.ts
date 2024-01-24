@@ -18,17 +18,17 @@ export enum BookCategory {
 export function bookCategoryToString(bookCategory: BookCategory): string {
     switch (bookCategory) {
         case BookCategory.BIOGRAPHY:
-            return "Biography";
+            return "Biography"
         case BookCategory.MYSTERY:
-            return "Mystery";
+            return "Mystery"
         case BookCategory.SCIENCEFICTION:
-            return "ScienceFiction";
+            return "ScienceFiction"
     }
 }
 
 export function bookCategoryFromString(literalValue: string): BookCategory {
-    if (literalValue == "Biography") return BookCategory.BIOGRAPHY;
-    else if (literalValue == "Mystery") return BookCategory.MYSTERY;
-    else if (literalValue == "ScienceFiction") return BookCategory.SCIENCEFICTION;
-    throw new Error("Invalid value for enum BookCategory: " + literalValue);
+    if (literalValue == "Biography") return BookCategory.BIOGRAPHY
+    else if (literalValue == "Mystery") return BookCategory.MYSTERY
+    else if (literalValue == "ScienceFiction") return BookCategory.SCIENCEFICTION
+    throw new Error("Invalid value for enum BookCategory: " + literalValue)
 }

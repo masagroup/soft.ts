@@ -9,11 +9,11 @@
 //
 // *****************************************************************************
 
-import { CirculatingItem } from "./internal";
+import { CirculatingItem } from "./internal"
 
 export interface AudioVisualItem extends CirculatingItem {
     // Attributes
-    title: string;
-    minutesLength: number;
-    isDamaged: boolean;
+    title: string
+    minutesLength: number
+    isDamaged: boolean
 }

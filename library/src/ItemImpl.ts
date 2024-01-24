@@ -9,30 +9,30 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Item, LibraryConstants, getLibraryPackage } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Item, LibraryConstants, getLibraryPackage } from "./internal"
 
 export class ItemImpl extends ecore.EObjectImpl implements Item {
-    protected _publicationDate: Date;
+    protected _publicationDate: Date
 
     constructor() {
-        super();
-        this._publicationDate = null;
+        super()
+        this._publicationDate = null
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getItem();
+        return getLibraryPackage().getItem()
     }
 
     // get the value of publicationDate
     get publicationDate(): Date {
-        return this._publicationDate;
+        return this._publicationDate
     }
 
     // set the value of publicationDate
     set publicationDate(newPublicationDate: Date) {
-        let oldPublicationDate = this._publicationDate;
-        this._publicationDate = newPublicationDate;
+        let oldPublicationDate = this._publicationDate
+        this._publicationDate = newPublicationDate
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -42,17 +42,17 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
                     oldPublicationDate,
                     newPublicationDate
                 )
-            );
+            )
         }
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.ITEM__PUBLICATION_DATE: {
-                return this.publicationDate;
+                return this.publicationDate
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -60,11 +60,11 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.ITEM__PUBLICATION_DATE: {
-                this.publicationDate = newValue as Date;
-                break;
+                this.publicationDate = newValue as Date
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -72,11 +72,11 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.ITEM__PUBLICATION_DATE: {
-                this.publicationDate = null;
-                break;
+                this.publicationDate = null
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -84,10 +84,10 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.ITEM__PUBLICATION_DATE: {
-                return this._publicationDate != null;
+                return this._publicationDate != null
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }

@@ -9,10 +9,10 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 
 export interface BookIndex extends ecore.EObject {
     // Attributes
-    key: string;
-    readonly value: ecore.EList<number>;
+    key: string
+    readonly value: ecore.EList<number>
 }

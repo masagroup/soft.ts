@@ -9,9 +9,9 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 
 export interface Addressable extends ecore.EObject {
     // Attributes
-    address: string;
+    address: string
 }

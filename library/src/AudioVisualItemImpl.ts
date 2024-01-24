@@ -9,40 +9,34 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import {
-    AudioVisualItem,
-    CirculatingItem,
-    CirculatingItemImpl,
-    LibraryConstants,
-    getLibraryPackage,
-} from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { AudioVisualItem, CirculatingItem, CirculatingItemImpl, LibraryConstants, getLibraryPackage } from "./internal"
 
 export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVisualItem {
-    protected _title: string;
-    protected _minutesLength: number;
-    protected _isDamaged: boolean;
+    protected _isDamaged: boolean
+    protected _title: string
+    protected _minutesLength: number
 
     constructor() {
-        super();
-        this._isDamaged = false;
-        this._minutesLength = 0;
-        this._title = "";
+        super()
+        this._isDamaged = false
+        this._minutesLength = 0
+        this._title = ""
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getAudioVisualItem();
+        return getLibraryPackage().getAudioVisualItem()
     }
 
     // get the value of isDamaged
     get isDamaged(): boolean {
-        return this._isDamaged;
+        return this._isDamaged
     }
 
     // set the value of isDamaged
     set isDamaged(newIsDamaged: boolean) {
-        let oldIsDamaged = this._isDamaged;
-        this._isDamaged = newIsDamaged;
+        let oldIsDamaged = this._isDamaged
+        this._isDamaged = newIsDamaged
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -52,19 +46,19 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
                     oldIsDamaged,
                     newIsDamaged
                 )
-            );
+            )
         }
     }
 
     // get the value of minutesLength
     get minutesLength(): number {
-        return this._minutesLength;
+        return this._minutesLength
     }
 
     // set the value of minutesLength
     set minutesLength(newMinutesLength: number) {
-        let oldMinutesLength = this._minutesLength;
-        this._minutesLength = newMinutesLength;
+        let oldMinutesLength = this._minutesLength
+        this._minutesLength = newMinutesLength
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -74,19 +68,19 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
                     oldMinutesLength,
                     newMinutesLength
                 )
-            );
+            )
         }
     }
 
     // get the value of title
     get title(): string {
-        return this._title;
+        return this._title
     }
 
     // set the value of title
     set title(newTitle: string) {
-        let oldTitle = this._title;
-        this._title = newTitle;
+        let oldTitle = this._title
+        this._title = newTitle
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -96,23 +90,23 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
                     oldTitle,
                     newTitle
                 )
-            );
+            )
         }
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.AUDIO_VISUAL_ITEM__DAMAGED: {
-                return this.isDamaged;
+                return this.isDamaged
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__MINUTES_LENGTH: {
-                return this.minutesLength;
+                return this.minutesLength
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__TITLE: {
-                return this.title;
+                return this.title
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -120,19 +114,19 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.AUDIO_VISUAL_ITEM__DAMAGED: {
-                this.isDamaged = newValue as boolean;
-                break;
+                this.isDamaged = newValue as boolean
+                break
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__MINUTES_LENGTH: {
-                this.minutesLength = newValue as number;
-                break;
+                this.minutesLength = newValue as number
+                break
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__TITLE: {
-                this.title = newValue as string;
-                break;
+                this.title = newValue as string
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -140,19 +134,19 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.AUDIO_VISUAL_ITEM__DAMAGED: {
-                this.isDamaged = false;
-                break;
+                this.isDamaged = false
+                break
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__MINUTES_LENGTH: {
-                this.minutesLength = 0;
-                break;
+                this.minutesLength = 0
+                break
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__TITLE: {
-                this.title = "";
-                break;
+                this.title = ""
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -160,16 +154,16 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.AUDIO_VISUAL_ITEM__DAMAGED: {
-                return this._isDamaged != false;
+                return this._isDamaged != false
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__MINUTES_LENGTH: {
-                return this._minutesLength != 0;
+                return this._minutesLength != 0
             }
             case LibraryConstants.AUDIO_VISUAL_ITEM__TITLE: {
-                return this._title != "";
+                return this._title != ""
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }

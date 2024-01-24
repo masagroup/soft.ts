@@ -9,60 +9,60 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { DocumentRoot, Library, LibraryConstants, getLibraryPackage } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { DocumentRoot, Library, LibraryConstants, getLibraryPackage } from "./internal"
 
 export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot {
-    protected _xSISchemaLocation: ecore.EMap<string, string>;
-    protected _library: Library;
-    protected _xMLNSPrefixMap: ecore.EMap<string, string>;
+    protected _xMLNSPrefixMap: ecore.EMap<string, string>
+    protected _library: Library
+    protected _xSISchemaLocation: ecore.EMap<string, string>
 
     constructor() {
-        super();
-        this._library = null;
-        this._xMLNSPrefixMap = null;
-        this._xSISchemaLocation = null;
+        super()
+        this._library = null
+        this._xMLNSPrefixMap = null
+        this._xSISchemaLocation = null
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getDocumentRoot();
+        return getLibraryPackage().getDocumentRoot()
     }
 
     // get the value of library
     get library(): Library {
-        return this._library;
+        return this._library
     }
 
     // set the value of library
     set library(newLibrary: Library) {
-        let oldLibrary = this._library;
+        let oldLibrary = this._library
         if (newLibrary != oldLibrary) {
-            let notifications: ecore.ENotificationChain = null;
+            let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldLibrary)) {
                 notifications = oldLibrary.eInverseRemove(
                     this,
                     ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.DOCUMENT_ROOT__LIBRARY,
                     notifications
-                );
+                )
             }
             if (ecore.isEObjectInternal(newLibrary)) {
                 notifications = newLibrary.eInverseAdd(
                     this,
                     ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.DOCUMENT_ROOT__LIBRARY,
                     notifications
-                );
+                )
             }
-            notifications = this.basicSetLibrary(newLibrary, notifications);
+            notifications = this.basicSetLibrary(newLibrary, notifications)
             if (notifications != null) {
-                notifications.dispatch();
+                notifications.dispatch()
             }
         }
     }
 
     basicSetLibrary(newLibrary: Library, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
-        let oldLibrary = this._library;
-        this._library = newLibrary;
-        let notifications = msgs;
+        let oldLibrary = this._library
+        this._library = newLibrary
+        let notifications = msgs
         if (this.eNotificationRequired) {
             let notification = new ecore.Notification(
                 this,
@@ -70,14 +70,14 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
                 LibraryConstants.DOCUMENT_ROOT__LIBRARY,
                 oldLibrary,
                 newLibrary
-            );
+            )
             if (notifications != null) {
-                notifications.add(notification);
+                notifications.add(notification)
             } else {
-                notifications = notification;
+                notifications = notification
             }
         }
-        return notifications;
+        return notifications
     }
 
     // get the value of xMLNSPrefixMap
@@ -85,9 +85,9 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
         if (this._xMLNSPrefixMap == null) {
             this._xMLNSPrefixMap = new ecore.BasicEObjectMap<string, string>(
                 ecore.getEcorePackage().getEStringToStringMapEntry()
-            );
+            )
         }
-        return this._xMLNSPrefixMap;
+        return this._xMLNSPrefixMap
     }
 
     // get the value of xSISchemaLocation
@@ -95,24 +95,24 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
         if (this._xSISchemaLocation == null) {
             this._xSISchemaLocation = new ecore.BasicEObjectMap<string, string>(
                 ecore.getEcorePackage().getEStringToStringMapEntry()
-            );
+            )
         }
-        return this._xSISchemaLocation;
+        return this._xSISchemaLocation
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.DOCUMENT_ROOT__LIBRARY: {
-                return this.library;
+                return this.library
             }
             case LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP: {
-                return this.xMLNSPrefixMap;
+                return this.xMLNSPrefixMap
             }
             case LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION: {
-                return this.xSISchemaLocation;
+                return this.xSISchemaLocation
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -120,25 +120,21 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.DOCUMENT_ROOT__LIBRARY: {
-                this.library = newValue as Library;
-                break;
+                this.library = newValue as Library
+                break
             }
             case LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP: {
-                this.xMLNSPrefixMap.clear();
-                this.xMLNSPrefixMap.addAll(
-                    newValue as ecore.EList<ecore.EMapEntry<string, string>>
-                );
-                break;
+                this.xMLNSPrefixMap.clear()
+                this.xMLNSPrefixMap.addAll(newValue as ecore.EList<ecore.EMapEntry<string, string>>)
+                break
             }
             case LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION: {
-                this.xSISchemaLocation.clear();
-                this.xSISchemaLocation.addAll(
-                    newValue as ecore.EList<ecore.EMapEntry<string, string>>
-                );
-                break;
+                this.xSISchemaLocation.clear()
+                this.xSISchemaLocation.addAll(newValue as ecore.EList<ecore.EMapEntry<string, string>>)
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -146,19 +142,19 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.DOCUMENT_ROOT__LIBRARY: {
-                this.library = null;
-                break;
+                this.library = null
+                break
             }
             case LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP: {
-                this.xMLNSPrefixMap.clear();
-                break;
+                this.xMLNSPrefixMap.clear()
+                break
             }
             case LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION: {
-                this.xSISchemaLocation.clear();
-                break;
+                this.xSISchemaLocation.clear()
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -166,16 +162,16 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.DOCUMENT_ROOT__LIBRARY: {
-                return this._library != null;
+                return this._library != null
             }
             case LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP: {
-                return this.xMLNSPrefixMap != null && this.xMLNSPrefixMap.size() != 0;
+                return this.xMLNSPrefixMap != null && this.xMLNSPrefixMap.size() != 0
             }
             case LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION: {
-                return this.xSISchemaLocation != null && this.xSISchemaLocation.size() != 0;
+                return this.xSISchemaLocation != null && this.xSISchemaLocation.size() != 0
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }
@@ -187,16 +183,16 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.DOCUMENT_ROOT__LIBRARY: {
-                return this.basicSetLibrary(null, notifications);
+                return this.basicSetLibrary(null, notifications)
             }
             case LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP: {
-                return notifications;
+                return notifications
             }
             case LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION: {
-                return notifications;
+                return notifications
             }
             default: {
-                return super.eBasicInverseRemove(otherEnd, featureID, notifications);
+                return super.eBasicInverseRemove(otherEnd, featureID, notifications)
             }
         }
     }

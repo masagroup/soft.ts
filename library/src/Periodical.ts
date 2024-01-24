@@ -9,10 +9,10 @@
 //
 // *****************************************************************************
 
-import { Item } from "./internal";
+import { Item } from "./internal"
 
 export interface Periodical extends Item {
     // Attributes
-    title: string;
-    issuesPerYear: number;
+    title: string
+    issuesPerYear: number
 }

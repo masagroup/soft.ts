@@ -9,19 +9,19 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Book, LibraryConstants, Person, PersonImpl, Writer, getLibraryPackage } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Book, LibraryConstants, Person, PersonImpl, Writer, getLibraryPackage } from "./internal"
 
 export class WriterImpl extends PersonImpl implements Writer {
-    protected _books: ecore.EList<Book>;
+    protected _books: ecore.EList<Book>
 
     constructor() {
-        super();
-        this._books = null;
+        super()
+        this._books = null
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getWriter();
+        return getLibraryPackage().getWriter()
     }
 
     // get the value of books
@@ -36,35 +36,31 @@ export class WriterImpl extends PersonImpl implements Writer {
                 true,
                 true,
                 false
-            );
+            )
         }
-        return this._books;
+        return this._books
     }
 
     // get the value of name
     get name(): string {
-        throw new Error("get name not implemented");
+        throw new Error("get name not implemented")
     }
 
     // set the value of name
     set name(newName: string) {
-        throw new Error("set name not implemented");
+        throw new Error("set name not implemented")
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                let list = this.books;
-                if (!resolve) {
-                    if (ecore.isEObjectList(list)) return list.getUnResolvedList();
-                }
-                return list;
+                return !resolve && ecore.isEObjectList(this.books) ? this.books.getUnResolvedList() : this.books
             }
             case LibraryConstants.WRITER__NAME: {
-                return this.name;
+                return this.name
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -72,16 +68,16 @@ export class WriterImpl extends PersonImpl implements Writer {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                this.books.clear();
-                this.books.addAll(newValue as ecore.EList<Book>);
-                break;
+                this.books.clear()
+                this.books.addAll(newValue as ecore.EList<Book>)
+                break
             }
             case LibraryConstants.WRITER__NAME: {
-                this.name = newValue as string;
-                break;
+                this.name = newValue as string
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -89,15 +85,15 @@ export class WriterImpl extends PersonImpl implements Writer {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                this.books.clear();
-                break;
+                this.books.clear()
+                break
             }
             case LibraryConstants.WRITER__NAME: {
-                this.name = "";
-                break;
+                this.name = ""
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -105,13 +101,13 @@ export class WriterImpl extends PersonImpl implements Writer {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                return this.books != null && this.books.size() != 0;
+                return this.books != null && this.books.size() != 0
             }
             case LibraryConstants.WRITER__NAME: {
-                return this.name != "";
+                return this.name != ""
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }
@@ -123,12 +119,12 @@ export class WriterImpl extends PersonImpl implements Writer {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                let list = this.books as ecore.ENotifyingList<Book>;
-                let end = otherEnd as Book;
-                return list.addWithNotification(end, notifications);
+                let list = this.books as ecore.ENotifyingList<Book>
+                let end = otherEnd as Book
+                return list.addWithNotification(end, notifications)
             }
             default: {
-                return super.eBasicInverseAdd(otherEnd, featureID, notifications);
+                return super.eBasicInverseAdd(otherEnd, featureID, notifications)
             }
         }
     }
@@ -140,12 +136,12 @@ export class WriterImpl extends PersonImpl implements Writer {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                let list = this.books as ecore.ENotifyingList<Book>;
-                let end = otherEnd as Book;
-                return list.removeWithNotification(end, notifications);
+                let list = this.books as ecore.ENotifyingList<Book>
+                let end = otherEnd as Book
+                return list.removeWithNotification(end, notifications)
             }
             default: {
-                return super.eBasicInverseRemove(otherEnd, featureID, notifications);
+                return super.eBasicInverseRemove(otherEnd, featureID, notifications)
             }
         }
     }

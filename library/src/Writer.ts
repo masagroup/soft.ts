@@ -9,13 +9,13 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Book, Person } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Book, Person } from "./internal"
 
 export interface Writer extends Person {
     // Attributes
-    name: string;
+    name: string
 
     // References
-    readonly books: ecore.EList<Book>;
+    readonly books: ecore.EList<Book>
 }

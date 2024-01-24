@@ -9,150 +9,150 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito";
-import * as ecore from "@masagroup/ecore";
-import { Addressable, LibraryConstants, PersonImpl, getLibraryPackage } from "./internal";
+import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import * as ecore from "@masagroup/ecore"
+import { Addressable, LibraryConstants, PersonImpl, getLibraryPackage } from "./internal"
 
 describe("PersonImpl", () => {
     test("eStaticClass", () => {
-        let o = new PersonImpl();
-        expect(o.eStaticClass()).toBe(getLibraryPackage().getPerson());
-    });
+        let o = new PersonImpl()
+        expect(o.eStaticClass()).toBe(getLibraryPackage().getPerson())
+    })
 
     test("getAddress", () => {
-        let o = new PersonImpl();
+        let o = new PersonImpl()
         // get default value
-        expect(o.address).toBe("");
-    });
+        expect(o.address).toBe("")
+    })
 
     test("setAddress", () => {
-        let o = new PersonImpl();
-        let value = "Test String";
+        let o = new PersonImpl()
+        let value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>();
-        let adapter = instance(mockAdapter);
-        o.eAdapters.add(adapter);
+        let mockAdapter = mock<ecore.EAdapter>()
+        let adapter = instance(mockAdapter)
+        o.eAdapters.add(adapter)
 
         // set value
-        o.address = value;
+        o.address = value
 
         // checks
-        verify(mockAdapter.notifyChanged(anything())).once();
-        const [notification] = capture(mockAdapter.notifyChanged).last();
-        expect(notification.notifier).toBe(o);
-        expect(notification.oldValue).toBe("");
-        expect(notification.newValue).toBe(value);
-        expect(notification.position).toBe(-1);
-    });
+        verify(mockAdapter.notifyChanged(anything())).once()
+        const [notification] = capture(mockAdapter.notifyChanged).last()
+        expect(notification.notifier).toBe(o)
+        expect(notification.oldValue).toBe("")
+        expect(notification.newValue).toBe(value)
+        expect(notification.position).toBe(-1)
+    })
 
     test("getFirstName", () => {
-        let o = new PersonImpl();
+        let o = new PersonImpl()
         // get default value
-        expect(o.firstName).toBe("");
-    });
+        expect(o.firstName).toBe("")
+    })
 
     test("setFirstName", () => {
-        let o = new PersonImpl();
-        let value = "Test String";
+        let o = new PersonImpl()
+        let value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>();
-        let adapter = instance(mockAdapter);
-        o.eAdapters.add(adapter);
+        let mockAdapter = mock<ecore.EAdapter>()
+        let adapter = instance(mockAdapter)
+        o.eAdapters.add(adapter)
 
         // set value
-        o.firstName = value;
+        o.firstName = value
 
         // checks
-        verify(mockAdapter.notifyChanged(anything())).once();
-        const [notification] = capture(mockAdapter.notifyChanged).last();
-        expect(notification.notifier).toBe(o);
-        expect(notification.oldValue).toBe("");
-        expect(notification.newValue).toBe(value);
-        expect(notification.position).toBe(-1);
-    });
+        verify(mockAdapter.notifyChanged(anything())).once()
+        const [notification] = capture(mockAdapter.notifyChanged).last()
+        expect(notification.notifier).toBe(o)
+        expect(notification.oldValue).toBe("")
+        expect(notification.newValue).toBe(value)
+        expect(notification.position).toBe(-1)
+    })
 
     test("getLastName", () => {
-        let o = new PersonImpl();
+        let o = new PersonImpl()
         // get default value
-        expect(o.lastName).toBe("");
-    });
+        expect(o.lastName).toBe("")
+    })
 
     test("setLastName", () => {
-        let o = new PersonImpl();
-        let value = "Test String";
+        let o = new PersonImpl()
+        let value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>();
-        let adapter = instance(mockAdapter);
-        o.eAdapters.add(adapter);
+        let mockAdapter = mock<ecore.EAdapter>()
+        let adapter = instance(mockAdapter)
+        o.eAdapters.add(adapter)
 
         // set value
-        o.lastName = value;
+        o.lastName = value
 
         // checks
-        verify(mockAdapter.notifyChanged(anything())).once();
-        const [notification] = capture(mockAdapter.notifyChanged).last();
-        expect(notification.notifier).toBe(o);
-        expect(notification.oldValue).toBe("");
-        expect(notification.newValue).toBe(value);
-        expect(notification.position).toBe(-1);
-    });
+        verify(mockAdapter.notifyChanged(anything())).once()
+        const [notification] = capture(mockAdapter.notifyChanged).last()
+        expect(notification.notifier).toBe(o)
+        expect(notification.oldValue).toBe("")
+        expect(notification.newValue).toBe(value)
+        expect(notification.position).toBe(-1)
+    })
 
     test("eGetFromID", () => {
-        let o = new PersonImpl();
-        expect(() => o.eGetFromID(-1, true)).toThrow(Error);
-        expect(o.eGetFromID(LibraryConstants.PERSON__ADDRESS, true)).toStrictEqual(o.address);
-        expect(o.eGetFromID(LibraryConstants.PERSON__FIRST_NAME, true)).toStrictEqual(o.firstName);
-        expect(o.eGetFromID(LibraryConstants.PERSON__LAST_NAME, true)).toStrictEqual(o.lastName);
-    });
+        let o = new PersonImpl()
+        expect(() => o.eGetFromID(-1, true)).toThrow(Error)
+        expect(o.eGetFromID(LibraryConstants.PERSON__ADDRESS, true)).toStrictEqual(o.address)
+        expect(o.eGetFromID(LibraryConstants.PERSON__FIRST_NAME, true)).toStrictEqual(o.firstName)
+        expect(o.eGetFromID(LibraryConstants.PERSON__LAST_NAME, true)).toStrictEqual(o.lastName)
+    })
 
     test("eSetFromID", () => {
-        let o = new PersonImpl();
-        expect(() => o.eSetFromID(-1, null)).toThrow(Error);
+        let o = new PersonImpl()
+        expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = "Test String";
-            o.eSetFromID(LibraryConstants.PERSON__ADDRESS, value);
-            expect(o.eGetFromID(LibraryConstants.PERSON__ADDRESS, false)).toBe(value);
+            let value = "Test String"
+            o.eSetFromID(LibraryConstants.PERSON__ADDRESS, value)
+            expect(o.eGetFromID(LibraryConstants.PERSON__ADDRESS, false)).toBe(value)
         }
         {
-            let value = "Test String";
-            o.eSetFromID(LibraryConstants.PERSON__FIRST_NAME, value);
-            expect(o.eGetFromID(LibraryConstants.PERSON__FIRST_NAME, false)).toBe(value);
+            let value = "Test String"
+            o.eSetFromID(LibraryConstants.PERSON__FIRST_NAME, value)
+            expect(o.eGetFromID(LibraryConstants.PERSON__FIRST_NAME, false)).toBe(value)
         }
         {
-            let value = "Test String";
-            o.eSetFromID(LibraryConstants.PERSON__LAST_NAME, value);
-            expect(o.eGetFromID(LibraryConstants.PERSON__LAST_NAME, false)).toBe(value);
+            let value = "Test String"
+            o.eSetFromID(LibraryConstants.PERSON__LAST_NAME, value)
+            expect(o.eGetFromID(LibraryConstants.PERSON__LAST_NAME, false)).toBe(value)
         }
-    });
+    })
 
     test("eIsSetFromID", () => {
-        let o = new PersonImpl();
-        expect(() => o.eIsSetFromID(-1)).toThrow(Error);
-        expect(o.eIsSetFromID(LibraryConstants.PERSON__ADDRESS)).toBeFalsy();
-        expect(o.eIsSetFromID(LibraryConstants.PERSON__FIRST_NAME)).toBeFalsy();
-        expect(o.eIsSetFromID(LibraryConstants.PERSON__LAST_NAME)).toBeFalsy();
-    });
+        let o = new PersonImpl()
+        expect(() => o.eIsSetFromID(-1)).toThrow(Error)
+        expect(o.eIsSetFromID(LibraryConstants.PERSON__ADDRESS)).toBeFalsy()
+        expect(o.eIsSetFromID(LibraryConstants.PERSON__FIRST_NAME)).toBeFalsy()
+        expect(o.eIsSetFromID(LibraryConstants.PERSON__LAST_NAME)).toBeFalsy()
+    })
 
     test("eUnsetFromID", () => {
-        let o = new PersonImpl();
-        expect(() => o.eUnsetFromID(-1)).toThrow(Error);
+        let o = new PersonImpl()
+        expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
-            o.eUnsetFromID(LibraryConstants.PERSON__ADDRESS);
-            let v = o.eGetFromID(LibraryConstants.PERSON__ADDRESS, false);
-            expect(v).toBe("");
+            o.eUnsetFromID(LibraryConstants.PERSON__ADDRESS)
+            let v = o.eGetFromID(LibraryConstants.PERSON__ADDRESS, false)
+            expect(v).toBe("")
         }
         {
-            o.eUnsetFromID(LibraryConstants.PERSON__FIRST_NAME);
-            let v = o.eGetFromID(LibraryConstants.PERSON__FIRST_NAME, false);
-            expect(v).toBe("");
+            o.eUnsetFromID(LibraryConstants.PERSON__FIRST_NAME)
+            let v = o.eGetFromID(LibraryConstants.PERSON__FIRST_NAME, false)
+            expect(v).toBe("")
         }
         {
-            o.eUnsetFromID(LibraryConstants.PERSON__LAST_NAME);
-            let v = o.eGetFromID(LibraryConstants.PERSON__LAST_NAME, false);
-            expect(v).toBe("");
+            o.eUnsetFromID(LibraryConstants.PERSON__LAST_NAME)
+            let v = o.eGetFromID(LibraryConstants.PERSON__LAST_NAME, false)
+            expect(v).toBe("")
         }
-    });
-});
+    })
+})

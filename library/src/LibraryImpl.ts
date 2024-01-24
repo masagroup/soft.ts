@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
+import * as ecore from "@masagroup/ecore"
 import {
     Addressable,
     Book,
@@ -21,46 +21,46 @@ import {
     Person,
     Writer,
     getLibraryPackage,
-} from "./internal";
+} from "./internal"
 
 export class LibraryImpl extends ecore.EObjectImpl implements Library {
-    protected _branches: ecore.EList<Library>;
-    protected _employees: ecore.EList<Employee>;
-    protected _address: string;
-    protected _people: ecore.EList<any>;
-    protected _name: string;
-    protected _proprietary: Person;
-    protected _stock: ecore.EList<Item>;
-    protected _borrowers: ecore.EList<Borrower>;
-    protected _books: ecore.EList<Book>;
-    protected _writers: ecore.EList<Writer>;
+    protected _branches: ecore.EList<Library>
+    protected _name: string
+    protected _people: ecore.EList<any>
+    protected _books: ecore.EList<Book>
+    protected _stock: ecore.EList<Item>
+    protected _writers: ecore.EList<Writer>
+    protected _borrowers: ecore.EList<Borrower>
+    protected _proprietary: Person
+    protected _address: string
+    protected _employees: ecore.EList<Employee>
 
     constructor() {
-        super();
-        this._address = "";
-        this._books = null;
-        this._borrowers = null;
-        this._branches = null;
-        this._employees = null;
-        this._name = "";
-        this._proprietary = null;
-        this._stock = null;
-        this._writers = null;
+        super()
+        this._address = ""
+        this._books = null
+        this._borrowers = null
+        this._branches = null
+        this._employees = null
+        this._name = ""
+        this._proprietary = null
+        this._stock = null
+        this._writers = null
     }
 
     eStaticClass(): ecore.EClass {
-        return getLibraryPackage().getLibrary();
+        return getLibraryPackage().getLibrary()
     }
 
     // get the value of address
     get address(): string {
-        return this._address;
+        return this._address
     }
 
     // set the value of address
     set address(newAddress: string) {
-        let oldAddress = this._address;
-        this._address = newAddress;
+        let oldAddress = this._address
+        this._address = newAddress
         if (this.eNotificationRequired) {
             this.eNotify(
                 new ecore.Notification(
@@ -70,7 +70,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                     oldAddress,
                     newAddress
                 )
-            );
+            )
         }
     }
 
@@ -86,9 +86,9 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 false,
                 false,
                 false
-            );
+            )
         }
-        return this._books;
+        return this._books
     }
 
     // get the value of borrowers
@@ -103,9 +103,9 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 false,
                 false,
                 false
-            );
+            )
         }
-        return this._borrowers;
+        return this._borrowers
     }
 
     // get the value of branches
@@ -120,9 +120,9 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 true,
                 false,
                 false
-            );
+            )
         }
-        return this._branches;
+        return this._branches
     }
 
     // get the value of employees
@@ -137,62 +137,51 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 false,
                 false,
                 false
-            );
+            )
         }
-        return this._employees;
+        return this._employees
     }
 
     // get the value of name
     get name(): string {
-        return this._name;
+        return this._name
     }
 
     // set the value of name
     set name(newName: string) {
-        let oldName = this._name;
-        this._name = newName;
+        let oldName = this._name
+        this._name = newName
         if (this.eNotificationRequired) {
             this.eNotify(
-                new ecore.Notification(
-                    this,
-                    ecore.EventType.SET,
-                    LibraryConstants.LIBRARY__NAME,
-                    oldName,
-                    newName
-                )
-            );
+                new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.LIBRARY__NAME, oldName, newName)
+            )
         }
     }
 
     // get the value of parentBranch
     get parentBranch(): Library {
         if (this.eContainerFeatureID() == LibraryConstants.LIBRARY__PARENT_BRANCH) {
-            return this.eContainer() as Library;
+            return this.eContainer() as Library
         }
-        return null;
+        return null
     }
 
     // set the value of parentBranch
     set parentBranch(newParentBranch: Library) {
         if (
             newParentBranch != this.eInternalContainer() ||
-            (newParentBranch != null &&
-                this.eContainerFeatureID() != LibraryConstants.LIBRARY__PARENT_BRANCH)
+            (newParentBranch != null && this.eContainerFeatureID() != LibraryConstants.LIBRARY__PARENT_BRANCH)
         ) {
-            let notifications: ecore.ENotificationChain = null;
+            let notifications: ecore.ENotificationChain = null
             if (this.eInternalContainer() != null) {
-                notifications = this.eBasicRemoveFromContainer(notifications);
+                notifications = this.eBasicRemoveFromContainer(notifications)
             }
             if (ecore.isEObjectInternal(newParentBranch)) {
-                notifications = newParentBranch.eInverseAdd(
-                    this,
-                    LibraryConstants.LIBRARY__BRANCHES,
-                    notifications
-                );
+                notifications = newParentBranch.eInverseAdd(this, LibraryConstants.LIBRARY__BRANCHES, notifications)
             }
-            notifications = this.basicSetParentBranch(newParentBranch, notifications);
+            notifications = this.basicSetParentBranch(newParentBranch, notifications)
             if (notifications != null) {
-                notifications.dispatch();
+                notifications.dispatch()
             }
         } else if (this.eNotificationRequired) {
             this.eNotify(
@@ -203,67 +192,57 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                     newParentBranch,
                     newParentBranch
                 )
-            );
+            )
         }
     }
 
-    basicSetParentBranch(
-        newParentBranch: Library,
-        msgs: ecore.ENotificationChain
-    ): ecore.ENotificationChain {
-        return this.eBasicSetContainer(
-            newParentBranch,
-            LibraryConstants.LIBRARY__PARENT_BRANCH,
-            msgs
-        );
+    basicSetParentBranch(newParentBranch: Library, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
+        return this.eBasicSetContainer(newParentBranch, LibraryConstants.LIBRARY__PARENT_BRANCH, msgs)
     }
 
     // get the value of people
     get people(): ecore.EList<any> {
         if (this._people == null) {
-            this._people = null;
+            this._people = null
         }
-        return this._people;
+        return this._people
     }
 
     // get the value of proprietary
     get proprietary(): Person {
-        return this._proprietary;
+        return this._proprietary
     }
 
     // set the value of proprietary
     set proprietary(newProprietary: Person) {
-        let oldProprietary = this._proprietary;
+        let oldProprietary = this._proprietary
         if (newProprietary != oldProprietary) {
-            let notifications: ecore.ENotificationChain = null;
+            let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldProprietary)) {
                 notifications = oldProprietary.eInverseRemove(
                     this,
                     ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__PROPRIETARY,
                     notifications
-                );
+                )
             }
             if (ecore.isEObjectInternal(newProprietary)) {
                 notifications = newProprietary.eInverseAdd(
                     this,
                     ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__PROPRIETARY,
                     notifications
-                );
+                )
             }
-            notifications = this.basicSetProprietary(newProprietary, notifications);
+            notifications = this.basicSetProprietary(newProprietary, notifications)
             if (notifications != null) {
-                notifications.dispatch();
+                notifications.dispatch()
             }
         }
     }
 
-    basicSetProprietary(
-        newProprietary: Person,
-        msgs: ecore.ENotificationChain
-    ): ecore.ENotificationChain {
-        let oldProprietary = this._proprietary;
-        this._proprietary = newProprietary;
-        let notifications = msgs;
+    basicSetProprietary(newProprietary: Person, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
+        let oldProprietary = this._proprietary
+        this._proprietary = newProprietary
+        let notifications = msgs
         if (this.eNotificationRequired) {
             let notification = new ecore.Notification(
                 this,
@@ -271,14 +250,14 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 LibraryConstants.LIBRARY__PROPRIETARY,
                 oldProprietary,
                 newProprietary
-            );
+            )
             if (notifications != null) {
-                notifications.add(notification);
+                notifications.add(notification)
             } else {
-                notifications = notification;
+                notifications = notification
             }
         }
-        return notifications;
+        return notifications
     }
 
     // get the value of stock
@@ -293,9 +272,9 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 false,
                 false,
                 false
-            );
+            )
         }
-        return this._stock;
+        return this._stock
     }
 
     // get the value of writers
@@ -310,48 +289,48 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 false,
                 false,
                 false
-            );
+            )
         }
-        return this._writers;
+        return this._writers
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.LIBRARY__ADDRESS: {
-                return this.address;
+                return this.address
             }
             case LibraryConstants.LIBRARY__BOOKS: {
-                return this.books;
+                return this.books
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                return this.borrowers;
+                return this.borrowers
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                return this.branches;
+                return this.branches
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                return this.employees;
+                return this.employees
             }
             case LibraryConstants.LIBRARY__NAME: {
-                return this.name;
+                return this.name
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
-                return this.parentBranch;
+                return this.parentBranch
             }
             case LibraryConstants.LIBRARY__PEOPLE: {
-                return this.people;
+                return this.people
             }
             case LibraryConstants.LIBRARY__PROPRIETARY: {
-                return this.proprietary;
+                return this.proprietary
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                return this.stock;
+                return this.stock
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                return this.writers;
+                return this.writers
             }
             default: {
-                return super.eGetFromID(featureID, resolve);
+                return super.eGetFromID(featureID, resolve)
             }
         }
     }
@@ -359,58 +338,58 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.LIBRARY__ADDRESS: {
-                this.address = newValue as string;
-                break;
+                this.address = newValue as string
+                break
             }
             case LibraryConstants.LIBRARY__BOOKS: {
-                this.books.clear();
-                this.books.addAll(newValue as ecore.EList<Book>);
-                break;
+                this.books.clear()
+                this.books.addAll(newValue as ecore.EList<Book>)
+                break
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                this.borrowers.clear();
-                this.borrowers.addAll(newValue as ecore.EList<Borrower>);
-                break;
+                this.borrowers.clear()
+                this.borrowers.addAll(newValue as ecore.EList<Borrower>)
+                break
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                this.branches.clear();
-                this.branches.addAll(newValue as ecore.EList<Library>);
-                break;
+                this.branches.clear()
+                this.branches.addAll(newValue as ecore.EList<Library>)
+                break
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                this.employees.clear();
-                this.employees.addAll(newValue as ecore.EList<Employee>);
-                break;
+                this.employees.clear()
+                this.employees.addAll(newValue as ecore.EList<Employee>)
+                break
             }
             case LibraryConstants.LIBRARY__NAME: {
-                this.name = newValue as string;
-                break;
+                this.name = newValue as string
+                break
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
-                this.parentBranch = newValue as Library;
-                break;
+                this.parentBranch = newValue as Library
+                break
             }
             case LibraryConstants.LIBRARY__PEOPLE: {
-                this.people.clear();
-                this.people.addAll(newValue as ecore.EList<any>);
-                break;
+                this.people.clear()
+                this.people.addAll(newValue as ecore.EList<any>)
+                break
             }
             case LibraryConstants.LIBRARY__PROPRIETARY: {
-                this.proprietary = newValue as Person;
-                break;
+                this.proprietary = newValue as Person
+                break
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                this.stock.clear();
-                this.stock.addAll(newValue as ecore.EList<Item>);
-                break;
+                this.stock.clear()
+                this.stock.addAll(newValue as ecore.EList<Item>)
+                break
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                this.writers.clear();
-                this.writers.addAll(newValue as ecore.EList<Writer>);
-                break;
+                this.writers.clear()
+                this.writers.addAll(newValue as ecore.EList<Writer>)
+                break
             }
             default: {
-                super.eSetFromID(featureID, newValue);
+                super.eSetFromID(featureID, newValue)
             }
         }
     }
@@ -418,51 +397,51 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.LIBRARY__ADDRESS: {
-                this.address = "";
-                break;
+                this.address = ""
+                break
             }
             case LibraryConstants.LIBRARY__BOOKS: {
-                this.books.clear();
-                break;
+                this.books.clear()
+                break
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                this.borrowers.clear();
-                break;
+                this.borrowers.clear()
+                break
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                this.branches.clear();
-                break;
+                this.branches.clear()
+                break
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                this.employees.clear();
-                break;
+                this.employees.clear()
+                break
             }
             case LibraryConstants.LIBRARY__NAME: {
-                this.name = "";
-                break;
+                this.name = ""
+                break
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
-                this.parentBranch = null;
-                break;
+                this.parentBranch = null
+                break
             }
             case LibraryConstants.LIBRARY__PEOPLE: {
-                this.people.clear();
-                break;
+                this.people.clear()
+                break
             }
             case LibraryConstants.LIBRARY__PROPRIETARY: {
-                this.proprietary = null;
-                break;
+                this.proprietary = null
+                break
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                this.stock.clear();
-                break;
+                this.stock.clear()
+                break
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                this.writers.clear();
-                break;
+                this.writers.clear()
+                break
             }
             default: {
-                super.eUnsetFromID(featureID);
+                super.eUnsetFromID(featureID)
             }
         }
     }
@@ -470,40 +449,40 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.LIBRARY__ADDRESS: {
-                return this._address != "";
+                return this._address != ""
             }
             case LibraryConstants.LIBRARY__BOOKS: {
-                return this.books != null && this.books.size() != 0;
+                return this.books != null && this.books.size() != 0
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                return this.borrowers != null && this.borrowers.size() != 0;
+                return this.borrowers != null && this.borrowers.size() != 0
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                return this.branches != null && this.branches.size() != 0;
+                return this.branches != null && this.branches.size() != 0
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                return this.employees != null && this.employees.size() != 0;
+                return this.employees != null && this.employees.size() != 0
             }
             case LibraryConstants.LIBRARY__NAME: {
-                return this._name != "";
+                return this._name != ""
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
-                return this.parentBranch != null;
+                return this.parentBranch != null
             }
             case LibraryConstants.LIBRARY__PEOPLE: {
-                return this.people != null && this.people.size() != 0;
+                return this.people != null && this.people.size() != 0
             }
             case LibraryConstants.LIBRARY__PROPRIETARY: {
-                return this._proprietary != null;
+                return this._proprietary != null
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                return this.stock != null && this.stock.size() != 0;
+                return this.stock != null && this.stock.size() != 0
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                return this.writers != null && this.writers.size() != 0;
+                return this.writers != null && this.writers.size() != 0
             }
             default: {
-                return super.eIsSetFromID(featureID);
+                return super.eIsSetFromID(featureID)
             }
         }
     }
@@ -515,19 +494,19 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.LIBRARY__BRANCHES: {
-                let list = this.branches as ecore.ENotifyingList<Library>;
-                let end = otherEnd as Library;
-                return list.addWithNotification(end, notifications);
+                let list = this.branches as ecore.ENotifyingList<Library>
+                let end = otherEnd as Library
+                return list.addWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
-                let msgs = notifications;
+                let msgs = notifications
                 if (this.eContainer() != null) {
-                    msgs = this.eBasicRemoveFromContainer(msgs);
+                    msgs = this.eBasicRemoveFromContainer(msgs)
                 }
-                return this.basicSetParentBranch(otherEnd as Library, msgs);
+                return this.basicSetParentBranch(otherEnd as Library, msgs)
             }
             default: {
-                return super.eBasicInverseAdd(otherEnd, featureID, notifications);
+                return super.eBasicInverseAdd(otherEnd, featureID, notifications)
             }
         }
     }
@@ -539,43 +518,43 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.LIBRARY__BOOKS: {
-                let list = this.books as ecore.ENotifyingList<Book>;
-                let end = otherEnd as Book;
-                return list.removeWithNotification(end, notifications);
+                let list = this.books as ecore.ENotifyingList<Book>
+                let end = otherEnd as Book
+                return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                let list = this.borrowers as ecore.ENotifyingList<Borrower>;
-                let end = otherEnd as Borrower;
-                return list.removeWithNotification(end, notifications);
+                let list = this.borrowers as ecore.ENotifyingList<Borrower>
+                let end = otherEnd as Borrower
+                return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                let list = this.branches as ecore.ENotifyingList<Library>;
-                let end = otherEnd as Library;
-                return list.removeWithNotification(end, notifications);
+                let list = this.branches as ecore.ENotifyingList<Library>
+                let end = otherEnd as Library
+                return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                let list = this.employees as ecore.ENotifyingList<Employee>;
-                let end = otherEnd as Employee;
-                return list.removeWithNotification(end, notifications);
+                let list = this.employees as ecore.ENotifyingList<Employee>
+                let end = otherEnd as Employee
+                return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
-                return this.basicSetParentBranch(null, notifications);
+                return this.basicSetParentBranch(null, notifications)
             }
             case LibraryConstants.LIBRARY__PROPRIETARY: {
-                return this.basicSetProprietary(null, notifications);
+                return this.basicSetProprietary(null, notifications)
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                let list = this.stock as ecore.ENotifyingList<Item>;
-                let end = otherEnd as Item;
-                return list.removeWithNotification(end, notifications);
+                let list = this.stock as ecore.ENotifyingList<Item>
+                let end = otherEnd as Item
+                return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                let list = this.writers as ecore.ENotifyingList<Writer>;
-                let end = otherEnd as Writer;
-                return list.removeWithNotification(end, notifications);
+                let list = this.writers as ecore.ENotifyingList<Writer>
+                let end = otherEnd as Writer
+                return list.removeWithNotification(end, notifications)
             }
             default: {
-                return super.eBasicInverseRemove(otherEnd, featureID, notifications);
+                return super.eBasicInverseRemove(otherEnd, featureID, notifications)
             }
         }
     }

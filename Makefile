@@ -74,7 +74,7 @@ ecore.test:
 library: library.install library.generate library.format library.build library.test
 
 .PHONY: library.ci
-ecore.ci: library.install library.generate library.build library.test
+library.ci: library.install library.generate library.build library.test
 
 
 .PHONY: library.install

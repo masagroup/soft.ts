@@ -9,12 +9,12 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Library } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Library } from "./internal"
 
 export interface DocumentRoot extends ecore.EObject {
     // References
-    readonly xMLNSPrefixMap: ecore.EMap<string, string>;
-    readonly xSISchemaLocation: ecore.EMap<string, string>;
-    library: Library;
+    readonly xMLNSPrefixMap: ecore.EMap<string, string>
+    readonly xSISchemaLocation: ecore.EMap<string, string>
+    library: Library
 }

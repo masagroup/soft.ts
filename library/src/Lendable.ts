@@ -9,13 +9,13 @@
 //
 // *****************************************************************************
 
-import * as ecore from "@masagroup/ecore";
-import { Borrower } from "./internal";
+import * as ecore from "@masagroup/ecore"
+import { Borrower } from "./internal"
 
 export interface Lendable extends ecore.EObject {
     // Attributes
-    copies: number;
+    copies: number
 
     // References
-    readonly borrowers: ecore.EList<Borrower>;
+    readonly borrowers: ecore.EList<Borrower>
 }
