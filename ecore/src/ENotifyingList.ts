@@ -7,18 +7,18 @@
 //
 // *****************************************************************************
 
-import { EList, ENotifier, EStructuralFeature, ENotificationChain } from "./internal";
+import { EList, ENotifier, EStructuralFeature, ENotificationChain } from "./internal"
 
 export interface ENotifyingList<E> extends EList<E> {
-    readonly notifier: ENotifier;
+    readonly notifier: ENotifier
 
-    readonly feature: EStructuralFeature;
+    readonly feature: EStructuralFeature
 
-    readonly featureID: number;
+    readonly featureID: number
 
-    addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain;
+    addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain
 
-    removeWithNotification(e: E, notifications: ENotificationChain): ENotificationChain;
+    removeWithNotification(e: E, notifications: ENotificationChain): ENotificationChain
 
-    setWithNotification(index: number, e: E, notifications: ENotificationChain): ENotificationChain;
+    setWithNotification(index: number, e: E, notifications: ENotificationChain): ENotificationChain
 }

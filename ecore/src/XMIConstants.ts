@@ -8,10 +8,10 @@
 // *****************************************************************************
 
 export class XMIConstants {
-    static xmiURI = "http://www.omg.org/XMI";
-    static xmiNS = "xmi";
-    static versionAttrib = "version";
-    static uuidAttrib = "uuid";
-    static typeAttrib = "type";
-    static xmlNS = "xmlns";
+    static xmiURI = "http://www.omg.org/XMI"
+    static xmiNS = "xmi"
+    static versionAttrib = "version"
+    static uuidAttrib = "uuid"
+    static typeAttrib = "type"
+    static xmlNS = "xmlns"
 }

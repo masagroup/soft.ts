@@ -7,17 +7,17 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs";
-import { URI } from "./URI";
+import * as fs from "fs"
+import { URI } from "./URI"
 
 export interface EURIHandler {
-    canHandle(uri: URI): boolean;
+    canHandle(uri: URI): boolean
 
-    createReadStream(uri: URI): fs.ReadStream;
+    createReadStream(uri: URI): fs.ReadStream
 
-    createWriteStream(uri: URI): fs.WriteStream;
+    createWriteStream(uri: URI): fs.WriteStream
 
-    readSync(uri: URI): null | Buffer;
+    readSync(uri: URI): null | Buffer
 
-    writeSync(uri: URI, s: Buffer): void;
+    writeSync(uri: URI, s: Buffer): void
 }

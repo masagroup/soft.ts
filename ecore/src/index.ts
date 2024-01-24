@@ -94,4 +94,4 @@ export {
     URI,
     URIParts,
     uriToFilePath,
-} from "./internal";
+} from "./internal"

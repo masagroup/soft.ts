@@ -7,15 +7,15 @@
 //
 // *****************************************************************************
 
-import { ENotification } from "./internal";
+import { ENotification } from "./internal"
 
 // ENotificationChain is an accumulator of notifications.
 // As notifications are produced,they are accumulated in a chain,
 // and possibly even merged, before finally being dispatched to the notifier.
 export interface ENotificationChain {
     // Adds a notification to the chain.
-    add(notification: ENotification): boolean;
+    add(notification: ENotification): boolean
 
     // Dispatches each notification to the appropriate notifier via notifier.ENotify method
-    dispatch(): void;
+    dispatch(): void
 }

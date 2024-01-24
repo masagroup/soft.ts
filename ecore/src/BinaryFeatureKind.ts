@@ -1,4 +1,4 @@
-import { EStructuralFeature, isEReference, isEEnum, isEAttribute, isEDataType } from "./internal";
+import { EStructuralFeature, isEReference, isEEnum, isEAttribute, isEDataType } from "./internal"
 
 export enum BinaryFeatureKind {
     bfkObjectContainer,
@@ -26,42 +26,42 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
         if (eFeature.isContainment) {
             if (eFeature.isResolveProxies) {
                 if (eFeature.isMany) {
-                    return BinaryFeatureKind.bfkObjectContainmentListProxy;
+                    return BinaryFeatureKind.bfkObjectContainmentListProxy
                 } else {
-                    return BinaryFeatureKind.bfkObjectContainmentProxy;
+                    return BinaryFeatureKind.bfkObjectContainmentProxy
                 }
             } else {
                 if (eFeature.isMany) {
-                    return BinaryFeatureKind.bfkObjectContainmentList;
+                    return BinaryFeatureKind.bfkObjectContainmentList
                 } else {
-                    return BinaryFeatureKind.bfkObjectContainment;
+                    return BinaryFeatureKind.bfkObjectContainment
                 }
             }
         } else if (eFeature.isContainer) {
             if (eFeature.isResolveProxies) {
-                return BinaryFeatureKind.bfkObjectContainerProxy;
+                return BinaryFeatureKind.bfkObjectContainerProxy
             } else {
-                return BinaryFeatureKind.bfkObjectContainer;
+                return BinaryFeatureKind.bfkObjectContainer
             }
         } else if (eFeature.isResolveProxies) {
             if (eFeature.isMany) {
-                return BinaryFeatureKind.bfkObjectListProxy;
+                return BinaryFeatureKind.bfkObjectListProxy
             } else {
-                return BinaryFeatureKind.bfkObjectProxy;
+                return BinaryFeatureKind.bfkObjectProxy
             }
         } else {
             if (eFeature.isMany) {
-                return BinaryFeatureKind.bfkObjectList;
+                return BinaryFeatureKind.bfkObjectList
             } else {
-                return BinaryFeatureKind.bfkObject;
+                return BinaryFeatureKind.bfkObject
             }
         }
     } else if (isEAttribute(eFeature)) {
         if (eFeature.isMany) {
-            return BinaryFeatureKind.bfkDataList;
+            return BinaryFeatureKind.bfkDataList
         } else {
-            let eDataType = eFeature.eAttributeType;
-            if (isEEnum(eDataType)) return BinaryFeatureKind.bfkEnum;
+            let eDataType = eFeature.eAttributeType
+            if (isEEnum(eDataType)) return BinaryFeatureKind.bfkEnum
 
             switch (eDataType.instanceTypeName) {
                 case "number":
@@ -79,23 +79,23 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
                 case "int16":
                 case "short":
                 case "long":
-                    return BinaryFeatureKind.bfkNumber;
+                    return BinaryFeatureKind.bfkNumber
                 case "bool":
                 case "boolean":
                 case "java.lang.Boolean":
-                    return BinaryFeatureKind.bfkBool;
+                    return BinaryFeatureKind.bfkBool
                 case "string":
                 case "java.lang.String":
-                    return BinaryFeatureKind.bfkString;
+                    return BinaryFeatureKind.bfkString
                 case "Uint8Array":
                 case "java.util.ByteArray":
-                    return BinaryFeatureKind.bfkByteArray;
+                    return BinaryFeatureKind.bfkByteArray
                 case "Date":
                 case "java.util.Date":
-                    return BinaryFeatureKind.bfkDate;
+                    return BinaryFeatureKind.bfkDate
             }
-            return BinaryFeatureKind.bfkData;
+            return BinaryFeatureKind.bfkData
         }
     }
-    return null;
+    return null
 }

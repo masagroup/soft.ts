@@ -1,11 +1,11 @@
-import { ECodec, ECodecRegistryImpl, URI } from "./internal";
+import { ECodec, ECodecRegistryImpl, URI } from "./internal"
 
 export interface ECodecRegistry {
-    getCodec(url: URI): ECodec;
-    getProtocolToCodecMap(): Map<string, ECodec>;
-    getExtensionToCodecMap(): Map<string, ECodec>;
+    getCodec(url: URI): ECodec
+    getProtocolToCodecMap(): Map<string, ECodec>
+    getExtensionToCodecMap(): Map<string, ECodec>
 }
 
 export function getCodecRegistry(): ECodecRegistry {
-    return ECodecRegistryImpl.getInstance();
+    return ECodecRegistryImpl.getInstance()
 }

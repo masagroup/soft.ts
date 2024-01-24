@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs";
+import * as fs from "fs"
 import {
     EPackage,
     EResource,
@@ -18,92 +18,92 @@ import {
     isEResourceSet,
     URI,
     XMLOptions,
-} from "./internal";
+} from "./internal"
 
 export class XMLProcessor {
-    private _extendMetaData: ExtendedMetaData = new ExtendedMetaData();
-    private _packages: EPackage[] = [];
-    private _resourceSet: EResourceSet;
+    private _extendMetaData: ExtendedMetaData = new ExtendedMetaData()
+    private _packages: EPackage[] = []
+    private _resourceSet: EResourceSet
 
     constructor(input: EPackage[] | EResourceSet) {
         if (isEResourceSet(input)) {
-            this._resourceSet = input;
+            this._resourceSet = input
         } else {
-            this._packages = input;
+            this._packages = input
         }
     }
 
     getResourceSet(): EResourceSet {
         if (!this._resourceSet) {
-            this._resourceSet = this.createResourceSet(this._packages);
+            this._resourceSet = this.createResourceSet(this._packages)
         }
-        return this._resourceSet;
+        return this._resourceSet
     }
 
     load(uri: URI, options?: Map<string, any>): Promise<EResource> {
-        let rs = this.getResourceSet();
-        let r = rs.createResource(uri);
-        let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]]);
-        if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())]);
+        let rs = this.getResourceSet()
+        let r = rs.createResource(uri)
+        let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
+        if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
 
         return new Promise<EResource>((resolve, reject) => {
-            let p = r.load(o);
+            let p = r.load(o)
             p.then((_) => {
-                resolve(r);
-            });
+                resolve(r)
+            })
             p.catch((reason) => {
-                reject(reason);
-            });
-        });
+                reject(reason)
+            })
+        })
     }
 
     loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<EResource> {
-        let rs = this.getResourceSet();
-        let r = rs.createResource(new URI("file:///*.xml"));
-        let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]]);
-        if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())]);
+        let rs = this.getResourceSet()
+        let r = rs.createResource(new URI("file:///*.xml"))
+        let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
+        if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
 
         return new Promise<EResource>((resolve, reject) => {
-            let p = r.loadFromStream(s, o);
+            let p = r.loadFromStream(s, o)
             p.then((_) => {
-                resolve(r);
-            });
+                resolve(r)
+            })
             p.catch((reason) => {
-                reject(reason);
-            });
-        });
+                reject(reason)
+            })
+        })
     }
 
     loadSync(uri: URI, options?: Map<string, any>): EResource {
-        let rs = this.getResourceSet();
-        let r = rs.createResource(uri);
-        let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]]);
-        if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())]);
-        r.loadSync(o);
-        return r;
+        let rs = this.getResourceSet()
+        let r = rs.createResource(uri)
+        let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
+        if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
+        r.loadSync(o)
+        return r
     }
 
     save(resource: EResource, options?: Map<string, any>): Promise<void> {
-        return resource.save(options);
+        return resource.save(options)
     }
 
     saveToStream(resource: EResource, s: fs.WriteStream, options?: Map<string, any>): Promise<void> {
-        return resource.saveToStream(s, options);
+        return resource.saveToStream(s, options)
     }
 
     saveToString(resource: EResource, options?: Map<string, any>): string {
-        return resource.saveToString(options);
+        return resource.saveToString(options)
     }
 
     private createResourceSet(packages: EPackage[]): EResourceSet {
-        let rs = new EResourceSetImpl();
-        let packageRegistry = rs.getPackageRegistry();
-        packageRegistry.registerPackage(getEcorePackage());
+        let rs = new EResourceSetImpl()
+        let packageRegistry = rs.getPackageRegistry()
+        packageRegistry.registerPackage(getEcorePackage())
         if (packages) {
             packages.forEach((p) => {
-                packageRegistry.registerPackage(p);
-            });
+                packageRegistry.registerPackage(p)
+            })
         }
-        return rs;
+        return rs
     }
 }

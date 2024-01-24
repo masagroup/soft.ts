@@ -7,52 +7,52 @@
 //
 // *****************************************************************************
 
-import { anything, instance, mock, verify, when } from "ts-mockito";
-import { EObject, ECodec, ECodecRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl, URI } from "./internal";
+import { anything, instance, mock, verify, when } from "ts-mockito"
+import { EObject, ECodec, ECodecRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl, URI } from "./internal"
 
 describe("EResourceSetImpl", () => {
     test("constructor", () => {
-        let rs = new EResourceSetImpl();
-        expect(rs.getURIResourceMap()).toBeNull();
-    });
+        let rs = new EResourceSetImpl()
+        expect(rs.getURIResourceMap()).toBeNull()
+    })
 
     test("resourcesWithMock", () => {
-        let rs = new EResourceSetImpl();
-        let mockEResource = mock<EResourceInternal>();
-        let eResource = instance(mockEResource);
-        when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null);
-        expect(rs.getResources().add(eResource)).toBeTruthy();
-    });
+        let rs = new EResourceSetImpl()
+        let mockEResource = mock<EResourceInternal>()
+        let eResource = instance(mockEResource)
+        when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null)
+        expect(rs.getResources().add(eResource)).toBeTruthy()
+    })
 
     test("resourcesNoMock", () => {
-        let rs = new EResourceSetImpl();
-        let r = new EResourceImpl();
+        let rs = new EResourceSetImpl()
+        let r = new EResourceImpl()
 
-        rs.getResources().add(r);
-        expect(r.eResourceSet()).toBe(rs);
-    });
+        rs.getResources().add(r)
+        expect(r.eResourceSet()).toBe(rs)
+    })
 
-    test("getResource", () => {});
+    test("getResource", () => {})
 
     test("getRegisteredResource", () => {
-        let uriResource = new URI("test://file.t");
-        let rs = new EResourceSetImpl();
+        let uriResource = new URI("test://file.t")
+        let rs = new EResourceSetImpl()
 
         // register resource
-        let mockEResource = mock<EResourceInternal>();
-        let eResource = instance(mockEResource);
-        when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null);
-        rs.getResources().add(eResource);
+        let mockEResource = mock<EResourceInternal>()
+        let eResource = instance(mockEResource)
+        when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null)
+        rs.getResources().add(eResource)
 
         // get registered resource - no loading
-        when(mockEResource.eURI).thenReturn(uriResource);
-        expect(rs.getResource(uriResource, false)).toBe(eResource);
+        when(mockEResource.eURI).thenReturn(uriResource)
+        expect(rs.getResource(uriResource, false)).toBe(eResource)
 
         // get registered resource - loading
-        when(mockEResource.isLoaded).thenReturn(false);
-        expect(rs.getResource(uriResource, true)).toBe(eResource);
-        verify(mockEResource.loadSync()).once();
-    });
+        when(mockEResource.isLoaded).thenReturn(false)
+        expect(rs.getResource(uriResource, true)).toBe(eResource)
+        verify(mockEResource.loadSync()).once()
+    })
 
-    test("getEObject", () => {});
-});
+    test("getEObject", () => {})
+})

@@ -7,32 +7,32 @@
 //
 // *****************************************************************************
 
-import { ENotifier, EResource, EList, EObject, EURIConverter, EPackageRegistry, ECodecRegistry, URI } from "./internal";
+import { ENotifier, EResource, EList, EObject, EURIConverter, EPackageRegistry, ECodecRegistry, URI } from "./internal"
 
 export class EResourceSetConstants {
-    public static readonly RESOURCE_SET__RESOURCES: number = 0;
+    public static readonly RESOURCE_SET__RESOURCES: number = 0
 }
 
 export interface EResourceSet extends ENotifier {
-    getResources(): EList<EResource>;
-    getResource(uri: URI, loadOnDemand: boolean): EResource;
-    createResource(uri: URI): EResource;
+    getResources(): EList<EResource>
+    getResource(uri: URI, loadOnDemand: boolean): EResource
+    createResource(uri: URI): EResource
 
-    getEObject(uri: URI, loadOnDemand: boolean): EObject;
+    getEObject(uri: URI, loadOnDemand: boolean): EObject
 
-    getURIConverter(): EURIConverter;
-    setURIConverter(uriConverter: EURIConverter): void;
+    getURIConverter(): EURIConverter
+    setURIConverter(uriConverter: EURIConverter): void
 
-    getPackageRegistry(): EPackageRegistry;
-    setPackageRegistry(packageRegistry: EPackageRegistry): void;
+    getPackageRegistry(): EPackageRegistry
+    setPackageRegistry(packageRegistry: EPackageRegistry): void
 
-    getCodecRegistry(): ECodecRegistry;
-    setCodecRegistry(resourceCodecRegistry: ECodecRegistry): void;
+    getCodecRegistry(): ECodecRegistry
+    setCodecRegistry(resourceCodecRegistry: ECodecRegistry): void
 
-    getURIResourceMap(): Map<string, EResource>;
-    setURIResourceMap(uriMap: Map<string, EResource>): void;
+    getURIResourceMap(): Map<string, EResource>
+    setURIResourceMap(uriMap: Map<string, EResource>): void
 }
 
 export function isEResourceSet(o: any): o is EResourceSet {
-    return o == undefined ? undefined : typeof o["getResources"] === "function";
+    return o == undefined ? undefined : typeof o["getResources"] === "function"
 }

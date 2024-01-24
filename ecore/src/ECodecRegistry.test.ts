@@ -7,12 +7,12 @@
 //
 // *****************************************************************************
 
-import { getCodecRegistry } from "./index";
+import { getCodecRegistry } from "./index"
 
 describe("ECodecRegistry", () => {
     test("singleton ", () => {
-        let r = getCodecRegistry();
-        expect(r).not.toBeNull();
-        expect(r.getExtensionToCodecMap().size).toBe(3);
-    });
-});
+        let r = getCodecRegistry()
+        expect(r).not.toBeNull()
+        expect(r.getExtensionToCodecMap().size).toBe(3)
+    })
+})

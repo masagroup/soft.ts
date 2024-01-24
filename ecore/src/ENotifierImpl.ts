@@ -7,28 +7,28 @@
 //
 // *****************************************************************************
 
-import { AbstractENotifier, AbstractENotifierList, EAdapter, EList } from "./internal";
+import { AbstractENotifier, AbstractENotifierList, EAdapter, EList } from "./internal"
 
 export class ENotifierImpl extends AbstractENotifier {
-    private _adapters: EList<EAdapter> = null;
-    private _deliver: boolean = true;
+    private _adapters: EList<EAdapter> = null
+    private _deliver: boolean = true
 
     get eAdapters(): EList<EAdapter> {
         if (!this._adapters) {
-            this._adapters = new AbstractENotifierList(this);
+            this._adapters = new AbstractENotifierList(this)
         }
-        return this._adapters;
+        return this._adapters
     }
 
     eBasicAdapters(): EList<EAdapter> {
-        return this._adapters;
+        return this._adapters
     }
 
     get eDeliver(): boolean {
-        return this._deliver;
+        return this._deliver
     }
 
     set eDeliver(deliver: boolean) {
-        this._deliver = deliver;
+        this._deliver = deliver
     }
 }

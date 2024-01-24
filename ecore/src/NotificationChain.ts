@@ -7,28 +7,28 @@
 //
 // *****************************************************************************
 
-import { ENotification, ENotificationChain } from "./internal";
+import { ENotification, ENotificationChain } from "./internal"
 
 export class NotificationChain implements ENotificationChain {
-    private _notifications: ENotification[];
+    private _notifications: ENotification[]
 
     constructor() {
-        this._notifications = [];
+        this._notifications = []
     }
 
     add(notification: ENotification): boolean {
-        if (!notification) return false;
+        if (!notification) return false
 
         for (const n of this._notifications) {
-            if (n.merge(notification)) return false;
+            if (n.merge(notification)) return false
         }
 
-        this._notifications.push(notification);
-        return true;
+        this._notifications.push(notification)
+        return true
     }
     dispatch(): void {
         for (const notification of this._notifications) {
-            if (notification.notifier) notification.notifier.eNotify(notification);
+            if (notification.notifier) notification.notifier.eNotify(notification)
         }
     }
 }

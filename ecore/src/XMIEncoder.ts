@@ -7,29 +7,29 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./internal";
-import { XMIConstants } from "./XMIConstants";
-import { XMLEncoder } from "./XMLEncoder";
+import { EResource } from "./internal"
+import { XMIConstants } from "./XMIConstants"
+import { XMLEncoder } from "./XMLEncoder"
 
 export class XMIEncoder extends XMLEncoder {
-    private _xmiVersion: string;
+    private _xmiVersion: string
 
     constructor(resource: EResource, options: Map<string, any>) {
-        super(resource, options);
-        this._xmiVersion = "2.0";
+        super(resource, options)
+        this._xmiVersion = "2.0"
     }
 
     getXMIVersion(): string {
-        return this._xmiVersion;
+        return this._xmiVersion
     }
 
     setXMIVersion(xmiVersion: string) {
-        this._xmiVersion = xmiVersion;
+        this._xmiVersion = xmiVersion
     }
 
     protected saveNamespaces() {
-        this._str.addAttribute(XMIConstants.xmiNS + ":" + XMIConstants.versionAttrib, this._xmiVersion);
-        this._str.addAttribute(XMIConstants.xmlNS + ":" + XMIConstants.xmiNS, XMIConstants.xmiURI);
-        super.saveNamespaces();
+        this._str.addAttribute(XMIConstants.xmiNS + ":" + XMIConstants.versionAttrib, this._xmiVersion)
+        this._str.addAttribute(XMIConstants.xmlNS + ":" + XMIConstants.xmiNS, XMIConstants.xmiURI)
+        super.saveNamespaces()
     }
 }

@@ -16,79 +16,79 @@ import {
     EReference,
     ImmutableEList,
     isEObject,
-} from "./internal";
+} from "./internal"
 
 export class DeepCopy {
-    private _objects: Map<EObject, EObject> = new Map();
-    private _resolve: boolean = false;
-    private _originalReferences: boolean = false;
+    private _objects: Map<EObject, EObject> = new Map()
+    private _resolve: boolean = false
+    private _originalReferences: boolean = false
 
     constructor(resolve: boolean, originalReferences: boolean) {
-        this._resolve = resolve;
-        this._originalReferences = originalReferences;
+        this._resolve = resolve
+        this._originalReferences = originalReferences
     }
 
     copy(eObject: EObject): EObject {
         if (eObject) {
-            let copyEObject = this.createCopy(eObject);
+            let copyEObject = this.createCopy(eObject)
             if (copyEObject) {
-                this._objects.set(eObject, copyEObject);
-                let eClass = eObject.eClass();
+                this._objects.set(eObject, copyEObject)
+                let eClass = eObject.eClass()
                 for (const eAttribute of eClass.eAttributes) {
                     if (eAttribute.isChangeable && !eAttribute.isDerived) {
-                        this.copyAttribute(eAttribute, eObject, copyEObject);
+                        this.copyAttribute(eAttribute, eObject, copyEObject)
                     }
                 }
                 for (const eReference of eClass.eReferences) {
                     if (eReference.isChangeable && !eReference.isDerived && eReference.isContainment) {
-                        this.copyContainment(eReference, eObject, copyEObject);
+                        this.copyContainment(eReference, eObject, copyEObject)
                     }
                 }
 
-                this.copyProxyURI(eObject, copyEObject);
+                this.copyProxyURI(eObject, copyEObject)
             }
-            return copyEObject;
+            return copyEObject
         }
-        return null;
+        return null
     }
 
     copyAll(eObjects: EList<EObject>): EList<EObject> {
-        let copies: EObject[] = [];
+        let copies: EObject[] = []
         for (const eObject of eObjects) {
-            copies.push(this.copy(eObject));
+            copies.push(this.copy(eObject))
         }
-        return new ImmutableEList<EObject>(copies);
+        return new ImmutableEList<EObject>(copies)
     }
 
     private createCopy(eObject: EObject): EObject {
-        let eClass = eObject.eClass();
-        let eFactory = eClass.ePackage.eFactoryInstance;
-        return eFactory.create(eClass);
+        let eClass = eObject.eClass()
+        let eFactory = eClass.ePackage.eFactoryInstance
+        return eFactory.create(eClass)
     }
 
     private copyProxyURI(eObject: EObject, copyEObject: EObject) {
         if (eObject.eIsProxy()) {
-            let eObjectInternal = eObject as EObjectInternal;
-            let eCopyInternal = copyEObject as EObjectInternal;
-            eCopyInternal.eSetProxyURI(eObjectInternal.eProxyURI());
+            let eObjectInternal = eObject as EObjectInternal
+            let eCopyInternal = copyEObject as EObjectInternal
+            eCopyInternal.eSetProxyURI(eObjectInternal.eProxyURI())
         }
     }
 
     private copyAttribute(eAttribute: EAttribute, eObject: EObject, copyEObject: EObject) {
         if (eObject.eIsSet(eAttribute)) {
-            copyEObject.eSet(eAttribute, eObject.eGet(eAttribute));
+            copyEObject.eSet(eAttribute, eObject.eGet(eAttribute))
         }
     }
 
     private copyContainment(eReference: EReference, eObject: EObject, copyEObject: EObject) {
         if (eObject.eIsSet(eReference)) {
-            let value = eObject.eGetResolve(eReference, this._resolve);
+            let value = eObject.eGetResolve(eReference, this._resolve)
             if (eReference.isMany) {
-                let list = value as EList<EObject>;
-                copyEObject.eSet(eReference, this.copyAll(list));
+                let list = value as EList<EObject>
+                copyEObject.eSet(eReference, this.copyAll(list))
             } else {
-                let object = value as EObject;
-                copyEObject.eSet(eReference, this.copy(object));
+                let object = value as EObject
+                copyEObject.eSet(eReference, this.copy(object))
             }
         }
     }
@@ -102,7 +102,7 @@ export class DeepCopy {
                     !eReference.isContainment &&
                     !eReference.isContainer
                 ) {
-                    this.copyReference(eReference, eObject, copyEObject);
+                    this.copyReference(eReference, eObject, copyEObject)
                 }
             }
         }
@@ -110,54 +110,54 @@ export class DeepCopy {
 
     private copyReference(eReference: EReference, eObject: EObject, copyEObject: EObject) {
         if (eObject.eIsSet(eReference)) {
-            let value = eObject.eGetResolve(eReference, this._resolve);
+            let value = eObject.eGetResolve(eReference, this._resolve)
             if (eReference.isMany) {
-                let listSource = value as EObjectList<EObject>;
-                let listTarget = copyEObject.eGetResolve(eReference, false) as EObjectList<EObject>;
-                let source: EList<EObject> = listSource;
+                let listSource = value as EObjectList<EObject>
+                let listTarget = copyEObject.eGetResolve(eReference, false) as EObjectList<EObject>
+                let source: EList<EObject> = listSource
                 if (!this._resolve) {
-                    source = listSource.getUnResolvedList();
+                    source = listSource.getUnResolvedList()
                 }
-                let target = listTarget.getUnResolvedList();
+                let target = listTarget.getUnResolvedList()
                 if (source.isEmpty()) {
-                    target.clear();
+                    target.clear()
                 } else {
-                    let isBidirectional = eReference.eOpposite != null;
-                    let index = 0;
+                    let isBidirectional = eReference.eOpposite != null
+                    let index = 0
                     for (const referencedObject of source) {
-                        let copyReferencedEObject = this._objects.get(referencedObject);
+                        let copyReferencedEObject = this._objects.get(referencedObject)
                         if (copyReferencedEObject) {
                             if (isBidirectional) {
-                                let position = target.indexOf(copyReferencedEObject);
+                                let position = target.indexOf(copyReferencedEObject)
                                 if (position == -1) {
-                                    target.insert(index, copyReferencedEObject);
+                                    target.insert(index, copyReferencedEObject)
                                 } else if (index != position) {
-                                    target.move(index, copyReferencedEObject);
+                                    target.move(index, copyReferencedEObject)
                                 }
                             } else {
-                                target.insert(index, copyReferencedEObject);
+                                target.insert(index, copyReferencedEObject)
                             }
-                            index++;
+                            index++
                         } else {
                             if (this._originalReferences && !isBidirectional) {
-                                target.insert(index, referencedObject);
-                                index++;
+                                target.insert(index, referencedObject)
+                                index++
                             }
                         }
                     }
                 }
             } else {
                 if (isEObject(value)) {
-                    let copyReferencedEObject = this._objects.get(value);
+                    let copyReferencedEObject = this._objects.get(value)
                     if (copyReferencedEObject) {
-                        copyEObject.eSet(eReference, copyReferencedEObject);
+                        copyEObject.eSet(eReference, copyReferencedEObject)
                     } else {
                         if (this._originalReferences && eReference.eOpposite == null) {
-                            copyEObject.eSet(eReference, value);
+                            copyEObject.eSet(eReference, value)
                         }
                     }
                 } else {
-                    copyEObject.eSet(eReference, value);
+                    copyEObject.eSet(eReference, value)
                 }
             }
         }

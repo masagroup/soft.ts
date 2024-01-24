@@ -7,21 +7,21 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs";
-import { EList, EURIHandler, URI } from "./internal";
+import * as fs from "fs"
+import { EList, EURIHandler, URI } from "./internal"
 
 export interface EURIConverter {
-    createReadStream(uri: URI): fs.ReadStream;
+    createReadStream(uri: URI): fs.ReadStream
 
-    createWriteStream(uri: URI): fs.WriteStream;
+    createWriteStream(uri: URI): fs.WriteStream
 
-    readSync(uri: URI): null | Buffer;
+    readSync(uri: URI): null | Buffer
 
-    writeSync(uri: URI, s: Buffer): void;
+    writeSync(uri: URI, s: Buffer): void
 
-    normalize(uri: URI): URI;
+    normalize(uri: URI): URI
 
-    getURIHandler(uri: URI): EURIHandler;
+    getURIHandler(uri: URI): EURIHandler
 
-    getURIHandlers(): EList<EURIHandler>;
+    getURIHandlers(): EList<EURIHandler>
 }

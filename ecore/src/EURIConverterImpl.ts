@@ -7,52 +7,52 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs";
-import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal";
+import * as fs from "fs"
+import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal"
 
 export class EURIConverterImpl implements EURIConverter {
-    private _uriHandlers: EList<EURIHandler>;
+    private _uriHandlers: EList<EURIHandler>
 
     constructor() {
-        this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()]);
+        this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()])
     }
 
     createReadStream(uri: URI): fs.ReadStream {
-        let uriHandler = this.getURIHandler(uri);
-        return uriHandler ? uriHandler.createReadStream(uri) : null;
+        let uriHandler = this.getURIHandler(uri)
+        return uriHandler ? uriHandler.createReadStream(uri) : null
     }
 
     createWriteStream(uri: URI): fs.WriteStream {
-        let uriHandler = this.getURIHandler(uri);
-        return uriHandler ? uriHandler.createWriteStream(uri) : null;
+        let uriHandler = this.getURIHandler(uri)
+        return uriHandler ? uriHandler.createWriteStream(uri) : null
     }
 
     readSync(uri: URI): null | Buffer {
-        let uriHandler = this.getURIHandler(uri);
-        return uriHandler ? uriHandler.readSync(uri) : null;
+        let uriHandler = this.getURIHandler(uri)
+        return uriHandler ? uriHandler.readSync(uri) : null
     }
 
     writeSync(uri: URI, s: Buffer): void {
-        let uriHandler = this.getURIHandler(uri);
+        let uriHandler = this.getURIHandler(uri)
         if (uriHandler) {
-            uriHandler.writeSync(uri, s);
+            uriHandler.writeSync(uri, s)
         }
     }
 
     normalize(uri: URI): URI {
-        return uri;
+        return uri
     }
 
     getURIHandler(uri: URI): EURIHandler {
         for (const uriHandler of this._uriHandlers) {
             if (uriHandler.canHandle(uri)) {
-                return uriHandler;
+                return uriHandler
             }
         }
-        return null;
+        return null
     }
 
     getURIHandlers(): EList<EURIHandler> {
-        return this._uriHandlers;
+        return this._uriHandlers
     }
 }

@@ -7,72 +7,72 @@
 //
 // *****************************************************************************
 
-import { EObject, EObjectIDManager } from "./internal";
+import { EObject, EObjectIDManager } from "./internal"
 
 export class IncrementalIDManager implements EObjectIDManager {
-    private _detachedToID: Map<EObject, number> = new Map<EObject, number>();
-    private _objectToID: Map<EObject, number> = new Map<EObject, number>();
-    private _idToObject: Map<number, EObject> = new Map<number, EObject>();
-    private _currentID: number = 0;
+    private _detachedToID: Map<EObject, number> = new Map<EObject, number>()
+    private _objectToID: Map<EObject, number> = new Map<EObject, number>()
+    private _idToObject: Map<number, EObject> = new Map<number, EObject>()
+    private _currentID: number = 0
 
     private newID(): number {
-        return this._currentID++;
+        return this._currentID++
     }
 
     clear(): void {
-        this._detachedToID.clear();
-        this._objectToID.clear();
-        this._idToObject.clear();
-        this._currentID = 0;
+        this._detachedToID.clear()
+        this._objectToID.clear()
+        this._idToObject.clear()
+        this._currentID = 0
     }
 
     register(eObject: EObject): void {
         if (!this._objectToID.has(eObject)) {
-            let newID = this._detachedToID.get(eObject);
+            let newID = this._detachedToID.get(eObject)
             if (newID === undefined) {
-                newID = this.newID();
+                newID = this.newID()
             } else {
-                this._detachedToID.delete(eObject);
+                this._detachedToID.delete(eObject)
             }
-            this.setID(eObject, newID);
+            this.setID(eObject, newID)
         }
     }
 
     unRegister(eObject: EObject): void {
-        let id = this._objectToID.get(eObject);
+        let id = this._objectToID.get(eObject)
         if (id !== undefined) {
-            this._idToObject.delete(id);
-            this._objectToID.delete(eObject);
-            this._detachedToID.set(eObject, id);
+            this._idToObject.delete(id)
+            this._objectToID.delete(eObject)
+            this._detachedToID.set(eObject, id)
         }
     }
 
     setID(eObject: EObject, id: any): void {
-        let oldID = this._objectToID.get(eObject);
-        let newID = id !== undefined && id !== null ? Number(id) : undefined;
+        let oldID = this._objectToID.get(eObject)
+        let newID = id !== undefined && id !== null ? Number(id) : undefined
         if (newID !== undefined) {
-            this._objectToID.set(eObject, newID);
+            this._objectToID.set(eObject, newID)
         } else {
-            this._objectToID.delete(eObject);
+            this._objectToID.delete(eObject)
         }
         if (oldID !== undefined) {
-            this._idToObject.delete(oldID);
+            this._idToObject.delete(oldID)
         }
         if (newID !== undefined) {
-            this._idToObject.set(newID, eObject);
-            this._currentID = Math.max(newID + 1, this._currentID);
+            this._idToObject.set(newID, eObject)
+            this._currentID = Math.max(newID + 1, this._currentID)
         }
     }
 
     getID(eObject: EObject): any {
-        return this._objectToID.get(eObject);
+        return this._objectToID.get(eObject)
     }
 
     getEObject(id: any): EObject {
-        return this._idToObject.get(Number(id));
+        return this._idToObject.get(Number(id))
     }
 
     getDetachedID(eObject: EObject): any {
-        return this._detachedToID.get(eObject);
+        return this._detachedToID.get(eObject)
     }
 }

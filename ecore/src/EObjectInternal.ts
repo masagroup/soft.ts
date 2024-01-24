@@ -7,62 +7,62 @@
 //
 // *****************************************************************************
 
-import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature, URI } from "./internal";
+import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature, URI } from "./internal"
 
 export interface EDynamicProperties {
-    eDynamicGet(dynamicFeatureID: number): any;
-    eDynamicSet(dynamicFeatureID: number, newValue: any): void;
-    eDynamicUnset(dynamicFeatureID: number): void;
+    eDynamicGet(dynamicFeatureID: number): any
+    eDynamicSet(dynamicFeatureID: number, newValue: any): void
+    eDynamicUnset(dynamicFeatureID: number): void
 }
 
 export interface EObjectInternal extends EObject {
-    eStaticClass(): EClass;
+    eStaticClass(): EClass
 
-    eDynamicProperties(): EDynamicProperties;
+    eDynamicProperties(): EDynamicProperties
 
-    eInternalResource(): EResource;
-    eInternalContainer(): EObject;
-    eInternalContainerFeatureID(): number;
-    eSetInternalContainer(container: EObject, containerFeatureID: number): void;
-    eSetInternalResource(resource: EResource): void;
-    eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain;
+    eInternalResource(): EResource
+    eInternalContainer(): EObject
+    eInternalContainerFeatureID(): number
+    eSetInternalContainer(container: EObject, containerFeatureID: number): void
+    eSetInternalResource(resource: EResource): void
+    eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain
 
-    eInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
+    eInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
 
-    eInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
+    eInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
 
-    eDerivedFeatureID(container: EObject, featureID: number): number;
+    eDerivedFeatureID(container: EObject, featureID: number): number
 
-    eDerivedOperationID(container: EObject, operationID: number): number;
+    eDerivedOperationID(container: EObject, operationID: number): number
 
-    eGetFromID(featureID: number, resolve: boolean, core: boolean): any;
+    eGetFromID(featureID: number, resolve: boolean, core: boolean): any
 
-    eSetFromID(featureID: number, newValue: any): void;
+    eSetFromID(featureID: number, newValue: any): void
 
-    eUnsetFromID(featureID: number): void;
+    eUnsetFromID(featureID: number): void
 
-    eIsSetFromID(featureID: number): boolean;
+    eIsSetFromID(featureID: number): boolean
 
-    eInvokeFromID(operationID: number, args: EList<any>): any;
+    eInvokeFromID(operationID: number, args: EList<any>): any
 
-    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
 
-    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain;
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
 
-    eObjectForFragmentSegment(fragment: string): EObject;
+    eObjectForFragmentSegment(fragment: string): EObject
 
-    eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string;
+    eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string
 
-    eProxyURI(): URI;
+    eProxyURI(): URI
 
-    eSetProxyURI(uri: URI): void;
+    eSetProxyURI(uri: URI): void
 
-    eResolveProxy(proxy: EObject): EObject;
+    eResolveProxy(proxy: EObject): EObject
 }
 
 export function isEObject(o: any): o is EObject {
-    return o == undefined ? undefined : typeof o["eClass"] === "function";
+    return o == undefined ? undefined : typeof o["eClass"] === "function"
 }
 export function isEObjectInternal(o: any): o is EObjectInternal {
-    return o == undefined ? undefined : isEObject(o) && typeof o["eStaticClass"] === "function";
+    return o == undefined ? undefined : isEObject(o) && typeof o["eStaticClass"] === "function"
 }

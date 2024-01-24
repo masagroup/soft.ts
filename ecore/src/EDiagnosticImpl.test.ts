@@ -7,14 +7,14 @@
 //
 // *****************************************************************************
 
-import { EDiagnosticImpl } from "./internal";
+import { EDiagnosticImpl } from "./internal"
 
 describe("EDiagnosticImpl", () => {
     test("accessors", () => {
-        let d = new EDiagnosticImpl("message", "location", 1, 2);
-        expect(d.message).toEqual("message");
-        expect(d.location).toEqual("location");
-        expect(d.line).toEqual(1);
-        expect(d.column).toEqual(2);
-    });
-});
+        let d = new EDiagnosticImpl("message", "location", 1, 2)
+        expect(d.message).toEqual("message")
+        expect(d.location).toEqual("location")
+        expect(d.line).toEqual(1)
+        expect(d.column).toEqual(2)
+    })
+})

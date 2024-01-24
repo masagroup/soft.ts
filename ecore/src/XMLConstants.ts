@@ -8,11 +8,11 @@
 // *****************************************************************************
 
 export class XMLConstants {
-    static href = "href";
-    static typeAttrib = "type";
-    static schemaLocationAttrib = "schemaLocation";
-    static noNamespaceSchemaLocationAttrib = "noNamespaceSchemaLocation";
-    static xsiURI = "http://www.w3.org/2001/XMLSchema-instance";
-    static xsiNS = "xsi";
-    static xmlNS = "xmlns";
+    static href = "href"
+    static typeAttrib = "type"
+    static schemaLocationAttrib = "schemaLocation"
+    static noNamespaceSchemaLocationAttrib = "noNamespaceSchemaLocation"
+    static xsiURI = "http://www.w3.org/2001/XMLSchema-instance"
+    static xsiNS = "xsi"
+    static xmlNS = "xmlns"
 }

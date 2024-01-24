@@ -7,22 +7,22 @@
 //
 // *****************************************************************************
 
-import { instance, mock } from "ts-mockito";
-import { EPackage, XMIProcessor, EResourceSet } from "./internal";
+import { instance, mock } from "ts-mockito"
+import { EPackage, XMIProcessor, EResourceSet } from "./internal"
 
 describe("XMIProcessor", () => {
     test("constructor.no.resourceset", () => {
-        let xmlProcessor = new XMIProcessor();
-        expect(xmlProcessor).not.toBeNull();
-        expect(xmlProcessor.getResourceSet()).not.toBeNull();
-    });
+        let xmlProcessor = new XMIProcessor()
+        expect(xmlProcessor).not.toBeNull()
+        expect(xmlProcessor.getResourceSet()).not.toBeNull()
+    })
 
     test("constructor.resourceset", () => {
-        let mockPackage = mock<EPackage>();
-        let mockEResourceSet = mock<EResourceSet>();
-        let eResourceSet = instance(mockEResourceSet);
-        let xmlProcessor = new XMIProcessor(eResourceSet);
-        expect(xmlProcessor).not.toBeNull();
-        expect(xmlProcessor.getResourceSet()).toBe(eResourceSet);
-    });
-});
+        let mockPackage = mock<EPackage>()
+        let mockEResourceSet = mock<EResourceSet>()
+        let eResourceSet = instance(mockEResourceSet)
+        let xmlProcessor = new XMIProcessor(eResourceSet)
+        expect(xmlProcessor).not.toBeNull()
+        expect(xmlProcessor.getResourceSet()).toBe(eResourceSet)
+    })
+})

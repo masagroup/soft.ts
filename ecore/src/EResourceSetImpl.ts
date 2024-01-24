@@ -7,8 +7,8 @@
 //
 // *****************************************************************************
 
-import { ECodecRegistryImpl } from "./ECodecRegistryImpl";
-import { EResourceImpl } from "./EResourceImpl";
+import { ECodecRegistryImpl } from "./ECodecRegistryImpl"
+import { EResourceImpl } from "./EResourceImpl"
 import {
     AbstractNotifyingList,
     EList,
@@ -29,136 +29,136 @@ import {
     getPackageRegistry,
     getCodecRegistry,
     URI,
-} from "./internal";
+} from "./internal"
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
     constructor(private _resourceSet: EResourceSetImpl) {
-        super();
+        super()
     }
 
     get notifier(): ENotifier {
-        return this._resourceSet;
+        return this._resourceSet
     }
 
     get feature(): EStructuralFeature {
-        return null;
+        return null
     }
 
     get featureID(): number {
-        return EResourceSetConstants.RESOURCE_SET__RESOURCES;
+        return EResourceSetConstants.RESOURCE_SET__RESOURCES
     }
 
     protected inverseAdd(e: EResource, notifications: ENotificationChain): ENotificationChain {
-        return (e as EResourceInternal).basicSetResourceSet(this._resourceSet, notifications);
+        return (e as EResourceInternal).basicSetResourceSet(this._resourceSet, notifications)
     }
 
     protected inverseRemove(e: EResource, notifications: ENotificationChain): ENotificationChain {
-        return (e as EResourceInternal).basicSetResourceSet(null, notifications);
+        return (e as EResourceInternal).basicSetResourceSet(null, notifications)
     }
 }
 
 export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
-    private _resources: EList<EResource>;
-    private _uriConverter: EURIConverter;
-    private _uriResourceMap: Map<string, EResource>;
-    private _resourceCodecRegistry: ECodecRegistry;
-    private _packageRegistry: EPackageRegistry;
+    private _resources: EList<EResource>
+    private _uriConverter: EURIConverter
+    private _uriResourceMap: Map<string, EResource>
+    private _resourceCodecRegistry: ECodecRegistry
+    private _packageRegistry: EPackageRegistry
 
     constructor() {
-        super();
-        this._resources = new ResourcesList(this);
-        this._uriConverter = new EURIConverterImpl();
-        this._resourceCodecRegistry = new ECodecRegistryImpl(getCodecRegistry());
-        this._packageRegistry = new EPackageRegistryImpl(getPackageRegistry());
-        this._uriResourceMap = null;
+        super()
+        this._resources = new ResourcesList(this)
+        this._uriConverter = new EURIConverterImpl()
+        this._resourceCodecRegistry = new ECodecRegistryImpl(getCodecRegistry())
+        this._packageRegistry = new EPackageRegistryImpl(getPackageRegistry())
+        this._uriResourceMap = null
     }
 
     getPackageRegistry(): EPackageRegistry {
-        return this._packageRegistry;
+        return this._packageRegistry
     }
 
     setPackageRegistry(packageRegistry: EPackageRegistry): void {
-        this._packageRegistry = packageRegistry;
+        this._packageRegistry = packageRegistry
     }
 
     getCodecRegistry(): ECodecRegistry {
-        return this._resourceCodecRegistry;
+        return this._resourceCodecRegistry
     }
 
     setCodecRegistry(resourceCodecRegistry: ECodecRegistry): void {
-        this._resourceCodecRegistry = resourceCodecRegistry;
+        this._resourceCodecRegistry = resourceCodecRegistry
     }
 
     getURIResourceMap(): Map<string, EResource> {
-        return this._uriResourceMap;
+        return this._uriResourceMap
     }
 
     setURIResourceMap(uriMap: Map<string, EResource>): void {
-        this._uriResourceMap = uriMap;
+        this._uriResourceMap = uriMap
     }
 
     getResources(): EList<EResource> {
-        return this._resources;
+        return this._resources
     }
 
     getResource(uri: URI, loadOnDemand: boolean): EResource {
         if (this._uriResourceMap) {
-            let resource = this._uriResourceMap.get(uri.toString());
+            let resource = this._uriResourceMap.get(uri.toString())
             if (resource) {
                 if (loadOnDemand && !resource.isLoaded) {
-                    resource.loadSync();
+                    resource.loadSync()
                 }
-                return resource;
+                return resource
             }
         }
 
-        let normalizedURI = this._uriConverter.normalize(uri);
+        let normalizedURI = this._uriConverter.normalize(uri)
         for (const resource of this._resources) {
-            let resourceURI = this._uriConverter.normalize(resource.eURI);
+            let resourceURI = this._uriConverter.normalize(resource.eURI)
             if (resourceURI.toString() == normalizedURI.toString()) {
                 if (loadOnDemand && !resource.isLoaded) {
-                    resource.loadSync();
+                    resource.loadSync()
                 }
                 if (this._uriResourceMap) {
-                    this._uriResourceMap.set(uri.toString(), resource);
+                    this._uriResourceMap.set(uri.toString(), resource)
                 }
-                return resource;
+                return resource
             }
         }
 
-        let ePackage = this.getPackageRegistry().getPackage(uri.toString());
-        if (ePackage) return ePackage.eResource();
+        let ePackage = this.getPackageRegistry().getPackage(uri.toString())
+        if (ePackage) return ePackage.eResource()
 
         if (loadOnDemand) {
-            let resource = this.createResource(uri);
+            let resource = this.createResource(uri)
             if (resource) {
-                resource.loadSync();
+                resource.loadSync()
             }
-            return resource;
+            return resource
         }
 
-        return null;
+        return null
     }
 
     createResource(uri: URI): EResource {
-        let resource = new EResourceImpl();
-        resource.eURI = uri;
-        this._resources.add(resource);
-        return resource;
+        let resource = new EResourceImpl()
+        resource.eURI = uri
+        this._resources.add(resource)
+        return resource
     }
 
     getEObject(uri: URI, loadOnDemand: boolean): EObject {
-        let uriStr = uri.toString();
-        let ndxHash = uriStr.lastIndexOf("#");
-        let resource = this.getResource(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand);
-        return resource ? resource.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "") : null;
+        let uriStr = uri.toString()
+        let ndxHash = uriStr.lastIndexOf("#")
+        let resource = this.getResource(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand)
+        return resource ? resource.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "") : null
     }
 
     getURIConverter(): EURIConverter {
-        return this._uriConverter;
+        return this._uriConverter
     }
 
     setURIConverter(uriConverter: EURIConverter): void {
-        this._uriConverter = uriConverter;
+        this._uriConverter = uriConverter
     }
 }

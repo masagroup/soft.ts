@@ -33,7 +33,8 @@
   },
   "prettier": {
     "printWidth": 120,
-    "tabWidth": 4
+    "tabWidth": 4,
+    "semi": false
   },
   "dependencies": {
     "@types/sax": "^1.2.7",

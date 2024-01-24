@@ -7,51 +7,51 @@
 //
 // *****************************************************************************
 
-import { ENotifier, EObject, EList, EResourceSet, EDiagnostic, EObjectIDManager, URI } from "./internal";
-import * as fs from "fs";
+import { ENotifier, EObject, EList, EResourceSet, EDiagnostic, EObjectIDManager, URI } from "./internal"
+import * as fs from "fs"
 
 export class EResourceConstants {
-    public static readonly RESOURCE__RESOURCE_SET: number = 0;
+    public static readonly RESOURCE__RESOURCE_SET: number = 0
 
-    public static readonly RESOURCE__URI: number = 1;
+    public static readonly RESOURCE__URI: number = 1
 
-    public static readonly RESOURCE__CONTENTS: number = 2;
+    public static readonly RESOURCE__CONTENTS: number = 2
 
-    public static readonly RESOURCE__IS_LOADED: number = 4;
+    public static readonly RESOURCE__IS_LOADED: number = 4
 }
 
 export interface EResource extends ENotifier {
-    eURI: URI;
-    eObjectIDManager: EObjectIDManager;
+    eURI: URI
+    eObjectIDManager: EObjectIDManager
 
-    eResourceSet(): EResourceSet;
-    eContents(): EList<EObject>;
-    eAllContents(): IterableIterator<EObject>;
+    eResourceSet(): EResourceSet
+    eContents(): EList<EObject>
+    eAllContents(): IterableIterator<EObject>
 
-    load(options?: Map<string, any>): Promise<void>;
-    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void>;
-    loadSync(options?: Map<string, any>): void;
-    loadFromString(s: string, options?: Map<string, any>): void;
+    load(options?: Map<string, any>): Promise<void>
+    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void>
+    loadSync(options?: Map<string, any>): void
+    loadFromString(s: string, options?: Map<string, any>): void
 
-    unload(): void;
-    readonly isLoaded: boolean;
-    readonly isLoading: boolean;
+    unload(): void
+    readonly isLoaded: boolean
+    readonly isLoading: boolean
 
-    save(options?: Map<string, any>): Promise<void>;
-    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void>;
-    saveSync(options?: Map<string, any>): void;
-    saveToString(options?: Map<string, any>): string;
+    save(options?: Map<string, any>): Promise<void>
+    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void>
+    saveSync(options?: Map<string, any>): void
+    saveToString(options?: Map<string, any>): string
 
-    attached(object: EObject): void;
-    detached(object: EObject): void;
+    attached(object: EObject): void
+    detached(object: EObject): void
 
-    getEObject(uriFragment: string): EObject;
-    getURIFragment(object: EObject): string;
+    getEObject(uriFragment: string): EObject
+    getURIFragment(object: EObject): string
 
-    getErrors(): EList<EDiagnostic>;
-    getWarnings(): EList<EDiagnostic>;
+    getErrors(): EList<EDiagnostic>
+    getWarnings(): EList<EDiagnostic>
 }
 
 export function isEResource(o: any): o is EResource {
-    return o == undefined ? undefined : typeof o["eResourceSet"] === "function";
+    return o == undefined ? undefined : typeof o["eResourceSet"] === "function"
 }

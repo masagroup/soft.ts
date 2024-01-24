@@ -7,15 +7,15 @@
 //
 // *****************************************************************************
 
-import { ENotification, ENotifier } from "./internal";
+import { ENotification, ENotifier } from "./internal"
 
 export interface EAdapter {
     // the target from which the adapter receives notification.
     // In general, an adapter may be shared by more than one notifier.
-    target: ENotifier;
+    target: ENotifier
 
-    unsetTarget(notifier: ENotifier): void;
+    unsetTarget(notifier: ENotifier): void
 
     // NotifyChanged Notifies that a change to some feature has occurred.
-    notifyChanged(notification: ENotification): void;
+    notifyChanged(notification: ENotification): void
 }
