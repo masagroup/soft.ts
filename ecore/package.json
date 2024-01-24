@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "test:cov": "jest --coverage",
     "pretty": "prettier --write src/**/*.ts"
   },
   "author": "MASA Group",
@@ -24,12 +25,11 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "verbose": true,
     "testPathIgnorePatterns": [
       "<rootDir>/dist/"
     ],
-    "collectCoverage": true,
-    "coverageDirectory": "coverage"
+    "coverageDirectory": "coverage",
+    "cache": false
   },
   "prettier": {
     "printWidth": 120,
