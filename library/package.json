@@ -32,7 +32,7 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "verbose": true,
+    "cache": false,
     "testPathIgnorePatterns": [
       "<rootDir>/dist/"
     ]
