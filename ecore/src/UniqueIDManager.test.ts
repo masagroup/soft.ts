@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito"
-import { EObject, IncrementalIDManager, UUIDManager } from "./internal"
+import { EObject, IncrementalIDManager, ULIDManager, UUIDManager } from "./internal"
 
 describe("IDManager", () => {
     describe('IncrementalIDManager', () => {
@@ -176,5 +176,51 @@ describe("IDManager", () => {
             expect(m.getID(eObject)).toBeUndefined()
         })
 
+    });
+
+    describe('ULIDManager', () => {
+        test("getEObject-invalid", () => {
+            let m = new ULIDManager()
+            expect(m.getEObject("invalid")).toBeUndefined()
+        })
+
+        test("register", () => {
+            let m = new ULIDManager()
+            let mockObject = mock<EObject>()
+            let eObject = instance(mockObject)
+            expect(m.getID(eObject)).toBeUndefined()
+
+            m.register(eObject)
+            m.register(eObject)
+            let id = m.getID(eObject)
+            expect(id).not.toBeUndefined()
+            expect(m.getEObject(id)).toBe(eObject)
+        })
+
+        test("setID-undefined", () => {
+            let m = new ULIDManager()
+            let mockObject = mock<EObject>()
+            let eObject = instance(mockObject)
+            let ulid = '01HNBCDR3FC57NH9V4VNQ3VPYD'
+            m.setID(eObject, ulid)
+            expect(m.getID(eObject)).toBe(ulid)
+
+            m.setID(eObject, null)
+            expect(m.getID(eObject)).toBeUndefined()
+
+            m.setID(eObject, ulid)
+            expect(m.getID(eObject)).toBe(ulid)
+        })
+
+        test("setID-invalid", () => {
+            let m = new ULIDManager()
+            let mockObject = mock<EObject>()
+            let eObject = instance(mockObject)
+            m.setID(eObject, 2)
+            expect(m.getID(eObject)).toBeUndefined()
+
+            m.setID(eObject, "invalid")
+            expect(m.getID(eObject)).toBeUndefined()
+        })
     });
 })

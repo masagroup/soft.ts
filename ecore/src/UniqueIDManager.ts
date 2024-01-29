@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { v4 as newUUID , validate as validateUUID} from "uuid"
+import { ulid } from "ulid"
 import { EObject, EObjectIDManager } from "./internal"
 
 abstract class UniqueIDManager<E> implements EObjectIDManager {
@@ -88,6 +89,24 @@ export class UUIDManager extends UniqueIDManager<string> {
     }
     isValidID( id : string ) : boolean {
         return validateUUID(id)
+    }
+    convertToID(v : any) : string {
+        if (typeof v === "string") {
+            return v    
+        }
+        return undefined
+    }
+    setCurrentID( id : string ) : void {        
+    }
+}
+
+export class ULIDManager extends UniqueIDManager<string> {
+    newID(): string {
+        return ulid()
+    }
+    isValidID( id : string ) : boolean {
+        const pattern = /^[0-9A-HJKMNP-TV-Z]{26}$/
+        return pattern.test(id)
     }
     convertToID(v : any) : string {
         if (typeof v === "string") {
