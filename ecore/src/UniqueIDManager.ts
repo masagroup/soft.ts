@@ -7,16 +7,33 @@
 //
 // *****************************************************************************
 
-import { v4 as uuid } from "uuid"
+import { v4 as newUUID , validate as validateUUID} from "uuid"
 import { EObject, EObjectIDManager } from "./internal"
 
-export class UniqueIDManager implements EObjectIDManager {
-    private _detachedToID: Map<EObject, string> = new Map<EObject, string>()
-    private _objectToID: Map<EObject, string> = new Map<EObject, string>()
-    private _idToObject: Map<string, EObject> = new Map<string, EObject>()
+abstract class UniqueIDManager<E> implements EObjectIDManager {
+    private _detachedToID: Map<EObject,E > = new Map<EObject, E>()
+    private _objectToID: Map<EObject, E> = new Map<EObject, E>()
+    private _idToObject: Map<E, EObject> = new Map<E, EObject>()
 
-    private newID(): string {
-        return uuid()
+    abstract newID(): E
+    abstract isValidID( id : E ) : boolean
+    abstract convertToID( v : any ) : E
+    abstract setCurrentID( id : E ) : void
+
+    private setObjectID( eObject : EObject, newID : E) {
+        if (this._objectToID.has(eObject)) {
+            let oldID = this._objectToID.get(eObject)
+            this._idToObject.delete(oldID)
+        }
+        
+        if (this.isValidID(newID)) {
+            this.setCurrentID(newID)
+            this._objectToID.set(eObject,newID)
+            this._idToObject.set(newID,eObject)
+
+        } else {
+            this._objectToID.delete(eObject)
+        }
     }
 
     clear(): void {
@@ -28,18 +45,18 @@ export class UniqueIDManager implements EObjectIDManager {
     register(eObject: EObject): void {
         if (!this._objectToID.has(eObject)) {
             let newID = this._detachedToID.get(eObject)
-            if (newID === undefined) {
+            if (newID == undefined) {
                 newID = this.newID()
             } else {
                 this._detachedToID.delete(eObject)
             }
-            this.setID(eObject, newID)
+            this.setObjectID(eObject, newID)
         }
     }
 
     unRegister(eObject: EObject): void {
         let id = this._objectToID.get(eObject)
-        if (id !== undefined) {
+        if (id != undefined) {
             this._idToObject.delete(id)
             this._objectToID.delete(eObject)
             this._detachedToID.set(eObject, id)
@@ -47,19 +64,8 @@ export class UniqueIDManager implements EObjectIDManager {
     }
 
     setID(eObject: EObject, id: any): void {
-        let oldID = this._objectToID.get(eObject)
-        let newID = id !== undefined && id !== null ? String(id) : undefined
-        if (newID !== undefined) {
-            this._objectToID.set(eObject, newID)
-        } else {
-            this._objectToID.delete(eObject)
-        }
-        if (oldID !== undefined) {
-            this._idToObject.delete(oldID)
-        }
-        if (newID !== undefined) {
-            this._idToObject.set(newID, eObject)
-        }
+        let newID = this.convertToID(id)
+        this.setObjectID(eObject,newID)
     }
 
     getID(eObject: EObject): any {
@@ -67,10 +73,54 @@ export class UniqueIDManager implements EObjectIDManager {
     }
 
     getEObject(id: any): EObject {
-        return this._idToObject.get(String(id))
+        let convertedID = this.convertToID(id)
+        return convertedID != undefined ? this._idToObject.get(convertedID) : undefined
     }
 
     getDetachedID(eObject: EObject): any {
         return this._detachedToID.get(eObject)
     }
 }
+
+export class UUIDManager extends UniqueIDManager<string> {
+    newID(): string {
+        return newUUID()
+    }
+    isValidID( id : string ) : boolean {
+        return validateUUID(id)
+    }
+    convertToID(v : any) : string {
+        if (typeof v === "string") {
+            return v    
+        }
+        return undefined
+    }
+    setCurrentID( id : string ) : void {        
+    }
+}
+
+export class IncrementalIDManager extends UniqueIDManager<number> {
+    private _id : number = 0
+
+    newID(): number {
+        return this._id++
+    }
+
+    isValidID( id : number ) : boolean {
+        return id >= 0
+    }
+
+    convertToID(v : any) : number {
+        if (typeof v === "string") {
+            return parseInt( v as string)
+        } else if (typeof v === "number") {
+            return v as number
+        }
+        return undefined
+    }
+
+    setCurrentID( id : number ) : void {
+        this._id = id
+    }
+}
+

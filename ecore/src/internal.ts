@@ -117,7 +117,6 @@ export * from "./EDiagnosticImpl"
 export * from "./EURIConverterImpl"
 export * from "./EResourceImpl"
 export * from "./EResourceSetImpl"
-export * from "./IncrementalIDManager"
 export * from "./UniqueIDManager"
 
 export * from "./ECodec"
