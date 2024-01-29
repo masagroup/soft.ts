@@ -10,8 +10,8 @@ import {
     EResource,
     EResourceImpl,
     EResourceSetImpl,
+    ULIDManager,
     URI,
-    UniqueIDManager,
     XMIProcessor,
     XMLProcessor,
     uriToFilePath,
@@ -136,7 +136,7 @@ describe("BinaryDecoder", () => {
         expect(eDocumentRootLibraryFeature).not.toBeNull()
 
         let eResource = new EResourceImpl()
-        let idManager = new UniqueIDManager()
+        let idManager = new ULIDManager()
         eResource.eObjectIDManager = idManager
         eResource.eURI = resourceURI
 

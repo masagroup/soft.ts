@@ -71,6 +71,7 @@ export {
     ImmutableEList,
     IncrementalIDManager,
     UUIDManager,
+    ULIDManager,
     isEAttribute,
     isEObject,
     isEEnum,

@@ -105,8 +105,7 @@ export class ULIDManager extends UniqueIDManager<string> {
         return ulid()
     }
     isValidID( id : string ) : boolean {
-        const pattern = /^[0-9A-HJKMNP-TV-Z]{26}$/
-        return pattern.test(id)
+        return id && id.length == 26
     }
     convertToID(v : any) : string {
         if (typeof v === "string") {

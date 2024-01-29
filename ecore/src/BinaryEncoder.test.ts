@@ -5,7 +5,7 @@ import {
     EResourceImpl,
     EResourceSetImpl,
     URI,
-    UniqueIDManager,
+    ULIDManager,
     XMIProcessor,
     XMLOptions,
     XMLProcessor,
@@ -49,7 +49,7 @@ describe("BinaryEncoder", () => {
         let expectedURI = new URI("testdata/library.complex.id.bin")
 
         let eResource = new EResourceImpl()
-        let idManager = new UniqueIDManager()
+        let idManager = new ULIDManager()
         eResource.eObjectIDManager = idManager
         eResource.eURI = resourceURI
 
