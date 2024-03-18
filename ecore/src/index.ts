@@ -69,6 +69,7 @@ export {
     getPackageRegistry,
     getCodecRegistry,
     ImmutableEList,
+    UniqueIDManager,
     IncrementalIDManager,
     UUIDManager,
     ULIDManager,

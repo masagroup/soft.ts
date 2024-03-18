@@ -11,7 +11,7 @@ import { v4 as newUUID , validate as validateUUID} from "uuid"
 import { ulid } from "ulid"
 import { EObject, EObjectIDManager } from "./internal"
 
-abstract class UniqueIDManager<E> implements EObjectIDManager {
+export abstract class UniqueIDManager<E> implements EObjectIDManager {
     private _detachedToID: Map<EObject,E > = new Map<EObject, E>()
     private _objectToID: Map<EObject, E> = new Map<EObject, E>()
     private _idToObject: Map<E, EObject> = new Map<E, EObject>()
