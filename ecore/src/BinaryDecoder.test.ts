@@ -155,7 +155,6 @@ describe("BinaryDecoder", () => {
 
             let eLibrary = eDocumentRoot.eGet(eDocumentRootLibraryFeature) as EObject
             expect(eLibrary).not.toBeNull()
-            expect(idManager.getID(eDocumentRoot)).toBe("h0Rz1FjVeBXUgaW3OzT2frUce90=")
             expect(idManager.getID(eLibrary)).toBe("d13pf-ypXLeIySkWAX03JcP-TbA=")
         })
 

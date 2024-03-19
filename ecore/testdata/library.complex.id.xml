@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<library xmlns="http:///org/eclipse/emf/examples/library/library.ecore/1.0.0" id="d13pf-ypXLeIySkWAX03JcP-TbA=" address="My Library Adress" name="My Library">
-  <writers id="6za3LSmxsIKoNGM-ntMmMnuxE80=" address="Adress 0" first-name="First Name 0" last-name="Last Name 0" books="#gTHMlBXaFg23nqjkQClAdj7SFcQ= #1rHMaOSOCq8oTdHv6C2m3Wyi740="/>
-  <employees id="zDKaBdJQTXPG1NKJN606XUMo9c0=" address="Adress 0" first-name="First Name 0" last-name="Last Name 0"/>
-  <employees id="0ALl8xV4z8R40s83abovpJZHzDc=" address="Adress 1" first-name="First Name 1" last-name="Last Name 1" manager="#zDKaBdJQTXPG1NKJN606XUMo9c0="/>
-  <books id="gTHMlBXaFg23nqjkQClAdj7SFcQ=" publication-date="2015-09-06T04:24:46Z" copies="4" title="Title 0" pages="336" category="Biography" author="#6za3LSmxsIKoNGM-ntMmMnuxE80="/>
-  <books id="1rHMaOSOCq8oTdHv6C2m3Wyi740=" publication-date="2015-09-07T04:24:46Z" copies="3" title="Title 1" pages="337" author="#6za3LSmxsIKoNGM-ntMmMnuxE80="/>
+<library xmlns="http:///org/eclipse/emf/examples/library/library.ecore/1.0.0" id="75aa92db-b419-4259-93c4-0e542d33aa35" address="My Library Adress" name="My Library">
+  <writers id="8074fd5a-9944-4265-8b49-07225ea8e18d" address="Adress 0" first-name="First Name 0" last-name="Last Name 0" books="#0cfc312b-4675-4a3f-8bd5-cc1373e9d9b4 #7d9cd4f6-9583-4903-bfe0-d2c73ed1b456"/>
+  <employees id="16bd7a90-311a-4a31-a0f0-82c38c8427b5" address="Adress 0" first-name="First Name 0" last-name="Last Name 0"/>
+  <employees id="dac7bb05-d636-47ab-a0db-a73a9718c665" address="Adress 1" first-name="First Name 1" last-name="Last Name 1" manager="#16bd7a90-311a-4a31-a0f0-82c38c8427b5"/>
+  <books id="0cfc312b-4675-4a3f-8bd5-cc1373e9d9b4" publication-date="2015-09-06T04:24:46Z" copies="4" title="Title 0" pages="336" category="Biography" author="#8074fd5a-9944-4265-8b49-07225ea8e18d"/>
+  <books id="7d9cd4f6-9583-4903-bfe0-d2c73ed1b456" publication-date="2015-09-07T04:24:46Z" copies="3" title="Title 1" pages="337" author="#8074fd5a-9944-4265-8b49-07225ea8e18d"/>
 </library>

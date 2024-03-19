@@ -19,6 +19,7 @@ import {
     EResourceSetImpl,
     ExtendedMetaData,
     URI,
+    UUIDManager,
     XMIProcessor,
     XMLDecoder,
     XMLEncoder,
@@ -179,6 +180,46 @@ describe("XMLResource", () => {
         test("loadSync", () => {
             resource = xmlProcessor.loadSync(resourceURI)
         })
+    })
+
+    describe("load.library.complex.ids", () => {
+        let ePackage = loadPackage("library.complex.ecore")
+        expect(ePackage).not.toBeNull()
+
+        let idManager = new UUIDManager()
+        let resourceSet = new EResourceSetImpl()
+        resourceSet.getPackageRegistry().registerPackage(ePackage)
+        let resourceURI = new URI("testdata/library.complex.id.xml")
+        let resource = resourceSet.createResource( resourceURI)
+        resource.eObjectIDManager = idManager
+        let options = new Map<string, any>([
+            [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true],
+            [XMLOptions.ID_ATTRIBUTE_NAME, "id"],
+        ])
+        
+        afterEach(() => {
+            expect(resource).not.toBeNull()
+            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.getErrors().isEmpty()).toBeTruthy()
+            expect(resource.getWarnings().isEmpty()).toBeTruthy()
+
+            let eLibrary = resource.eContents().get(0)
+            expect(idManager.getID(eLibrary)).toBe("75aa92db-b419-4259-93c4-0e542d33aa35")
+        })
+
+        test("load", async () => {
+            await resource.load(options)
+        })
+
+        test("loadFromStream", async () => {
+            let stream = fs.createReadStream(uriToFilePath(resourceURI))
+            await resource.loadFromStream(stream, options)
+        })
+
+        test("loadSync", () => {
+            resource.loadSync(options)
+        })
+
     })
 
     describe("load.library.complex.options", () => {

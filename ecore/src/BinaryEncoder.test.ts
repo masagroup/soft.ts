@@ -10,6 +10,7 @@ import {
     XMLOptions,
     XMLProcessor,
     uriToFilePath,
+    UUIDManager,
 } from "./internal"
 import * as fs from "fs"
 
@@ -49,7 +50,7 @@ describe("BinaryEncoder", () => {
         let expectedURI = new URI("testdata/library.complex.id.bin")
 
         let eResource = new EResourceImpl()
-        let idManager = new ULIDManager()
+        let idManager = new UUIDManager()
         eResource.eObjectIDManager = idManager
         eResource.eURI = resourceURI
 
@@ -63,7 +64,7 @@ describe("BinaryEncoder", () => {
 
         let eDocumentRoot = eResource.eContents().get(0)
         expect(eDocumentRoot).not.toBeNull()
-        expect(idManager.setID(eDocumentRoot, "h0Rz1FjVeBXUgaW3OzT2frUce90=")).toBeUndefined()
+        expect(idManager.setID(eDocumentRoot, "dc48710b-0e2e-419f-94fb-178c7fc1370b=")).toBeUndefined()
 
         let e = new BinaryEncoder(eResource, new Map<string, any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
         let r = e.encode(eResource)
