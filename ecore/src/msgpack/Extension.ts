@@ -1,4 +1,6 @@
 import { dateExtension } from "./Date"
+import { ulidExtension } from "./ULID"
+import { uuidExtension } from "./UUID"
 
 export class ExtData {
     constructor(
@@ -31,6 +33,8 @@ export class ExtensionCodec implements ExtensionCodecType {
 
     public constructor() {
         this.register(dateExtension)
+        this.register(ulidExtension)
+        this.register(uuidExtension)
     }
 
     public register({
