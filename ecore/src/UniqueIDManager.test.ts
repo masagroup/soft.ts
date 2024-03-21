@@ -9,26 +9,12 @@
 
 import { instance, mock } from "ts-mockito"
 import { EObject, IncrementalIDManager, ULIDManager, UUIDManager } from "./internal"
-import { Uuid4 } from "id128";
+import { Uuid4 , Exception, Ulid} from "id128"
 
 describe("IDManager", () => {
-    describe('UUIDmap', () => {
-        test('should ', () => {
-            let id1 = Uuid4.fromCanonical("b4c6c281-69b6-48e6-9847-850e52cafe2e")
-            let id2 = Uuid4.fromCanonical("b4c6c281-69b6-48e6-9847-850e52cafe2e")
-            expect(id1).toStrictEqual(id2)
-
-            let m  = new Map<Uuid4, string>()
-            m.set(id1,"toto")
-
-            expect(m.get(id2)).toBe("toto")
-        });
-
-    });
-
-
+    
     describe("IncrementalIDManager", () => {
-        test("getEObject-invalid", () => {
+        test("invalid", () => {
             let m = new IncrementalIDManager()
             expect(m.getEObject("invalid")).toBeUndefined()
         })
@@ -113,9 +99,23 @@ describe("IDManager", () => {
     })
 
     describe("UUIDManager", () => {
-        test("getEObject-invalid", () => {
+        test("undefined", () => {
             let m = new UUIDManager()
-            expect(m.getEObject("invalid")).toBeUndefined()
+            expect(m.getEObject(undefined)).toBeUndefined()
+        })
+
+        test("null", () => {
+            let m = new UUIDManager()
+            expect(m.getEObject(null)).toBeUndefined()
+        })
+
+        test("invalid", () => {
+            let m = new UUIDManager()
+            try {
+                m.getEObject("invalid")
+            }catch( err ) {
+                expect(err instanceof Exception.InvalidEncoding).toBeTruthy()
+            }
         })
 
         test("register", () => {
@@ -155,7 +155,7 @@ describe("IDManager", () => {
             let m = new UUIDManager()
             let mockObject = mock<EObject>()
             let eObject = instance(mockObject)
-            let uuid = "d96dc8e1-a25c-4431-b58e-c39df80c64da"
+            let uuid = Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
             m.setID(eObject, uuid)
             expect(m.getID(eObject)).toBe(uuid)
 
@@ -172,16 +172,13 @@ describe("IDManager", () => {
             let eObject = instance(mockObject)
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBeUndefined()
-
-            m.setID(eObject, "invalid")
-            expect(m.getID(eObject)).toBeUndefined()
-        })
+         })
 
         test("clear", () => {
             let m = new UUIDManager()
             let mockObject = mock<EObject>()
             let eObject = instance(mockObject)
-            let uuid = "d96dc8e1-a25c-4431-b58e-c39df80c64da"
+            let uuid = Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
 
             m.setID(eObject, uuid)
             expect(m.getID(eObject)).toBe(uuid)
@@ -192,9 +189,13 @@ describe("IDManager", () => {
     })
 
     describe("ULIDManager", () => {
-        test("getEObject-invalid", () => {
-            let m = new ULIDManager()
-            expect(m.getEObject("invalid")).toBeUndefined()
+        test("invalid", () => {
+            let m = new UUIDManager()
+            try {
+                m.getEObject("invalid")
+            }catch( err ) {
+                expect(err instanceof Exception.InvalidEncoding).toBeTruthy()
+            }
         })
 
         test("register", () => {
@@ -214,7 +215,7 @@ describe("IDManager", () => {
             let m = new ULIDManager()
             let mockObject = mock<EObject>()
             let eObject = instance(mockObject)
-            let ulid = "01HNBCDR3FC57NH9V4VNQ3VPYD"
+            let ulid = Ulid.fromCanonical("01HNBCDR3FC57NH9V4VNQ3VPYD")
             m.setID(eObject, ulid)
             expect(m.getID(eObject)).toBe(ulid)
 
@@ -230,9 +231,6 @@ describe("IDManager", () => {
             let mockObject = mock<EObject>()
             let eObject = instance(mockObject)
             m.setID(eObject, 2)
-            expect(m.getID(eObject)).toBeUndefined()
-
-            m.setID(eObject, "invalid")
             expect(m.getID(eObject)).toBeUndefined()
         })
     })

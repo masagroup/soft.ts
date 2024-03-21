@@ -27,6 +27,7 @@ import {
     XMLProcessor,
     uriToFilePath,
 } from "./internal"
+import { Uuid4 } from "id128"
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor()
@@ -204,7 +205,8 @@ describe("XMLResource", () => {
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
             let eLibrary = resource.eContents().get(0)
-            expect(idManager.getID(eLibrary)).toBe("75aa92db-b419-4259-93c4-0e542d33aa35")
+            let eLibraryUUID = Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
+            expect(idManager.getID(eLibrary)).toStrictEqual(eLibraryUUID)
         })
 
         test("load", async () => {
