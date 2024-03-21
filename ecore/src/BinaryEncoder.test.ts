@@ -1,3 +1,4 @@
+import { Uuid4 } from "id128"
 import { BinaryEncoder } from "./BinaryEncoder"
 import {
     BinaryOptions,
@@ -64,7 +65,9 @@ describe("BinaryEncoder", () => {
 
         let eDocumentRoot = eResource.eContents().get(0)
         expect(eDocumentRoot).not.toBeNull()
-        expect(idManager.setID(eDocumentRoot, "dc48710b-0e2e-419f-94fb-178c7fc1370b=")).toBeUndefined()
+        expect(
+            idManager.setID(eDocumentRoot, Uuid4.fromCanonical("dc48710b-0e2e-419f-94fb-178c7fc1370b")),
+        ).toBeUndefined()
 
         let e = new BinaryEncoder(eResource, new Map<string, any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
         let r = e.encode(eResource)

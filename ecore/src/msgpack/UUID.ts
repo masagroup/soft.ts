@@ -1,4 +1,4 @@
-import {Uuid4} from 'id128'
+import { Uuid4 } from "id128"
 
 export const EXT_UUID = 2
 

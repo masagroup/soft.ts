@@ -205,8 +205,9 @@ describe("XMLResource", () => {
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
             let eLibrary = resource.eContents().get(0)
-            let eLibraryUUID = Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
-            expect(idManager.getID(eLibrary)).toStrictEqual(eLibraryUUID)
+            let expectedUUID = Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
+            let receivedUUID = idManager.getID(eLibrary)
+            expect(expectedUUID.equal(receivedUUID)).toBeTruthy()
         })
 
         test("load", async () => {

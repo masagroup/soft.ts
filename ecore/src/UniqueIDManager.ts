@@ -112,7 +112,7 @@ export class UUIDManager extends UniqueIDManager<Uuid4, string> {
         return id ? id.toRaw() : undefined
     }
 
-    setCurrent(id: Uuid4): void { }
+    setCurrent(id: Uuid4): void {}
 }
 
 export class ULIDManager extends UniqueIDManager<Ulid, string> {
@@ -125,7 +125,6 @@ export class ULIDManager extends UniqueIDManager<Ulid, string> {
     }
 
     isID(id: Ulid): boolean {
-       
         return true
     }
     toID(v: any): Ulid {
@@ -143,7 +142,7 @@ export class ULIDManager extends UniqueIDManager<Ulid, string> {
         return id ? id.toRaw() : undefined
     }
 
-    setCurrent(id: Ulid): void { }
+    setCurrent(id: Ulid): void {}
 }
 
 export class IncrementalIDManager extends UniqueIDManager<number, number> {

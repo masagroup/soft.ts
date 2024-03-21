@@ -1,4 +1,4 @@
-import {Ulid} from 'id128'
+import { Ulid } from "id128"
 
 export const EXT_ULID = 1
 

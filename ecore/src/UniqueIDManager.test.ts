@@ -9,10 +9,9 @@
 
 import { instance, mock } from "ts-mockito"
 import { EObject, IncrementalIDManager, ULIDManager, UUIDManager } from "./internal"
-import { Uuid4 , Exception, Ulid} from "id128"
+import { Uuid4, Exception, Ulid } from "id128"
 
 describe("IDManager", () => {
-    
     describe("IncrementalIDManager", () => {
         test("invalid", () => {
             let m = new IncrementalIDManager()
@@ -113,7 +112,7 @@ describe("IDManager", () => {
             let m = new UUIDManager()
             try {
                 m.getEObject("invalid")
-            }catch( err ) {
+            } catch (err) {
                 expect(err instanceof Exception.InvalidEncoding).toBeTruthy()
             }
         })
@@ -172,7 +171,7 @@ describe("IDManager", () => {
             let eObject = instance(mockObject)
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBeUndefined()
-         })
+        })
 
         test("clear", () => {
             let m = new UUIDManager()
@@ -193,7 +192,7 @@ describe("IDManager", () => {
             let m = new UUIDManager()
             try {
                 m.getEObject("invalid")
-            }catch( err ) {
+            } catch (err) {
                 expect(err instanceof Exception.InvalidEncoding).toBeTruthy()
             }
         })

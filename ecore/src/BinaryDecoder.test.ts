@@ -1,3 +1,4 @@
+import { Uuid4 } from "id128"
 import { BinaryDecoder } from "./BinaryDecoder"
 import {
     EAttribute,
@@ -12,6 +13,7 @@ import {
     EResourceSetImpl,
     ULIDManager,
     URI,
+    UUIDManager,
     XMIProcessor,
     XMLProcessor,
     uriToFilePath,
@@ -136,7 +138,7 @@ describe("BinaryDecoder", () => {
         expect(eDocumentRootLibraryFeature).not.toBeNull()
 
         let eResource = new EResourceImpl()
-        let idManager = new ULIDManager()
+        let idManager = new UUIDManager()
         eResource.eObjectIDManager = idManager
         eResource.eURI = resourceURI
 
@@ -155,7 +157,9 @@ describe("BinaryDecoder", () => {
 
             let eLibrary = eDocumentRoot.eGet(eDocumentRootLibraryFeature) as EObject
             expect(eLibrary).not.toBeNull()
-            expect(idManager.getID(eLibrary)).toBe("d13pf-ypXLeIySkWAX03JcP-TbA=")
+            let expectedUUID = Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
+            let receivedUUID = idManager.getID(eLibrary)
+            expect(expectedUUID.equal(receivedUUID)).toBeTruthy()
         })
 
         test("decode", () => {
