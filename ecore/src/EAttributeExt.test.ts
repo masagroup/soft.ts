@@ -7,18 +7,18 @@
 //
 // *****************************************************************************
 
-import { instance, mock } from "ts-mockito";
-import { EDataType } from "./EDataType";
-import { EAttributeExt, EClassifier } from "./internal";
+import { instance, mock } from "ts-mockito"
+import { EDataType } from "./EDataType"
+import { EAttributeExt, EClassifier } from "./internal"
 
 describe("EAttributeExt", () => {
     test("basicGetEAttributeType", () => {
-        let a = new EAttributeExt();
-        expect(a.basicGetEAttributeType()).toBeNull();
+        let a = new EAttributeExt()
+        expect(a.basicGetEAttributeType()).toBeNull()
 
-        let mockDataType = mock<EDataType>();
-        let dataType = instance(mockDataType);
-        a.eType = dataType;
-        expect(a.basicGetEAttributeType()).toBe(dataType);
-    });
-});
+        let mockDataType = mock<EDataType>()
+        let dataType = instance(mockDataType)
+        a.eType = dataType
+        expect(a.basicGetEAttributeType()).toBe(dataType)
+    })
+})

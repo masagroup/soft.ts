@@ -7,18 +7,26 @@
 //
 // *****************************************************************************
 
-import { EClassifierImpl } from "./internal";
+import { EClassifierImpl } from "./internal"
 
 export class EClassifierExt extends EClassifierImpl {
     constructor() {
-        super();
+        super()
     }
 
     protected initClassifierID(): number {
-        return this.ePackage != null ? this.ePackage.eClassifiers.indexOf(this) : -1;
+        return this.ePackage != null ? this.ePackage.eClassifiers.indexOf(this) : -1
     }
 
     get defaultValue(): any {
-        return null;
+        return null
+    }
+
+    get instanceTypeName(): string {
+        return this.instanceClassName
+    }
+
+    set instanceTypeName(newInstanceTypeName: string) {
+        this.instanceClassName = newInstanceTypeName
     }
 }

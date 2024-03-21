@@ -17,8 +17,10 @@ import {
     EDataType,
     EDataTypeInternal,
     EEnum,
+    EFactoryExt,
     ENotification,
     EOperation,
+    EPackage,
     EPackageImpl,
     EReference,
     EResource,
@@ -26,11 +28,16 @@ import {
     EStructuralFeature,
     EventType,
     getEcoreFactory,
-} from "./internal";
+    URI,
+} from "./internal"
+
+export function isEPackage(o: any): o is EPackage {
+    return o == undefined ? undefined : "nsURI" in o
+}
 
 class EPackageExtAdapter extends AbstractEAdapter {
     constructor(private _pack: EPackageExt) {
-        super();
+        super()
     }
 
     notifyChanged(notification: ENotification): void {
@@ -38,40 +45,41 @@ class EPackageExtAdapter extends AbstractEAdapter {
             notification.eventType != EventType.REMOVING_ADAPTER &&
             notification.featureID == EcoreConstants.EPACKAGE__ECLASSIFIERS
         ) {
-            this._pack._nameToClassifier = null;
+            this._pack._nameToClassifier = null
         }
     }
 }
 
 export class EPackageExt extends EPackageImpl {
-    _nameToClassifier: Map<string, EClassifier> = null;
-    _adapter: EAdapter = null;
+    _nameToClassifier: Map<string, EClassifier> = null
+    _adapter: EAdapter = null
 
     constructor() {
-        super();
-        this._adapter = new EPackageExtAdapter(this);
-        this.eAdapters.add(this._adapter);
+        super()
+        this.eFactoryInstance = new EFactoryExt()
+        this._adapter = new EPackageExtAdapter(this)
+        this.eAdapters.add(this._adapter)
     }
 
     getEClassifier(name: string): EClassifier {
         if (!this._nameToClassifier) {
-            this._nameToClassifier = new Map<string, EClassifier>();
+            this._nameToClassifier = new Map<string, EClassifier>()
             for (const classifier of this.eClassifiers) {
-                this._nameToClassifier.set(classifier.name, classifier);
+                this._nameToClassifier.set(classifier.name, classifier)
             }
         }
-        return this._nameToClassifier.get(name);
+        return this._nameToClassifier.get(name)
     }
 
     protected createResource(): EResource {
-        let resource = this.eResource();
+        let resource = this.eResource()
         if (!resource) {
-            let uri = new URL(this.nsURI);
-            resource = new EResourceImpl();
-            resource.eURI = uri;
-            resource.eContents().add(this);
+            let uri = new URI(this.nsURI)
+            resource = new EResourceImpl()
+            resource.eURI = uri
+            resource.eContents().add(this)
         }
-        return resource;
+        return resource
     }
 
     protected initEClass(
@@ -79,12 +87,12 @@ export class EPackageExt extends EPackageImpl {
         name: string,
         instanceTypeName: string,
         isAbstract: boolean,
-        isInterface: boolean
+        isInterface: boolean,
     ) {
-        eClass.name = name;
-        eClass.isAbstract = isAbstract;
-        eClass.isInterface = isInterface;
-        eClass.instanceTypeName = instanceTypeName;
+        eClass.name = name
+        eClass.isAbstract = isAbstract
+        eClass.isInterface = isInterface
+        eClass.instanceTypeName = instanceTypeName
     }
 
     protected initEStructuralFeature(
@@ -100,20 +108,20 @@ export class EPackageExt extends EPackageImpl {
         isUnSettable: boolean,
         isUnique: boolean,
         isDerived: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
-        aFeature.name = name;
-        aFeature.eType = aClassifier;
-        aFeature.defaultValueLiteral = defaultValue;
-        aFeature.lowerBound = lowerBound;
-        aFeature.upperBound = upperBound;
-        aFeature.isTransient = isTransient;
-        aFeature.isVolatile = isVolatile;
-        aFeature.isChangeable = isChangeable;
-        aFeature.isUnsettable = isUnSettable;
-        aFeature.isUnique = isUnique;
-        aFeature.isDerived = isDerived;
-        aFeature.isOrdered = isOrdered;
+        aFeature.name = name
+        aFeature.eType = aClassifier
+        aFeature.defaultValueLiteral = defaultValue
+        aFeature.lowerBound = lowerBound
+        aFeature.upperBound = upperBound
+        aFeature.isTransient = isTransient
+        aFeature.isVolatile = isVolatile
+        aFeature.isChangeable = isChangeable
+        aFeature.isUnsettable = isUnSettable
+        aFeature.isUnique = isUnique
+        aFeature.isDerived = isDerived
+        aFeature.isOrdered = isOrdered
     }
 
     protected initEAttribute(
@@ -130,7 +138,7 @@ export class EPackageExt extends EPackageImpl {
         isUnique: boolean,
         isDerived: boolean,
         isOrdered: boolean,
-        isID: boolean
+        isID: boolean,
     ) {
         this.initEStructuralFeature(
             aAttribute,
@@ -145,9 +153,9 @@ export class EPackageExt extends EPackageImpl {
             isUnSettable,
             isUnique,
             isDerived,
-            isOrdered
-        );
-        aAttribute.isID = isID;
+            isOrdered,
+        )
+        aAttribute.isID = isID
     }
 
     protected initEReference(
@@ -166,7 +174,7 @@ export class EPackageExt extends EPackageImpl {
         isUnSettable: boolean,
         isUnique: boolean,
         isDerived: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
         this.initEStructuralFeature(
             aReference,
@@ -181,11 +189,11 @@ export class EPackageExt extends EPackageImpl {
             isUnSettable,
             isUnique,
             isDerived,
-            isOrdered
-        );
-        aReference.isContainment = isContainment;
-        aReference.isResolveProxies = isResolveProxies;
-        aReference.eOpposite = aOtherEnd;
+            isOrdered,
+        )
+        aReference.isContainment = isContainment
+        aReference.isResolveProxies = isResolveProxies
+        aReference.eOpposite = aOtherEnd
     }
 
     protected initEOperation(
@@ -195,14 +203,14 @@ export class EPackageExt extends EPackageImpl {
         lowerBound: number,
         upperBound: number,
         isUnique: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
-        aOperation.name = name;
-        aOperation.eType = aType;
-        aOperation.lowerBound = lowerBound;
-        aOperation.upperBound = upperBound;
-        aOperation.isUnique = isUnique;
-        aOperation.isOrdered = isOrdered;
+        aOperation.name = name
+        aOperation.eType = aType
+        aOperation.lowerBound = lowerBound
+        aOperation.upperBound = upperBound
+        aOperation.isUnique = isUnique
+        aOperation.isOrdered = isOrdered
     }
 
     protected addEParameter(
@@ -212,20 +220,20 @@ export class EPackageExt extends EPackageImpl {
         lowerBound: number,
         upperBound: number,
         isUnique: boolean,
-        isOrdered: boolean
+        isOrdered: boolean,
     ) {
-        let parameter = getEcoreFactory().createEParameterFromContainer(aOperation);
-        parameter.name = name;
-        parameter.eType = aType;
-        parameter.lowerBound = lowerBound;
-        parameter.upperBound = upperBound;
-        parameter.isUnique = isUnique;
-        parameter.isOrdered = isOrdered;
+        let parameter = getEcoreFactory().createEParameterFromContainer(aOperation)
+        parameter.name = name
+        parameter.eType = aType
+        parameter.lowerBound = lowerBound
+        parameter.upperBound = upperBound
+        parameter.isUnique = isUnique
+        parameter.isOrdered = isOrdered
     }
 
     protected initEClassifier(aClassifier: EClassifier, name: string, instanceTypeName: string) {
-        aClassifier.name = name;
-        aClassifier.instanceTypeName = instanceTypeName;
+        aClassifier.name = name
+        aClassifier.instanceTypeName = instanceTypeName
     }
 
     protected initEDataType(
@@ -233,27 +241,24 @@ export class EPackageExt extends EPackageImpl {
         name: string,
         instanceTypeName: string,
         defaultValue: string,
-        isSerializable: boolean
+        isSerializable: boolean,
     ) {
-        this.initEClassifier(aDataType, name, instanceTypeName);
-        aDataType.isSerializable = isSerializable;
+        this.initEClassifier(aDataType, name, instanceTypeName)
+        aDataType.isSerializable = isSerializable
         if (defaultValue.length > 0) {
-            let aDataTypeInternal = aDataType as EDataTypeInternal;
-            aDataTypeInternal.defaultValue = this.eFactoryInstance.createFromString(
-                aDataType,
-                defaultValue
-            );
+            let aDataTypeInternal = aDataType as EDataTypeInternal
+            aDataTypeInternal.defaultValue = this.eFactoryInstance.createFromString(aDataType, defaultValue)
         }
     }
 
     protected initEEnum(aEnum: EEnum, name: string, instanceTypeName: string) {
-        this.initEClassifier(aEnum, name, instanceTypeName);
+        this.initEClassifier(aEnum, name, instanceTypeName)
     }
 
     protected addEEnumLiteral(aEnum: EEnum, name: string, literal: string, value: number) {
-        let enumLiteral = getEcoreFactory().createEEnumLiteralFromContainer(aEnum);
-        enumLiteral.name = name;
-        enumLiteral.literal = literal;
-        enumLiteral.value = value;
+        let enumLiteral = getEcoreFactory().createEEnumLiteralFromContainer(aEnum)
+        enumLiteral.name = name
+        enumLiteral.literal = literal
+        enumLiteral.value = value
     }
 }

@@ -7,107 +7,107 @@
 //
 // *****************************************************************************
 
-import { BasicEList, EMap, EMapEntry } from "./internal";
+import { BasicEList, EMap, EMapEntry } from "./internal"
 
 class BasicEMapEntry<K, V> implements EMapEntry<K, V> {
-    private _key: K;
-    private _value: V;
+    private _key: K
+    private _value: V
 
     constructor(key: K, value: V) {
-        this._key = key;
-        this._value = value;
+        this._key = key
+        this._value = value
     }
 
     get key(): K {
-        return this._key;
+        return this._key
     }
 
     set key(newKey: K) {
-        this._key = newKey;
+        this._key = newKey
     }
 
     get value(): V {
-        return this._value;
+        return this._value
     }
 
     set value(newValue: V) {
-        this._value = newValue;
+        this._value = newValue
     }
 }
 
 export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap<K, V> {
-    private _mapData: Map<K, V>;
+    private _mapData: Map<K, V>
 
     constructor() {
-        super([], true);
-        this._mapData = new Map<K, V>();
+        super([], true)
+        this._mapData = new Map<K, V>()
     }
 
     put(key: K, value: V): void {
-        this._mapData.set(key, value);
-        this.add(this.newEntry(key, value));
+        this._mapData.set(key, value)
+        this.add(this.newEntry(key, value))
     }
 
     getValue(key: K): V {
-        return this._mapData.get(key);
+        return this._mapData.get(key)
     }
 
     removeKey(key: K): V {
         // remove from map data
-        this._mapData.delete(key);
+        this._mapData.delete(key)
         // remove from list
-        let e = this.getEntry(key);
+        let e = this.getEntry(key)
         if (e) {
-            this.remove(e);
-            return e.value;
+            this.remove(e)
+            return e.value
         }
-        return undefined;
+        return undefined
     }
 
     containsKey(key: K): boolean {
-        return this._mapData.get(key) != undefined;
+        return this._mapData.get(key) != undefined
     }
 
     containsValue(value: V): boolean {
         for (let [_, v] of this._mapData) {
             if (v == value) {
-                return true;
+                return true
             }
         }
-        return false;
+        return false
     }
 
     toMap(): Map<K, V> {
-        return this._mapData;
+        return this._mapData
     }
 
     private getEntry(key: K): EMapEntry<K, V> {
         for (const entry of this) {
             if (entry.key == key) {
-                return entry;
+                return entry
             }
         }
-        return undefined;
+        return undefined
     }
 
     protected newEntry(key: K, value: V): EMapEntry<K, V> {
-        return new BasicEMapEntry<K, V>(key, value);
+        return new BasicEMapEntry<K, V>(key, value)
     }
 
     protected didAdd(index: number, e: EMapEntry<K, V>): void {
-        this._mapData.set(e.key, e.value);
+        this._mapData.set(e.key, e.value)
     }
 
     protected didRemove(index: number, e: EMapEntry<K, V>): void {
-        this._mapData.delete(e.key);
+        this._mapData.delete(e.key)
     }
 
     protected didClear(elements: EMapEntry<K, V>[]): void {
-        this._mapData.clear();
+        this._mapData.clear()
     }
 
     protected didSet(index: number, newE: EMapEntry<K, V>, oldE: EMapEntry<K, V>): void {
-        this._mapData.delete(oldE.key);
-        this._mapData.set(newE.key, newE.value);
+        this._mapData.delete(oldE.key)
+        this._mapData.set(newE.key, newE.value)
     }
 }

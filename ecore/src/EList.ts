@@ -7,10 +7,10 @@
 //
 // *****************************************************************************
 
-import { List } from "./List";
+import { List } from "./List"
 
 export interface EList<E> extends List<E> {
-    move(to: number, e: E): void;
+    move(to: number, e: E): void
 
-    moveTo(from: number, to: number): E;
+    moveTo(from: number, to: number): E
 }

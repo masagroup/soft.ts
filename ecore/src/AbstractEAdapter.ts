@@ -7,24 +7,24 @@
 //
 // *****************************************************************************
 
-import { EAdapter, ENotification, ENotifier } from "./internal";
+import { EAdapter, ENotification, ENotifier } from "./internal"
 
 export abstract class AbstractEAdapter implements EAdapter {
-    private _target: ENotifier = null;
+    private _target: ENotifier = null
 
     get target(): ENotifier {
-        return this._target;
+        return this._target
     }
 
     set target(notifier: ENotifier) {
-        this._target = notifier;
+        this._target = notifier
     }
 
     unsetTarget(notifier: ENotifier) {
         if (this._target == notifier) {
-            this._target = null;
+            this._target = null
         }
     }
 
-    abstract notifyChanged(notification: ENotification): void;
+    abstract notifyChanged(notification: ENotification): void
 }

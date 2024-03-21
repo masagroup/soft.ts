@@ -7,12 +7,12 @@
 //
 // *****************************************************************************
 
-import { EList } from "./internal";
+import { EList } from "./internal"
 
 export interface EObjectList<E> extends EList<E> {
-    getUnResolvedList(): EList<E>;
+    getUnResolvedList(): EList<E>
 }
 
 export function isEObjectList<E>(l: EList<E>): l is EObjectList<E> {
-    return "getUnResolvedList" in l;
+    return "getUnResolvedList" in l
 }

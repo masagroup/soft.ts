@@ -7,33 +7,26 @@
 //
 // *****************************************************************************
 
-import {
-    EClassifier,
-    EcoreConstants,
-    EDataType,
-    EDataTypeImpl,
-    EventType,
-    Notification,
-} from "./internal";
+import { EClassifier, EcoreConstants, EDataType, EDataTypeImpl, EventType, Notification } from "./internal"
 
 export function isEDataType(e: EClassifier): e is EDataType {
-    return e == undefined ? undefined : "isSerializable" in e;
+    return e == undefined ? undefined : "isSerializable" in e
 }
 
 export interface EDataTypeInternal extends EDataType {
-    defaultValue: any;
+    defaultValue: any
 }
 
 export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
-    private _defaultValue: any;
+    private _defaultValue: any
 
     get defaultValue(): any {
-        return this._defaultValue;
+        return this._defaultValue
     }
 
     set defaultValue(newDefaultValue: any) {
-        let oldDefaultValue = this._defaultValue;
-        this._defaultValue = newDefaultValue;
+        let oldDefaultValue = this._defaultValue
+        this._defaultValue = newDefaultValue
         if (this.eNotificationRequired) {
             this.eNotify(
                 new Notification(
@@ -41,9 +34,9 @@ export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
                     EventType.SET,
                     EcoreConstants.EDATA_TYPE__DEFAULT_VALUE,
                     oldDefaultValue,
-                    newDefaultValue
-                )
-            );
+                    newDefaultValue,
+                ),
+            )
         }
     }
 }

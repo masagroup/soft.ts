@@ -7,34 +7,38 @@
 //
 // *****************************************************************************
 
-import { EDiagnostic } from "./internal";
+import { EDiagnostic } from "./internal"
 
 export class EDiagnosticImpl implements EDiagnostic {
-    private _message: string;
-    private _location: string;
-    private _line: number;
-    private _column: number;
+    private _message: string
+    private _location: string
+    private _line: number
+    private _column: number
 
     constructor(message: string, location: string, line: number, column: number) {
-        this._message = message;
-        this._location = location;
-        this._line = line;
-        this._column = column;
+        this._message = message
+        this._location = location
+        this._line = line
+        this._column = column
+    }
+
+    get name(): string {
+        return "EDiagnostic"
     }
 
     get message(): string {
-        return this._message;
+        return this._message
     }
 
     get location(): string {
-        return this._location;
+        return this._location
     }
 
     get line(): number {
-        return this._line;
+        return this._line
     }
 
     get column(): number {
-        return this._column;
+        return this._column
     }
 }

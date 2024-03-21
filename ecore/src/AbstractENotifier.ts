@@ -17,97 +17,85 @@ import {
     EStructuralFeature,
     EventType,
     ImmutableEList,
-} from "./internal";
+} from "./internal"
 
 class AbstractENotifierNotification extends AbstractNotification {
-    private _notifier: AbstractENotifier;
+    private _notifier: AbstractENotifier
 
-    constructor(
-        notifier: AbstractENotifier,
-        eventType: EventType,
-        oldValue: any,
-        newValue: any,
-        position: number
-    ) {
-        super(eventType, oldValue, newValue, position);
-        this._notifier = notifier;
+    constructor(notifier: AbstractENotifier, eventType: EventType, oldValue: any, newValue: any, position: number) {
+        super(eventType, oldValue, newValue, position)
+        this._notifier = notifier
     }
 
     get feature(): EStructuralFeature {
-        return null;
+        return null
     }
 
     get featureID(): number {
-        return -1;
+        return -1
     }
 
     get notifier(): ENotifier {
-        return this._notifier;
+        return this._notifier
     }
 }
 
 export class AbstractENotifierList extends BasicEList<EAdapter> {
-    private _notifier: AbstractENotifier;
+    private _notifier: AbstractENotifier
 
     constructor(notifier: AbstractENotifier) {
-        super([], true);
-        this._notifier = notifier;
+        super([], true)
+        this._notifier = notifier
     }
 
     protected didAdd(index: number, adapter: EAdapter): void {
-        adapter.target = this._notifier;
+        adapter.target = this._notifier
     }
 
     protected didRemove(index: number, adapter: EAdapter): void {
         if (this._notifier.eDeliver) {
             adapter.notifyChanged(
-                new AbstractENotifierNotification(
-                    this._notifier,
-                    EventType.REMOVING_ADAPTER,
-                    adapter,
-                    null,
-                    index
-                )
-            );
+                new AbstractENotifierNotification(this._notifier, EventType.REMOVING_ADAPTER, adapter, null, index),
+            )
         }
-        adapter.unsetTarget(this._notifier);
+        adapter.unsetTarget(this._notifier)
     }
 
     toJSON(): any {
-        return {};
+        return {}
     }
 }
 
 export abstract class AbstractENotifier implements ENotifier {
     protected eBasicAdapters(): EList<EAdapter> {
-        return null;
+        return null
     }
 
     protected eBasicHasAdapters(): boolean {
-        let adapters = this.eBasicAdapters();
-        return adapters && !adapters.isEmpty();
+        let adapters = this.eBasicAdapters()
+        return adapters && !adapters.isEmpty()
     }
 
     get eAdapters(): EList<EAdapter> {
-        return new ImmutableEList();
+        return new ImmutableEList()
     }
 
     get eDeliver(): boolean {
-        return false;
+        return false
     }
 
     set eDeliver(boolean) {
-        throw new Error("Unsupported operation.");
+        throw new Error("Unsupported operation.")
     }
 
     get eNotificationRequired(): boolean {
-        return this.eBasicHasAdapters() && this.eDeliver;
+        return this.eBasicHasAdapters() && this.eDeliver
     }
 
     eNotify(notification: ENotification): void {
         if (this.eNotificationRequired) {
             for (const adapter of this.eBasicAdapters()) {
-                adapter.notifyChanged(notification);
+                adapter.notifyChanged(notification)
             }
         }
     }

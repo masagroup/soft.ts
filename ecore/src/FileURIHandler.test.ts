@@ -7,29 +7,41 @@
 //
 // *****************************************************************************
 
-import { FileURIHandler } from "./internal";
+import { FileURIHandler, URI } from "./internal"
 
 describe("FileURIHandler", () => {
     test("canHandle", () => {
-        let uriHandler = new FileURIHandler();
+        let uriHandler = new FileURIHandler()
+        expect(uriHandler.canHandle(new URI("file://test"))).toBeTruthy()
+        expect(uriHandler.canHandle(new URI("http://test"))).toBeFalsy()
+        expect(uriHandler.canHandle(new URI("testdata/test"))).toBeTruthy()
+    })
 
-        expect(uriHandler.canHandle(new URL("file://test"))).toBeTruthy();
-        expect(uriHandler.canHandle(new URL("http://test"))).toBeFalsy();
-    });
+    test("createReadStream-Absolute", () => {
+        let uriHandler = new FileURIHandler()
+        let uri = new URI("file:///" + __dirname + "/../testdata/read-stream.txt")
+        let s = uriHandler.createReadStream(uri)
+        expect(s).not.toBeNull()
+    })
 
-    test("createReadStream", () => {
-        let uriHandler = new FileURIHandler();
-        let s = uriHandler.createReadStream(
-            new URL("file:///" + __dirname + "/../testdata/read-stream.txt")
-        );
-        expect(s).not.toBeNull();
-    });
+    test("createReadStream-Relative", () => {
+        let uriHandler = new FileURIHandler()
+        let uri = new URI("testdata/read-stream.txt")
+        let s = uriHandler.createReadStream(uri)
+        expect(s).not.toBeNull()
+    })
 
-    test("createWriteStream", () => {
-        let uriHandler = new FileURIHandler();
-        let s = uriHandler.createWriteStream(
-            new URL("file:///" + __dirname + "/../testdata/write-stream.txt")
-        );
-        expect(s).not.toBeNull();
-    });
-});
+    test("createWriteStream-Absolute", () => {
+        let uriHandler = new FileURIHandler()
+        let uri = new URI("file:///" + __dirname + "/../testdata/write-stream.txt")
+        let s = uriHandler.createWriteStream(uri)
+        expect(s).not.toBeNull()
+    })
+
+    test("createWriteStream-Relative", () => {
+        let uriHandler = new FileURIHandler()
+        let uri = new URI("testdata/write-stream.txt")
+        let s = uriHandler.createWriteStream(uri)
+        expect(s).not.toBeNull()
+    })
+})

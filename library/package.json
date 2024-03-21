@@ -24,13 +24,15 @@
     "@masagroup/ecore": "file:../ecore"
   },
   "prettier": {
-    "printWidth": 100,
-    "tabWidth": 4
+    "printWidth": 120,
+    "tabWidth": 4,
+    "semi": false
+
   },
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "verbose": true,
+    "cache": false,
     "testPathIgnorePatterns": [
       "<rootDir>/dist/"
     ]

@@ -7,24 +7,24 @@
 //
 // *****************************************************************************
 
-import { instance, mock } from "ts-mockito";
-import { EPackage, EResourceSet, XMLProcessor } from "./internal";
+import { instance, mock } from "ts-mockito"
+import { EPackage, EResourceSet, XMLProcessor } from "./internal"
 
 describe("XMLProcessor", () => {
     test("constructor.packages", () => {
-        let mockPackage = mock<EPackage>();
-        let ePackage = instance(mockPackage);
-        let xmlProcessor = new XMLProcessor([ePackage]);
-        expect(xmlProcessor).not.toBeNull();
-    });
+        let mockPackage = mock<EPackage>()
+        let ePackage = instance(mockPackage)
+        let xmlProcessor = new XMLProcessor([ePackage])
+        expect(xmlProcessor).not.toBeNull()
+    })
 
     test("constructor.resourceset", () => {
-        let mockPackage = mock<EPackage>();
-        let ePackage = instance(mockPackage);
-        let mockEResourceSet = mock<EResourceSet>();
-        let eResourceSet = instance(mockEResourceSet);
-        let xmlProcessor = new XMLProcessor(eResourceSet);
-        expect(xmlProcessor).not.toBeNull();
-        expect(xmlProcessor.getResourceSet()).toBe(eResourceSet);
-    });
-});
+        let mockPackage = mock<EPackage>()
+        let ePackage = instance(mockPackage)
+        let mockEResourceSet = mock<EResourceSet>()
+        let eResourceSet = instance(mockEResourceSet)
+        let xmlProcessor = new XMLProcessor(eResourceSet)
+        expect(xmlProcessor).not.toBeNull()
+        expect(xmlProcessor.getResourceSet()).toBe(eResourceSet)
+    })
+})

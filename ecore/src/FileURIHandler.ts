@@ -7,27 +7,31 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs";
-import { EURIHandler } from "./internal";
+import * as fs from "fs"
+import { EURIHandler, URI, uriToFilePath } from "./internal"
 
 export class FileURIHandler implements EURIHandler {
-    canHandle(uri: URL): boolean {
-        return uri.protocol == "file:" || (!uri.protocol && uri.host && !uri.search);
+    canHandle(uri: URI): boolean {
+        return uri.scheme == "file" || (!uri.scheme && !uri.host && !uri.query)
     }
 
-    createReadStream(uri: URL): fs.ReadStream {
-        return fs.existsSync(uri) ? fs.createReadStream(uri) : null;
+    createReadStream(uri: URI): fs.ReadStream {
+        let path = uriToFilePath(uri)
+        return fs.existsSync(path) ? fs.createReadStream(path) : null
     }
 
-    createWriteStream(uri: URL): fs.WriteStream {
-        return fs.createWriteStream(uri);
+    createWriteStream(uri: URI): fs.WriteStream {
+        let path = uriToFilePath(uri)
+        return fs.createWriteStream(path)
     }
 
-    readSync(uri: URL): null | string {
-        return fs.existsSync(uri) ? fs.readFileSync(uri).toString() : null;
+    readSync(uri: URI): null | Buffer {
+        let path = uriToFilePath(uri)
+        return fs.existsSync(path) ? fs.readFileSync(path) : null
     }
 
-    writeSync(uri: URL, s: string) {
-        fs.writeFileSync(uri, s);
+    writeSync(uri: URI, b: Buffer): void {
+        let path = uriToFilePath(uri)
+        fs.writeFileSync(path, b)
     }
 }

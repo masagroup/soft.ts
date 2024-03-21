@@ -7,40 +7,40 @@
 //
 // *****************************************************************************
 
-import { instance, mock, verify } from "ts-mockito";
-import { EAdapter, ENotification, ENotifierImpl } from "./internal";
+import { instance, mock, verify } from "ts-mockito"
+import { EAdapter, ENotification, ENotifierImpl } from "./internal"
 
 describe("ENotifierImpl", () => {
     test("constructor", () => {
-        let n = new ENotifierImpl();
-        expect(n.eDeliver).toBeTruthy();
-        expect(n.eAdapters.isEmpty()).toBeTruthy();
-    });
+        let n = new ENotifierImpl()
+        expect(n.eDeliver).toBeTruthy()
+        expect(n.eAdapters.isEmpty()).toBeTruthy()
+    })
     test("eDeliver", () => {
-        let n = new ENotifierImpl();
-        expect(n.eDeliver).toBeTruthy();
-        n.eDeliver = false;
-        expect(n.eDeliver).toBeFalsy();
-    });
+        let n = new ENotifierImpl()
+        expect(n.eDeliver).toBeTruthy()
+        n.eDeliver = false
+        expect(n.eDeliver).toBeFalsy()
+    })
     test("eAdapters", () => {
-        let n = new ENotifierImpl();
-        expect(n.eBasicAdapters()).toBeNull();
-        expect(n.eAdapters).not.toBeNull();
-        expect(n.eBasicAdapters()).not.toBeNull();
-    });
+        let n = new ENotifierImpl()
+        expect(n.eBasicAdapters()).toBeNull()
+        expect(n.eAdapters).not.toBeNull()
+        expect(n.eBasicAdapters()).not.toBeNull()
+    })
     test("eNotify", () => {
         // mocks
-        const mockAdapter = mock<EAdapter>();
-        const mockNotification = mock<ENotification>();
-        const adapter = instance(mockAdapter);
-        const notification = instance(mockNotification);
+        const mockAdapter = mock<EAdapter>()
+        const mockNotification = mock<ENotification>()
+        const adapter = instance(mockAdapter)
+        const notification = instance(mockNotification)
 
         // call
-        let n = new ENotifierImpl();
-        n.eAdapters.add(adapter);
-        n.eNotify(notification);
+        let n = new ENotifierImpl()
+        n.eAdapters.add(adapter)
+        n.eNotify(notification)
 
         // checks
-        verify(mockAdapter.notifyChanged(notification)).called();
-    });
-});
+        verify(mockAdapter.notifyChanged(notification)).called()
+    })
+})

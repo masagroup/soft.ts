@@ -7,18 +7,12 @@
 //
 // *****************************************************************************
 
-import {
-    AbstractNotification,
-    ENotifier,
-    EObject,
-    EStructuralFeature,
-    EventType,
-} from "./internal";
+import { AbstractNotification, ENotifier, EObject, EStructuralFeature, EventType } from "./internal"
 
 export class Notification extends AbstractNotification {
-    private _object: EObject;
-    private _feature: EStructuralFeature;
-    private _featureID: number;
+    private _object: EObject
+    private _feature: EStructuralFeature
+    private _featureID: number
 
     constructor(
         object: EObject,
@@ -26,31 +20,31 @@ export class Notification extends AbstractNotification {
         feature: EStructuralFeature | number,
         oldValue: any,
         newValue: any,
-        position: number = -1
+        position: number = -1,
     ) {
-        super(eventType, oldValue, newValue, position);
-        this._object = object;
+        super(eventType, oldValue, newValue, position)
+        this._object = object
         if (typeof feature === "number") {
-            this._featureID = feature;
-            this._feature = null;
+            this._featureID = feature
+            this._feature = null
         } else {
-            this._featureID = -1;
-            this._feature = feature;
+            this._featureID = -1
+            this._feature = feature
         }
     }
 
     get feature(): EStructuralFeature {
-        if (this._feature != null) return this._feature;
-        else return this._object.eClass().getEStructuralFeature(this._featureID);
+        if (this._feature != null) return this._feature
+        else return this._object.eClass().getEStructuralFeature(this._featureID)
     }
 
     get featureID(): number {
-        if (this._featureID != -1) return this._featureID;
-        if (this._feature != null) return this._feature.featureID;
-        return -1;
+        if (this._featureID != -1) return this._featureID
+        if (this._feature != null) return this._feature.featureID
+        return -1
     }
 
     get notifier(): ENotifier {
-        return this._object;
+        return this._object
     }
 }

@@ -7,9 +7,9 @@
 //
 // *****************************************************************************
 
-import { ENotificationChain, EResource, EResourceSet } from "./internal";
+import { ENotificationChain, EResource, EResourceSet } from "./internal"
 
 export interface EResourceInternal extends EResource {
-    basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain;
-    basicSetResourceSet(resourceSet: EResourceSet, msgs: ENotificationChain): ENotificationChain;
+    basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain
+    basicSetResourceSet(resourceSet: EResourceSet, msgs: ENotificationChain): ENotificationChain
 }

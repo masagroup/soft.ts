@@ -7,29 +7,27 @@
 //
 // *****************************************************************************
 
-import { AbstractNotifyingList, EObjectInternal, ENotifier, EStructuralFeature } from "./internal";
+import { AbstractNotifyingList, EObjectInternal, ENotifier, EStructuralFeature } from "./internal"
 
 export class BasicEDataTypeList<E> extends AbstractNotifyingList<E> {
-    private _owner: EObjectInternal;
-    private _featureID: number;
+    private _owner: EObjectInternal
+    private _featureID: number
 
     constructor(owner: EObjectInternal, featureID: number) {
-        super();
-        this._owner = owner;
-        this._featureID = featureID;
+        super()
+        this._owner = owner
+        this._featureID = featureID
     }
 
     get notifier(): ENotifier {
-        return this._owner;
+        return this._owner
     }
 
     get feature(): EStructuralFeature {
-        return this._owner != null
-            ? this._owner.eClass().getEStructuralFeature(this._featureID)
-            : null;
+        return this._owner != null ? this._owner.eClass().getEStructuralFeature(this._featureID) : null
     }
 
     get featureID(): number {
-        return this._featureID;
+        return this._featureID
     }
 }

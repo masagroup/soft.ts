@@ -7,18 +7,64 @@
 //
 // *****************************************************************************
 
-import { EClass, EObject, DynamicEObjectImpl, EFactoryImpl } from "./internal";
+import { EClass, EObject, DynamicEObjectImpl, EFactoryImpl, EDataType, isEEnum } from "./internal"
 
 export class EFactoryExt extends EFactoryImpl {
     constructor() {
-        super();
+        super()
     }
 
     create(eClass: EClass): EObject {
         if (this.ePackage != eClass.ePackage || eClass.isAbstract)
-            throw new Error("The class '" + eClass.name + "' is not a valid classifier");
-        let eObject = new DynamicEObjectImpl();
-        eObject.setEClass(eClass);
-        return eObject;
+            throw new Error("The class '" + eClass.name + "' is not a valid classifier")
+        let eObject = new DynamicEObjectImpl()
+        eObject.setEClass(eClass)
+        return eObject
+    }
+
+    // CreateFromString default implementation
+    createFromString(eDataType: EDataType, literalValue: string): any {
+        if (this.ePackage != eDataType.ePackage) {
+            throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+        }
+
+        if (isEEnum(eDataType)) {
+            let result = eDataType.getEEnumLiteralByLiteral(literalValue)
+            if (!result) {
+                throw new Error(
+                    "The value '" + literalValue + "' is not a valid enumerator of '" + eDataType.name + "'",
+                )
+            }
+            return result.value
+        }
+
+        switch (eDataType.instanceTypeName) {
+            case "number":
+                return Number(literalValue)
+            case "boolean":
+                return Boolean(literalValue)
+            case "string":
+                return literalValue
+        }
+
+        throw new Error("createFromString not implemented for '" + eDataType.name + "'")
+    }
+
+    convertToString(eDataType: EDataType, instanceValue: any): string {
+        if (this.ePackage != eDataType.ePackage) {
+            throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+        }
+
+        if (isEEnum(eDataType)) {
+            let result = eDataType.getEEnumLiteralByValue(instanceValue)
+            if (!result) {
+                throw new Error(
+                    "The value '" + instanceValue + "' is not a valid enumerator of '" + eDataType.name + "'",
+                )
+            }
+            return result.literal
+        }
+
+        return instanceValue.toString()
     }
 }

@@ -7,18 +7,18 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./internal";
+import { EObject } from "./internal"
 
 export interface EObjectIDManager {
-    clear(): void;
+    clear(): void
 
-    register(object: EObject): void;
-    unRegister(object: EObject): void;
+    register(object: EObject): void
+    unRegister(object: EObject): void
 
-    setID(object: EObject, newID: any): void;
+    setID(object: EObject, newID: any): void
 
-    getID(object: EObject): any;
-    getEObject(id: any): EObject;
+    getID(object: EObject): any
+    getEObject(id: any): EObject
 
-    getDetachedID(object: EObject): any;
+    getDetachedID(object: EObject): any
 }

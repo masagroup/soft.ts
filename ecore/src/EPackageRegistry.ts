@@ -7,16 +7,16 @@
 //
 // *****************************************************************************
 
-import { EPackage, EFactory, EPackageRegistryImpl } from "./internal";
+import { EPackage, EFactory, EPackageRegistryImpl } from "./internal"
 
 export interface EPackageRegistry {
-    registerPackage(pack: EPackage): void;
-    unregisterPackage(pack: EPackage): void;
+    registerPackage(pack: EPackage): void
+    unregisterPackage(pack: EPackage): void
 
-    getPackage(nsURI: string): EPackage;
-    getFactory(nsURI: string): EFactory;
+    getPackage(nsURI: string): EPackage
+    getFactory(nsURI: string): EFactory
 }
 
 export function getPackageRegistry(): EPackageRegistry {
-    return EPackageRegistryImpl.getInstance();
+    return EPackageRegistryImpl.getInstance()
 }

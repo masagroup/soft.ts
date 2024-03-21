@@ -7,15 +7,15 @@
 //
 // *****************************************************************************
 
-import { EList, EMapEntry } from "./internal";
+import { EList, EMapEntry } from "./internal"
 
 export interface EMap<K, V> extends EList<EMapEntry<K, V>> {
-    put(key: K, value: V): void;
-    getValue(ket: K): V;
-    removeKey(key: K): V;
+    put(key: K, value: V): void
+    getValue(ket: K): V
+    removeKey(key: K): V
 
-    containsKey(key: K): boolean;
-    containsValue(value: V): boolean;
+    containsKey(key: K): boolean
+    containsValue(value: V): boolean
 
-    toMap(): Map<K, V>;
+    toMap(): Map<K, V>
 }

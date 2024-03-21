@@ -7,9 +7,9 @@
 //
 // *****************************************************************************
 
-export interface EDiagnostic {
-    readonly message: string;
-    readonly location: string;
-    readonly line: number;
-    readonly column: number;
+export interface EDiagnostic extends Error {
+    readonly message: string
+    readonly location: string
+    readonly line: number
+    readonly column: number
 }

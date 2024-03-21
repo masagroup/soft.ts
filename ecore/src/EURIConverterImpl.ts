@@ -7,52 +7,52 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs";
-import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList } from "./internal";
+import * as fs from "fs"
+import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal"
 
 export class EURIConverterImpl implements EURIConverter {
-    private _uriHandlers: EList<EURIHandler>;
+    private _uriHandlers: EList<EURIHandler>
 
     constructor() {
-        this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()]);
+        this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()])
     }
 
-    createReadStream(uri: URL): fs.ReadStream {
-        let uriHandler = this.getURIHandler(uri);
-        return uriHandler ? uriHandler.createReadStream(uri) : null;
+    createReadStream(uri: URI): fs.ReadStream {
+        let uriHandler = this.getURIHandler(uri)
+        return uriHandler ? uriHandler.createReadStream(uri) : null
     }
 
-    createWriteStream(uri: URL): fs.WriteStream {
-        let uriHandler = this.getURIHandler(uri);
-        return uriHandler ? uriHandler.createWriteStream(uri) : null;
+    createWriteStream(uri: URI): fs.WriteStream {
+        let uriHandler = this.getURIHandler(uri)
+        return uriHandler ? uriHandler.createWriteStream(uri) : null
     }
 
-    readSync(uri: URL): null | string {
-        let uriHandler = this.getURIHandler(uri);
-        return uriHandler ? uriHandler.readSync(uri) : null;
+    readSync(uri: URI): null | Buffer {
+        let uriHandler = this.getURIHandler(uri)
+        return uriHandler ? uriHandler.readSync(uri) : null
     }
 
-    writeSync(uri: URL, s: string) {
-        let uriHandler = this.getURIHandler(uri);
+    writeSync(uri: URI, s: Buffer): void {
+        let uriHandler = this.getURIHandler(uri)
         if (uriHandler) {
-            uriHandler.writeSync(uri, s);
+            uriHandler.writeSync(uri, s)
         }
     }
 
-    normalize(uri: URL): URL {
-        return uri;
+    normalize(uri: URI): URI {
+        return uri
     }
 
-    getURIHandler(uri: URL): EURIHandler {
+    getURIHandler(uri: URI): EURIHandler {
         for (const uriHandler of this._uriHandlers) {
             if (uriHandler.canHandle(uri)) {
-                return uriHandler;
+                return uriHandler
             }
         }
-        return null;
+        return null
     }
 
     getURIHandlers(): EList<EURIHandler> {
-        return this._uriHandlers;
+        return this._uriHandlers
     }
 }

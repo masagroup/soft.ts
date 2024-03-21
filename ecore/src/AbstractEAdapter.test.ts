@@ -7,36 +7,36 @@
 //
 // *****************************************************************************
 
-import { instance, mock } from "ts-mockito";
-import { AbstractEAdapter, ENotification, ENotifier } from "./internal";
+import { instance, mock } from "ts-mockito"
+import { AbstractEAdapter, ENotification, ENotifier } from "./internal"
 
 class EAdapterTest extends AbstractEAdapter {
     notifyChanged(notification: ENotification): void {
-        throw new Error("Method not implemented.");
+        throw new Error("Method not implemented.")
     }
 }
 
 describe("AbstractEAdapter", () => {
     test("get", () => {
-        let a = new EAdapterTest();
-        expect(a.target).toBeNull();
-    });
+        let a = new EAdapterTest()
+        expect(a.target).toBeNull()
+    })
     test("set", () => {
-        let a = new EAdapterTest();
-        let mockNotifier = mock<ENotifier>();
-        let notifier = instance(mockNotifier);
-        a.target = notifier;
-        expect(a.target).not.toBeNull();
-        expect(a.target).toBe(notifier);
-    });
+        let a = new EAdapterTest()
+        let mockNotifier = mock<ENotifier>()
+        let notifier = instance(mockNotifier)
+        a.target = notifier
+        expect(a.target).not.toBeNull()
+        expect(a.target).toBe(notifier)
+    })
     test("unset", () => {
-        let a = new EAdapterTest();
-        let mockNotifier = mock<ENotifier>();
-        let notifier = instance(mockNotifier);
-        a.unsetTarget(notifier);
-        expect(a.target).toBeNull();
-        a.target = notifier;
-        a.unsetTarget(notifier);
-        expect(a.target).toBeNull();
-    });
-});
+        let a = new EAdapterTest()
+        let mockNotifier = mock<ENotifier>()
+        let notifier = instance(mockNotifier)
+        a.unsetTarget(notifier)
+        expect(a.target).toBeNull()
+        a.target = notifier
+        a.unsetTarget(notifier)
+        expect(a.target).toBeNull()
+    })
+})

@@ -7,10 +7,10 @@
 //
 // *****************************************************************************
 
-import { EResourceSet, XMLProcessor } from "./internal";
+import { EResourceSet, XMLProcessor } from "./internal"
 
 export class XMIProcessor extends XMLProcessor {
     constructor(resourceSet?: EResourceSet) {
-        super(resourceSet ? resourceSet : []);
+        super(resourceSet ? resourceSet : [])
     }
 }
