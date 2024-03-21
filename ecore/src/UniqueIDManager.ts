@@ -7,31 +7,29 @@
 //
 // *****************************************************************************
 
-import { v4 as newUUID , validate as validateUUID} from "uuid"
-import { ulid } from "ulid"
 import { EObject, EObjectIDManager } from "./internal"
+import { Ulid, Uuid4 } from "id128"
 
 export abstract class UniqueIDManager<E> implements EObjectIDManager {
-    private _detachedToID: Map<EObject,E > = new Map<EObject, E>()
+    private _detachedToID: Map<EObject, E> = new Map<EObject, E>()
     private _objectToID: Map<EObject, E> = new Map<EObject, E>()
     private _idToObject: Map<E, EObject> = new Map<E, EObject>()
 
     abstract newID(): E
-    abstract isValidID( id : E ) : boolean
-    abstract convertToID( v : any ) : E
-    abstract setCurrentID( id : E ) : void
+    abstract isValidID(id: E): boolean
+    abstract convertToID(v: any): E
+    abstract setCurrentID(id: E): void
 
-    private setObjectID( eObject : EObject, newID : E) {
+    private setObjectID(eObject: EObject, newID: E) {
         if (this._objectToID.has(eObject)) {
             let oldID = this._objectToID.get(eObject)
             this._idToObject.delete(oldID)
         }
-        
+
         if (this.isValidID(newID)) {
             this.setCurrentID(newID)
-            this._objectToID.set(eObject,newID)
-            this._idToObject.set(newID,eObject)
-
+            this._objectToID.set(eObject, newID)
+            this._idToObject.set(newID, eObject)
         } else {
             this._objectToID.delete(eObject)
         }
@@ -66,7 +64,7 @@ export abstract class UniqueIDManager<E> implements EObjectIDManager {
 
     setID(eObject: EObject, id: any): void {
         let newID = this.convertToID(id)
-        this.setObjectID(eObject,newID)
+        this.setObjectID(eObject, newID)
     }
 
     getID(eObject: EObject): any {
@@ -83,62 +81,63 @@ export abstract class UniqueIDManager<E> implements EObjectIDManager {
     }
 }
 
-export class UUIDManager extends UniqueIDManager<string> {
-    newID(): string {
-        return newUUID()
+export class UUIDManager extends UniqueIDManager<Uuid4> {
+    newID(): Uuid4 {
+        return Uuid4.generate()
     }
-    isValidID( id : string ) : boolean {
-        return validateUUID(id)
+    isValidID(id: Uuid4): boolean {
+        return true
     }
-    convertToID(v : any) : string {
+    convertToID(v: any): Uuid4 {
         if (typeof v === "string") {
-            return v    
+            return Uuid4.fromCanonical(v)
+        } else if (v instanceof Uint8Array) {
+            return Uuid4.construct(v)
         }
         return undefined
     }
-    setCurrentID( id : string ) : void {        
-    }
+    setCurrentID(id: Uuid4): void {}
 }
 
-export class ULIDManager extends UniqueIDManager<string> {
-    newID(): string {
-        return ulid()
+export class ULIDManager extends UniqueIDManager<Ulid> {
+    newID(): Ulid {
+        return Ulid.generate()
     }
-    isValidID( id : string ) : boolean {
-        return id && id.length == 26
+    isValidID(id: Ulid): boolean {
+        return true
     }
-    convertToID(v : any) : string {
+    convertToID(v: any): Ulid {
         if (typeof v === "string") {
-            return v    
+            return Ulid.fromCanonical(v)
+        } else if (v instanceof Uint8Array) {
+            return Ulid.construct(v)
         }
         return undefined
     }
-    setCurrentID( id : string ) : void {        
-    }
+    setCurrentID(id: Ulid): void {}
 }
 
 export class IncrementalIDManager extends UniqueIDManager<number> {
-    private _id : number = 0
+    private _id: number = 0
 
     newID(): number {
         return this._id++
     }
 
-    isValidID( id : number ) : boolean {
+    isValidID(id: number): boolean {
         return id >= 0
     }
 
-    convertToID(v : any) : number {
+    convertToID(v: any): number {
         if (typeof v === "string") {
-            return parseInt( v as string)
+            return parseInt(v as string)
         } else if (typeof v === "number") {
             return v as number
         }
         return undefined
     }
 
-    setCurrentID( id : number ) : void {
+    setCurrentID(id: number): void {
         this._id = id
     }
 }
-

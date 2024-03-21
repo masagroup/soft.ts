@@ -190,13 +190,13 @@ describe("XMLResource", () => {
         let resourceSet = new EResourceSetImpl()
         resourceSet.getPackageRegistry().registerPackage(ePackage)
         let resourceURI = new URI("testdata/library.complex.id.xml")
-        let resource = resourceSet.createResource( resourceURI)
+        let resource = resourceSet.createResource(resourceURI)
         resource.eObjectIDManager = idManager
         let options = new Map<string, any>([
             [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true],
             [XMLOptions.ID_ATTRIBUTE_NAME, "id"],
         ])
-        
+
         afterEach(() => {
             expect(resource).not.toBeNull()
             expect(resource.isLoaded).toBeTruthy()
@@ -219,7 +219,6 @@ describe("XMLResource", () => {
         test("loadSync", () => {
             resource.loadSync(options)
         })
-
     })
 
     describe("load.library.complex.options", () => {

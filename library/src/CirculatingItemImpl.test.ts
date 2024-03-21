@@ -16,9 +16,19 @@ import { Borrower, CirculatingItemImpl, Item, Lendable, LibraryConstants, getLib
 
 interface BorrowerInternal extends Borrower, ecore.EObjectInternal {}
 
+class DateListener extends ecore.AbstractEAdapter {
+    notifyChanged(notification: ecore.ENotification): void {
+        if (notification.eventType == getLibraryPackage().getItem_PublicationDate()) {
+            // 
+        }
+    }
+    
+}
+
 describe("CirculatingItemImpl", () => {
     test("eStaticClass", () => {
         let o = new CirculatingItemImpl()
+        o.eAdapters.add( new DateListener())
         expect(o.eStaticClass()).toBe(getLibraryPackage().getCirculatingItem())
     })
 
