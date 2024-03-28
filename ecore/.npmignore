@@ -1,5 +1,5 @@
-*
-!dist/**/*
-!package.json
-!tsconfig.json
-!README.md
+.github
+.vscode
+coverage
+node_modules
+testdata
