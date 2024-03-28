@@ -8,12 +8,10 @@
     "stripInternal": true,
     "outDir": "dist",
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
+ "exclude": [
+    ".vscode",
     "dist",
+    "node_modules",
     "testdata"
   ]
 }
