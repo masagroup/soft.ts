@@ -14,12 +14,16 @@ export class EResourceSetConstants {
 }
 
 export interface EResourceSet extends ENotifier {
-    getResources(): EList<EResource>
-    getResource(uri: URI, loadOnDemand: boolean): EResource
     createResource(uri: URI): EResource
 
+    getResources(): EList<EResource>
+    
+    getResource(uri: URI, loadOnDemand: boolean): EResource
+    getResourceAsync(uri: URI, loadOnDemand: boolean): Promise<EResource>
+    
     getEObject(uri: URI, loadOnDemand: boolean): EObject
-
+    getEObjectAsync(uri: URI, loadOnDemand: boolean): Promise<EObject>
+    
     getURIConverter(): EURIConverter
     setURIConverter(uriConverter: EURIConverter): void
 
