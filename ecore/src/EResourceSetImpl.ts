@@ -141,6 +141,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             if (resource) {
                 resource.loadSync()
             }
+            if (this._uriResourceMap) {
+                this._uriResourceMap.set(uri.toString(), resource)
+            }
             return resource
         }
 
@@ -174,7 +177,6 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
                     if (loadOnDemand && !resource.isLoaded) {
                         resource.load().then(
                             function () {
-                                // initialize resource map
                                 if (rs._uriResourceMap) {
                                     rs._uriResourceMap.set(uri.toString(), resource)
                                 }
@@ -197,6 +199,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
                 if (resource) {
                     resource.load().then(
                         function () {
+                            if (this._uriResourceMap) {
+                                this._uriResourceMap.set(uri.toString(), resource)
+                            }
                             resolve(resource)
                         },
                         reject
