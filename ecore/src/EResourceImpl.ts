@@ -526,8 +526,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doSaveToBuffer(encoder: EEncoder): Buffer {
         let r = encoder.encode(this)
-        if (r.ok) {
-            return Buffer.from(r.val)
+        if (r.isOk()) {
+            return Buffer.from(r.value)
         }
         return null
     }

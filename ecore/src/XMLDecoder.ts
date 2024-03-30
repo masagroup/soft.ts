@@ -9,7 +9,7 @@
 
 import * as fs from "fs"
 import * as sax from "sax"
-import { Err, Ok, Result } from "ts-results"
+import { Err, Ok, Result } from "ts-results-es"
 import {
     EClass,
     EClassifier,

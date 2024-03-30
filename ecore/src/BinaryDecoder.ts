@@ -1,5 +1,5 @@
 import { ReadStream } from "fs"
-import { Err, Ok, Result } from "ts-results"
+import { Err, Ok, Result } from "ts-results-es"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind"
 import {
     EClass,

@@ -38,7 +38,7 @@ describe("BinaryEncoder", () => {
         expect(eResource.eContents().isEmpty()).toBeFalsy()
         let e = new BinaryEncoder(eResource)
         let r = e.encode(eResource)
-        expect(r.ok).toBeTruthy()
+        expect(r.isOk()).toBeTruthy()
         let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()
         let result = Buffer.from(r.unwrap()).toString()
         expect(result).toBe(expected)
@@ -71,7 +71,7 @@ describe("BinaryEncoder", () => {
 
         let e = new BinaryEncoder(eResource, new Map<string, any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
         let r = e.encode(eResource)
-        expect(r.ok).toBeTruthy()
+        expect(r.isOk()).toBeTruthy()
         let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()
         let result = Buffer.from(r.unwrap()).toString()
         expect(result).toBe(expected)

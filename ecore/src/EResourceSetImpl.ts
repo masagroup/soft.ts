@@ -157,12 +157,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
                 let resource = rs._uriResourceMap.get(uri.toString())
                 if (resource) {
                     if (loadOnDemand && !resource.isLoaded) {
-                        resource.load().then(
-                            function () {
-                                resolve(resource)
-                            },
-                            reject
-                        )
+                        resource.load().then(function () {
+                            resolve(resource)
+                        }, reject)
                     } else {
                         resolve(resource)
                     }
@@ -175,15 +172,12 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
                 let resourceURI = rs._uriConverter.normalize(resource.eURI)
                 if (resourceURI.toString() == normalizedURI.toString()) {
                     if (loadOnDemand && !resource.isLoaded) {
-                        resource.load().then(
-                            function () {
-                                if (rs._uriResourceMap) {
-                                    rs._uriResourceMap.set(uri.toString(), resource)
-                                }
-                                resolve(resource)
-                            },
-                            reject
-                        )
+                        resource.load().then(function () {
+                            if (rs._uriResourceMap) {
+                                rs._uriResourceMap.set(uri.toString(), resource)
+                            }
+                            resolve(resource)
+                        }, reject)
                     } else {
                         resolve(resource)
                     }
@@ -197,15 +191,12 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             if (loadOnDemand) {
                 let resource = rs.createResource(uri)
                 if (resource) {
-                    resource.load().then(
-                        function () {
-                            if (this._uriResourceMap) {
-                                this._uriResourceMap.set(uri.toString(), resource)
-                            }
-                            resolve(resource)
-                        },
-                        reject
-                    )
+                    resource.load().then(function () {
+                        if (this._uriResourceMap) {
+                            this._uriResourceMap.set(uri.toString(), resource)
+                        }
+                        resolve(resource)
+                    }, reject)
                 } else {
                     resolve(resource)
                 }
@@ -227,9 +218,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         let ndxHash = objectURIStr.lastIndexOf("#")
         let resourceURI = ndxHash != -1 ? new URI(objectURIStr.slice(0, ndxHash)) : objectURI
         let objectFragment = ndxHash != -1 ? objectURIStr.slice(ndxHash + 1) : ""
-        return this.getResourceAsync(resourceURI, loadOnDemand).then(
-            resource => resource?.getEObject(objectFragment)
-        )
+        return this.getResourceAsync(resourceURI, loadOnDemand).then((resource) => resource?.getEObject(objectFragment))
     }
 
     getURIConverter(): EURIConverter {
