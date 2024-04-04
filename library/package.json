@@ -33,6 +33,16 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "cache": false,
+    "transform": {
+      "^.+\\.[tj]s$": ["ts-jest", {
+        "tsconfig": {
+          "allowJs": true
+        }
+      }]
+    },
+    "transformIgnorePatterns": [
+      "<rootDir>/node_modules/(?!@masagroup/ecore)"
+    ],
     "testPathIgnorePatterns": [
       "<rootDir>/dist/"
     ]
