@@ -12,7 +12,7 @@
 export enum BookCategory {
     BIOGRAPHY = 2,
     MYSTERY = 0,
-    SCIENCEFICTION = 1,
+    SCIENCEFICTION = 1
 }
 
 export function bookCategoryToString(bookCategory: BookCategory): string {

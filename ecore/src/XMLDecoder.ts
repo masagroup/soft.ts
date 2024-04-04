@@ -9,7 +9,7 @@
 
 import * as fs from "fs"
 import * as sax from "sax"
-import { Err, Ok, Result } from "ts-results"
+import { Err, Ok, Result } from "ts-results-es"
 import {
     EClass,
     EClassifier,
@@ -34,7 +34,7 @@ import {
     isEDataType,
     XMLNamespaces,
     XMLOptions,
-    URI,
+    URI
 } from "./internal"
 import { XMLConstants } from "./XMLConstants"
 
@@ -53,7 +53,7 @@ enum LoadFeatureKind {
     Many,
     ManyAdd,
     ManyMove,
-    Other,
+    Other
 }
 
 export class XMLDecoder implements EDecoder {
@@ -73,8 +73,8 @@ export class XMLDecoder implements EDecoder {
         { uri: XMLConstants.xsiURI, local: XMLConstants.schemaLocationAttrib },
         {
             uri: XMLConstants.xsiURI,
-            local: XMLConstants.noNamespaceSchemaLocationAttrib,
-        },
+            local: XMLConstants.noNamespaceSchemaLocationAttrib
+        }
     ]
     protected _isResolveDeferred: boolean = false
     protected _isSuppressDocumentRoot: boolean = false
@@ -171,7 +171,7 @@ export class XMLDecoder implements EDecoder {
             trim: true,
             lowercase: true,
             xmlns: true,
-            position: true,
+            position: true
         })
         saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t)
         saxParser.onclosetag = (t: string) => this.onEndTag(t)
@@ -233,7 +233,7 @@ export class XMLDecoder implements EDecoder {
             trim: true,
             lowercase: true,
             xmlns: true,
-            position: true,
+            position: true
         })
         saxStream.on("processinginstruction", (n) => this.onProcessingInstruction(n))
         saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t))
@@ -324,7 +324,7 @@ export class XMLDecoder implements EDecoder {
 
     private onError(err: Error) {
         this.error(
-            new EDiagnosticImpl(err.message, this._resource.eURI.toString(), this._parser.line, this._parser.column),
+            new EDiagnosticImpl(err.message, this._resource.eURI.toString(), this._parser.line, this._parser.column)
         )
     }
 
@@ -392,7 +392,7 @@ export class XMLDecoder implements EDecoder {
 
         let xsiNoNamespaceSchemaLocation = this.getAttributeValue(
             XMLConstants.xsiURI,
-            XMLConstants.noNamespaceSchemaLocationAttrib,
+            XMLConstants.noNamespaceSchemaLocationAttrib
         )
         if (xsiNoNamespaceSchemaLocation) {
             this.handleXSINoNamespaceSchemaLocation(xsiSchemaLocation)
@@ -429,8 +429,8 @@ export class XMLDecoder implements EDecoder {
                     "Class {'" + uri + +"':'" + typeName + "}' not found",
                     this._resource.eURI.toString(),
                     this._parser.line,
-                    this._parser.column,
-                ),
+                    this._parser.column
+                )
             )
         }
     }
@@ -646,8 +646,8 @@ export class XMLDecoder implements EDecoder {
                         "Unresolved reference '" + reference.id + "'",
                         this._resource.eURI.toString(),
                         this._parser.line,
-                        this._parser.column,
-                    ),
+                        this._parser.column
+                    )
                 )
             }
         }
@@ -840,7 +840,7 @@ export class XMLDecoder implements EDecoder {
                     object: eObject,
                     feature: eReference,
                     id: id,
-                    pos: position,
+                    pos: position
                 } as XMLReference)
             }
 
@@ -891,8 +891,8 @@ export class XMLDecoder implements EDecoder {
                 "Feature " + name + " not found",
                 this._resource.eURI?.toString(),
                 this._parser.column,
-                this._parser.line,
-            ),
+                this._parser.line
+            )
         )
     }
 
@@ -902,8 +902,8 @@ export class XMLDecoder implements EDecoder {
                 "Package " + name + " not found",
                 this._resource.eURI?.toString(),
                 this._parser.column,
-                this._parser.line,
-            ),
+                this._parser.line
+            )
         )
     }
 
@@ -913,8 +913,8 @@ export class XMLDecoder implements EDecoder {
                 "URI " + name + " not found",
                 this._resource.eURI?.toString(),
                 this._parser.column,
-                this._parser.line,
-            ),
+                this._parser.line
+            )
         )
     }
 

@@ -25,7 +25,7 @@ import {
     XMLEncoder,
     XMLOptions,
     XMLProcessor,
-    uriToFilePath,
+    uriToFilePath
 } from "./internal"
 import { Uuid4 } from "id128"
 
@@ -111,7 +111,7 @@ describe("XMLResource", () => {
                 .replace(/\r?\n|\r/g, "\n")
             const result = xmlProcessor.saveToString(
                 resource,
-                new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, new ExtendedMetaData()]]),
+                new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, new ExtendedMetaData()]])
             )
             expect(result).toBe(expected)
         })
@@ -195,7 +195,7 @@ describe("XMLResource", () => {
         resource.eObjectIDManager = idManager
         let options = new Map<string, any>([
             [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true],
-            [XMLOptions.ID_ATTRIBUTE_NAME, "id"],
+            [XMLOptions.ID_ATTRIBUTE_NAME, "id"]
         ])
 
         afterEach(() => {
@@ -233,7 +233,7 @@ describe("XMLResource", () => {
         let resource: EResource = null
         let options = new Map<string, any>([
             [XMLOptions.EXTENDED_META_DATA, new ExtendedMetaData()],
-            [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true],
+            [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true]
         ])
 
         afterEach(() => {
@@ -286,7 +286,7 @@ describe("XMLResource", () => {
             let path = uriToFilePath(eObjectURI)
             let buffer = fs.readFileSync(path)
             let result = decoder.decodeObject(buffer)
-            if (result.ok) eObject = result.val
+            if (result.isOk()) eObject = result.value
         })
 
         test("decodeObjectAsync", async () => {
@@ -381,8 +381,8 @@ describe("XMLResource", () => {
 
         test("encodeObject", () => {
             let result = xmlEncoder.encodeObject(eBook)
-            if (result.ok) {
-                expect(new TextDecoder().decode(Buffer.from(result.val))).toBe(expected)
+            if (result.isOk()) {
+                expect(new TextDecoder().decode(Buffer.from(result.value))).toBe(expected)
             }
         })
     })

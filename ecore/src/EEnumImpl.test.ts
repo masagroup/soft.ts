@@ -29,7 +29,7 @@ import {
     ImmutableEList,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EEnumLiteralInternal extends EEnumLiteral, EObjectInternal {}
@@ -65,8 +65,8 @@ describe("EEnumImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EENUM__ELITERALS, false),
-                (o.eLiterals as EObjectList<EEnumLiteral>).getUnResolvedList(),
-            ),
+                (o.eLiterals as EObjectList<EEnumLiteral>).getUnResolvedList()
+            )
         ).toBeTruthy()
     })
 

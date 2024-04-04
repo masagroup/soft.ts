@@ -5,7 +5,7 @@ export const EXT_ULID = 1
 export const ulidExtension = {
     type: EXT_ULID,
     encode: encodeULIDExtension,
-    decode: decodeULIDExtension,
+    decode: decodeULIDExtension
 }
 
 export function encodeULIDExtension(object: unknown): Uint8Array | null {

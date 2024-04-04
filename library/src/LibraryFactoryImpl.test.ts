@@ -33,7 +33,7 @@ import {
     VideoCassette,
     Writer,
     bookCategoryFromString,
-    bookCategoryToString,
+    bookCategoryToString
 } from "./internal"
 
 describe("LibraryFactoryImpl", () => {

@@ -27,7 +27,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class ETypedElementImpl extends ENamedElementImpl implements ETypedElement {
@@ -64,8 +64,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
                             EventType.RESOLVE,
                             EcoreConstants.ETYPED_ELEMENT__ETYPE,
                             oldEType,
-                            newEType,
-                        ),
+                            newEType
+                        )
                     )
                 }
             }
@@ -79,7 +79,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         this._eType = newEType
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType),
+                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType)
             )
         }
     }
@@ -117,8 +117,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
                     EventType.SET,
                     EcoreConstants.ETYPED_ELEMENT__ORDERED,
                     oldIsOrdered,
-                    newIsOrdered,
-                ),
+                    newIsOrdered
+                )
             )
         }
     }
@@ -139,7 +139,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         this._isUnique = newIsUnique
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldIsUnique, newIsUnique),
+                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldIsUnique, newIsUnique)
             )
         }
     }
@@ -160,8 +160,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
                     EventType.SET,
                     EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND,
                     oldLowerBound,
-                    newLowerBound,
-                ),
+                    newLowerBound
+                )
             )
         }
     }
@@ -182,8 +182,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
                     EventType.SET,
                     EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND,
                     oldUpperBound,
-                    newUpperBound,
-                ),
+                    newUpperBound
+                )
             )
         }
     }

@@ -43,7 +43,7 @@ export class XMLNamespaces {
         } else {
             this._namespaces[this._namespacesSize] = {
                 prefix: prefix,
-                uri: uri,
+                uri: uri
             }
         }
         return false

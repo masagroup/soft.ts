@@ -33,7 +33,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EClassifierInternal extends EClassifier, EObjectInternal {}
@@ -313,8 +313,8 @@ describe("EGenericTypeImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, false),
-                (o.eTypeArguments as EObjectList<EGenericType>).getUnResolvedList(),
-            ),
+                (o.eTypeArguments as EObjectList<EGenericType>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER, true)).toStrictEqual(o.eTypeParameter)
         expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, true)).toStrictEqual(o.eUpperBound)
@@ -336,8 +336,8 @@ describe("EGenericTypeImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
-                    anything(),
-                ),
+                    anything()
+                )
             ).thenReturn(null)
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, false)).toBe(value)
@@ -345,8 +345,8 @@ describe("EGenericTypeImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
-                    anything(),
-                ),
+                    anything()
+                )
             ).once()
         }
         {
@@ -358,8 +358,8 @@ describe("EGenericTypeImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
-                    anything(),
-                ),
+                    anything()
+                )
             ).thenReturn(null)
 
             // set list with new contents
@@ -371,8 +371,8 @@ describe("EGenericTypeImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
-                    anything(),
-                ),
+                    anything()
+                )
             ).once()
         }
 
@@ -389,8 +389,8 @@ describe("EGenericTypeImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
-                    anything(),
-                ),
+                    anything()
+                )
             ).thenReturn(null)
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, false)).toBe(value)
@@ -398,8 +398,8 @@ describe("EGenericTypeImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
-                    anything(),
-                ),
+                    anything()
+                )
             ).once()
         }
     })
@@ -471,8 +471,8 @@ describe("EGenericTypeImpl", () => {
                 mockValue.eInverseAdd(
                     o,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
-                    anything(),
-                ),
+                    anything()
+                )
             ).thenReturn(null)
 
             o.eTypeArguments.add(value)

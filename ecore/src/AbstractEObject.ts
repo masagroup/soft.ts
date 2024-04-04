@@ -37,7 +37,7 @@ import {
     isMapType,
     isProxy,
     Notification,
-    URI,
+    URI
 } from "./internal"
 
 function isNumeric(n) {
@@ -242,7 +242,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        resolve: boolean,
+        resolve: boolean
     ): any {
         if (isContainer(dynamicFeature)) {
             let featureID = this.eClass().getFeatureID(dynamicFeature)
@@ -278,7 +278,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                     notifications = oldObject.eInverseRemove(
                                         this,
                                         EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications,
+                                        notifications
                                     )
                                 }
                                 if (newValue) {
@@ -286,7 +286,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                     notifications = newObject.eInverseAdd(
                                         this,
                                         EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications,
+                                        notifications
                                     )
                                 }
                             } else {
@@ -347,7 +347,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 inverse,
                 opposite,
                 feature.isResolveProxies,
-                feature.isUnsettable,
+                feature.isUnsettable
             )
         }
         return null
@@ -384,7 +384,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        newValue: any,
+        newValue: any
     ) {
         if (isContainer(dynamicFeature)) {
             // container
@@ -422,7 +422,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         notifications = oldObject.eInverseRemove(
                             this,
                             EOPPOSITE_FEATURE_BASE - featureID,
-                            notifications,
+                            notifications
                         )
                     }
                     if (newObject) {
@@ -499,7 +499,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     protected eDynamicPropertiesIsSet(
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
-        dynamicFeatureID: number,
+        dynamicFeatureID: number
     ): boolean {
         if (isContainer(dynamicFeature)) {
             let featureID = this.eClass().getFeatureID(dynamicFeature)
@@ -539,7 +539,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     protected eDynamicPropertiesUnset(
         properties: EDynamicProperties,
         dynamicFeature: EStructuralFeature,
-        dynamicFeatureID: number,
+        dynamicFeatureID: number
     ) {
         if (isContainer(dynamicFeature)) {
             if (this.eInternalContainer()) {
@@ -564,7 +564,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         notifications = oldObject.eInverseRemove(
                             this,
                             EOPPOSITE_FEATURE_BASE - featureID,
-                            notifications,
+                            notifications
                         )
                     }
                 } else {
@@ -647,7 +647,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         otherEnd: EObject,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        notifications: ENotificationChain,
+        notifications: ENotificationChain
     ): ENotificationChain {
         if (dynamicFeature.isMany) {
             let value = properties.eDynamicGet(dynamicFeatureID)
@@ -713,7 +713,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     otherEnd,
                     feature,
                     dynamicFeatureID,
-                    notifications,
+                    notifications
                 )
             } else {
                 throw new Error("EObject doesn't define any dynamic properties")
@@ -727,7 +727,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         otherEnd: EObject,
         dynamicFeature: EStructuralFeature,
         dynamicFeatureID: number,
-        notifications: ENotificationChain,
+        notifications: ENotificationChain
     ): ENotificationChain {
         if (dynamicFeature.isMany) {
             let value = properties.eDynamicGet(dynamicFeatureID)
@@ -758,7 +758,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     protected eBasicSetContainer(
         newContainer: EObject,
         newContainerFeatureID: number,
-        n: ENotificationChain,
+        n: ENotificationChain
     ): ENotificationChain {
         let notifications = n
         let oldResource = this.eInternalResource()
@@ -814,7 +814,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     EventType.SET,
                     newContainerFeatureID,
                     oldContainerFeatureID == newContainerFeatureID ? oldContainer : null,
-                    newContainer,
+                    newContainer
                 )
                 if (notifications != null) {
                     notifications.add(notification)
@@ -834,7 +834,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 return eContainer.eInverseRemove(
                     this,
                     EOPPOSITE_FEATURE_BASE - this.eInternalContainerFeatureID(),
-                    notifications,
+                    notifications
                 )
         }
         return notifications

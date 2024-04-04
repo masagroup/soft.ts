@@ -16,7 +16,7 @@ import {
     UUIDManager,
     XMIProcessor,
     XMLProcessor,
-    uriToFilePath,
+    uriToFilePath
 } from "./internal"
 
 import * as fs from "fs"
@@ -115,7 +115,7 @@ describe("BinaryDecoder", () => {
             let path = uriToFilePath(resourceURI)
             let s = fs.readFileSync(path)
             let result = decoder.decode(s)
-            expect(result.ok).toBeTruthy()
+            expect(result.isOk()).toBeTruthy()
             resource = result.unwrap()
         })
 
@@ -166,7 +166,7 @@ describe("BinaryDecoder", () => {
             let path = uriToFilePath(resourceURI)
             let s = fs.readFileSync(path)
             let result = decoder.decode(s)
-            expect(result.ok).toBeTruthy()
+            expect(result.isOk()).toBeTruthy()
             resource = result.unwrap()
         })
 

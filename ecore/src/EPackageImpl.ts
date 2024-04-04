@@ -31,7 +31,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EPackageImpl extends ENamedElementImpl implements EPackage {
@@ -76,7 +76,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                 notifications = oldEFactoryInstance.eInverseRemove(
                     this,
                     EcoreConstants.EFACTORY__EPACKAGE,
-                    notifications,
+                    notifications
                 )
             }
             if (isEObjectInternal(newEFactoryInstance)) {
@@ -99,7 +99,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                 EventType.SET,
                 EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,
                 oldEFactoryInstance,
-                newEFactoryInstance,
+                newEFactoryInstance
             )
             if (notifications != null) {
                 notifications.add(notification)
@@ -137,7 +137,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         this._nsPrefix = newNsPrefix
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_PREFIX, oldNsPrefix, newNsPrefix),
+                new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_PREFIX, oldNsPrefix, newNsPrefix)
             )
         }
     }
@@ -170,7 +170,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
             true,
             true,
             false,
-            false,
+            false
         )
     }
     protected initESubPackages(): EList<EPackage> {
@@ -182,7 +182,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
             true,
             true,
             false,
-            false,
+            false
         )
     }
 
@@ -320,7 +320,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                     msgs = this.eFactoryInstance.eInverseRemove(
                         this,
                         EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,
-                        msgs,
+                        msgs
                     )
                 }
                 return this.basicSetEFactoryInstance(otherEnd as EFactory, msgs)

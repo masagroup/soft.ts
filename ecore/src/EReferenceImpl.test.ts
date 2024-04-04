@@ -34,7 +34,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EAttributeInternal extends EAttribute, EObjectInternal {}
@@ -188,8 +188,8 @@ describe("EReferenceImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, false),
-                (o.eKeys as EObjectList<EAttribute>).getUnResolvedList(),
-            ),
+                (o.eKeys as EObjectList<EAttribute>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EREFERENCE__EOPPOSITE, true)).toStrictEqual(o.eOpposite)
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__EREFERENCE_TYPE, true)).toThrow(Error)

@@ -29,7 +29,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EEnumInternal extends EEnum, EObjectInternal {}

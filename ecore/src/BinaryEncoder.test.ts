@@ -11,7 +11,7 @@ import {
     XMLOptions,
     XMLProcessor,
     uriToFilePath,
-    UUIDManager,
+    UUIDManager
 } from "./internal"
 import * as fs from "fs"
 
@@ -38,7 +38,7 @@ describe("BinaryEncoder", () => {
         expect(eResource.eContents().isEmpty()).toBeFalsy()
         let e = new BinaryEncoder(eResource)
         let r = e.encode(eResource)
-        expect(r.ok).toBeTruthy()
+        expect(r.isOk()).toBeTruthy()
         let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()
         let result = Buffer.from(r.unwrap()).toString()
         expect(result).toBe(expected)
@@ -66,12 +66,12 @@ describe("BinaryEncoder", () => {
         let eDocumentRoot = eResource.eContents().get(0)
         expect(eDocumentRoot).not.toBeNull()
         expect(
-            idManager.setID(eDocumentRoot, Uuid4.fromCanonical("dc48710b-0e2e-419f-94fb-178c7fc1370b")),
+            idManager.setID(eDocumentRoot, Uuid4.fromCanonical("dc48710b-0e2e-419f-94fb-178c7fc1370b"))
         ).toBeUndefined()
 
         let e = new BinaryEncoder(eResource, new Map<string, any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
         let r = e.encode(eResource)
-        expect(r.ok).toBeTruthy()
+        expect(r.isOk()).toBeTruthy()
         let expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()
         let result = Buffer.from(r.unwrap()).toString()
         expect(result).toBe(expected)

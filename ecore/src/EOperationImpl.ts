@@ -31,7 +31,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EOperationImpl extends ETypedElementExt implements EOperation {
@@ -97,8 +97,8 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
                     EventType.SET,
                     EcoreConstants.EOPERATION__OPERATION_ID,
                     oldOperationID,
-                    newOperationID,
-                ),
+                    newOperationID
+                )
             )
         }
     }
@@ -117,7 +117,7 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
             false,
             false,
             true,
-            true,
+            true
         )
     }
     protected initEParameters(): EList<EParameter> {
@@ -129,7 +129,7 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
             true,
             true,
             false,
-            false,
+            false
         )
     }
 

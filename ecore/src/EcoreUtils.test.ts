@@ -17,7 +17,7 @@ import {
     getEcoreFactory,
     getEcorePackage,
     ImmutableEList,
-    URI,
+    URI
 } from "./internal"
 
 describe("EcoreUtils", () => {

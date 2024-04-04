@@ -34,7 +34,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EClassifierInternal extends EClassifier, EObjectInternal {}
@@ -214,16 +214,16 @@ describe("EPackageImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, false),
-                (o.eClassifiers as EObjectList<EClassifier>).getUnResolvedList(),
-            ),
+                (o.eClassifiers as EObjectList<EClassifier>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, true)).toStrictEqual(o.eFactoryInstance)
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, true)).toStrictEqual(o.eSubPackages)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, false),
-                (o.eSubPackages as EObjectList<EPackage>).getUnResolvedList(),
-            ),
+                (o.eSubPackages as EObjectList<EPackage>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUPER_PACKAGE, true)).toStrictEqual(o.eSuperPackage)
         expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, true)).toStrictEqual(o.nsPrefix)
@@ -358,7 +358,7 @@ describe("EPackageImpl", () => {
             let mockOther = mock<EFactoryInternal>()
             let other = instance(mockOther)
             when(
-                mockValue.eInverseRemove(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null),
+                mockValue.eInverseRemove(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
             ).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
             expect(o.eFactoryInstance).toBe(other)

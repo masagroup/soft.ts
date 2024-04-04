@@ -30,7 +30,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EReferenceImpl extends EStructuralFeatureExt implements EReference {
@@ -73,8 +73,8 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
                             EventType.RESOLVE,
                             EcoreConstants.EREFERENCE__EOPPOSITE,
                             oldEOpposite,
-                            newEOpposite,
-                        ),
+                            newEOpposite
+                        )
                     )
                 }
             }
@@ -88,7 +88,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         this._eOpposite = newEOpposite
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite),
+                new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite)
             )
         }
     }
@@ -129,8 +129,8 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
                     EventType.SET,
                     EcoreConstants.EREFERENCE__CONTAINMENT,
                     oldIsContainment,
-                    newIsContainment,
-                ),
+                    newIsContainment
+                )
             )
         }
     }
@@ -151,8 +151,8 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
                     EventType.SET,
                     EcoreConstants.EREFERENCE__RESOLVE_PROXIES,
                     oldIsResolveProxies,
-                    newIsResolveProxies,
-                ),
+                    newIsResolveProxies
+                )
             )
         }
     }
@@ -166,7 +166,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
             false,
             false,
             true,
-            false,
+            false
         )
     }
 

@@ -27,7 +27,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute {

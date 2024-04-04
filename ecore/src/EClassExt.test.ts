@@ -16,7 +16,7 @@ import {
     EReferenceExt,
     getEcoreFactory,
     getEcorePackage,
-    ImmutableEList,
+    ImmutableEList
 } from "./internal"
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {

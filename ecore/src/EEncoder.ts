@@ -1,7 +1,7 @@
 import { EObject } from "./EObject"
 import { EResource } from "./EResource"
 import * as fs from "fs"
-import { Result } from "ts-results"
+import { Result } from "ts-results-es"
 
 export interface EEncoder {
     encode(eResource: EResource): Result<Uint8Array, Error>

@@ -18,7 +18,7 @@ import {
     CirculatingItemImpl,
     LibraryConstants,
     Writer,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 export class BookImpl extends CirculatingItemImpl implements Book {

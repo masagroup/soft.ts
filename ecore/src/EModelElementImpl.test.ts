@@ -28,7 +28,7 @@ import {
     ImmutableEList,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EAnnotationInternal extends EAnnotation, EObjectInternal {}
@@ -56,8 +56,8 @@ describe("EModelElementImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, false),
-                (o.eAnnotations as EObjectList<EAnnotation>).getUnResolvedList(),
-            ),
+                (o.eAnnotations as EObjectList<EAnnotation>).getUnResolvedList()
+            )
         ).toBeTruthy()
     })
 

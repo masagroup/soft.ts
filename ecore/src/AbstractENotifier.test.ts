@@ -14,7 +14,7 @@ import {
     EList,
     ENotification,
     EventType,
-    ImmutableEList,
+    ImmutableEList
 } from "./internal"
 
 describe("AbstractENotifierList", () => {

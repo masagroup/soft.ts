@@ -30,7 +30,7 @@ import {
     EStructuralFeature,
     ETypeParameter,
     ETypedElement,
-    EcoreFactoryExt,
+    EcoreFactoryExt
 } from "./internal"
 
 export interface EcoreFactory extends EFactory {

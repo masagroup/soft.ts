@@ -46,7 +46,7 @@ import {
     ETypeParameterImpl,
     ETypedElement,
     EcoreConstants,
-    EcoreFactory,
+    EcoreFactory
 } from "./internal"
 
 export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {

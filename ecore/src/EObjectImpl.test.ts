@@ -31,7 +31,7 @@ import {
     ImmutableEList,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 describe("EObjectImpl", () => {

@@ -21,7 +21,7 @@ import {
     EventType,
     ImmutableEList,
     isEAttribute,
-    isEReference,
+    isEReference
 } from "./internal"
 
 export function isEClass(e: EClassifier): e is EClass {

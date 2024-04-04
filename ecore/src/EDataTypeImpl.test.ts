@@ -28,7 +28,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 describe("EDataTypeImpl", () => {

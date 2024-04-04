@@ -19,7 +19,7 @@ import {
     ImmutableEList,
     EResourceImpl,
     EResourceSetImpl,
-    URI,
+    URI
 } from "./internal"
 
 describe("DynamicEObjectImpl", () => {

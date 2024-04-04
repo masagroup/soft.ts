@@ -34,7 +34,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EModelElementInternal extends EModelElement, EObjectInternal {}
@@ -195,8 +195,8 @@ describe("EAnnotationImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EANNOTATION__CONTENTS, false),
-                (o.contents as EObjectList<EObject>).getUnResolvedList(),
-            ),
+                (o.contents as EObjectList<EObject>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EANNOTATION__DETAILS, true)).toStrictEqual(o.details)
         expect(o.eGetFromID(EcoreConstants.EANNOTATION__EMODEL_ELEMENT, true)).toStrictEqual(o.eModelElement)
@@ -204,8 +204,8 @@ describe("EAnnotationImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EANNOTATION__REFERENCES, false),
-                (o.references as EObjectList<EObject>).getUnResolvedList(),
-            ),
+                (o.references as EObjectList<EObject>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EANNOTATION__SOURCE, true)).toStrictEqual(o.source)
     })
@@ -219,7 +219,7 @@ describe("EAnnotationImpl", () => {
             let value = instance(mockValue)
             let l = new ImmutableEList<EObject>([value])
             when(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything()),
+                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())
             ).thenReturn(null)
 
             // set list with new contents
@@ -228,7 +228,7 @@ describe("EAnnotationImpl", () => {
             expect(o.contents.size()).toBe(1)
             expect(o.contents.get(0)).toBe(value)
             verify(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything()),
+                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())
             ).once()
         }
 
@@ -371,7 +371,7 @@ describe("EAnnotationImpl", () => {
             let mockValue = mock<EObjectInternal>()
             let value = instance(mockValue)
             when(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything()),
+                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())
             ).thenReturn(null)
 
             o.contents.add(value)
