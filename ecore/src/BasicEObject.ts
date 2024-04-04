@@ -20,7 +20,7 @@ import {
     EResource,
     EStructuralFeature,
     ImmutableEList,
-    URI,
+    URI
 } from "./internal"
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>
@@ -200,7 +200,7 @@ export class BasicEObject extends AbstractEObject {
     eCrossReferences(): EList<EObject> {
         if (!this._crossReferencesListAdapter)
             this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
-                c: EClass,
+                c: EClass
             ): EList<EStructuralFeature> {
                 return c.eCrossReferenceFeatures
             })

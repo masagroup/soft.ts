@@ -25,7 +25,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringToStringMapEntry {
@@ -53,7 +53,7 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
         this._key = newKey
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, oldKey, newKey),
+                new Notification(this, EventType.SET, EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, oldKey, newKey)
             )
         }
     }
@@ -74,8 +74,8 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
                     EventType.SET,
                     EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE,
                     oldValue,
-                    newValue,
-                ),
+                    newValue
+                )
             )
         }
     }

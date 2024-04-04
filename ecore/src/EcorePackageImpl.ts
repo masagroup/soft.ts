@@ -20,7 +20,7 @@ import {
     EcoreConstants,
     EcoreFactory,
     EcorePackage,
-    getEcoreFactory,
+    getEcoreFactory
 } from "./internal"
 
 export class EcorePackageImpl extends EPackageExt implements EcorePackage {
@@ -679,7 +679,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEReferenceFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__DETAILS)
         factory.createEReferenceFromContainerAndClassID(
             this._eAnnotationClass,
-            EcoreConstants.EANNOTATION__EMODEL_ELEMENT,
+            EcoreConstants.EANNOTATION__EMODEL_ELEMENT
         )
         factory.createEReferenceFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__CONTENTS)
         factory.createEReferenceFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__REFERENCES)
@@ -688,7 +688,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEAttributeFromContainerAndClassID(this._eAttributeClass, EcoreConstants.EATTRIBUTE__ID)
         factory.createEReferenceFromContainerAndClassID(
             this._eAttributeClass,
-            EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE,
+            EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE
         )
 
         this._eClassClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ECLASS)
@@ -702,7 +702,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__ECONTAINMENT_FEATURES)
         factory.createEReferenceFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES,
+            EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES
         )
         factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_ATTRIBUTES)
         factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_REFERENCES)
@@ -711,67 +711,67 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_OPERATIONS)
         factory.createEReferenceFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES,
+            EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES
         )
         factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_SUPER_TYPES)
         factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EID_ATTRIBUTE)
         factory.createEOperationFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__IS_SUPER_TYPE_OF_ECLASS,
+            EcoreConstants.ECLASS__IS_SUPER_TYPE_OF_ECLASS
         )
         factory.createEOperationFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__GET_FEATURE_COUNT)
         factory.createEOperationFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_EINT,
+            EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_EINT
         )
         factory.createEOperationFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_ESTRING,
+            EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_ESTRING
         )
         factory.createEOperationFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__GET_FEATURE_ID_ESTRUCTURALFEATURE,
+            EcoreConstants.ECLASS__GET_FEATURE_ID_ESTRUCTURALFEATURE
         )
         factory.createEOperationFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__GET_OPERATION_COUNT)
         factory.createEOperationFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__GET_EOPERATION_EINT)
         factory.createEOperationFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__GET_OPERATION_ID_EOPERATION,
+            EcoreConstants.ECLASS__GET_OPERATION_ID_EOPERATION
         )
         factory.createEOperationFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__GET_OVERRIDE_EOPERATION,
+            EcoreConstants.ECLASS__GET_OVERRIDE_EOPERATION
         )
         factory.createEOperationFromContainerAndClassID(
             this._eClassClass,
-            EcoreConstants.ECLASS__GET_FEATURE_TYPE_ESTRUCTURALFEATURE,
+            EcoreConstants.ECLASS__GET_FEATURE_TYPE_ESTRUCTURALFEATURE
         )
 
         this._eClassifierClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ECLASSIFIER)
         factory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
-            EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME,
+            EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
-            EcoreConstants.ECLASSIFIER__INSTANCE_CLASS,
+            EcoreConstants.ECLASSIFIER__INSTANCE_CLASS
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
-            EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME,
+            EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
-            EcoreConstants.ECLASSIFIER__DEFAULT_VALUE,
+            EcoreConstants.ECLASSIFIER__DEFAULT_VALUE
         )
         factory.createEReferenceFromContainerAndClassID(this._eClassifierClass, EcoreConstants.ECLASSIFIER__EPACKAGE)
         factory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
-            EcoreConstants.ECLASSIFIER__CLASSIFIER_ID,
+            EcoreConstants.ECLASSIFIER__CLASSIFIER_ID
         )
         factory.createEOperationFromContainerAndClassID(
             this._eClassifierClass,
-            EcoreConstants.ECLASSIFIER__IS_INSTANCE_EJAVAOBJECT,
+            EcoreConstants.ECLASSIFIER__IS_INSTANCE_EJAVAOBJECT
         )
 
         this._eDataTypeClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EDATA_TYPE)
@@ -781,12 +781,12 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEReferenceFromContainerAndClassID(this._eEnumClass, EcoreConstants.EENUM__ELITERALS)
         factory.createEOperationFromContainerAndClassID(
             this._eEnumClass,
-            EcoreConstants.EENUM__GET_EENUM_LITERAL_ESTRING,
+            EcoreConstants.EENUM__GET_EENUM_LITERAL_ESTRING
         )
         factory.createEOperationFromContainerAndClassID(this._eEnumClass, EcoreConstants.EENUM__GET_EENUM_LITERAL_EINT)
         factory.createEOperationFromContainerAndClassID(
             this._eEnumClass,
-            EcoreConstants.EENUM__GET_EENUM_LITERAL_BY_LITERAL_ESTRING,
+            EcoreConstants.EENUM__GET_EENUM_LITERAL_BY_LITERAL_ESTRING
         )
 
         this._eEnumLiteralClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EENUM_LITERAL)
@@ -800,51 +800,51 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEOperationFromContainerAndClassID(this._eFactoryClass, EcoreConstants.EFACTORY__CREATE_ECLASS)
         factory.createEOperationFromContainerAndClassID(
             this._eFactoryClass,
-            EcoreConstants.EFACTORY__CREATE_FROM_STRING_EDATATYPE_ESTRING,
+            EcoreConstants.EFACTORY__CREATE_FROM_STRING_EDATATYPE_ESTRING
         )
         factory.createEOperationFromContainerAndClassID(
             this._eFactoryClass,
-            EcoreConstants.EFACTORY__CONVERT_TO_STRING_EDATATYPE_EJAVAOBJECT,
+            EcoreConstants.EFACTORY__CONVERT_TO_STRING_EDATATYPE_EJAVAOBJECT
         )
 
         this._eGenericTypeClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EGENERIC_TYPE)
         factory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
-            EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
+            EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND
         )
         factory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
-            EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
+            EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS
         )
         factory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
-            EcoreConstants.EGENERIC_TYPE__ERAW_TYPE,
+            EcoreConstants.EGENERIC_TYPE__ERAW_TYPE
         )
         factory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
-            EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
+            EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND
         )
         factory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
-            EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER,
+            EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER
         )
         factory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
-            EcoreConstants.EGENERIC_TYPE__ECLASSIFIER,
+            EcoreConstants.EGENERIC_TYPE__ECLASSIFIER
         )
         factory.createEOperationFromContainerAndClassID(
             this._eGenericTypeClass,
-            EcoreConstants.EGENERIC_TYPE__IS_INSTANCE_EJAVAOBJECT,
+            EcoreConstants.EGENERIC_TYPE__IS_INSTANCE_EJAVAOBJECT
         )
 
         this._eModelElementClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EMODEL_ELEMENT)
         factory.createEReferenceFromContainerAndClassID(
             this._eModelElementClass,
-            EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS,
+            EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS
         )
         factory.createEOperationFromContainerAndClassID(
             this._eModelElementClass,
-            EcoreConstants.EMODEL_ELEMENT__GET_EANNOTATION_ESTRING,
+            EcoreConstants.EMODEL_ELEMENT__GET_EANNOTATION_ESTRING
         )
 
         this._eNamedElementClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ENAMED_ELEMENT)
@@ -858,47 +858,47 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECONTAINING_FEATURE)
         factory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
-            EcoreConstants.EOBJECT__ECONTAINMENT_FEATURE,
+            EcoreConstants.EOBJECT__ECONTAINMENT_FEATURE
         )
         factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECONTENTS)
         factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__EALL_CONTENTS)
         factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECROSS_REFERENCES)
         factory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
-            EcoreConstants.EOBJECT__EGET_ESTRUCTURALFEATURE,
+            EcoreConstants.EOBJECT__EGET_ESTRUCTURALFEATURE
         )
         factory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
-            EcoreConstants.EOBJECT__EGET_ESTRUCTURALFEATURE_EBOOLEAN,
+            EcoreConstants.EOBJECT__EGET_ESTRUCTURALFEATURE_EBOOLEAN
         )
         factory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
-            EcoreConstants.EOBJECT__ESET_ESTRUCTURALFEATURE_EJAVAOBJECT,
+            EcoreConstants.EOBJECT__ESET_ESTRUCTURALFEATURE_EJAVAOBJECT
         )
         factory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
-            EcoreConstants.EOBJECT__EIS_SET_ESTRUCTURALFEATURE,
+            EcoreConstants.EOBJECT__EIS_SET_ESTRUCTURALFEATURE
         )
         factory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
-            EcoreConstants.EOBJECT__EUNSET_ESTRUCTURALFEATURE,
+            EcoreConstants.EOBJECT__EUNSET_ESTRUCTURALFEATURE
         )
         factory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
-            EcoreConstants.EOBJECT__EINVOKE_EOPERATION_EELIST,
+            EcoreConstants.EOBJECT__EINVOKE_EOPERATION_EELIST
         )
 
         this._eOperationClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EOPERATION)
         factory.createEReferenceFromContainerAndClassID(
             this._eOperationClass,
-            EcoreConstants.EOPERATION__ECONTAINING_CLASS,
+            EcoreConstants.EOPERATION__ECONTAINING_CLASS
         )
         factory.createEReferenceFromContainerAndClassID(this._eOperationClass, EcoreConstants.EOPERATION__EPARAMETERS)
         factory.createEReferenceFromContainerAndClassID(this._eOperationClass, EcoreConstants.EOPERATION__EEXCEPTIONS)
         factory.createEAttributeFromContainerAndClassID(this._eOperationClass, EcoreConstants.EOPERATION__OPERATION_ID)
         factory.createEOperationFromContainerAndClassID(
             this._eOperationClass,
-            EcoreConstants.EOPERATION__IS_OVERRIDE_OF_EOPERATION,
+            EcoreConstants.EOPERATION__IS_OVERRIDE_OF_EOPERATION
         )
 
         this._ePackageClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EPACKAGE)
@@ -910,7 +910,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEReferenceFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__ESUPER_PACKAGE)
         factory.createEOperationFromContainerAndClassID(
             this._ePackageClass,
-            EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING,
+            EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING
         )
 
         this._eParameterClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EPARAMETER)
@@ -921,97 +921,97 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         factory.createEAttributeFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__CONTAINER)
         factory.createEAttributeFromContainerAndClassID(
             this._eReferenceClass,
-            EcoreConstants.EREFERENCE__RESOLVE_PROXIES,
+            EcoreConstants.EREFERENCE__RESOLVE_PROXIES
         )
         factory.createEReferenceFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__EOPPOSITE)
         factory.createEReferenceFromContainerAndClassID(
             this._eReferenceClass,
-            EcoreConstants.EREFERENCE__EREFERENCE_TYPE,
+            EcoreConstants.EREFERENCE__EREFERENCE_TYPE
         )
         factory.createEReferenceFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__EKEYS)
 
         this._eStringToStringMapEntryClass = factory.createEClassFromContainerAndClassID(
             this,
-            EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY,
+            EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStringToStringMapEntryClass,
-            EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY,
+            EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStringToStringMapEntryClass,
-            EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE,
+            EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE
         )
 
         this._eStructuralFeatureClass = factory.createEClassFromContainerAndClassID(
             this,
-            EcoreConstants.ESTRUCTURAL_FEATURE,
+            EcoreConstants.ESTRUCTURAL_FEATURE
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE,
+            EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE,
+            EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT,
+            EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL,
+            EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE,
+            EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE,
+            EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED,
+            EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED
         )
         factory.createEReferenceFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
+            EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID,
+            EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID
         )
         factory.createEOperationFromContainerAndClassID(
             this._eStructuralFeatureClass,
-            EcoreConstants.ESTRUCTURAL_FEATURE__GET_CONTAINER_CLASS,
+            EcoreConstants.ESTRUCTURAL_FEATURE__GET_CONTAINER_CLASS
         )
 
         this._eTypeParameterClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ETYPE_PARAMETER)
         factory.createEReferenceFromContainerAndClassID(
             this._eTypeParameterClass,
-            EcoreConstants.ETYPE_PARAMETER__EBOUNDS,
+            EcoreConstants.ETYPE_PARAMETER__EBOUNDS
         )
 
         this._eTypedElementClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ETYPED_ELEMENT)
         factory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
-            EcoreConstants.ETYPED_ELEMENT__ORDERED,
+            EcoreConstants.ETYPED_ELEMENT__ORDERED
         )
         factory.createEAttributeFromContainerAndClassID(this._eTypedElementClass, EcoreConstants.ETYPED_ELEMENT__UNIQUE)
         factory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
-            EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND,
+            EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND
         )
         factory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
-            EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND,
+            EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND
         )
         factory.createEAttributeFromContainerAndClassID(this._eTypedElementClass, EcoreConstants.ETYPED_ELEMENT__MANY)
         factory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
-            EcoreConstants.ETYPED_ELEMENT__REQUIRED,
+            EcoreConstants.ETYPED_ELEMENT__REQUIRED
         )
         factory.createEReferenceFromContainerAndClassID(this._eTypedElementClass, EcoreConstants.ETYPED_ELEMENT__ETYPE)
 
@@ -1025,12 +1025,12 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this._eCharType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ECHAR)
         this._eCharacterObjectType = factory.createEDataTypeFromContainerAndClassID(
             this,
-            EcoreConstants.ECHARACTER_OBJECT,
+            EcoreConstants.ECHARACTER_OBJECT
         )
         this._eDateType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDATE)
         this._eDiagnosticChainType = factory.createEDataTypeFromContainerAndClassID(
             this,
-            EcoreConstants.EDIAGNOSTIC_CHAIN,
+            EcoreConstants.EDIAGNOSTIC_CHAIN
         )
         this._eDoubleType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDOUBLE)
         this._eDoubleObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDOUBLE_OBJECT)
@@ -1039,7 +1039,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this._eFeatureMapType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFEATURE_MAP)
         this._eFeatureMapEntryType = factory.createEDataTypeFromContainerAndClassID(
             this,
-            EcoreConstants.EFEATURE_MAP_ENTRY,
+            EcoreConstants.EFEATURE_MAP_ENTRY
         )
         this._eFloatType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFLOAT)
         this._eFloatObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFLOAT_OBJECT)
@@ -1047,7 +1047,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this._eIntegerObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EINTEGER_OBJECT)
         this._eInvocationTargetExceptionType = factory.createEDataTypeFromContainerAndClassID(
             this,
-            EcoreConstants.EINVOCATION_TARGET_EXCEPTION,
+            EcoreConstants.EINVOCATION_TARGET_EXCEPTION
         )
         this._eJavaClassType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EJAVA_CLASS)
         this._eJavaObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EJAVA_OBJECT)
@@ -1095,7 +1095,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEAnnotation_Details(),
@@ -1113,7 +1113,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEAnnotation_EModelElement(),
@@ -1131,7 +1131,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEAnnotation_Contents(),
@@ -1149,7 +1149,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEAnnotation_References(),
@@ -1167,7 +1167,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
 
         this.initEClass(this._eAttributeClass, "EAttribute", "ecore.EAttribute", false, false)
@@ -1185,7 +1185,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEAttribute_EAttributeType(),
@@ -1203,7 +1203,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
 
         this.initEClass(this._eClassClass, "EClass", "ecore.EClass", false, false)
@@ -1221,7 +1221,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEClass_Interface(),
@@ -1237,7 +1237,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEClass_EStructuralFeatures(),
@@ -1255,7 +1255,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAttributes(),
@@ -1273,7 +1273,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EReferences(),
@@ -1291,7 +1291,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_ESuperTypes(),
@@ -1309,7 +1309,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EOperations(),
@@ -1327,7 +1327,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EContainmentFeatures(),
@@ -1345,7 +1345,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_ECrossReferenceFeatures(),
@@ -1363,7 +1363,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAllAttributes(),
@@ -1381,7 +1381,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAllReferences(),
@@ -1399,7 +1399,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAllContainments(),
@@ -1417,7 +1417,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAllCrossReferences(),
@@ -1435,7 +1435,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAllOperations(),
@@ -1453,7 +1453,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAllStructuralFeatures(),
@@ -1471,7 +1471,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EAllSuperTypes(),
@@ -1489,7 +1489,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEClass_EIDAttribute(),
@@ -1507,7 +1507,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         {
             let operation = this.getEClass_IsSuperTypeOf_EClass()
@@ -1567,7 +1567,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEClassifier_InstanceClass(),
@@ -1583,7 +1583,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEClassifier_InstanceTypeName(),
@@ -1599,7 +1599,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEClassifier_DefaultValue(),
@@ -1615,7 +1615,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             true,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEClassifier_ClassifierID(),
@@ -1631,7 +1631,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEClassifier_EPackage(),
@@ -1649,7 +1649,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         {
             let operation = this.getEClassifier_IsInstance_EJavaObject()
@@ -1672,7 +1672,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
 
         this.initEClass(this._eEnumClass, "EEnum", "ecore.EEnum", false, false)
@@ -1692,7 +1692,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         {
             let operation = this.getEEnum_GetEEnumLiteral_EString()
@@ -1725,7 +1725,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEEnumLiteral_Instance(),
@@ -1741,7 +1741,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEEnumLiteral_Literal(),
@@ -1757,7 +1757,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEEnumLiteral_EEnum(),
@@ -1775,7 +1775,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
 
         this.initEClass(this._eFactoryClass, "EFactory", "ecore.EFactory", false, false)
@@ -1795,7 +1795,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         {
             let operation = this.getEFactory_Create_EClass()
@@ -1832,7 +1832,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEGenericType_ETypeArguments(),
@@ -1850,7 +1850,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEGenericType_ERawType(),
@@ -1868,7 +1868,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEGenericType_ELowerBound(),
@@ -1886,7 +1886,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEGenericType_ETypeParameter(),
@@ -1904,7 +1904,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEGenericType_EClassifier(),
@@ -1922,7 +1922,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         {
             let operation = this.getEGenericType_IsInstance_EJavaObject()
@@ -1947,7 +1947,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         {
             let operation = this.getEModelElement_GetEAnnotation_EString()
@@ -1970,7 +1970,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
 
         this.initEClass(this._eObjectClass, "EObject", "ecore.EObject", false, false)
@@ -1985,7 +1985,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             0,
             1,
             true,
-            true,
+            true
         )
         this.initEOperation(
             this.getEObject_EContainmentFeature(),
@@ -1994,7 +1994,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             0,
             1,
             true,
-            true,
+            true
         )
         this.initEOperation(this.getEObject_EContents(), this.getEEList(), "eContents", 0, 1, true, true)
         this.initEOperation(this.getEObject_EAllContents(), this.getETreeIterator(), "eAllContents", 0, 1, true, true)
@@ -2048,7 +2048,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEOperation_EContainingClass(),
@@ -2066,7 +2066,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEOperation_EParameters(),
@@ -2084,7 +2084,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEOperation_EExceptions(),
@@ -2102,7 +2102,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             true,
             false,
-            true,
+            true
         )
         {
             let operation = this.getEOperation_IsOverrideOf_EOperation()
@@ -2125,7 +2125,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEPackage_NsPrefix(),
@@ -2141,7 +2141,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEPackage_EFactoryInstance(),
@@ -2159,7 +2159,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEPackage_EClassifiers(),
@@ -2177,7 +2177,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEPackage_ESubPackages(),
@@ -2195,7 +2195,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEPackage_ESuperPackage(),
@@ -2213,7 +2213,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         {
             let operation = this.getEPackage_GetEClassifier_EString()
@@ -2238,7 +2238,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
 
         this.initEClass(this._eReferenceClass, "EReference", "ecore.EReference", false, false)
@@ -2256,7 +2256,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEReference_Container(),
@@ -2272,7 +2272,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             true,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEReference_ResolveProxies(),
@@ -2288,7 +2288,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEReference_EOpposite(),
@@ -2306,7 +2306,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEReference(
             this.getEReference_EReferenceType(),
@@ -2324,7 +2324,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             true,
-            true,
+            true
         )
         this.initEReference(
             this.getEReference_EKeys(),
@@ -2342,7 +2342,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
 
         this.initEClass(this._eStringToStringMapEntryClass, "EStringToStringMapEntry", "ecore.EMapEntry", false, false)
@@ -2360,7 +2360,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStringToStringMapEntry_Value(),
@@ -2376,7 +2376,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
 
         this.initEClass(this._eStructuralFeatureClass, "EStructuralFeature", "ecore.EStructuralFeature", true, false)
@@ -2394,7 +2394,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStructuralFeature_Volatile(),
@@ -2410,7 +2410,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStructuralFeature_Transient(),
@@ -2426,7 +2426,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStructuralFeature_DefaultValueLiteral(),
@@ -2442,7 +2442,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStructuralFeature_DefaultValue(),
@@ -2458,7 +2458,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             true,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStructuralFeature_Unsettable(),
@@ -2474,7 +2474,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStructuralFeature_Derived(),
@@ -2490,7 +2490,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getEStructuralFeature_FeatureID(),
@@ -2506,7 +2506,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getEStructuralFeature_EContainingClass(),
@@ -2524,7 +2524,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
         this.initEOperation(
             this.getEStructuralFeature_GetContainerClass(),
@@ -2533,7 +2533,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             0,
             1,
             true,
-            true,
+            true
         )
 
         this.initEClass(this._eTypeParameterClass, "ETypeParameter", "ecore.ETypeParameter", false, false)
@@ -2553,7 +2553,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false,
             true,
             false,
-            true,
+            true
         )
 
         this.initEClass(this._eTypedElementClass, "ETypedElement", "ecore.ETypedElement", true, false)
@@ -2571,7 +2571,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getETypedElement_Unique(),
@@ -2587,7 +2587,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getETypedElement_LowerBound(),
@@ -2603,7 +2603,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getETypedElement_UpperBound(),
@@ -2619,7 +2619,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             false,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getETypedElement_Many(),
@@ -2635,7 +2635,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             true,
             true,
-            false,
+            false
         )
         this.initEAttribute(
             this.getETypedElement_Required(),
@@ -2651,7 +2651,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             true,
             true,
-            false,
+            false
         )
         this.initEReference(
             this.getETypedElement_EType(),
@@ -2669,7 +2669,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true,
             true,
             false,
-            true,
+            true
         )
 
         this.initEDataType(this.getEBigDecimal(), "EBigDecimal", "number", "0", true)
@@ -2698,7 +2698,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             "EInvocationTargetException",
             "java.lang.reflect.InvocationTargetException",
             "",
-            false,
+            false
         )
         this.initEDataType(this.getEJavaClass(), "EJavaClass", "any", "", true)
         this.initEDataType(this.getEJavaObject(), "EJavaObject", "any", "", true)

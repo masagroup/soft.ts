@@ -27,7 +27,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral {
@@ -65,7 +65,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         this._instance = newInstance
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__INSTANCE, oldInstance, newInstance),
+                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__INSTANCE, oldInstance, newInstance)
             )
         }
     }
@@ -81,7 +81,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         this._literal = newLiteral
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__LITERAL, oldLiteral, newLiteral),
+                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__LITERAL, oldLiteral, newLiteral)
             )
         }
     }

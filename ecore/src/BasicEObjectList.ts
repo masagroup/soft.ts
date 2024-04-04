@@ -18,7 +18,7 @@ import {
     EStructuralFeature,
     AbstractNotifyingList,
     EventType,
-    EOPPOSITE_FEATURE_BASE,
+    EOPPOSITE_FEATURE_BASE
 } from "./internal"
 
 export class BasicEObjectList<O extends EObject>
@@ -42,7 +42,7 @@ export class BasicEObjectList<O extends EObject>
         inverse: boolean,
         opposite: boolean,
         proxies: boolean,
-        unset: boolean,
+        unset: boolean
     ) {
         super()
         this._owner = owner
@@ -172,7 +172,7 @@ export class BasicEObjectList<O extends EObject>
             _inverse: this._inverse,
             _opposite: this._opposite,
             _proxies: this._proxies,
-            _unset: this._unset,
+            _unset: this._unset
         }
     }
 }

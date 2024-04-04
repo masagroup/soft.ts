@@ -14,13 +14,13 @@ var uriRegExp = new RegExp(
     "(([a-zA-Z][a-zA-Z0-9+.-]*):)?" + // scheme:
         "([^?#]*)" + // authority and path
         "(?:\\?([^#]*))?" + // ?query
-        "(?:#(.*))?",
+        "(?:#(.*))?"
 ) // #fragment
 var authorityAndPathRegExp = new RegExp("^//([^/]*)(/.*)?$")
 var authorityRegExp = new RegExp(
     "(?:([^@:]*)(?::([^@]*))?@)?" + // username, password
         "(\\[[^\\]]*\\]|[^\\[:]*)" + // host (IP-literal (e.g. '['+IPv6+']',dotted-IPv4, or named host)
-        "(?::(\\d*))?",
+        "(?::(\\d*))?"
 ) // port)
 
 export function uriToFilePath(uri: URI): string {
@@ -69,7 +69,7 @@ function parseURI(u: string): URIParts {
         port: port,
         path: path,
         query: uriMatchs[4] ?? "",
-        fragment: uriMatchs[5] ?? "",
+        fragment: uriMatchs[5] ?? ""
     }
 }
 
@@ -188,7 +188,7 @@ export class URI {
             port: this.port,
             path: np,
             query: this.query,
-            fragment: this.fragment,
+            fragment: this.fragment
         })
     }
 
@@ -225,7 +225,7 @@ export class URI {
                 port: this.port,
                 path: path,
                 query: ref.query,
-                fragment: ref.fragment,
+                fragment: ref.fragment
             })
         } else {
             return new URI({
@@ -235,7 +235,7 @@ export class URI {
                 port: ref.port,
                 path: ref.path,
                 query: ref.query,
-                fragment: ref.fragment,
+                fragment: ref.fragment
             })
         }
     }
@@ -272,7 +272,7 @@ export class URI {
             host: this.host,
             port: this.port,
             path: this.path,
-            query: this.query,
+            query: this.query
         })
     }
 
@@ -283,7 +283,7 @@ export class URI {
             host: this.host,
             port: this.port,
             path: this.path,
-            fragment: this.fragment,
+            fragment: this.fragment
         })
     }
 }

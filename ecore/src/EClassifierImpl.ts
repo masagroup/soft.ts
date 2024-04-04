@@ -27,7 +27,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
@@ -65,8 +65,8 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
                     EventType.SET,
                     EcoreConstants.ECLASSIFIER__CLASSIFIER_ID,
                     oldClassifierID,
-                    newClassifierID,
-                ),
+                    newClassifierID
+                )
             )
         }
     }
@@ -100,8 +100,8 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
                     EventType.SET,
                     EcoreConstants.ECLASSIFIER__INSTANCE_CLASS,
                     oldInstanceClass,
-                    newInstanceClass,
-                ),
+                    newInstanceClass
+                )
             )
         }
     }
@@ -122,8 +122,8 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
                     EventType.SET,
                     EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME,
                     oldInstanceClassName,
-                    newInstanceClassName,
-                ),
+                    newInstanceClassName
+                )
             )
         }
     }

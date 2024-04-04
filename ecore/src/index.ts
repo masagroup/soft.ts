@@ -97,5 +97,5 @@ export {
     BinaryEncoder,
     URI,
     URIParts,
-    uriToFilePath,
+    uriToFilePath
 } from "./internal"

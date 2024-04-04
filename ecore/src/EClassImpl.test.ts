@@ -36,7 +36,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EAttributeInternal extends EAttribute, EObjectInternal {}
@@ -229,75 +229,75 @@ describe("EClassImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_ATTRIBUTES, false),
-                (o.eAllAttributes as EObjectList<EAttribute>).getUnResolvedList(),
-            ),
+                (o.eAllAttributes as EObjectList<EAttribute>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_CONTAINMENTS, true)).toStrictEqual(o.eAllContainments)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_CONTAINMENTS, false),
-                (o.eAllContainments as EObjectList<EReference>).getUnResolvedList(),
-            ),
+                (o.eAllContainments as EObjectList<EReference>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_CROSS_REFERENCES, true)).toStrictEqual(o.eAllCrossReferences)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_CROSS_REFERENCES, false),
-                (o.eAllCrossReferences as EObjectList<EReference>).getUnResolvedList(),
-            ),
+                (o.eAllCrossReferences as EObjectList<EReference>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_OPERATIONS, true)).toStrictEqual(o.eAllOperations)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_OPERATIONS, false),
-                (o.eAllOperations as EObjectList<EOperation>).getUnResolvedList(),
-            ),
+                (o.eAllOperations as EObjectList<EOperation>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_REFERENCES, true)).toStrictEqual(o.eAllReferences)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_REFERENCES, false),
-                (o.eAllReferences as EObjectList<EReference>).getUnResolvedList(),
-            ),
+                (o.eAllReferences as EObjectList<EReference>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES, true)).toStrictEqual(
-            o.eAllStructuralFeatures,
+            o.eAllStructuralFeatures
         )
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES, false),
-                (o.eAllStructuralFeatures as EObjectList<EStructuralFeature>).getUnResolvedList(),
-            ),
+                (o.eAllStructuralFeatures as EObjectList<EStructuralFeature>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EALL_SUPER_TYPES, true)).toStrictEqual(o.eAllSuperTypes)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EALL_SUPER_TYPES, false),
-                (o.eAllSuperTypes as EObjectList<EClass>).getUnResolvedList(),
-            ),
+                (o.eAllSuperTypes as EObjectList<EClass>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EATTRIBUTES, true)).toStrictEqual(o.eAttributes)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EATTRIBUTES, false),
-                (o.eAttributes as EObjectList<EAttribute>).getUnResolvedList(),
-            ),
+                (o.eAttributes as EObjectList<EAttribute>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__ECONTAINMENT_FEATURES, true)).toStrictEqual(o.eContainmentFeatures)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__ECONTAINMENT_FEATURES, false),
-                (o.eContainmentFeatures as EObjectList<EStructuralFeature>).getUnResolvedList(),
-            ),
+                (o.eContainmentFeatures as EObjectList<EStructuralFeature>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES, true)).toStrictEqual(
-            o.eCrossReferenceFeatures,
+            o.eCrossReferenceFeatures
         )
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES, false),
-                (o.eCrossReferenceFeatures as EObjectList<EStructuralFeature>).getUnResolvedList(),
-            ),
+                (o.eCrossReferenceFeatures as EObjectList<EStructuralFeature>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(() => o.eGetFromID(EcoreConstants.ECLASS__EID_ATTRIBUTE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ECLASS__EID_ATTRIBUTE, false)).toThrow(Error)
@@ -305,29 +305,29 @@ describe("EClassImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EOPERATIONS, false),
-                (o.eOperations as EObjectList<EOperation>).getUnResolvedList(),
-            ),
+                (o.eOperations as EObjectList<EOperation>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__EREFERENCES, true)).toStrictEqual(o.eReferences)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__EREFERENCES, false),
-                (o.eReferences as EObjectList<EReference>).getUnResolvedList(),
-            ),
+                (o.eReferences as EObjectList<EReference>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, true)).toStrictEqual(o.eStructuralFeatures)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, false),
-                (o.eStructuralFeatures as EObjectList<EStructuralFeature>).getUnResolvedList(),
-            ),
+                (o.eStructuralFeatures as EObjectList<EStructuralFeature>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__ESUPER_TYPES, true)).toStrictEqual(o.eSuperTypes)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ECLASS__ESUPER_TYPES, false),
-                (o.eSuperTypes as EObjectList<EClass>).getUnResolvedList(),
-            ),
+                (o.eSuperTypes as EObjectList<EClass>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.ECLASS__INTERFACE, true)).toStrictEqual(o.isInterface)
     })
@@ -361,7 +361,7 @@ describe("EClassImpl", () => {
             let value = instance(mockValue)
             let l = new ImmutableEList<EStructuralFeature>([value])
             when(
-                mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything()),
+                mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything())
             ).thenReturn(null)
 
             // set list with new contents
@@ -517,7 +517,7 @@ describe("EClassImpl", () => {
             let mockValue = mock<EStructuralFeatureInternal>()
             let value = instance(mockValue)
             when(
-                mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything()),
+                mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything())
             ).thenReturn(null)
 
             o.eStructuralFeatures.add(value)

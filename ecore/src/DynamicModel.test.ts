@@ -17,7 +17,7 @@ import {
     EReference,
     getEcoreFactory,
     getEcorePackage,
-    UNBOUNDED_MULTIPLICITY,
+    UNBOUNDED_MULTIPLICITY
 } from "./internal"
 
 class DynamicMetaModel {

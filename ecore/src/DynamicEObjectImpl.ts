@@ -17,7 +17,7 @@ import {
     EOperation,
     EStructuralFeature,
     EventType,
-    getEcorePackage,
+    getEcorePackage
 } from "./internal"
 
 function resize(arr: any[], newSize: number, defaultValue: any) {

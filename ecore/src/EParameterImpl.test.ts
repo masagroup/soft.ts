@@ -25,7 +25,7 @@ import {
     EcoreConstants,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EOperationInternal extends EOperation, EObjectInternal {}

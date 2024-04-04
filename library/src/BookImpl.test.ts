@@ -19,7 +19,7 @@ import {
     CirculatingItem,
     LibraryConstants,
     Writer,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 interface BookIndexInternal extends BookIndex, ecore.EObjectInternal {}

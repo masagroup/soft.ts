@@ -5,7 +5,7 @@ import { uuidExtension } from "./UUID"
 export class ExtData {
     constructor(
         readonly type: number,
-        readonly data: Uint8Array,
+        readonly data: Uint8Array
     ) {}
 }
 
@@ -40,7 +40,7 @@ export class ExtensionCodec implements ExtensionCodecType {
     public register({
         type,
         encode,
-        decode,
+        decode
     }: {
         type: number
         encode: ExtensionEncoderType

@@ -26,7 +26,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EStructuralFeatureImpl extends ETypedElementExt implements EStructuralFeature {
@@ -79,8 +79,8 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL,
                     oldDefaultValueLiteral,
-                    newDefaultValueLiteral,
-                ),
+                    newDefaultValueLiteral
+                )
             )
         }
     }
@@ -109,8 +109,8 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID,
                     oldFeatureID,
-                    newFeatureID,
-                ),
+                    newFeatureID
+                )
             )
         }
     }
@@ -131,8 +131,8 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE,
                     oldIsChangeable,
-                    newIsChangeable,
-                ),
+                    newIsChangeable
+                )
             )
         }
     }
@@ -153,8 +153,8 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED,
                     oldIsDerived,
-                    newIsDerived,
-                ),
+                    newIsDerived
+                )
             )
         }
     }
@@ -175,8 +175,8 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT,
                     oldIsTransient,
-                    newIsTransient,
-                ),
+                    newIsTransient
+                )
             )
         }
     }
@@ -197,8 +197,8 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE,
                     oldIsUnsettable,
-                    newIsUnsettable,
-                ),
+                    newIsUnsettable
+                )
             )
         }
     }
@@ -219,8 +219,8 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE,
                     oldIsVolatile,
-                    newIsVolatile,
-                ),
+                    newIsVolatile
+                )
             )
         }
     }
@@ -412,7 +412,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                 return this.eBasicSetContainer(
                     null,
                     EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
-                    notifications,
+                    notifications
                 )
             }
             default: {

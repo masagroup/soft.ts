@@ -34,8 +34,8 @@ export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
                     EventType.SET,
                     EcoreConstants.EDATA_TYPE__DEFAULT_VALUE,
                     oldDefaultValue,
-                    newDefaultValue,
-                ),
+                    newDefaultValue
+                )
             )
         }
     }

@@ -26,7 +26,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EDataTypeImpl extends EClassifierExt implements EDataType {
@@ -57,8 +57,8 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
                     EventType.SET,
                     EcoreConstants.EDATA_TYPE__SERIALIZABLE,
                     oldIsSerializable,
-                    newIsSerializable,
-                ),
+                    newIsSerializable
+                )
             )
         }
     }

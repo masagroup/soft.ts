@@ -31,5 +31,5 @@ export {
     LibraryFactory,
     LibraryConstants,
     getLibraryPackage,
-    getLibraryFactory,
+    getLibraryFactory
 } from "./internal"

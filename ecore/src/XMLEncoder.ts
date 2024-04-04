@@ -33,7 +33,7 @@ import {
     isEReference,
     XMLOptions,
     EDiagnosticImpl,
-    URI,
+    URI
 } from "./internal"
 import { XMLConstants } from "./XMLConstants"
 import { XMLString } from "./XMLString"
@@ -65,13 +65,13 @@ enum SaveFeatureKind {
     ObjectAttributeMany,
     ObjectAttributeIDRefSingle,
     ObjectAttributeIDRefMany,
-    DataTypeAttributeMany,
+    DataTypeAttributeMany
 }
 
 enum SaveResourceKind {
     Skip,
     Same,
-    Cross,
+    Cross
 }
 
 function stringFormat(template: string, ...args: any[]) {
@@ -695,7 +695,7 @@ export class XMLEncoder implements EEncoder {
             port: uri.port,
             path: uri.path,
             query: uri.query,
-            fragment: resource.getURIFragment(object),
+            fragment: resource.getURIFragment(object)
         })
     }
 

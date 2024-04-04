@@ -32,7 +32,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EClassImpl extends EClassifierExt implements EClass {
@@ -191,7 +191,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         this._isAbstract = newIsAbstract
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldIsAbstract, newIsAbstract),
+                new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldIsAbstract, newIsAbstract)
             )
         }
     }
@@ -207,7 +207,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         this._isInterface = newIsInterface
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldIsInterface, newIsInterface),
+                new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldIsInterface, newIsInterface)
             )
         }
     }
@@ -271,7 +271,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -284,7 +284,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -297,7 +297,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -310,7 +310,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -323,7 +323,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -336,7 +336,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -349,7 +349,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -362,7 +362,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -375,7 +375,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -388,7 +388,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -405,7 +405,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             true,
             true,
             false,
-            false,
+            false
         )
     }
     protected initEReferences(): void {
@@ -417,7 +417,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 
@@ -430,7 +430,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             true,
             true,
             false,
-            false,
+            false
         )
     }
     protected initESuperTypes(): EList<EClass> {
@@ -442,7 +442,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 

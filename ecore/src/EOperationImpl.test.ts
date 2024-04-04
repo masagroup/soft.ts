@@ -35,7 +35,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EClassInternal extends EClass, EObjectInternal {}
@@ -120,15 +120,15 @@ describe("EOperationImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, false),
-                (o.eExceptions as EObjectList<EClassifier>).getUnResolvedList(),
-            ),
+                (o.eExceptions as EObjectList<EClassifier>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, true)).toStrictEqual(o.eParameters)
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, false),
-                (o.eParameters as EObjectList<EParameter>).getUnResolvedList(),
-            ),
+                (o.eParameters as EObjectList<EParameter>).getUnResolvedList()
+            )
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EOPERATION__OPERATION_ID, true)).toStrictEqual(o.operationID)
     })

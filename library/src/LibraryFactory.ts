@@ -27,7 +27,7 @@ import {
     Periodical,
     Person,
     VideoCassette,
-    Writer,
+    Writer
 } from "./internal"
 
 export interface LibraryFactory extends ecore.EFactory {

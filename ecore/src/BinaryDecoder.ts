@@ -19,7 +19,7 @@ import {
     isEAttribute,
     isEClass,
     isEPackage,
-    URI,
+    URI
 } from "./internal"
 import { Decoder } from "./msgpack/Decoder"
 

@@ -23,7 +23,7 @@ import {
     EcoreConstants,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EParameterImpl extends ETypedElementExt implements EParameter {

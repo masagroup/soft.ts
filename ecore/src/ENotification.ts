@@ -31,7 +31,7 @@ export enum EventType {
     // RESOLVE An event type indicating that a feature of the notifier has been resolved from a proxy.
     RESOLVE,
     // EVENT_TYPE_COUNT User defined event types should start from this value.
-    EVENT_TYPE_COUNT,
+    EVENT_TYPE_COUNT
 }
 
 export interface ENotification {

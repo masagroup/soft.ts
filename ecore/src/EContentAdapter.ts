@@ -18,7 +18,7 @@ import {
     isEObjectInternal,
     isEReference,
     isEResource,
-    isEResourceSet,
+    isEResourceSet
 } from "./internal"
 
 export class EContentAdapter extends AbstractEAdapter {

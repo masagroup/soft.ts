@@ -17,7 +17,7 @@ import {
     EReference,
     EAttribute,
     URI,
-    BinaryOptions,
+    BinaryOptions
 } from "./internal"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind"
 import { Encoder } from "./msgpack/Encoder"
@@ -29,7 +29,7 @@ enum CheckType {
     CheckNothing,
     CheckDirectResource,
     CheckResource,
-    CheckContainer,
+    CheckContainer
 }
 
 class PackageData {

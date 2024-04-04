@@ -16,7 +16,7 @@ import {
     UUIDManager,
     XMIProcessor,
     XMLProcessor,
-    uriToFilePath,
+    uriToFilePath
 } from "./internal"
 
 import * as fs from "fs"

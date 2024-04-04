@@ -17,7 +17,7 @@ import {
     getEcorePackage,
     isEResourceSet,
     URI,
-    XMLOptions,
+    XMLOptions
 } from "./internal"
 
 export class XMLProcessor {

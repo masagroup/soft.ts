@@ -16,7 +16,7 @@ import {
     ENotifier,
     EStructuralFeature,
     EventType,
-    ImmutableEList,
+    ImmutableEList
 } from "./internal"
 
 class AbstractENotifierNotification extends AbstractNotification {
@@ -55,7 +55,7 @@ export class AbstractENotifierList extends BasicEList<EAdapter> {
     protected didRemove(index: number, adapter: EAdapter): void {
         if (this._notifier.eDeliver) {
             adapter.notifyChanged(
-                new AbstractENotifierNotification(this._notifier, EventType.REMOVING_ADAPTER, adapter, null, index),
+                new AbstractENotifierNotification(this._notifier, EventType.REMOVING_ADAPTER, adapter, null, index)
             )
         }
         adapter.unsetTarget(this._notifier)

@@ -28,7 +28,7 @@ import {
     EURIConverterImpl,
     getPackageRegistry,
     getCodecRegistry,
-    URI,
+    URI
 } from "./internal"
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
