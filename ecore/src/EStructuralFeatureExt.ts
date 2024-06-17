@@ -73,7 +73,7 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
 }
 
 export function isMapType(feature: EStructuralFeature): boolean {
-    return feature.eType && feature.eType.instanceTypeName == "ecore.EMapEntry"
+    return feature.eType && feature.eType.instanceTypeName == "@masagroup/ecore/EMapEntry"
 }
 
 export function isEStructuralFeature(o: any): o is EStructuralFeature {
