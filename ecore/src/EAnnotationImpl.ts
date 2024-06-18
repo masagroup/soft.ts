@@ -27,7 +27,6 @@ import {
     EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
-    EStringToStringMapEntry,
     EcoreConstants,
     EventType,
     Notification,

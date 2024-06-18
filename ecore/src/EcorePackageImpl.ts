@@ -1080,7 +1080,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this._eTypeParameterClass.eSuperTypes.add(this._eNamedElementClass)
         this._eTypedElementClass.eSuperTypes.add(this._eNamedElementClass)
 
-        this.initEClass(this._eAnnotationClass, "EAnnotation", "ecore.EAnnotation", false, false)
+        this.initEClass(this._eAnnotationClass, "EAnnotation", "@masagroup/ecore/EAnnotation", false, false)
         this.initEAttribute(
             this.getEAnnotation_Source(),
             this.getEString(),
@@ -1170,7 +1170,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
 
-        this.initEClass(this._eAttributeClass, "EAttribute", "ecore.EAttribute", false, false)
+        this.initEClass(this._eAttributeClass, "EAttribute", "@masagroup/ecore/EAttribute", false, false)
         this.initEAttribute(
             this.getEAttribute_ID(),
             this.getEBoolean(),
@@ -1206,7 +1206,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
 
-        this.initEClass(this._eClassClass, "EClass", "ecore.EClass", false, false)
+        this.initEClass(this._eClassClass, "EClass", "@masagroup/ecore/EClass", false, false)
         this.initEAttribute(
             this.getEClass_Abstract(),
             this.getEBoolean(),
@@ -1552,7 +1552,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
 
-        this.initEClass(this._eClassifierClass, "EClassifier", "ecore.EClassifier", true, false)
+        this.initEClass(this._eClassifierClass, "EClassifier", "@masagroup/ecore/EClassifier", true, false)
         this.initEAttribute(
             this.getEClassifier_InstanceClassName(),
             this.getEString(),
@@ -1657,7 +1657,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEJavaObject(), "object", 0, 1, true, true)
         }
 
-        this.initEClass(this._eDataTypeClass, "EDataType", "ecore.EDataType", false, false)
+        this.initEClass(this._eDataTypeClass, "EDataType", "@masagroup/ecore/EDataType", false, false)
         this.initEAttribute(
             this.getEDataType_Serializable(),
             this.getEBoolean(),
@@ -1675,7 +1675,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false
         )
 
-        this.initEClass(this._eEnumClass, "EEnum", "ecore.EEnum", false, false)
+        this.initEClass(this._eEnumClass, "EEnum", "@masagroup/ecore/EEnum", false, false)
         this.initEReference(
             this.getEEnum_ELiterals(),
             this.getEEnumLiteral(),
@@ -1710,7 +1710,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEString(), "literal", 0, 1, true, true)
         }
 
-        this.initEClass(this._eEnumLiteralClass, "EEnumLiteral", "ecore.EEnumLiteral", false, false)
+        this.initEClass(this._eEnumLiteralClass, "EEnumLiteral", "@masagroup/ecore/EEnumLiteral", false, false)
         this.initEAttribute(
             this.getEEnumLiteral_Value(),
             this.getEInt(),
@@ -1778,7 +1778,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
 
-        this.initEClass(this._eFactoryClass, "EFactory", "ecore.EFactory", false, false)
+        this.initEClass(this._eFactoryClass, "EFactory", "@masagroup/ecore/EFactory", false, false)
         this.initEReference(
             this.getEFactory_EPackage(),
             this.getEPackage(),
@@ -1815,7 +1815,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEJavaObject(), "instanceValue", 0, 1, true, true)
         }
 
-        this.initEClass(this._eGenericTypeClass, "EGenericType", "ecore.EGenericType", false, false)
+        this.initEClass(this._eGenericTypeClass, "EGenericType", "@masagroup/ecore/EGenericType", false, false)
         this.initEReference(
             this.getEGenericType_EUpperBound(),
             this.getEGenericType(),
@@ -1930,7 +1930,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEJavaObject(), "object", 0, 1, true, true)
         }
 
-        this.initEClass(this._eModelElementClass, "EModelElement", "ecore.EModelElement", true, false)
+        this.initEClass(this._eModelElementClass, "EModelElement", "@masagroup/ecore/EModelElement", true, false)
         this.initEReference(
             this.getEModelElement_EAnnotations(),
             this.getEAnnotationClass(),
@@ -1955,7 +1955,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEString(), "source", 0, 1, true, true)
         }
 
-        this.initEClass(this._eNamedElementClass, "ENamedElement", "ecore.ENamedElement", true, false)
+        this.initEClass(this._eNamedElementClass, "ENamedElement", "@masagroup/ecore/ENamedElement", true, false)
         this.initEAttribute(
             this.getENamedElement_Name(),
             this.getEString(),
@@ -1973,7 +1973,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false
         )
 
-        this.initEClass(this._eObjectClass, "EObject", "ecore.EObject", false, false)
+        this.initEClass(this._eObjectClass, "EObject", "@masagroup/ecore/EObject", false, false)
         this.initEOperation(this.getEObject_EClass(), this.getEClass(), "eClass", 0, 1, true, true)
         this.initEOperation(this.getEObject_EIsProxy(), this.getEBoolean(), "eIsProxy", 0, 1, true, true)
         this.initEOperation(this.getEObject_EResource(), this.getEResource(), "eResource", 0, 1, true, true)
@@ -2033,7 +2033,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEEList(), "arguments", 0, 1, true, true)
         }
 
-        this.initEClass(this._eOperationClass, "EOperation", "ecore.EOperation", false, false)
+        this.initEClass(this._eOperationClass, "EOperation", "@masagroup/ecore/EOperation", false, false)
         this.initEAttribute(
             this.getEOperation_OperationID(),
             this.getEInt(),
@@ -2110,7 +2110,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEOperation(), "someOperation", 0, 1, true, true)
         }
 
-        this.initEClass(this._ePackageClass, "EPackage", "ecore.EPackage", false, false)
+        this.initEClass(this._ePackageClass, "EPackage", "@masagroup/ecore/EPackage", false, false)
         this.initEAttribute(
             this.getEPackage_NsURI(),
             this.getEString(),
@@ -2221,7 +2221,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             this.addEParameter(operation, this.getEString(), "name", 0, 1, true, true)
         }
 
-        this.initEClass(this._eParameterClass, "EParameter", "ecore.EParameter", false, false)
+        this.initEClass(this._eParameterClass, "EParameter", "@masagroup/ecore/EParameter", false, false)
         this.initEReference(
             this.getEParameter_EOperation(),
             this.getEOperation(),
@@ -2241,7 +2241,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
 
-        this.initEClass(this._eReferenceClass, "EReference", "ecore.EReference", false, false)
+        this.initEClass(this._eReferenceClass, "EReference", "@masagroup/ecore/EReference", false, false)
         this.initEAttribute(
             this.getEReference_Containment(),
             this.getEBoolean(),
@@ -2345,7 +2345,13 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
 
-        this.initEClass(this._eStringToStringMapEntryClass, "EStringToStringMapEntry", "ecore.EMapEntry", false, false)
+        this.initEClass(
+            this._eStringToStringMapEntryClass,
+            "EStringToStringMapEntry",
+            "@masagroup/ecore/EMapEntry",
+            false,
+            false
+        )
         this.initEAttribute(
             this.getEStringToStringMapEntry_Key(),
             this.getEString(),
@@ -2379,7 +2385,13 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             false
         )
 
-        this.initEClass(this._eStructuralFeatureClass, "EStructuralFeature", "ecore.EStructuralFeature", true, false)
+        this.initEClass(
+            this._eStructuralFeatureClass,
+            "EStructuralFeature",
+            "@masagroup/ecore/EStructuralFeature",
+            true,
+            false
+        )
         this.initEAttribute(
             this.getEStructuralFeature_Changeable(),
             this.getEBoolean(),
@@ -2536,7 +2548,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
 
-        this.initEClass(this._eTypeParameterClass, "ETypeParameter", "ecore.ETypeParameter", false, false)
+        this.initEClass(this._eTypeParameterClass, "ETypeParameter", "@masagroup/ecore/ETypeParameter", false, false)
         this.initEReference(
             this.getETypeParameter_EBounds(),
             this.getEGenericType(),
@@ -2556,7 +2568,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
 
-        this.initEClass(this._eTypedElementClass, "ETypedElement", "ecore.ETypedElement", true, false)
+        this.initEClass(this._eTypedElementClass, "ETypedElement", "@masagroup/ecore/ETypedElement", true, false)
         this.initEAttribute(
             this.getETypedElement_Ordered(),
             this.getEBoolean(),
@@ -2682,10 +2694,16 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this.initEDataType(this.getEChar(), "EChar", "number", "0", true)
         this.initEDataType(this.getECharacterObject(), "ECharacterObject", "number", "0", true)
         this.initEDataType(this.getEDate(), "EDate", "Date", "", true)
-        this.initEDataType(this.getEDiagnosticChain(), "EDiagnosticChain", "ecore.EDiagnosticChain", "", false)
+        this.initEDataType(
+            this.getEDiagnosticChain(),
+            "EDiagnosticChain",
+            "@masagroup/ecore/EDiagnosticChain",
+            "",
+            false
+        )
         this.initEDataType(this.getEDouble(), "EDouble", "number", "0.0", true)
         this.initEDataType(this.getEDoubleObject(), "EDoubleObject", "number", "0", true)
-        this.initEDataType(this.getEEList(), "EEList", "ecore.EList", "", false)
+        this.initEDataType(this.getEEList(), "EEList", "@masagroup/ecore/EList", "", false)
         this.initEDataType(this.getEEnumerator(), "EEnumerator", "any", "", false)
         this.initEDataType(this.getEFeatureMap(), "EFeatureMap", "any", "", false)
         this.initEDataType(this.getEFeatureMapEntry(), "EFeatureMapEntry", "any", "", false)
@@ -2704,9 +2722,9 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this.initEDataType(this.getEJavaObject(), "EJavaObject", "any", "", true)
         this.initEDataType(this.getELong(), "ELong", "number", "0", true)
         this.initEDataType(this.getELongObject(), "ELongObject", "number", "0", true)
-        this.initEDataType(this.getEMap(), "EMap", "ecore.EMap", "", false)
-        this.initEDataType(this.getEResource(), "EResource", "ecore.EResource", "", false)
-        this.initEDataType(this.getEResourceSet(), "EResourceSet", "ecore.EResourceSet", "", false)
+        this.initEDataType(this.getEMap(), "EMap", "@masagroup/ecore/EMap", "", false)
+        this.initEDataType(this.getEResource(), "EResource", "@masagroup/ecore/EResource", "", false)
+        this.initEDataType(this.getEResourceSet(), "EResourceSet", "@masagroup/ecore/EResourceSet", "", false)
         this.initEDataType(this.getEShort(), "EShort", "number", "0", true)
         this.initEDataType(this.getEShortObject(), "EShortObject", "number", "0", true)
         this.initEDataType(this.getEString(), "EString", "string", "", true)

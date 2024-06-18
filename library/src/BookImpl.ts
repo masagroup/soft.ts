@@ -13,7 +13,6 @@ import * as ecore from "@masagroup/ecore"
 import {
     Book,
     BookCategory,
-    BookIndex,
     CirculatingItem,
     CirculatingItemImpl,
     LibraryConstants,

@@ -176,7 +176,7 @@ describe("LibraryFactoryImpl", () => {
         when(mockDataType.classifierID).thenReturn(LibraryConstants.BOOK_CATEGORY)
         expect(factory.createFromString(eDataType, "Biography")).toStrictEqual(BookCategory.BIOGRAPHY)
         expect(factory.createFromString(eDataType, "Mystery")).toStrictEqual(BookCategory.MYSTERY)
-        expect(factory.createFromString(eDataType, "ScienceFiction")).toStrictEqual(BookCategory.SCIENCEFICTION)
+        expect(factory.createFromString(eDataType, "ScienceFiction")).toStrictEqual(BookCategory.SCIENCE_FICTION)
     })
 
     test("convertBookCategoryToString", () => {
@@ -186,6 +186,6 @@ describe("LibraryFactoryImpl", () => {
         when(mockDataType.classifierID).thenReturn(LibraryConstants.BOOK_CATEGORY)
         expect(factory.convertToString(eDataType, BookCategory.BIOGRAPHY)).toStrictEqual("Biography")
         expect(factory.convertToString(eDataType, BookCategory.MYSTERY)).toStrictEqual("Mystery")
-        expect(factory.convertToString(eDataType, BookCategory.SCIENCEFICTION)).toStrictEqual("ScienceFiction")
+        expect(factory.convertToString(eDataType, BookCategory.SCIENCE_FICTION)).toStrictEqual("ScienceFiction")
     })
 })

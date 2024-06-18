@@ -12,7 +12,7 @@
 export enum BookCategory {
     BIOGRAPHY = 2,
     MYSTERY = 0,
-    SCIENCEFICTION = 1
+    SCIENCE_FICTION = 1
 }
 
 export function bookCategoryToString(bookCategory: BookCategory): string {
@@ -21,7 +21,7 @@ export function bookCategoryToString(bookCategory: BookCategory): string {
             return "Biography"
         case BookCategory.MYSTERY:
             return "Mystery"
-        case BookCategory.SCIENCEFICTION:
+        case BookCategory.SCIENCE_FICTION:
             return "ScienceFiction"
     }
 }
@@ -29,6 +29,6 @@ export function bookCategoryToString(bookCategory: BookCategory): string {
 export function bookCategoryFromString(literalValue: string): BookCategory {
     if (literalValue == "Biography") return BookCategory.BIOGRAPHY
     else if (literalValue == "Mystery") return BookCategory.MYSTERY
-    else if (literalValue == "ScienceFiction") return BookCategory.SCIENCEFICTION
+    else if (literalValue == "ScienceFiction") return BookCategory.SCIENCE_FICTION
     throw new Error("Invalid value for enum BookCategory: " + literalValue)
 }
