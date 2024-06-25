@@ -147,11 +147,11 @@ export class URI {
     }
 
     isOpaque(): boolean {
-        return !this.path
+        return this.path == ""
     }
 
     isAbsolute(): boolean {
-        return !this.scheme
+        return this.scheme != ""
     }
 
     isEmpty(): boolean {

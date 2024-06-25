@@ -71,4 +71,7 @@ describe("URI", () => {
         )
         expect(new URI("path/path2").resolve(new URI("path3"))).toEqual(new URI("path/path3"))
     })
+    test("isAbsolute", () => {
+        expect(new URI("data/test/file.xml").isAbsolute()).toBeFalsy()
+    })
 })
