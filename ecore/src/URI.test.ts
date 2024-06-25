@@ -72,6 +72,11 @@ describe("URI", () => {
         expect(new URI("path/path2").resolve(new URI("path3"))).toEqual(new URI("path/path3"))
     })
     test("isAbsolute", () => {
-        expect(new URI("data/test/file.xml").isAbsolute()).toBeFalsy()
+        expect(new URI("http://toto").isAbsolute()).toBeTruthy()
+        expect(new URI("/toto").isAbsolute()).toBeFalsy()
+    })
+    test("isOpaque", () => {
+        expect(new URI("http://toto").isOpaque()).toBeTruthy()
+        expect(new URI("http://toto/").isOpaque()).toBeFalsy()
     })
 })
