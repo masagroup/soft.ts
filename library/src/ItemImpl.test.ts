@@ -74,7 +74,7 @@ describe("ItemImpl", () => {
         {
             o.eUnsetFromID(LibraryConstants.ITEM__PUBLICATION_DATE)
             let v = o.eGetFromID(LibraryConstants.ITEM__PUBLICATION_DATE, false)
-            expect(v).toBe(null)
+            expect(v).toBeNull()
         }
     })
 })

@@ -2689,7 +2689,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this.initEDataType(this.getEBoolean(), "EBoolean", "boolean", "false", true)
         this.initEDataType(this.getEBooleanObject(), "EBooleanObject", "boolean", "false", true)
         this.initEDataType(this.getEByte(), "EByte", "byte", "0", true)
-        this.initEDataType(this.getEByteArray(), "EByteArray", "Uint8Array", "nil", true)
+        this.initEDataType(this.getEByteArray(), "EByteArray", "Uint8Array", "", true)
         this.initEDataType(this.getEByteObject(), "EByteObject", "number", "0", true)
         this.initEDataType(this.getEChar(), "EChar", "number", "0", true)
         this.initEDataType(this.getECharacterObject(), "ECharacterObject", "number", "0", true)
