@@ -698,7 +698,8 @@ export class XMLDecoder implements EDecoder {
         }
 
         // set object proxy uri
-        (eProxy as EObjectInternal).eSetProxyURI(uri)
+        let eObjectInternal = eProxy as EObjectInternal
+        eObjectInternal.eSetProxyURI(uri)
 
         let ndx = id.indexOf("#")
         let trimmedURI: string = ndx != -1 ? (ndx > 0 ? id.slice(0, ndx - 1) : "") : id

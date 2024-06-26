@@ -27,8 +27,14 @@ export function bookCategoryToString(bookCategory: BookCategory): string {
 }
 
 export function bookCategoryFromString(literalValue: string): BookCategory {
-    if (literalValue == "Biography") return BookCategory.BIOGRAPHY
-    else if (literalValue == "Mystery") return BookCategory.MYSTERY
-    else if (literalValue == "ScienceFiction") return BookCategory.SCIENCE_FICTION
-    throw new Error("Invalid value for enum BookCategory: " + literalValue)
+    switch (literalValue) {
+        case "Biography":
+            return BookCategory.BIOGRAPHY
+        case "Mystery":
+            return BookCategory.MYSTERY
+        case "ScienceFiction":
+            return BookCategory.SCIENCE_FICTION
+        default:
+            throw new Error("Invalid value for enum BookCategory: " + literalValue)
+    }
 }
