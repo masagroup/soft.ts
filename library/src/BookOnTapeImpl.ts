@@ -17,7 +17,7 @@ import {
     LibraryConstants,
     Person,
     Writer,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {

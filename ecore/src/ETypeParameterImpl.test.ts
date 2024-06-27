@@ -29,7 +29,7 @@ import {
     ImmutableEList,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EGenericTypeInternal extends EGenericType, EObjectInternal {}
@@ -52,8 +52,8 @@ describe("ETypeParameterImpl", () => {
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ETYPE_PARAMETER__EBOUNDS, false),
-                (o.eBounds as EObjectList<EGenericType>).getUnResolvedList(),
-            ),
+                (o.eBounds as EObjectList<EGenericType>).getUnResolvedList()
+            )
         ).toBeTruthy()
     })
 
@@ -66,7 +66,7 @@ describe("ETypeParameterImpl", () => {
             let value = instance(mockValue)
             let l = new ImmutableEList<EGenericType>([value])
             when(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything()),
+                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())
             ).thenReturn(null)
 
             // set list with new contents
@@ -75,7 +75,7 @@ describe("ETypeParameterImpl", () => {
             expect(o.eBounds.size()).toBe(1)
             expect(o.eBounds.get(0)).toBe(value)
             verify(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything()),
+                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())
             ).once()
         }
     })
@@ -112,7 +112,7 @@ describe("ETypeParameterImpl", () => {
             let mockValue = mock<EGenericTypeInternal>()
             let value = instance(mockValue)
             when(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything()),
+                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())
             ).thenReturn(null)
 
             o.eBounds.add(value)

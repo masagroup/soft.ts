@@ -51,24 +51,32 @@ describe("URI", () => {
 
     test("relativize", () => {
         expect(new URI("http://host:10020/path/").relativize(new URI("http://host:10020/path/path2"))).toEqual(
-            new URI("path2"),
+            new URI("path2")
         )
         expect(new URI("testdata/path2").relativize(new URI("testdata/path1"))).toEqual(new URI("path1"))
     })
 
     test("resolve", () => {
         expect(new URI("http://host:10020/path/").resolve(new URI("http://host:10020/path2/"))).toEqual(
-            new URI("http://host:10020/path2/"),
+            new URI("http://host:10020/path2/")
         )
         expect(new URI("http://host:10020/path/").resolve(new URI("../path2"))).toEqual(
-            new URI("http://host:10020/path2"),
+            new URI("http://host:10020/path2")
         )
         expect(new URI("http://host:10020/path/").resolve(new URI("/path2"))).toEqual(
-            new URI("http://host:10020/path2"),
+            new URI("http://host:10020/path2")
         )
         expect(new URI("http://host:10020/path/").resolve(new URI("./path2"))).toEqual(
-            new URI("http://host:10020/path/path2"),
+            new URI("http://host:10020/path/path2")
         )
         expect(new URI("path/path2").resolve(new URI("path3"))).toEqual(new URI("path/path3"))
+    })
+    test("isAbsolute", () => {
+        expect(new URI("http://toto").isAbsolute()).toBeTruthy()
+        expect(new URI("/toto").isAbsolute()).toBeFalsy()
+    })
+    test("isOpaque", () => {
+        expect(new URI("http://toto").isOpaque()).toBeTruthy()
+        expect(new URI("http://toto/").isOpaque()).toBeFalsy()
     })
 })

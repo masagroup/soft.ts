@@ -1,5 +1,5 @@
 import { WriteStream } from "fs"
-import { Err, Ok, Result } from "ts-results"
+import { Err, Ok, Result } from "ts-results-es"
 import {
     EObject,
     EResource,
@@ -17,7 +17,7 @@ import {
     EReference,
     EAttribute,
     URI,
-    BinaryOptions,
+    BinaryOptions
 } from "./internal"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind"
 import { Encoder } from "./msgpack/Encoder"
@@ -29,7 +29,7 @@ enum CheckType {
     CheckNothing,
     CheckDirectResource,
     CheckResource,
-    CheckContainer,
+    CheckContainer
 }
 
 class PackageData {
@@ -401,11 +401,11 @@ export class BinaryEncoder implements EEncoder {
     encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
         return new Promise<Uint8Array>((resolve, reject) => {
             let r = this.encode(eResource)
-            if (r.ok) {
-                s.write(r.val)
-                resolve(r.val)
+            if (r.isOk()) {
+                s.write(r.value)
+                resolve(r.value)
             } else {
-                reject(r.val)
+                reject(r.error)
             }
         })
     }
@@ -413,11 +413,11 @@ export class BinaryEncoder implements EEncoder {
     encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
         return new Promise<Uint8Array>((resolve, reject) => {
             let r = this.encodeObject(eObject)
-            if (r.ok) {
-                s.write(r.val)
-                resolve(r.val)
+            if (r.isOk()) {
+                s.write(r.value)
+                resolve(r.value)
             } else {
-                reject(r.val)
+                reject(r.error)
             }
         })
     }

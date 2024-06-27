@@ -20,7 +20,7 @@ import {
     LibraryConstants,
     Person,
     Writer,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 export class LibraryImpl extends ecore.EObjectImpl implements Library {

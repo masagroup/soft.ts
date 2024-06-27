@@ -1,5 +1,5 @@
 import { ReadStream } from "fs"
-import { Err, Ok, Result } from "ts-results"
+import { Err, Ok, Result } from "ts-results-es"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind"
 import {
     EClass,
@@ -19,7 +19,7 @@ import {
     isEAttribute,
     isEClass,
     isEPackage,
-    URI,
+    URI
 } from "./internal"
 import { Decoder } from "./msgpack/Decoder"
 

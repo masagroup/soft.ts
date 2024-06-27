@@ -28,7 +28,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EFactoryImpl extends EModelElementExt implements EFactory {
@@ -67,7 +67,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
             }
         } else if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EFACTORY__EPACKAGE, newEPackage, newEPackage),
+                new Notification(this, EventType.SET, EcoreConstants.EFACTORY__EPACKAGE, newEPackage, newEPackage)
             )
         }
     }

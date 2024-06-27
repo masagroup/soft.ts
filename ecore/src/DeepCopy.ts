@@ -15,7 +15,7 @@ import {
     EObjectList,
     EReference,
     ImmutableEList,
-    isEObject,
+    isEObject
 } from "./internal"
 
 export class DeepCopy {

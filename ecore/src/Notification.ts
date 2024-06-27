@@ -20,7 +20,7 @@ export class Notification extends AbstractNotification {
         feature: EStructuralFeature | number,
         oldValue: any,
         newValue: any,
-        position: number = -1,
+        position: number = -1
     ) {
         super(eventType, oldValue, newValue, position)
         this._object = object

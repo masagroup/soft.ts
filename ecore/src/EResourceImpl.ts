@@ -38,7 +38,7 @@ import {
     EDecoder,
     ECodecRegistry,
     EDiagnosticImpl,
-    URI,
+    URI
 } from "./internal"
 
 class ResourceNotification extends AbstractNotification {
@@ -51,7 +51,7 @@ class ResourceNotification extends AbstractNotification {
         eventType: EventType,
         oldValue: any,
         newValue: any,
-        position: number = -1,
+        position: number = -1
     ) {
         super(eventType, oldValue, newValue, position)
         this._notifier = notifier
@@ -165,7 +165,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._uri = uri
         if (this.eNotificationRequired) {
             this.eNotify(
-                new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1),
+                new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1)
             )
         }
     }
@@ -234,7 +234,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     id = this.getIDForObject(eObject)
                     if (id.length == 0) {
                         fragmentPath.unshift(
-                            eContainer.eURIFragmentSegment(internalEObject.eContainingFeature(), internalEObject),
+                            eContainer.eURIFragmentSegment(internalEObject.eContainingFeature(), internalEObject)
                         )
                     }
                     internalEObject = eContainer
@@ -307,8 +307,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                             "Unable to create decoder for '" + this._uri.toString() + "'",
                             this._uri.toString(),
                             0,
-                            0,
-                        ),
+                            0
+                        )
                     )
                     return Promise.resolve()
                 }
@@ -320,8 +320,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to find codec for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0,
-                    ),
+                        0
+                    )
                 )
                 return Promise.resolve()
             }
@@ -376,8 +376,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                             "Unable to create decoder for '" + this._uri.toString() + "'",
                             this._uri.toString(),
                             0,
-                            0,
-                        ),
+                            0
+                        )
                     )
                 }
             } else {
@@ -388,8 +388,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to find codec for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0,
-                    ),
+                        0
+                    )
                 )
             }
         }
@@ -447,8 +447,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to create decoder for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0,
-                    ),
+                        0
+                    )
                 )
             }
         } else {
@@ -459,8 +459,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     "Unable to find codec for '" + this._uri.toString() + "'",
                     this._uri.toString(),
                     0,
-                    0,
-                ),
+                    0
+                )
             )
         }
         return Promise.reject()
@@ -493,8 +493,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         "Unable to create decoder for '" + this._uri.toString() + "'",
                         this._uri.toString(),
                         0,
-                        0,
-                    ),
+                        0
+                    )
                 )
             }
         } else {
@@ -505,8 +505,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     "Unable to find codec for '" + this._uri.toString() + "'",
                     this._uri.toString(),
                     0,
-                    0,
-                ),
+                    0
+                )
             )
         }
         return null
@@ -526,8 +526,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doSaveToBuffer(encoder: EEncoder): Buffer {
         let r = encoder.encode(this)
-        if (r.ok) {
-            return Buffer.from(r.val)
+        if (r.isOk()) {
+            return Buffer.from(r.value)
         }
         return null
     }
@@ -576,8 +576,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     EResourceConstants.RESOURCE__IS_LOADED,
                     EventType.SET,
                     oldLoaded,
-                    this._isLoaded,
-                ),
+                    this._isLoaded
+                )
             )
         }
         return notifications
@@ -601,8 +601,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     EResourceConstants.RESOURCE__RESOURCE_SET,
                     EventType.SET,
                     oldResourseSet,
-                    this._resourceSet,
-                ),
+                    this._resourceSet
+                )
             )
         }
         return notifications

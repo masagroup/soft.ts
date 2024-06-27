@@ -27,13 +27,12 @@ import {
     EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
-    EStringToStringMapEntry,
     EcoreConstants,
     EventType,
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
@@ -92,7 +91,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
                 notifications = newEModelElement.eInverseAdd(
                     this,
                     EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS,
-                    notifications,
+                    notifications
                 )
             }
             notifications = this.basicSetEModelElement(newEModelElement, notifications)
@@ -106,8 +105,8 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
                     EventType.SET,
                     EcoreConstants.EANNOTATION__EMODEL_ELEMENT,
                     newEModelElement,
-                    newEModelElement,
-                ),
+                    newEModelElement
+                )
             )
         }
     }
@@ -135,7 +134,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         this._source = newSource
         if (this.eNotificationRequired) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__SOURCE, oldSource, newSource),
+                new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__SOURCE, oldSource, newSource)
             )
         }
     }
@@ -149,7 +148,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
             true,
             false,
             false,
-            false,
+            false
         )
     }
     protected initDetails(): EMap<string, string> {
@@ -164,7 +163,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
             false,
             false,
             true,
-            false,
+            false
         )
     }
 

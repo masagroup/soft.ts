@@ -26,7 +26,7 @@ import {
     EcoreConstants,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParameter {
@@ -58,7 +58,7 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
             true,
             false,
             false,
-            false,
+            false
         )
     }
 

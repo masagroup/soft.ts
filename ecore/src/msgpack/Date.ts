@@ -50,7 +50,7 @@ export function encodeDateToTimeSpec(date: Date): TimeSpec {
     const nsecInSec = Math.floor(nsec / 1e9)
     return {
         sec: sec + nsecInSec,
-        nsec: nsec - nsecInSec * 1e9,
+        nsec: nsec - nsecInSec * 1e9
     }
 }
 
@@ -101,5 +101,5 @@ export function decodeDateExtension(data: Uint8Array): Date {
 export const dateExtension = {
     type: EXT_DATE,
     encode: encodeDateExtension,
-    decode: decodeDateExtension,
+    decode: decodeDateExtension
 }

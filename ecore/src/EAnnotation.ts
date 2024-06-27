@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EList, EMap, EModelElement, EObject, EStringToStringMapEntry } from "./internal"
+import { EList, EMap, EModelElement, EObject } from "./internal"
 
 export interface EAnnotation extends EModelElement {
     // Attributes

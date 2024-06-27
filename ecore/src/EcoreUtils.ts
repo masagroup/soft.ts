@@ -19,7 +19,7 @@ import {
     EResource,
     EResourceSet,
     URI,
-    getPackageRegistry,
+    getPackageRegistry
 } from "./internal"
 
 export class EcoreUtils {
@@ -67,7 +67,7 @@ export class EcoreUtils {
                 let proxyURIStr = proxyURI.toString()
                 let ndxHash = proxyURIStr.lastIndexOf("#")
                 let ePackage = getPackageRegistry().getPackage(
-                    ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr,
+                    ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr
                 )
                 if (ePackage) {
                     let eResource = ePackage.eResource()
@@ -156,7 +156,7 @@ export class EcoreUtils {
                     user: uri.user,
                     path: uri.path,
                     query: uri.query,
-                    fragment: resource.getURIFragment(eObject),
+                    fragment: resource.getURIFragment(eObject)
                 })
             } else {
                 let id = EcoreUtils.getEObjectID(eObject)

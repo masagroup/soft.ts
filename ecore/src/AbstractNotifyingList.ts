@@ -17,7 +17,7 @@ import {
     ENotifyingList,
     EStructuralFeature,
     EventType,
-    NotificationChain,
+    NotificationChain
 } from "./internal"
 
 export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements ENotifyingList<E> {
@@ -121,7 +121,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         eventType: EventType,
         oldValue: any,
         newValue: any,
-        position: number = -1,
+        position: number = -1
     ): AbstractNotification {
         return new (class extends AbstractNotification {
             constructor(private list: AbstractNotifyingList<E>) {
@@ -147,7 +147,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         eventType: EventType,
         oldValue: any,
         newValue: any,
-        position: number = -1,
+        position: number = -1
     ): ENotificationChain {
         let notifications = nc
         if (this.isNotificationRequired) {
@@ -166,7 +166,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         eventType: EventType,
         oldValue: any,
         newValue: any,
-        position: number = -1,
+        position: number = -1
     ): void {
         this.createAndDispatchNotificationFn(notifications, () => {
             return this.createNotification(eventType, oldValue, newValue, position)
@@ -175,7 +175,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
 
     private createAndDispatchNotificationFn(
         notifications: ENotificationChain,
-        createNotification: () => ENotification,
+        createNotification: () => ENotification
     ) {
         if (this.isNotificationRequired) {
             let notification = createNotification()

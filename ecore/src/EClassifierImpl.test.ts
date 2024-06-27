@@ -29,7 +29,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EPackageInternal extends EPackage, EObjectInternal {}
@@ -214,7 +214,7 @@ describe("EClassifierImpl", () => {
         {
             o.eUnsetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS)
             let v = o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, false)
-            expect(v).toBe(null)
+            expect(v).toBeNull()
         }
         {
             o.eUnsetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME)

@@ -26,7 +26,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class ENamedElementImpl extends EModelElementExt implements ENamedElement {

@@ -15,7 +15,7 @@ import {
     ENotifier,
     EStructuralFeature,
     EventType,
-    ImmutableEList,
+    ImmutableEList
 } from "./internal"
 
 class NotifyingListTest<E> extends AbstractNotifyingList<E> {
@@ -88,9 +88,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: 3,
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([3])
 
@@ -104,9 +104,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: 4,
-                    position: 1,
-                }),
-            ),
+                    position: 1
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([3, 4])
     })
@@ -123,9 +123,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: [2, 3],
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([2, 3])
 
@@ -139,9 +139,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: 4,
-                    position: 2,
-                }),
-            ),
+                    position: 2
+                })
+            )
         ).once()
     })
 
@@ -157,9 +157,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: 1,
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([1])
 
@@ -173,9 +173,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: 2,
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).once()
 
         expect(l.toArray()).toEqual([2, 1])
@@ -190,9 +190,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: 3,
-                    position: 1,
-                }),
-            ),
+                    position: 1
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([2, 3, 1])
     })
@@ -209,9 +209,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: [1, 2, 3],
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([1, 2, 3])
 
@@ -225,9 +225,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: [4, 5],
-                    position: 1,
-                }),
-            ),
+                    position: 1
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([1, 4, 5, 2, 3])
 
@@ -246,9 +246,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: 2,
                     newValue: 3,
-                    position: 1,
-                }),
-            ),
+                    position: 1
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([1, 3])
     })
@@ -265,9 +265,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: 2,
                     newValue: null,
-                    position: 1,
-                }),
-            ),
+                    position: 1
+                })
+            )
         ).once()
         expect(l.toArray()).toEqual([1])
     })
@@ -283,9 +283,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: null,
                     newValue: 1,
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).thenReturn(true)
 
         l.addWithNotification(1, l.chain)
@@ -303,9 +303,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: 1,
                     newValue: null,
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).thenReturn(true)
         l.removeWithNotification(1, l.chain)
         expect(l.toArray()).toEqual([])
@@ -325,9 +325,9 @@ describe("AbstractNotifyingList", () => {
                     featureID: l.featureID,
                     oldValue: 1,
                     newValue: 2,
-                    position: 0,
-                }),
-            ),
+                    position: 0
+                })
+            )
         ).thenReturn(true)
         l.setWithNotification(0, 2, l.chain)
         expect(l.toArray()).toEqual([2])

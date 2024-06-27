@@ -13,12 +13,11 @@ import * as ecore from "@masagroup/ecore"
 import {
     Book,
     BookCategory,
-    BookIndex,
     CirculatingItem,
     CirculatingItemImpl,
     LibraryConstants,
     Writer,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 export class BookImpl extends CirculatingItemImpl implements Book {

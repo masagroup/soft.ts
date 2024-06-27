@@ -26,7 +26,7 @@ import {
     EcoreConstants,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EEnumImpl extends EDataTypeExt implements EEnum {
@@ -73,7 +73,7 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
             true,
             true,
             false,
-            false,
+            false
         )
     }
 

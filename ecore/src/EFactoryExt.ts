@@ -32,7 +32,7 @@ export class EFactoryExt extends EFactoryImpl {
             let result = eDataType.getEEnumLiteralByLiteral(literalValue)
             if (!result) {
                 throw new Error(
-                    "The value '" + literalValue + "' is not a valid enumerator of '" + eDataType.name + "'",
+                    "The value '" + literalValue + "' is not a valid enumerator of '" + eDataType.name + "'"
                 )
             }
             return result.value
@@ -59,7 +59,7 @@ export class EFactoryExt extends EFactoryImpl {
             let result = eDataType.getEEnumLiteralByValue(instanceValue)
             if (!result) {
                 throw new Error(
-                    "The value '" + instanceValue + "' is not a valid enumerator of '" + eDataType.name + "'",
+                    "The value '" + instanceValue + "' is not a valid enumerator of '" + eDataType.name + "'"
                 )
             }
             return result.literal

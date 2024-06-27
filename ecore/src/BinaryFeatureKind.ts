@@ -18,7 +18,7 @@ export enum BinaryFeatureKind {
     bfkData,
     bfkDataList,
     bfkEnum,
-    bfkDate,
+    bfkDate
 }
 
 export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryFeatureKind {

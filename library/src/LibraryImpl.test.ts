@@ -23,7 +23,7 @@ import {
     LibraryImpl,
     Person,
     Writer,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 interface BookInternal extends Book, ecore.EObjectInternal {}

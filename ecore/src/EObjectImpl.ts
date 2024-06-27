@@ -27,7 +27,7 @@ import {
     EcoreConstants,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EObjectImpl extends BasicEObject implements EObject {

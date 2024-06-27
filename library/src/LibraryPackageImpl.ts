@@ -373,7 +373,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
         this._videoCassetteClass.eSuperTypes.add(this._audioVisualItemClass)
         this._writerClass.eSuperTypes.add(this._personClass)
 
-        this.initEClass(this._addressableClass, "Addressable", "library.Addressable", true, true)
+        this.initEClass(this._addressableClass, "Addressable", "library/Addressable", true, true)
         this.initEAttribute(
             this.getAddressable_Address(),
             ecore.getEcorePackage().getEString(),
@@ -391,7 +391,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             false
         )
 
-        this.initEClass(this._audioVisualItemClass, "AudioVisualItem", "library.AudioVisualItem", true, false)
+        this.initEClass(this._audioVisualItemClass, "AudioVisualItem", "library/AudioVisualItem", true, false)
         this.initEAttribute(
             this.getAudioVisualItem_Title(),
             ecore.getEcorePackage().getEString(),
@@ -441,7 +441,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             false
         )
 
-        this.initEClass(this._bookClass, "Book", "library.Book", false, false)
+        this.initEClass(this._bookClass, "Book", "library/Book", false, false)
         this.initEAttribute(
             this.getBook_Title(),
             ecore.getEcorePackage().getEString(),
@@ -543,7 +543,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             true
         )
 
-        this.initEClass(this._bookIndexClass, "BookIndex", "ecore.EMapEntry", false, false)
+        this.initEClass(this._bookIndexClass, "BookIndex", "@masagroup/ecore/EMapEntry", false, false)
         this.initEAttribute(
             this.getBookIndex_Key(),
             ecore.getEcorePackage().getEString(),
@@ -577,7 +577,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             false
         )
 
-        this.initEClass(this._bookOnTapeClass, "BookOnTape", "library.BookOnTape", false, false)
+        this.initEClass(this._bookOnTapeClass, "BookOnTape", "library/BookOnTape", false, false)
         this.initEReference(
             this.getBookOnTape_Reader(),
             this.getPerson(),
@@ -615,7 +615,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             true
         )
 
-        this.initEClass(this._borrowerClass, "Borrower", "library.Borrower", false, false)
+        this.initEClass(this._borrowerClass, "Borrower", "library/Borrower", false, false)
         this.initEReference(
             this.getBorrower_Borrowed(),
             this.getLendable(),
@@ -635,9 +635,9 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             true
         )
 
-        this.initEClass(this._circulatingItemClass, "CirculatingItem", "library.CirculatingItem", true, false)
+        this.initEClass(this._circulatingItemClass, "CirculatingItem", "library/CirculatingItem", true, false)
 
-        this.initEClass(this._documentRootClass, "DocumentRoot", "library.DocumentRoot", false, false)
+        this.initEClass(this._documentRootClass, "DocumentRoot", "library/DocumentRoot", false, false)
         this.initEReference(
             this.getDocumentRoot_XMLNSPrefixMap(),
             ecore.getEcorePackage().getEStringToStringMapEntry(),
@@ -693,7 +693,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             true
         )
 
-        this.initEClass(this._employeeClass, "Employee", "library.Employee", false, false)
+        this.initEClass(this._employeeClass, "Employee", "library/Employee", false, false)
         this.initEReference(
             this.getEmployee_Manager(),
             this.getEmployee(),
@@ -713,7 +713,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             true
         )
 
-        this.initEClass(this._itemClass, "Item", "library.Item", true, false)
+        this.initEClass(this._itemClass, "Item", "library/Item", true, false)
         this.initEAttribute(
             this.getItem_PublicationDate(),
             ecore.getEcorePackage().getEDate(),
@@ -731,7 +731,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             false
         )
 
-        this.initEClass(this._lendableClass, "Lendable", "library.Lendable", true, true)
+        this.initEClass(this._lendableClass, "Lendable", "library/Lendable", true, true)
         this.initEAttribute(
             this.getLendable_Copies(),
             ecore.getEcorePackage().getEInt(),
@@ -767,7 +767,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             false
         )
 
-        this.initEClass(this._libraryClass, "Library", "library.Library", false, false)
+        this.initEClass(this._libraryClass, "Library", "library/Library", false, false)
         this.initEAttribute(
             this.getLibrary_Name(),
             ecore.getEcorePackage().getEString(),
@@ -945,7 +945,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             true
         )
 
-        this.initEClass(this._periodicalClass, "Periodical", "library.Periodical", true, false)
+        this.initEClass(this._periodicalClass, "Periodical", "library/Periodical", true, false)
         this.initEAttribute(
             this.getPeriodical_Title(),
             ecore.getEcorePackage().getEString(),
@@ -979,7 +979,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             false
         )
 
-        this.initEClass(this._personClass, "Person", "library.Person", false, false)
+        this.initEClass(this._personClass, "Person", "library/Person", false, false)
         this.initEAttribute(
             this.getPerson_FirstName(),
             ecore.getEcorePackage().getEString(),
@@ -1013,7 +1013,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             false
         )
 
-        this.initEClass(this._videoCassetteClass, "VideoCassette", "library.VideoCassette", false, false)
+        this.initEClass(this._videoCassetteClass, "VideoCassette", "library/VideoCassette", false, false)
         this.initEReference(
             this.getVideoCassette_Cast(),
             this.getPerson(),
@@ -1033,7 +1033,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
             true
         )
 
-        this.initEClass(this._writerClass, "Writer", "library.Writer", false, false)
+        this.initEClass(this._writerClass, "Writer", "library/Writer", false, false)
         this.initEAttribute(
             this.getWriter_Name(),
             ecore.getEcorePackage().getEString(),

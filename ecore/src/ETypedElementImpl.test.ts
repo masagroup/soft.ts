@@ -29,7 +29,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EClassifierInternal extends EClassifier, EObjectInternal {}

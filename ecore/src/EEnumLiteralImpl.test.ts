@@ -29,7 +29,7 @@ import {
     Notification,
     URI,
     getEcorePackage,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 interface EEnumInternal extends EEnum, EObjectInternal {}
@@ -181,7 +181,7 @@ describe("EEnumLiteralImpl", () => {
         {
             o.eUnsetFromID(EcoreConstants.EENUM_LITERAL__INSTANCE)
             let v = o.eGetFromID(EcoreConstants.EENUM_LITERAL__INSTANCE, false)
-            expect(v).toBe(null)
+            expect(v).toBeNull()
         }
         {
             o.eUnsetFromID(EcoreConstants.EENUM_LITERAL__LITERAL)

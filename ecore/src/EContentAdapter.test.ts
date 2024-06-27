@@ -19,7 +19,7 @@ import {
     EObjectInternal,
     EReference,
     EventType,
-    ImmutableEList,
+    ImmutableEList
 } from "./internal"
 
 describe("EContentAdapter", () => {

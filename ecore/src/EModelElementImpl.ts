@@ -25,7 +25,7 @@ import {
     EcoreConstants,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EModelElementImpl extends EObjectImpl implements EModelElement {
@@ -62,7 +62,7 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
             true,
             true,
             false,
-            false,
+            false
         )
     }
 

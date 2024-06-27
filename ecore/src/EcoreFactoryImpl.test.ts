@@ -35,7 +35,7 @@ import {
     ETypedElement,
     EcoreConstants,
     EcoreFactory,
-    EcoreFactoryImpl,
+    EcoreFactoryImpl
 } from "./internal"
 
 describe("EcoreFactoryImpl", () => {
@@ -508,7 +508,7 @@ describe("EcoreFactoryImpl", () => {
         let eDataType = instance(mockDataType)
         when(mockDataType.classifierID).thenReturn(EcoreConstants.EDATE)
         expect(factory.createFromString(eDataType, "2020-05-12T17:33:10.770Z")).toEqual(
-            new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770)),
+            new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))
         )
     })
     test("convertEDateToString", () => {
@@ -517,7 +517,7 @@ describe("EcoreFactoryImpl", () => {
         let eDataType = instance(mockDataType)
         when(mockDataType.classifierID).thenReturn(EcoreConstants.EDATE)
         expect(factory.convertToString(eDataType, new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770)))).toStrictEqual(
-            "2020-05-12T17:33:10.770Z",
+            "2020-05-12T17:33:10.770Z"
         )
     })
     test("createEDoubleFromString", () => {

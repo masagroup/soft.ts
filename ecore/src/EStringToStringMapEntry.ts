@@ -9,9 +9,9 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./internal"
+import { EMapEntry, EObject } from "./internal"
 
-export interface EStringToStringMapEntry extends EObject {
+export interface EStringToStringMapEntry extends EObject, EMapEntry<string, string> {
     // Attributes
     key: string
     value: string

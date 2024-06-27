@@ -41,7 +41,7 @@ import {
     Writer,
     WriterExt,
     bookCategoryFromString,
-    bookCategoryToString,
+    bookCategoryToString
 } from "./internal"
 
 export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFactory {

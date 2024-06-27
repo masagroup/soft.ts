@@ -16,7 +16,7 @@ import {
     LibraryConstants,
     Person,
     VideoCassette,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCassette {

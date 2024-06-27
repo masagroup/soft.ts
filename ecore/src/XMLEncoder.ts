@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { WriteStream } from "fs"
-import { Err, Ok, Result } from "ts-results"
+import { Err, Ok, Result } from "ts-results-es"
 import {
     EClass,
     EClassifier,
@@ -33,7 +33,7 @@ import {
     isEReference,
     XMLOptions,
     EDiagnosticImpl,
-    URI,
+    URI
 } from "./internal"
 import { XMLConstants } from "./XMLConstants"
 import { XMLString } from "./XMLString"
@@ -65,13 +65,13 @@ enum SaveFeatureKind {
     ObjectAttributeMany,
     ObjectAttributeIDRefSingle,
     ObjectAttributeIDRefMany,
-    DataTypeAttributeMany,
+    DataTypeAttributeMany
 }
 
 enum SaveResourceKind {
     Skip,
     Same,
-    Cross,
+    Cross
 }
 
 function stringFormat(template: string, ...args: any[]) {
@@ -166,11 +166,11 @@ export class XMLEncoder implements EEncoder {
     encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
         return new Promise((resolve, reject) => {
             let result = this.encode(eResource)
-            if (result.ok) {
-                s.write(result.val)
-                resolve(result.val)
+            if (result.isOk()) {
+                s.write(result.value)
+                resolve(result.value)
             } else {
-                reject(result.val)
+                reject(result.error)
             }
         })
     }
@@ -178,11 +178,11 @@ export class XMLEncoder implements EEncoder {
     encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
         return new Promise((resolve, reject) => {
             let result = this.encodeObject(eObject)
-            if (result.ok) {
-                s.write(result.val)
-                resolve(result.val)
+            if (result.isOk()) {
+                s.write(result.value)
+                resolve(result.value)
             } else {
-                reject(result.val)
+                reject(result.error)
             }
         })
     }
@@ -695,7 +695,7 @@ export class XMLEncoder implements EEncoder {
             port: uri.port,
             path: uri.path,
             query: uri.query,
-            fragment: resource.getURIFragment(object),
+            fragment: resource.getURIFragment(object)
         })
     }
 

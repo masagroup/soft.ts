@@ -267,7 +267,7 @@ describe("BasicEObjectList", () => {
             _inverse: false,
             _opposite: false,
             _proxies: true,
-            _unset: false,
+            _unset: false
         })
     })
 })

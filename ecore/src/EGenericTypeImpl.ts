@@ -30,7 +30,7 @@ import {
     Notification,
     getEcorePackage,
     isEObjectInternal,
-    isEObjectList,
+    isEObjectList
 } from "./internal"
 
 export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
@@ -69,8 +69,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                             EventType.RESOLVE,
                             EcoreConstants.EGENERIC_TYPE__ECLASSIFIER,
                             oldEClassifier,
-                            newEClassifier,
-                        ),
+                            newEClassifier
+                        )
                     )
                 }
             }
@@ -89,8 +89,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                     EventType.SET,
                     EcoreConstants.EGENERIC_TYPE__ECLASSIFIER,
                     oldEClassifier,
-                    newEClassifier,
-                ),
+                    newEClassifier
+                )
             )
         }
     }
@@ -114,14 +114,14 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                 notifications = oldELowerBound.eInverseRemove(
                     this,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
-                    notifications,
+                    notifications
                 )
             }
             if (isEObjectInternal(newELowerBound)) {
                 notifications = newELowerBound.eInverseAdd(
                     this,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
-                    notifications,
+                    notifications
                 )
             }
             notifications = this.basicSetELowerBound(newELowerBound, notifications)
@@ -141,7 +141,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                 EventType.SET,
                 EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
                 oldELowerBound,
-                newELowerBound,
+                newELowerBound
             )
             if (notifications != null) {
                 notifications.add(notification)
@@ -166,8 +166,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                             EventType.RESOLVE,
                             EcoreConstants.EGENERIC_TYPE__ERAW_TYPE,
                             oldERawType,
-                            newERawType,
-                        ),
+                            newERawType
+                        )
                     )
                 }
             }
@@ -209,8 +209,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                     EventType.SET,
                     EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER,
                     oldETypeParameter,
-                    newETypeParameter,
-                ),
+                    newETypeParameter
+                )
             )
         }
     }
@@ -229,14 +229,14 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                 notifications = oldEUpperBound.eInverseRemove(
                     this,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
-                    notifications,
+                    notifications
                 )
             }
             if (isEObjectInternal(newEUpperBound)) {
                 notifications = newEUpperBound.eInverseAdd(
                     this,
                     EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
-                    notifications,
+                    notifications
                 )
             }
             notifications = this.basicSetEUpperBound(newEUpperBound, notifications)
@@ -256,7 +256,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                 EventType.SET,
                 EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
                 oldEUpperBound,
-                newEUpperBound,
+                newEUpperBound
             )
             if (notifications != null) {
                 notifications.add(notification)
@@ -281,7 +281,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
             true,
             false,
             false,
-            false,
+            false
         )
     }
 

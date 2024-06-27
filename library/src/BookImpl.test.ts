@@ -19,7 +19,7 @@ import {
     CirculatingItem,
     LibraryConstants,
     Writer,
-    getLibraryPackage,
+    getLibraryPackage
 } from "./internal"
 
 interface BookIndexInternal extends BookIndex, ecore.EObjectInternal {}
@@ -147,7 +147,7 @@ describe("BookImpl", () => {
 
     test("setCategory", () => {
         let o = new BookImpl()
-        let value = BookCategory.SCIENCEFICTION
+        let value = BookCategory.SCIENCE_FICTION
 
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
@@ -273,7 +273,7 @@ describe("BookImpl", () => {
             verify(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).once()
         }
         {
-            let value = BookCategory.SCIENCEFICTION
+            let value = BookCategory.SCIENCE_FICTION
             o.eSetFromID(LibraryConstants.BOOK__CATEGORY, value)
             expect(o.eGetFromID(LibraryConstants.BOOK__CATEGORY, false)).toBe(value)
         }
