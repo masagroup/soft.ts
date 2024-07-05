@@ -30,7 +30,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 interface EEnumInternal extends EEnum, EObjectInternal {}
 

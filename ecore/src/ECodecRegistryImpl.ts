@@ -1,10 +1,10 @@
-import { BinaryCodec } from "./BinaryCodec"
-import { ECodec } from "./ECodec"
-import { ECodecRegistry } from "./ECodecRegistry"
-import { NoCodec } from "./NoCodec"
-import { XMICodec } from "./XMICodec"
-import { XMLCodec } from "./XMLCodec"
-import { URI } from "./internal"
+import { BinaryCodec } from "./BinaryCodec.js"
+import { ECodec } from "./ECodec.js"
+import { ECodecRegistry } from "./ECodecRegistry.js"
+import { NoCodec } from "./NoCodec.js"
+import { XMICodec } from "./XMICodec.js"
+import { XMLCodec } from "./XMLCodec.js"
+import { URI } from "./internal.js"
 
 export class ECodecRegistryImpl implements ECodecRegistry {
     private _protocolToCodec: Map<string, ECodec>

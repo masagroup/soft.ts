@@ -34,7 +34,7 @@ import {
     Writer,
     bookCategoryFromString,
     bookCategoryToString
-} from "./internal"
+} from "./internal.js"
 
 describe("LibraryFactoryImpl", () => {
     test("createFromEClass", () => {

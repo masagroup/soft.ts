@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EPackage, EFactory, EPackageRegistryImpl } from "./internal"
+import { EPackage, EFactory, EPackageRegistryImpl } from "./internal.js"
 
 export interface EPackageRegistry {
     registerPackage(pack: EPackage): void

@@ -8,8 +8,8 @@
 // *****************************************************************************
 
 import * as fs from "fs"
-import { getCodecRegistry } from "./ECodecRegistry"
-import { EEncoder } from "./EEncoder"
+import { getCodecRegistry } from "./ECodecRegistry.js"
+import { EEncoder } from "./EEncoder.js"
 import {
     AbstractNotification,
     AbstractNotifyingList,
@@ -39,7 +39,7 @@ import {
     ECodecRegistry,
     EDiagnosticImpl,
     URI
-} from "./internal"
+} from "./internal.js"
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier

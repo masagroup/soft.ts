@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EOperation, ETypedElement } from "./internal"
+import { EOperation, ETypedElement } from "./internal.js"
 
 export interface EParameter extends ETypedElement {
     // References

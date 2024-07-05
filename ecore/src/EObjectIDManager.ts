@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EObject } from "./internal"
+import { EObject } from "./internal.js"
 
 export interface EObjectIDManager {
     clear(): void

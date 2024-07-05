@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotification } from "./internal"
+import { ENotification } from "./internal.js"
 
 // ENotificationChain is an accumulator of notifications.
 // As notifications are produced,they are accumulated in a chain,

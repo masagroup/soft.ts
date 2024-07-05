@@ -12,7 +12,7 @@
 import deepEqual from "deep-equal"
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { AudioVisualItem, LibraryConstants, Person, VideoCassetteImpl, getLibraryPackage } from "./internal"
+import { AudioVisualItem, LibraryConstants, Person, VideoCassetteImpl, getLibraryPackage } from "./internal.js"
 
 interface PersonInternal extends Person, ecore.EObjectInternal {}
 

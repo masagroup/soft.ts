@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { Person } from "./internal"
+import { Person } from "./internal.js"
 
 export interface Employee extends Person {
     // References

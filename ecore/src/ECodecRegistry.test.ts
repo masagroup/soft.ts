@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { getCodecRegistry } from "./index"
+import { getCodecRegistry } from "./ECodecRegistry.js"
 
 describe("ECodecRegistry", () => {
     test("singleton ", () => {

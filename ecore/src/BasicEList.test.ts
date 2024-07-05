@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { BasicEList, ImmutableEList } from "./internal"
+import { BasicEList, ImmutableEList } from "./internal.js"
 
 describe("BasicEList", () => {
     test("get", () => {

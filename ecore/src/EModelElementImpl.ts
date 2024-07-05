@@ -26,7 +26,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EModelElementImpl extends EObjectImpl implements EModelElement {
     protected _eAnnotations: EList<EAnnotation>

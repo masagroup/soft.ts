@@ -31,7 +31,7 @@ import {
     ETypeParameter,
     ETypedElement,
     EcoreFactoryExt
-} from "./internal"
+} from "./internal.js"
 
 export interface EcoreFactory extends EFactory {
     createEAnnotation(): EAnnotation

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { WriterImpl } from "./internal"
+import { WriterImpl } from "./internal.js"
 
 export class WriterExt extends WriterImpl {
     constructor() {

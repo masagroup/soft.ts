@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Addressable, LibraryConstants, Person, getLibraryPackage } from "./internal"
+import { Addressable, LibraryConstants, Person, getLibraryPackage } from "./internal.js"
 
 export class PersonImpl extends ecore.EObjectImpl implements Person {
     protected _firstName: string

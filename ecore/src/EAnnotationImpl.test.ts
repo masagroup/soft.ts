@@ -35,7 +35,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 interface EModelElementInternal extends EModelElement, EObjectInternal {}
 interface EStringToStringMapEntryInternal extends EStringToStringMapEntry, EObjectInternal {}

@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EClass, ETypedElement } from "./internal"
+import { EClass, ETypedElement } from "./internal.js"
 
 export interface EStructuralFeature extends ETypedElement {
     // Attributes

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EResourceSet, XMLProcessor } from "./internal"
+import { EResourceSet, XMLProcessor } from "./internal.js"
 
 export class XMIProcessor extends XMLProcessor {
     constructor(resourceSet?: EResourceSet) {

@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { Addressable } from "./internal"
+import { Addressable } from "./internal.js"
 
 export interface Person extends Addressable {
     // Attributes

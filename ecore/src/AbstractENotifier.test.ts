@@ -15,7 +15,7 @@ import {
     ENotification,
     EventType,
     ImmutableEList
-} from "./internal"
+} from "./internal.js"
 
 describe("AbstractENotifierList", () => {
     let mockNotifier = mock<AbstractENotifier>()

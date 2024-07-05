@@ -32,7 +32,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 interface EPackageInternal extends EPackage, EObjectInternal {}
 

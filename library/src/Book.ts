@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { BookCategory, CirculatingItem, Writer } from "./internal"
+import { BookCategory, CirculatingItem, Writer } from "./internal.js"
 
 export interface Book extends CirculatingItem {
     // Attributes

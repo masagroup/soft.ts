@@ -1,6 +1,6 @@
-import { dateExtension } from "./Date"
-import { ulidExtension } from "./ULID"
-import { uuidExtension } from "./UUID"
+import { dateExtension } from "./Date.js"
+import { ulidExtension } from "./ULID.js"
+import { uuidExtension } from "./UUID.js"
 
 export class ExtData {
     constructor(

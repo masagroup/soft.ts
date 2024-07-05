@@ -27,7 +27,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParameter {
     protected _eBounds: EList<EGenericType>

@@ -11,7 +11,7 @@
 
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { Item, LibraryConstants, PeriodicalImpl, getLibraryPackage } from "./internal"
+import { Item, LibraryConstants, PeriodicalImpl, getLibraryPackage } from "./internal.js"
 
 describe("PeriodicalImpl", () => {
     test("eStaticClass", () => {

@@ -7,12 +7,12 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./EResource"
-import { ECodec } from "./ECodec"
-import { EDecoder } from "./EDecoder"
-import { EEncoder } from "./EEncoder"
-import { XMLDecoder } from "./XMLDecoder"
-import { XMLEncoder } from "./XMLEncoder"
+import { EResource } from "./EResource.js"
+import { ECodec } from "./ECodec.js"
+import { EDecoder } from "./EDecoder.js"
+import { EEncoder } from "./EEncoder.js"
+import { XMLDecoder } from "./XMLDecoder.js"
+import { XMLEncoder } from "./XMLEncoder.js"
 
 export class XMLOptions {
     static EXTENDED_META_DATA = "EXTENDED_META_DATA"

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EList, EMapEntry } from "./internal"
+import { EList, EMapEntry } from "./internal.js"
 
 export interface EMap<K, V> extends EList<EMapEntry<K, V>> {
     put(key: K, value: V): void

@@ -12,7 +12,7 @@
 import deepEqual from "deep-equal"
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { BorrowerImpl, Lendable, LibraryConstants, Person, getLibraryPackage } from "./internal"
+import { BorrowerImpl, Lendable, LibraryConstants, Person, getLibraryPackage } from "./internal.js"
 
 interface LendableInternal extends Lendable, ecore.EObjectInternal {}
 

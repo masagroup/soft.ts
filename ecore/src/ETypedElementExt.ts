@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { ETypedElementImpl, UNBOUNDED_MULTIPLICITY } from "./internal"
+import { ETypedElementImpl, UNBOUNDED_MULTIPLICITY } from "./internal.js"
 
 export class ETypedElementExt extends ETypedElementImpl {
     constructor() {

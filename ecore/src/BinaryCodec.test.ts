@@ -1,5 +1,5 @@
 import { mock } from "ts-mockito"
-import { BinaryCodec, EResource } from "./internal"
+import { BinaryCodec, EResource } from "./internal.js"
 
 describe("BinaryCodec", () => {
     test("newEncoder", () => {

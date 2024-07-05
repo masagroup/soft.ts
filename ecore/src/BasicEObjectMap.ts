@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { BasicEMap, EClass, EMapEntry } from "./internal"
+import { BasicEMap, EClass, EMapEntry } from "./internal.js"
 
 export class BasicEObjectMap<K, V> extends BasicEMap<K, V> {
     private _entryClass: EClass

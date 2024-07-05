@@ -1,6 +1,6 @@
 import { ReadStream } from "fs"
 import { Err, Ok, Result } from "ts-results-es"
-import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind"
+import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
 import {
     EClass,
     EcoreUtils,
@@ -20,8 +20,8 @@ import {
     isEClass,
     isEPackage,
     URI
-} from "./internal"
-import { Decoder } from "./msgpack/Decoder"
+} from "./internal.js"
+import { Decoder } from "./msgpack/Decoder.js"
 
 var toArray = require("stream-to-array")
 

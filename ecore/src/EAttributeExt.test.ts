@@ -8,8 +8,8 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito"
-import { EDataType } from "./EDataType"
-import { EAttributeExt, EClassifier } from "./internal"
+import { EDataType } from "./EDataType.js"
+import { EAttributeExt, EClassifier } from "./internal.js"
 
 describe("EAttributeExt", () => {
     test("basicGetEAttributeType", () => {

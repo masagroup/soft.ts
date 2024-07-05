@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EClass, EList, ENotifier, EOperation, EReference, EResource, EStructuralFeature } from "./internal"
+import { EClass, EList, ENotifier, EOperation, EReference, EResource, EStructuralFeature } from "./internal.js"
 
 export interface EObject extends ENotifier {
     // Operations

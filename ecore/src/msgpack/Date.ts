@@ -1,4 +1,4 @@
-import { getInt64, setInt64 } from "./Int"
+import { getInt64, setInt64 } from "./Int.js"
 
 export const EXT_DATE = -1
 

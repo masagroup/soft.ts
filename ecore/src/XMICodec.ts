@@ -7,12 +7,12 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./EResource"
-import { ECodec } from "./ECodec"
-import { EDecoder } from "./EDecoder"
-import { EEncoder } from "./EEncoder"
-import { XMIDecoder } from "./XMIDecoder"
-import { XMIEncoder } from "./XMIEncoder"
+import { EResource } from "./EResource.js"
+import { ECodec } from "./ECodec.js"
+import { EDecoder } from "./EDecoder.js"
+import { EEncoder } from "./EEncoder.js"
+import { XMIDecoder } from "./XMIDecoder.js"
+import { XMIEncoder } from "./XMIEncoder.js"
 
 export class XMICodec implements ECodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EEncoder {

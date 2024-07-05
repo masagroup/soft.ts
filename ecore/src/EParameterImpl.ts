@@ -24,7 +24,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EParameterImpl extends ETypedElementExt implements EParameter {
     constructor() {

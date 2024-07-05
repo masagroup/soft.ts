@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito"
-import { AbstractEAdapter, ENotification, ENotifier } from "./internal"
+import { AbstractEAdapter, ENotification, ENotifier } from "./internal.js"
 
 class EAdapterTest extends AbstractEAdapter {
     notifyChanged(notification: ENotification): void {

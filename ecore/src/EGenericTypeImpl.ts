@@ -31,7 +31,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     protected _eTypeArguments: EList<EGenericType>

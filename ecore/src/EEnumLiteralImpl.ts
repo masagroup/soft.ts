@@ -28,7 +28,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral {
     protected _value: number

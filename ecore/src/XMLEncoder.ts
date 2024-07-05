@@ -34,9 +34,9 @@ import {
     XMLOptions,
     EDiagnosticImpl,
     URI
-} from "./internal"
-import { XMLConstants } from "./XMLConstants"
-import { XMLString } from "./XMLString"
+} from "./internal.js"
+import { XMLConstants } from "./XMLConstants.js"
+import { XMLString } from "./XMLString.js"
 
 enum SaveFeatureKind {
     Transient,

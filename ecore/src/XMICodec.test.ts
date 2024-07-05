@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs"
-import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, URI, uriToFilePath } from "./internal"
+import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, URI, uriToFilePath } from "./internal.js"
 
 describe("XMICodec", () => {
     describe("load.library.simple", () => {

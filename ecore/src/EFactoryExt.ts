@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EClass, EObject, DynamicEObjectImpl, EFactoryImpl, EDataType, isEEnum } from "./internal"
+import { EClass, EObject, DynamicEObjectImpl, EFactoryImpl, EDataType, isEEnum } from "./internal.js"
 
 export class EFactoryExt extends EFactoryImpl {
     constructor() {

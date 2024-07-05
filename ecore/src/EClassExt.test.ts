@@ -17,7 +17,7 @@ import {
     getEcoreFactory,
     getEcorePackage,
     ImmutableEList
-} from "./internal"
+} from "./internal.js"
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
     return eSuper._subClasses.indexOf(eClass) != -1

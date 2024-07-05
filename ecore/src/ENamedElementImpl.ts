@@ -27,7 +27,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class ENamedElementImpl extends EModelElementExt implements ENamedElement {
     protected _name: string

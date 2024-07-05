@@ -27,7 +27,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EEnumImpl extends EDataTypeExt implements EEnum {
     protected _eLiterals: EList<EEnumLiteral>

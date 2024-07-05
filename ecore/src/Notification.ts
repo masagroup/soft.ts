@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { AbstractNotification, ENotifier, EObject, EStructuralFeature, EventType } from "./internal"
+import { AbstractNotification, ENotifier, EObject, EStructuralFeature, EventType } from "./internal.js"
 
 export class Notification extends AbstractNotification {
     private _object: EObject

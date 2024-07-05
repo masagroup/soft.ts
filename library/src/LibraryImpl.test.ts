@@ -24,7 +24,7 @@ import {
     Person,
     Writer,
     getLibraryPackage
-} from "./internal"
+} from "./internal.js"
 
 interface BookInternal extends Book, ecore.EObjectInternal {}
 interface BorrowerInternal extends Borrower, ecore.EObjectInternal {}

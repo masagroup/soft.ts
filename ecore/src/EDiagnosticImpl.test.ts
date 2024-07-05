@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EDiagnosticImpl } from "./internal"
+import { EDiagnosticImpl } from "./internal.js"
 
 describe("EDiagnosticImpl", () => {
     test("accessors", () => {

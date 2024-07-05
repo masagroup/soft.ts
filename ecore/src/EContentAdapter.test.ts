@@ -20,7 +20,7 @@ import {
     EReference,
     EventType,
     ImmutableEList
-} from "./internal"
+} from "./internal.js"
 
 describe("EContentAdapter", () => {
     test("convert", () => {

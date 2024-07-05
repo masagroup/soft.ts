@@ -10,7 +10,7 @@ import {
     EStructuralFeature,
     ExtendedMetaData,
     ImmutableEList
-} from "./internal"
+} from "./internal.js"
 
 const annotationURI = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
 

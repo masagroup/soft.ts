@@ -27,7 +27,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EDataTypeImpl extends EClassifierExt implements EDataType {
     protected _isSerializable: boolean

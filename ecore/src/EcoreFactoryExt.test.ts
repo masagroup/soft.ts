@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito"
-import { EcoreConstants, EcoreFactoryExt, EDataType } from "./internal"
+import { EcoreConstants, EcoreFactoryExt, EDataType } from "./internal.js"
 
 describe("EcoreFactoryExt", () => {
     test("convertDate", () => {

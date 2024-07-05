@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EAnnotation, EModelElementImpl, ENamedElement, EObject, EObjectList, EStructuralFeature } from "./internal"
+import { EAnnotation, EModelElementImpl, ENamedElement, EObject, EObjectList, EStructuralFeature } from "./internal.js"
 
 function isEAnnotation(eObject: EObject): eObject is EAnnotation {
     return "details" in eObject

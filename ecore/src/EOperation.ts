@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EClass, EClassifier, EList, EParameter, ETypedElement } from "./internal"
+import { EClass, EClassifier, EList, EParameter, ETypedElement } from "./internal.js"
 
 export interface EOperation extends ETypedElement {
     // Attributes

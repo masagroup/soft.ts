@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Addressable, Book, Borrower, Employee, Item, Person, Writer } from "./internal"
+import { Addressable, Book, Borrower, Employee, Item, Person, Writer } from "./internal.js"
 
 export interface Library extends Addressable {
     // Attributes

@@ -33,7 +33,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EClassImpl extends EClassifierExt implements EClass {
     protected _eReferences: EList<EReference>

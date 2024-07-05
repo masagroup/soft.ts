@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Library } from "./internal"
+import { Library } from "./internal.js"
 
 export interface DocumentRoot extends ecore.EObject {
     // References

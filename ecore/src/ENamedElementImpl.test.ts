@@ -29,7 +29,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 describe("ENamedElementImpl", () => {
     test("eStaticClass", () => {

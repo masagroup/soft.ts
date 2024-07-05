@@ -16,7 +16,7 @@ import {
     EReference,
     ImmutableEList,
     isEObject
-} from "./internal"
+} from "./internal.js"
 
 export class DeepCopy {
     private _objects: Map<EObject, EObject> = new Map()

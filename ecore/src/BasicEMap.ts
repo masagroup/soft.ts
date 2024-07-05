@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { BasicEList, EMap, EMapEntry } from "./internal"
+import { BasicEList, EMap, EMapEntry } from "./internal.js"
 
 class BasicEMapEntry<K, V> implements EMapEntry<K, V> {
     private _key: K

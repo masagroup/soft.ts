@@ -28,7 +28,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 describe("EStringToStringMapEntryImpl", () => {
     test("eStaticClass", () => {

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { Collection, EList, getNonDuplicates } from "./internal"
+import { Collection, EList, getNonDuplicates } from "./internal.js"
 
 export abstract class AbstractEList<E> implements EList<E> {
     protected _isUnique: boolean
