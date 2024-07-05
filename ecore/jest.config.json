@@ -5,5 +5,8 @@
         "<rootDir>/dist/"
     ],
     "coverageDirectory": "coverage",
-    "cache": false
+    "cache": false,
+    "moduleNameMapper": {
+        "^(\\.\\.?\\/.+)\\.js$": "$1"
+    }
 }
