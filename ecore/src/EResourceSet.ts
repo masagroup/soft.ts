@@ -7,7 +7,16 @@
 //
 // *****************************************************************************
 
-import { ENotifier, EResource, EList, EObject, EURIConverter, EPackageRegistry, ECodecRegistry, URI } from "./internal.js"
+import {
+    ENotifier,
+    EResource,
+    EList,
+    EObject,
+    EURIConverter,
+    EPackageRegistry,
+    ECodecRegistry,
+    URI
+} from "./internal.js"
 
 export class EResourceSetConstants {
     public static readonly RESOURCE_SET__RESOURCES: number = 0
