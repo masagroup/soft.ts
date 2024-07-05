@@ -17,5 +17,8 @@
     ],
     "testPathIgnorePatterns": [
         "<rootDir>/dist/"
-    ]
+    ],
+    "moduleNameMapper": {
+        "^(\\.\\.?\\/.+)\\.js$": "$1"
+    }
 }
