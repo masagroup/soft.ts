@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EcoreFactoryImpl, EDataType } from "./internal"
+import { EcoreFactoryImpl, EDataType } from "./internal.js"
 
 export class EcoreFactoryExt extends EcoreFactoryImpl {
     private static _instanceExt: EcoreFactoryExt = null

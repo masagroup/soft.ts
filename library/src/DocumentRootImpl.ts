@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { DocumentRoot, Library, LibraryConstants, getLibraryPackage } from "./internal"
+import { DocumentRoot, Library, LibraryConstants, getLibraryPackage } from "./internal.js"
 
 export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot {
     protected _xMLNSPrefixMap: ecore.EMap<string, string>

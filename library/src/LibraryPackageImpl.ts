@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { LibraryConstants, LibraryPackage, getLibraryFactory } from "./internal"
+import { LibraryConstants, LibraryPackage, getLibraryFactory } from "./internal.js"
 
 export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPackage {
     private static _instance: LibraryPackageImpl = null

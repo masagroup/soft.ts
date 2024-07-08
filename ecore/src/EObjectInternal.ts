@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature, URI } from "./internal"
+import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature, URI } from "./internal.js"
 
 export interface EDynamicProperties {
     eDynamicGet(dynamicFeatureID: number): any

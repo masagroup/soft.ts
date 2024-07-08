@@ -22,7 +22,7 @@ import {
     ImmutableEList,
     isEAttribute,
     isEReference
-} from "./internal"
+} from "./internal.js"
 
 export function isEClass(e: EClassifier): e is EClass {
     return "isAbstract" in e

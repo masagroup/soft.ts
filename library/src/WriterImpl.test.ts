@@ -12,7 +12,7 @@
 import deepEqual from "deep-equal"
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { Book, LibraryConstants, Person, WriterImpl, getLibraryPackage } from "./internal"
+import { Book, LibraryConstants, Person, WriterImpl, getLibraryPackage } from "./internal.js"
 
 interface BookInternal extends Book, ecore.EObjectInternal {}
 

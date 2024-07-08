@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { FileURIHandler, URI } from "./internal"
+import { FileURIHandler, URI } from "./internal.js"
 
 describe("FileURIHandler", () => {
     test("canHandle", () => {

@@ -29,7 +29,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 interface EAnnotationInternal extends EAnnotation, EObjectInternal {}
 

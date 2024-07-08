@@ -32,4 +32,4 @@ export {
     LibraryConstants,
     getLibraryPackage,
     getLibraryFactory
-} from "./internal"
+} from "./internal.js"

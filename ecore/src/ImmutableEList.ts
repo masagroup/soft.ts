@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { Collection, EList } from "./internal"
+import { Collection, EList } from "./internal.js"
 
 export class ImmutableEList<E> implements EList<E> {
     protected _v: E[]

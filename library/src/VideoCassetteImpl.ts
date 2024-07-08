@@ -17,7 +17,7 @@ import {
     Person,
     VideoCassette,
     getLibraryPackage
-} from "./internal"
+} from "./internal.js"
 
 export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCassette {
     protected _cast: ecore.EList<Person>

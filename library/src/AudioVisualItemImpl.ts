@@ -10,7 +10,13 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { AudioVisualItem, CirculatingItem, CirculatingItemImpl, LibraryConstants, getLibraryPackage } from "./internal"
+import {
+    AudioVisualItem,
+    CirculatingItem,
+    CirculatingItemImpl,
+    LibraryConstants,
+    getLibraryPackage
+} from "./internal.js"
 
 export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVisualItem {
     protected _isDamaged: boolean

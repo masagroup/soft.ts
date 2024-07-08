@@ -42,7 +42,7 @@ import {
     WriterExt,
     bookCategoryFromString,
     bookCategoryToString
-} from "./internal"
+} from "./internal.js"
 
 export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFactory {
     private static _instance: LibraryFactoryImpl = null

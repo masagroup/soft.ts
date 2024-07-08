@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EList, EMap, EModelElement, EObject } from "./internal"
+import { EList, EMap, EModelElement, EObject } from "./internal.js"
 
 export interface EAnnotation extends EModelElement {
     // Attributes

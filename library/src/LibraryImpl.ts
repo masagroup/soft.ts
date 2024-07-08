@@ -21,7 +21,7 @@ import {
     Person,
     Writer,
     getLibraryPackage
-} from "./internal"
+} from "./internal.js"
 
 export class LibraryImpl extends ecore.EObjectImpl implements Library {
     protected _branches: ecore.EList<Library>

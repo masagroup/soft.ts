@@ -7,8 +7,8 @@
 //
 // *****************************************************************************
 
-import { ECodecRegistryImpl } from "./ECodecRegistryImpl"
-import { EResourceImpl } from "./EResourceImpl"
+import { ECodecRegistryImpl } from "./ECodecRegistryImpl.js"
+import { EResourceImpl } from "./EResourceImpl.js"
 import {
     AbstractNotifyingList,
     EList,
@@ -29,7 +29,7 @@ import {
     getPackageRegistry,
     getCodecRegistry,
     URI
-} from "./internal"
+} from "./internal.js"
 
 class ResourcesList extends AbstractNotifyingList<EResource> {
     constructor(private _resourceSet: EResourceSetImpl) {

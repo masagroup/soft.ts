@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EAdapter, ENotification, ENotifier } from "./internal"
+import { EAdapter, ENotification, ENotifier } from "./internal.js"
 
 export abstract class AbstractEAdapter implements EAdapter {
     private _target: ENotifier = null

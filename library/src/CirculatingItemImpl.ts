@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Borrower, CirculatingItem, Item, ItemImpl, Lendable, LibraryConstants, getLibraryPackage } from "./internal"
+import { Borrower, CirculatingItem, Item, ItemImpl, Lendable, LibraryConstants, getLibraryPackage } from "./internal.js"
 
 export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     protected _borrowers: ecore.EList<Borrower>

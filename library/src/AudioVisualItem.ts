@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { CirculatingItem } from "./internal"
+import { CirculatingItem } from "./internal.js"
 
 export interface AudioVisualItem extends CirculatingItem {
     // Attributes

@@ -16,7 +16,7 @@ import {
     EStructuralFeature,
     EventType,
     ImmutableEList
-} from "./internal"
+} from "./internal.js"
 
 class NotifyingListTest<E> extends AbstractNotifyingList<E> {
     private _mockNotifier: ENotifier

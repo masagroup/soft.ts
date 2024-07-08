@@ -7,9 +7,9 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./internal"
-import { XMIConstants } from "./XMIConstants"
-import { XMLEncoder } from "./XMLEncoder"
+import { EResource } from "./internal.js"
+import { XMIConstants } from "./XMIConstants.js"
+import { XMLEncoder } from "./XMLEncoder.js"
 
 export class XMIEncoder extends XMLEncoder {
     private _xmiVersion: string

@@ -26,7 +26,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringToStringMapEntry {
     protected _key: string

@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EModelElement } from "./internal"
+import { EModelElement } from "./internal.js"
 
 export interface ENamedElement extends EModelElement {
     // Attributes

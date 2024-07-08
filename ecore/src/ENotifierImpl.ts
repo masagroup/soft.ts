@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { AbstractENotifier, AbstractENotifierList, EAdapter, EList } from "./internal"
+import { AbstractENotifier, AbstractENotifierList, EAdapter, EList } from "./internal.js"
 
 export class ENotifierImpl extends AbstractENotifier {
     private _adapters: EList<EAdapter> = null

@@ -9,7 +9,7 @@
 
 import deepEqual from "deep-equal"
 import { mock, instance, when } from "ts-mockito"
-import { EObject, ETreeIterator, ImmutableEList } from "./internal"
+import { EObject, ETreeIterator, ImmutableEList } from "./internal.js"
 
 describe("ETreeIterator", () => {
     test("iteratorWithRoot", () => {

@@ -1,5 +1,5 @@
 import { Uuid4 } from "id128"
-import { BinaryEncoder } from "./BinaryEncoder"
+import { BinaryEncoder } from "./BinaryEncoder.js"
 import {
     BinaryOptions,
     EPackage,
@@ -12,7 +12,7 @@ import {
     XMLProcessor,
     uriToFilePath,
     UUIDManager
-} from "./internal"
+} from "./internal.js"
 import * as fs from "fs"
 
 function loadPackage(filename: string): EPackage {

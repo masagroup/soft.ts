@@ -1,6 +1,6 @@
-import { EResource } from "./EResource"
-import { EDecoder } from "./EDecoder"
-import { EEncoder } from "./EEncoder"
+import { EResource } from "./EResource.js"
+import { EDecoder } from "./EDecoder.js"
+import { EEncoder } from "./EEncoder.js"
 
 export interface ECodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EEncoder

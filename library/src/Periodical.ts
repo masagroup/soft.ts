@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { Item } from "./internal"
+import { Item } from "./internal.js"
 
 export interface Periodical extends Item {
     // Attributes

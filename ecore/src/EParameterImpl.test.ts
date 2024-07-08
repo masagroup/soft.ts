@@ -26,7 +26,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 interface EOperationInternal extends EOperation, EObjectInternal {}
 

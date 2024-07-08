@@ -29,7 +29,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EFactoryImpl extends EModelElementExt implements EFactory {
     constructor() {

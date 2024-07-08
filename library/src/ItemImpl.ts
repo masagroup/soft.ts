@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Item, LibraryConstants, getLibraryPackage } from "./internal"
+import { Item, LibraryConstants, getLibraryPackage } from "./internal.js"
 
 export class ItemImpl extends ecore.EObjectImpl implements Item {
     protected _publicationDate: Date

@@ -19,7 +19,7 @@ import {
     isEReference,
     isEResource,
     isEResourceSet
-} from "./internal"
+} from "./internal.js"
 
 export class EContentAdapter extends AbstractEAdapter {
     notifyChanged(notification: ENotification): void {

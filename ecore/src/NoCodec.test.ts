@@ -1,4 +1,4 @@
-import { NoCodec } from "./NoCodec"
+import { NoCodec } from "./NoCodec.js"
 
 describe("NoCoder", () => {
     test("newEncoder", () => {

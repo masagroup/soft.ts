@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EFactory, EPackage, EPackageRegistry, getEcorePackage } from "./internal"
+import { EFactory, EPackage, EPackageRegistry, getEcorePackage } from "./internal.js"
 
 export class EPackageRegistryImpl implements EPackageRegistry {
     private _packages: Map<string, EPackage>

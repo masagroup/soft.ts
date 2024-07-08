@@ -28,7 +28,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EObjectImpl extends BasicEObject implements EObject {
     constructor() {

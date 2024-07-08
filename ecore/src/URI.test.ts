@@ -1,4 +1,4 @@
-import { URI } from "./URI"
+import { URI } from "./URI.js"
 
 describe("URI", () => {
     test("constructor", () => {

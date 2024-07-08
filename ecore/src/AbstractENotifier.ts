@@ -17,7 +17,7 @@ import {
     EStructuralFeature,
     EventType,
     ImmutableEList
-} from "./internal"
+} from "./internal.js"
 
 class AbstractENotifierNotification extends AbstractNotification {
     private _notifier: AbstractENotifier

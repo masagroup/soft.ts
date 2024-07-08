@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EClassifierExt, EPackageExt } from "./internal"
+import { EClassifierExt, EPackageExt } from "./internal.js"
 
 describe("EClassifierExt", () => {
     test("classifierID", () => {

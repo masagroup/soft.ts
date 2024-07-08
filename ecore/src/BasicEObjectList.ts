@@ -19,7 +19,7 @@ import {
     AbstractNotifyingList,
     EventType,
     EOPPOSITE_FEATURE_BASE
-} from "./internal"
+} from "./internal.js"
 
 export class BasicEObjectList<O extends EObject>
     extends AbstractNotifyingList<O>

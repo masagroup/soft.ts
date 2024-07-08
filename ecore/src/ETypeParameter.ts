@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EGenericType, EList, ENamedElement } from "./internal"
+import { EGenericType, EList, ENamedElement } from "./internal.js"
 
 export interface ETypeParameter extends ENamedElement {
     // References

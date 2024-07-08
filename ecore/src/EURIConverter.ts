@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs"
-import { EList, EURIHandler, URI } from "./internal"
+import { EList, EURIHandler, URI } from "./internal.js"
 
 export interface EURIConverter {
     createReadStream(uri: URI): fs.ReadStream

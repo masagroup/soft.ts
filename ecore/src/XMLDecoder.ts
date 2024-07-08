@@ -35,8 +35,8 @@ import {
     XMLNamespaces,
     XMLOptions,
     URI
-} from "./internal"
-import { XMLConstants } from "./XMLConstants"
+} from "./internal.js"
+import { XMLConstants } from "./XMLConstants.js"
 
 type XMLReference = {
     object: EObject

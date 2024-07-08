@@ -32,7 +32,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 describe("EObjectImpl", () => {
     test("eStaticClass", () => {

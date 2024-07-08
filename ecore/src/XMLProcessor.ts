@@ -18,7 +18,7 @@ import {
     isEResourceSet,
     URI,
     XMLOptions
-} from "./internal"
+} from "./internal.js"
 
 export class XMLProcessor {
     private _extendMetaData: ExtendedMetaData = new ExtendedMetaData()

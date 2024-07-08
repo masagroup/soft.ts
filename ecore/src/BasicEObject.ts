@@ -21,7 +21,7 @@ import {
     EStructuralFeature,
     ImmutableEList,
     URI
-} from "./internal"
+} from "./internal.js"
 
 type getFeatureFnType = (c: EClass) => EList<EStructuralFeature>
 

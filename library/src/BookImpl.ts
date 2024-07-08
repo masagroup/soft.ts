@@ -18,7 +18,7 @@ import {
     LibraryConstants,
     Writer,
     getLibraryPackage
-} from "./internal"
+} from "./internal.js"
 
 export class BookImpl extends CirculatingItemImpl implements Book {
     protected _indexes: ecore.EMap<string, number>

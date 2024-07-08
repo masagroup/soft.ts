@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs"
-import { URI } from "./URI"
+import { URI } from "./URI.js"
 
 export interface EURIHandler {
     canHandle(uri: URI): boolean

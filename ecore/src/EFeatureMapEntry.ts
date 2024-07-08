@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EStructuralFeature } from "./internal"
+import { EStructuralFeature } from "./internal.js"
 
 export interface EFeatureMapEntry {
     getEStructuralFeature(): EStructuralFeature

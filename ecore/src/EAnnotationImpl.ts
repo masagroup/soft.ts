@@ -33,7 +33,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     protected _details: EMap<string, string>

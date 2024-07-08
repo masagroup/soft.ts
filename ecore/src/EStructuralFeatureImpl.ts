@@ -27,7 +27,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EStructuralFeatureImpl extends ETypedElementExt implements EStructuralFeature {
     protected _isTransient: boolean

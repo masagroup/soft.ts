@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { ENamedElement, EPackage } from "./internal"
+import { ENamedElement, EPackage } from "./internal.js"
 
 export interface EClassifier extends ENamedElement {
     // Attributes

@@ -28,7 +28,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     protected _classifierID: number

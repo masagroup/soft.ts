@@ -14,7 +14,7 @@ import {
     EStructuralFeature,
     EventType,
     NotificationChain
-} from "./internal"
+} from "./internal.js"
 
 export abstract class AbstractNotification implements ENotification, ENotificationChain {
     abstract readonly feature: EStructuralFeature

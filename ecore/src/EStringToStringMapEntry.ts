@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EMapEntry, EObject } from "./internal"
+import { EMapEntry, EObject } from "./internal.js"
 
 export interface EStringToStringMapEntry extends EObject, EMapEntry<string, string> {
     // Attributes

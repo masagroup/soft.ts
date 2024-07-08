@@ -18,9 +18,9 @@ import {
     EAttribute,
     URI,
     BinaryOptions
-} from "./internal"
-import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind"
-import { Encoder } from "./msgpack/Encoder"
+} from "./internal.js"
+import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
+import { Encoder } from "./msgpack/Encoder.js"
 
 const binaryVersion = 0
 const binarySignature = Uint8Array.from([137, 101, 109, 102, 10, 13, 26, 10])

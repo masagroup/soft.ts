@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EClassifierImpl } from "./internal"
+import { EClassifierImpl } from "./internal.js"
 
 export class EClassifierExt extends EClassifierImpl {
     constructor() {

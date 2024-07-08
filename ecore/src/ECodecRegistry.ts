@@ -1,4 +1,4 @@
-import { ECodec, ECodecRegistryImpl, URI } from "./internal"
+import { ECodec, ECodecRegistryImpl, URI } from "./internal.js"
 
 export interface ECodecRegistry {
     getCodec(url: URI): ECodec

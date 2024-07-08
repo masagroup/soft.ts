@@ -32,7 +32,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EOperationImpl extends ETypedElementExt implements EOperation {
     protected _eParameters: EList<EParameter>

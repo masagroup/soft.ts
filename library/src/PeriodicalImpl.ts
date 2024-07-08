@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Item, ItemImpl, LibraryConstants, Periodical, getLibraryPackage } from "./internal"
+import { Item, ItemImpl, LibraryConstants, Periodical, getLibraryPackage } from "./internal.js"
 
 export class PeriodicalImpl extends ItemImpl implements Periodical {
     protected _title: string

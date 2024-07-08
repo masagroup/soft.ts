@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EClassifier, EList, EObject, ETypeParameter } from "./internal"
+import { EClassifier, EList, EObject, ETypeParameter } from "./internal.js"
 
 export interface EGenericType extends EObject {
     // References

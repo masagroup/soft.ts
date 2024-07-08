@@ -28,7 +28,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute {
     protected _isID: boolean
