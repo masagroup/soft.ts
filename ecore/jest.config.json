@@ -1,12 +1,10 @@
 {
-    "preset": "ts-jest",
+    "preset": "ts-jest/presets/default-esm",
+    "resolver": "ts-jest-resolver",
     "testEnvironment": "node",
     "testPathIgnorePatterns": [
         "<rootDir>/dist/"
     ],
     "coverageDirectory": "coverage",
-    "cache": false,
-    "moduleNameMapper": {
-        "^(\\.\\.?\\/.+)\\.js$": "$1"
-    }
+    "cache": false
 }
