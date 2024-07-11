@@ -9,7 +9,7 @@
 
 ECORE_TS_VERSION := 1.0.4
 
-GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/$(1) -o /pwd/ -P /pwd/generator.properties ${2}
+GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/$(2) -o /pwd/$(1) -P /pwd/generator.properties $(3)
 
 ifeq (${OS},Windows_NT)
 DEVNULL := NUL
@@ -34,16 +34,16 @@ else
 endif
 
 .PHONY: all
-all: ecore library
+all: ecore empty library
 
 .PHONY: ci
-ci: ecore.ci library.ci
+ci: ecore.ci empty.ci library.ci
 
 .PHONY: ecore
 ecore: ecore.install ecore.generate ecore.format ecore.build ecore.test
 
 .PHONY: ecore.ci
-ecore.ci: ecore.install ecore.generate ecore.build ecore.test
+ecore.ci: ecore.install ecore.build ecore.test
 
 .PHONY: ecore.install
 ecore.install:
@@ -53,7 +53,7 @@ ecore.install:
 .PHONY: ecore.generate
 ecore.generate:
 	@echo "[ecore.generate]"
-	@$(call GENERATE,ecore.ecore,-t generateModel -t generateTests)
+	@$(call GENERATE,,ecore.ecore,-t generateModel -t generateTests)
 
 .PHONY: ecore.format
 ecore.format:
@@ -70,37 +70,71 @@ ecore.test:
 	@echo "[ecore.test]"
 	@(cd ecore && $(NPM) run test)
 
+.PHONY: examples
+examples: library empty
+
 .PHONY: library
 library: library.install library.generate library.format library.build library.test
 
 .PHONY: library.ci
-library.ci: library.install library.generate library.build library.test
+library.ci: library.install library.build library.test
 
 
 .PHONY: library.install
 library.install:
 	@echo "[library.install]"
-	@(cd library && $(NPM) install --no-fund --loglevel=error)
+	@(cd examples/library && $(NPM) install --no-fund --loglevel=error)
 
 .PHONY: library.generate
 library.generate:
 	@echo "[library.generate]"
-	@$(call GENERATE,library.ecore,)
+	@$(call GENERATE,examples,library.ecore,)
 
 .PHONY: library.format
 library.format:
 	@echo "[library.format]"
-	@(cd library && $(NPM) run pretty)
+	@(cd examples/library && $(NPM) run pretty)
 
 .PHONY: library.build
 library.build:
 	@echo "[library.build]"
-	@(cd library && $(NPM) run build)
+	@(cd examples/library && $(NPM) run build)
 
 .PHONY: library.test
 library.test:
 	@echo "[library.test]"
-	@(cd library && $(NPM) run test)
+	@(cd examples/library && $(NPM) run test)
+
+.PHONY: empty
+empty: empty.install empty.generate empty.format empty.build empty.test
+
+.PHONY: empty.ci
+empty.ci: empty.install empty.build empty.test
+
+.PHONY: empty.install
+empty.install:
+	@echo "[empty.install]"
+	@(cd examples/empty && $(NPM) install --no-fund --loglevel=error)
+
+.PHONY: empty.generate
+empty.generate:
+	@echo "[empty.generate]"
+	@$(call GENERATE,examples,empty.ecore,)
+
+.PHONY: empty.format
+empty.format:
+	@echo "[empty.format]"
+	@(cd examples/empty && $(NPM) run pretty)
+
+.PHONY: empty.build
+empty.build:
+	@echo "[empty.build]"
+	@(cd examples/empty && $(NPM) run build)
+
+.PHONY: empty.test
+empty.test:
+	@echo "[empty.test]"
+	@(cd examples/empty && $(NPM) run test)
 
 .PHONY: versions
 versions:
