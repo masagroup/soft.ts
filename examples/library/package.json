@@ -23,6 +23,6 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "@masagroup/ecore": "file:../ecore"
+    "@masagroup/ecore": "file:../../ecore"
   }
 }
