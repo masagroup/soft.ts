@@ -1,5 +1,5 @@
-import { EObject } from "./EObject"
-import { EResource } from "./EResource"
+import { EObject } from "./EObject.js"
+import { EResource } from "./EResource.js"
 import * as fs from "fs"
 import { Result } from "ts-results-es"
 

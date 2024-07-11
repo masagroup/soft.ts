@@ -1,15 +1,19 @@
 {
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compileOnSave": false,
   "compilerOptions": {
-    "module": "es2015",
-    "target": "es2015",
-    "moduleResolution": "node",
-    "esModuleInterop":true,
-    "sourceMap": true,
-    "declaration": true,
-    "stripInternal": true,
-    "outDir": "dist",
+    "lib": ["ES2020","DOM"],
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "types": ["node", "jest","sax","deep-equal"],
+    "esModuleInterop":true,	
+    "inlineSourceMap": false,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true
   },
- "exclude": [
+  "exclude": [
     ".vscode",
     "dist",
     "node_modules",

@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { BookIndex, LibraryConstants, getLibraryPackage } from "./internal"
+import { BookIndex, LibraryConstants, getLibraryPackage } from "./internal.js"
 
 export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
     protected _key: string

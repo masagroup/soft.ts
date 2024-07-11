@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { spy, verify, when } from "ts-mockito"
-import { AbstractEList, Collection } from "./internal"
+import { AbstractEList, Collection } from "./internal.js"
 
 class EListTest<E> extends AbstractEList<E> {
     removeAt(index: number): E {

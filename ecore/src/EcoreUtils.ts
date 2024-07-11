@@ -7,7 +7,6 @@
 //
 // *****************************************************************************
 
-import { isEObjectInternal } from "./EObjectInternal"
 import {
     DeepCopy,
     DeepEqual,
@@ -19,8 +18,9 @@ import {
     EResource,
     EResourceSet,
     URI,
-    getPackageRegistry
-} from "./internal"
+    getPackageRegistry,
+    isEObjectInternal
+} from "./internal.js"
 
 export class EcoreUtils {
     static getEObjectID(eObject: EObject): string {

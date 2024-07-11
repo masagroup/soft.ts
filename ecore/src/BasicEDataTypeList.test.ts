@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito"
-import { BasicEDataTypeList, EClass, EObjectInternal, EStructuralFeature } from "./internal"
+import { BasicEDataTypeList, EClass, EObjectInternal, EStructuralFeature } from "./internal.js"
 
 describe("BasicEDataTypeList", () => {
     test("constructor", () => {

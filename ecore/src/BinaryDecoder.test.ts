@@ -1,5 +1,5 @@
 import { Uuid4 } from "id128"
-import { BinaryDecoder } from "./BinaryDecoder"
+import { BinaryDecoder } from "./BinaryDecoder.js"
 import {
     EAttribute,
     EClass,
@@ -17,7 +17,7 @@ import {
     XMIProcessor,
     XMLProcessor,
     uriToFilePath
-} from "./internal"
+} from "./internal.js"
 
 import * as fs from "fs"
 

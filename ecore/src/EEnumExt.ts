@@ -1,4 +1,4 @@
-import { EEnum, EEnumImpl, EEnumLiteral } from "./internal"
+import { EEnum, EEnumImpl, EEnumLiteral } from "./internal.js"
 
 export function isEEnum(o: any): o is EEnum {
     return o == undefined ? undefined : "eLiterals" in o

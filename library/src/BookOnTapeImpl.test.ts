@@ -11,7 +11,7 @@
 
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { AudioVisualItem, BookOnTapeImpl, LibraryConstants, Person, Writer, getLibraryPackage } from "./internal"
+import { AudioVisualItem, BookOnTapeImpl, LibraryConstants, Person, Writer, getLibraryPackage } from "./internal.js"
 
 interface PersonInternal extends Person, ecore.EObjectInternal {}
 interface WriterInternal extends Writer, ecore.EObjectInternal {}

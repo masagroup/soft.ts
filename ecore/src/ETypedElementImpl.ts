@@ -28,7 +28,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class ETypedElementImpl extends ENamedElementImpl implements ETypedElement {
     protected _lowerBound: number

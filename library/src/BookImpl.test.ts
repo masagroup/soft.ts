@@ -20,7 +20,7 @@ import {
     LibraryConstants,
     Writer,
     getLibraryPackage
-} from "./internal"
+} from "./internal.js"
 
 interface BookIndexInternal extends BookIndex, ecore.EObjectInternal {}
 interface WriterInternal extends Writer, ecore.EObjectInternal {}

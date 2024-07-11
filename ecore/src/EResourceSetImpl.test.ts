@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { anything, instance, mock, verify, when } from "ts-mockito"
-import { EObject, ECodec, ECodecRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl, URI } from "./internal"
+import { EObject, ECodec, ECodecRegistry, EResourceInternal, EResourceSetImpl, EResourceImpl, URI } from "./internal.js"
 
 describe("EResourceSetImpl", () => {
     test("constructor", () => {

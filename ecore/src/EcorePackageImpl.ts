@@ -21,7 +21,7 @@ import {
     EcoreFactory,
     EcorePackage,
     getEcoreFactory
-} from "./internal"
+} from "./internal.js"
 
 export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     private static _instance: EcorePackageImpl = null

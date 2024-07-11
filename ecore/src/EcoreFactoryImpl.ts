@@ -47,7 +47,7 @@ import {
     ETypedElement,
     EcoreConstants,
     EcoreFactory
-} from "./internal"
+} from "./internal.js"
 
 export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     private static _instance: EcoreFactoryImpl = null

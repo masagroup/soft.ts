@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EDataType, EStructuralFeature } from "./internal"
+import { EDataType, EStructuralFeature } from "./internal.js"
 
 export interface EAttribute extends EStructuralFeature {
     // Attributes

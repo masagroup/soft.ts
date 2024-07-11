@@ -35,7 +35,7 @@ import {
     URI,
     getEcorePackage,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 interface EAttributeInternal extends EAttribute, EObjectInternal {}
 interface EClassInternal extends EClass, EObjectInternal {}

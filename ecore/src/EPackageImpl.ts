@@ -32,7 +32,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EPackageImpl extends ENamedElementImpl implements EPackage {
     protected _eClassifiers: EList<EClassifier>

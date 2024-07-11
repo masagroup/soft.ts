@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EClassifier } from "./internal"
+import { EClassifier } from "./internal.js"
 
 export interface EDataType extends EClassifier {
     // Attributes

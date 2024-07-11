@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { AudioVisualItem, Person, Writer } from "./internal"
+import { AudioVisualItem, Person, Writer } from "./internal.js"
 
 export interface BookOnTape extends AudioVisualItem {
     // References

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { WriterExt } from "./internal"
+import { WriterExt } from "./internal.js"
 
 describe("WriterExt", () => {
     test("names", () => {

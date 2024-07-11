@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EFactory, EStructuralFeature, EStructuralFeatureImpl, isEDataType } from "./internal"
+import { EFactory, EStructuralFeature, EStructuralFeatureImpl, isEDataType } from "./internal.js"
 
 export class EStructuralFeatureExt extends EStructuralFeatureImpl {
     private _defaultValue: any

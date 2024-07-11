@@ -1,7 +1,7 @@
-import { EResource } from "./EResource"
-import { ECodec } from "./ECodec"
-import { EDecoder } from "./EDecoder"
-import { EEncoder } from "./EEncoder"
+import { EResource } from "./EResource.js"
+import { ECodec } from "./ECodec.js"
+import { EDecoder } from "./EDecoder.js"
+import { EEncoder } from "./EEncoder.js"
 
 export class NoCodec implements ECodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EEncoder {

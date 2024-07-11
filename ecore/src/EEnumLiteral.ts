@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EEnum, ENamedElement } from "./internal"
+import { EEnum, ENamedElement } from "./internal.js"
 
 export interface EEnumLiteral extends ENamedElement {
     // Attributes

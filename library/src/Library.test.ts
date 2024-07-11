@@ -9,7 +9,7 @@
 
 import * as ecore from "@masagroup/ecore"
 import * as fs from "fs"
-import { getLibraryPackage } from "./internal"
+import { getLibraryPackage } from "./internal.js"
 
 describe("Library", () => {
     test("load.simple.default", async () => {

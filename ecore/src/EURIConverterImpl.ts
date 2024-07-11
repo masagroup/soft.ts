@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs"
-import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal"
+import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal.js"
 
 export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>

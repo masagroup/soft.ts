@@ -11,7 +11,7 @@
 
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { Addressable, LibraryConstants, PersonImpl, getLibraryPackage } from "./internal"
+import { Addressable, LibraryConstants, PersonImpl, getLibraryPackage } from "./internal.js"
 
 describe("PersonImpl", () => {
     test("eStaticClass", () => {

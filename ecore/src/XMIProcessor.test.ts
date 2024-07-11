@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito"
-import { EPackage, XMIProcessor, EResourceSet } from "./internal"
+import { EPackage, XMIProcessor, EResourceSet } from "./internal.js"
 
 describe("XMIProcessor", () => {
     test("constructor.no.resourceset", () => {

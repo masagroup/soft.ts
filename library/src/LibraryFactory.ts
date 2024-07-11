@@ -28,7 +28,7 @@ import {
     Person,
     VideoCassette,
     Writer
-} from "./internal"
+} from "./internal.js"
 
 export interface LibraryFactory extends ecore.EFactory {
     createBook(): Book

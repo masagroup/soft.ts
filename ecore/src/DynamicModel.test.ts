@@ -18,7 +18,7 @@ import {
     getEcoreFactory,
     getEcorePackage,
     UNBOUNDED_MULTIPLICITY
-} from "./internal"
+} from "./internal.js"
 
 class DynamicMetaModel {
     bookStoreEPackage: EPackage

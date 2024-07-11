@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EClass, EDataType, EModelElement, EObject, EPackage } from "./internal"
+import { EClass, EDataType, EModelElement, EObject, EPackage } from "./internal.js"
 
 export interface EFactory extends EModelElement {
     // References

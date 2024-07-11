@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, verify, when } from "ts-mockito"
-import { EClass, EObject, EStructuralFeature, EventType, Notification } from "./index"
+import { EClass, EObject, EStructuralFeature, EventType, Notification } from "./index.js"
 
 describe("Notification", () => {
     test("constructor", () => {

@@ -18,7 +18,7 @@ import {
     getEcorePackage,
     ImmutableEList,
     URI
-} from "./internal"
+} from "./internal.js"
 
 describe("EcoreUtils", () => {
     describe("equals", () => {

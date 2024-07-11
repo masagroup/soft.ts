@@ -1,4 +1,4 @@
-import { EEnumLiteralImpl } from "./internal"
+import { EEnumLiteralImpl } from "./internal.js"
 
 export class EEnumLiteralExt extends EEnumLiteralImpl {
     get literal(): string {

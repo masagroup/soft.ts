@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { XMLNamespaces } from "./XMLNamespaces"
+import { XMLNamespaces } from "./XMLNamespaces.js"
 
 describe("XMLNamespaces", () => {
     test("constructor", () => {

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EDiagnostic } from "./internal"
+import { EDiagnostic } from "./internal.js"
 
 export class EDiagnosticImpl implements EDiagnostic {
     private _message: string

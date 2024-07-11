@@ -36,7 +36,7 @@ import {
     EcoreConstants,
     EcoreFactory,
     EcoreFactoryImpl
-} from "./internal"
+} from "./internal.js"
 
 describe("EcoreFactoryImpl", () => {
     test("createFromEClass", () => {

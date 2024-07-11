@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Book, LibraryConstants, Person, PersonImpl, Writer, getLibraryPackage } from "./internal"
+import { Book, LibraryConstants, Person, PersonImpl, Writer, getLibraryPackage } from "./internal.js"
 
 export class WriterImpl extends PersonImpl implements Writer {
     protected _books: ecore.EList<Book>

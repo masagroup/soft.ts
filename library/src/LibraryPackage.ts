@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { LibraryPackageImpl } from "./internal"
+import { LibraryPackageImpl } from "./internal.js"
 
 export interface LibraryPackage extends ecore.EPackage {
     // Returns the meta object for the Addressable

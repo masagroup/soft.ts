@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Employee, LibraryConstants, Person, PersonImpl, getLibraryPackage } from "./internal"
+import { Employee, LibraryConstants, Person, PersonImpl, getLibraryPackage } from "./internal.js"
 
 export class EmployeeImpl extends PersonImpl implements Employee {
     protected _manager: Employee

@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito"
-import { BasicEObjectMap, EClass, EFactory, EMapEntry, EObject, EPackage } from "./internal"
+import { BasicEObjectMap, EClass, EFactory, EMapEntry, EObject, EPackage } from "./internal.js"
 
 interface EObjectEMapEntry<K, V> extends EObject, EMapEntry<K, V> {}
 

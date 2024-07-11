@@ -18,7 +18,7 @@ import {
     Person,
     Writer,
     getLibraryPackage
-} from "./internal"
+} from "./internal.js"
 
 export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     protected _author: Writer

@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs"
-import { EURIHandler, URI, uriToFilePath } from "./internal"
+import { EURIHandler, URI, uriToFilePath } from "./internal.js"
 
 export class FileURIHandler implements EURIHandler {
     canHandle(uri: URI): boolean {

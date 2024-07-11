@@ -31,7 +31,7 @@ import {
     getEcorePackage,
     isEObjectInternal,
     isEObjectList
-} from "./internal"
+} from "./internal.js"
 
 export class EReferenceImpl extends EStructuralFeatureExt implements EReference {
     protected _eKeys: EList<EAttribute>

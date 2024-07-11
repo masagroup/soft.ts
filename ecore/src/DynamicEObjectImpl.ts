@@ -18,7 +18,7 @@ import {
     EStructuralFeature,
     EventType,
     getEcorePackage
-} from "./internal"
+} from "./internal.js"
 
 function resize(arr: any[], newSize: number, defaultValue: any) {
     while (newSize > arr.length) arr.push(defaultValue)

@@ -20,7 +20,7 @@ import {
     EResourceImpl,
     EResourceSetImpl,
     URI
-} from "./internal"
+} from "./internal.js"
 
 describe("DynamicEObjectImpl", () => {
     test("constructor", () => {

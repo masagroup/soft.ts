@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { ENotificationChain, EResource, EResourceSet } from "./internal"
+import { ENotificationChain, EResource, EResourceSet } from "./internal.js"
 
 export interface EResourceInternal extends EResource {
     basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain

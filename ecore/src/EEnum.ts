@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EDataType, EEnumLiteral, EList } from "./internal"
+import { EDataType, EEnumLiteral, EList } from "./internal.js"
 
 export interface EEnum extends EDataType {
     // References

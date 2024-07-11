@@ -26,7 +26,7 @@ import {
     XMLOptions,
     XMLProcessor,
     uriToFilePath
-} from "./internal"
+} from "./internal.js"
 import { Uuid4 } from "id128"
 
 function loadPackage(filename: string): EPackage {

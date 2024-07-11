@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EAttribute, EList, EObject, EObjectInternal, EReference } from "./internal"
+import { EAttribute, EList, EObject, EObjectInternal, EReference } from "./internal.js"
 
 export class DeepEqual {
     private _objects: Map<EObject, EObject> = new Map()

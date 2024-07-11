@@ -7,9 +7,9 @@
 //
 // *****************************************************************************
 
-import { EObject, EResource } from "./internal"
-import { XMIConstants } from "./XMIConstants"
-import { XMLDecoder } from "./XMLDecoder"
+import { EObject, EResource } from "./internal.js"
+import { XMIConstants } from "./XMIConstants.js"
+import { XMLDecoder } from "./XMLDecoder.js"
 
 export class XMIDecoder extends XMLDecoder {
     private _xmiVersion: string

@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Borrower } from "./internal"
+import { Borrower } from "./internal.js"
 
 export interface Lendable extends ecore.EObject {
     // Attributes

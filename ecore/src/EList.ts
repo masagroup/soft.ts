@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { List } from "./List"
+import { List } from "./List.js"
 
 export interface EList<E> extends List<E> {
     move(to: number, e: E): void
