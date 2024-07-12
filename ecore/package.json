@@ -17,10 +17,9 @@
     }
   },
   "scripts": {
-    "build": "npm run build-types && npm run build-server && npm run build-browser",
-    "build-browser": "tsc -p tsconfig.cjs.json",
+    "build": "npm run build-types && npm run build-server",
     "build-types": "tsc -p tsconfig.types.json",
-    "build-server": "tsc -p tsconfig.esm.json",
+    "build-server": "tsc -b tsconfig.esm.json tsconfig.cjs.json && cp ./package-cjs.json ./dist/cjs/package.json",
     "pretty": "prettier --write src/**/*.ts",
     "test": "jest"
   },
