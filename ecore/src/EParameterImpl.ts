@@ -11,19 +11,13 @@
 
 import {
     EClass,
-    EList,
     ENotificationChain,
-    ENotifyingList,
     EObject,
-    EObjectInternal,
     EOperation,
     EParameter,
-    ETypedElement,
     ETypedElementExt,
     EcoreConstants,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EParameterImpl extends ETypedElementExt implements EParameter {

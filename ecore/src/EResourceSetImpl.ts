@@ -11,6 +11,7 @@ import { ECodecRegistryImpl } from "./ECodecRegistryImpl.js"
 import { EResourceImpl } from "./EResourceImpl.js"
 import {
     AbstractNotifyingList,
+    ECodecRegistry,
     EList,
     ENotificationChain,
     ENotifier,
@@ -19,15 +20,14 @@ import {
     EPackageRegistry,
     EPackageRegistryImpl,
     EResource,
-    ECodecRegistry,
     EResourceInternal,
     EResourceSet,
     EResourceSetConstants,
     EStructuralFeature,
     EURIConverter,
     EURIConverterImpl,
-    getPackageRegistry,
     getCodecRegistry,
+    getPackageRegistry,
     URI
 } from "./internal.js"
 

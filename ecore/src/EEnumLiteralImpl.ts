@@ -13,21 +13,13 @@ import {
     EClass,
     EEnum,
     EEnumLiteral,
-    EList,
-    ENamedElement,
     ENamedElementImpl,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
-    EObjectInternal,
     EcoreConstants,
     EventType,
     Notification,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral {

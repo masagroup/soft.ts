@@ -8,13 +8,13 @@
 // *****************************************************************************
 
 import {
-    ENotifier,
-    EResource,
-    EList,
-    EObject,
-    EURIConverter,
-    EPackageRegistry,
     ECodecRegistry,
+    EList,
+    ENotifier,
+    EObject,
+    EPackageRegistry,
+    EResource,
+    EURIConverter,
     URI
 } from "./internal.js"
 

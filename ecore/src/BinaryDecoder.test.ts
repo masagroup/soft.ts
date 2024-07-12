@@ -3,7 +3,6 @@ import { BinaryDecoder } from "./BinaryDecoder.js"
 import {
     EAttribute,
     EClass,
-    EClassifier,
     EList,
     EObject,
     EPackage,
@@ -11,11 +10,9 @@ import {
     EResource,
     EResourceImpl,
     EResourceSetImpl,
-    ULIDManager,
     URI,
     UUIDManager,
     XMIProcessor,
-    XMLProcessor,
     uriToFilePath
 } from "./internal.js"
 

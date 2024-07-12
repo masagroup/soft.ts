@@ -8,17 +8,17 @@
 // *****************************************************************************
 
 import {
-    ENotifier,
-    ENotificationChain,
-    EObject,
-    EObjectList,
-    EObjectInternal,
-    EList,
-    ENotifyingList,
-    EStructuralFeature,
     AbstractNotifyingList,
-    EventType,
-    EOPPOSITE_FEATURE_BASE
+    EList,
+    ENotificationChain,
+    ENotifier,
+    ENotifyingList,
+    EObject,
+    EObjectInternal,
+    EObjectList,
+    EOPPOSITE_FEATURE_BASE,
+    EStructuralFeature,
+    EventType
 } from "./internal.js"
 
 export class BasicEObjectList<O extends EObject>

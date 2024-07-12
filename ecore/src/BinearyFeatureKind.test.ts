@@ -1,6 +1,6 @@
-import { instance, mock, verify, when } from "ts-mockito"
-import { EAttribute, EDataType, EEnum, EReference, EStructuralFeature } from "./internal.js"
+import { instance, mock, when } from "ts-mockito"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
+import { EAttribute, EDataType, EEnum, EReference, EStructuralFeature } from "./internal.js"
 
 describe("BinaryFeatureKind", () => {
     test("unknown", () => {

@@ -1,3 +1,4 @@
+import * as fs from "fs"
 import { Uuid4 } from "id128"
 import { BinaryEncoder } from "./BinaryEncoder.js"
 import {
@@ -6,14 +7,12 @@ import {
     EResourceImpl,
     EResourceSetImpl,
     URI,
-    ULIDManager,
+    uriToFilePath,
+    UUIDManager,
     XMIProcessor,
     XMLOptions,
-    XMLProcessor,
-    uriToFilePath,
-    UUIDManager
+    XMLProcessor
 } from "./internal.js"
-import * as fs from "fs"
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor()

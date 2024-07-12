@@ -10,16 +10,14 @@
 // *****************************************************************************
 
 import deepEqual from "deep-equal"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, capture, instance, mock, verify, when } from "ts-mockito"
 import {
     EAdapter,
     EClassifier,
     EGenericType,
     EGenericTypeImpl,
     EList,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
     EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
@@ -30,10 +28,8 @@ import {
     EcoreConstants,
     EventType,
     ImmutableEList,
-    Notification,
     URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EClassifierInternal extends EClassifier, EObjectInternal {}

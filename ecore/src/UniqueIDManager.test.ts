@@ -7,9 +7,9 @@
 //
 // *****************************************************************************
 
+import { Exception, Ulid, Uuid4 } from "id128"
 import { instance, mock } from "ts-mockito"
 import { EObject, IncrementalIDManager, ULIDManager, UUIDManager } from "./internal.js"
-import { Uuid4, Exception, Ulid } from "id128"
 
 describe("IDManager", () => {
     describe("IncrementalIDManager", () => {

@@ -7,8 +7,8 @@
 //
 // *****************************************************************************
 
-import { ENotifier, EObject, EList, EResourceSet, EDiagnostic, EObjectIDManager, URI } from "./internal.js"
 import * as fs from "fs"
+import { EDiagnostic, EList, ENotifier, EObject, EObjectIDManager, EResourceSet, URI } from "./internal.js"
 
 export class EResourceConstants {
     public static readonly RESOURCE__RESOURCE_SET: number = 0

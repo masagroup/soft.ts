@@ -1,25 +1,25 @@
 import { WriteStream } from "fs"
 import { Err, Ok, Result } from "ts-results-es"
+import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
 import {
-    EObject,
-    EResource,
-    EEncoder,
-    EPackage,
+    BinaryOptions,
+    EAttribute,
     EClass,
+    EcoreUtils,
     EDataType,
+    EEncoder,
     EFactory,
     EList,
+    EObject,
     EObjectInternal,
-    EcoreUtils,
-    EStructuralFeature,
-    isEReference,
-    isEAttribute,
+    EPackage,
     EReference,
-    EAttribute,
-    URI,
-    BinaryOptions
+    EResource,
+    EStructuralFeature,
+    isEAttribute,
+    isEReference,
+    URI
 } from "./internal.js"
-import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
 import { Encoder } from "./msgpack/Encoder.js"
 
 const binaryVersion = 0

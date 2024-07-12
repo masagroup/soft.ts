@@ -10,26 +10,18 @@
 // *****************************************************************************
 
 import deepEqual from "deep-equal"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, instance, mock, verify, when } from "ts-mockito"
 import {
-    EAdapter,
-    EDataType,
     EEnumImpl,
     EEnumLiteral,
     EList,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
     EObjectList,
-    EResource,
-    EResourceSet,
     EcoreConstants,
     ImmutableEList,
-    URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EEnumLiteralInternal extends EEnumLiteral, EObjectInternal {}

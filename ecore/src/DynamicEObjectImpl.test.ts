@@ -7,18 +7,18 @@
 //
 // *****************************************************************************
 
-import { mock, instance, when, anything } from "ts-mockito"
+import { anything, instance, mock, when } from "ts-mockito"
 import {
+    DynamicEObjectImpl,
+    EAdapter,
     EClass,
     EList,
-    EAdapter,
-    getEcoreFactory,
-    getEcorePackage,
-    DynamicEObjectImpl,
     EObject,
-    ImmutableEList,
     EResourceImpl,
     EResourceSetImpl,
+    getEcoreFactory,
+    getEcorePackage,
+    ImmutableEList,
     URI
 } from "./internal.js"
 

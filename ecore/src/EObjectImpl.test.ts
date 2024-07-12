@@ -9,30 +9,7 @@
 //
 // *****************************************************************************
 
-import deepEqual from "deep-equal"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
-import {
-    EAdapter,
-    EClass,
-    EList,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    EObjectImpl,
-    EObjectInternal,
-    EObjectList,
-    EOperation,
-    EReference,
-    EResource,
-    EResourceSet,
-    EStructuralFeature,
-    EcoreConstants,
-    ImmutableEList,
-    URI,
-    getEcorePackage,
-    isEObjectList
-} from "./internal.js"
+import { EObjectImpl, getEcorePackage } from "./internal.js"
 
 describe("EObjectImpl", () => {
     test("eStaticClass", () => {

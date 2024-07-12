@@ -10,11 +10,8 @@
 // *****************************************************************************
 
 import {
-    BasicEDataTypeList,
-    BasicEList,
     BasicEObjectList,
     EClass,
-    EDataType,
     EDataTypeExt,
     EEnum,
     EEnumLiteral,
@@ -22,11 +19,8 @@ import {
     ENotificationChain,
     ENotifyingList,
     EObject,
-    EObjectInternal,
     EcoreConstants,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EEnumImpl extends EDataTypeExt implements EEnum {

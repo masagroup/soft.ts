@@ -13,23 +13,12 @@ import { anything, capture, instance, mock, reset, verify, when } from "ts-mocki
 import {
     EAdapter,
     EClass,
-    EList,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
-    EResource,
-    EResourceSet,
     EStructuralFeatureImpl,
-    ETypedElement,
     EcoreConstants,
-    EventType,
-    Notification,
-    URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EClassInternal extends EClass, EObjectInternal {}

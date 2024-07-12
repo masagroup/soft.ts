@@ -10,24 +10,14 @@
 // *****************************************************************************
 
 import {
-    BasicEDataTypeList,
-    BasicEList,
     BasicEObject,
-    BasicEObjectList,
     EClass,
     EList,
-    ENotificationChain,
-    ENotifyingList,
     EObject,
-    EObjectInternal,
     EOperation,
-    EReference,
-    EResource,
     EStructuralFeature,
     EcoreConstants,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EObjectImpl extends BasicEObject implements EObject {

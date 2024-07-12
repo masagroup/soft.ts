@@ -10,8 +10,6 @@
 // *****************************************************************************
 
 import {
-    BasicEDataTypeList,
-    BasicEList,
     BasicEObjectList,
     EAnnotation,
     EClass,
@@ -21,11 +19,8 @@ import {
     ENotifyingList,
     EObject,
     EObjectImpl,
-    EObjectInternal,
     EcoreConstants,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EModelElementImpl extends EObjectImpl implements EModelElement {

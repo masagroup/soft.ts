@@ -7,10 +7,10 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./EResource.js"
 import { ECodec } from "./ECodec.js"
 import { EDecoder } from "./EDecoder.js"
 import { EEncoder } from "./EEncoder.js"
+import { EResource } from "./EResource.js"
 import { XMIDecoder } from "./XMIDecoder.js"
 import { XMIEncoder } from "./XMIEncoder.js"
 

@@ -11,22 +11,12 @@
 
 import {
     EClass,
-    EClassifier,
     EClassifierExt,
     EDataType,
-    EList,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    EObjectInternal,
     EcoreConstants,
     EventType,
     Notification,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EDataTypeImpl extends EClassifierExt implements EDataType {

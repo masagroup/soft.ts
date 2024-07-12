@@ -11,10 +11,10 @@ import * as fs from "fs"
 import * as sax from "sax"
 import { Err, Ok, Result } from "ts-results-es"
 import {
-    EClass,
     EClassifier,
     EcoreUtils,
     EDataType,
+    EDecoder,
     EDiagnostic,
     EDiagnosticImpl,
     EFactory,
@@ -26,15 +26,14 @@ import {
     EPackageRegistry,
     EReference,
     EResource,
-    EDecoder,
     EStructuralFeature,
     ExtendedMetaData,
     getPackageRegistry,
     isEClass,
     isEDataType,
+    URI,
     XMLNamespaces,
-    XMLOptions,
-    URI
+    XMLOptions
 } from "./internal.js"
 import { XMLConstants } from "./XMLConstants.js"
 

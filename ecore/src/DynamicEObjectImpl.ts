@@ -7,18 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    AbstractEAdapter,
-    EClass,
-    EcoreConstants,
-    EDynamicProperties,
-    ENotification,
-    EObjectImpl,
-    EOperation,
-    EStructuralFeature,
-    EventType,
-    getEcorePackage
-} from "./internal.js"
+import { EClass, EDynamicProperties, EObjectImpl, EOperation, EStructuralFeature, getEcorePackage } from "./internal.js"
 
 function resize(arr: any[], newSize: number, defaultValue: any) {
     while (newSize > arr.length) arr.push(defaultValue)
