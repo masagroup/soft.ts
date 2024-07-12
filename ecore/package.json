@@ -18,8 +18,8 @@
   },
   "scripts": {
     "build": "npm run build-types && npm run build-server",
-    "build-types": "tsc -p tsconfig.types.json",
-    "build-server": "tsc -b tsconfig.esm.json tsconfig.cjs.json && cp ./package-cjs.json ./dist/cjs/package.json",
+    "build-types": "tsc -b tsconfig.types.json",
+    "build-server": "tsc -b tsconfig.esm.json tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
     "pretty": "prettier --write src/**/*.ts",
     "test": "jest"
   },
@@ -31,6 +31,7 @@
     "@types/jest": "^29.5.12",
     "deep-equal": "^2.2.3",
     "jest": "^29.7.0",
+    "ncp": "^2.0.0",
     "prettier": "^3.3.2",
     "ts-jest": "^29.1.5",
     "ts-jest-resolver": "^2.0.1",
