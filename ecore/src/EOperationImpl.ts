@@ -10,27 +10,20 @@
 // *****************************************************************************
 
 import {
-    BasicEDataTypeList,
-    BasicEList,
     BasicEObjectList,
     EClass,
     EClassifier,
     EList,
-    ENotification,
     ENotificationChain,
     ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
-    EObjectInternal,
     EOperation,
     EParameter,
-    ETypedElement,
     ETypedElementExt,
     EcoreConstants,
     EventType,
     Notification,
     getEcorePackage,
-    isEObjectInternal,
     isEObjectList
 } from "./internal.js"
 

@@ -13,21 +13,14 @@ import {
     EClass,
     EClassifier,
     EList,
-    ENamedElement,
     ENamedElementImpl,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
-    EObjectInternal,
     EPackage,
     EcoreConstants,
     EventType,
     Notification,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EClassifierImpl extends ENamedElementImpl implements EClassifier {

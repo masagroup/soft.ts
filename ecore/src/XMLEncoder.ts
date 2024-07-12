@@ -14,6 +14,8 @@ import {
     EClassifier,
     EDataType,
     EDiagnostic,
+    EDiagnosticImpl,
+    EEncoder,
     EList,
     EMap,
     ENamedElement,
@@ -21,7 +23,6 @@ import {
     EObjectInternal,
     EPackage,
     EResource,
-    EEncoder,
     EStructuralFeature,
     ExtendedMetaData,
     getEcorePackage,
@@ -31,9 +32,8 @@ import {
     isEObject,
     isEObjectInternal,
     isEReference,
-    XMLOptions,
-    EDiagnosticImpl,
-    URI
+    URI,
+    XMLOptions
 } from "./internal.js"
 import { XMLConstants } from "./XMLConstants.js"
 import { XMLString } from "./XMLString.js"

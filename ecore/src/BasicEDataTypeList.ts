@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { AbstractNotifyingList, EObjectInternal, ENotifier, EStructuralFeature } from "./internal.js"
+import { AbstractNotifyingList, ENotifier, EObjectInternal, EStructuralFeature } from "./internal.js"
 
 export class BasicEDataTypeList<E> extends AbstractNotifyingList<E> {
     private _owner: EObjectInternal

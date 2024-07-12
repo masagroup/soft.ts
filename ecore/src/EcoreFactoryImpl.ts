@@ -16,7 +16,6 @@ import {
     EAttributeExt,
     EClass,
     EClassExt,
-    EClassifier,
     EDataType,
     EDataTypeExt,
     EEnum,
@@ -28,7 +27,6 @@ import {
     EGenericType,
     EGenericTypeImpl,
     EModelElement,
-    ENamedElement,
     EObject,
     EObjectImpl,
     EOperation,
@@ -41,10 +39,8 @@ import {
     EReferenceExt,
     EStringToStringMapEntry,
     EStringToStringMapEntryImpl,
-    EStructuralFeature,
     ETypeParameter,
     ETypeParameterImpl,
-    ETypedElement,
     EcoreConstants,
     EcoreFactory
 } from "./internal.js"

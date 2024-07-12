@@ -6,7 +6,7 @@ testdata
 **/*.test.*
 
 # configs
-.prettierrc.json
+.prettier*
 jest.config.json
 package-cjs.json
 tsconfig*

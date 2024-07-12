@@ -6,7 +6,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
-import { anything, capture, deepEqual, instance, mock, verify, when } from "ts-mockito"
+import { anything, capture, instance, mock, verify, when } from "ts-mockito"
 import {
     AbstractENotifier,
     AbstractENotifierList,

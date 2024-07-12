@@ -2,5 +2,6 @@
     "printWidth": 120,
     "tabWidth": 4,
     "semi": false,
-    "trailingComma": "none"
+    "trailingComma": "none",
+    "plugins": ["prettier-plugin-organize-imports"]
 }

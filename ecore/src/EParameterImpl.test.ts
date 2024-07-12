@@ -9,23 +9,15 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { instance, mock, reset, verify, when } from "ts-mockito"
 import {
-    EAdapter,
-    EList,
     ENotificationChain,
-    ENotifyingList,
     EObject,
     EObjectInternal,
     EOperation,
     EParameterImpl,
-    EResource,
-    EResourceSet,
-    ETypedElement,
     EcoreConstants,
-    URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EOperationInternal extends EOperation, EObjectInternal {}

@@ -9,26 +9,8 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
-import {
-    EAdapter,
-    EList,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    EObjectInternal,
-    EResource,
-    EResourceSet,
-    EStringToStringMapEntryImpl,
-    EcoreConstants,
-    EventType,
-    Notification,
-    URI,
-    getEcorePackage,
-    isEObjectList
-} from "./internal.js"
+import { anything, capture, instance, mock, verify } from "ts-mockito"
+import { EAdapter, EStringToStringMapEntryImpl, EcoreConstants, getEcorePackage } from "./internal.js"
 
 describe("EStringToStringMapEntryImpl", () => {
     test("eStaticClass", () => {

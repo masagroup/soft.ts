@@ -11,21 +11,12 @@
 
 import {
     EClass,
-    EList,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
     EObjectImpl,
-    EObjectInternal,
     EStringToStringMapEntry,
     EcoreConstants,
     EventType,
     Notification,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringToStringMapEntry {

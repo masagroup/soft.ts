@@ -10,8 +10,6 @@
 // *****************************************************************************
 
 import {
-    BasicEDataTypeList,
-    BasicEList,
     BasicEObjectList,
     BasicEObjectMap,
     EAnnotation,
@@ -21,12 +19,9 @@ import {
     EMapEntry,
     EModelElement,
     EModelElementExt,
-    ENotification,
     ENotificationChain,
     ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
-    EObjectInternal,
     EcoreConstants,
     EventType,
     Notification,

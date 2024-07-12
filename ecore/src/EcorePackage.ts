@@ -9,7 +9,7 @@
 //
 // *****************************************************************************
 
-import { EAttribute, EClass, EDataType, EEnum, EOperation, EPackage, EReference, EcorePackageImpl } from "./internal.js"
+import { EAttribute, EClass, EDataType, EOperation, EPackage, EReference, EcorePackageImpl } from "./internal.js"
 
 export interface EcorePackage extends EPackage {
     // Returns the meta object for the EAnnotation

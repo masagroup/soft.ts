@@ -9,27 +9,8 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
-import {
-    EAdapter,
-    EClassifier,
-    EDataTypeImpl,
-    EList,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    EObjectInternal,
-    EResource,
-    EResourceSet,
-    EcoreConstants,
-    EventType,
-    Notification,
-    URI,
-    getEcorePackage,
-    isEObjectList
-} from "./internal.js"
+import { anything, capture, instance, mock, verify } from "ts-mockito"
+import { EAdapter, EDataTypeImpl, EcoreConstants, getEcorePackage } from "./internal.js"
 
 describe("EDataTypeImpl", () => {
     test("eStaticClass", () => {

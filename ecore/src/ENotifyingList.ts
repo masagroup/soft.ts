@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EList, ENotifier, EStructuralFeature, ENotificationChain } from "./internal.js"
+import { EList, ENotificationChain, ENotifier, EStructuralFeature } from "./internal.js"
 
 export interface ENotifyingList<E> extends EList<E> {
     readonly notifier: ENotifier

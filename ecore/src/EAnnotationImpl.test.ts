@@ -18,23 +18,17 @@ import {
     EMap,
     EMapEntry,
     EModelElement,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
     EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
     EObjectList,
     EResource,
-    EResourceSet,
     EStringToStringMapEntry,
     EcoreConstants,
     EventType,
     ImmutableEList,
-    Notification,
-    URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EModelElementInternal extends EModelElement, EObjectInternal {}

@@ -7,8 +7,8 @@
 //
 // *****************************************************************************
 
-import { EObject, EObjectIDManager } from "./internal.js"
 import { Ulid, Uuid4 } from "id128"
+import { EObject, EObjectIDManager } from "./internal.js"
 
 type Primitive = string | number
 

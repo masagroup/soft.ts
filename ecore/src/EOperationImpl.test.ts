@@ -16,26 +16,15 @@ import {
     EClass,
     EClassifier,
     EList,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
     EObjectList,
-    EOperation,
     EOperationImpl,
     EParameter,
-    EResource,
-    EResourceSet,
-    ETypedElement,
     EcoreConstants,
-    EventType,
     ImmutableEList,
-    Notification,
-    URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EClassInternal extends EClass, EObjectInternal {}

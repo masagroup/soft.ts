@@ -14,21 +14,15 @@ import {
     EDataType,
     EFactory,
     EList,
-    EModelElement,
     EModelElementExt,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
-    EObjectInternal,
     EPackage,
     EcoreConstants,
     EventType,
     Notification,
     getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    isEObjectInternal
 } from "./internal.js"
 
 export class EFactoryImpl extends EModelElementExt implements EFactory {

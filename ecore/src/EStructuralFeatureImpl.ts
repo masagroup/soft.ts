@@ -12,21 +12,14 @@
 import {
     EClass,
     EList,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
-    EObjectInternal,
     EStructuralFeature,
-    ETypedElement,
     ETypedElementExt,
     EcoreConstants,
     EventType,
     Notification,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EStructuralFeatureImpl extends ETypedElementExt implements EStructuralFeature {

@@ -13,21 +13,11 @@ import {
     EAttribute,
     EClass,
     EDataType,
-    EList,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    EObjectInternal,
-    EStructuralFeature,
     EStructuralFeatureExt,
     EcoreConstants,
     EventType,
     Notification,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute {

@@ -1,7 +1,7 @@
-import { EObject } from "./EObject.js"
-import { EResource } from "./EResource.js"
 import * as fs from "fs"
 import { Result } from "ts-results-es"
+import { EObject } from "./EObject.js"
+import { EResource } from "./EResource.js"
 
 export interface EDecoder {
     decode(buffer: BufferSource): Result<EResource, Error>

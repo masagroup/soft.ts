@@ -10,27 +10,22 @@
 // *****************************************************************************
 
 import {
-    BasicEDataTypeList,
-    BasicEList,
     BasicEObjectList,
     EClass,
     EClassifier,
     EGenericType,
     EList,
-    ENotification,
     ENotificationChain,
     ENotifyingList,
     EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectImpl,
-    EObjectInternal,
     ETypeParameter,
     EcoreConstants,
     EventType,
     Notification,
     getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    isEObjectInternal
 } from "./internal.js"
 
 export class EGenericTypeImpl extends EObjectImpl implements EGenericType {

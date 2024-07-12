@@ -12,22 +12,12 @@
 import {
     EClass,
     EClassifier,
-    EList,
-    ENamedElement,
     ENamedElementImpl,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    EObjectInternal,
     ETypedElement,
     EcoreConstants,
     EventType,
     Notification,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class ETypedElementImpl extends ENamedElementImpl implements ETypedElement {

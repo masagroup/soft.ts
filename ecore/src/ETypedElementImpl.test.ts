@@ -9,27 +9,18 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, capture, instance, mock, verify, when } from "ts-mockito"
 import {
     EAdapter,
     EClassifier,
-    EList,
-    ENamedElement,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
     EObjectInternal,
     EResource,
     EResourceSet,
     ETypedElementImpl,
     EcoreConstants,
     EventType,
-    Notification,
     URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EClassifierInternal extends EClassifier, EObjectInternal {}

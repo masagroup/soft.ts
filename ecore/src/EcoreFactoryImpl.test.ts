@@ -9,32 +9,21 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, instance, mock, when } from "ts-mockito"
 import {
     EAnnotation,
-    EAttribute,
     EClass,
     EClassifier,
     EDataType,
     EEnum,
     EEnumLiteral,
-    EFactory,
-    EFactoryExt,
-    EGenericType,
     EList,
     EModelElement,
-    ENamedElement,
-    EObject,
     EOperation,
     EPackage,
     EParameter,
-    EReference,
-    EStringToStringMapEntry,
     EStructuralFeature,
-    ETypeParameter,
-    ETypedElement,
     EcoreConstants,
-    EcoreFactory,
     EcoreFactoryImpl
 } from "./internal.js"
 

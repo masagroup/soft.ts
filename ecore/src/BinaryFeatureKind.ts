@@ -1,4 +1,4 @@
-import { EStructuralFeature, isEReference, isEEnum, isEAttribute, isEDataType } from "./internal.js"
+import { EStructuralFeature, isEAttribute, isEEnum, isEReference } from "./internal.js"
 
 export enum BinaryFeatureKind {
     bfkObjectContainer,

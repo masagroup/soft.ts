@@ -9,28 +9,8 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
-import {
-    EAdapter,
-    EAttributeImpl,
-    EDataType,
-    EList,
-    ENotification,
-    ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
-    EObject,
-    EObjectInternal,
-    EResource,
-    EResourceSet,
-    EStructuralFeature,
-    EcoreConstants,
-    EventType,
-    Notification,
-    URI,
-    getEcorePackage,
-    isEObjectList
-} from "./internal.js"
+import { anything, capture, instance, mock, verify } from "ts-mockito"
+import { EAdapter, EAttributeImpl, EDataType, EObjectInternal, EcoreConstants, getEcorePackage } from "./internal.js"
 
 interface EDataTypeInternal extends EDataType, EObjectInternal {}
 

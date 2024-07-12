@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs"
+import { Uuid4 } from "id128"
 import {
     EAttribute,
     EClass,
@@ -27,7 +28,6 @@ import {
     XMLProcessor,
     uriToFilePath
 } from "./internal.js"
-import { Uuid4 } from "id128"
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor()

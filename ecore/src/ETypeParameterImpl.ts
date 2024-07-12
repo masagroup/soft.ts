@@ -10,23 +10,17 @@
 // *****************************************************************************
 
 import {
-    BasicEDataTypeList,
-    BasicEList,
     BasicEObjectList,
     EClass,
     EGenericType,
     EList,
-    ENamedElement,
     ENamedElementImpl,
     ENotificationChain,
     ENotifyingList,
     EObject,
-    EObjectInternal,
     ETypeParameter,
     EcoreConstants,
-    getEcorePackage,
-    isEObjectInternal,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParameter {

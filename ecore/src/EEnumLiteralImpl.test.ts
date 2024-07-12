@@ -14,22 +14,11 @@ import {
     EAdapter,
     EEnum,
     EEnumLiteralImpl,
-    EList,
-    ENamedElement,
-    ENotification,
     ENotificationChain,
-    ENotifyingList,
-    EOPPOSITE_FEATURE_BASE,
     EObject,
     EObjectInternal,
-    EResource,
-    EResourceSet,
     EcoreConstants,
-    EventType,
-    Notification,
-    URI,
-    getEcorePackage,
-    isEObjectList
+    getEcorePackage
 } from "./internal.js"
 
 interface EEnumInternal extends EEnum, EObjectInternal {}

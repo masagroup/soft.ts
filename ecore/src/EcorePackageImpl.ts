@@ -13,12 +13,10 @@ import {
     EAttribute,
     EClass,
     EDataType,
-    EEnum,
     EOperation,
     EPackageExt,
     EReference,
     EcoreConstants,
-    EcoreFactory,
     EcorePackage,
     getEcoreFactory
 } from "./internal.js"

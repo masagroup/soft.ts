@@ -13,23 +13,19 @@ import {
     EAnnotation,
     EAttribute,
     EClass,
-    EClassifier,
     EDataType,
     EEnum,
     EEnumLiteral,
     EFactory,
     EGenericType,
     EModelElement,
-    ENamedElement,
     EObject,
     EOperation,
     EPackage,
     EParameter,
     EReference,
     EStringToStringMapEntry,
-    EStructuralFeature,
     ETypeParameter,
-    ETypedElement,
     EcoreFactoryExt
 } from "./internal.js"
 
