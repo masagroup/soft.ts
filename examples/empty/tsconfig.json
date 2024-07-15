@@ -12,7 +12,12 @@
   "exclude": [
     "dist",
     "node_modules",
-    "testdata"
+    "testdata",
+    "src/*.test.ts",
+    "src/**/*.test.ts"
   ],
-  "include": ["src/*.ts", "src/**/*.ts"]
+  "include": [
+    "src/*.ts",
+    "src/**/*.ts"
+  ]
 }
