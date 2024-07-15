@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { BasicEMap, EMapEntry } from "./internal.js"
 
 describe("BasicEMap", () => {

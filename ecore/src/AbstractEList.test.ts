@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { spy, verify, when } from "ts-mockito"
+import { describe, test } from "vitest"
 import { AbstractEList, Collection } from "./internal.js"
 
 class EListTest<E> extends AbstractEList<E> {

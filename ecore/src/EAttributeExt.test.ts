@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EDataType } from "./EDataType.js"
 import { EAttributeExt } from "./internal.js"
 

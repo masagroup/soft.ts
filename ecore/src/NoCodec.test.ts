@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest"
 import { NoCodec } from "./NoCodec.js"
 
 describe("NoCoder", () => {

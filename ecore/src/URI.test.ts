@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest"
 import { URI } from "./URI.js"
 
 describe("URI", () => {

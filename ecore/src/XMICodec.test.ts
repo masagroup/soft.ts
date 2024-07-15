@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import * as fs from "fs"
+import { afterEach, beforeEach, describe, expect, test } from "vitest"
 import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, URI, uriToFilePath } from "./internal.js"
 
 describe("XMICodec", () => {

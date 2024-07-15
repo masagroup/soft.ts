@@ -1,4 +1,5 @@
 import { mock } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { BinaryCodec, EResource } from "./internal.js"
 
 describe("BinaryCodec", () => {

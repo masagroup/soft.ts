@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 
 describe("ECodecRegistry", () => {

@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, verify, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EResourceImpl, EResourceInternal, EResourceSetImpl, URI } from "./internal.js"
 
 describe("EResourceSetImpl", () => {

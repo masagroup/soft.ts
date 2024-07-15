@@ -9,6 +9,7 @@
 
 import * as fs from "fs"
 import id128 from "id128"
+import { afterEach, describe, expect, test } from "vitest"
 import {
     EAttribute,
     EClass,

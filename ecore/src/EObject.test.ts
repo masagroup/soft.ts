@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { getEcoreFactory } from "./index.js"
 
 describe("EObject", () => {

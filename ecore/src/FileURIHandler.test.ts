@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { FileURIHandler, URI } from "./internal.js"
 
 describe("FileURIHandler", () => {

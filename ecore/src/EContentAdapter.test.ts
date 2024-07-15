@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, resetCalls, verify, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import {
     EAdapter,
     EAttribute,

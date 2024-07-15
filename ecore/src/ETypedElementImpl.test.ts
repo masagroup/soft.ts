@@ -10,6 +10,7 @@
 // *****************************************************************************
 
 import { anything, capture, instance, mock, verify, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import {
     EAdapter,
     EClassifier,

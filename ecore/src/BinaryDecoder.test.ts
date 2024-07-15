@@ -1,4 +1,5 @@
 import id128 from "id128"
+import { afterEach, describe, expect, test } from "vitest"
 import { BinaryDecoder } from "./BinaryDecoder.js"
 import {
     EAttribute,

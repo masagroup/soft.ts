@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { XMLNamespaces } from "./XMLNamespaces.js"
 
 describe("XMLNamespaces", () => {

@@ -10,6 +10,7 @@
 // *****************************************************************************
 
 import { anything, instance, mock, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import {
     EAnnotation,
     EClass,

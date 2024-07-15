@@ -9,6 +9,7 @@
 
 import id128 from "id128"
 import { instance, mock } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EObject, IncrementalIDManager, ULIDManager, UUIDManager } from "./internal.js"
 
 describe("IDManager", () => {
