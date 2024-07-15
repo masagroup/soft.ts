@@ -17,6 +17,7 @@
   },
   "exclude": [
     ".vscode",
+    "coverage",
     "dist",
     "node_modules",
     "testdata"

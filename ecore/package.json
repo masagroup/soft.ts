@@ -21,13 +21,15 @@
     "build-types": "tsc -b tsconfig.types.json",
     "build-server": "tsc -b tsconfig.esm.json tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
     "pretty": "prettier --write src/**/*.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "engines": {
     "node": ">=16"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
+    "@vitest/coverage-v8": "^2.0.3",
     "deep-equal": "^2.2.3",
     "ncp": "^2.0.0",
     "prettier": "^3.3.2",
