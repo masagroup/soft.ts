@@ -23,8 +23,6 @@ import {
 } from "./internal.js"
 import { Decoder } from "./msgpack/Decoder.js"
 
-var toArray = require("stream-to-array")
-
 function arraysAreEqual(a: Uint8Array, b: Uint8Array) {
     if (a.byteLength !== b.byteLength) return false
     return a.every((val, i) => val === b[i])
@@ -109,50 +107,31 @@ export class BinaryDecoder implements EDecoder {
 
     decodeAsync(stream: ReadStream): Promise<EResource> {
         let decoder = this
-        return new Promise<EResource>((resolve, reject) => {
-            toArray(stream, function (err: Error, arr: Buffer[]) {
-                if (err != null) {
-                    reject(err)
-                } else {
-                    try {
-                        decoder.setBuffer(Buffer.concat(arr))
-                        decoder.decodeSignature()
-                        decoder.decodeVersion()
-                        // objects
-                        let size = decoder.decodeNumber()
-                        let objects = []
-                        for (let i = 0; i < size; i++) {
-                            objects.push(decoder.decodeEObject())
-                        }
+        let resource = this._resource
+        return stream.toArray().then(function (arr: any[]): EResource {
+            decoder.setBuffer(Buffer.concat(arr))
+            decoder.decodeSignature()
+            decoder.decodeVersion()
+            // objects
+            let size = decoder.decodeNumber()
+            let objects = []
+            for (let i = 0; i < size; i++) {
+                objects.push(decoder.decodeEObject())
+            }
 
-                        // add objects to resource
-                        decoder._resource.eContents().addAll(new ImmutableEList(objects))
-                        resolve(decoder._resource)
-                    } catch (err) {
-                        reject(err)
-                    }
-                }
-            })
+            // add objects to resource
+            resource.eContents().addAll(new ImmutableEList(objects))
+            return resource
         })
     }
 
     decodeObjectAsync(stream: ReadStream): Promise<EObject> {
         let decoder = this
-        return new Promise<EObject>((resolve, reject) => {
-            toArray(stream, function (err: Error, arr: Buffer[]) {
-                if (err != null) {
-                    reject(err)
-                } else {
-                    try {
-                        decoder.setBuffer(Buffer.concat(arr))
-                        decoder.decodeSignature()
-                        decoder.decodeVersion()
-                        resolve(decoder.decodeEObject())
-                    } catch (err) {
-                        reject(err)
-                    }
-                }
-            })
+        return stream.toArray().then(function (arr: any[]): EObject {
+            decoder.setBuffer(Buffer.concat(arr))
+            decoder.decodeSignature()
+            decoder.decodeVersion()
+            return decoder.decodeEObject()
         })
     }
 
