@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { WriterExt } from "./internal.js"
 
 describe("WriterExt", () => {

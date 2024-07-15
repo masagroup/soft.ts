@@ -7,20 +7,17 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "vitest run",
     "pretty": "prettier --write src/**/*.ts"
   },
   "author": "MASA Group",
   "license": "MPL-2.0",
   "devDependencies": {
-    "@types/jest": "^29.5.12",
     "deep-equal": "^2.2.3",
-    "jest": "^29.7.0",
     "prettier": "^3.3.2",
-    "ts-jest": "^29.1.5",
-    "ts-jest-resolver": "^2.0.1",
     "ts-mockito": "^2.6.1",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vitest": "^2.0.3"
   },
   "dependencies": {
     "@masagroup/ecore": "file:../../ecore"
