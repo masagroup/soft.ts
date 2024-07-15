@@ -3,5 +3,7 @@
     "tabWidth": 4,
     "semi": false,
     "trailingComma": "none",
-    "plugins": ["prettier-plugin-organize-imports"]
+    "plugins": [
+        "prettier-plugin-organize-imports"
+    ]
 }
