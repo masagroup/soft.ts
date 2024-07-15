@@ -45,5 +45,8 @@
     "sax": "^1.4.1",
     "stream-to-array": "^2.3.0",
     "ts-results-es": "^4.2.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.9.5"
   }
 }
