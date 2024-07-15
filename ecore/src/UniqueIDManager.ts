@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { Ulid, Uuid4 } from "id128"
+import id128 from "id128"
 import { EObject, EObjectIDManager } from "./internal.js"
 
 type Primitive = string | number
@@ -88,61 +88,61 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
     }
 }
 
-export class UUIDManager extends UniqueIDManager<Uuid4, string> {
-    newID(): Uuid4 {
-        return Uuid4.generate()
+export class UUIDManager extends UniqueIDManager<id128.Uuid4, string> {
+    newID(): id128.Uuid4 {
+        return id128.Uuid4.generate()
     }
 
-    isValid(id: Uuid4): boolean {
+    isValid(id: id128.Uuid4): boolean {
         return id != undefined
     }
 
-    toID(v: any): Uuid4 {
-        if (v instanceof Uuid4.type) {
+    toID(v: any): id128.Uuid4 {
+        if (v instanceof id128.Uuid4.type) {
             return v
         } else if (typeof v === "string") {
-            return Uuid4.fromCanonical(v)
+            return id128.Uuid4.fromCanonical(v)
         } else if (v instanceof Uint8Array) {
-            return Uuid4.construct(v)
+            return id128.Uuid4.construct(v)
         }
         return undefined
     }
 
-    toKey(id: Uuid4): string {
+    toKey(id: id128.Uuid4): string {
         return id ? id.toRaw() : undefined
     }
 
-    setCurrent(id: Uuid4): void {}
+    setCurrent(id: id128.Uuid4): void {}
 }
 
-export class ULIDManager extends UniqueIDManager<Ulid, string> {
-    newID(): Ulid {
-        return Ulid.generate()
+export class ULIDManager extends UniqueIDManager<id128.Ulid, string> {
+    newID(): id128.Ulid {
+        return id128.Ulid.generate()
     }
 
-    isValid(id: Ulid): boolean {
+    isValid(id: id128.Ulid): boolean {
         return id != undefined
     }
 
-    isID(id: Ulid): boolean {
+    isID(id: id128.Ulid): boolean {
         return true
     }
-    toID(v: any): Ulid {
-        if (v instanceof Ulid.type) {
+    toID(v: any): id128.Ulid {
+        if (v instanceof id128.Ulid.type) {
             return v
         } else if (typeof v === "string") {
-            return Ulid.fromCanonical(v)
+            return id128.Ulid.fromCanonical(v)
         } else if (v instanceof Uint8Array) {
-            return Ulid.construct(v)
+            return id128.Ulid.construct(v)
         }
         return undefined
     }
 
-    toKey(id: Ulid): string {
+    toKey(id: id128.Ulid): string {
         return id ? id.toRaw() : undefined
     }
 
-    setCurrent(id: Ulid): void {}
+    setCurrent(id: id128.Ulid): void {}
 }
 
 export class IncrementalIDManager extends UniqueIDManager<number, number> {
