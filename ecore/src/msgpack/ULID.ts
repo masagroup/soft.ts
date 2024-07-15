@@ -1,4 +1,4 @@
-import { Ulid } from "id128"
+import id128 from "id128"
 
 export const EXT_ULID = 1
 
@@ -9,9 +9,9 @@ export const ulidExtension = {
 }
 
 export function encodeULIDExtension(object: unknown): Uint8Array | null {
-    return object instanceof Ulid.type ? object.bytes : null
+    return object instanceof id128.Ulid.type ? object.bytes : null
 }
 
-export function decodeULIDExtension(data: Uint8Array): Ulid {
-    return Ulid.construct(data)
+export function decodeULIDExtension(data: Uint8Array): id128.Ulid {
+    return id128.Ulid.construct(data)
 }

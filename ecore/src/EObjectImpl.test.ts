@@ -9,6 +9,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { EObjectImpl, getEcorePackage } from "./internal.js"
 
 describe("EObjectImpl", () => {

@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { BasicEList, ImmutableEList } from "./internal.js"
 
 describe("BasicEList", () => {

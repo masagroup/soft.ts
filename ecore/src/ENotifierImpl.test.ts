@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, verify } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EAdapter, ENotification, ENotifierImpl } from "./internal.js"
 
 describe("ENotifierImpl", () => {

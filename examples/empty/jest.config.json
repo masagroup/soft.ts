@@ -1,9 +1,0 @@
-{
-    "preset": "ts-jest",
-    "resolver": "ts-jest-resolver",
-    "testEnvironment": "node",
-    "cache": false,
-    "testPathIgnorePatterns": [
-        "<rootDir>/dist/"
-    ]
- }

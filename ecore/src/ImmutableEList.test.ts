@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import { ImmutableEList, getNonDuplicates } from "./internal.js"
 
 describe("ImmutableEList", () => {

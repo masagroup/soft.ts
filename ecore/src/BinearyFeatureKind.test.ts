@@ -1,4 +1,5 @@
 import { instance, mock, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
 import { EAttribute, EDataType, EEnum, EReference, EStructuralFeature } from "./internal.js"
 

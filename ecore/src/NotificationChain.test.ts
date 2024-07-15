@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, verify, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { ENotification, ENotifier, EventType, NotificationChain } from "./internal.js"
 
 describe("NotificationChain", () => {

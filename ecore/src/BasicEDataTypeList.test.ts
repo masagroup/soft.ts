@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { BasicEDataTypeList, EClass, EObjectInternal, EStructuralFeature } from "./internal.js"
 
 describe("BasicEDataTypeList", () => {

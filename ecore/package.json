@@ -1,6 +1,6 @@
 {
   "name": "@masagroup/ecore",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "ecore typescript library",
   "author": "MASA Group",
   "license": "MPL-2.0",
@@ -21,24 +21,23 @@
     "build-types": "tsc -b tsconfig.types.json",
     "build-server": "tsc -b tsconfig.esm.json tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
     "pretty": "prettier --write src/**/*.ts",
-    "test": "jest"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "engines": {
     "node": ">=16"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
-    "@types/jest": "^29.5.12",
+    "@vitest/coverage-v8": "^2.0.3",
     "deep-equal": "^2.2.3",
-    "jest": "^29.7.0",
     "ncp": "^2.0.0",
     "prettier": "^3.3.2",
     "prettier-plugin-organize-imports": "^4.0.0",
-    "ts-jest": "^29.1.5",
-    "ts-jest-resolver": "^2.0.1",
     "ts-mockito": "^2.6.1",
     "tslib": "^2.6.3",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vitest": "^2.0.2"
   },
   "dependencies": {
     "@types/sax": "^1.2.7",

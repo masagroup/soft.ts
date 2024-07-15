@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EcoreConstants, EcoreFactoryExt, EDataType } from "./internal.js"
 
 describe("EcoreFactoryExt", () => {

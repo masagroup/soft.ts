@@ -10,6 +10,7 @@
 // *****************************************************************************
 
 import { anything, capture, instance, mock, verify } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EAdapter, EAttributeImpl, EDataType, EObjectInternal, EcoreConstants, getEcorePackage } from "./internal.js"
 
 interface EDataTypeInternal extends EDataType, EObjectInternal {}

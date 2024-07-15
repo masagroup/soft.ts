@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { instance, mock } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EPackage, EResourceSet, XMLProcessor } from "./internal.js"
 
 describe("XMLProcessor", () => {

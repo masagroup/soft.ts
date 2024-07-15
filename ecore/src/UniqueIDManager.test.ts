@@ -7,8 +7,9 @@
 //
 // *****************************************************************************
 
-import { Exception, Ulid, Uuid4 } from "id128"
+import id128 from "id128"
 import { instance, mock } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import { EObject, IncrementalIDManager, ULIDManager, UUIDManager } from "./internal.js"
 
 describe("IDManager", () => {
@@ -113,7 +114,7 @@ describe("IDManager", () => {
             try {
                 m.getEObject("invalid")
             } catch (err) {
-                expect(err instanceof Exception.InvalidEncoding).toBeTruthy()
+                expect(err instanceof id128.Exception.InvalidEncoding).toBeTruthy()
             }
         })
 
@@ -154,7 +155,7 @@ describe("IDManager", () => {
             let m = new UUIDManager()
             let mockObject = mock<EObject>()
             let eObject = instance(mockObject)
-            let uuid = Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
+            let uuid = id128.Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
             m.setID(eObject, uuid)
             expect(m.getID(eObject)).toBe(uuid)
 
@@ -177,7 +178,7 @@ describe("IDManager", () => {
             let m = new UUIDManager()
             let mockObject = mock<EObject>()
             let eObject = instance(mockObject)
-            let uuid = Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
+            let uuid = id128.Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
 
             m.setID(eObject, uuid)
             expect(m.getID(eObject)).toBe(uuid)
@@ -193,7 +194,7 @@ describe("IDManager", () => {
             try {
                 m.getEObject("invalid")
             } catch (err) {
-                expect(err instanceof Exception.InvalidEncoding).toBeTruthy()
+                expect(err instanceof id128.Exception.InvalidEncoding).toBeTruthy()
             }
         })
 
@@ -214,7 +215,7 @@ describe("IDManager", () => {
             let m = new ULIDManager()
             let mockObject = mock<EObject>()
             let eObject = instance(mockObject)
-            let ulid = Ulid.fromCanonical("01HNBCDR3FC57NH9V4VNQ3VPYD")
+            let ulid = id128.Ulid.fromCanonical("01HNBCDR3FC57NH9V4VNQ3VPYD")
             m.setID(eObject, ulid)
             expect(m.getID(eObject)).toBe(ulid)
 

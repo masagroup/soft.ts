@@ -1,4 +1,5 @@
-import { Uuid4 } from "id128"
+import id128 from "id128"
+import { afterEach, describe, expect, test } from "vitest"
 import { BinaryDecoder } from "./BinaryDecoder.js"
 import {
     EAttribute,
@@ -154,7 +155,7 @@ describe("BinaryDecoder", () => {
 
             let eLibrary = eDocumentRoot.eGet(eDocumentRootLibraryFeature) as EObject
             expect(eLibrary).not.toBeNull()
-            let expectedUUID = Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
+            let expectedUUID = id128.Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
             let receivedUUID = idManager.getID(eLibrary)
             expect(expectedUUID.equal(receivedUUID)).toBeTruthy()
         })

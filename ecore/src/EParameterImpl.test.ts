@@ -10,6 +10,7 @@
 // *****************************************************************************
 
 import { instance, mock, reset, verify, when } from "ts-mockito"
+import { describe, expect, test } from "vitest"
 import {
     ENotificationChain,
     EObject,
