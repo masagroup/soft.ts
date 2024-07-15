@@ -1,4 +1,4 @@
-import * as fs from "fs"
+import fs from "fs"
 import { Result } from "ts-results-es"
 import { EObject } from "./EObject.js"
 import { EResource } from "./EResource.js"

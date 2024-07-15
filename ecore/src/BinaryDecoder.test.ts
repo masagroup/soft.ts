@@ -17,7 +17,7 @@ import {
     uriToFilePath
 } from "./internal.js"
 
-import * as fs from "fs"
+import fs from "fs"
 
 function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor()
