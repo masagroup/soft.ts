@@ -7,8 +7,8 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs"
-import * as sax from "sax"
+import fs from "fs"
+import sax from "sax"
 import { Err, Ok, Result } from "ts-results-es"
 import {
     EClassifier,

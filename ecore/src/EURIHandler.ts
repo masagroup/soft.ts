@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs"
+import fs from "fs"
 import { URI } from "./URI.js"
 
 export interface EURIHandler {

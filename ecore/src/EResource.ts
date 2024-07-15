@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs"
+import fs from "fs"
 import { EDiagnostic, EList, ENotifier, EObject, EObjectIDManager, EResourceSet, URI } from "./internal.js"
 
 export class EResourceConstants {

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs"
+import fs from "fs"
 import { EURIHandler, URI, uriToFilePath } from "./internal.js"
 
 export class FileURIHandler implements EURIHandler {

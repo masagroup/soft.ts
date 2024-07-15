@@ -9,7 +9,7 @@
 
 import { describe, expect, test } from "vitest"
 import * as ecore from "@masagroup/ecore"
-import * as fs from "fs"
+import fs from "fs"
 import { getLibraryPackage } from "./internal.js"
 
 describe("Library", () => {

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs"
+import fs from "fs"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 import { EEncoder } from "./EEncoder.js"
 import {

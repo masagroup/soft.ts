@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import * as fs from "fs"
+import fs from "fs"
 import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal.js"
 
 export class EURIConverterImpl implements EURIConverter {
