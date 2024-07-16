@@ -80,4 +80,34 @@ describe("URI", () => {
         expect(new URI("http://toto").isOpaque()).toBeTruthy()
         expect(new URI("http://toto/").isOpaque()).toBeFalsy()
     })
+    test("replacePrefix", () => {
+        expect(new URI("http://").replacePrefix(new URI("file://"), null)).toBeNull()
+        expect(new URI("http://host").replacePrefix(new URI("http://host2/path"), null)).toBeNull()
+        expect(new URI("test/toto").replacePrefix(new URI("info"), null)).toBeNull()
+        {
+            let uri = new URI("test:///toto").replacePrefix(new URI({ scheme: "test" }), new URI({ scheme: "file" }))
+            expect(uri).not.toBeNull()
+            expect(uri.scheme).toBe("file")
+        }
+        {
+            let uri = new URI().replacePrefix(new URI(), new URI("file"))
+            expect(uri).not.toBeNull()
+            expect(uri.path).toBe("file")
+        }
+        {
+            let uri = new URI("toto").replacePrefix(new URI(), new URI("test/"))
+            expect(uri).not.toBeNull()
+            expect(uri.path).toBe("test/toto")
+        }
+        {
+            let uri = new URI("test/toto").replacePrefix(new URI("test/toto"), new URI("test2"))
+            expect(uri).not.toBeNull()
+            expect(uri.path).toBe("test2")
+        }
+        {
+            let uri = new URI("test/toto").replacePrefix(new URI("test"), new URI("test2"))
+            expect(uri).not.toBeNull()
+            expect(uri.path).toBe("test2/toto")
+        }
+    })
 })
