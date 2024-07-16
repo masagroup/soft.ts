@@ -24,4 +24,6 @@ export interface EURIConverter {
     getURIHandler(uri: URI): EURIHandler
 
     getURIHandlers(): EList<EURIHandler>
+
+    getURIMap(): Map<URI, URI>
 }

@@ -12,35 +12,40 @@ import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI 
 
 export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>
+    private _uriMap: Map<URI, URI>
 
     constructor() {
         this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()])
+        this._uriMap = new Map<URI, URI>()
+    }
+    getURIMap(): Map<URI, URI> {
+        return this._uriMap
     }
 
     createReadStream(uri: URI): fs.ReadStream {
-        let uriHandler = this.getURIHandler(uri)
-        return uriHandler ? uriHandler.createReadStream(uri) : null
+        let normalized = this.normalize(uri)
+        let uriHandler = this.getURIHandler(normalized)
+        return uriHandler ? uriHandler.createReadStream(normalized) : null
     }
 
     createWriteStream(uri: URI): fs.WriteStream {
-        let uriHandler = this.getURIHandler(uri)
-        return uriHandler ? uriHandler.createWriteStream(uri) : null
+        let normalized = this.normalize(uri)
+        let uriHandler = this.getURIHandler(normalized)
+        return uriHandler ? uriHandler.createWriteStream(normalized) : null
     }
 
     readSync(uri: URI): null | Buffer {
-        let uriHandler = this.getURIHandler(uri)
-        return uriHandler ? uriHandler.readSync(uri) : null
+        let normalized = this.normalize(uri)
+        let uriHandler = this.getURIHandler(normalized)
+        return uriHandler ? uriHandler.readSync(normalized) : null
     }
 
     writeSync(uri: URI, s: Buffer): void {
-        let uriHandler = this.getURIHandler(uri)
+        let normalized = this.normalize(uri)
+        let uriHandler = this.getURIHandler(normalized)
         if (uriHandler) {
-            uriHandler.writeSync(uri, s)
+            uriHandler.writeSync(normalized, s)
         }
-    }
-
-    normalize(uri: URI): URI {
-        return uri
     }
 
     getURIHandler(uri: URI): EURIHandler {
@@ -54,5 +59,20 @@ export class EURIConverterImpl implements EURIConverter {
 
     getURIHandlers(): EList<EURIHandler> {
         return this._uriHandlers
+    }
+
+    normalize(uri: URI): URI {
+        let normalized = this.getURIFromMap(uri)
+        return uri == normalized ? normalized : this.normalize(normalized)
+    }
+
+    private getURIFromMap(uri: URI): URI {
+        for (let [oldPrefix, newPrefix] of this._uriMap) {
+            let r = uri.replacePrefix(oldPrefix, newPrefix)
+            if (r) {
+                return r
+            }
+        }
+        return uri
     }
 }
