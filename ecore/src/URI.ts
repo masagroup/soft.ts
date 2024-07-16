@@ -265,6 +265,30 @@ export class URI {
         return new URI({ path: cp.substring(bp.length), query: ref.query, fragment: ref.fragment })
     }
 
+    replacePrefix(oldPrefix: URI, newPrefix: URI): URI {
+        if (
+            this.scheme != oldPrefix.scheme ||
+            this.user != oldPrefix.user ||
+            this.host != oldPrefix.host ||
+            this.port != oldPrefix.port
+        )
+            return null
+
+        let oldLen = oldPrefix.path.length
+        if (this.path.length >= oldLen && this.path.slice(0, oldLen) == oldPrefix.path) {
+            return new URI({
+                scheme: newPrefix.scheme,
+                user: newPrefix.user,
+                host: newPrefix.host,
+                port: newPrefix.port,
+                path: newPrefix.path + this.path.slice(oldLen),
+                query: this.query,
+                fragment: this.fragment
+            })
+        }
+        return null
+    }
+
     trimFragment(): URI {
         return new URI({
             scheme: this.scheme,
