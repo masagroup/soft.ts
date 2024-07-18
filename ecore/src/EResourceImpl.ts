@@ -7,7 +7,6 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 import { EEncoder } from "./EEncoder.js"
 import {
@@ -40,6 +39,9 @@ import {
     NotificationChain,
     URI
 } from "./internal.js"
+import { ensureAsyncIterable } from "./utils/Stream.js"
+import { ensureUint8Array } from "./utils/TypedArray.js"
+import { utf8Count, utf8Encode } from "./utils/UTF8.js"
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier
@@ -284,7 +286,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return Promise.resolve()
     }
 
-    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void> {
+    loadFromStream(stream: AsyncIterable<Uint8Array> | ReadableStream, options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
             let codecs = this.getCodecRegistry()
             let codec = codecs.getCodec(this._uri)
@@ -293,10 +295,13 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 if (decoder) {
                     this._isLoading = true
                     let n = this.basicSetLoaded(true, null)
-                    return this.doLoadFromStream(decoder, s).then(() => {
+                    let iterable = ensureAsyncIterable(stream)
+                    return this.doLoadFromStream(decoder, iterable).then(() => {
                         if (n) {
                             n.dispatch()
                         }
+                        
+                    }).finally(()=>{
                         this._isLoading = false
                     })
                 } else {
@@ -329,10 +334,10 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return Promise.resolve()
     }
 
-    protected doLoadFromStream(decoder: EDecoder, s: fs.ReadStream): Promise<void> {
+    protected doLoadFromStream(decoder: EDecoder, stream:  AsyncIterable<Uint8Array>): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             decoder
-                .decodeAsync(s)
+                .decodeAsync(stream)
                 .then(() => resolve())
                 .catch((reason) => reject(reason))
         })
@@ -350,11 +355,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    loadFromString(s: string, options?: Map<string, any>) {
-        this.loadFromBuffer(Buffer.from(s), options)
-    }
-
-    private loadFromBuffer(buffer: Buffer, options?: Map<string, any>) {
+    loadFromBuffer(buffer : ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer, options?: Map<string, any>) {
         if (!this._isLoaded) {
             let codecs = this.getCodecRegistry()
             let codec = codecs.getCodec(this._uri)
@@ -363,7 +364,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 if (decoder) {
                     this._isLoading = true
                     let n = this.basicSetLoaded(true, null)
-                    this.doLoadFromBuffer(decoder, buffer)
+                    let array = ensureUint8Array(buffer)
+                    this.doLoadFromBytes(decoder, array)
                     if (n) {
                         n.dispatch()
                     }
@@ -395,7 +397,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    protected doLoadFromBuffer(decoder: EDecoder, buffer: Buffer): void {
+    loadFromString(s: string, options?: Map<string, any>) {
+       const byteLength = utf8Count(s)
+       const bytes = new Uint8Array(byteLength)
+       const buffer = utf8Encode(s,bytes,0)
+       this.loadFromBuffer(bytes, options)
+    }
+
+    protected doLoadFromBytes(decoder: EDecoder, buffer: Uint8Array): void {
         decoder.decode(buffer)
     }
 
@@ -425,20 +434,20 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     this.saveToStream(s, options)
                         .then(() => resolve())
                         .catch((reason) => reject(reason))
-                        .finally(() => s.end())
+                        .finally(() => s.close())
                 })
             }
         }
         return Promise.reject()
     }
 
-    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void> {
+    saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
         let codecs = this.getCodecRegistry()
         let codec = codecs.getCodec(this._uri)
         if (codec) {
             let encoder = codec.newEncoder(this, options)
             if (encoder) {
-                return this.doSaveToStream(encoder, s)
+                return this.doSaveToStream(encoder, stream)
             } else {
                 let errors = this.getErrors()
                 errors.clear()
@@ -478,13 +487,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return buffer ? buffer.toString() : ""
     }
 
-    private saveToBuffer(options?: Map<string, any>): Buffer {
+   
+    saveToBuffer(options?: Map<string, any>) : Uint8Array {
         let codecs = this.getCodecRegistry()
         let codec = codecs.getCodec(this._uri)
         if (codec) {
             let encoder = codec.newEncoder(this, options)
             if (encoder) {
-                return this.doSaveToBuffer(encoder)
+                return this.doSaveToBytes(encoder)
             } else {
                 let errors = this.getErrors()
                 errors.clear()
@@ -512,25 +522,27 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return null
     }
 
-    protected doSaveToStream(encoder: EEncoder, s: fs.WriteStream): Promise<void> {
+    protected doSaveToBytes(encoder: EEncoder): Uint8Array {
+        let r = encoder.encode(this)
+        if (r.isOk()) {
+            return r.value
+        }
+        return null
+    }
+
+    protected doSaveToStream(encoder: EEncoder, stream: WritableStream): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             encoder
-                .encodeAsync(this, s)
+                .encodeAsync(this, stream)
                 .then((r) => {
                     resolve()
                 })
                 .catch((reason) => reject(reason))
-                .finally(() => s.end())
+                .finally(() => stream.close())
         })
     }
 
-    protected doSaveToBuffer(encoder: EEncoder): Buffer {
-        let r = encoder.encode(this)
-        if (r.isOk()) {
-            return Buffer.from(r.value)
-        }
-        return null
-    }
+    
 
     protected isAttachedDetachedRequired(): boolean {
         return this._objectIDManager != null

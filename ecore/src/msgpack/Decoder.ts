@@ -1,7 +1,7 @@
 import { ExtensionCodec, ExtensionCodecType } from "./Extension.js"
-import { createDataView, ensureUint8Array } from "./TypedArray.js"
+import { utf8Decode } from "../utils/UTF8.js"
+import { createDataView, ensureUint8Array } from "../utils/TypedArray.js"
 import * as Types from "./Types.js"
-import { utf8Decode } from "./UTF8.js"
 
 function prettyByte(byte: number): string {
     return `${byte < 0 ? "-" : ""}0x${Math.abs(byte).toString(16).padStart(2, "0")}`

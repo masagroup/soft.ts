@@ -1,8 +1,8 @@
 import { ExtData, ExtensionCodec, ExtensionCodecType } from "./Extension.js"
 import { setInt64, setUint64 } from "./Int.js"
-import { ensureUint8Array } from "./TypedArray.js"
+import { utf8Count, utf8Encode } from "../utils/UTF8.js"
+import { ensureUint8Array } from "../utils/TypedArray.js"
 import * as Types from "./Types.js"
-import { utf8Count, utf8Encode } from "./UTF8.js"
 
 export const DEFAULT_INITIAL_BUFFER_SIZE = 2048
 

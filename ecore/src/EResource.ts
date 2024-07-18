@@ -29,18 +29,22 @@ export interface EResource extends ENotifier {
     eAllContents(): IterableIterator<EObject>
 
     load(options?: Map<string, any>): Promise<void>
-    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void>
+    loadFromStream(stream: AsyncIterable<Uint8Array> | ReadableStream, options?: Map<string, any>): Promise<void>
+    
     loadSync(options?: Map<string, any>): void
     loadFromString(s: string, options?: Map<string, any>): void
-
+    loadFromBuffer(buffer : ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer, options?: Map<string, any>) : void
+    
     unload(): void
     readonly isLoaded: boolean
     readonly isLoading: boolean
 
     save(options?: Map<string, any>): Promise<void>
-    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void>
+    saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void>
+    
     saveSync(options?: Map<string, any>): void
     saveToString(options?: Map<string, any>): string
+    saveToBuffer(options?: Map<string, any>): Uint8Array
 
     attached(object: EObject): void
     detached(object: EObject): void
