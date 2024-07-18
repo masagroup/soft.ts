@@ -7,17 +7,16 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import { EList, EURIHandler, URI } from "./internal.js"
 
 export interface EURIConverter {
-    createReadStream(uri: URI): fs.ReadStream
+    createReadStream(uri: URI): ReadableStream
 
-    createWriteStream(uri: URI): fs.WriteStream
+    createWriteStream(uri: URI): WritableStream
 
-    readSync(uri: URI): null | Buffer
+    readSync(uri: URI): Uint8Array
 
-    writeSync(uri: URI, s: Buffer): void
+    writeSync(uri: URI, arr : Uint8Array): void
 
     normalize(uri: URI): URI
 
