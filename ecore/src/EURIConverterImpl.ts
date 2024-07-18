@@ -7,7 +7,6 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal.js"
 
 export class EURIConverterImpl implements EURIConverter {
@@ -22,29 +21,29 @@ export class EURIConverterImpl implements EURIConverter {
         return this._uriMap
     }
 
-    createReadStream(uri: URI): fs.ReadStream {
+    createReadStream(uri: URI): ReadableStream {
         let normalized = this.normalize(uri)
         let uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createReadStream(normalized) : null
     }
 
-    createWriteStream(uri: URI): fs.WriteStream {
+    createWriteStream(uri: URI): WritableStream {
         let normalized = this.normalize(uri)
         let uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createWriteStream(normalized) : null
     }
 
-    readSync(uri: URI): null | Buffer {
+    readSync(uri: URI): Uint8Array {
         let normalized = this.normalize(uri)
         let uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.readSync(normalized) : null
     }
 
-    writeSync(uri: URI, s: Buffer): void {
+    writeSync(uri: URI, arr: Uint8Array): void {
         let normalized = this.normalize(uri)
         let uriHandler = this.getURIHandler(normalized)
         if (uriHandler) {
-            uriHandler.writeSync(normalized, s)
+            uriHandler.writeSync(normalized, arr)
         }
     }
 
