@@ -275,7 +275,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return this._warnings
     }
 
-    load(options?: Map<string, any>): Promise<void> {
+    async load(options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter()
             if (uriConverter) {
@@ -285,10 +285,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 }
             }
         }
-        return Promise.resolve()
     }
 
-    loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
+    async loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
             let codecs = this.getCodecRegistry()
             let codec = codecs.getCodec(this._uri)
@@ -317,7 +316,6 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                             0
                         )
                     )
-                    return Promise.resolve()
                 }
             } else {
                 let errors = this.getErrors()
@@ -330,10 +328,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         0
                     )
                 )
-                return Promise.resolve()
             }
         }
-        return Promise.resolve()
     }
 
     protected doLoadFromStream(decoder: EDecoder, stream: ReadableStreamLike<BufferLike>): Promise<void> {
