@@ -46,7 +46,7 @@ export class XMLProcessor {
         let r = rs.createResource(uri)
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
-        await r.load(options)    
+        await r.load(options)
         return r
     }
 
@@ -55,7 +55,7 @@ export class XMLProcessor {
         let r = rs.createResource(new URI("file:///*.xml"))
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
-        await r.loadFromStream(stream,o)
+        await r.loadFromStream(stream, o)
         return r
     }
 

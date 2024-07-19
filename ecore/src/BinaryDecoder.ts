@@ -114,7 +114,7 @@ export class BinaryDecoder implements EDecoder {
         // set decoder buffer
         this.setBuffer(buffer)
 
-        // decode 
+        // decode
         this.decodeSignature()
         this.decodeVersion()
 
@@ -135,13 +135,13 @@ export class BinaryDecoder implements EDecoder {
         const buffer = await this.getBuffer(streamLike)
         // set decoder buffer
         this.setBuffer(buffer)
-        // decode 
+        // decode
         this.decodeSignature()
         this.decodeVersion()
         return this.decodeEObject()
     }
 
-    private async getBuffer(streamLike: ReadableStreamLike<BufferLike>) : Promise<Uint8Array> {
+    private async getBuffer(streamLike: ReadableStreamLike<BufferLike>): Promise<Uint8Array> {
         // retrieve all stream arrays
         let arrays = []
         let iterable = ensureAsyncIterable(streamLike)
@@ -150,11 +150,11 @@ export class BinaryDecoder implements EDecoder {
         }
 
         // concat arrays to buffer
-        const bufferLength = arrays.reduce((total,array) => total + array.byteLength,0)
+        const bufferLength = arrays.reduce((total, array) => total + array.byteLength, 0)
         const buffer = new Uint8Array(bufferLength)
         let offset = 0
-        arrays.forEach((array) => { 
-            buffer.set(array,offset)
+        arrays.forEach((array) => {
+            buffer.set(array, offset)
             offset += array.length
         })
         return buffer

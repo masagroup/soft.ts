@@ -1,6 +1,6 @@
-import { ExtensionCodec, ExtensionCodecType } from "./Extension.js"
-import { utf8Decode } from "../utils/UTF8.js"
 import { createDataView, ensureUint8Array } from "../utils/TypedArray.js"
+import { utf8Decode } from "../utils/UTF8.js"
+import { ExtensionCodec, ExtensionCodecType } from "./Extension.js"
 import * as Types from "./Types.js"
 
 function prettyByte(byte: number): string {

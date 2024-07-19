@@ -11,19 +11,18 @@ import fs from "fs"
 import stream from "stream"
 import { EURIHandler, URI, uriToFilePath } from "./internal.js"
 
-
-function readableNodeStreamToWebStream(stream : stream.Readable) : ReadableStream {
+function readableNodeStreamToWebStream(stream: stream.Readable): ReadableStream {
     return new ReadableStream({
         async pull(controller) {
-            for await ( const chunk of stream ) {
+            for await (const chunk of stream) {
                 controller.enqueue(new Uint8Array(chunk))
             }
             controller.close()
-        },
+        }
     })
 }
 
-function writableNodeStreamToWebStream(stream : stream.Writable) : WritableStream {
+function writableNodeStreamToWebStream(stream: stream.Writable): WritableStream {
     return new WritableStream({
         write(chunk, controller) {
             stream.write(chunk)
@@ -36,7 +35,6 @@ function writableNodeStreamToWebStream(stream : stream.Writable) : WritableStrea
         }
     })
 }
-
 
 export class FileURIHandler implements EURIHandler {
     canHandle(uri: URI): boolean {

@@ -18,5 +18,5 @@ export interface EURIHandler {
 
     readSync(uri: URI): Uint8Array
 
-    writeSync(uri: URI, arr : Uint8Array): void
+    writeSync(uri: URI, arr: Uint8Array): void
 }

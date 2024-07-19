@@ -316,8 +316,8 @@ export class URI {
 
 function normalize(path: string): string {
     const bytesLength = utf8Count(path)
-    let buffer = new Uint8Array(bytesLength) 
-    utf8Encode(path,buffer,0)
+    let buffer = new Uint8Array(bytesLength)
+    utf8Encode(path, buffer, 0)
 
     // Does this path need normalization?
     let ns = needsNormalization(buffer) // Number of segments
@@ -338,7 +338,7 @@ function normalize(path: string): string {
     // Join the remaining segments and return the result
     let newSize = join(buffer, segs)
     let newBuffer = buffer.subarray(0, newSize)
-    return utf8Decode(newBuffer,0,newBuffer.length)
+    return utf8Decode(newBuffer, 0, newBuffer.length)
 }
 
 const SLASH = 47

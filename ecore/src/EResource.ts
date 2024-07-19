@@ -7,7 +7,17 @@
 //
 // *****************************************************************************
 
-import { EDiagnostic, EList, ENotifier, EObject, EObjectIDManager, EResourceSet, URI, BufferLike, ReadableStreamLike } from "./internal.js"
+import {
+    BufferLike,
+    EDiagnostic,
+    EList,
+    ENotifier,
+    EObject,
+    EObjectIDManager,
+    EResourceSet,
+    ReadableStreamLike,
+    URI
+} from "./internal.js"
 
 export class EResourceConstants {
     public static readonly RESOURCE__RESOURCE_SET: number = 0

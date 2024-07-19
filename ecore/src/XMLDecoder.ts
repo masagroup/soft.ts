@@ -36,10 +36,10 @@ import {
     XMLNamespaces,
     XMLOptions
 } from "./internal.js"
-import { XMLConstants } from "./XMLConstants.js"
-import { ensureUint8Array } from "./utils/TypedArray.js"
-import { utf8Decode, utf8Encode } from "./utils/UTF8.js"
 import { ensureAsyncIterable } from "./utils/Stream.js"
+import { ensureUint8Array } from "./utils/TypedArray.js"
+import { utf8Decode } from "./utils/UTF8.js"
+import { XMLConstants } from "./XMLConstants.js"
 
 type XMLReference = {
     object: EObject
@@ -387,9 +387,9 @@ export class XMLDecoder implements EDecoder {
         }
     }
 
-    protected handleXSISchemaLocation(loc: string): void { }
+    protected handleXSISchemaLocation(loc: string): void {}
 
-    protected handleXSINoNamespaceSchemaLocation(loc: string): void { }
+    protected handleXSINoNamespaceSchemaLocation(loc: string): void {}
 
     protected getXSIType(): string {
         return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib)

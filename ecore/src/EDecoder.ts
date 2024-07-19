@@ -1,8 +1,7 @@
-
 import { Result } from "ts-results-es"
+import { BufferLike, ReadableStreamLike } from "./Buffer.js"
 import { EObject } from "./EObject.js"
 import { EResource } from "./EResource.js"
-import { BufferLike, ReadableStreamLike } from "./Buffer.js"
 
 export interface EDecoder {
     decode(buffer: BufferLike): Result<EResource, Error>

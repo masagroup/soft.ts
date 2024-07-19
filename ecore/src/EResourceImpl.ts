@@ -479,7 +479,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     saveToString(options?: Map<string, any>): string {
         let buffer = this.saveToBuffer()
-        return buffer ? utf8Decode(buffer,0,buffer.length) : ""
+        return buffer ? utf8Decode(buffer, 0, buffer.length) : ""
     }
 
     saveToBuffer(options?: Map<string, any>): Uint8Array {
@@ -535,8 +535,6 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 .finally(() => stream.close())
         })
     }
-
-
 
     protected isAttachedDetachedRequired(): boolean {
         return this._objectIDManager != null

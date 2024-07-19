@@ -162,7 +162,7 @@ export class XMLEncoder implements EEncoder {
         }
     }
 
-    async encodeAsync(eResource: EResource, stream : WritableStream): Promise<Uint8Array> {
+    async encodeAsync(eResource: EResource, stream: WritableStream): Promise<Uint8Array> {
         const r = this.encode(eResource)
         if (r.isOk()) {
             stream.getWriter().write(r.value)
@@ -172,7 +172,7 @@ export class XMLEncoder implements EEncoder {
         }
     }
 
-    async encodeObjectAsync(eObject: EObject, stream : WritableStream): Promise<Uint8Array> {
+    async encodeObjectAsync(eObject: EObject, stream: WritableStream): Promise<Uint8Array> {
         const r = this.encodeObject(eObject)
         if (r.isOk()) {
             stream.getWriter().write(r.value)
