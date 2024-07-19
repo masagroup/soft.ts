@@ -1,7 +1,7 @@
-import { ReadStream } from "fs"
 import { Err, Ok, Result } from "ts-results-es"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
 import {
+    BufferLike,
     EClass,
     EcoreUtils,
     EDataType,
@@ -19,9 +19,12 @@ import {
     isEAttribute,
     isEClass,
     isEPackage,
+    ReadableStreamLike,
     URI
 } from "./internal.js"
 import { Decoder } from "./msgpack/Decoder.js"
+import { ensureAsyncIterable } from "./utils/Stream.js"
+import { ensureUint8Array } from "./utils/TypedArray.js"
 
 function arraysAreEqual(a: Uint8Array, b: Uint8Array) {
     if (a.byteLength !== b.byteLength) return false
@@ -65,7 +68,7 @@ export class BinaryDecoder implements EDecoder {
         this._baseURI = this._resource.eURI
     }
 
-    decode(buffer: BufferSource): Result<EResource, Error> {
+    decode(buffer: BufferLike): Result<EResource, Error> {
         try {
             this.setBuffer(buffer)
             this.decodeSignature()
@@ -94,7 +97,7 @@ export class BinaryDecoder implements EDecoder {
         }
     }
 
-    decodeObject(buffer: BufferSource): Result<EObject, Error> {
+    decodeObject(buffer: BufferLike): Result<EObject, Error> {
         try {
             this.setBuffer(buffer)
             this.decodeSignature()
@@ -105,34 +108,56 @@ export class BinaryDecoder implements EDecoder {
         }
     }
 
-    decodeAsync(stream: ReadStream): Promise<EResource> {
-        let decoder = this
-        let resource = this._resource
-        return stream.toArray().then(function (arr: any[]): EResource {
-            decoder.setBuffer(Buffer.concat(arr))
-            decoder.decodeSignature()
-            decoder.decodeVersion()
-            // objects
-            let size = decoder.decodeNumber()
-            let objects = []
-            for (let i = 0; i < size; i++) {
-                objects.push(decoder.decodeEObject())
-            }
+    async decodeAsync(streamLike: ReadableStreamLike<BufferLike>): Promise<EResource> {
+        // convert stream to buffer
+        const buffer = await this.getBuffer(streamLike)
+        // set decoder buffer
+        this.setBuffer(buffer)
 
-            // add objects to resource
-            resource.eContents().addAll(new ImmutableEList(objects))
-            return resource
-        })
+        // decode 
+        this.decodeSignature()
+        this.decodeVersion()
+
+        // objects
+        let size = this.decodeNumber()
+        let objects = []
+        for (let i = 0; i < size; i++) {
+            objects.push(this.decodeEObject())
+        }
+
+        // add objects to resource
+        this._resource.eContents().addAll(new ImmutableEList(objects))
+        return this._resource
     }
 
-    decodeObjectAsync(stream: ReadStream): Promise<EObject> {
-        let decoder = this
-        return stream.toArray().then(function (arr: any[]): EObject {
-            decoder.setBuffer(Buffer.concat(arr))
-            decoder.decodeSignature()
-            decoder.decodeVersion()
-            return decoder.decodeEObject()
+    async decodeObjectAsync(streamLike: ReadableStreamLike<BufferLike>): Promise<EObject> {
+        // convert stream to buffer
+        const buffer = await this.getBuffer(streamLike)
+        // set decoder buffer
+        this.setBuffer(buffer)
+        // decode 
+        this.decodeSignature()
+        this.decodeVersion()
+        return this.decodeEObject()
+    }
+
+    private async getBuffer(streamLike: ReadableStreamLike<BufferLike>) : Promise<Uint8Array> {
+        // retrieve all stream arrays
+        let arrays = []
+        let iterable = ensureAsyncIterable(streamLike)
+        for await (const bufferLike of iterable) {
+            arrays.push(ensureUint8Array(bufferLike))
+        }
+
+        // concat arrays to buffer
+        const bufferLength = arrays.reduce((total,array) => total + array.byteLength,0)
+        const buffer = new Uint8Array(bufferLength)
+        let offset = 0
+        arrays.forEach((array) => { 
+            buffer.set(array,offset)
+            offset += array.length
         })
+        return buffer
     }
 
     private setBuffer(buffer: ArrayLike<number> | BufferSource): void {

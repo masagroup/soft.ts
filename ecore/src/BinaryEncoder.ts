@@ -398,27 +398,23 @@ export class BinaryEncoder implements EEncoder {
         }
     }
 
-    encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
-        return new Promise<Uint8Array>((resolve, reject) => {
-            let r = this.encode(eResource)
-            if (r.isOk()) {
-                s.write(r.value)
-                resolve(r.value)
-            } else {
-                reject(r.error)
-            }
-        })
+    async encodeAsync(eResource: EResource, stream : WritableStream): Promise<Uint8Array> {
+        const r = this.encode(eResource)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 
-    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
-        return new Promise<Uint8Array>((resolve, reject) => {
-            let r = this.encodeObject(eObject)
-            if (r.isOk()) {
-                s.write(r.value)
-                resolve(r.value)
-            } else {
-                reject(r.error)
-            }
-        })
+    async encodeObjectAsync(eObject: EObject, stream : WritableStream): Promise<Uint8Array> {
+        const r = this.encodeObject(eObject)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 }
