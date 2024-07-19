@@ -297,14 +297,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     this._isLoading = true
                     let n = this.basicSetLoaded(true, null)
                     let iterable = ensureAsyncIterable(stream)
-                    return this.doLoadFromStream(decoder, iterable).then(() => {
-                        if (n) {
-                            n.dispatch()
-                        }
-
-                    }).finally(() => {
-                        this._isLoading = false
-                    })
+                    await this.doLoadFromStream(decoder, iterable)
+                    if (n) {
+                        n.dispatch()
+                    }
+                    this._isLoading = false
                 } else {
                     let errors = this.getErrors()
                     errors.clear()
@@ -332,7 +329,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    protected doLoadFromStream(decoder: EDecoder, stream: ReadableStreamLike<BufferLike>): Promise<void> {
+    protected async doLoadFromStream(decoder: EDecoder, stream: ReadableStreamLike<BufferLike>): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             decoder
                 .decodeAsync(stream)
@@ -439,7 +436,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return Promise.reject()
     }
 
-    saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
+    async saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
         let codecs = this.getCodecRegistry()
         let codec = codecs.getCodec(this._uri)
         if (codec) {

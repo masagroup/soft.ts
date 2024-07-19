@@ -7,8 +7,8 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import {
+    BufferLike,
     EPackage,
     EResource,
     EResourceSet,
@@ -16,6 +16,7 @@ import {
     ExtendedMetaData,
     getEcorePackage,
     isEResourceSet,
+    ReadableStreamLike,
     URI,
     XMLOptions
 } from "./internal.js"
@@ -40,38 +41,22 @@ export class XMLProcessor {
         return this._resourceSet
     }
 
-    load(uri: URI, options?: Map<string, any>): Promise<EResource> {
+    async load(uri: URI, options?: Map<string, any>): Promise<EResource> {
         let rs = this.getResourceSet()
         let r = rs.createResource(uri)
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
-
-        return new Promise<EResource>((resolve, reject) => {
-            let p = r.load(o)
-            p.then((_) => {
-                resolve(r)
-            })
-            p.catch((reason) => {
-                reject(reason)
-            })
-        })
+        await r.load(options)    
+        return r
     }
 
-    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<EResource> {
+    async loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<EResource> {
         let rs = this.getResourceSet()
         let r = rs.createResource(new URI("file:///*.xml"))
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
-
-        return new Promise<EResource>((resolve, reject) => {
-            let p = r.loadFromStream(s, o)
-            p.then((_) => {
-                resolve(r)
-            })
-            p.catch((reason) => {
-                reject(reason)
-            })
-        })
+        await r.loadFromStream(stream,o)
+        return r
     }
 
     loadSync(uri: URI, options?: Map<string, any>): EResource {
@@ -87,8 +72,8 @@ export class XMLProcessor {
         return resource.save(options)
     }
 
-    saveToStream(resource: EResource, s: fs.WriteStream, options?: Map<string, any>): Promise<void> {
-        return resource.saveToStream(s, options)
+    saveToStream(resource: EResource, stream: WritableStream, options?: Map<string, any>): Promise<void> {
+        return resource.saveToStream(stream, options)
     }
 
     saveToString(resource: EResource, options?: Map<string, any>): string {
