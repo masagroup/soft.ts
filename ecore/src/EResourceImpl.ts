@@ -43,7 +43,7 @@ import {
 } from "./internal.js"
 import { ensureAsyncIterable } from "./utils/Stream.js"
 import { ensureUint8Array } from "./utils/TypedArray.js"
-import { utf8Count, utf8Encode } from "./utils/UTF8.js"
+import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier
@@ -479,9 +479,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     saveToString(options?: Map<string, any>): string {
         let buffer = this.saveToBuffer()
-        return buffer ? buffer.toString() : ""
+        return buffer ? utf8Decode(buffer,0,buffer.length) : ""
     }
-
 
     saveToBuffer(options?: Map<string, any>): Uint8Array {
         let codecs = this.getCodecRegistry()
