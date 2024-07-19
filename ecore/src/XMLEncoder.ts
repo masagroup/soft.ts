@@ -7,7 +7,6 @@
 //
 // *****************************************************************************
 
-import { WriteStream } from "fs"
 import { Err, Ok, Result } from "ts-results-es"
 import {
     EClass,
@@ -163,28 +162,24 @@ export class XMLEncoder implements EEncoder {
         }
     }
 
-    encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
-        return new Promise((resolve, reject) => {
-            let result = this.encode(eResource)
-            if (result.isOk()) {
-                s.write(result.value)
-                resolve(result.value)
-            } else {
-                reject(result.error)
-            }
-        })
+    async encodeAsync(eResource: EResource, stream : WritableStream): Promise<Uint8Array> {
+        const r = this.encode(eResource)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 
-    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
-        return new Promise((resolve, reject) => {
-            let result = this.encodeObject(eObject)
-            if (result.isOk()) {
-                s.write(result.value)
-                resolve(result.value)
-            } else {
-                reject(result.error)
-            }
-        })
+    async encodeObjectAsync(eObject: EObject, stream : WritableStream): Promise<Uint8Array> {
+        const r = this.encodeObject(eObject)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 
     private encodeTopObject(eObject: EObject) {

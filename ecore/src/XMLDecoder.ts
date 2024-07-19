@@ -7,10 +7,10 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import sax from "sax"
 import { Err, Ok, Result } from "ts-results-es"
 import {
+    BufferLike,
     EClassifier,
     EcoreUtils,
     EDataType,
@@ -31,11 +31,15 @@ import {
     getPackageRegistry,
     isEClass,
     isEDataType,
+    ReadableStreamLike,
     URI,
     XMLNamespaces,
     XMLOptions
 } from "./internal.js"
 import { XMLConstants } from "./XMLConstants.js"
+import { ensureUint8Array } from "./utils/TypedArray.js"
+import { utf8Decode, utf8Encode } from "./utils/UTF8.js"
+import { ensureAsyncIterable } from "./utils/Stream.js"
 
 type XMLReference = {
     object: EObject
@@ -122,48 +126,6 @@ export class XMLDecoder implements EDecoder {
         return this._encoding
     }
 
-    decode(buffer: BufferSource): Result<EResource, Error> {
-        // create parser and configure decoder
-        this._parser = this.createSAXParser()
-        this._attachFn = function (eObject: EObject): void {
-            this._resource.eContents().add(eObject)
-        }
-        this._errorFn = function (eDiagnostic: EDiagnostic): void {
-            this._resource.getErrors().add(eDiagnostic)
-        }
-
-        // parse buffer
-        this._parser.write(buffer.toString()).close()
-
-        // check errors
-        let errors = this._resource.getErrors()
-        return errors.isEmpty() ? Ok(this._resource) : Err(errors.get(0))
-    }
-
-    decodeObject(buffer: BufferSource): Result<EObject, Error> {
-        // create parser and configure decoder
-        this._parser = this.createSAXParser()
-
-        var error: Error
-        var object: EObject
-        this._attachFn = function (eObject: EObject): void {
-            if (!object) {
-                object = eObject
-            }
-        }
-        this._errorFn = function (eDiagnostic: EDiagnostic): void {
-            if (!error) {
-                error = eDiagnostic
-            }
-        }
-
-        // parse buffer
-        this._parser.write(buffer.toString()).close()
-
-        // check error
-        return error ? Err(error) : Ok(object)
-    }
-
     private createSAXParser(): sax.SAXParser {
         // configure parser
         let saxParser = new sax.SAXParser(true, {
@@ -180,67 +142,94 @@ export class XMLDecoder implements EDecoder {
         return saxParser
     }
 
-    decodeAsync(stream: fs.ReadStream): Promise<EResource> {
-        return new Promise<EResource>((resolve, reject) => {
-            this._attachFn = function (eObject: EObject): void {
-                this._resource.eContents().add(eObject)
-            }
-            this._errorFn = function (eDiagnostic: EDiagnostic): void {
-                this._resource.getErrors().add(eDiagnostic)
-            }
-            let saxStream = this.createSAXStream(() => {
-                let errors = this._resource.getErrors()
-                if (errors.isEmpty()) {
-                    resolve(this._resource)
-                } else {
-                    reject(errors.get(0))
-                }
-            })
-            this._parser = (saxStream as any)["_parser"]
-            stream.pipe(saxStream)
-        })
+    decode(bufferLike: BufferLike): Result<EResource, Error> {
+        // contents & errors
+        this._attachFn = function (eObject: EObject): void {
+            this._resource.eContents().add(eObject)
+        }
+        this._errorFn = function (eDiagnostic: EDiagnostic): void {
+            this._resource.getErrors().add(eDiagnostic)
+        }
+        // parser & buffer
+        const buffer = ensureUint8Array(bufferLike)
+        const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
+        this._parser = this.createSAXParser()
+        this._parser.write(bufferUTF8).close()
+
+        // check errors
+        const errors = this._resource.getErrors()
+        return errors.isEmpty() ? Ok(this._resource) : Err(errors.get(0))
     }
 
-    decodeObjectAsync(stream: fs.ReadStream): Promise<EObject> {
-        return new Promise<EObject>((resolve, reject) => {
-            var error: Error
-            var object: EObject
-            this._attachFn = function (eObject: EObject): void {
-                if (!object) {
-                    object = eObject
-                }
+    decodeObject(bufferLike: BufferLike): Result<EObject, Error> {
+        // object & error
+        var error: Error
+        var object: EObject
+        this._attachFn = function (eObject: EObject): void {
+            if (!object) {
+                object = eObject
             }
-            this._errorFn = function (eDiagnostic: EDiagnostic): void {
-                if (!error) {
-                    error = eDiagnostic
-                }
+        }
+        this._errorFn = function (eDiagnostic: EDiagnostic): void {
+            if (!error) {
+                error = eDiagnostic
             }
-            let saxStream = this.createSAXStream(() => {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve(object)
-                }
-            })
-            this._parser = (saxStream as any)["_parser"]
-            stream.pipe(saxStream)
-        })
+        }
+        // parser & buffer
+        const buffer = ensureUint8Array(bufferLike)
+        const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
+        this._parser = this.createSAXParser()
+        this._parser.write(bufferUTF8).close()
+        // check error
+        return error ? Err(error) : Ok(object)
     }
 
-    private createSAXStream(end: () => void): sax.SAXStream {
-        let saxStream = new sax.SAXStream(true, {
-            trim: true,
-            lowercase: true,
-            xmlns: true,
-            position: true
-        })
-        saxStream.on("processinginstruction", (n) => this.onProcessingInstruction(n))
-        saxStream.on("opentag", (t: sax.QualifiedTag) => this.onStartTag(t))
-        saxStream.on("closetag", (t) => this.onEndTag(t))
-        saxStream.on("text", (t) => this.onText(t))
-        saxStream.on("error", (e) => this.onError(e))
-        saxStream.on("end", end)
-        return saxStream
+    async decodeAsync(streamLike: ReadableStreamLike<BufferLike>): Promise<EResource> {
+        // content & error
+        let errors = this._resource.getErrors()
+        let contents = this._resource.eContents()
+        this._attachFn = function (eObject: EObject): void {
+            contents.add(eObject)
+        }
+        this._errorFn = function (eDiagnostic: EDiagnostic): void {
+            errors.add(eDiagnostic)
+        }
+        // parser & buffer
+        this._parser = this.createSAXParser()
+        let iterable = ensureAsyncIterable(streamLike)
+        for await (const bufferLike of iterable) {
+            const buffer = ensureUint8Array(bufferLike)
+            const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
+            this._parser.write(bufferUTF8).close()
+        }
+        // result
+        return errors.isEmpty() ? this._resource : Promise.reject(errors.get(0))
+    }
+
+    async decodeObjectAsync(streamLike: ReadableStreamLike<BufferLike>): Promise<EObject> {
+        // object & error
+        var error: Error
+        var object: EObject
+        this._attachFn = function (eObject: EObject): void {
+            if (!object) {
+                object = eObject
+            }
+        }
+        this._errorFn = function (eDiagnostic: EDiagnostic): void {
+            if (!error) {
+                error = eDiagnostic
+            }
+        }
+        // parser & buffer
+        this._parser = this.createSAXParser()
+        let iterable = ensureAsyncIterable(streamLike)
+        for await (const bufferLike of iterable) {
+            const buffer = ensureUint8Array(bufferLike)
+            const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
+            this._parser.write(bufferUTF8).close()
+        }
+        // result
+        return error ? Promise.reject(error) : object
     }
 
     private onProcessingInstruction(node: { name: string; body: string }) {
@@ -398,9 +387,9 @@ export class XMLDecoder implements EDecoder {
         }
     }
 
-    protected handleXSISchemaLocation(loc: string): void {}
+    protected handleXSISchemaLocation(loc: string): void { }
 
-    protected handleXSINoNamespaceSchemaLocation(loc: string): void {}
+    protected handleXSINoNamespaceSchemaLocation(loc: string): void { }
 
     protected getXSIType(): string {
         return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib)
