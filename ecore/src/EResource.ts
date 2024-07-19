@@ -7,8 +7,7 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
-import { EDiagnostic, EList, ENotifier, EObject, EObjectIDManager, EResourceSet, URI } from "./internal.js"
+import { EDiagnostic, EList, ENotifier, EObject, EObjectIDManager, EResourceSet, URI, BufferLike, ReadableStreamLike } from "./internal.js"
 
 export class EResourceConstants {
     public static readonly RESOURCE__RESOURCE_SET: number = 0
@@ -29,19 +28,19 @@ export interface EResource extends ENotifier {
     eAllContents(): IterableIterator<EObject>
 
     load(options?: Map<string, any>): Promise<void>
-    loadFromStream(stream: AsyncIterable<Uint8Array> | ReadableStream, options?: Map<string, any>): Promise<void>
-    
+    loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void>
+
     loadSync(options?: Map<string, any>): void
     loadFromString(s: string, options?: Map<string, any>): void
-    loadFromBuffer(buffer : ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer, options?: Map<string, any>) : void
-    
+    loadFromBuffer(buffer: BufferLike, options?: Map<string, any>): void
+
     unload(): void
     readonly isLoaded: boolean
     readonly isLoading: boolean
 
     save(options?: Map<string, any>): Promise<void>
     saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void>
-    
+
     saveSync(options?: Map<string, any>): void
     saveToString(options?: Map<string, any>): string
     saveToBuffer(options?: Map<string, any>): Uint8Array

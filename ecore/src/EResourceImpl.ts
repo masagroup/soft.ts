@@ -13,6 +13,7 @@ import {
     AbstractNotification,
     AbstractNotifyingList,
     BasicEList,
+    BufferLike,
     ECodecRegistry,
     EcoreUtils,
     EDecoder,
@@ -37,6 +38,7 @@ import {
     EURIConverterImpl,
     EventType,
     NotificationChain,
+    ReadableStreamLike,
     URI
 } from "./internal.js"
 import { ensureAsyncIterable } from "./utils/Stream.js"
@@ -286,7 +288,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return Promise.resolve()
     }
 
-    loadFromStream(stream: AsyncIterable<Uint8Array> | ReadableStream, options?: Map<string, any>): Promise<void> {
+    loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
             let codecs = this.getCodecRegistry()
             let codec = codecs.getCodec(this._uri)
@@ -300,8 +302,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         if (n) {
                             n.dispatch()
                         }
-                        
-                    }).finally(()=>{
+
+                    }).finally(() => {
                         this._isLoading = false
                     })
                 } else {
@@ -334,7 +336,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return Promise.resolve()
     }
 
-    protected doLoadFromStream(decoder: EDecoder, stream:  AsyncIterable<Uint8Array>): Promise<void> {
+    protected doLoadFromStream(decoder: EDecoder, stream: ReadableStreamLike<BufferLike>): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             decoder
                 .decodeAsync(stream)
@@ -355,7 +357,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    loadFromBuffer(buffer : ArrayLike<number> | Uint8Array | ArrayBufferView | ArrayBuffer, options?: Map<string, any>) {
+    loadFromBuffer(buffer: BufferLike, options?: Map<string, any>) {
         if (!this._isLoaded) {
             let codecs = this.getCodecRegistry()
             let codec = codecs.getCodec(this._uri)
@@ -398,13 +400,13 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     loadFromString(s: string, options?: Map<string, any>) {
-       const byteLength = utf8Count(s)
-       const bytes = new Uint8Array(byteLength)
-       const buffer = utf8Encode(s,bytes,0)
-       this.loadFromBuffer(bytes, options)
+        const byteLength = utf8Count(s)
+        const bytes = new Uint8Array(byteLength)
+        const buffer = utf8Encode(s, bytes, 0)
+        this.loadFromBuffer(bytes, options)
     }
 
-    protected doLoadFromBytes(decoder: EDecoder, buffer: Uint8Array): void {
+    protected doLoadFromBytes(decoder: EDecoder, buffer: BufferLike): void {
         decoder.decode(buffer)
     }
 
@@ -487,8 +489,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return buffer ? buffer.toString() : ""
     }
 
-   
-    saveToBuffer(options?: Map<string, any>) : Uint8Array {
+
+    saveToBuffer(options?: Map<string, any>): Uint8Array {
         let codecs = this.getCodecRegistry()
         let codec = codecs.getCodec(this._uri)
         if (codec) {
@@ -542,7 +544,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         })
     }
 
-    
+
 
     protected isAttachedDetachedRequired(): boolean {
         return this._objectIDManager != null
