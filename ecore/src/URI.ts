@@ -1,3 +1,5 @@
+import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
+
 export type URIParts = Partial<
     Readonly<{
         scheme: string
@@ -313,7 +315,9 @@ export class URI {
 }
 
 function normalize(path: string): string {
-    let buffer = Buffer.from(path)
+    const bytesLength = utf8Count(path)
+    let buffer = new Uint8Array(bytesLength) 
+    utf8Encode(path,buffer,0)
 
     // Does this path need normalization?
     let ns = needsNormalization(buffer) // Number of segments
@@ -334,7 +338,7 @@ function normalize(path: string): string {
     // Join the remaining segments and return the result
     let newSize = join(buffer, segs)
     let newBuffer = buffer.subarray(0, newSize)
-    return newBuffer.toString()
+    return utf8Decode(newBuffer,0,newBuffer.length)
 }
 
 const SLASH = 47
@@ -360,7 +364,7 @@ const COLON = 58
 //
 // This method takes a string argument rather than a char array so that
 // this test can be performed without invoking path.toCharArray().
-function needsNormalization(path: Buffer): number {
+function needsNormalization(path: Uint8Array): number {
     let normal = true
     let ns = 0 // Number of segments
     let end = path.length - 1 // Index of last char in path
@@ -422,7 +426,7 @@ function needsNormalization(path: Buffer): number {
 //
 //	All slashes in path replaced by '\0'
 //	segs[i] == Index of first char in segment i (0 <= i < segs.length)
-function split(path: Buffer, segs: Array<number>) {
+function split(path: Uint8Array, segs: Array<number>) {
     let end = path.length - 1 // Index of last char in path
     let p = 0 // Index of next char in path
     let i = 0 // Index of current segment
@@ -466,7 +470,7 @@ function split(path: Buffer, segs: Array<number>) {
 
 // Remove "." segments from the given path, and remove segment pairs
 // consisting of a non-".." segment followed by a ".." segment.
-function removeDots(path: Buffer, segs: Array<number>) {
+function removeDots(path: Uint8Array, segs: Array<number>) {
     let ns = segs.length
     let end = path.length - 1
     for (let i = 0; i < ns; i++) {
@@ -521,7 +525,7 @@ function removeDots(path: Buffer, segs: Array<number>) {
 
 // DEVIATION: If the normalized path is relative, and if the first
 // segment could be parsed as a scheme name, then prepend a "." segment
-function maybeAddLeadingDot(path: Buffer, segs: Array<number>) {
+function maybeAddLeadingDot(path: Uint8Array, segs: Array<number>) {
     if (path[0] == 0) {
         // The path is absolute
         return
@@ -571,7 +575,7 @@ function maybeAddLeadingDot(path: Buffer, segs: Array<number>) {
 // Postconditions:
 //
 //	path[0] .. path[return value] == Resulting path
-function join(path: Buffer, segs: ArrayLike<number>): number {
+function join(path: Uint8Array, segs: ArrayLike<number>): number {
     let ns = segs.length // Number of segments
     let end = path.length - 1 // Index of last char in path
     let p = 0 // Index of next path char to write
