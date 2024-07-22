@@ -7,8 +7,6 @@
 //
 // *****************************************************************************
 
-import * as stream from "stream"
-
 class XMLStringSegment {
     buffer: string = ""
     lineWidth: number = 0
@@ -38,7 +36,8 @@ export class XMLString {
         return result
     }
 
-    write(w: stream.Writable) {
+    write(stream: WritableStream) {
+        const w = stream.getWriter()
         for (const segment of this.segments) {
             w.write(segment.buffer)
         }
