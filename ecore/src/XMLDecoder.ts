@@ -200,8 +200,10 @@ export class XMLDecoder implements EDecoder {
         for await (const bufferLike of iterable) {
             const buffer = ensureUint8Array(bufferLike)
             const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
-            this._parser.write(bufferUTF8).close()
+            this._parser.write(bufferUTF8)
         }
+        // close parser
+        this._parser.close()
         // result
         return errors.isEmpty() ? this._resource : Promise.reject(errors.get(0))
     }
@@ -226,8 +228,10 @@ export class XMLDecoder implements EDecoder {
         for await (const bufferLike of iterable) {
             const buffer = ensureUint8Array(bufferLike)
             const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
-            this._parser.write(bufferUTF8).close()
+            this._parser.write(bufferUTF8)
         }
+        // close parser
+        this._parser.close()
         // result
         return error ? Promise.reject(error) : object
     }
