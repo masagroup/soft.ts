@@ -10,9 +10,9 @@
 import { EList, EURIHandler, URI } from "./internal.js"
 
 export interface EURIConverter {
-    createReadStream(uri: URI): ReadableStream
+    createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null>
 
-    createWriteStream(uri: URI): WritableStream
+    createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null>
 
     readSync(uri: URI): Uint8Array
 

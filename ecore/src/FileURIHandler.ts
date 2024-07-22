@@ -41,12 +41,12 @@ export class FileURIHandler implements EURIHandler {
         return uri.scheme == "file" || (!uri.scheme && !uri.host && !uri.query)
     }
 
-    createReadStream(uri: URI): ReadableStream {
+    async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
         let path = uriToFilePath(uri)
         return fs.existsSync(path) ? readableNodeStreamToWebStream(fs.createReadStream(path)) : null
     }
 
-    createWriteStream(uri: URI): WritableStream {
+    async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
         let path = uriToFilePath(uri)
         return writableNodeStreamToWebStream(fs.createWriteStream(path))
     }

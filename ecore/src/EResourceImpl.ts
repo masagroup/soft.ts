@@ -279,7 +279,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         if (!this._isLoaded) {
             let uriConverter = this.getURIConverter()
             if (uriConverter) {
-                let s = uriConverter.createReadStream(this._uri)
+                let s = await uriConverter.createReadStream(this._uri)
                 if (s) {
                     await this.loadFromStream(s, options)
                 }
@@ -298,14 +298,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 let msg = `Unable to find decoder for ':${uri}'`
                 let errors = this.getErrors()
                 errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        msg,
-                        uri,
-                        0,
-                        0
-                    )
-                )
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
                 throw new Error(msg)
             }
 
@@ -316,14 +309,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 let msg = `Unable to find codec for ':${uri}'`
                 let errors = this.getErrors()
                 errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        msg,
-                        uri,
-                        0,
-                        0
-                    )
-                )
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
                 throw new Error(msg)
             }
 
@@ -368,14 +354,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 let msg = `Unable to find codec for ':${uri}'`
                 let errors = this.getErrors()
                 errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        msg,
-                        uri,
-                        0,
-                        0
-                    )
-                )
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
                 throw new Error(msg)
             }
 
@@ -386,14 +365,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 let msg = `Unable to find decoder for ':${uri}'`
                 let errors = this.getErrors()
                 errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        msg,
-                        uri,
-                        0,
-                        0
-                    )
-                )
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
                 throw new Error(msg)
             }
 
@@ -439,10 +411,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     async save(options?: Map<string, any>): Promise<void> {
         let uriConverter = this.getURIConverter()
-        if (!uriConverter)
-            throw new Error(`Unable to find converter for ':${this._uri}'`)
-
-        let s = uriConverter.createWriteStream(this._uri)
+        if (!uriConverter) throw new Error(`Unable to find converter for ':${this._uri}'`)
+        let s = await uriConverter.createWriteStream(this._uri)
         if (s) {
             try {
                 await this.saveToStream(s, options)
@@ -461,14 +431,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             let msg = `Unable to find codec for ':${uri}'`
             let errors = this.getErrors()
             errors.clear()
-            errors.add(
-                new EDiagnosticImpl(
-                    msg,
-                    uri,
-                    0,
-                    0
-                )
-            )
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
             throw new Error(msg)
         }
         // find encoder
@@ -478,14 +441,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             let msg = `Unable to find encoder for ':${uri}'`
             let errors = this.getErrors()
             errors.clear()
-            errors.add(
-                new EDiagnosticImpl(
-                    msg,
-                    uri,
-                    0,
-                    0
-                )
-            )
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
             throw new Error(msg)
         }
         // encode resource
@@ -512,14 +468,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             let msg = `Unable to find codec for ':${uri}'`
             let errors = this.getErrors()
             errors.clear()
-            errors.add(
-                new EDiagnosticImpl(
-                    msg,
-                    uri,
-                    0,
-                    0
-                )
-            )
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
             throw new Error(msg)
         }
 
@@ -529,14 +478,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             let msg = `Unable to find encoder for ':${uri}'`
             let errors = this.getErrors()
             errors.clear()
-            errors.add(
-                new EDiagnosticImpl(
-                    msg,
-                    uri,
-                    0,
-                    0
-                )
-            )
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
             throw new Error(msg)
         }
 

@@ -7,27 +7,27 @@
 //
 // *****************************************************************************
 
-import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal.js"
+import { BasicEList, EList, EURIConverter, EURIHandler, FileURIHandler, URI } from "./internal.js"
 
 export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>
     private _uriMap: Map<URI, URI>
 
     constructor() {
-        this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()])
+        this._uriHandlers = new BasicEList<EURIHandler>([new FileURIHandler()])
         this._uriMap = new Map<URI, URI>()
     }
     getURIMap(): Map<URI, URI> {
         return this._uriMap
     }
 
-    createReadStream(uri: URI): ReadableStream {
+    async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
         let normalized = this.normalize(uri)
         let uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createReadStream(normalized) : null
     }
 
-    createWriteStream(uri: URI): WritableStream {
+    async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
         let normalized = this.normalize(uri)
         let uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createWriteStream(normalized) : null

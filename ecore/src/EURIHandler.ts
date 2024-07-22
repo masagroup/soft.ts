@@ -12,9 +12,9 @@ import { URI } from "./URI.js"
 export interface EURIHandler {
     canHandle(uri: URI): boolean
 
-    createReadStream(uri: URI): ReadableStream
+    createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null>
 
-    createWriteStream(uri: URI): WritableStream
+    createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null>
 
     readSync(uri: URI): Uint8Array
 
