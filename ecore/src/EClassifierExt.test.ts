@@ -13,10 +13,10 @@ import { EClassifierExt, EPackageExt } from "./internal.js"
 describe("EClassifierExt", () => {
     test("classifierID", () => {
         let c = new EClassifierExt()
-        expect(c.classifierID).toEqual(-1)
+        expect(c.getClassifierID()).toEqual(-1)
 
         let p = new EPackageExt()
-        p.eClassifiers.add(c)
-        expect(c.classifierID).toEqual(0)
+        p.getEClassifiers().add(c)
+        expect(c.getClassifierID()).toEqual(0)
     })
 })

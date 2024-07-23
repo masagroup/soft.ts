@@ -21,7 +21,7 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
         let eType = this.getEType()
         let defaultValueLiteral = this.getDefaultValueLiteral()
         if (eType && defaultValueLiteral.length == 0) {
-            if (this.isMany) {
+            if (this.isMany()) {
                 return null
             } else {
                 return eType.getDefaultValue()
@@ -29,7 +29,7 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
         } else if (isEDataType(eType)) {
             let factory = eType.getEPackage()?.getEFactoryInstance()
             if (factory && factory != this._defaultValueFactory) {
-                if (eType.isSerializable) {
+                if (eType.isSerializable()) {
                     this._defaultValue = factory.createFromString(eType, defaultValueLiteral)
                 }
                 this._defaultValueFactory = factory
@@ -58,12 +58,8 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
         super.setDefaultValueLiteral(newDefaultValueLiteral)
     }
 
-    get featureID(): number {
-        return this._featureID
-    }
-
     // set the value of featureID
-    set featureID(newFeatureID: number) {
+    setFeatureID(newFeatureID: number) {
         this._featureID = newFeatureID
     }
 }
@@ -73,5 +69,5 @@ export function isMapType(feature: EStructuralFeature): boolean {
 }
 
 export function isEStructuralFeature(o: any): o is EStructuralFeature {
-    return o == undefined ? undefined : "featureID" in o
+    return o == undefined ? undefined : "getFeatureID" in o
 }

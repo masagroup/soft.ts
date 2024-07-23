@@ -83,7 +83,7 @@ abstract class AbstractContentsList extends ImmutableEList<EObject> implements E
         for (const feature of features) {
             if (this._obj.eIsSet(feature)) {
                 let value = this._obj.eGetResolve(feature, this._resolve)
-                if (feature.isMany) {
+                if (feature.isMany()) {
                     let l = value as EList<EObject>
                     this._v.push(...l.toArray())
                 } else if (value != null) {

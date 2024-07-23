@@ -25,7 +25,7 @@ import {
 } from "./internal.js"
 
 export function isEClass(c: EClassifier): c is EClass {
-     return c == undefined ? undefined : typeof c["isAbstract"] === "function"
+     return c == undefined ? undefined : "isAbstract" in c
 }
 
 class ESuperAdapter extends AbstractEAdapter {
@@ -223,12 +223,12 @@ export class EClassExt extends EClassImpl {
         let crossreferences: EStructuralFeature[] = []
         for (const eFeature of this.getEStructuralFeatures()) {
             if (isEReference(eFeature)) {
-                if (eFeature.isContainment) {
-                    if (!eFeature.isDerived) {
+                if (eFeature.isContainment()) {
+                    if (!eFeature.isDerived()) {
                         containments.push(eFeature)
                     }
-                } else if (!eFeature.isContainer) {
-                    if (!eFeature.isDerived) {
+                } else if (!eFeature.isContainer()) {
+                    if (!eFeature.isDerived()) {
                         crossreferences.push(eFeature)
                     }
                 }
@@ -250,7 +250,7 @@ export class EClassExt extends EClassImpl {
         for (const eSuperType of this.getESuperTypes()) {
             for (const eAttribute of eSuperType.getEAllAttributes()) {
                 allAttributes.push(eAttribute)
-                if (eAttribute.isID && !eIDAttribute) {
+                if (eAttribute.isID() && !eIDAttribute) {
                     eIDAttribute = eAttribute
                 }
             }
@@ -260,7 +260,7 @@ export class EClassExt extends EClassImpl {
             if (isEAttribute(eFeature)) {
                 attributes.push(eFeature)
                 allAttributes.push(eFeature)
-                if (eFeature.isID && !eIDAttribute) {
+                if (eFeature.isID() && !eIDAttribute) {
                     eIDAttribute = eFeature
                 }
             }
@@ -300,7 +300,7 @@ export class EClassExt extends EClassImpl {
 
         let allContainments: EReference[] = []
         for (const eReference of this.getEAllReferences()) {
-            if (eReference.isContainment) {
+            if (eReference.isContainment()) {
                 allContainments.push(eReference)
             }
         }

@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { instance, mock } from "ts-mockito"
+import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
 import { EPackage, EResourceSet, XMLProcessor } from "./internal.js"
 
@@ -20,10 +20,9 @@ describe("XMLProcessor", () => {
     })
 
     test("constructor.resourceset", () => {
-        let mockPackage = mock<EPackage>()
-        let ePackage = instance(mockPackage)
         let mockEResourceSet = mock<EResourceSet>()
         let eResourceSet = instance(mockEResourceSet)
+        when(mockEResourceSet.getResources()).thenReturn(null)
         let xmlProcessor = new XMLProcessor(eResourceSet)
         expect(xmlProcessor).not.toBeNull()
         expect(xmlProcessor.getResourceSet()).toBe(eResourceSet)

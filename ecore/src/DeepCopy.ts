@@ -34,13 +34,13 @@ export class DeepCopy {
             if (copyEObject) {
                 this._objects.set(eObject, copyEObject)
                 let eClass = eObject.eClass()
-                for (const eAttribute of eClass.eAttributes) {
-                    if (eAttribute.isChangeable && !eAttribute.isDerived) {
+                for (const eAttribute of eClass.getEAttributes()) {
+                    if (eAttribute.isChangeable() && !eAttribute.isDerived()) {
                         this.copyAttribute(eAttribute, eObject, copyEObject)
                     }
                 }
-                for (const eReference of eClass.eReferences) {
-                    if (eReference.isChangeable && !eReference.isDerived && eReference.isContainment) {
+                for (const eReference of eClass.getEReferences()) {
+                    if (eReference.isChangeable() && !eReference.isDerived() && eReference.isContainment()) {
                         this.copyContainment(eReference, eObject, copyEObject)
                     }
                 }
@@ -62,7 +62,7 @@ export class DeepCopy {
 
     private createCopy(eObject: EObject): EObject {
         let eClass = eObject.eClass()
-        let eFactory = eClass.ePackage.eFactoryInstance
+        let eFactory = eClass.getEPackage().getEFactoryInstance()
         return eFactory.create(eClass)
     }
 
@@ -83,7 +83,7 @@ export class DeepCopy {
     private copyContainment(eReference: EReference, eObject: EObject, copyEObject: EObject) {
         if (eObject.eIsSet(eReference)) {
             let value = eObject.eGetResolve(eReference, this._resolve)
-            if (eReference.isMany) {
+            if (eReference.isMany()) {
                 let list = value as EList<EObject>
                 copyEObject.eSet(eReference, this.copyAll(list))
             } else {
@@ -95,12 +95,12 @@ export class DeepCopy {
 
     copyReferences() {
         for (let [eObject, copyEObject] of this._objects) {
-            for (const eReference of eObject.eClass().eReferences) {
+            for (const eReference of eObject.eClass().getEReferences()) {
                 if (
-                    eReference.isChangeable &&
-                    !eReference.isDerived &&
-                    !eReference.isContainment &&
-                    !eReference.isContainer
+                    eReference.isChangeable() &&
+                    !eReference.isDerived() &&
+                    !eReference.isContainment() &&
+                    !eReference.isContainer()
                 ) {
                     this.copyReference(eReference, eObject, copyEObject)
                 }
@@ -111,7 +111,7 @@ export class DeepCopy {
     private copyReference(eReference: EReference, eObject: EObject, copyEObject: EObject) {
         if (eObject.eIsSet(eReference)) {
             let value = eObject.eGetResolve(eReference, this._resolve)
-            if (eReference.isMany) {
+            if (eReference.isMany()) {
                 let listSource = value as EObjectList<EObject>
                 let listTarget = copyEObject.eGetResolve(eReference, false) as EObjectList<EObject>
                 let source: EList<EObject> = listSource
@@ -122,7 +122,7 @@ export class DeepCopy {
                 if (source.isEmpty()) {
                     target.clear()
                 } else {
-                    let isBidirectional = eReference.eOpposite != null
+                    let isBidirectional = eReference.getEOpposite() != null
                     let index = 0
                     for (const referencedObject of source) {
                         let copyReferencedEObject = this._objects.get(referencedObject)
@@ -152,7 +152,7 @@ export class DeepCopy {
                     if (copyReferencedEObject) {
                         copyEObject.eSet(eReference, copyReferencedEObject)
                     } else {
-                        if (this._originalReferences && eReference.eOpposite == null) {
+                        if (this._originalReferences && eReference.getEOpposite() == null) {
                             copyEObject.eSet(eReference, value)
                         }
                     }

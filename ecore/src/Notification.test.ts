@@ -41,7 +41,7 @@ describe("Notification", () => {
             expect(n.newValue).toBe(2)
             expect(n.position).toBe(3)
 
-            f.featureID = 1
+            when(mockFeature.getFeatureID()).thenReturn(1)
             expect(n.featureID).toBe(1)
         }
         {

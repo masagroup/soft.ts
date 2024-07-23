@@ -15,7 +15,7 @@ export class EFactoryExt extends EFactoryImpl {
     }
 
     create(eClass: EClass): EObject {
-        if (this.getEPackage() != eClass.getEPackage() || eClass.isAbstract)
+        if (this.getEPackage() != eClass.getEPackage() || eClass.isAbstract())
             throw new Error("The class '" + eClass.getName() + "' is not a valid classifier")
         let eObject = new DynamicEObjectImpl()
         eObject.setEClass(eClass)

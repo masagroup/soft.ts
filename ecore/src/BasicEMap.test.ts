@@ -56,8 +56,8 @@ describe("BasicEMap", () => {
         let m = new BasicEMap<number, string>()
         let mockEntry = mock<EMapEntry<number, string>>()
         let entry = instance(mockEntry)
-        when(mockEntry.key).thenReturn(2)
-        when(mockEntry.value).thenReturn("2")
+        when(mockEntry.getKey()).thenReturn(2)
+        when(mockEntry.getValue()).thenReturn("2")
         m.add(entry)
         expect(m.toMap()).toEqual(new Map([[2, "2"]]))
     })
@@ -66,14 +66,14 @@ describe("BasicEMap", () => {
         let m = new BasicEMap<number, string>()
         let mockEntry1 = mock<EMapEntry<number, string>>()
         let entry1 = instance(mockEntry1)
-        when(mockEntry1.key).thenReturn(2)
-        when(mockEntry1.value).thenReturn("2")
+        when(mockEntry1.getKey()).thenReturn(2)
+        when(mockEntry1.getValue()).thenReturn("2")
         m.add(entry1)
 
         let mockEntry2 = mock<EMapEntry<number, string>>()
         let entry2 = instance(mockEntry2)
-        when(mockEntry2.key).thenReturn(3)
-        when(mockEntry2.value).thenReturn("3")
+        when(mockEntry2.getKey()).thenReturn(3)
+        when(mockEntry2.getValue()).thenReturn("3")
         m.set(0, entry2)
 
         expect(m.toMap()).toEqual(new Map([[3, "3"]]))
@@ -83,16 +83,16 @@ describe("BasicEMap", () => {
         let m = new BasicEMap<number, string>()
         m.put(2, "2")
         let e = m.get(0)
-        e.key = 2
-        e.value = "2"
+        e.setKey(2)
+        e.setValue("2")
     })
 
     test("clear", () => {
         let m = new BasicEMap<number, string>()
         let mockEntry = mock<EMapEntry<number, string>>()
         let entry = instance(mockEntry)
-        when(mockEntry.key).thenReturn(2)
-        when(mockEntry.value).thenReturn("2")
+        when(mockEntry.getKey()).thenReturn(2)
+        when(mockEntry.getValue()).thenReturn("2")
         m.add(entry)
 
         m.clear()

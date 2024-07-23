@@ -7,10 +7,9 @@
 //
 // *****************************************************************************
 
-import { instance, mock } from "ts-mockito"
+import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import { EDataType } from "./EDataType.js"
-import { EAttributeExt } from "./internal.js"
+import { EAttribute, EAttributeExt, EDataType, EStructuralFeature, EStructuralFeatureExt, isEAttribute } from "./internal.js"
 
 describe("EAttributeExt", () => {
     test("basicGetEAttributeType", () => {
@@ -21,5 +20,22 @@ describe("EAttributeExt", () => {
         let dataType = instance(mockDataType)
         a.setEType(dataType)
         expect(a.basicGetEAttributeType()).toBe(dataType)
+    })
+
+    test("isEAttribute", () => {
+        let feature = new EStructuralFeatureExt()
+        expect(isEAttribute(feature)).toBeFalsy()
+
+        let attribute = new EAttributeExt()
+        expect(isEAttribute(attribute)).toBeTruthy()
+
+        let mockFeature = mock<EStructuralFeature>()
+        let mockFeatureInstance = instance(mockFeature)
+        expect(isEAttribute(mockFeatureInstance)).toBeFalsy()
+
+        let mockAttribute = mock<EAttribute>()
+        let mockAttributeInstance = instance(mockAttribute)
+        when(mockAttribute.getEAttributeType()).thenReturn(null)
+        expect(isEAttribute(mockAttributeInstance)).toBeTruthy()
     })
 })

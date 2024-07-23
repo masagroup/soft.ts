@@ -10,7 +10,7 @@
 import { EAttribute, EAttributeImpl, EClassExt, EcoreConstants, EDataType, EStructuralFeature } from "./internal.js"
 
 export function isEAttribute(s: EStructuralFeature): s is EAttribute {
-    return s == undefined ? undefined : typeof s["getEAttributeType"] === "function"
+    return s == undefined ? undefined : "getEAttributeType" in s
 }
 
 export class EAttributeExt extends EAttributeImpl {

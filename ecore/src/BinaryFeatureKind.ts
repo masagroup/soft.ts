@@ -25,7 +25,7 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
     if (isEReference(eFeature)) {
         if (eFeature.isContainment()) {
             if (eFeature.isResolveProxies()) {
-                if (eFeature.isMany) {
+                if (eFeature.isMany()) {
                     return BinaryFeatureKind.bfkObjectContainmentListProxy
                 } else {
                     return BinaryFeatureKind.bfkObjectContainmentProxy

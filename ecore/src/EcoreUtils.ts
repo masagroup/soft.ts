@@ -112,7 +112,7 @@ export class EcoreUtils {
             let eContainer = eObject.eInternalContainer()
             let eFeature = eObject.eContainmentFeature()
             if (eContainer && eFeature) {
-                if (eFeature.isMany) {
+                if (eFeature.isMany()) {
                     let l = eContainer.eGet(eFeature) as EList<EObject>
                     l.remove(eObject)
                 } else {

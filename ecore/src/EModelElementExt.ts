@@ -10,11 +10,11 @@
 import { EAnnotation, EModelElementImpl, ENamedElement, EObject, EObjectList, EStructuralFeature } from "./internal.js"
 
 function isEAnnotation(o: EObject): o is EAnnotation {
-    return o == undefined ? undefined : typeof o["getDetails"] === "function"
+    return o == undefined ? undefined : "getDetails" in o
 }
 
 function isENamedElement(o: EObject): o is ENamedElement {
-    return o == undefined ? undefined : typeof o["getName"] === "function"
+    return o == undefined ? undefined : "getName" in o
 }
 
 export class EModelElementExt extends EModelElementImpl {

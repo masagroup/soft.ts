@@ -439,7 +439,7 @@ export class XMLDecoder implements EDecoder {
     private createTopObject(uri: string, local: string): EObject {
         let eFactory = this.getFactoryForURI(uri)
         if (eFactory) {
-            let ePackage = eFactory.ePackage
+            let ePackage = eFactory.getEPackage()
             if (this._extendedMetaData && this._extendedMetaData.getDocumentRoot(ePackage)) {
                 let eClass = this._extendedMetaData.getDocumentRoot(ePackage)
                 // add document root to object list & handle its features
@@ -475,7 +475,7 @@ export class XMLDecoder implements EDecoder {
 
     private createObjectWithFactory(eFactory: EFactory, eType: EClassifier, handleAttributes: boolean = true): EObject {
         if (eFactory) {
-            if (isEClass(eType) && !eType.isAbstract) {
+            if (isEClass(eType) && !eType.isAbstract()) {
                 let eObject = eFactory.create(eType)
                 if (eObject && handleAttributes) {
                     this.handleAttributes(eObject)
@@ -488,9 +488,9 @@ export class XMLDecoder implements EDecoder {
 
     private createObjectFromFeatureType(eObject: EObject, eFeature: EStructuralFeature): EObject {
         let eResult: EObject = null
-        if (eFeature?.eType) {
-            let eType = eFeature.eType
-            let eFactory = eType.ePackage.eFactoryInstance
+        if (eFeature?.getEType()) {
+            let eType = eFeature.getEType()
+            let eFactory = eType.getEPackage().getEFactoryInstance()
             eResult = this.createObjectWithFactory(eFactory, eType)
         }
         if (eResult) {
@@ -516,7 +516,7 @@ export class XMLDecoder implements EDecoder {
             return null
         }
 
-        let eType = this.getType(eFactory.ePackage, local)
+        let eType = this.getType(eFactory.getEPackage(), local)
         let eResult = this.createObjectWithFactory(eFactory, eType)
         this.validateObject(eResult, uri, local)
         if (eResult) {
@@ -570,13 +570,13 @@ export class XMLDecoder implements EDecoder {
 
     private handleReferences() {
         for (const eProxy of this._sameDocumentProxies) {
-            for (const eReference of eProxy.eClass().eAllReferences) {
-                let eOpposite = eReference.eOpposite
-                if (eOpposite && eOpposite.isChangeable && eProxy.eIsSet(eReference)) {
+            for (const eReference of eProxy.eClass().getEAllReferences()) {
+                let eOpposite = eReference.getEOpposite()
+                if (eOpposite && eOpposite.isChangeable() && eProxy.eIsSet(eReference)) {
                     let resolvedObject = this._resource.getEObject((eProxy as EObjectInternal).eProxyURI().fragment)
                     if (resolvedObject) {
                         let proxyHolder: EObject = null
-                        if (eReference.isMany) {
+                        if (eReference.isMany()) {
                             let value = eProxy.eGet(eReference)
                             let list = value as EList<EObject>
                             proxyHolder = list.get(0)
@@ -585,7 +585,7 @@ export class XMLDecoder implements EDecoder {
                             proxyHolder = value as EObject
                         }
 
-                        if (eOpposite.isMany) {
+                        if (eOpposite.isMany()) {
                             let value = proxyHolder.eGetResolve(eOpposite, false)
                             let holderContents = value as EList<EObject>
                             let resolvedIndex = holderContents.indexOf(resolvedObject)
@@ -602,7 +602,7 @@ export class XMLDecoder implements EDecoder {
                         }
 
                         let replace = false
-                        if (eReference.isMany) {
+                        if (eReference.isMany()) {
                             let value = resolvedObject.eGet(eReference)
                             let list = value as EList<EObject>
                             replace = !list.contains(proxyHolder)
@@ -613,7 +613,7 @@ export class XMLDecoder implements EDecoder {
                         }
 
                         if (replace) {
-                            if (eOpposite.isMany) {
+                            if (eOpposite.isMany()) {
                                 let value = proxyHolder.eGetResolve(eOpposite, false)
                                 let list = value as EList<EObject>
                                 let ndx = list.indexOf(eProxy)
@@ -718,9 +718,9 @@ export class XMLDecoder implements EDecoder {
         let kind = this.getLoadFeatureKind(eFeature)
         switch (kind) {
             case LoadFeatureKind.Single: {
-                let eClassifier = eFeature.eType
+                let eClassifier = eFeature.getEType()
                 let eDataType = eClassifier as EDataType
-                let eFactory = eDataType.ePackage.eFactoryInstance
+                let eFactory = eDataType.getEPackage().getEFactoryInstance()
                 if (!value) {
                     eObject.eSet(eFeature, null)
                 } else {
@@ -729,9 +729,9 @@ export class XMLDecoder implements EDecoder {
                 break
             }
             case LoadFeatureKind.Many: {
-                let eClassifier = eFeature.eType
+                let eClassifier = eFeature.getEType()
                 let eDataType = eClassifier as EDataType
-                let eFactory = eDataType.ePackage.eFactoryInstance
+                let eFactory = eDataType.getEPackage().getEFactoryInstance()
                 let eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
                 if (position == -2) {
                 } else if (!value) {
@@ -806,10 +806,10 @@ export class XMLDecoder implements EDecoder {
 
             if (!this._isResolveDeferred) {
                 if (isFirstID) {
-                    let eOpposite = eReference.eOpposite
+                    let eOpposite = eReference.getEOpposite()
                     if (eOpposite) {
-                        mustAdd = eOpposite.isTransient || eReference.isMany
-                        mustAddOrNotOppositeIsMany = mustAdd || !eOpposite.isMany
+                        mustAdd = eOpposite.isTransient() || eReference.isMany()
+                        mustAddOrNotOppositeIsMany = mustAdd || !eOpposite.isMany()
                     } else {
                         mustAdd = true
                         mustAddOrNotOppositeIsMany = true
@@ -852,7 +852,7 @@ export class XMLDecoder implements EDecoder {
         let eClass = eObject.eClass()
         let eFeature = eClass.getEStructuralFeatureFromName(name)
         if (!eFeature && this._extendedMetaData) {
-            for (const eFeature of eClass.eAllStructuralFeatures) {
+            for (const eFeature of eClass.getEAllStructuralFeatures()) {
                 if (name === this._extendedMetaData.getName(eFeature)) return eFeature
             }
         }
@@ -864,13 +864,13 @@ export class XMLDecoder implements EDecoder {
     }
 
     private getLoadFeatureKind(eFeature: EStructuralFeature): LoadFeatureKind {
-        let eClassifier = eFeature.eType
+        let eClassifier = eFeature.getEType()
         if (eClassifier && isEDataType(eClassifier)) {
-            return eFeature.isMany ? LoadFeatureKind.Many : LoadFeatureKind.Single
-        } else if (eFeature.isMany) {
+            return eFeature.isMany() ? LoadFeatureKind.Many : LoadFeatureKind.Single
+        } else if (eFeature.isMany()) {
             let eReference = eFeature as EReference
-            let eOpposite = eReference.eOpposite
-            if (!eOpposite || eOpposite.isTransient || !eOpposite.isMany) {
+            let eOpposite = eReference.getEOpposite()
+            if (!eOpposite || eOpposite.isTransient() || !eOpposite.isMany()) {
                 return LoadFeatureKind.ManyAdd
             }
             return LoadFeatureKind.ManyMove

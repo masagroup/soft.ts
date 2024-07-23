@@ -38,7 +38,7 @@ function loadPackage(filename: string): EPackage {
     expect(resource.getErrors().isEmpty()).toBeTruthy()
     expect(resource.eContents().isEmpty()).toBeFalsy()
     let ePackage = resource.eContents().get(0) as EPackage
-    ePackage.eFactoryInstance = new EFactoryExt()
+    ePackage.setEFactoryInstance(new EFactoryExt())
     return ePackage
 }
 

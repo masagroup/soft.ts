@@ -119,7 +119,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
         let eContainer = this.eInternalContainer()
         if (eContainer) {
-            if (this.eContainmentFeature().isResolveProxies) {
+            if (this.eContainmentFeature().isResolveProxies()) {
                 let oldContainerResource = eContainer.eResource()
                 if (oldContainerResource) {
                     if (!newResource) {
@@ -252,7 +252,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         } else {
             let result = properties.eDynamicGet(dynamicFeatureID)
             if (!result) {
-                if (dynamicFeature.isMany) {
+                if (dynamicFeature.isMany()) {
                     if (isMapType(dynamicFeature)) {
                         result = this.eDynamicPropertiesCreateMap(dynamicFeature)
                     } else {
@@ -335,7 +335,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 reverseID = reverseFeature.getFeatureID()
                 inverse = true
                 opposite = true
-            } else if (feature.isContainment) {
+            } else if (feature.isContainment()) {
                 inverse = true
                 opposite = false
             }
@@ -649,7 +649,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         dynamicFeatureID: number,
         notifications: ENotificationChain
     ): ENotificationChain {
-        if (dynamicFeature.isMany) {
+        if (dynamicFeature.isMany()) {
             let value = properties.eDynamicGet(dynamicFeatureID)
             if (!value) {
                 value = this.eDynamicPropertiesCreateList(dynamicFeature)
@@ -729,7 +729,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         dynamicFeatureID: number,
         notifications: ENotificationChain
     ): ENotificationChain {
-        if (dynamicFeature.isMany) {
+        if (dynamicFeature.isMany()) {
             let value = properties.eDynamicGet(dynamicFeatureID)
             if (value) {
                 let list = value as ENotifyingList<EObject>
@@ -769,7 +769,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (oldResource) {
             if (
                 newContainer &&
-                !this.eObjectContainmentFeature(this, newContainer, newContainerFeatureID).isResolveProxies
+                !this.eObjectContainmentFeature(this, newContainer, newContainerFeatureID).isResolveProxies()
             ) {
                 let list = oldResource.eContents() as ENotifyingList<EObject>
                 notifications = list.removeWithNotification(this, notifications)
@@ -882,7 +882,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string {
         let s = "@"
         s += feature.getName()
-        if (feature.isMany) {
+        if (feature.isMany()) {
             let v = this.eGetResolve(feature, false)
             let i = (v as EList<EObject>).indexOf(o)
             s += "." + i.toString()

@@ -66,5 +66,5 @@ export interface EResource extends ENotifier {
 }
 
 export function isEResource(o: any): o is EResource {
-    return o == undefined ? undefined : typeof o["eResourceSet"] === "function"
+    return o == undefined ? undefined : "eResourceSet" in o
 }

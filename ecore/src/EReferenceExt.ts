@@ -10,7 +10,7 @@
 import { EClass, EReference, EReferenceImpl, EStructuralFeature, isEClass } from "./internal.js"
 
 export function isEReference(s: EStructuralFeature): s is EReference {
-    return s == undefined ? undefined : typeof s["getEReferenceType"] === "function"
+    return s == undefined ? undefined : "getEReferenceType" in s
 }
 
 export function isContainer(feature: EStructuralFeature): boolean {

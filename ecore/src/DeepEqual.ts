@@ -75,15 +75,15 @@ export class DeepEqual {
         this._objects.set(eObj1, eObj2)
         this._objects.set(eObj2, eObj1)
 
-        for (const eAttribute of eClass.eAttributes) {
-            if (!eAttribute.isDerived && !this.equalsAttribute(eObj1, eObj2, eAttribute)) {
+        for (const eAttribute of eClass.getEAttributes()) {
+            if (!eAttribute.isDerived() && !this.equalsAttribute(eObj1, eObj2, eAttribute)) {
                 this._objects.delete(eObj1)
                 this._objects.delete(eObj2)
                 return false
             }
         }
-        for (const eReference of eClass.eReferences) {
-            if (!eReference.isDerived && !this.equalsReference(eObj1, eObj2, eReference)) {
+        for (const eReference of eClass.getEReferences()) {
+            if (!eReference.isDerived() && !this.equalsReference(eObj1, eObj2, eReference)) {
                 this._objects.delete(eObj1)
                 this._objects.delete(eObj2)
                 return false
@@ -126,7 +126,7 @@ export class DeepEqual {
         if (isSet1 && isSet2) {
             let value1 = eObj1.eGet(eReference)
             let value2 = eObj2.eGet(eReference)
-            if (eReference.isMany) {
+            if (eReference.isMany()) {
                 return this.equalsAll(value1 as EList<EObject>, value2 as EList<EObject>)
             } else {
                 return this.equals(value1 as EObject, value2 as EObject)
