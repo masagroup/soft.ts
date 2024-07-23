@@ -56,7 +56,7 @@ export class EPackageExt extends EPackageImpl {
 
     constructor() {
         super()
-        this._eFactoryInstance = new EFactoryExt()
+        this.setEFactoryInstance(new EFactoryExt())
         this._adapter = new EPackageExtAdapter(this)
         this.eAdapters.add(this._adapter)
     }
