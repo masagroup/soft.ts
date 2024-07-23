@@ -13,8 +13,9 @@ import { EDataType, EStructuralFeature } from "./internal.js"
 
 export interface EAttribute extends EStructuralFeature {
     // Attributes
-    isID: boolean
+    isID(): boolean
+    setID(newIsID: boolean): void
 
     // References
-    readonly eAttributeType: EDataType
+    getEAttributeType(): EDataType
 }

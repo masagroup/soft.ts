@@ -32,7 +32,7 @@ describe("EParameterImpl", () => {
     test("getEOperation", () => {
         // default
         let o = new EParameterImpl()
-        expect(o.eOperation).toBeNull()
+        expect(o.getEOperation()).toBeNull()
 
         // set a mock container
         let mockContainer = mock<EObject>()
@@ -41,14 +41,14 @@ describe("EParameterImpl", () => {
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.eOperation).toBe(container)
+        expect(o.getEOperation()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("eGetFromID", () => {
         let o = new EParameterImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EPARAMETER__EOPERATION, true)).toStrictEqual(o.eOperation)
+        expect(o.eGetFromID(EcoreConstants.EPARAMETER__EOPERATION, true)).toStrictEqual(o.getEOperation())
     })
 
     test("eIsSetFromID", () => {
@@ -72,7 +72,7 @@ describe("EParameterImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EPARAMETER__EOPERATION, null)
-            expect(o.eOperation).toBe(value)
+            expect(o.getEOperation()).toBe(value)
 
             reset(mockValue)
             let mockOther = mock<EOperationInternal>()
@@ -82,7 +82,7 @@ describe("EParameterImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.EOPERATION__EPARAMETERS, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EPARAMETER__EOPERATION, null)
-            expect(o.eOperation).toBe(other)
+            expect(o.getEOperation()).toBe(other)
         }
     })
 

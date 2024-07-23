@@ -41,19 +41,19 @@ describe("EReferenceImpl", () => {
 
     test("getEKeys", () => {
         let o = new EReferenceImpl()
-        expect(o.eKeys).not.toBeNull()
+        expect(o.getEKeys()).not.toBeNull()
     })
 
     test("getEOpposite", () => {
         let o = new EReferenceImpl()
 
         // get default value
-        expect(o.eOpposite).toBeNull()
+        expect(o.getEOpposite()).toBeNull()
 
         // initialize object with a mock value
         let mockValue = mock<EReferenceInternal>()
         let value = instance(mockValue)
-        o.eOpposite = value
+        o.setEOpposite(value)
 
         // events
         let mockAdapter = mock<EAdapter>()
@@ -69,7 +69,7 @@ describe("EReferenceImpl", () => {
 
         // get non resolved value
         when(mockValue.eIsProxy()).thenReturn(false)
-        expect(o.eOpposite).toBe(value)
+        expect(o.getEOpposite()).toBe(value)
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
@@ -81,7 +81,7 @@ describe("EReferenceImpl", () => {
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
         when(mockValue.eIsProxy()).thenReturn(true)
         when(mockValue.eProxyURI()).thenReturn(mockURI)
-        expect(o.eOpposite).toBe(resolved)
+        expect(o.getEOpposite()).toBe(resolved)
     })
 
     test("setEOpposite", () => {
@@ -95,7 +95,7 @@ describe("EReferenceImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.eOpposite = value
+        o.setEOpposite(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -108,18 +108,18 @@ describe("EReferenceImpl", () => {
 
     test("getEReferenceType", () => {
         let o = new EReferenceImpl()
-        expect(() => o.eReferenceType).toThrow(Error)
+        expect(() => o.getEReferenceType()).toThrow(Error)
     })
 
     test("getContainer", () => {
         let o = new EReferenceImpl()
-        expect(() => o.isContainer).toThrow(Error)
+        expect(() => o.isContainer()).toThrow(Error)
     })
 
     test("getContainment", () => {
         let o = new EReferenceImpl()
         // get default value
-        expect(o.isContainment).toBe(false)
+        expect(o.isContainment()).toBe(false)
     })
 
     test("setContainment", () => {
@@ -132,7 +132,7 @@ describe("EReferenceImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isContainment = value
+        o.setContainment(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -146,7 +146,7 @@ describe("EReferenceImpl", () => {
     test("getResolveProxies", () => {
         let o = new EReferenceImpl()
         // get default value
-        expect(o.isResolveProxies).toBe(true)
+        expect(o.isResolveProxies()).toBe(true)
     })
 
     test("setResolveProxies", () => {
@@ -159,7 +159,7 @@ describe("EReferenceImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isResolveProxies = value
+        o.setResolveProxies(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -175,18 +175,18 @@ describe("EReferenceImpl", () => {
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINER, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINER, false)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, true)).toStrictEqual(o.isContainment)
-        expect(o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, true)).toStrictEqual(o.eKeys)
+        expect(o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, true)).toStrictEqual(o.isContainment())
+        expect(o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, true)).toStrictEqual(o.getEKeys())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, false),
-                (o.eKeys as EObjectList<EAttribute>).getUnResolvedList()
+                (o.getEKeys() as EObjectList<EAttribute>).getUnResolvedList()
             )
         ).toBeTruthy()
-        expect(o.eGetFromID(EcoreConstants.EREFERENCE__EOPPOSITE, true)).toStrictEqual(o.eOpposite)
+        expect(o.eGetFromID(EcoreConstants.EREFERENCE__EOPPOSITE, true)).toStrictEqual(o.getEOpposite())
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__EREFERENCE_TYPE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__EREFERENCE_TYPE, false)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, true)).toStrictEqual(o.isResolveProxies)
+        expect(o.eGetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, true)).toStrictEqual(o.isResolveProxies())
     })
 
     test("eSetFromID", () => {
@@ -207,8 +207,8 @@ describe("EReferenceImpl", () => {
             // set list with new contents
             o.eSetFromID(EcoreConstants.EREFERENCE__EKEYS, l)
             // checks
-            expect(o.eKeys.size()).toBe(1)
-            expect(o.eKeys.get(0)).toBe(value)
+            expect(o.getEKeys().size()).toBe(1)
+            expect(o.getEKeys().get(0)).toBe(value)
         }
 
         {

@@ -23,13 +23,13 @@ describe("EAttributeImpl", () => {
 
     test("getEAttributeType", () => {
         let o = new EAttributeImpl()
-        expect(() => o.eAttributeType).toThrow(Error)
+        expect(() => o.getEAttributeType()).toThrow(Error)
     })
 
     test("getID", () => {
         let o = new EAttributeImpl()
         // get default value
-        expect(o.isID).toBe(false)
+        expect(o.isID()).toBe(false)
     })
 
     test("setID", () => {
@@ -42,7 +42,7 @@ describe("EAttributeImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isID = value
+        o.setID(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -58,7 +58,7 @@ describe("EAttributeImpl", () => {
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE, false)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EATTRIBUTE__ID, true)).toStrictEqual(o.isID)
+        expect(o.eGetFromID(EcoreConstants.EATTRIBUTE__ID, true)).toStrictEqual(o.isID())
     })
 
     test("eSetFromID", () => {

@@ -35,7 +35,7 @@ describe("EFactoryImpl", () => {
     test("getEPackage", () => {
         // default
         let o = new EFactoryImpl()
-        expect(o.ePackage).toBeNull()
+        expect(o.getEPackage()).toBeNull()
 
         // set a mock container
         let mockContainer = mock<EObject>()
@@ -44,7 +44,7 @@ describe("EFactoryImpl", () => {
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.ePackage).toBe(container)
+        expect(o.getEPackage()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
@@ -63,7 +63,7 @@ describe("EFactoryImpl", () => {
         // set value
         when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
-        o.ePackage = value
+        o.setEPackage(value)
         verify(mockResource.attached(o)).once()
         verify(mockAdapter.notifyChanged(anything())).once()
         {
@@ -74,7 +74,7 @@ describe("EFactoryImpl", () => {
         }
         // set with the same value
         reset(mockAdapter)
-        o.ePackage = value
+        o.setEPackage(value)
         verify(mockAdapter.notifyChanged(anything())).once()
 
         // set with another value in a different resource
@@ -89,7 +89,7 @@ describe("EFactoryImpl", () => {
         when(mockValue.eResource()).thenReturn(resource)
         when(mockOther.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(null)
         when(mockOther.eResource()).thenReturn(otherResource)
-        o.ePackage = other
+        o.setEPackage(other)
         verify(mockResource.detached(o)).once()
         verify(mockOtherResource.attached(o)).once()
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -148,7 +148,7 @@ describe("EFactoryImpl", () => {
     test("eGetFromID", () => {
         let o = new EFactoryImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EFACTORY__EPACKAGE, true)).toStrictEqual(o.ePackage)
+        expect(o.eGetFromID(EcoreConstants.EFACTORY__EPACKAGE, true)).toStrictEqual(o.getEPackage())
     })
 
     test("eSetFromID", () => {
@@ -210,7 +210,7 @@ describe("EFactoryImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EFACTORY__EPACKAGE, null)
-            expect(o.ePackage).toBe(value)
+            expect(o.getEPackage()).toBe(value)
 
             reset(mockValue)
             let mockOther = mock<EPackageInternal>()
@@ -220,7 +220,7 @@ describe("EFactoryImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EFACTORY__EPACKAGE, null)
-            expect(o.ePackage).toBe(other)
+            expect(o.getEPackage()).toBe(other)
         }
     })
 

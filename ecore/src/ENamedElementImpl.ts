@@ -32,12 +32,13 @@ export class ENamedElementImpl extends EModelElementExt implements ENamedElement
     }
 
     // get the value of name
-    get name(): string {
+    getName(): string {
         return this._name
     }
 
     // set the value of name
-    set name(newName: string) {
+    setName(newName: string): void {
+        // set the value of name
         let oldName = this._name
         this._name = newName
         if (this.eNotificationRequired) {
@@ -48,7 +49,7 @@ export class ENamedElementImpl extends EModelElementExt implements ENamedElement
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.ENAMED_ELEMENT__NAME: {
-                return this.name
+                return this.getName()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -59,7 +60,7 @@ export class ENamedElementImpl extends EModelElementExt implements ENamedElement
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ENAMED_ELEMENT__NAME: {
-                this.name = newValue as string
+                this.setName(newValue as string)
                 break
             }
             default: {
@@ -71,7 +72,7 @@ export class ENamedElementImpl extends EModelElementExt implements ENamedElement
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.ENAMED_ELEMENT__NAME: {
-                this.name = ""
+                this.setName("")
                 break
             }
             default: {

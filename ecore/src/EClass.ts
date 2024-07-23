@@ -13,25 +13,42 @@ import { EAttribute, EClassifier, EList, EOperation, EReference, EStructuralFeat
 
 export interface EClass extends EClassifier {
     // Attributes
-    isAbstract: boolean
-    isInterface: boolean
+    isAbstract(): boolean
+    setAbstract(newIsAbstract: boolean): void
+
+    isInterface(): boolean
+    setInterface(newIsInterface: boolean): void
 
     // References
-    readonly eStructuralFeatures: EList<EStructuralFeature>
-    readonly eAttributes: EList<EAttribute>
-    readonly eReferences: EList<EReference>
-    readonly eSuperTypes: EList<EClass>
-    readonly eOperations: EList<EOperation>
-    readonly eContainmentFeatures: EList<EStructuralFeature>
-    readonly eCrossReferenceFeatures: EList<EStructuralFeature>
-    readonly eAllAttributes: EList<EAttribute>
-    readonly eAllReferences: EList<EReference>
-    readonly eAllContainments: EList<EReference>
-    readonly eAllCrossReferences: EList<EReference>
-    readonly eAllOperations: EList<EOperation>
-    readonly eAllStructuralFeatures: EList<EStructuralFeature>
-    readonly eAllSuperTypes: EList<EClass>
-    readonly eIDAttribute: EAttribute
+    getEStructuralFeatures(): EList<EStructuralFeature>
+
+    getEAttributes(): EList<EAttribute>
+
+    getEReferences(): EList<EReference>
+
+    getESuperTypes(): EList<EClass>
+
+    getEOperations(): EList<EOperation>
+
+    getEContainmentFeatures(): EList<EStructuralFeature>
+
+    getECrossReferenceFeatures(): EList<EStructuralFeature>
+
+    getEAllAttributes(): EList<EAttribute>
+
+    getEAllReferences(): EList<EReference>
+
+    getEAllContainments(): EList<EReference>
+
+    getEAllCrossReferences(): EList<EReference>
+
+    getEAllOperations(): EList<EOperation>
+
+    getEAllStructuralFeatures(): EList<EStructuralFeature>
+
+    getEAllSuperTypes(): EList<EClass>
+
+    getEIDAttribute(): EAttribute
 
     // Operations
     isSuperTypeOf(someClass: EClass): boolean

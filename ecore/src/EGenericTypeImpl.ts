@@ -51,7 +51,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     }
 
     // get the value of eClassifier
-    get eClassifier(): EClassifier {
+    getEClassifier(): EClassifier {
         if (this._eClassifier != null && this._eClassifier.eIsProxy()) {
             let oldEClassifier = this._eClassifier
             let newEClassifier = this.eResolveProxy(oldEClassifier) as EClassifier
@@ -74,7 +74,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     }
 
     // set the value of eClassifier
-    set eClassifier(newEClassifier: EClassifier) {
+    setEClassifier(newEClassifier: EClassifier): void {
+        // set the value of eClassifier
         let oldEClassifier = this._eClassifier
         this._eClassifier = newEClassifier
         if (this.eNotificationRequired) {
@@ -96,12 +97,13 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     }
 
     // get the value of eLowerBound
-    get eLowerBound(): EGenericType {
+    getELowerBound(): EGenericType {
         return this._eLowerBound
     }
 
     // set the value of eLowerBound
-    set eLowerBound(newELowerBound: EGenericType) {
+    setELowerBound(newELowerBound: EGenericType): void {
+        // set the value of eLowerBound
         let oldELowerBound = this._eLowerBound
         if (newELowerBound != oldELowerBound) {
             let notifications: ENotificationChain = null
@@ -148,7 +150,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     }
 
     // get the value of eRawType
-    get eRawType(): EClassifier {
+    getERawType(): EClassifier {
         if (this._eRawType != null && this._eRawType.eIsProxy()) {
             let oldERawType = this._eRawType
             let newERawType = this.eResolveProxy(oldERawType) as EClassifier
@@ -170,18 +172,13 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         return this._eRawType
     }
 
-    /** @internal */
-    set eRawType(newERawType: EClassifier) {
-        this._eRawType = newERawType
-    }
-
     // get the basic value of eRawType with no proxy resolution
     basicGetERawType(): EClassifier {
         return this._eRawType
     }
 
     // get the value of eTypeArguments
-    get eTypeArguments(): EList<EGenericType> {
+    getETypeArguments(): EList<EGenericType> {
         if (this._eTypeArguments == null) {
             this._eTypeArguments = this.initETypeArguments()
         }
@@ -189,12 +186,13 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     }
 
     // get the value of eTypeParameter
-    get eTypeParameter(): ETypeParameter {
+    getETypeParameter(): ETypeParameter {
         return this._eTypeParameter
     }
 
     // set the value of eTypeParameter
-    set eTypeParameter(newETypeParameter: ETypeParameter) {
+    setETypeParameter(newETypeParameter: ETypeParameter): void {
+        // set the value of eTypeParameter
         let oldETypeParameter = this._eTypeParameter
         this._eTypeParameter = newETypeParameter
         if (this.eNotificationRequired) {
@@ -211,12 +209,13 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     }
 
     // get the value of eUpperBound
-    get eUpperBound(): EGenericType {
+    getEUpperBound(): EGenericType {
         return this._eUpperBound
     }
 
     // set the value of eUpperBound
-    set eUpperBound(newEUpperBound: EGenericType) {
+    setEUpperBound(newEUpperBound: EGenericType): void {
+        // set the value of eUpperBound
         let oldEUpperBound = this._eUpperBound
         if (newEUpperBound != oldEUpperBound) {
             let notifications: ENotificationChain = null
@@ -283,22 +282,22 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EGENERIC_TYPE__ECLASSIFIER: {
-                return resolve ? this.eClassifier : this.basicGetEClassifier()
+                return resolve ? this.getEClassifier() : this.basicGetEClassifier()
             }
             case EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND: {
-                return this.eLowerBound
+                return this.getELowerBound()
             }
             case EcoreConstants.EGENERIC_TYPE__ERAW_TYPE: {
-                return resolve ? this.eRawType : this.basicGetERawType()
+                return resolve ? this.getERawType() : this.basicGetERawType()
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS: {
-                return this.eTypeArguments
+                return this.getETypeArguments()
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER: {
-                return this.eTypeParameter
+                return this.getETypeParameter()
             }
             case EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND: {
-                return this.eUpperBound
+                return this.getEUpperBound()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -309,24 +308,25 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EGENERIC_TYPE__ECLASSIFIER: {
-                this.eClassifier = newValue as EClassifier
+                this.setEClassifier(newValue as EClassifier)
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND: {
-                this.eLowerBound = newValue as EGenericType
+                this.setELowerBound(newValue as EGenericType)
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS: {
-                this.eTypeArguments.clear()
-                this.eTypeArguments.addAll(newValue as EList<EGenericType>)
+                const list = this.getETypeArguments()
+                list.clear()
+                list.addAll(newValue as EList<EGenericType>)
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER: {
-                this.eTypeParameter = newValue as ETypeParameter
+                this.setETypeParameter(newValue as ETypeParameter)
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND: {
-                this.eUpperBound = newValue as EGenericType
+                this.setEUpperBound(newValue as EGenericType)
                 break
             }
             default: {
@@ -338,23 +338,23 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EGENERIC_TYPE__ECLASSIFIER: {
-                this.eClassifier = null
+                this.setEClassifier(null)
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND: {
-                this.eLowerBound = null
+                this.setELowerBound(null)
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS: {
-                this.eTypeArguments.clear()
+                this.getETypeArguments().clear()
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER: {
-                this.eTypeParameter = null
+                this.setETypeParameter(null)
                 break
             }
             case EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND: {
-                this.eUpperBound = null
+                this.setEUpperBound(null)
                 break
             }
             default: {
@@ -366,22 +366,22 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EGENERIC_TYPE__ECLASSIFIER: {
-                return this._eClassifier != null
+                return this.getEClassifier() != null
             }
             case EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND: {
-                return this._eLowerBound != null
+                return this.getELowerBound() != null
             }
             case EcoreConstants.EGENERIC_TYPE__ERAW_TYPE: {
-                return this._eRawType != null
+                return this.getERawType() != null
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS: {
-                return this.eTypeArguments != null && this.eTypeArguments.size() != 0
+                return this._eTypeArguments && this._eTypeArguments.size() != 0
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER: {
-                return this._eTypeParameter != null
+                return this.getETypeParameter() != null
             }
             case EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND: {
-                return this._eUpperBound != null
+                return this.getEUpperBound() != null
             }
             default: {
                 return super.eIsSetFromID(featureID)
@@ -406,7 +406,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                 return this.basicSetELowerBound(null, notifications)
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS: {
-                let list = this.eTypeArguments as ENotifyingList<EGenericType>
+                let list = this.getETypeArguments() as ENotifyingList<EGenericType>
                 let end = otherEnd as EGenericType
                 return list.removeWithNotification(end, notifications)
             }

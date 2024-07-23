@@ -13,17 +13,32 @@ import { EClass, ETypedElement } from "./internal.js"
 
 export interface EStructuralFeature extends ETypedElement {
     // Attributes
-    isChangeable: boolean
-    isVolatile: boolean
-    isTransient: boolean
-    defaultValueLiteral: string
-    defaultValue: any
-    isUnsettable: boolean
-    isDerived: boolean
-    featureID: number
+    isChangeable(): boolean
+    setChangeable(newIsChangeable: boolean): void
+
+    isVolatile(): boolean
+    setVolatile(newIsVolatile: boolean): void
+
+    isTransient(): boolean
+    setTransient(newIsTransient: boolean): void
+
+    getDefaultValueLiteral(): string
+    setDefaultValueLiteral(newDefaultValueLiteral: string): void
+
+    getDefaultValue(): any
+    setDefaultValue(newDefaultValue: any): void
+
+    isUnsettable(): boolean
+    setUnsettable(newIsUnsettable: boolean): void
+
+    isDerived(): boolean
+    setDerived(newIsDerived: boolean): void
+
+    getFeatureID(): number
+    setFeatureID(newFeatureID: number): void
 
     // References
-    readonly eContainingClass: EClass
+    getEContainingClass(): EClass
 
     // Operations
     getContainerClass(): any

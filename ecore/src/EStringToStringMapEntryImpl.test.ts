@@ -22,7 +22,7 @@ describe("EStringToStringMapEntryImpl", () => {
     test("getKey", () => {
         let o = new EStringToStringMapEntryImpl()
         // get default value
-        expect(o.key).toBe("")
+        expect(o.getKey()).toBe("")
     })
 
     test("setKey", () => {
@@ -35,7 +35,7 @@ describe("EStringToStringMapEntryImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.key = value
+        o.setKey(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -49,7 +49,7 @@ describe("EStringToStringMapEntryImpl", () => {
     test("getValue", () => {
         let o = new EStringToStringMapEntryImpl()
         // get default value
-        expect(o.value).toBe("")
+        expect(o.getValue()).toBe("")
     })
 
     test("setValue", () => {
@@ -62,7 +62,7 @@ describe("EStringToStringMapEntryImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.value = value
+        o.setValue(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -76,8 +76,8 @@ describe("EStringToStringMapEntryImpl", () => {
     test("eGetFromID", () => {
         let o = new EStringToStringMapEntryImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, true)).toStrictEqual(o.key)
-        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, true)).toStrictEqual(o.value)
+        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, true)).toStrictEqual(o.getKey())
+        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, true)).toStrictEqual(o.getValue())
     })
 
     test("eSetFromID", () => {

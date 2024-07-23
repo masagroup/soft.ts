@@ -13,6 +13,9 @@ import { EMapEntry, EObject } from "./internal.js"
 
 export interface EStringToStringMapEntry extends EObject, EMapEntry<string, string> {
     // Attributes
-    key: string
-    value: string
+    getKey(): string
+    setKey(newKey: string): void
+
+    getValue(): string
+    setValue(newValue: string): void
 }

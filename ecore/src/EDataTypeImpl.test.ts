@@ -22,7 +22,7 @@ describe("EDataTypeImpl", () => {
     test("getSerializable", () => {
         let o = new EDataTypeImpl()
         // get default value
-        expect(o.isSerializable).toBe(true)
+        expect(o.isSerializable()).toBe(true)
     })
 
     test("setSerializable", () => {
@@ -35,7 +35,7 @@ describe("EDataTypeImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isSerializable = value
+        o.setSerializable(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -49,7 +49,7 @@ describe("EDataTypeImpl", () => {
     test("eGetFromID", () => {
         let o = new EDataTypeImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, true)).toStrictEqual(o.isSerializable)
+        expect(o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, true)).toStrictEqual(o.isSerializable())
     })
 
     test("eSetFromID", () => {

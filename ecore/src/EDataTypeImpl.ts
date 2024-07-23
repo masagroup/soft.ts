@@ -31,13 +31,14 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
         return getEcorePackage().getEDataType()
     }
 
-    // get the value of isSerializable
-    get isSerializable(): boolean {
+    // get the value of serializable
+    isSerializable(): boolean {
         return this._isSerializable
     }
 
-    // set the value of isSerializable
-    set isSerializable(newIsSerializable: boolean) {
+    // set the value of serializable
+    setSerializable(newIsSerializable: boolean): void {
+        // set the value of isSerializable
         let oldIsSerializable = this._isSerializable
         this._isSerializable = newIsSerializable
         if (this.eNotificationRequired) {
@@ -56,7 +57,7 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EDATA_TYPE__SERIALIZABLE: {
-                return this.isSerializable
+                return this.isSerializable()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -67,7 +68,7 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EDATA_TYPE__SERIALIZABLE: {
-                this.isSerializable = newValue as boolean
+                this.setSerializable(newValue as boolean)
                 break
             }
             default: {
@@ -79,7 +80,7 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EDATA_TYPE__SERIALIZABLE: {
-                this.isSerializable = true
+                this.setSerializable(true)
                 break
             }
             default: {

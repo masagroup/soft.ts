@@ -41,7 +41,7 @@ describe("EOperationImpl", () => {
     test("getEContainingClass", () => {
         // default
         let o = new EOperationImpl()
-        expect(o.eContainingClass).toBeNull()
+        expect(o.getEContainingClass()).toBeNull()
 
         // set a mock container
         let mockContainer = mock<EObject>()
@@ -50,30 +50,30 @@ describe("EOperationImpl", () => {
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.eContainingClass).toBe(container)
+        expect(o.getEContainingClass()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("getEExceptions", () => {
         let o = new EOperationImpl()
-        expect(o.eExceptions).not.toBeNull()
+        expect(o.getEExceptions()).not.toBeNull()
     })
 
     test("unsetEExceptions", () => {
         let o = new EOperationImpl()
         o.unSetEExceptions()
-        expect(o.eExceptions.isEmpty()).toBeTruthy()
+        expect(o.getEExceptions().isEmpty()).toBeTruthy()
     })
 
     test("getEParameters", () => {
         let o = new EOperationImpl()
-        expect(o.eParameters).not.toBeNull()
+        expect(o.getEParameters()).not.toBeNull()
     })
 
     test("getOperationID", () => {
         let o = new EOperationImpl()
         // get default value
-        expect(o.operationID).toBe(-1)
+        expect(o.getOperationID()).toBe(-1)
     })
 
     test("setOperationID", () => {
@@ -86,7 +86,7 @@ describe("EOperationImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.operationID = value
+        o.setOperationID(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -105,22 +105,22 @@ describe("EOperationImpl", () => {
     test("eGetFromID", () => {
         let o = new EOperationImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__ECONTAINING_CLASS, true)).toStrictEqual(o.eContainingClass)
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, true)).toStrictEqual(o.eExceptions)
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__ECONTAINING_CLASS, true)).toStrictEqual(o.getEContainingClass())
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, true)).toStrictEqual(o.getEExceptions())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, false),
-                (o.eExceptions as EObjectList<EClassifier>).getUnResolvedList()
+                (o.getEExceptions() as EObjectList<EClassifier>).getUnResolvedList()
             )
         ).toBeTruthy()
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, true)).toStrictEqual(o.eParameters)
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, true)).toStrictEqual(o.getEParameters())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EOPERATION__EPARAMETERS, false),
-                (o.eParameters as EObjectList<EParameter>).getUnResolvedList()
+                (o.getEParameters() as EObjectList<EParameter>).getUnResolvedList()
             )
         ).toBeTruthy()
-        expect(o.eGetFromID(EcoreConstants.EOPERATION__OPERATION_ID, true)).toStrictEqual(o.operationID)
+        expect(o.eGetFromID(EcoreConstants.EOPERATION__OPERATION_ID, true)).toStrictEqual(o.getOperationID())
     })
 
     test("eSetFromID", () => {
@@ -136,8 +136,8 @@ describe("EOperationImpl", () => {
             // set list with new contents
             o.eSetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, l)
             // checks
-            expect(o.eExceptions.size()).toBe(1)
-            expect(o.eExceptions.get(0)).toBe(value)
+            expect(o.getEExceptions().size()).toBe(1)
+            expect(o.getEExceptions().get(0)).toBe(value)
         }
 
         {
@@ -150,8 +150,8 @@ describe("EOperationImpl", () => {
             // set list with new contents
             o.eSetFromID(EcoreConstants.EOPERATION__EPARAMETERS, l)
             // checks
-            expect(o.eParameters.size()).toBe(1)
-            expect(o.eParameters.get(0)).toBe(value)
+            expect(o.getEParameters().size()).toBe(1)
+            expect(o.getEParameters().get(0)).toBe(value)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).once()
         }
 
@@ -216,7 +216,7 @@ describe("EOperationImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EOPERATION__ECONTAINING_CLASS, null)
-            expect(o.eContainingClass).toBe(value)
+            expect(o.getEContainingClass()).toBe(value)
 
             reset(mockValue)
             let mockOther = mock<EClassInternal>()
@@ -226,13 +226,13 @@ describe("EOperationImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.ECLASS__EOPERATIONS, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EOPERATION__ECONTAINING_CLASS, null)
-            expect(o.eContainingClass).toBe(other)
+            expect(o.getEContainingClass()).toBe(other)
         }
         {
             let mockValue = mock<EParameterInternal>()
             let value = instance(mockValue)
             o.eBasicInverseAdd(value, EcoreConstants.EOPERATION__EPARAMETERS, null)
-            expect(o.eParameters.contains(value)).toBeTruthy()
+            expect(o.getEParameters().contains(value)).toBeTruthy()
         }
     })
 
@@ -256,13 +256,13 @@ describe("EOperationImpl", () => {
             let value = instance(mockValue)
             when(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).thenReturn(null)
 
-            o.eParameters.add(value)
+            o.getEParameters().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.EOPERATION__EPARAMETERS, null)
 
             // check it was removed
-            expect(o.eParameters.contains(value)).toBeFalsy()
+            expect(o.getEParameters().contains(value)).toBeFalsy()
         }
     })
 })

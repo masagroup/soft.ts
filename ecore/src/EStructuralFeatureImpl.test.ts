@@ -32,19 +32,19 @@ describe("EStructuralFeatureImpl", () => {
 
     test("getDefaultValue", () => {
         let o = new EStructuralFeatureImpl()
-        expect(() => o.defaultValue).toThrow(Error)
+        expect(() => o.getDefaultValue()).toThrow(Error)
     })
 
     test("setDefaultValue", () => {
         let o = new EStructuralFeatureImpl()
         let value = null
-        expect(() => (o.defaultValue = value)).toThrow(Error)
+        expect(() => o.setDefaultValue(value)).toThrow(Error)
     })
 
     test("getDefaultValueLiteral", () => {
         let o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.defaultValueLiteral).toBe("")
+        expect(o.getDefaultValueLiteral()).toBe("")
     })
 
     test("setDefaultValueLiteral", () => {
@@ -57,7 +57,7 @@ describe("EStructuralFeatureImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.defaultValueLiteral = value
+        o.setDefaultValueLiteral(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -71,7 +71,7 @@ describe("EStructuralFeatureImpl", () => {
     test("getEContainingClass", () => {
         // default
         let o = new EStructuralFeatureImpl()
-        expect(o.eContainingClass).toBeNull()
+        expect(o.getEContainingClass()).toBeNull()
 
         // set a mock container
         let mockContainer = mock<EObject>()
@@ -80,14 +80,14 @@ describe("EStructuralFeatureImpl", () => {
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.eContainingClass).toBe(container)
+        expect(o.getEContainingClass()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("getFeatureID", () => {
         let o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.featureID).toBe(-1)
+        expect(o.getFeatureID()).toBe(-1)
     })
 
     test("setFeatureID", () => {
@@ -100,7 +100,7 @@ describe("EStructuralFeatureImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.featureID = value
+        o.setFeatureID(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -114,7 +114,7 @@ describe("EStructuralFeatureImpl", () => {
     test("getChangeable", () => {
         let o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isChangeable).toBe(true)
+        expect(o.isChangeable()).toBe(true)
     })
 
     test("setChangeable", () => {
@@ -127,7 +127,7 @@ describe("EStructuralFeatureImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isChangeable = value
+        o.setChangeable(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -141,7 +141,7 @@ describe("EStructuralFeatureImpl", () => {
     test("getDerived", () => {
         let o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isDerived).toBe(false)
+        expect(o.isDerived()).toBe(false)
     })
 
     test("setDerived", () => {
@@ -154,7 +154,7 @@ describe("EStructuralFeatureImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isDerived = value
+        o.setDerived(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -168,7 +168,7 @@ describe("EStructuralFeatureImpl", () => {
     test("getTransient", () => {
         let o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isTransient).toBe(false)
+        expect(o.isTransient()).toBe(false)
     })
 
     test("setTransient", () => {
@@ -181,7 +181,7 @@ describe("EStructuralFeatureImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isTransient = value
+        o.setTransient(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -195,7 +195,7 @@ describe("EStructuralFeatureImpl", () => {
     test("getUnsettable", () => {
         let o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isUnsettable).toBe(false)
+        expect(o.isUnsettable()).toBe(false)
     })
 
     test("setUnsettable", () => {
@@ -208,7 +208,7 @@ describe("EStructuralFeatureImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isUnsettable = value
+        o.setUnsettable(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -222,7 +222,7 @@ describe("EStructuralFeatureImpl", () => {
     test("getVolatile", () => {
         let o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isVolatile).toBe(false)
+        expect(o.isVolatile()).toBe(false)
     })
 
     test("setVolatile", () => {
@@ -235,7 +235,7 @@ describe("EStructuralFeatureImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.isVolatile = value
+        o.setVolatile(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -254,20 +254,20 @@ describe("EStructuralFeatureImpl", () => {
     test("eGetFromID", () => {
         let o = new EStructuralFeatureImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, true)).toStrictEqual(o.isChangeable)
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, true)).toStrictEqual(o.isChangeable())
         expect(() => o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, false)).toThrow(Error)
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, true)).toStrictEqual(
-            o.defaultValueLiteral
+            o.getDefaultValueLiteral()
         )
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, true)).toStrictEqual(o.isDerived)
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, true)).toStrictEqual(o.isDerived())
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, true)).toStrictEqual(
-            o.eContainingClass
+            o.getEContainingClass()
         )
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, true)).toStrictEqual(o.featureID)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, true)).toStrictEqual(o.isTransient)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, true)).toStrictEqual(o.isUnsettable)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, true)).toStrictEqual(o.isVolatile)
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, true)).toStrictEqual(o.getFeatureID())
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, true)).toStrictEqual(o.isTransient())
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, true)).toStrictEqual(o.isUnsettable())
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, true)).toStrictEqual(o.isVolatile())
     })
 
     test("eSetFromID", () => {
@@ -389,7 +389,7 @@ describe("EStructuralFeatureImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, null)
-            expect(o.eContainingClass).toBe(value)
+            expect(o.getEContainingClass()).toBe(value)
 
             reset(mockValue)
             let mockOther = mock<EClassInternal>()
@@ -399,7 +399,7 @@ describe("EStructuralFeatureImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, null)
-            expect(o.eContainingClass).toBe(other)
+            expect(o.getEContainingClass()).toBe(other)
         }
     })
 

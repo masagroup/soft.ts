@@ -33,7 +33,7 @@ describe("EClassifierImpl", () => {
     test("getClassifierID", () => {
         let o = new EClassifierImpl()
         // get default value
-        expect(o.classifierID).toBe(-1)
+        expect(o.getClassifierID()).toBe(-1)
     })
 
     test("setClassifierID", () => {
@@ -46,7 +46,7 @@ describe("EClassifierImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.classifierID = value
+        o.setClassifierID(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -59,13 +59,13 @@ describe("EClassifierImpl", () => {
 
     test("getDefaultValue", () => {
         let o = new EClassifierImpl()
-        expect(() => o.defaultValue).toThrow(Error)
+        expect(() => o.getDefaultValue()).toThrow(Error)
     })
 
     test("getEPackage", () => {
         // default
         let o = new EClassifierImpl()
-        expect(o.ePackage).toBeNull()
+        expect(o.getEPackage()).toBeNull()
 
         // set a mock container
         let mockContainer = mock<EObject>()
@@ -74,14 +74,14 @@ describe("EClassifierImpl", () => {
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.ePackage).toBe(container)
+        expect(o.getEPackage()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("getInstanceClass", () => {
         let o = new EClassifierImpl()
         // get default value
-        expect(o.instanceClass).toBe(null)
+        expect(o.getInstanceClass()).toBe(null)
     })
 
     test("setInstanceClass", () => {
@@ -94,7 +94,7 @@ describe("EClassifierImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.instanceClass = value
+        o.setInstanceClass(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -108,7 +108,7 @@ describe("EClassifierImpl", () => {
     test("getInstanceClassName", () => {
         let o = new EClassifierImpl()
         // get default value
-        expect(o.instanceClassName).toBe("")
+        expect(o.getInstanceClassName()).toBe("")
     })
 
     test("setInstanceClassName", () => {
@@ -121,7 +121,7 @@ describe("EClassifierImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.instanceClassName = value
+        o.setInstanceClassName(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -134,13 +134,13 @@ describe("EClassifierImpl", () => {
 
     test("getInstanceTypeName", () => {
         let o = new EClassifierImpl()
-        expect(() => o.instanceTypeName).toThrow(Error)
+        expect(() => o.getInstanceTypeName()).toThrow(Error)
     })
 
     test("setInstanceTypeName", () => {
         let o = new EClassifierImpl()
         let value = "Test String"
-        expect(() => (o.instanceTypeName = value)).toThrow(Error)
+        expect(() => o.setInstanceTypeName(value)).toThrow(Error)
     })
 
     test("isInstance", () => {
@@ -151,12 +151,14 @@ describe("EClassifierImpl", () => {
     test("eGetFromID", () => {
         let o = new EClassifierImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, true)).toStrictEqual(o.classifierID)
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, true)).toStrictEqual(o.getClassifierID())
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE, false)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__EPACKAGE, true)).toStrictEqual(o.ePackage)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, true)).toStrictEqual(o.instanceClass)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, true)).toStrictEqual(o.instanceClassName)
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__EPACKAGE, true)).toStrictEqual(o.getEPackage())
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, true)).toStrictEqual(o.getInstanceClass())
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, true)).toStrictEqual(
+            o.getInstanceClassName()
+        )
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, false)).toThrow(Error)
     })
@@ -237,7 +239,7 @@ describe("EClassifierImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.ECLASSIFIER__EPACKAGE, null)
-            expect(o.ePackage).toBe(value)
+            expect(o.getEPackage()).toBe(value)
 
             reset(mockValue)
             let mockOther = mock<EPackageInternal>()
@@ -247,7 +249,7 @@ describe("EClassifierImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ECLASSIFIERS, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.ECLASSIFIER__EPACKAGE, null)
-            expect(o.ePackage).toBe(other)
+            expect(o.getEPackage()).toBe(other)
         }
     })
 

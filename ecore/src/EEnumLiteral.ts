@@ -13,10 +13,15 @@ import { EEnum, ENamedElement } from "./internal.js"
 
 export interface EEnumLiteral extends ENamedElement {
     // Attributes
-    value: number
-    instance: any
-    literal: string
+    getValue(): number
+    setValue(newValue: number): void
+
+    getInstance(): any
+    setInstance(newInstance: any): void
+
+    getLiteral(): string
+    setLiteral(newLiteral: string): void
 
     // References
-    readonly eEnum: EEnum
+    getEEnum(): EEnum
 }

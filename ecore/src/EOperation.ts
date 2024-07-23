@@ -13,12 +13,15 @@ import { EClass, EClassifier, EList, EParameter, ETypedElement } from "./interna
 
 export interface EOperation extends ETypedElement {
     // Attributes
-    operationID: number
+    getOperationID(): number
+    setOperationID(newOperationID: number): void
 
     // References
-    readonly eContainingClass: EClass
-    readonly eParameters: EList<EParameter>
-    readonly eExceptions: EList<EClassifier>
+    getEContainingClass(): EClass
+
+    getEParameters(): EList<EParameter>
+
+    getEExceptions(): EList<EClassifier>
     unSetEExceptions(): void
 
     // Operations

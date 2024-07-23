@@ -47,12 +47,12 @@ describe("EGenericTypeImpl", () => {
         let o = new EGenericTypeImpl()
 
         // get default value
-        expect(o.eClassifier).toBeNull()
+        expect(o.getEClassifier()).toBeNull()
 
         // initialize object with a mock value
         let mockValue = mock<EClassifierInternal>()
         let value = instance(mockValue)
-        o.eClassifier = value
+        o.setEClassifier(value)
 
         // events
         let mockAdapter = mock<EAdapter>()
@@ -68,7 +68,7 @@ describe("EGenericTypeImpl", () => {
 
         // get non resolved value
         when(mockValue.eIsProxy()).thenReturn(false)
-        expect(o.eClassifier).toBe(value)
+        expect(o.getEClassifier()).toBe(value)
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
@@ -80,7 +80,7 @@ describe("EGenericTypeImpl", () => {
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
         when(mockValue.eIsProxy()).thenReturn(true)
         when(mockValue.eProxyURI()).thenReturn(mockURI)
-        expect(o.eClassifier).toBe(resolved)
+        expect(o.getEClassifier()).toBe(resolved)
     })
 
     test("setEClassifier", () => {
@@ -94,7 +94,7 @@ describe("EGenericTypeImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.eClassifier = value
+        o.setEClassifier(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -109,7 +109,7 @@ describe("EGenericTypeImpl", () => {
         let o = new EGenericTypeImpl()
 
         // get default value
-        expect(o.eLowerBound).toBeNull()
+        expect(o.getELowerBound()).toBeNull()
     })
 
     test("setELowerBound", () => {
@@ -123,7 +123,7 @@ describe("EGenericTypeImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.eLowerBound = value
+        o.setELowerBound(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -167,12 +167,12 @@ describe("EGenericTypeImpl", () => {
         let o = new EGenericTypeImpl()
 
         // get default value
-        expect(o.eRawType).toBeNull()
+        expect(o.getERawType()).toBeNull()
 
         // initialize object with a mock value
         let mockValue = mock<EClassifierInternal>()
         let value = instance(mockValue)
-        o.eRawType = value
+        o.setERawType(value)
 
         // events
         let mockAdapter = mock<EAdapter>()
@@ -188,7 +188,7 @@ describe("EGenericTypeImpl", () => {
 
         // get non resolved value
         when(mockValue.eIsProxy()).thenReturn(false)
-        expect(o.eRawType).toBe(value)
+        expect(o.getERawType()).toBe(value)
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
@@ -200,19 +200,19 @@ describe("EGenericTypeImpl", () => {
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
         when(mockValue.eIsProxy()).thenReturn(true)
         when(mockValue.eProxyURI()).thenReturn(mockURI)
-        expect(o.eRawType).toBe(resolved)
+        expect(o.getERawType()).toBe(resolved)
     })
 
     test("getETypeArguments", () => {
         let o = new EGenericTypeImpl()
-        expect(o.eTypeArguments).not.toBeNull()
+        expect(o.getETypeArguments()).not.toBeNull()
     })
 
     test("getETypeParameter", () => {
         let o = new EGenericTypeImpl()
 
         // get default value
-        expect(o.eTypeParameter).toBeNull()
+        expect(o.getETypeParameter()).toBeNull()
     })
 
     test("setETypeParameter", () => {
@@ -226,7 +226,7 @@ describe("EGenericTypeImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.eTypeParameter = value
+        o.setETypeParameter(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -241,7 +241,7 @@ describe("EGenericTypeImpl", () => {
         let o = new EGenericTypeImpl()
 
         // get default value
-        expect(o.eUpperBound).toBeNull()
+        expect(o.getEUpperBound()).toBeNull()
     })
 
     test("setEUpperBound", () => {
@@ -255,7 +255,7 @@ describe("EGenericTypeImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.eUpperBound = value
+        o.setEUpperBound(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -303,18 +303,18 @@ describe("EGenericTypeImpl", () => {
     test("eGetFromID", () => {
         let o = new EGenericTypeImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, true)).toStrictEqual(o.eClassifier)
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, true)).toStrictEqual(o.eLowerBound)
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, true)).toStrictEqual(o.eRawType)
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, true)).toStrictEqual(o.eTypeArguments)
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, true)).toStrictEqual(o.getEClassifier())
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, true)).toStrictEqual(o.getELowerBound())
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, true)).toStrictEqual(o.getERawType())
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, true)).toStrictEqual(o.getETypeArguments())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, false),
-                (o.eTypeArguments as EObjectList<EGenericType>).getUnResolvedList()
+                (o.getETypeArguments() as EObjectList<EGenericType>).getUnResolvedList()
             )
         ).toBeTruthy()
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER, true)).toStrictEqual(o.eTypeParameter)
-        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, true)).toStrictEqual(o.eUpperBound)
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER, true)).toStrictEqual(o.getETypeParameter())
+        expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, true)).toStrictEqual(o.getEUpperBound())
     })
 
     test("eSetFromID", () => {
@@ -362,8 +362,8 @@ describe("EGenericTypeImpl", () => {
             // set list with new contents
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, l)
             // checks
-            expect(o.eTypeArguments.size()).toBe(1)
-            expect(o.eTypeArguments.get(0)).toBe(value)
+            expect(o.getETypeArguments().size()).toBe(1)
+            expect(o.getETypeArguments().get(0)).toBe(value)
             verify(
                 mockValue.eInverseAdd(
                     o,
@@ -472,13 +472,13 @@ describe("EGenericTypeImpl", () => {
                 )
             ).thenReturn(null)
 
-            o.eTypeArguments.add(value)
+            o.getETypeArguments().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, null)
 
             // check it was removed
-            expect(o.eTypeArguments.contains(value)).toBeFalsy()
+            expect(o.getETypeArguments().contains(value)).toBeFalsy()
         }
         {
             let mockValue = mock<EGenericTypeInternal>()

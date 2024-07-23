@@ -36,17 +36,17 @@ describe("ETypeParameterImpl", () => {
 
     test("getEBounds", () => {
         let o = new ETypeParameterImpl()
-        expect(o.eBounds).not.toBeNull()
+        expect(o.getEBounds()).not.toBeNull()
     })
 
     test("eGetFromID", () => {
         let o = new ETypeParameterImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ETYPE_PARAMETER__EBOUNDS, true)).toStrictEqual(o.eBounds)
+        expect(o.eGetFromID(EcoreConstants.ETYPE_PARAMETER__EBOUNDS, true)).toStrictEqual(o.getEBounds())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.ETYPE_PARAMETER__EBOUNDS, false),
-                (o.eBounds as EObjectList<EGenericType>).getUnResolvedList()
+                (o.getEBounds() as EObjectList<EGenericType>).getUnResolvedList()
             )
         ).toBeTruthy()
     })
@@ -66,8 +66,8 @@ describe("ETypeParameterImpl", () => {
             // set list with new contents
             o.eSetFromID(EcoreConstants.ETYPE_PARAMETER__EBOUNDS, l)
             // checks
-            expect(o.eBounds.size()).toBe(1)
-            expect(o.eBounds.get(0)).toBe(value)
+            expect(o.getEBounds().size()).toBe(1)
+            expect(o.getEBounds().get(0)).toBe(value)
             verify(
                 mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())
             ).once()
@@ -109,13 +109,13 @@ describe("ETypeParameterImpl", () => {
                 mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())
             ).thenReturn(null)
 
-            o.eBounds.add(value)
+            o.getEBounds().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.ETYPE_PARAMETER__EBOUNDS, null)
 
             // check it was removed
-            expect(o.eBounds.contains(value)).toBeFalsy()
+            expect(o.getEBounds().contains(value)).toBeFalsy()
         }
     })
 })

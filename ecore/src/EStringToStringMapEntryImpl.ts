@@ -34,12 +34,13 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     }
 
     // get the value of key
-    get key(): string {
+    getKey(): string {
         return this._key
     }
 
     // set the value of key
-    set key(newKey: string) {
+    setKey(newKey: string): void {
+        // set the value of key
         let oldKey = this._key
         this._key = newKey
         if (this.eNotificationRequired) {
@@ -50,12 +51,13 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     }
 
     // get the value of value
-    get value(): string {
+    getValue(): string {
         return this._value
     }
 
     // set the value of value
-    set value(newValue: string) {
+    setValue(newValue: string): void {
+        // set the value of value
         let oldValue = this._value
         this._value = newValue
         if (this.eNotificationRequired) {
@@ -74,10 +76,10 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY: {
-                return this.key
+                return this.getKey()
             }
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE: {
-                return this.value
+                return this.getValue()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -88,11 +90,11 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY: {
-                this.key = newValue as string
+                this.setKey(newValue as string)
                 break
             }
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE: {
-                this.value = newValue as string
+                this.setValue(newValue as string)
                 break
             }
             default: {
@@ -104,11 +106,11 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY: {
-                this.key = ""
+                this.setKey("")
                 break
             }
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE: {
-                this.value = ""
+                this.setValue("")
                 break
             }
             default: {

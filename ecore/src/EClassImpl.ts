@@ -74,78 +74,73 @@ export class EClassImpl extends EClassifierExt implements EClass {
     }
 
     // get the value of eAllAttributes
-    get eAllAttributes(): EList<EAttribute> {
+    getEAllAttributes(): EList<EAttribute> {
         this.initEAllAttributes()
         return this._eAllAttributes
     }
 
     // get the value of eAllContainments
-    get eAllContainments(): EList<EReference> {
+    getEAllContainments(): EList<EReference> {
         this.initEAllContainments()
         return this._eAllContainments
     }
 
     // get the value of eAllCrossReferences
-    get eAllCrossReferences(): EList<EReference> {
+    getEAllCrossReferences(): EList<EReference> {
         this.initEAllCrossReferences()
         return this._eAllCrossReferences
     }
 
     // get the value of eAllOperations
-    get eAllOperations(): EList<EOperation> {
+    getEAllOperations(): EList<EOperation> {
         this.initEAllOperations()
         return this._eAllOperations
     }
 
     // get the value of eAllReferences
-    get eAllReferences(): EList<EReference> {
+    getEAllReferences(): EList<EReference> {
         this.initEAllReferences()
         return this._eAllReferences
     }
 
     // get the value of eAllStructuralFeatures
-    get eAllStructuralFeatures(): EList<EStructuralFeature> {
+    getEAllStructuralFeatures(): EList<EStructuralFeature> {
         this.initEAllStructuralFeatures()
         return this._eAllStructuralFeatures
     }
 
     // get the value of eAllSuperTypes
-    get eAllSuperTypes(): EList<EClass> {
+    getEAllSuperTypes(): EList<EClass> {
         this.initEAllSuperTypes()
         return this._eAllSuperTypes
     }
 
     // get the value of eAttributes
-    get eAttributes(): EList<EAttribute> {
+    getEAttributes(): EList<EAttribute> {
         this.initEAttributes()
         return this._eAttributes
     }
 
     // get the value of eContainmentFeatures
-    get eContainmentFeatures(): EList<EStructuralFeature> {
+    getEContainmentFeatures(): EList<EStructuralFeature> {
         this.initEContainmentFeatures()
         return this._eContainmentFeatures
     }
 
     // get the value of eCrossReferenceFeatures
-    get eCrossReferenceFeatures(): EList<EStructuralFeature> {
+    getECrossReferenceFeatures(): EList<EStructuralFeature> {
         this.initECrossReferenceFeatures()
         return this._eCrossReferenceFeatures
     }
 
     // get the value of eIDAttribute
-    get eIDAttribute(): EAttribute {
+    getEIDAttribute(): EAttribute {
         this.initEIDAttribute()
         return this._eIDAttribute
     }
 
-    /** @internal */
-    set eIDAttribute(newEIDAttribute: EAttribute) {
-        this._eIDAttribute = newEIDAttribute
-    }
-
     // get the value of eOperations
-    get eOperations(): EList<EOperation> {
+    getEOperations(): EList<EOperation> {
         if (this._eOperations == null) {
             this._eOperations = this.initEOperations()
         }
@@ -153,13 +148,13 @@ export class EClassImpl extends EClassifierExt implements EClass {
     }
 
     // get the value of eReferences
-    get eReferences(): EList<EReference> {
+    getEReferences(): EList<EReference> {
         this.initEReferences()
         return this._eReferences
     }
 
     // get the value of eStructuralFeatures
-    get eStructuralFeatures(): EList<EStructuralFeature> {
+    getEStructuralFeatures(): EList<EStructuralFeature> {
         if (this._eStructuralFeatures == null) {
             this._eStructuralFeatures = this.initEStructuralFeatures()
         }
@@ -167,20 +162,21 @@ export class EClassImpl extends EClassifierExt implements EClass {
     }
 
     // get the value of eSuperTypes
-    get eSuperTypes(): EList<EClass> {
+    getESuperTypes(): EList<EClass> {
         if (this._eSuperTypes == null) {
             this._eSuperTypes = this.initESuperTypes()
         }
         return this._eSuperTypes
     }
 
-    // get the value of isAbstract
-    get isAbstract(): boolean {
+    // get the value of abstract
+    isAbstract(): boolean {
         return this._isAbstract
     }
 
-    // set the value of isAbstract
-    set isAbstract(newIsAbstract: boolean) {
+    // set the value of abstract
+    setAbstract(newIsAbstract: boolean): void {
+        // set the value of isAbstract
         let oldIsAbstract = this._isAbstract
         this._isAbstract = newIsAbstract
         if (this.eNotificationRequired) {
@@ -190,13 +186,14 @@ export class EClassImpl extends EClassifierExt implements EClass {
         }
     }
 
-    // get the value of isInterface
-    get isInterface(): boolean {
+    // get the value of interface
+    isInterface(): boolean {
         return this._isInterface
     }
 
-    // set the value of isInterface
-    set isInterface(newIsInterface: boolean) {
+    // set the value of interface
+    setInterface(newIsInterface: boolean): void {
+        // set the value of isInterface
         let oldIsInterface = this._isInterface
         this._isInterface = newIsInterface
         if (this.eNotificationRequired) {
@@ -268,7 +265,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEAllContainments(): void {
         this._eAllContainments = new BasicEObjectList<EReference>(
             this,
@@ -281,7 +277,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEAllCrossReferences(): void {
         this._eAllCrossReferences = new BasicEObjectList<EReference>(
             this,
@@ -294,7 +289,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEAllOperations(): void {
         this._eAllOperations = new BasicEObjectList<EOperation>(
             this,
@@ -307,7 +301,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEAllReferences(): void {
         this._eAllReferences = new BasicEObjectList<EReference>(
             this,
@@ -320,7 +313,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEAllStructuralFeatures(): void {
         this._eAllStructuralFeatures = new BasicEObjectList<EStructuralFeature>(
             this,
@@ -333,7 +325,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEAllSuperTypes(): void {
         this._eAllSuperTypes = new BasicEObjectList<EClass>(
             this,
@@ -346,7 +337,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEAttributes(): void {
         this._eAttributes = new BasicEObjectList<EAttribute>(
             this,
@@ -359,7 +349,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEContainmentFeatures(): void {
         this._eContainmentFeatures = new BasicEObjectList<EStructuralFeature>(
             this,
@@ -372,7 +361,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initECrossReferenceFeatures(): void {
         this._eCrossReferenceFeatures = new BasicEObjectList<EStructuralFeature>(
             this,
@@ -385,11 +373,9 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEIDAttribute(): void {
         throw new Error("initEIDAttribute not implemented")
     }
-
     protected initEOperations(): EList<EOperation> {
         return new BasicEObjectList<EOperation>(
             this,
@@ -414,7 +400,6 @@ export class EClassImpl extends EClassifierExt implements EClass {
             false
         )
     }
-
     protected initEStructuralFeatures(): EList<EStructuralFeature> {
         return new BasicEObjectList<EStructuralFeature>(
             this,
@@ -443,79 +428,67 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.ECLASS__ABSTRACT: {
-                return this.isAbstract
+                return this.isAbstract()
             }
             case EcoreConstants.ECLASS__EALL_ATTRIBUTES: {
-                return !resolve && isEObjectList(this.eAllAttributes)
-                    ? this.eAllAttributes.getUnResolvedList()
-                    : this.eAllAttributes
+                const list = this.getEAllAttributes()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EALL_CONTAINMENTS: {
-                return !resolve && isEObjectList(this.eAllContainments)
-                    ? this.eAllContainments.getUnResolvedList()
-                    : this.eAllContainments
+                const list = this.getEAllContainments()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EALL_CROSS_REFERENCES: {
-                return !resolve && isEObjectList(this.eAllCrossReferences)
-                    ? this.eAllCrossReferences.getUnResolvedList()
-                    : this.eAllCrossReferences
+                const list = this.getEAllCrossReferences()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EALL_OPERATIONS: {
-                return !resolve && isEObjectList(this.eAllOperations)
-                    ? this.eAllOperations.getUnResolvedList()
-                    : this.eAllOperations
+                const list = this.getEAllOperations()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EALL_REFERENCES: {
-                return !resolve && isEObjectList(this.eAllReferences)
-                    ? this.eAllReferences.getUnResolvedList()
-                    : this.eAllReferences
+                const list = this.getEAllReferences()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES: {
-                return !resolve && isEObjectList(this.eAllStructuralFeatures)
-                    ? this.eAllStructuralFeatures.getUnResolvedList()
-                    : this.eAllStructuralFeatures
+                const list = this.getEAllStructuralFeatures()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EALL_SUPER_TYPES: {
-                return !resolve && isEObjectList(this.eAllSuperTypes)
-                    ? this.eAllSuperTypes.getUnResolvedList()
-                    : this.eAllSuperTypes
+                const list = this.getEAllSuperTypes()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EATTRIBUTES: {
-                return !resolve && isEObjectList(this.eAttributes)
-                    ? this.eAttributes.getUnResolvedList()
-                    : this.eAttributes
+                const list = this.getEAttributes()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__ECONTAINMENT_FEATURES: {
-                return !resolve && isEObjectList(this.eContainmentFeatures)
-                    ? this.eContainmentFeatures.getUnResolvedList()
-                    : this.eContainmentFeatures
+                const list = this.getEContainmentFeatures()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES: {
-                return !resolve && isEObjectList(this.eCrossReferenceFeatures)
-                    ? this.eCrossReferenceFeatures.getUnResolvedList()
-                    : this.eCrossReferenceFeatures
+                const list = this.getECrossReferenceFeatures()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__EID_ATTRIBUTE: {
-                return this.eIDAttribute
+                return this.getEIDAttribute()
             }
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                return this.eOperations
+                return this.getEOperations()
             }
             case EcoreConstants.ECLASS__EREFERENCES: {
-                return !resolve && isEObjectList(this.eReferences)
-                    ? this.eReferences.getUnResolvedList()
-                    : this.eReferences
+                const list = this.getEReferences()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                return this.eStructuralFeatures
+                return this.getEStructuralFeatures()
             }
             case EcoreConstants.ECLASS__ESUPER_TYPES: {
-                return !resolve && isEObjectList(this.eSuperTypes)
-                    ? this.eSuperTypes.getUnResolvedList()
-                    : this.eSuperTypes
+                const list = this.getESuperTypes()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.ECLASS__INTERFACE: {
-                return this.isInterface
+                return this.isInterface()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -526,26 +499,29 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ECLASS__ABSTRACT: {
-                this.isAbstract = newValue as boolean
+                this.setAbstract(newValue as boolean)
                 break
             }
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                this.eOperations.clear()
-                this.eOperations.addAll(newValue as EList<EOperation>)
+                const list = this.getEOperations()
+                list.clear()
+                list.addAll(newValue as EList<EOperation>)
                 break
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                this.eStructuralFeatures.clear()
-                this.eStructuralFeatures.addAll(newValue as EList<EStructuralFeature>)
+                const list = this.getEStructuralFeatures()
+                list.clear()
+                list.addAll(newValue as EList<EStructuralFeature>)
                 break
             }
             case EcoreConstants.ECLASS__ESUPER_TYPES: {
-                this.eSuperTypes.clear()
-                this.eSuperTypes.addAll(newValue as EList<EClass>)
+                const list = this.getESuperTypes()
+                list.clear()
+                list.addAll(newValue as EList<EClass>)
                 break
             }
             case EcoreConstants.ECLASS__INTERFACE: {
-                this.isInterface = newValue as boolean
+                this.setInterface(newValue as boolean)
                 break
             }
             default: {
@@ -557,23 +533,23 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.ECLASS__ABSTRACT: {
-                this.isAbstract = false
+                this.setAbstract(false)
                 break
             }
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                this.eOperations.clear()
+                this.getEOperations().clear()
                 break
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                this.eStructuralFeatures.clear()
+                this.getEStructuralFeatures().clear()
                 break
             }
             case EcoreConstants.ECLASS__ESUPER_TYPES: {
-                this.eSuperTypes.clear()
+                this.getESuperTypes().clear()
                 break
             }
             case EcoreConstants.ECLASS__INTERFACE: {
-                this.isInterface = false
+                this.setInterface(false)
                 break
             }
             default: {
@@ -588,49 +564,49 @@ export class EClassImpl extends EClassifierExt implements EClass {
                 return this._isAbstract != false
             }
             case EcoreConstants.ECLASS__EALL_ATTRIBUTES: {
-                return this.eAllAttributes != null && this.eAllAttributes.size() != 0
+                return this._eAllAttributes && this._eAllAttributes.size() != 0
             }
             case EcoreConstants.ECLASS__EALL_CONTAINMENTS: {
-                return this.eAllContainments != null && this.eAllContainments.size() != 0
+                return this._eAllContainments && this._eAllContainments.size() != 0
             }
             case EcoreConstants.ECLASS__EALL_CROSS_REFERENCES: {
-                return this.eAllCrossReferences != null && this.eAllCrossReferences.size() != 0
+                return this._eAllCrossReferences && this._eAllCrossReferences.size() != 0
             }
             case EcoreConstants.ECLASS__EALL_OPERATIONS: {
-                return this.eAllOperations != null && this.eAllOperations.size() != 0
+                return this._eAllOperations && this._eAllOperations.size() != 0
             }
             case EcoreConstants.ECLASS__EALL_REFERENCES: {
-                return this.eAllReferences != null && this.eAllReferences.size() != 0
+                return this._eAllReferences && this._eAllReferences.size() != 0
             }
             case EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES: {
-                return this.eAllStructuralFeatures != null && this.eAllStructuralFeatures.size() != 0
+                return this._eAllStructuralFeatures && this._eAllStructuralFeatures.size() != 0
             }
             case EcoreConstants.ECLASS__EALL_SUPER_TYPES: {
-                return this.eAllSuperTypes != null && this.eAllSuperTypes.size() != 0
+                return this._eAllSuperTypes && this._eAllSuperTypes.size() != 0
             }
             case EcoreConstants.ECLASS__EATTRIBUTES: {
-                return this.eAttributes != null && this.eAttributes.size() != 0
+                return this._eAttributes && this._eAttributes.size() != 0
             }
             case EcoreConstants.ECLASS__ECONTAINMENT_FEATURES: {
-                return this.eContainmentFeatures != null && this.eContainmentFeatures.size() != 0
+                return this._eContainmentFeatures && this._eContainmentFeatures.size() != 0
             }
             case EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES: {
-                return this.eCrossReferenceFeatures != null && this.eCrossReferenceFeatures.size() != 0
+                return this._eCrossReferenceFeatures && this._eCrossReferenceFeatures.size() != 0
             }
             case EcoreConstants.ECLASS__EID_ATTRIBUTE: {
-                return this._eIDAttribute != null
+                return this.getEIDAttribute() != null
             }
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                return this.eOperations != null && this.eOperations.size() != 0
+                return this._eOperations && this._eOperations.size() != 0
             }
             case EcoreConstants.ECLASS__EREFERENCES: {
-                return this.eReferences != null && this.eReferences.size() != 0
+                return this._eReferences && this._eReferences.size() != 0
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                return this.eStructuralFeatures != null && this.eStructuralFeatures.size() != 0
+                return this._eStructuralFeatures && this._eStructuralFeatures.size() != 0
             }
             case EcoreConstants.ECLASS__ESUPER_TYPES: {
-                return this.eSuperTypes != null && this.eSuperTypes.size() != 0
+                return this._eSuperTypes && this._eSuperTypes.size() != 0
             }
             case EcoreConstants.ECLASS__INTERFACE: {
                 return this._isInterface != false
@@ -682,12 +658,12 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                let list = this.eOperations as ENotifyingList<EOperation>
+                let list = this.getEOperations() as ENotifyingList<EOperation>
                 let end = otherEnd as EOperation
                 return list.addWithNotification(end, notifications)
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                let list = this.eStructuralFeatures as ENotifyingList<EStructuralFeature>
+                let list = this.getEStructuralFeatures() as ENotifyingList<EStructuralFeature>
                 let end = otherEnd as EStructuralFeature
                 return list.addWithNotification(end, notifications)
             }
@@ -700,12 +676,12 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                let list = this.eOperations as ENotifyingList<EOperation>
+                let list = this.getEOperations() as ENotifyingList<EOperation>
                 let end = otherEnd as EOperation
                 return list.removeWithNotification(end, notifications)
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                let list = this.eStructuralFeatures as ENotifyingList<EStructuralFeature>
+                let list = this.getEStructuralFeatures() as ENotifyingList<EStructuralFeature>
                 let end = otherEnd as EStructuralFeature
                 return list.removeWithNotification(end, notifications)
             }

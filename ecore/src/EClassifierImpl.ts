@@ -40,7 +40,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     }
 
     // get the value of classifierID
-    get classifierID(): number {
+    getClassifierID(): number {
         if (this._classifierID == -1) {
             this._classifierID = this.initClassifierID()
         }
@@ -48,7 +48,8 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     }
 
     // set the value of classifierID
-    set classifierID(newClassifierID: number) {
+    setClassifierID(newClassifierID: number): void {
+        // set the value of classifierID
         let oldClassifierID = this._classifierID
         this._classifierID = newClassifierID
         if (this.eNotificationRequired) {
@@ -65,12 +66,12 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     }
 
     // get the value of defaultValue
-    get defaultValue(): any {
+    getDefaultValue(): any {
         throw new Error("get defaultValue not implemented")
     }
 
     // get the value of ePackage
-    get ePackage(): EPackage {
+    getEPackage(): EPackage {
         if (this.eContainerFeatureID() == EcoreConstants.ECLASSIFIER__EPACKAGE) {
             return this.eContainer() as EPackage
         }
@@ -78,12 +79,13 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     }
 
     // get the value of instanceClass
-    get instanceClass(): any {
+    getInstanceClass(): any {
         return this._instanceClass
     }
 
     // set the value of instanceClass
-    set instanceClass(newInstanceClass: any) {
+    setInstanceClass(newInstanceClass: any): void {
+        // set the value of instanceClass
         let oldInstanceClass = this._instanceClass
         this._instanceClass = newInstanceClass
         if (this.eNotificationRequired) {
@@ -100,12 +102,13 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     }
 
     // get the value of instanceClassName
-    get instanceClassName(): string {
+    getInstanceClassName(): string {
         return this._instanceClassName
     }
 
     // set the value of instanceClassName
-    set instanceClassName(newInstanceClassName: string) {
+    setInstanceClassName(newInstanceClassName: string): void {
+        // set the value of instanceClassName
         let oldInstanceClassName = this._instanceClassName
         this._instanceClassName = newInstanceClassName
         if (this.eNotificationRequired) {
@@ -122,12 +125,13 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     }
 
     // get the value of instanceTypeName
-    get instanceTypeName(): string {
+    getInstanceTypeName(): string {
         throw new Error("get instanceTypeName not implemented")
     }
 
     // set the value of instanceTypeName
-    set instanceTypeName(newInstanceTypeName: string) {
+    setInstanceTypeName(newInstanceTypeName: string): void {
+        // set the value of instanceTypeName
         throw new Error("set instanceTypeName not implemented")
     }
 
@@ -143,22 +147,22 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.ECLASSIFIER__CLASSIFIER_ID: {
-                return this.classifierID
+                return this.getClassifierID()
             }
             case EcoreConstants.ECLASSIFIER__DEFAULT_VALUE: {
-                return this.defaultValue
+                return this.getDefaultValue()
             }
             case EcoreConstants.ECLASSIFIER__EPACKAGE: {
-                return this.ePackage
+                return this.getEPackage()
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS: {
-                return this.instanceClass
+                return this.getInstanceClass()
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME: {
-                return this.instanceClassName
+                return this.getInstanceClassName()
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME: {
-                return this.instanceTypeName
+                return this.getInstanceTypeName()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -169,19 +173,19 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ECLASSIFIER__CLASSIFIER_ID: {
-                this.classifierID = newValue as number
+                this.setClassifierID(newValue as number)
                 break
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS: {
-                this.instanceClass = newValue as any
+                this.setInstanceClass(newValue as any)
                 break
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME: {
-                this.instanceClassName = newValue as string
+                this.setInstanceClassName(newValue as string)
                 break
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME: {
-                this.instanceTypeName = newValue as string
+                this.setInstanceTypeName(newValue as string)
                 break
             }
             default: {
@@ -193,19 +197,19 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.ECLASSIFIER__CLASSIFIER_ID: {
-                this.classifierID = -1
+                this.setClassifierID(-1)
                 break
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS: {
-                this.instanceClass = null
+                this.setInstanceClass(null)
                 break
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME: {
-                this.instanceClassName = ""
+                this.setInstanceClassName("")
                 break
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME: {
-                this.instanceTypeName = ""
+                this.setInstanceTypeName("")
                 break
             }
             default: {
@@ -220,10 +224,10 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
                 return this._classifierID != -1
             }
             case EcoreConstants.ECLASSIFIER__DEFAULT_VALUE: {
-                return this.defaultValue != null
+                return this.getDefaultValue() != null
             }
             case EcoreConstants.ECLASSIFIER__EPACKAGE: {
-                return this.ePackage != null
+                return this.getEPackage() != null
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS: {
                 return this._instanceClass != null
@@ -232,7 +236,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
                 return this._instanceClassName != ""
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME: {
-                return this.instanceTypeName != ""
+                return this.getInstanceTypeName() != ""
             }
             default: {
                 return super.eIsSetFromID(featureID)

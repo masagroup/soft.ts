@@ -13,7 +13,8 @@ import { EClass, EDataType, EModelElement, EObject, EPackage } from "./internal.
 
 export interface EFactory extends EModelElement {
     // References
-    ePackage: EPackage
+    getEPackage(): EPackage
+    setEPackage(newEPackage: EPackage): void
 
     // Operations
     create(eClass: EClass): EObject

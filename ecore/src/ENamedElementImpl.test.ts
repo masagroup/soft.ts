@@ -22,7 +22,7 @@ describe("ENamedElementImpl", () => {
     test("getName", () => {
         let o = new ENamedElementImpl()
         // get default value
-        expect(o.name).toBe("")
+        expect(o.getName()).toBe("")
     })
 
     test("setName", () => {
@@ -35,7 +35,7 @@ describe("ENamedElementImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.name = value
+        o.setName(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -49,7 +49,7 @@ describe("ENamedElementImpl", () => {
     test("eGetFromID", () => {
         let o = new ENamedElementImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ENAMED_ELEMENT__NAME, true)).toStrictEqual(o.name)
+        expect(o.eGetFromID(EcoreConstants.ENAMED_ELEMENT__NAME, true)).toStrictEqual(o.getName())
     })
 
     test("eSetFromID", () => {

@@ -35,7 +35,7 @@ describe("EEnumImpl", () => {
 
     test("getELiterals", () => {
         let o = new EEnumImpl()
-        expect(o.eLiterals).not.toBeNull()
+        expect(o.getELiterals()).not.toBeNull()
     })
 
     test("getEEnumLiteralByLiteral", () => {
@@ -54,11 +54,11 @@ describe("EEnumImpl", () => {
     test("eGetFromID", () => {
         let o = new EEnumImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EENUM__ELITERALS, true)).toStrictEqual(o.eLiterals)
+        expect(o.eGetFromID(EcoreConstants.EENUM__ELITERALS, true)).toStrictEqual(o.getELiterals())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EENUM__ELITERALS, false),
-                (o.eLiterals as EObjectList<EEnumLiteral>).getUnResolvedList()
+                (o.getELiterals() as EObjectList<EEnumLiteral>).getUnResolvedList()
             )
         ).toBeTruthy()
     })
@@ -76,8 +76,8 @@ describe("EEnumImpl", () => {
             // set list with new contents
             o.eSetFromID(EcoreConstants.EENUM__ELITERALS, l)
             // checks
-            expect(o.eLiterals.size()).toBe(1)
-            expect(o.eLiterals.get(0)).toBe(value)
+            expect(o.getELiterals().size()).toBe(1)
+            expect(o.getELiterals().get(0)).toBe(value)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).once()
         }
     })
@@ -121,7 +121,7 @@ describe("EEnumImpl", () => {
             let mockValue = mock<EEnumLiteralInternal>()
             let value = instance(mockValue)
             o.eBasicInverseAdd(value, EcoreConstants.EENUM__ELITERALS, null)
-            expect(o.eLiterals.contains(value)).toBeTruthy()
+            expect(o.getELiterals().contains(value)).toBeTruthy()
         }
     })
 
@@ -140,13 +140,13 @@ describe("EEnumImpl", () => {
             let value = instance(mockValue)
             when(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).thenReturn(null)
 
-            o.eLiterals.add(value)
+            o.getELiterals().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.EENUM__ELITERALS, null)
 
             // check it was removed
-            expect(o.eLiterals.contains(value)).toBeFalsy()
+            expect(o.getELiterals().contains(value)).toBeFalsy()
         }
     })
 })

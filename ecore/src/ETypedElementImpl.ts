@@ -41,7 +41,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     }
 
     // get the value of eType
-    get eType(): EClassifier {
+    getEType(): EClassifier {
         if (this._eType != null && this._eType.eIsProxy()) {
             let oldEType = this._eType
             let newEType = this.eResolveProxy(oldEType) as EClassifier
@@ -64,7 +64,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     }
 
     // set the value of eType
-    set eType(newEType: EClassifier) {
+    setEType(newEType: EClassifier): void {
+        // set the value of eType
         let oldEType = this._eType
         this._eType = newEType
         if (this.eNotificationRequired) {
@@ -74,11 +75,6 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         }
     }
 
-    // get the basic value of eType with no proxy resolution
-    basicGetEType(): EClassifier {
-        return this._eType
-    }
-
     // unSetEType unset the value of _eType
     unSetEType(): void {
         if (this.eNotificationRequired) {
@@ -86,18 +82,24 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         }
     }
 
-    // get the value of isMany
-    get isMany(): boolean {
+    // get the basic value of eType with no proxy resolution
+    basicGetEType(): EClassifier {
+        return this._eType
+    }
+
+    // get the value of many
+    isMany(): boolean {
         throw new Error("get isMany not implemented")
     }
 
-    // get the value of isOrdered
-    get isOrdered(): boolean {
+    // get the value of ordered
+    isOrdered(): boolean {
         return this._isOrdered
     }
 
-    // set the value of isOrdered
-    set isOrdered(newIsOrdered: boolean) {
+    // set the value of ordered
+    setOrdered(newIsOrdered: boolean): void {
+        // set the value of isOrdered
         let oldIsOrdered = this._isOrdered
         this._isOrdered = newIsOrdered
         if (this.eNotificationRequired) {
@@ -113,18 +115,19 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         }
     }
 
-    // get the value of isRequired
-    get isRequired(): boolean {
+    // get the value of required
+    isRequired(): boolean {
         throw new Error("get isRequired not implemented")
     }
 
-    // get the value of isUnique
-    get isUnique(): boolean {
+    // get the value of unique
+    isUnique(): boolean {
         return this._isUnique
     }
 
-    // set the value of isUnique
-    set isUnique(newIsUnique: boolean) {
+    // set the value of unique
+    setUnique(newIsUnique: boolean): void {
+        // set the value of isUnique
         let oldIsUnique = this._isUnique
         this._isUnique = newIsUnique
         if (this.eNotificationRequired) {
@@ -135,12 +138,13 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     }
 
     // get the value of lowerBound
-    get lowerBound(): number {
+    getLowerBound(): number {
         return this._lowerBound
     }
 
     // set the value of lowerBound
-    set lowerBound(newLowerBound: number) {
+    setLowerBound(newLowerBound: number): void {
+        // set the value of lowerBound
         let oldLowerBound = this._lowerBound
         this._lowerBound = newLowerBound
         if (this.eNotificationRequired) {
@@ -157,12 +161,13 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     }
 
     // get the value of upperBound
-    get upperBound(): number {
+    getUpperBound(): number {
         return this._upperBound
     }
 
     // set the value of upperBound
-    set upperBound(newUpperBound: number) {
+    setUpperBound(newUpperBound: number): void {
+        // set the value of upperBound
         let oldUpperBound = this._upperBound
         this._upperBound = newUpperBound
         if (this.eNotificationRequired) {
@@ -181,25 +186,25 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.ETYPED_ELEMENT__ETYPE: {
-                return resolve ? this.eType : this.basicGetEType()
+                return resolve ? this.getEType() : this.basicGetEType()
             }
             case EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND: {
-                return this.lowerBound
+                return this.getLowerBound()
             }
             case EcoreConstants.ETYPED_ELEMENT__MANY: {
-                return this.isMany
+                return this.isMany()
             }
             case EcoreConstants.ETYPED_ELEMENT__ORDERED: {
-                return this.isOrdered
+                return this.isOrdered()
             }
             case EcoreConstants.ETYPED_ELEMENT__REQUIRED: {
-                return this.isRequired
+                return this.isRequired()
             }
             case EcoreConstants.ETYPED_ELEMENT__UNIQUE: {
-                return this.isUnique
+                return this.isUnique()
             }
             case EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND: {
-                return this.upperBound
+                return this.getUpperBound()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -210,23 +215,23 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ETYPED_ELEMENT__ETYPE: {
-                this.eType = newValue as EClassifier
+                this.setEType(newValue as EClassifier)
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND: {
-                this.lowerBound = newValue as number
+                this.setLowerBound(newValue as number)
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__ORDERED: {
-                this.isOrdered = newValue as boolean
+                this.setOrdered(newValue as boolean)
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__UNIQUE: {
-                this.isUnique = newValue as boolean
+                this.setUnique(newValue as boolean)
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND: {
-                this.upperBound = newValue as number
+                this.setUpperBound(newValue as number)
                 break
             }
             default: {
@@ -242,19 +247,19 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND: {
-                this.lowerBound = 0
+                this.setLowerBound(0)
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__ORDERED: {
-                this.isOrdered = true
+                this.setOrdered(true)
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__UNIQUE: {
-                this.isUnique = true
+                this.setUnique(true)
                 break
             }
             case EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND: {
-                this.upperBound = 1
+                this.setUpperBound(1)
                 break
             }
             default: {
@@ -266,19 +271,19 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ETYPED_ELEMENT__ETYPE: {
-                return this._eType != null
+                return this.getEType() != null
             }
             case EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND: {
                 return this._lowerBound != 0
             }
             case EcoreConstants.ETYPED_ELEMENT__MANY: {
-                return this.isMany != false
+                return this.isMany() != false
             }
             case EcoreConstants.ETYPED_ELEMENT__ORDERED: {
                 return this._isOrdered != true
             }
             case EcoreConstants.ETYPED_ELEMENT__REQUIRED: {
-                return this.isRequired != false
+                return this.isRequired() != false
             }
             case EcoreConstants.ETYPED_ELEMENT__UNIQUE: {
                 return this._isUnique != true

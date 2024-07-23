@@ -33,7 +33,7 @@ describe("EEnumLiteralImpl", () => {
     test("getEEnum", () => {
         // default
         let o = new EEnumLiteralImpl()
-        expect(o.eEnum).toBeNull()
+        expect(o.getEEnum()).toBeNull()
 
         // set a mock container
         let mockContainer = mock<EObject>()
@@ -42,14 +42,14 @@ describe("EEnumLiteralImpl", () => {
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.eEnum).toBe(container)
+        expect(o.getEEnum()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("getInstance", () => {
         let o = new EEnumLiteralImpl()
         // get default value
-        expect(o.instance).toBe(null)
+        expect(o.getInstance()).toBe(null)
     })
 
     test("setInstance", () => {
@@ -62,7 +62,7 @@ describe("EEnumLiteralImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.instance = value
+        o.setInstance(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -76,7 +76,7 @@ describe("EEnumLiteralImpl", () => {
     test("getLiteral", () => {
         let o = new EEnumLiteralImpl()
         // get default value
-        expect(o.literal).toBe("")
+        expect(o.getLiteral()).toBe("")
     })
 
     test("setLiteral", () => {
@@ -89,7 +89,7 @@ describe("EEnumLiteralImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.literal = value
+        o.setLiteral(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -103,7 +103,7 @@ describe("EEnumLiteralImpl", () => {
     test("getValue", () => {
         let o = new EEnumLiteralImpl()
         // get default value
-        expect(o.value).toBe(0)
+        expect(o.getValue()).toBe(0)
     })
 
     test("setValue", () => {
@@ -116,7 +116,7 @@ describe("EEnumLiteralImpl", () => {
         o.eAdapters.add(adapter)
 
         // set value
-        o.value = value
+        o.setValue(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -130,10 +130,10 @@ describe("EEnumLiteralImpl", () => {
     test("eGetFromID", () => {
         let o = new EEnumLiteralImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__EENUM, true)).toStrictEqual(o.eEnum)
-        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__INSTANCE, true)).toStrictEqual(o.instance)
-        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__LITERAL, true)).toStrictEqual(o.literal)
-        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__VALUE, true)).toStrictEqual(o.value)
+        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__EENUM, true)).toStrictEqual(o.getEEnum())
+        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__INSTANCE, true)).toStrictEqual(o.getInstance())
+        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__LITERAL, true)).toStrictEqual(o.getLiteral())
+        expect(o.eGetFromID(EcoreConstants.EENUM_LITERAL__VALUE, true)).toStrictEqual(o.getValue())
     })
 
     test("eSetFromID", () => {
@@ -200,7 +200,7 @@ describe("EEnumLiteralImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EENUM_LITERAL__EENUM, null)
-            expect(o.eEnum).toBe(value)
+            expect(o.getEEnum()).toBe(value)
 
             reset(mockValue)
             let mockOther = mock<EEnumInternal>()
@@ -210,7 +210,7 @@ describe("EEnumLiteralImpl", () => {
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.EENUM__ELITERALS, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EENUM_LITERAL__EENUM, null)
-            expect(o.eEnum).toBe(other)
+            expect(o.getEEnum()).toBe(other)
         }
     })
 

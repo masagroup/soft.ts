@@ -13,14 +13,24 @@ import { EClassifier, ENamedElement } from "./internal.js"
 
 export interface ETypedElement extends ENamedElement {
     // Attributes
-    isOrdered: boolean
-    isUnique: boolean
-    lowerBound: number
-    upperBound: number
-    readonly isMany: boolean
-    readonly isRequired: boolean
+    isOrdered(): boolean
+    setOrdered(newIsOrdered: boolean): void
+
+    isUnique(): boolean
+    setUnique(newIsUnique: boolean): void
+
+    getLowerBound(): number
+    setLowerBound(newLowerBound: number): void
+
+    getUpperBound(): number
+    setUpperBound(newUpperBound: number): void
+
+    isMany(): boolean
+
+    isRequired(): boolean
 
     // References
-    eType: EClassifier
+    getEType(): EClassifier
+    setEType(newEType: EClassifier): void
     unSetEType(): void
 }

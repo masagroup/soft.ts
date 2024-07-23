@@ -13,5 +13,6 @@ import { EClassifier } from "./internal.js"
 
 export interface EDataType extends EClassifier {
     // Attributes
-    isSerializable: boolean
+    isSerializable(): boolean
+    setSerializable(newIsSerializable: boolean): void
 }

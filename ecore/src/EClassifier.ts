@@ -13,14 +13,22 @@ import { ENamedElement, EPackage } from "./internal.js"
 
 export interface EClassifier extends ENamedElement {
     // Attributes
-    instanceClassName: string
-    instanceClass: any
-    instanceTypeName: string
-    readonly defaultValue: any
-    classifierID: number
+    getInstanceClassName(): string
+    setInstanceClassName(newInstanceClassName: string): void
+
+    getInstanceClass(): any
+    setInstanceClass(newInstanceClass: any): void
+
+    getInstanceTypeName(): string
+    setInstanceTypeName(newInstanceTypeName: string): void
+
+    getDefaultValue(): any
+
+    getClassifierID(): number
+    setClassifierID(newClassifierID: number): void
 
     // References
-    readonly ePackage: EPackage
+    getEPackage(): EPackage
 
     // Operations
     isInstance(object: any): boolean
