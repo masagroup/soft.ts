@@ -31,46 +31,46 @@ describe("XMICodec", () => {
 
             let ePackage = contents.get(0) as EPackage
             expect(ePackage).not.toBeNull()
-            expect(ePackage.name).toBe("library")
-            expect(ePackage.nsPrefix).toBe("lib")
-            expect(ePackage.nsURI).toBe("http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0")
+            expect(ePackage.getName()).toBe("library")
+            expect(ePackage.getNsPrefix()).toBe("lib")
+            expect(ePackage.getNsURI()).toBe("http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0")
 
-            let eClassifiers = ePackage.eClassifiers
+            let eClassifiers = ePackage.getEClassifiers()
             expect(eClassifiers.size()).toBe(2)
 
             let eBookStore = eClassifiers.get(0) as EClassifier
             expect(eBookStore).not.toBeNull()
-            expect(eBookStore.name).toBe("Library")
+            expect(eBookStore.getName()).toBe("Library")
 
             let eBookStoreClass = eBookStore as EClass
             expect(eBookStoreClass).not.toBeNull()
             expect(eBookStoreClass.getFeatureCount()).toBe(3)
 
             let eOwnerAttribute = eBookStoreClass.getEStructuralFeature(0) as EAttribute
-            expect(eOwnerAttribute.name).toBe("owner")
-            let eOwnerAttributeType = eOwnerAttribute.eAttributeType
-            expect(eOwnerAttributeType.name).toBe("EString")
+            expect(eOwnerAttribute.getName()).toBe("owner")
+            let eOwnerAttributeType = eOwnerAttribute.getEAttributeType()
+            expect(eOwnerAttributeType.getName()).toBe("EString")
 
             let eLocationAttribute = eBookStoreClass.getEStructuralFeature(1) as EAttribute
-            expect(eLocationAttribute.name).toBe("location")
-            let eLocationType = eLocationAttribute.eAttributeType
+            expect(eLocationAttribute.getName()).toBe("location")
+            let eLocationType = eLocationAttribute.getEAttributeType()
             expect(eLocationType).not.toBeNull()
 
             let eBooksReference = eBookStoreClass.getEStructuralFeature(2) as EReference
-            expect(eBooksReference.name).toBe("books")
+            expect(eBooksReference.getName()).toBe("books")
 
             let eBookClass = eClassifiers.get(1) as EClass
-            expect(eBookClass.name).toBe("Book")
+            expect(eBookClass.getName()).toBe("Book")
             expect(eBookClass.getFeatureCount()).toBe(2)
 
             let eNameAttribute = eBookClass.getEStructuralFeature(0) as EAttribute
-            expect(eNameAttribute.name).toBe("name")
+            expect(eNameAttribute.getName()).toBe("name")
 
             let eISBNFeature = eBookClass.getEStructuralFeature(1) as EAttribute
-            expect(eISBNFeature.name).toBe("isbn")
+            expect(eISBNFeature.getName()).toBe("isbn")
 
             // check resolved reference
-            expect(eBooksReference.eReferenceType).toBe(eBookClass)
+            expect(eBooksReference.getEReferenceType()).toBe(eBookClass)
         })
 
         test("load", async () => {
@@ -104,24 +104,24 @@ describe("XMICodec", () => {
             let ePackage = contents.get(0) as EPackage
             expect(ePackage).not.toBeNull()
 
-            let eClassifiers = ePackage.eClassifiers
+            let eClassifiers = ePackage.getEClassifiers()
             let eBook = eClassifiers.get(0) as EClassifier
             expect(eBook).not.toBeNull()
-            expect(eBook.name).toBe("Book")
+            expect(eBook.getName()).toBe("Book")
 
             let eBookClass = eBook as EClass
             expect(eBookClass).not.toBeNull()
-            let eSuperTypes = eBookClass.eSuperTypes
+            let eSuperTypes = eBookClass.getESuperTypes()
             expect(eSuperTypes.size()).toBe(1)
             let eCirculatingItemClass = eSuperTypes.get(0)
-            expect(eCirculatingItemClass.name).toBe("CirculatingItem")
+            expect(eCirculatingItemClass.getName()).toBe("CirculatingItem")
 
             let eWriterClass = eClassifiers.get(2) as EClass
             expect(eWriterClass).not.toBeNull()
-            expect(eWriterClass.eAnnotations.isEmpty()).toBeFalsy()
+            expect(eWriterClass.getEAnnotations().isEmpty()).toBeFalsy()
             let eAnnotation = eWriterClass.getEAnnotation("http://net.masagroup/soft/2020/GenTS")
             expect(eAnnotation).not.toBeNull()
-            expect(eAnnotation.details.getValue("extension")).toBe("true")
+            expect(eAnnotation.getDetails().getValue("extension")).toBe("true")
         })
 
         test("load", async () => {
@@ -153,18 +153,18 @@ describe("XMICodec", () => {
             expect(contents.size()).toBe(1)
 
             let ePackage = contents.get(0) as EPackage
-            let eClassifiers = ePackage.eClassifiers
+            let eClassifiers = ePackage.getEClassifiers()
 
             let eDocumentRootClass = eClassifiers.get(0) as EClass
             expect(eDocumentRootClass).not.toBeNull()
-            expect(eDocumentRootClass.name).toBe("DocumentRoot")
+            expect(eDocumentRootClass.getName()).toBe("DocumentRoot")
 
             let eXMNLSPrefixFeature = eDocumentRootClass.getEStructuralFeatureFromName("xMLNSPrefixMap") as EReference
             expect(eXMNLSPrefixFeature).not.toBeNull()
 
-            let eType = eXMNLSPrefixFeature.eType
+            let eType = eXMNLSPrefixFeature.getEType()
             expect(eType).not.toBeNull()
-            expect(eType.name).toBe("EStringToStringMapEntry")
+            expect(eType.getName()).toBe("EStringToStringMapEntry")
             expect(eType.eIsProxy()).toBeFalsy()
         })
 

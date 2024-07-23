@@ -658,13 +658,15 @@ export class XMLEncoder implements EEncoder {
             let uri = eObject.eProxyURI()
             if (!uri) {
                 let eResource = eObject.eResource()
-                if (!eResource) {
+                if (eResource) {
+                    uri = this.getResourceHRef(eResource, eObject)
+                } else {
                     if (this._resource && this._resource.eObjectIDManager) {
                         uri = this.getResourceHRef(this._resource, eObject)
                     } else {
                         this.handleDanglingHREF(eObject)
                         return ""
-                    }
+                    }    
                 }
             }
             uri = this._resource.eURI.relativize(uri)
