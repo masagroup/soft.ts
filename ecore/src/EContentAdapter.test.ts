@@ -79,7 +79,7 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(false)
+            when(mockReference.isContainment()).thenReturn(false)
             when(mockNotification.notifier).thenReturn(object)
             when(mockNotification.feature).thenReturn(reference)
             adapter.notifyChanged(notification)
@@ -101,8 +101,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters).thenReturn(oldAdapters)
             when(mockOldAdapters.contains(adapter)).thenReturn(false)
             when(mockNotification.notifier).thenReturn(object)
@@ -136,8 +136,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters).thenReturn(oldAdapters)
             when(mockOldAdapters.contains(adapter)).thenReturn(true)
             when(mockOldAdapters.remove(adapter)).thenReturn(true)
@@ -152,7 +152,7 @@ describe("EContentAdapter", () => {
 
             adapter.notifyChanged(notification)
 
-            verify(mockReference.isContainment).once()
+            verify(mockReference.isContainment()).once()
             verify(mockOldObject.eAdapters).twice()
             verify(mockOldAdapters.contains(adapter)).once()
             verify(mockOldAdapters.remove(adapter)).once()
@@ -183,8 +183,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters).thenReturn(oldAdapters)
             when(mockOldObject.eInternalResource()).thenReturn(null)
             when(mockOldAdapters.remove(adapter)).thenReturn(true)
@@ -199,7 +199,7 @@ describe("EContentAdapter", () => {
 
             adapter.notifyChanged(notification)
 
-            verify(mockReference.isContainment).once()
+            verify(mockReference.isContainment()).once()
             verify(mockOldObject.eAdapters).once()
             verify(mockOldAdapters.remove(adapter)).once()
             verify(mockNewObject.eAdapters).twice()
@@ -229,8 +229,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters).thenReturn(oldAdapters)
             when(mockOldObject.eInternalResource()).thenReturn(null)
             when(mockOldAdapters.remove(adapter)).thenReturn(true)
@@ -245,7 +245,7 @@ describe("EContentAdapter", () => {
 
             adapter.notifyChanged(notification)
 
-            verify(mockReference.isContainment).once()
+            verify(mockReference.isContainment()).once()
             verify(mockOldObject.eAdapters).once()
             verify(mockOldAdapters.remove(adapter)).once()
             verify(mockNewObject.eAdapters).twice()
@@ -271,8 +271,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockNewObject.eAdapters).thenReturn(newAdapters)
             when(mockNewAdapters.contains(adapter)).thenReturn(false)
             when(mockNewAdapters.add(adapter)).thenReturn(true)
@@ -283,7 +283,7 @@ describe("EContentAdapter", () => {
 
             adapter.notifyChanged(notification)
 
-            verify(mockReference.isContainment).once()
+            verify(mockReference.isContainment()).once()
             verify(mockNewObject.eAdapters).twice()
             verify(mockNewAdapters.contains(adapter)).once()
             verify(mockNewAdapters.add(adapter)).once()
@@ -302,8 +302,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
 
             let children: EObject[] = []
             let nb = Math.floor(Math.random() * 10) + 1
@@ -339,8 +339,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters).thenReturn(oldAdapters)
             when(mockOldObject.eInternalResource()).thenReturn(null)
             when(mockOldAdapters.remove(adapter)).thenReturn(true)
@@ -351,7 +351,7 @@ describe("EContentAdapter", () => {
 
             adapter.notifyChanged(notification)
 
-            verify(mockReference.isContainment).once()
+            verify(mockReference.isContainment()).once()
             verify(mockOldObject.eAdapters).once()
             verify(mockOldObject.eInternalResource()).once()
             verify(mockOldAdapters.remove(adapter)).once()
@@ -369,8 +369,8 @@ describe("EContentAdapter", () => {
             let mockReference = mock<EReference>()
             let reference = instance(mockReference)
 
-            when(mockReference.isContainment).thenReturn(true)
-            when(mockReference.eReferenceType).thenReturn(null)
+            when(mockReference.isContainment()).thenReturn(true)
+            when(mockReference.getEReferenceType()).thenReturn(null)
 
             let children: EObject[] = []
             let nb = Math.floor(Math.random() * 10) + 1

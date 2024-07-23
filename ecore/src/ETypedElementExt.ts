@@ -14,11 +14,11 @@ export class ETypedElementExt extends ETypedElementImpl {
         super()
     }
 
-    get isMany(): boolean {
-        return this.upperBound > 1 || this.upperBound == UNBOUNDED_MULTIPLICITY
+    isMany(): boolean {
+        return this.getUpperBound() > 1 || this.getUpperBound() == UNBOUNDED_MULTIPLICITY
     }
 
-    get isRequired(): boolean {
-        return this.lowerBound >= 1
+    isRequired(): boolean {
+        return this.getLowerBound() >= 1
     }
 }

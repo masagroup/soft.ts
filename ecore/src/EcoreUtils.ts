@@ -25,27 +25,27 @@ import {
 export class EcoreUtils {
     static getEObjectID(eObject: EObject): string {
         let eClass = eObject.eClass()
-        let eIDAttribute = eClass.eIDAttribute
+        let eIDAttribute = eClass.getEIDAttribute()
         return !eIDAttribute || !eObject.eIsSet(eIDAttribute)
             ? ""
-            : this.convertToString(eIDAttribute.eAttributeType, eObject.eGet(eIDAttribute))
+            : this.convertToString(eIDAttribute.getEAttributeType(), eObject.eGet(eIDAttribute))
     }
 
     static setEObjectID(eObject: EObject, id: string) {
         let eClass = eObject.eClass()
-        let eIDAttribute = eClass.eIDAttribute
+        let eIDAttribute = eClass.getEIDAttribute()
         if ((eIDAttribute = null)) throw new Error("The object doesn't have an ID feature.")
         else if (id.length == 0) eObject.eUnset(eIDAttribute)
-        else eObject.eSet(eIDAttribute, this.createFromString(eIDAttribute.eAttributeType, id))
+        else eObject.eSet(eIDAttribute, this.createFromString(eIDAttribute.getEAttributeType(), id))
     }
 
     static convertToString(eDataType: EDataType, value: any): string {
-        let eFactory = eDataType.ePackage.eFactoryInstance
+        let eFactory = eDataType.getEPackage().getEFactoryInstance()
         return eFactory.convertToString(eDataType, value)
     }
 
     static createFromString(eDataType: EDataType, literal: string): any {
-        let eFactory = eDataType.ePackage.eFactoryInstance
+        let eFactory = eDataType.getEPackage().getEFactoryInstance()
         return eFactory.createFromString(eDataType, literal)
     }
 

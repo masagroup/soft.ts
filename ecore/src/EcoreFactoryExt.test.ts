@@ -15,7 +15,7 @@ describe("EcoreFactoryExt", () => {
     test("convertDate", () => {
         let mockEDataType = mock<EDataType>()
         let eDataType = instance(mockEDataType)
-        when(mockEDataType.classifierID).thenReturn(EcoreConstants.EDATE)
+        when(mockEDataType.getClassifierID()).thenReturn(EcoreConstants.EDATE)
 
         {
             let date = EcoreFactoryExt.getInstance().createFromString(eDataType, "2020-05-12T17:33:10.770Z")

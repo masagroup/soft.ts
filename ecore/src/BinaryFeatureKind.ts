@@ -23,47 +23,47 @@ export enum BinaryFeatureKind {
 
 export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryFeatureKind {
     if (isEReference(eFeature)) {
-        if (eFeature.isContainment) {
-            if (eFeature.isResolveProxies) {
+        if (eFeature.isContainment()) {
+            if (eFeature.isResolveProxies()) {
                 if (eFeature.isMany) {
                     return BinaryFeatureKind.bfkObjectContainmentListProxy
                 } else {
                     return BinaryFeatureKind.bfkObjectContainmentProxy
                 }
             } else {
-                if (eFeature.isMany) {
+                if (eFeature.isMany()) {
                     return BinaryFeatureKind.bfkObjectContainmentList
                 } else {
                     return BinaryFeatureKind.bfkObjectContainment
                 }
             }
-        } else if (eFeature.isContainer) {
-            if (eFeature.isResolveProxies) {
+        } else if (eFeature.isContainer()) {
+            if (eFeature.isResolveProxies()) {
                 return BinaryFeatureKind.bfkObjectContainerProxy
             } else {
                 return BinaryFeatureKind.bfkObjectContainer
             }
-        } else if (eFeature.isResolveProxies) {
-            if (eFeature.isMany) {
+        } else if (eFeature.isResolveProxies()) {
+            if (eFeature.isMany()) {
                 return BinaryFeatureKind.bfkObjectListProxy
             } else {
                 return BinaryFeatureKind.bfkObjectProxy
             }
         } else {
-            if (eFeature.isMany) {
+            if (eFeature.isMany()) {
                 return BinaryFeatureKind.bfkObjectList
             } else {
                 return BinaryFeatureKind.bfkObject
             }
         }
     } else if (isEAttribute(eFeature)) {
-        if (eFeature.isMany) {
+        if (eFeature.isMany()) {
             return BinaryFeatureKind.bfkDataList
         } else {
-            let eDataType = eFeature.eAttributeType
+            let eDataType = eFeature.getEAttributeType()
             if (isEEnum(eDataType)) return BinaryFeatureKind.bfkEnum
 
-            switch (eDataType.instanceTypeName) {
+            switch (eDataType.getInstanceTypeName()) {
                 case "number":
                 case "java.lang.Double":
                 case "java.lang.Float":

@@ -201,9 +201,9 @@ export class BinaryEncoder implements EEncoder {
         } else {
             ePackageData = new PackageData()
             ePackageData.id = this._packageDataMap.size
-            ePackageData.classData = new Array(ePackage.eClassifiers.size())
+            ePackageData.classData = new Array(ePackage.getEClassifiers().size())
             this.encodeNumber(ePackageData.id)
-            this.encodeString(ePackage.nsURI)
+            this.encodeString(ePackage.getNsURI())
             this.encodeURI(EcoreUtils.getURI(ePackage))
             this._packageDataMap.set(ePackage, ePackageData)
         }
@@ -218,7 +218,7 @@ export class BinaryEncoder implements EEncoder {
         } else {
             eClassData = this.newClassData(eClass)
             this.encodeNumber(eClassData.id)
-            this.encodeString(eClass.name)
+            this.encodeString(eClass.getName())
             this._classDataMap.set(eClass, eClassData)
         }
         return eClassData
@@ -331,8 +331,8 @@ export class BinaryEncoder implements EEncoder {
     }
 
     private newClassData(eClass: EClass): ClassData {
-        let eFeatures = eClass.eAllStructuralFeatures
-        let ePackageData = this.encodePackage(eClass.ePackage)
+        let eFeatures = eClass.getEAllStructuralFeatures()
+        let ePackageData = this.encodePackage(eClass.getEPackage())
         let eClassData = new ClassData(this.newClassID(ePackageData), ePackageData.id)
         ePackageData.classData[eClassData.id] = eClassData
         for (const eFeature of eFeatures) {
@@ -343,18 +343,17 @@ export class BinaryEncoder implements EEncoder {
 
     private newFeatureData(eFeature: EStructuralFeature): FeatureData {
         let eFeatureData = new FeatureData()
-        eFeatureData.name = eFeature.name
+        eFeatureData.name = eFeature.getName()
         eFeatureData.featureKind = getBinaryCodecFeatureKind(eFeature)
         if (isEReference(eFeature)) {
             let eReference = eFeature as EReference
-            eFeatureData.isTransient =
-                eReference.isTransient || (eReference.isContainer && !eReference.isResolveProxies)
+            eFeatureData.isTransient = eReference.isTransient() || (eReference.isContainer && !eReference.isResolveProxies())
         } else if (isEAttribute(eFeature)) {
             let eAttribute = eFeature as EAttribute
-            let eDataType = eAttribute.eAttributeType
-            eFeatureData.isTransient = eAttribute.isTransient
+            let eDataType = eAttribute.getEAttributeType()
+            eFeatureData.isTransient = eAttribute.isTransient()
             eFeatureData.dataType = eDataType
-            eFeatureData.factory = eDataType.ePackage.eFactoryInstance
+            eFeatureData.factory = eDataType.getEPackage().getEFactoryInstance()
         }
         return eFeatureData
     }

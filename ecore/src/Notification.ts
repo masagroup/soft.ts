@@ -40,7 +40,7 @@ export class Notification extends AbstractNotification {
 
     get featureID(): number {
         if (this._featureID != -1) return this._featureID
-        if (this._feature != null) return this._feature.featureID
+        if (this._feature != null) return this._feature.getFeatureID()
         return -1
     }
 

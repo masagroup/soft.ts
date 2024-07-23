@@ -10,21 +10,22 @@
 import { EClassifier, EcoreConstants, EDataType, EDataTypeImpl, EventType, Notification } from "./internal.js"
 
 export function isEDataType(e: EClassifier): e is EDataType {
-    return e == undefined ? undefined : "isSerializable" in e
+    return e == undefined ? undefined : typeof e["isSerializable"] === "function"
 }
 
 export interface EDataTypeInternal extends EDataType {
-    defaultValue: any
+    getDefaultValue(): any
+    setDefaultValue(newDefaultValue: any) : void
 }
 
 export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
     private _defaultValue: any
 
-    get defaultValue(): any {
+    getDefaultValue(): any {
         return this._defaultValue
     }
 
-    set defaultValue(newDefaultValue: any) {
+    setDefaultValue(newDefaultValue: any) : void {
         let oldDefaultValue = this._defaultValue
         this._defaultValue = newDefaultValue
         if (this.eNotificationRequired) {

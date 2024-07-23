@@ -82,15 +82,15 @@ describe("EcoreUtils", () => {
             let ePackage = getEcoreFactory().createEPackage()
             let eFactory = getEcoreFactory().createEFactory()
             let eClass = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.add(eClass)
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().add(eClass)
             let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
             let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
             // the model
             let eObject = eFactory.create(eClass)
@@ -109,15 +109,15 @@ describe("EcoreUtils", () => {
             let ePackage = getEcoreFactory().createEPackage()
             let eFactory = getEcoreFactory().createEFactory()
             let eClass = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.add(eClass)
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().add(eClass)
             let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
             let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
             // the model
             let eObject1 = eFactory.create(eClass)
@@ -139,22 +139,22 @@ describe("EcoreUtils", () => {
             let eFactory = getEcoreFactory().createEFactory()
             let eClass1 = getEcoreFactory().createEClass()
             let eClass2 = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
 
             let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
             let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass2.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass2.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
             let eReference1 = getEcoreFactory().createEReference()
-            eReference1.name = "reference1"
-            eReference1.isContainment = true
-            eReference1.eType = eClass2
-            eClass1.eStructuralFeatures.add(eReference1)
+            eReference1.setName("reference1")
+            eReference1.setContainment(true)
+            eReference1.setEType(eClass2)
+            eClass1.getEStructuralFeatures().add(eReference1)
 
             // the model
             let eObject1 = eFactory.create(eClass1)
@@ -176,26 +176,26 @@ describe("EcoreUtils", () => {
             let eFactory = getEcoreFactory().createEFactory()
             let eClass1 = getEcoreFactory().createEClass()
             let eClass2 = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
-
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
+            
             let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
             let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass2.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass2.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
             let eReference1 = getEcoreFactory().createEReference()
-            eReference1.name = "reference1"
-            eReference1.isContainment = true
-            eReference1.eType = eClass2
+            eReference1.setName("reference1")
+            eReference1.setContainment(true)
+            eReference1.setEType(eClass2)
             let eReference2 = getEcoreFactory().createEReference()
-            eReference2.name = "reference2"
-            eReference2.isContainment = false
-            eReference2.eType = eClass2
-            eClass1.eStructuralFeatures.addAll(new ImmutableEList<EReference>([eReference1, eReference2]))
+            eReference2.setName("reference2")
+            eReference2.setContainment(false)
+            eReference2.setEType(eClass2)
+            eClass1.getEStructuralFeatures().addAll(new ImmutableEList<EReference>([eReference1, eReference2]))
 
             // the model
             let eObject1 = eFactory.create(eClass1)
@@ -216,8 +216,8 @@ describe("EcoreUtils", () => {
             let ePackage = getEcoreFactory().createEPackage()
             let eFactory = getEcoreFactory().createEFactory()
             let eClass = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.add(eClass)
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().add(eClass)
 
             // the model
             let eObject = eFactory.create(eClass)

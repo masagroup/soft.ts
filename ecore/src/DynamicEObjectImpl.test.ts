@@ -53,7 +53,7 @@ describe("DynamicEObjectImpl", () => {
     test("getSet", () => {
         let c = getEcoreFactory().createEClass()
         let a = getEcoreFactory().createEAttribute()
-        c.eStructuralFeatures.add(a)
+        c.getEStructuralFeatures().add(a)
 
         let o = new DynamicEObjectImpl()
         o.setEClass(c)
@@ -67,7 +67,7 @@ describe("DynamicEObjectImpl", () => {
     test("unset", () => {
         let c = getEcoreFactory().createEClass()
         let a = getEcoreFactory().createEAttribute()
-        c.eStructuralFeatures.add(a)
+        c.getEStructuralFeatures().add(a)
 
         let o = new DynamicEObjectImpl()
         o.setEClass(c)
@@ -80,18 +80,18 @@ describe("DynamicEObjectImpl", () => {
 
     test("container", () => {
         let r1 = getEcoreFactory().createEReference()
-        r1.isContainment = true
-        r1.name = "ref"
+        r1.setContainment(true)
+        r1.setName("ref")
 
         let r2 = getEcoreFactory().createEReference()
-        r2.eOpposite = r1
-        r2.name = "parent"
+        r2.setEOpposite(r1)
+        r2.setName("parent")
 
         let c1 = getEcoreFactory().createEClass()
-        c1.eStructuralFeatures.add(r1)
+        c1.getEStructuralFeatures().add(r1)
 
         let c2 = getEcoreFactory().createEClass()
-        c2.eStructuralFeatures.add(r2)
+        c2.getEStructuralFeatures().add(r2)
 
         let o1 = new DynamicEObjectImpl()
         o1.setEClass(c1)
@@ -123,24 +123,24 @@ describe("DynamicEObjectImpl", () => {
         let c3 = getEcoreFactory().createEClass()
 
         let r1 = getEcoreFactory().createEReference()
-        r1.isContainment = true
-        r1.name = "r1"
-        r1.lowerBound = 0
-        r1.upperBound = -1
-        r1.eType = c2
+        r1.setContainment(true)
+        r1.setName("r1")
+        r1.setLowerBound(0)
+        r1.setUpperBound(-1)
+        r1.setEType(c2)
 
         let r3 = getEcoreFactory().createEReference()
-        r3.name = "r3;"
-        r3.eType = c2
-        r3.isResolveProxies = true
+        r3.setName("r3")
+        r3.setEType(c2)
+        r3.setResolveProxies(true)
 
-        c1.eStructuralFeatures.add(r1)
-        c1.name = "c1"
+        c1.getEStructuralFeatures().add(r1)
+        c1.setName("c1")
 
-        c2.name = "c2"
+        c2.setName("c2")
 
-        c3.eStructuralFeatures.add(r3)
-        c3.name = "c3"
+        c3.getEStructuralFeatures().add(r3)
+        c3.setName("c3")
 
         // model - a container object with two children and another object
         // with one of these child reference

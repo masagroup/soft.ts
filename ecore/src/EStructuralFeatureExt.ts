@@ -17,17 +17,17 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
     }
 
     // get the value of defaultValue
-    get defaultValue(): any {
-        let eType = this.eType
-        let defaultValueLiteral = this.defaultValueLiteral
+    getDefaultValue(): any {
+        let eType = this.getEType()
+        let defaultValueLiteral = this.getDefaultValueLiteral()
         if (eType && defaultValueLiteral.length == 0) {
             if (this.isMany) {
                 return null
             } else {
-                return eType.defaultValue
+                return eType.getDefaultValue()
             }
         } else if (isEDataType(eType)) {
-            let factory = eType.ePackage?.eFactoryInstance
+            let factory = eType.getEPackage()?.getEFactoryInstance()
             if (factory && factory != this._defaultValueFactory) {
                 if (eType.isSerializable) {
                     this._defaultValue = factory.createFromString(eType, defaultValueLiteral)
@@ -40,26 +40,22 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
     }
 
     // set the value of defaultValue
-    set defaultValue(newDefaultValue: any) {
-        let eType = this.eType
+    setDefaultValue(newDefaultValue: any) {
+        let eType = this.getEType()
         if (isEDataType(eType)) {
-            let factory = eType.ePackage.eFactoryInstance
+            let factory = eType.getEPackage().getEFactoryInstance()
             let literal = factory.convertToString(eType, newDefaultValue)
-            super.defaultValueLiteral = literal
+            super.setDefaultValue(literal)
             this._defaultValueFactory = null // reset default value
         } else {
             throw new Error("Cannot serialize value to object without an EDataType eType")
         }
     }
 
-    get defaultValueLiteral(): string {
-        return super.defaultValueLiteral
-    }
-
     // set the value of defaultValueLiteral
-    set defaultValueLiteral(newDefaultValueLiteral: string) {
+    setDefaultValueLiteral(newDefaultValueLiteral: string) {
         this._defaultValueFactory = null // reset default value
-        super.defaultValueLiteral = newDefaultValueLiteral
+        super.setDefaultValueLiteral(newDefaultValueLiteral)
     }
 
     get featureID(): number {
@@ -73,7 +69,7 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
 }
 
 export function isMapType(feature: EStructuralFeature): boolean {
-    return feature.eType && feature.eType.instanceTypeName == "@masagroup/ecore/EMapEntry"
+    return feature.getEType() && feature.getEType().getInstanceTypeName() == "@masagroup/ecore/EMapEntry"
 }
 
 export function isEStructuralFeature(o: any): o is EStructuralFeature {

@@ -43,7 +43,7 @@ class NotifyingListTest<E> extends AbstractNotifyingList<E> {
 
         when(this._mockNotifier.eDeliver).thenReturn(true)
         when(this._mockNotifier.eAdapters).thenReturn(new ImmutableEList([this._adapter]))
-        when(this._mockFeature.featureID).thenReturn(0)
+        when(this._mockFeature.getFeatureID()).thenReturn(0)
     }
 
     get mockNotifier(): ENotifier {
@@ -67,7 +67,7 @@ class NotifyingListTest<E> extends AbstractNotifyingList<E> {
     }
 
     get featureID(): number {
-        return this._feature.featureID
+        return this._feature.getFeatureID()
     }
 
     get chain(): ENotificationChain {

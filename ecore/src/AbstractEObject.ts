@@ -146,7 +146,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 return feature
             } else {
                 let reference = this.eClass().getEStructuralFeature(containerFeatureID) as EReference
-                return reference.eOpposite
+                return reference.getEOpposite()
             }
         }
         return null
@@ -184,9 +184,9 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     eFeatureID(feature: EStructuralFeature): number {
-        if (!this.eClass().eAllStructuralFeatures.contains(feature))
-            throw new Error("The feature '" + feature.name + "' is not a valid feature")
-        return this.eDerivedFeatureID(feature.eContainer(), feature.featureID)
+        if (!this.eClass().getEAllStructuralFeatures().contains(feature))
+            throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
+        return this.eDerivedFeatureID(feature.eContainer(), feature.getFeatureID())
     }
 
     eDerivedFeatureID(container: EObject, featureID: number): number {
@@ -194,10 +194,10 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     eOperationID(operation: EOperation): number {
-        if (!this.eClass().eAllOperations.contains(operation)) {
-            throw new Error("The operation '" + operation.name + "' is not a valid feature")
+        if (!this.eClass().getEAllOperations().contains(operation)) {
+            throw new Error("The operation '" + operation.getName() + "' is not a valid feature")
         }
-        return this.eDerivedOperationID(operation.eContainer(), operation.operationID)
+        return this.eDerivedOperationID(operation.eContainer(), operation.getOperationID())
     }
 
     eDerivedOperationID(container: EObject, operationID: number): number {
@@ -217,7 +217,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (featureID >= 0) {
             return this.eGetFromID(featureID, resolve)
         }
-        throw new Error("The feature '" + feature.name + "' is not a valid feature")
+        throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
@@ -259,8 +259,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         result = this.eDynamicPropertiesCreateList(dynamicFeature)
                     }
                     properties.eDynamicSet(dynamicFeatureID, result)
-                } else if (dynamicFeature.defaultValue) {
-                    result = dynamicFeature.defaultValue
+                } else if (dynamicFeature.getDefaultValue()) {
+                    result = dynamicFeature.getDefaultValue()
                 }
             } else if (resolve && isProxy(dynamicFeature)) {
                 if (isEObject(result)) {
@@ -291,7 +291,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                 }
                             } else {
                                 let dynamicReference = dynamicFeature as EReference
-                                let reverseFeature = dynamicReference.eOpposite
+                                let reverseFeature = dynamicReference.getEOpposite()
                                 if (oldValue) {
                                     let oldObject = oldValue as EObjectInternal
                                     let featureID = oldObject.eClass().getFeatureID(reverseFeature)
@@ -319,20 +319,20 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     private eDynamicPropertiesCreateMap(feature: EStructuralFeature): any {
-        let eClass = feature.eType as EClass
+        let eClass = feature.getEType() as EClass
         return new BasicEObjectMap<any, any>(eClass)
     }
 
     private eDynamicPropertiesCreateList(feature: EStructuralFeature): any {
         if (isEAttribute(feature)) {
-            return new BasicEList([], feature.isUnique)
+            return new BasicEList([], feature.isUnique())
         } else if (isEReference(feature)) {
             let inverse = false
             let opposite = false
             let reverseID = -1
-            let reverseFeature = feature.eOpposite
+            let reverseFeature = feature.getEOpposite()
             if (reverseFeature) {
-                reverseID = reverseFeature.featureID
+                reverseID = reverseFeature.getFeatureID()
                 inverse = true
                 opposite = true
             } else if (feature.isContainment) {
@@ -341,13 +341,13 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
             return new BasicEObjectList(
                 this,
-                feature.featureID,
+                feature.getFeatureID(),
                 reverseID,
-                feature.isContainment,
+                feature.isContainment(),
                 inverse,
                 opposite,
-                feature.isResolveProxies,
-                feature.isUnsettable
+                feature.isResolveProxies(),
+                feature.isUnsettable()
             )
         }
         return null
@@ -358,7 +358,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (featureID >= 0) {
             this.eSetFromID(featureID, newValue)
         } else {
-            throw new Error("The feature '" + feature.name + "' is not a valid feature")
+            throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
         }
     }
 
@@ -397,7 +397,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     notifications = this.eBasicRemoveFromContainer(notifications)
                 }
                 if (newContainer) {
-                    let reverseFeature = (dynamicFeature as EReference).eOpposite
+                    let reverseFeature = (dynamicFeature as EReference).getEOpposite()
                     let featureID = newContainer.eClass().getFeatureID(reverseFeature)
                     notifications = newContainer.eInverseAdd(this, featureID, notifications)
                 }
@@ -430,7 +430,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     }
                 } else {
                     let dynamicReference = dynamicFeature as EReference
-                    let reverseFeature = dynamicReference.eOpposite
+                    let reverseFeature = dynamicReference.getEOpposite()
                     if (oldObject) {
                         let featureID = oldObject.eClass().getFeatureID(reverseFeature)
                         notifications = oldObject.eInverseRemove(this, featureID, notifications)
@@ -475,7 +475,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (featureID >= 0) {
             return this.eIsSetFromID(featureID)
         }
-        throw new Error("The feature '" + feature.name + "' is not a valid feature")
+        throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
     }
 
     eIsSetFromID(featureID: number): boolean {
@@ -514,7 +514,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (featureID >= 0) {
             this.eUnsetFromID(featureID)
         } else {
-            throw new Error("The feature '" + feature.name + "' is not a valid feature")
+            throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
         }
     }
 
@@ -569,7 +569,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     }
                 } else {
                     let dynamicReference = dynamicFeature as EReference
-                    let reverseFeature = dynamicReference.eOpposite
+                    let reverseFeature = dynamicReference.getEOpposite()
                     if (oldObject) {
                         let featureID = oldObject.eClass().getFeatureID(reverseFeature)
                         notifications = oldObject.eInverseRemove(this, featureID, notifications)
@@ -608,7 +608,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (operationID >= 0) {
             return this.eInvokeFromID(operationID, args)
         }
-        throw new Error("The operation '" + operation.name + "' is not a valid operation")
+        throw new Error("The operation '" + operation.getName() + "' is not a valid operation")
     }
 
     eInvokeFromID(operationID: number, args: EList<any>): any {
@@ -674,7 +674,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                 } else if (isBidirectional(dynamicFeature)) {
                     let dynamicReference = dynamicFeature as EReference
-                    let reverseFeature = dynamicReference.eOpposite
+                    let reverseFeature = dynamicReference.getEOpposite()
                     let featureID = oldObject.eClass().getFeatureID(reverseFeature)
                     notifications = oldObject.eInverseRemove(this, featureID, notifications)
                 }
@@ -843,11 +843,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     protected eBasicRemoveFromContainerFeature(notifications: ENotificationChain): ENotificationChain {
         let feature = this.eClass().getEStructuralFeature(this.eInternalContainerFeatureID())
         if (isEReference(feature)) {
-            let inverseFeature = feature.eOpposite
+            let inverseFeature = feature.getEOpposite()
             if (inverseFeature) {
                 let eContainer = this.eInternalContainer()
                 if (isEObjectInternal(eContainer))
-                    return eContainer.eInverseRemove(this, inverseFeature.featureID, notifications)
+                    return eContainer.eInverseRemove(this, inverseFeature.getFeatureID(), notifications)
             }
         }
         return notifications
@@ -881,7 +881,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string {
         let s = "@"
-        s += feature.name
+        s += feature.getName()
         if (feature.isMany) {
             let v = this.eGetResolve(feature, false)
             let i = (v as EList<EObject>).indexOf(o)

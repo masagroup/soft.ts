@@ -10,31 +10,24 @@
 import { EAttribute, EAttributeImpl, EClassExt, EcoreConstants, EDataType, EStructuralFeature } from "./internal.js"
 
 export function isEAttribute(s: EStructuralFeature): s is EAttribute {
-    return "eAttributeType" in s
+    return s == undefined ? undefined : typeof s["getEAttributeType"] === "function"
 }
 
 export class EAttributeExt extends EAttributeImpl {
-    constructor() {
-        super()
-    }
-
-    get eAttributeType(): EDataType {
-        return this.eType as EDataType
+    
+    getEAttributeType(): EDataType {
+        return this.getEType() as EDataType
     }
 
     basicGetEAttributeType(): EDataType {
         return this.basicGetEType() as EDataType
     }
 
-    get isID(): boolean {
-        return super.isID
-    }
-
-    set isID(newIsID: boolean) {
-        super.isID = newIsID
-        let eClass = this.eContainingClass
+    setID(newIsID: boolean) {
+        super.setID(newIsID)
+        let eClass = this.getEContainingClass()
         if (eClass != null) {
-            ;(eClass as EClassExt).setModified(EcoreConstants.ECLASS__EATTRIBUTES)
+            (eClass as EClassExt).setModified(EcoreConstants.ECLASS__EATTRIBUTES)
         }
     }
 }

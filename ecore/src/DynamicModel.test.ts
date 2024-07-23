@@ -50,58 +50,58 @@ class DynamicMetaModel {
         this.bookStoreEFactory = getEcoreFactory().createEFactory()
 
         this.bookStoreEPackage = getEcoreFactory().createEPackage()
-        this.bookStoreEPackage.name = "BookStorePackage"
-        this.bookStoreEPackage.nsPrefix = "bookStore"
-        this.bookStoreEPackage.nsURI = "http:///cothis.ibthis.dynamic.example.bookstore.ecore"
-        this.bookStoreEPackage.eFactoryInstance = this.bookStoreEFactory
+        this.bookStoreEPackage.setName("BookStorePackage")
+        this.bookStoreEPackage.setNsPrefix("bookStore")
+        this.bookStoreEPackage.setNsURI("http:///cothis.ibthis.dynamic.example.bookstore.ecore")
+        this.bookStoreEPackage.setEFactoryInstance(this.bookStoreEFactory)
 
         /*
          * Create attributes for BookStore class as specified in the model
          */
         this.bookStoreOwner = getEcoreFactory().createEAttribute()
-        this.bookStoreOwner.name = "owner"
-        this.bookStoreOwner.eType = getEcorePackage().getEString()
+        this.bookStoreOwner.setName("owner")
+        this.bookStoreOwner.setEType(getEcorePackage().getEString())
 
         this.bookStoreLocation = getEcoreFactory().createEAttribute()
-        this.bookStoreLocation.name = "location"
-        this.bookStoreLocation.eType = getEcorePackage().getEString()
+        this.bookStoreLocation.setName("location")
+        this.bookStoreLocation.setEType(getEcorePackage().getEString())
 
         this.bookStoreBooks = getEcoreFactory().createEReference()
-        this.bookStoreBooks.name = "books"
-        this.bookStoreBooks.eType = this.bookEClass
-        this.bookStoreBooks.upperBound = UNBOUNDED_MULTIPLICITY
-        this.bookStoreBooks.isContainment = true
+        this.bookStoreBooks.setName("books")
+        this.bookStoreBooks.setEType(this.bookEClass)
+        this.bookStoreBooks.setUpperBound(UNBOUNDED_MULTIPLICITY)
+        this.bookStoreBooks.setContainment(true)
 
         /*
          * Create attributes for Book class as defined in the model
          */
         this.bookName = getEcoreFactory().createEAttribute()
-        this.bookName.name = "name"
-        this.bookName.eType = getEcorePackage().getEString()
+        this.bookName.setName("name")
+        this.bookName.setEType(getEcorePackage().getEString())
 
         this.bookISBN = getEcoreFactory().createEAttribute()
-        this.bookISBN.name = "isbn"
-        this.bookISBN.eType = getEcorePackage().getEInt()
+        this.bookISBN.setName("isbn")
+        this.bookISBN.setEType(getEcorePackage().getEInt())
 
         /*
          * Add owner, location and books attributes/references
          * to BookStore class
          */
-        this.bookStoreEClass.eStructuralFeatures.add(this.bookStoreOwner)
-        this.bookStoreEClass.eStructuralFeatures.add(this.bookStoreLocation)
-        this.bookStoreEClass.eStructuralFeatures.add(this.bookStoreBooks)
+        this.bookStoreEClass.getEStructuralFeatures().add(this.bookStoreOwner)
+        this.bookStoreEClass.getEStructuralFeatures().add(this.bookStoreLocation)
+        this.bookStoreEClass.getEStructuralFeatures().add(this.bookStoreBooks)
 
         /*
          * Add name and isbn attributes to Book class
          */
-        this.bookEClass.eStructuralFeatures.add(this.bookName)
-        this.bookEClass.eStructuralFeatures.add(this.bookISBN)
+        this.bookEClass.getEStructuralFeatures().add(this.bookName)
+        this.bookEClass.getEStructuralFeatures().add(this.bookISBN)
 
         /*
          * Place BookStore and Book classes in bookStoreEPackage
          */
-        this.bookStoreEPackage.eClassifiers.add(this.bookStoreEClass)
-        this.bookStoreEPackage.eClassifiers.add(this.bookEClass)
+        this.bookStoreEPackage.getEClassifiers().add(this.bookStoreEClass)
+        this.bookStoreEPackage.getEClassifiers().add(this.bookEClass)
     }
 }
 
@@ -113,7 +113,7 @@ class DynamicModel {
     constructor(mm: DynamicMetaModel) {
         this.mm = mm
 
-        let bookFactoryInstance = mm.bookStoreEPackage.eFactoryInstance
+        let bookFactoryInstance = mm.bookStoreEPackage.getEFactoryInstance()
         /*
          * Create dynamic instance of BookStoreEClass and BookEClass
          */

@@ -1,12 +1,8 @@
 import { EEnumLiteralImpl } from "./internal.js"
 
 export class EEnumLiteralExt extends EEnumLiteralImpl {
-    get literal(): string {
-        let l = super.literal
-        return l.length == 0 ? this.name : l
-    }
-
-    set literal(newLiteral: string) {
-        super.literal = newLiteral
+    getLiteral(): string {
+        let l = super.getLiteral()
+        return l.length == 0 ? this.getName(): l
     }
 }

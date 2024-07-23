@@ -389,31 +389,31 @@ export class BinaryDecoder implements EDecoder {
         if (isEClass(eClassifier)) {
             let classData = new ClassData()
             classData.eClass = eClassifier
-            classData.eFactory = ePackage.eFactoryInstance
+            classData.eFactory = ePackage.getEFactoryInstance()
             classData.featureData = new Array(eClassifier.getFeatureCount())
             return classData
         }
-        throw new Error(`Unable to find class ${className} in package  ${ePackage.nsURI}`)
+        throw new Error(`Unable to find class ${className} in package  ${ePackage.getNsURI()}`)
     }
 
     private newPackageData(ePackage: EPackage): PackageData {
         let packageData = new PackageData()
         packageData.ePackage = ePackage
-        packageData.eClassData = new Array(ePackage.eClassifiers.size())
+        packageData.eClassData = new Array(ePackage.getEClassifiers().size())
         return packageData
     }
 
     private newFeatureData(eClassData: ClassData, featureID: number): FeatureData {
         let eFeatureName = this.decodeString()
         let eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName)
-        if (!eFeature) throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.name} EClass`)
+        if (!eFeature) throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.getName()} EClass`)
         let featureData = new FeatureData()
         featureData.eFeature = eFeature
         featureData.featureID = featureID
         featureData.featureKind = getBinaryCodecFeatureKind(eFeature)
         if (isEAttribute(eFeature)) {
-            featureData.eDataType = eFeature.eAttributeType
-            featureData.eFactory = featureData.eDataType.ePackage.eFactoryInstance
+            featureData.eDataType = eFeature.getEAttributeType()
+            featureData.eFactory = featureData.eDataType.getEPackage().getEFactoryInstance()
         }
         return featureData
     }

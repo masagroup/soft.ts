@@ -9,12 +9,12 @@
 
 import { EAnnotation, EModelElementImpl, ENamedElement, EObject, EObjectList, EStructuralFeature } from "./internal.js"
 
-function isEAnnotation(eObject: EObject): eObject is EAnnotation {
-    return "details" in eObject
+function isEAnnotation(o: EObject): o is EAnnotation {
+    return o == undefined ? undefined : typeof o["getDetails"] === "function"
 }
 
-function isENamedElement(eObject: EObject): eObject is ENamedElement {
-    return "name" in eObject
+function isENamedElement(o: EObject): o is ENamedElement {
+    return o == undefined ? undefined : typeof o["getName"] === "function"
 }
 
 export class EModelElementExt extends EModelElementImpl {
@@ -25,7 +25,7 @@ export class EModelElementExt extends EModelElementImpl {
     getEAnnotation(source: string): EAnnotation {
         if (this._eAnnotations) {
             for (const annotation of this._eAnnotations) {
-                if (annotation.source == source) {
+                if (annotation.getSource() == source) {
                     return annotation
                 }
             }
@@ -65,8 +65,8 @@ export class EModelElementExt extends EModelElementImpl {
                             // Look for the annotation with the matching source.
                             for (const eObject of this.eContents()) {
                                 if (isEAnnotation(eObject)) {
-                                    let otherSource = eObject.source
-                                    if (eObject.source == source) {
+                                    let otherSource = eObject.getSource()
+                                    if (eObject.getSource() == source) {
                                         if (count == 0) {
                                             return eObject
                                         }
@@ -100,7 +100,7 @@ export class EModelElementExt extends EModelElementImpl {
 
                 for (const eObject of this.eContents()) {
                     if (isENamedElement(eObject)) {
-                        if (eObject.name == name) {
+                        if (eObject.getName() == name) {
                             if (count == 0) {
                                 return eObject
                             }
@@ -117,12 +117,12 @@ export class EModelElementExt extends EModelElementImpl {
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string {
         if (isENamedElement(o)) {
             let count = 0
-            let name = o.name
+            let name = o.getName()
             for (const otherObject of (this.eContents() as EObjectList<EObject>).getUnResolvedList()) {
                 if (otherObject == o) {
                     break
                 }
-                if (isENamedElement(otherObject) && otherObject.name == name) {
+                if (isENamedElement(otherObject) && otherObject.getName() == name) {
                     count++
                 }
             }
@@ -142,16 +142,16 @@ export class EModelElementExt extends EModelElementImpl {
                 if (otherObject == o) {
                     break
                 }
-                if (isEAnnotation(otherObject) && otherObject.source == o.source) {
+                if (isEAnnotation(otherObject) && otherObject.getSource() == o.getSource()) {
                     count++
                 }
             }
 
             let result = "%"
-            if (!o.source || o.source.length == 0) {
+            if (!o.getSource() || o.getSource().length == 0) {
                 result += "%"
             } else {
-                result += encodeURI(o.source)
+                result += encodeURI(o.getSource())
             }
             result += "%"
             if (count > 0) {

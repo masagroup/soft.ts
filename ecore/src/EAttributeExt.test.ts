@@ -19,7 +19,7 @@ describe("EAttributeExt", () => {
 
         let mockDataType = mock<EDataType>()
         let dataType = instance(mockDataType)
-        a.eType = dataType
+        a.setEType(dataType)
         expect(a.basicGetEAttributeType()).toBe(dataType)
     })
 })
