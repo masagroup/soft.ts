@@ -33,7 +33,7 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
     set publicationDate(newPublicationDate: Date) {
         let oldPublicationDate = this._publicationDate
         this._publicationDate = newPublicationDate
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,

@@ -61,7 +61,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     set address(newAddress: string) {
         let oldAddress = this._address
         this._address = newAddress
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -91,6 +91,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
         return this._books
     }
 
+    // set the value of books
+    set books(newBooks: ecore.EList<Book>) {
+        const l = this.books
+        l.clear()
+        l.addAll(newBooks)
+    }
+
     // get the value of borrowers
     get borrowers(): ecore.EList<Borrower> {
         if (this._borrowers == null) {
@@ -106,6 +113,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
             )
         }
         return this._borrowers
+    }
+
+    // set the value of borrowers
+    set borrowers(newBorrowers: ecore.EList<Borrower>) {
+        const l = this.borrowers
+        l.clear()
+        l.addAll(newBorrowers)
     }
 
     // get the value of branches
@@ -125,6 +139,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
         return this._branches
     }
 
+    // set the value of branches
+    set branches(newBranches: ecore.EList<Library>) {
+        const l = this.branches
+        l.clear()
+        l.addAll(newBranches)
+    }
+
     // get the value of employees
     get employees(): ecore.EList<Employee> {
         if (this._employees == null) {
@@ -142,6 +163,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
         return this._employees
     }
 
+    // set the value of employees
+    set employees(newEmployees: ecore.EList<Employee>) {
+        const l = this.employees
+        l.clear()
+        l.addAll(newEmployees)
+    }
+
     // get the value of name
     get name(): string {
         return this._name
@@ -151,7 +179,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     set name(newName: string) {
         let oldName = this._name
         this._name = newName
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.LIBRARY__NAME, oldName, newName)
             )
@@ -183,7 +211,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
             if (notifications != null) {
                 notifications.dispatch()
             }
-        } else if (this.eNotificationRequired) {
+        } else if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -206,6 +234,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
             this._people = null
         }
         return this._people
+    }
+
+    // set the value of people
+    set people(newPeople: ecore.EList<any>) {
+        const l = this.people
+        l.clear()
+        l.addAll(newPeople)
     }
 
     // get the value of proprietary
@@ -243,7 +278,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
         let oldProprietary = this._proprietary
         this._proprietary = newProprietary
         let notifications = msgs
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             let notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
@@ -277,6 +312,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
         return this._stock
     }
 
+    // set the value of stock
+    set stock(newStock: ecore.EList<Item>) {
+        const l = this.stock
+        l.clear()
+        l.addAll(newStock)
+    }
+
     // get the value of writers
     get writers(): ecore.EList<Writer> {
         if (this._writers == null) {
@@ -292,6 +334,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
             )
         }
         return this._writers
+    }
+
+    // set the value of writers
+    set writers(newWriters: ecore.EList<Writer>) {
+        const l = this.writers
+        l.clear()
+        l.addAll(newWriters)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
@@ -342,23 +391,27 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 break
             }
             case LibraryConstants.LIBRARY__BOOKS: {
-                this.books.clear()
-                this.books.addAll(newValue as ecore.EList<Book>)
+                const list = this.books
+                list.clear()
+                list.addAll(newValue as ecore.EList<Book>)
                 break
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                this.borrowers.clear()
-                this.borrowers.addAll(newValue as ecore.EList<Borrower>)
+                const list = this.borrowers
+                list.clear()
+                list.addAll(newValue as ecore.EList<Borrower>)
                 break
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                this.branches.clear()
-                this.branches.addAll(newValue as ecore.EList<Library>)
+                const list = this.branches
+                list.clear()
+                list.addAll(newValue as ecore.EList<Library>)
                 break
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                this.employees.clear()
-                this.employees.addAll(newValue as ecore.EList<Employee>)
+                const list = this.employees
+                list.clear()
+                list.addAll(newValue as ecore.EList<Employee>)
                 break
             }
             case LibraryConstants.LIBRARY__NAME: {
@@ -370,8 +423,9 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 break
             }
             case LibraryConstants.LIBRARY__PEOPLE: {
-                this.people.clear()
-                this.people.addAll(newValue as ecore.EList<any>)
+                const list = this.people
+                list.clear()
+                list.addAll(newValue as ecore.EList<any>)
                 break
             }
             case LibraryConstants.LIBRARY__PROPRIETARY: {
@@ -379,13 +433,15 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 break
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                this.stock.clear()
-                this.stock.addAll(newValue as ecore.EList<Item>)
+                const list = this.stock
+                list.clear()
+                list.addAll(newValue as ecore.EList<Item>)
                 break
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                this.writers.clear()
-                this.writers.addAll(newValue as ecore.EList<Writer>)
+                const list = this.writers
+                list.clear()
+                list.addAll(newValue as ecore.EList<Writer>)
                 break
             }
             default: {
@@ -452,16 +508,16 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 return this._address != ""
             }
             case LibraryConstants.LIBRARY__BOOKS: {
-                return this.books != null && this.books.size() != 0
+                return this._books && !this._books.isEmpty()
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                return this.borrowers != null && this.borrowers.size() != 0
+                return this._borrowers && !this._borrowers.isEmpty()
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                return this.branches != null && this.branches.size() != 0
+                return this._branches && !this._branches.isEmpty()
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                return this.employees != null && this.employees.size() != 0
+                return this._employees && !this._employees.isEmpty()
             }
             case LibraryConstants.LIBRARY__NAME: {
                 return this._name != ""
@@ -470,16 +526,16 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 return this.parentBranch != null
             }
             case LibraryConstants.LIBRARY__PEOPLE: {
-                return this.people != null && this.people.size() != 0
+                return this._people && !this._people.isEmpty()
             }
             case LibraryConstants.LIBRARY__PROPRIETARY: {
                 return this._proprietary != null
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                return this.stock != null && this.stock.size() != 0
+                return this._stock && !this._stock.isEmpty()
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                return this.writers != null && this.writers.size() != 0
+                return this._writers && !this._writers.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

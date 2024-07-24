@@ -27,14 +27,24 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
 
     // get the value of key
     get key(): string {
-        return this._key
+        return this.getKey()
     }
 
     // set the value of key
     set key(newKey: string) {
+        this.setKey(newKey)
+    }
+
+    // get the value of key
+    getKey(): string {
+        return this._key
+    }
+
+    // set the value of key
+    setKey(newKey: string): void {
         let oldKey = this._key
         this._key = newKey
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK_INDEX__KEY, oldKey, newKey)
             )
@@ -43,10 +53,27 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
 
     // get the value of value
     get value(): ecore.EList<number> {
+        return this.getValue()
+    }
+
+    // set the value of value
+    set value(newValue: ecore.EList<number>) {
+        this.setValue(newValue)
+    }
+
+    // get the value of value
+    getValue(): ecore.EList<number> {
         if (this._value == null) {
             this._value = new ecore.BasicEDataTypeList<number>(this, LibraryConstants.BOOK_INDEX__VALUE)
         }
         return this._value
+    }
+
+    // set the value of value
+    setValue(newValue: ecore.EList<number>) {
+        const l = this.value
+        l.clear()
+        l.addAll(newValue)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
@@ -70,8 +97,9 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
                 break
             }
             case LibraryConstants.BOOK_INDEX__VALUE: {
-                this.value.clear()
-                this.value.addAll(newValue as ecore.EList<number>)
+                const list = this.value
+                list.clear()
+                list.addAll(newValue as ecore.EList<number>)
                 break
             }
             default: {
@@ -102,7 +130,7 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
                 return this._key != ""
             }
             case LibraryConstants.BOOK_INDEX__VALUE: {
-                return this.value != null && this.value.size() != 0
+                return this._value && !this._value.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

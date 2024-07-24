@@ -31,7 +31,7 @@ export class EmployeeImpl extends PersonImpl implements Employee {
             let newManager = this.eResolveProxy(oldManager) as Employee
             this._manager = newManager
             if (newManager != oldManager) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
                             this,
@@ -51,7 +51,7 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     set manager(newManager: Employee) {
         let oldManager = this._manager
         this._manager = newManager
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,

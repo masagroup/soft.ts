@@ -347,7 +347,8 @@ export class BinaryEncoder implements EEncoder {
         eFeatureData.featureKind = getBinaryCodecFeatureKind(eFeature)
         if (isEReference(eFeature)) {
             let eReference = eFeature as EReference
-            eFeatureData.isTransient = eReference.isTransient() || (eReference.isContainer() && !eReference.isResolveProxies())
+            eFeatureData.isTransient =
+                eReference.isTransient() || (eReference.isContainer() && !eReference.isResolveProxies())
         } else if (isEAttribute(eFeature)) {
             let eAttribute = eFeature as EAttribute
             let eDataType = eAttribute.getEAttributeType()

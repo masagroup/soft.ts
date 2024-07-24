@@ -17,7 +17,6 @@ export interface Book extends CirculatingItem {
     title: string
     pages: number
     category: BookCategory
-    unSetCategory(): void
     readonly tableOfContents: ecore.EList<string>
 
     // References

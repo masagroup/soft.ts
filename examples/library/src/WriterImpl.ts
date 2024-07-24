@@ -41,6 +41,13 @@ export class WriterImpl extends PersonImpl implements Writer {
         return this._books
     }
 
+    // set the value of books
+    set books(newBooks: ecore.EList<Book>) {
+        const l = this.books
+        l.clear()
+        l.addAll(newBooks)
+    }
+
     // get the value of name
     get name(): string {
         throw new Error("get name not implemented")
@@ -54,7 +61,8 @@ export class WriterImpl extends PersonImpl implements Writer {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                return !resolve && ecore.isEObjectList(this.books) ? this.books.getUnResolvedList() : this.books
+                const list = this.books
+                return !resolve && ecore.isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case LibraryConstants.WRITER__NAME: {
                 return this.name
@@ -68,8 +76,9 @@ export class WriterImpl extends PersonImpl implements Writer {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                this.books.clear()
-                this.books.addAll(newValue as ecore.EList<Book>)
+                const list = this.books
+                list.clear()
+                list.addAll(newValue as ecore.EList<Book>)
                 break
             }
             case LibraryConstants.WRITER__NAME: {
@@ -101,7 +110,7 @@ export class WriterImpl extends PersonImpl implements Writer {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                return this.books != null && this.books.size() != 0
+                return this._books && !this._books.isEmpty()
             }
             case LibraryConstants.WRITER__NAME: {
                 return this.name != ""

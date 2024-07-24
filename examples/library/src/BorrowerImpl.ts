@@ -41,12 +41,18 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
         return this._borrowed
     }
 
+    // set the value of borrowed
+    set borrowed(newBorrowed: ecore.EList<Lendable>) {
+        const l = this.borrowed
+        l.clear()
+        l.addAll(newBorrowed)
+    }
+
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                return !resolve && ecore.isEObjectList(this.borrowed)
-                    ? this.borrowed.getUnResolvedList()
-                    : this.borrowed
+                const list = this.borrowed
+                return !resolve && ecore.isEObjectList(list) ? list.getUnResolvedList() : list
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -57,8 +63,9 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                this.borrowed.clear()
-                this.borrowed.addAll(newValue as ecore.EList<Lendable>)
+                const list = this.borrowed
+                list.clear()
+                list.addAll(newValue as ecore.EList<Lendable>)
                 break
             }
             default: {
@@ -82,7 +89,7 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                return this.borrowed != null && this.borrowed.size() != 0
+                return this._borrowed && !this._borrowed.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

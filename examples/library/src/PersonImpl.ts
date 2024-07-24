@@ -37,7 +37,7 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     set address(newAddress: string) {
         let oldAddress = this._address
         this._address = newAddress
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -59,7 +59,7 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     set firstName(newFirstName: string) {
         let oldFirstName = this._firstName
         this._firstName = newFirstName
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -81,7 +81,7 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     set lastName(newLastName: string) {
         let oldLastName = this._lastName
         this._lastName = newLastName
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,

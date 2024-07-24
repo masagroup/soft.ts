@@ -41,7 +41,7 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
             let newAuthor = this.eResolveProxy(oldAuthor) as Writer
             this._author = newAuthor
             if (newAuthor != oldAuthor) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
                             this,
@@ -61,7 +61,7 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     set author(newAuthor: Writer) {
         let oldAuthor = this._author
         this._author = newAuthor
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -86,7 +86,7 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
             let newReader = this.eResolveProxy(oldReader) as Person
             this._reader = newReader
             if (newReader != oldReader) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
                             this,
@@ -106,7 +106,7 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     set reader(newReader: Person) {
         let oldReader = this._reader
         this._reader = newReader
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,

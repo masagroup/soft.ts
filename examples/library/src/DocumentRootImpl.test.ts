@@ -39,7 +39,7 @@ describe("DocumentRootImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.library = value
@@ -47,10 +47,10 @@ describe("DocumentRootImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("basicSetLibrary", () => {
@@ -61,7 +61,7 @@ describe("DocumentRootImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // notification chain
         let mockNotifications = mock<ecore.ENotificationChain>()
@@ -74,12 +74,12 @@ describe("DocumentRootImpl", () => {
         // checks
         verify(mockNotifications.add(anything())).once()
         const [notification] = capture(mockNotifications.add).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.eventType).toBe(ecore.EventType.SET)
-        expect(notification.featureID).toBe(LibraryConstants.DOCUMENT_ROOT__LIBRARY)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getEventType()).toBe(ecore.EventType.SET)
+        expect(notification.getFeatureID()).toBe(LibraryConstants.DOCUMENT_ROOT__LIBRARY)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getXMLNSPrefixMap", () => {
@@ -138,8 +138,8 @@ describe("DocumentRootImpl", () => {
             when(mockIterator.next())
                 .thenReturn({ value: entry, done: false })
                 .thenReturn({ value: undefined, done: true })
-            when(mockEntry.key).thenReturn(key)
-            when(mockEntry.value).thenReturn(value)
+            when(mockEntry.getKey()).thenReturn(key)
+            when(mockEntry.getValue()).thenReturn(value)
             o.eSetFromID(LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP, map)
             expect(o.xMLNSPrefixMap.toMap()).toEqual(new Map<string, string>([[key, value]]))
         }
@@ -156,8 +156,8 @@ describe("DocumentRootImpl", () => {
             when(mockIterator.next())
                 .thenReturn({ value: entry, done: false })
                 .thenReturn({ value: undefined, done: true })
-            when(mockEntry.key).thenReturn(key)
-            when(mockEntry.value).thenReturn(value)
+            when(mockEntry.getKey()).thenReturn(key)
+            when(mockEntry.getValue()).thenReturn(value)
             o.eSetFromID(LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION, map)
             expect(o.xSISchemaLocation.toMap()).toEqual(new Map<string, string>([[key, value]]))
         }

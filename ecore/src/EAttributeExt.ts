@@ -14,7 +14,6 @@ export function isEAttribute(s: EStructuralFeature): s is EAttribute {
 }
 
 export class EAttributeExt extends EAttributeImpl {
-    
     getEAttributeType(): EDataType {
         return this.getEType() as EDataType
     }
@@ -27,7 +26,7 @@ export class EAttributeExt extends EAttributeImpl {
         super.setID(newIsID)
         let eClass = this.getEContainingClass()
         if (eClass != null) {
-            (eClass as EClassExt).setModified(EcoreConstants.ECLASS__EATTRIBUTES)
+            ;(eClass as EClassExt).setModified(EcoreConstants.ECLASS__EATTRIBUTES)
         }
     }
 }

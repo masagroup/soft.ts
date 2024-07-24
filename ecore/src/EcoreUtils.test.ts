@@ -178,7 +178,7 @@ describe("EcoreUtils", () => {
             let eClass2 = getEcoreFactory().createEClass()
             ePackage.setEFactoryInstance(eFactory)
             ePackage.getEClassifiers().addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
-            
+
             let eAttribute1 = getEcoreFactory().createEAttribute()
             eAttribute1.setName("attribute1")
             eAttribute1.setEType(getEcorePackage().getEInt())

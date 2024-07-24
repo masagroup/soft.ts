@@ -31,10 +31,10 @@ export class EResourceConstants {
 
 export interface EResource extends ENotifier {
     getURI(): URI
-    setURI(uri : URI): void
+    setURI(uri: URI): void
 
     getObjectIDManager(): EObjectIDManager
-    setObjectIDManager(objectIDManager : EObjectIDManager): void
+    setObjectIDManager(objectIDManager: EObjectIDManager): void
 
     eResourceSet(): EResourceSet
     eContents(): EList<EObject>

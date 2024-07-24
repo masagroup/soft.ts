@@ -9,8 +9,8 @@
 
 export interface EMapEntry<K, V> {
     getKey(): K
-    setKey(k : K): void
+    setKey(k: K): void
 
     getValue(): V
-    setValue(v : V): void
+    setValue(v: V): void
 }

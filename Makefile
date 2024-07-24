@@ -88,7 +88,7 @@ library.install:
 .PHONY: library.generate
 library.generate:
 	@echo "[library.generate]"
-	@$(call GENERATE,examples,library.ecore,)
+	@$(call GENERATE,examples,library.ecore,-p accessors=property)
 
 .PHONY: library.format
 library.format:

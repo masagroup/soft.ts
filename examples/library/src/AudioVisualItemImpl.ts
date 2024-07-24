@@ -34,16 +34,16 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
         return getLibraryPackage().getAudioVisualItem()
     }
 
-    // get the value of isDamaged
+    // get the value of damaged
     get isDamaged(): boolean {
         return this._isDamaged
     }
 
-    // set the value of isDamaged
+    // set the value of damaged
     set isDamaged(newIsDamaged: boolean) {
         let oldIsDamaged = this._isDamaged
         this._isDamaged = newIsDamaged
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -65,7 +65,7 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
     set minutesLength(newMinutesLength: number) {
         let oldMinutesLength = this._minutesLength
         this._minutesLength = newMinutesLength
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -87,7 +87,7 @@ export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVis
     set title(newTitle: string) {
         let oldTitle = this._title
         this._title = newTitle
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,

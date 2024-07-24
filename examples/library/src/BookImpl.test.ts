@@ -46,7 +46,7 @@ describe("BookImpl", () => {
         // events
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set object resource
         let mockResourceSet = mock<ecore.EResourceSet>()
@@ -78,7 +78,7 @@ describe("BookImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // first value
         let mockValue = mock<WriterInternal>()
@@ -88,9 +88,9 @@ describe("BookImpl", () => {
         verify(mockAdapter.notifyChanged(anything())).once()
         {
             let [notification] = capture(mockAdapter.notifyChanged).last()
-            expect(notification.notifier).toBe(o)
-            expect(notification.oldValue).toBeNull()
-            expect(notification.newValue).toBe(value)
+            expect(notification.getNotifier()).toBe(o)
+            expect(notification.getOldValue()).toBeNull()
+            expect(notification.getNewValue()).toBe(value)
         }
 
         // set with other value
@@ -104,10 +104,10 @@ describe("BookImpl", () => {
         verify(mockAdapter.notifyChanged(anything())).once()
         {
             let [notification] = capture(mockAdapter.notifyChanged).last()
-            expect(notification.notifier).toBe(o)
-            expect(notification.oldValue).toBe(value)
-            expect(notification.newValue).toBe(other)
-            expect(notification.position).toBe(-1)
+            expect(notification.getNotifier()).toBe(o)
+            expect(notification.getOldValue()).toBe(value)
+            expect(notification.getNewValue()).toBe(other)
+            expect(notification.getPosition()).toBe(-1)
         }
     })
 
@@ -119,7 +119,7 @@ describe("BookImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // notification chain
         let mockNotifications = mock<ecore.ENotificationChain>()
@@ -132,12 +132,12 @@ describe("BookImpl", () => {
         // checks
         verify(mockNotifications.add(anything())).once()
         const [notification] = capture(mockNotifications.add).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.eventType).toBe(ecore.EventType.SET)
-        expect(notification.featureID).toBe(LibraryConstants.BOOK__AUTHOR)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getEventType()).toBe(ecore.EventType.SET)
+        expect(notification.getFeatureID()).toBe(LibraryConstants.BOOK__AUTHOR)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getCategory", () => {
@@ -153,7 +153,7 @@ describe("BookImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.category = value
@@ -161,30 +161,10 @@ describe("BookImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(BookCategory.MYSTERY)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
-    })
-
-    test("unsetCategory", () => {
-        let o = new BookImpl()
-
-        // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
-
-        // unset
-        o.unSetCategory()
-
-        // checks
-        verify(mockAdapter.notifyChanged(anything())).once()
-        const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.eventType).toBe(ecore.EventType.UNSET)
-        expect(notification.featureID).toBe(LibraryConstants.BOOK__CATEGORY)
-        expect(o.category).toBe(BookCategory.MYSTERY)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(BookCategory.MYSTERY)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getIndexes", () => {
@@ -205,7 +185,7 @@ describe("BookImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.pages = value
@@ -213,10 +193,10 @@ describe("BookImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(100)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(100)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getTableOfContents", () => {
@@ -237,7 +217,7 @@ describe("BookImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.title = value
@@ -245,10 +225,10 @@ describe("BookImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("eGetFromID", () => {
@@ -291,8 +271,8 @@ describe("BookImpl", () => {
             when(mockIterator.next())
                 .thenReturn({ value: entry, done: false })
                 .thenReturn({ value: undefined, done: true })
-            when(mockEntry.key).thenReturn(key)
-            when(mockEntry.value).thenReturn(value)
+            when(mockEntry.getKey()).thenReturn(key)
+            when(mockEntry.getValue()).thenReturn(value)
             o.eSetFromID(LibraryConstants.BOOK__INDEXES, map)
             expect(o.indexes.toMap()).toEqual(new Map<string, number>([[key, value]]))
         }

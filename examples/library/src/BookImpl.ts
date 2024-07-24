@@ -48,7 +48,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
             let newAuthor = this.eResolveProxy(oldAuthor) as Writer
             this._author = newAuthor
             if (newAuthor != oldAuthor) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
                             this,
@@ -91,7 +91,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         let oldAuthor = this._author
         this._author = newAuthor
         let notifications = msgs
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             let notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
@@ -117,7 +117,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     set category(newCategory: BookCategory) {
         let oldCategory = this._category
         this._category = newCategory
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -130,21 +130,19 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         }
     }
 
-    // unSetCategory unset the value of _category
-    unSetCategory(): void {
-        if (this.eNotificationRequired) {
-            this.eNotify(
-                new ecore.Notification(this, ecore.EventType.UNSET, LibraryConstants.BOOK__CATEGORY, null, null)
-            )
-        }
-    }
-
     // get the value of indexes
     get indexes(): ecore.EMap<string, number> {
         if (this._indexes == null) {
             this._indexes = new ecore.BasicEObjectMap<string, number>(getLibraryPackage().getBookIndex())
         }
         return this._indexes
+    }
+
+    // set the value of indexes
+    set indexes(newIndexes: ecore.EMap<string, number>) {
+        const l = this.indexes
+        l.clear()
+        l.addAll(newIndexes)
     }
 
     // get the value of pages
@@ -156,7 +154,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     set pages(newPages: number) {
         let oldPages = this._pages
         this._pages = newPages
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK__PAGES, oldPages, newPages)
             )
@@ -171,6 +169,13 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         return this._tableOfContents
     }
 
+    // set the value of tableOfContents
+    set tableOfContents(newTableOfContents: ecore.EList<string>) {
+        const l = this.tableOfContents
+        l.clear()
+        l.addAll(newTableOfContents)
+    }
+
     // get the value of title
     get title(): string {
         return this._title
@@ -180,7 +185,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     set title(newTitle: string) {
         let oldTitle = this._title
         this._title = newTitle
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK__TITLE, oldTitle, newTitle)
             )
@@ -196,7 +201,8 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 return this.category
             }
             case LibraryConstants.BOOK__INDEXES: {
-                return !resolve && ecore.isEObjectList(this.indexes) ? this.indexes.getUnResolvedList() : this.indexes
+                const list = this.indexes
+                return !resolve && ecore.isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case LibraryConstants.BOOK__PAGES: {
                 return this.pages
@@ -224,8 +230,9 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 break
             }
             case LibraryConstants.BOOK__INDEXES: {
-                this.indexes.clear()
-                this.indexes.addAll(newValue as ecore.EList<ecore.EMapEntry<string, number>>)
+                const list = this.indexes
+                list.clear()
+                list.addAll(newValue as ecore.EList<ecore.EMapEntry<string, number>>)
                 break
             }
             case LibraryConstants.BOOK__PAGES: {
@@ -233,8 +240,9 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 break
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                this.tableOfContents.clear()
-                this.tableOfContents.addAll(newValue as ecore.EList<string>)
+                const list = this.tableOfContents
+                list.clear()
+                list.addAll(newValue as ecore.EList<string>)
                 break
             }
             case LibraryConstants.BOOK__TITLE: {
@@ -254,7 +262,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 break
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                this.unSetCategory()
+                this.category = BookCategory.MYSTERY
                 break
             }
             case LibraryConstants.BOOK__INDEXES: {
@@ -288,13 +296,13 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 return this._category != BookCategory.MYSTERY
             }
             case LibraryConstants.BOOK__INDEXES: {
-                return this.indexes != null && this.indexes.size() != 0
+                return this._indexes && !this._indexes.isEmpty()
             }
             case LibraryConstants.BOOK__PAGES: {
                 return this._pages != 100
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                return this.tableOfContents != null && this.tableOfContents.size() != 0
+                return this._tableOfContents && !this._tableOfContents.isEmpty()
             }
             case LibraryConstants.BOOK__TITLE: {
                 return this._title != ""
@@ -313,8 +321,9 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
                 let msgs = notifications
-                if (ecore.isEObjectInternal(this.author)) {
-                    msgs = this.author.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, msgs)
+                const author = this.basicGetAuthor()
+                if (ecore.isEObjectInternal(author)) {
+                    msgs = author.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, msgs)
                 }
                 return this.basicSetAuthor(otherEnd as Writer, msgs)
             }

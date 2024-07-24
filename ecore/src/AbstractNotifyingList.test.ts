@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { anything, instance, mock, objectContaining, reset, verify, when, capture, resetCalls } from "ts-mockito"
+import { anything, capture, instance, mock, resetCalls, verify, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
 import {
     AbstractNotifyingList,
@@ -94,7 +94,7 @@ describe("AbstractNotifyingList", () => {
         expect(l.toArray()).toEqual([3])
 
         resetCalls(l.getMockNotifier())
-        
+
         // add
         l.add(4)
         verify(l.getMockNotifier().eNotify(anything())).once()

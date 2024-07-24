@@ -10,7 +10,6 @@
 import { EClassifierImpl } from "./internal.js"
 
 export class EClassifierExt extends EClassifierImpl {
-    
     protected initClassifierID(): number {
         return this.getEPackage() != null ? this.getEPackage().getEClassifiers().indexOf(this) : -1
     }

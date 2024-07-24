@@ -1,11 +1,5 @@
-
-import { describe, expect, test } from "vitest"
+import { describe, test } from "vitest"
 
 describe("EEnumExt", () => {
-
-    test("isEEnum", () => {
-        
-
-    })
-
+    test("isEEnum", () => {})
 })

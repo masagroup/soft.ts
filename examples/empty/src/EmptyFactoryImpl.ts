@@ -27,23 +27,23 @@ export class EmptyFactoryImpl extends ecore.EFactoryExt implements EmptyFactory 
     }
 
     create(eClass: ecore.EClass): ecore.EObject {
-        switch (eClass.classifierID) {
+        switch (eClass.getClassifierID()) {
             default:
-                throw new Error("create: " + eClass.classifierID + " not found")
+                throw new Error(`create: ${eClass.getClassifierID()} not found`)
         }
     }
 
     createFromString(eDataType: ecore.EDataType, literalValue: string): any {
-        switch (eDataType.classifierID) {
+        switch (eDataType.getClassifierID()) {
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+                throw new Error(`The datatype '${eDataType.getName()}' is not a valid classifier`)
         }
     }
 
     convertToString(eDataType: ecore.EDataType, instanceValue: any): string {
-        switch (eDataType.classifierID) {
+        switch (eDataType.getClassifierID()) {
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+                throw new Error(`The datatype '${eDataType.getName()}' is not a valid classifier`)
         }
     }
 }

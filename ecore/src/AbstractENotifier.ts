@@ -84,7 +84,7 @@ export abstract class AbstractENotifier implements ENotifier {
         return false
     }
 
-    eSetDeliver(_ : boolean) {
+    eSetDeliver(_: boolean) {
         throw new Error("Unsupported operation.")
     }
 

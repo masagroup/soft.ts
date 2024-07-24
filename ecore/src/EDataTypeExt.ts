@@ -15,7 +15,7 @@ export function isEDataType(e: EClassifier): e is EDataType {
 
 export interface EDataTypeInternal extends EDataType {
     getDefaultValue(): any
-    setDefaultValue(newDefaultValue: any) : void
+    setDefaultValue(newDefaultValue: any): void
 }
 
 export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
@@ -25,7 +25,7 @@ export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
         return this._defaultValue
     }
 
-    setDefaultValue(newDefaultValue: any) : void {
+    setDefaultValue(newDefaultValue: any): void {
         let oldDefaultValue = this._defaultValue
         this._defaultValue = newDefaultValue
         if (this.eNotificationRequired) {

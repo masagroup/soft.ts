@@ -20,7 +20,7 @@ describe("EmptyFactoryImpl", () => {
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(-1)
+            when(mockEClass.getClassifierID()).thenReturn(-1)
             expect(() => factory.create(eClass)).toThrow(Error)
         }
     })
@@ -28,13 +28,13 @@ describe("EmptyFactoryImpl", () => {
     test("createFromStringInvalid", () => {
         let mockDataType = mock<ecore.EDataType>()
         let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(-1)
+        when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => EmptyFactoryImpl.getInstance().createFromString(eDataType, "")).toThrow(Error)
     })
     test("convertToStringInvalid", () => {
         let mockDataType = mock<ecore.EDataType>()
         let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(-1)
+        when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => EmptyFactoryImpl.getInstance().convertToString(eDataType, null)).toThrow(Error)
     })
 })

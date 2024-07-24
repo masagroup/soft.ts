@@ -406,7 +406,8 @@ export class BinaryDecoder implements EDecoder {
     private newFeatureData(eClassData: ClassData, featureID: number): FeatureData {
         let eFeatureName = this.decodeString()
         let eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName)
-        if (!eFeature) throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.getName()} EClass`)
+        if (!eFeature)
+            throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.getName()} EClass`)
         let featureData = new FeatureData()
         featureData.eFeature = eFeature
         featureData.featureID = featureID

@@ -100,7 +100,12 @@ describe("EClassExt", () => {
         expect(eClass.getFeatureID(eReference2)).toBe(3)
 
         // collections
-        expect(eClass.getEAllStructuralFeatures().toArray()).toEqual([eAttribute1, eReference1, eAttribute2, eReference2])
+        expect(eClass.getEAllStructuralFeatures().toArray()).toEqual([
+            eAttribute1,
+            eReference1,
+            eAttribute2,
+            eReference2
+        ])
         expect(eClass.getEAllAttributes().toArray()).toEqual([eAttribute1, eAttribute2])
         expect(eClass.getEAllReferences().toArray()).toEqual([eReference1, eReference2])
         expect(eClass.getEAttributes().toArray()).toEqual([eAttribute1, eAttribute2])
@@ -144,7 +149,12 @@ describe("EClassExt", () => {
         expect(eSuperClass.getEAllReferences().toArray()).toEqual([eReference2])
         expect(eSuperClass.getEReferences().toArray()).toEqual([eReference2])
 
-        expect(eClass.getEAllStructuralFeatures().toArray()).toEqual([eAttribute2, eReference2, eAttribute1, eReference1])
+        expect(eClass.getEAllStructuralFeatures().toArray()).toEqual([
+            eAttribute2,
+            eReference2,
+            eAttribute1,
+            eReference1
+        ])
         expect(eClass.getEAllAttributes().toArray()).toEqual([eAttribute2, eAttribute1])
         expect(eClass.getEAttributes().toArray()).toEqual([eAttribute1])
         expect(eClass.getEAllReferences().toArray()).toEqual([eReference2, eReference1])

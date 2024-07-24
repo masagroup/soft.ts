@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { anything, capture, instance, mock, verify, when } from "ts-mockito"
-import { beforeEach, describe, expect, test } from "vitest"
+import { describe, expect, test } from "vitest"
 import {
     AbstractENotifier,
     AbstractENotifierList,
@@ -20,7 +20,6 @@ import {
 } from "./internal.js"
 
 describe("AbstractENotifierList", () => {
-   
     test("add", () => {
         let mockNotifier = mock<AbstractENotifier>()
         let notifier = instance(mockNotifier)

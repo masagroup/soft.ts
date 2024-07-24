@@ -25,7 +25,7 @@ import {
 } from "./internal.js"
 
 export function isEClass(c: EClassifier): c is EClass {
-     return c == undefined ? undefined : "isAbstract" in c
+    return c == undefined ? undefined : "isAbstract" in c
 }
 
 class ESuperAdapter extends AbstractEAdapter {

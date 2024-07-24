@@ -63,7 +63,7 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
         let oldLibrary = this._library
         this._library = newLibrary
         let notifications = msgs
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             let notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
@@ -90,6 +90,13 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
         return this._xMLNSPrefixMap
     }
 
+    // set the value of xMLNSPrefixMap
+    set xMLNSPrefixMap(newXMLNSPrefixMap: ecore.EMap<string, string>) {
+        const l = this.xMLNSPrefixMap
+        l.clear()
+        l.addAll(newXMLNSPrefixMap)
+    }
+
     // get the value of xSISchemaLocation
     get xSISchemaLocation(): ecore.EMap<string, string> {
         if (this._xSISchemaLocation == null) {
@@ -98,6 +105,13 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
             )
         }
         return this._xSISchemaLocation
+    }
+
+    // set the value of xSISchemaLocation
+    set xSISchemaLocation(newXSISchemaLocation: ecore.EMap<string, string>) {
+        const l = this.xSISchemaLocation
+        l.clear()
+        l.addAll(newXSISchemaLocation)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
@@ -124,13 +138,15 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
                 break
             }
             case LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP: {
-                this.xMLNSPrefixMap.clear()
-                this.xMLNSPrefixMap.addAll(newValue as ecore.EList<ecore.EMapEntry<string, string>>)
+                const list = this.xMLNSPrefixMap
+                list.clear()
+                list.addAll(newValue as ecore.EList<ecore.EMapEntry<string, string>>)
                 break
             }
             case LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION: {
-                this.xSISchemaLocation.clear()
-                this.xSISchemaLocation.addAll(newValue as ecore.EList<ecore.EMapEntry<string, string>>)
+                const list = this.xSISchemaLocation
+                list.clear()
+                list.addAll(newValue as ecore.EList<ecore.EMapEntry<string, string>>)
                 break
             }
             default: {
@@ -165,10 +181,10 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
                 return this._library != null
             }
             case LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP: {
-                return this.xMLNSPrefixMap != null && this.xMLNSPrefixMap.size() != 0
+                return this._xMLNSPrefixMap && !this._xMLNSPrefixMap.isEmpty()
             }
             case LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION: {
-                return this.xSISchemaLocation != null && this.xSISchemaLocation.size() != 0
+                return this._xSISchemaLocation && !this._xSISchemaLocation.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

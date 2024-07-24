@@ -54,7 +54,7 @@ describe("LibraryImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.address = value
@@ -62,10 +62,10 @@ describe("LibraryImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getBooks", () => {
@@ -101,7 +101,7 @@ describe("LibraryImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.name = value
@@ -109,10 +109,10 @@ describe("LibraryImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getParentBranch", () => {
@@ -141,7 +141,7 @@ describe("LibraryImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
@@ -151,9 +151,9 @@ describe("LibraryImpl", () => {
         verify(mockAdapter.notifyChanged(anything())).once()
         {
             let [notification] = capture(mockAdapter.notifyChanged).last()
-            expect(notification.notifier).toBe(o)
-            expect(notification.oldValue).toBeNull()
-            expect(notification.newValue).toBe(value)
+            expect(notification.getNotifier()).toBe(o)
+            expect(notification.getOldValue()).toBeNull()
+            expect(notification.getNewValue()).toBe(value)
         }
         // set with the same value
         reset(mockAdapter)
@@ -178,10 +178,10 @@ describe("LibraryImpl", () => {
         verify(mockAdapter.notifyChanged(anything())).once()
         {
             let [notification] = capture(mockAdapter.notifyChanged).last()
-            expect(notification.notifier).toBe(o)
-            expect(notification.oldValue).toBe(value)
-            expect(notification.newValue).toBe(other)
-            expect(notification.position).toBe(-1)
+            expect(notification.getNotifier()).toBe(o)
+            expect(notification.getOldValue()).toBe(value)
+            expect(notification.getNewValue()).toBe(other)
+            expect(notification.getPosition()).toBe(-1)
         }
     })
 
@@ -193,7 +193,7 @@ describe("LibraryImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // notification chain
         let mockNotifications = mock<ecore.ENotificationChain>()
@@ -207,12 +207,12 @@ describe("LibraryImpl", () => {
         // checks
         verify(mockNotifications.add(anything())).once()
         const [notification] = capture(mockNotifications.add).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.eventType).toBe(ecore.EventType.SET)
-        expect(notification.featureID).toBe(LibraryConstants.LIBRARY__PARENT_BRANCH)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getEventType()).toBe(ecore.EventType.SET)
+        expect(notification.getFeatureID()).toBe(LibraryConstants.LIBRARY__PARENT_BRANCH)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getPeople", () => {
@@ -235,7 +235,7 @@ describe("LibraryImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.proprietary = value
@@ -243,10 +243,10 @@ describe("LibraryImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("basicSetProprietary", () => {
@@ -257,7 +257,7 @@ describe("LibraryImpl", () => {
         // add listener
         let mockAdapter = mock<ecore.EAdapter>()
         let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        o.eAdapters().add(adapter)
 
         // notification chain
         let mockNotifications = mock<ecore.ENotificationChain>()
@@ -270,12 +270,12 @@ describe("LibraryImpl", () => {
         // checks
         verify(mockNotifications.add(anything())).once()
         const [notification] = capture(mockNotifications.add).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.eventType).toBe(ecore.EventType.SET)
-        expect(notification.featureID).toBe(LibraryConstants.LIBRARY__PROPRIETARY)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getEventType()).toBe(ecore.EventType.SET)
+        expect(notification.getFeatureID()).toBe(LibraryConstants.LIBRARY__PROPRIETARY)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getStock", () => {

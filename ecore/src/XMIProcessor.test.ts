@@ -9,7 +9,7 @@
 
 import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import { EPackage, EResourceSet, XMIProcessor } from "./internal.js"
+import { EResourceSet, XMIProcessor } from "./internal.js"
 
 describe("XMIProcessor", () => {
     test("constructor.no.resourceset", () => {

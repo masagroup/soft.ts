@@ -35,7 +35,7 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     set issuesPerYear(newIssuesPerYear: number) {
         let oldIssuesPerYear = this._issuesPerYear
         this._issuesPerYear = newIssuesPerYear
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -57,7 +57,7 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     set title(newTitle: string) {
         let oldTitle = this._title
         this._title = newTitle
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,

@@ -43,67 +43,67 @@ describe("LibraryFactoryImpl", () => {
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(-1)
+            when(mockEClass.getClassifierID()).thenReturn(-1)
             expect(() => factory.create(eClass)).toThrow(Error)
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.BOOK)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BOOK)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.BOOK_INDEX)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BOOK_INDEX)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.BOOK_ON_TAPE)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BOOK_ON_TAPE)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.BORROWER)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BORROWER)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.DOCUMENT_ROOT)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.DOCUMENT_ROOT)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.EMPLOYEE)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.EMPLOYEE)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.LIBRARY)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.LIBRARY)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.PERSON)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.PERSON)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.VIDEO_CASSETTE)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.VIDEO_CASSETTE)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
             let mockEClass = mock<ecore.EClass>()
             let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(LibraryConstants.WRITER)
+            when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.WRITER)
             expect(factory.create(eClass)).not.toBeNull()
         }
     })
@@ -161,20 +161,20 @@ describe("LibraryFactoryImpl", () => {
     test("createFromStringInvalid", () => {
         let mockDataType = mock<ecore.EDataType>()
         let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(-1)
+        when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => LibraryFactoryImpl.getInstance().createFromString(eDataType, "")).toThrow(Error)
     })
     test("convertToStringInvalid", () => {
         let mockDataType = mock<ecore.EDataType>()
         let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(-1)
+        when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => LibraryFactoryImpl.getInstance().convertToString(eDataType, null)).toThrow(Error)
     })
     test("createBookCategoryFromString", () => {
         let factory = LibraryFactoryImpl.getInstance()
         let mockDataType = mock<ecore.EDataType>()
         let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(LibraryConstants.BOOK_CATEGORY)
+        when(mockDataType.getClassifierID()).thenReturn(LibraryConstants.BOOK_CATEGORY)
         expect(factory.createFromString(eDataType, "Biography")).toStrictEqual(BookCategory.BIOGRAPHY)
         expect(factory.createFromString(eDataType, "Mystery")).toStrictEqual(BookCategory.MYSTERY)
         expect(factory.createFromString(eDataType, "ScienceFiction")).toStrictEqual(BookCategory.SCIENCE_FICTION)
@@ -184,7 +184,7 @@ describe("LibraryFactoryImpl", () => {
         let factory = LibraryFactoryImpl.getInstance()
         let mockDataType = mock<ecore.EDataType>()
         let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(LibraryConstants.BOOK_CATEGORY)
+        when(mockDataType.getClassifierID()).thenReturn(LibraryConstants.BOOK_CATEGORY)
         expect(factory.convertToString(eDataType, BookCategory.BIOGRAPHY)).toStrictEqual("Biography")
         expect(factory.convertToString(eDataType, BookCategory.MYSTERY)).toStrictEqual("Mystery")
         expect(factory.convertToString(eDataType, BookCategory.SCIENCE_FICTION)).toStrictEqual("ScienceFiction")

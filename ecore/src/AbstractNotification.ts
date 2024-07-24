@@ -60,7 +60,10 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                 switch (notification.getEventType()) {
                     case EventType.SET:
                     case EventType.UNSET: {
-                        if (this.getNotifier() == notification.getNotifier() && this.getFeatureID() == notification.getFeatureID()) {
+                        if (
+                            this.getNotifier() == notification.getNotifier() &&
+                            this.getFeatureID() == notification.getFeatureID()
+                        ) {
                             this._newValue = notification.getNewValue()
                             if (notification.getEventType() == EventType.SET) this._eventType = EventType.SET
                             return true
@@ -73,7 +76,10 @@ export abstract class AbstractNotification implements ENotification, ENotificati
             case EventType.REMOVE: {
                 switch (notification.getEventType()) {
                     case EventType.REMOVE: {
-                        if (this.getNotifier() == notification.getNotifier() && this.getFeatureID() == notification.getFeatureID()) {
+                        if (
+                            this.getNotifier() == notification.getNotifier() &&
+                            this.getFeatureID() == notification.getFeatureID()
+                        ) {
                             this._eventType = EventType.REMOVE_MANY
                             let originalPosition = this._position
                             let notificationPosition = notification.getPosition()
@@ -98,7 +104,10 @@ export abstract class AbstractNotification implements ENotification, ENotificati
             case EventType.REMOVE_MANY: {
                 switch (notification.getEventType()) {
                     case EventType.REMOVE: {
-                        if (this.getNotifier() == notification.getNotifier() && this.getFeatureID() == notification.getFeatureID()) {
+                        if (
+                            this.getNotifier() == notification.getNotifier() &&
+                            this.getFeatureID() == notification.getFeatureID()
+                        ) {
                             let notificationPosition = notification.getPosition()
                             let positions: number[] = this._newValue || []
                             let newPositions: number[] = new Array(positions.length + 1)
