@@ -413,7 +413,7 @@ describe("EClassImpl", () => {
 		expect(o.eIsSetFromID(EcoreConstants.ECLASS__EATTRIBUTES)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.ECLASS__ECONTAINMENT_FEATURES)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES)).toBeFalsy()
-		expect(() => o.eIsSetFromID(EcoreConstants.ECLASS__EID_ATTRIBUTE)).toThrow(Error)
+		expect(o.eIsSetFromID(EcoreConstants.ECLASS__EID_ATTRIBUTE)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.ECLASS__EOPERATIONS)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.ECLASS__EREFERENCES)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES)).toBeFalsy()

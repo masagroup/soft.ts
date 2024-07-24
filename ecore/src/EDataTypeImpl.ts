@@ -107,7 +107,7 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EDATA_TYPE__SERIALIZABLE: {
-                return this.isSerializable() != true
+                return this._isSerializable != true
             }
             default: {
                 return super.eIsSetFromID(featureID)

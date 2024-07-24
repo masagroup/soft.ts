@@ -243,19 +243,19 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
-                return this.getContents() && !this.getContents().isEmpty()
+                return this._contents && !this._contents.isEmpty()
             }
             case EcoreConstants.EANNOTATION__DETAILS: {
-                return this.getDetails() && !this.getDetails().isEmpty()
+                return this._details && !this._details.isEmpty()
             }
             case EcoreConstants.EANNOTATION__EMODEL_ELEMENT: {
                 return this.getEModelElement() != null
             }
             case EcoreConstants.EANNOTATION__REFERENCES: {
-                return this.getReferences() && !this.getReferences().isEmpty()
+                return this._references && !this._references.isEmpty()
             }
             case EcoreConstants.EANNOTATION__SOURCE: {
-                return this.getSource() != ""
+                return this._source != ""
             }
             default: {
                 return super.eIsSetFromID(featureID)

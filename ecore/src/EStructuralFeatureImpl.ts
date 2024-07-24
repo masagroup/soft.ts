@@ -329,31 +329,31 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE: {
-                return this.isChangeable() != true
+                return this._isChangeable != true
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE: {
                 return this.getDefaultValue() != null
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL: {
-                return this.getDefaultValueLiteral() != ""
+                return this._defaultValueLiteral != ""
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED: {
-                return this.isDerived() != false
+                return this._isDerived != false
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS: {
                 return this.getEContainingClass() != null
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID: {
-                return this.getFeatureID() != -1
+                return this._featureID != -1
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT: {
-                return this.isTransient() != false
+                return this._isTransient != false
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE: {
-                return this.isUnsettable() != false
+                return this._isUnsettable != false
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE: {
-                return this.isVolatile() != false
+                return this._isVolatile != false
             }
             default: {
                 return super.eIsSetFromID(featureID)

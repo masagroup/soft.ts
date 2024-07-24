@@ -226,7 +226,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ECLASSIFIER__CLASSIFIER_ID: {
-                return this.getClassifierID() != -1
+                return this._classifierID != -1
             }
             case EcoreConstants.ECLASSIFIER__DEFAULT_VALUE: {
                 return this.getDefaultValue() != null
@@ -235,10 +235,10 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
                 return this.getEPackage() != null
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS: {
-                return this.getInstanceClass() != null
+                return this._instanceClass != null
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME: {
-                return this.getInstanceClassName() != ""
+                return this._instanceClassName != ""
             }
             case EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME: {
                 return this.getInstanceTypeName() != ""

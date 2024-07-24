@@ -270,22 +270,22 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
-                return this.getEClassifiers() && !this.getEClassifiers().isEmpty()
+                return this._eClassifiers && !this._eClassifiers.isEmpty()
             }
             case EcoreConstants.EPACKAGE__EFACTORY_INSTANCE: {
-                return this.getEFactoryInstance() != null
+                return this._eFactoryInstance != null
             }
             case EcoreConstants.EPACKAGE__ESUB_PACKAGES: {
-                return this.getESubPackages() && !this.getESubPackages().isEmpty()
+                return this._eSubPackages && !this._eSubPackages.isEmpty()
             }
             case EcoreConstants.EPACKAGE__ESUPER_PACKAGE: {
                 return this.getESuperPackage() != null
             }
             case EcoreConstants.EPACKAGE__NS_PREFIX: {
-                return this.getNsPrefix() != ""
+                return this._nsPrefix != ""
             }
             case EcoreConstants.EPACKAGE__NS_URI: {
-                return this.getNsURI() != ""
+                return this._nsURI != ""
             }
             default: {
                 return super.eIsSetFromID(featureID)

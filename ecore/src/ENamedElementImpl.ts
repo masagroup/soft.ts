@@ -107,7 +107,7 @@ export class ENamedElementImpl extends EModelElementExt implements ENamedElement
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ENAMED_ELEMENT__NAME: {
-                return this.getName() != ""
+                return this._name != ""
             }
             default: {
                 return super.eIsSetFromID(featureID)

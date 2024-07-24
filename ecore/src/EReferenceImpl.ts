@@ -243,19 +243,19 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
                 return this.isContainer() != false
             }
             case EcoreConstants.EREFERENCE__CONTAINMENT: {
-                return this.isContainment() != false
+                return this._isContainment != false
             }
             case EcoreConstants.EREFERENCE__EKEYS: {
-                return this.getEKeys() && !this.getEKeys().isEmpty()
+                return this._eKeys && !this._eKeys.isEmpty()
             }
             case EcoreConstants.EREFERENCE__EOPPOSITE: {
-                return this.getEOpposite() != null
+                return this._eOpposite != null
             }
             case EcoreConstants.EREFERENCE__EREFERENCE_TYPE: {
                 return this.getEReferenceType() != null
             }
             case EcoreConstants.EREFERENCE__RESOLVE_PROXIES: {
-                return this.isResolveProxies() != true
+                return this._isResolveProxies != true
             }
             default: {
                 return super.eIsSetFromID(featureID)

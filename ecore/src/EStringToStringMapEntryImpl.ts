@@ -136,10 +136,10 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY: {
-                return this.getKey() != ""
+                return this._key != ""
             }
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE: {
-                return this.getValue() != ""
+                return this._value != ""
             }
             default: {
                 return super.eIsSetFromID(featureID)

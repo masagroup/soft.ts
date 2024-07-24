@@ -197,13 +197,13 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
                 return this.getEContainingClass() != null
             }
             case EcoreConstants.EOPERATION__EEXCEPTIONS: {
-                return this.getEExceptions() && !this.getEExceptions().isEmpty()
+                return this._eExceptions && !this._eExceptions.isEmpty()
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                return this.getEParameters() && !this.getEParameters().isEmpty()
+                return this._eParameters && !this._eParameters.isEmpty()
             }
             case EcoreConstants.EOPERATION__OPERATION_ID: {
-                return this.getOperationID() != -1
+                return this._operationID != -1
             }
             default: {
                 return super.eIsSetFromID(featureID)

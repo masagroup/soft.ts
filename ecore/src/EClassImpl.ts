@@ -171,6 +171,10 @@ export class EClassImpl extends EClassifierExt implements EClass {
     
     }
     
+    setEIDAttribute(newEIDAttribute : EAttribute ) {
+    	this._eIDAttribute = newEIDAttribute
+    }
+    
     
     // get the value of eOperations
     getEOperations(): EList<EOperation> {
@@ -481,55 +485,55 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ECLASS__ABSTRACT: {
-                return this.isAbstract() != false
+                return this._isAbstract != false
             }
             case EcoreConstants.ECLASS__EALL_ATTRIBUTES: {
-                return this.getEAllAttributes() && !this.getEAllAttributes().isEmpty()
+                return this._eAllAttributes && !this._eAllAttributes.isEmpty()
             }
             case EcoreConstants.ECLASS__EALL_CONTAINMENTS: {
-                return this.getEAllContainments() && !this.getEAllContainments().isEmpty()
+                return this._eAllContainments && !this._eAllContainments.isEmpty()
             }
             case EcoreConstants.ECLASS__EALL_CROSS_REFERENCES: {
-                return this.getEAllCrossReferences() && !this.getEAllCrossReferences().isEmpty()
+                return this._eAllCrossReferences && !this._eAllCrossReferences.isEmpty()
             }
             case EcoreConstants.ECLASS__EALL_OPERATIONS: {
-                return this.getEAllOperations() && !this.getEAllOperations().isEmpty()
+                return this._eAllOperations && !this._eAllOperations.isEmpty()
             }
             case EcoreConstants.ECLASS__EALL_REFERENCES: {
-                return this.getEAllReferences() && !this.getEAllReferences().isEmpty()
+                return this._eAllReferences && !this._eAllReferences.isEmpty()
             }
             case EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES: {
-                return this.getEAllStructuralFeatures() && !this.getEAllStructuralFeatures().isEmpty()
+                return this._eAllStructuralFeatures && !this._eAllStructuralFeatures.isEmpty()
             }
             case EcoreConstants.ECLASS__EALL_SUPER_TYPES: {
-                return this.getEAllSuperTypes() && !this.getEAllSuperTypes().isEmpty()
+                return this._eAllSuperTypes && !this._eAllSuperTypes.isEmpty()
             }
             case EcoreConstants.ECLASS__EATTRIBUTES: {
-                return this.getEAttributes() && !this.getEAttributes().isEmpty()
+                return this._eAttributes && !this._eAttributes.isEmpty()
             }
             case EcoreConstants.ECLASS__ECONTAINMENT_FEATURES: {
-                return this.getEContainmentFeatures() && !this.getEContainmentFeatures().isEmpty()
+                return this._eContainmentFeatures && !this._eContainmentFeatures.isEmpty()
             }
             case EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES: {
-                return this.getECrossReferenceFeatures() && !this.getECrossReferenceFeatures().isEmpty()
+                return this._eCrossReferenceFeatures && !this._eCrossReferenceFeatures.isEmpty()
             }
             case EcoreConstants.ECLASS__EID_ATTRIBUTE: {
-                return this.getEIDAttribute() != null
+                return this._eIDAttribute != null
             }
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                return this.getEOperations() && !this.getEOperations().isEmpty()
+                return this._eOperations && !this._eOperations.isEmpty()
             }
             case EcoreConstants.ECLASS__EREFERENCES: {
-                return this.getEReferences() && !this.getEReferences().isEmpty()
+                return this._eReferences && !this._eReferences.isEmpty()
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                return this.getEStructuralFeatures() && !this.getEStructuralFeatures().isEmpty()
+                return this._eStructuralFeatures && !this._eStructuralFeatures.isEmpty()
             }
             case EcoreConstants.ECLASS__ESUPER_TYPES: {
-                return this.getESuperTypes() && !this.getESuperTypes().isEmpty()
+                return this._eSuperTypes && !this._eSuperTypes.isEmpty()
             }
             case EcoreConstants.ECLASS__INTERFACE: {
-                return this.isInterface() != false
+                return this._isInterface != false
             }
             default: {
                 return super.eIsSetFromID(featureID)

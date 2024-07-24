@@ -184,13 +184,13 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
                 return this.getEEnum() != null
             }
             case EcoreConstants.EENUM_LITERAL__INSTANCE: {
-                return this.getInstance() != null
+                return this._instance != null
             }
             case EcoreConstants.EENUM_LITERAL__LITERAL: {
-                return this.getLiteral() != ""
+                return this._literal != ""
             }
             case EcoreConstants.EENUM_LITERAL__VALUE: {
-                return this.getValue() != 0
+                return this._value != 0
             }
             default: {
                 return super.eIsSetFromID(featureID)

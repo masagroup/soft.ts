@@ -105,7 +105,7 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {
-                return this.getEBounds() && !this.getEBounds().isEmpty()
+                return this._eBounds && !this._eBounds.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

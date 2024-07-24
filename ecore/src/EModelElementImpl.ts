@@ -109,7 +109,7 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                return this.getEAnnotations() && !this.getEAnnotations().isEmpty()
+                return this._eAnnotations && !this._eAnnotations.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

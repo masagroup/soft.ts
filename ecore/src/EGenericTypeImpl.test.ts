@@ -388,11 +388,11 @@ describe("EGenericTypeImpl", () => {
 		let o = new EGenericTypeImpl()
 		expect(() => o.eIsSetFromID(-1)).toThrow(Error)
 		expect(o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__ECLASSIFIER)).toBeFalsy()
-		expect(() => o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND)).toThrow(Error)
+		expect(o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__ERAW_TYPE)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS)).toBeFalsy()
-		expect(() => o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER)).toThrow(Error)
-		expect(() => o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND)).toThrow(Error)
+		expect(o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER)).toBeFalsy()
+		expect(o.eIsSetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND)).toBeFalsy()
 	})
 	
 	test("eUnsetFromID", () => {

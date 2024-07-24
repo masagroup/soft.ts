@@ -301,7 +301,7 @@ describe("EPackageImpl", () => {
 		let o = new EPackageImpl()
 		expect(() => o.eIsSetFromID(-1)).toThrow(Error)
 		expect(o.eIsSetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS)).toBeFalsy()
-		expect(() => o.eIsSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)).toThrow(Error)
+		expect(o.eIsSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.EPACKAGE__ESUPER_PACKAGE)).toBeFalsy()
 		expect(o.eIsSetFromID(EcoreConstants.EPACKAGE__NS_PREFIX)).toBeFalsy()

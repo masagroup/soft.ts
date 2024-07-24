@@ -149,6 +149,10 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     
     }
     
+    setERawType(newERawType : EClassifier ) {
+    	this._eRawType = newERawType
+    }
+    
     
     // get the basic value of eRawType with no proxy resolution
     basicGetERawType(): EClassifier {
@@ -324,22 +328,22 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EGENERIC_TYPE__ECLASSIFIER: {
-                return this.getEClassifier() != null
+                return this._eClassifier != null
             }
             case EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND: {
-                return this.getELowerBound() != null
+                return this._eLowerBound != null
             }
             case EcoreConstants.EGENERIC_TYPE__ERAW_TYPE: {
-                return this.getERawType() != null
+                return this._eRawType != null
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS: {
-                return this.getETypeArguments() && !this.getETypeArguments().isEmpty()
+                return this._eTypeArguments && !this._eTypeArguments.isEmpty()
             }
             case EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER: {
-                return this.getETypeParameter() != null
+                return this._eTypeParameter != null
             }
             case EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND: {
-                return this.getEUpperBound() != null
+                return this._eUpperBound != null
             }
             default: {
                 return super.eIsSetFromID(featureID)

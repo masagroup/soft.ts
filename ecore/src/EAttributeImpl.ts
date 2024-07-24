@@ -126,7 +126,7 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
                 return this.getEAttributeType() != null
             }
             case EcoreConstants.EATTRIBUTE__ID: {
-                return this.isID() != false
+                return this._isID != false
             }
             default: {
                 return super.eIsSetFromID(featureID)

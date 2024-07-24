@@ -120,7 +120,7 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
-                return this.getELiterals() && !this.getELiterals().isEmpty()
+                return this._eLiterals && !this._eLiterals.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

@@ -270,25 +270,25 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ETYPED_ELEMENT__ETYPE: {
-                return this.getEType() != null
+                return this._eType != null
             }
             case EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND: {
-                return this.getLowerBound() != 0
+                return this._lowerBound != 0
             }
             case EcoreConstants.ETYPED_ELEMENT__MANY: {
                 return this.isMany() != false
             }
             case EcoreConstants.ETYPED_ELEMENT__ORDERED: {
-                return this.isOrdered() != true
+                return this._isOrdered != true
             }
             case EcoreConstants.ETYPED_ELEMENT__REQUIRED: {
                 return this.isRequired() != false
             }
             case EcoreConstants.ETYPED_ELEMENT__UNIQUE: {
-                return this.isUnique() != true
+                return this._isUnique != true
             }
             case EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND: {
-                return this.getUpperBound() != 1
+                return this._upperBound != 1
             }
             default: {
                 return super.eIsSetFromID(featureID)
