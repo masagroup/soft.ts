@@ -58,7 +58,7 @@ describe("ETypedElementImpl", () => {
 		// events
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 		
 		// set object resource
 		let mockResourceSet = mock<EResourceSet>()
@@ -93,7 +93,7 @@ describe("ETypedElementImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setEType(value)
@@ -101,10 +101,10 @@ describe("ETypedElementImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -114,7 +114,7 @@ describe("ETypedElementImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// unset
 		o.unSetEType()
@@ -122,9 +122,9 @@ describe("ETypedElementImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.eventType).toBe(EventType.UNSET)
-		expect(notification.featureID).toBe(EcoreConstants.ETYPED_ELEMENT__ETYPE)	
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getEventType()).toBe(EventType.UNSET)
+		expect(notification.getFeatureID()).toBe(EcoreConstants.ETYPED_ELEMENT__ETYPE)	
 		expect(o.getEType()).toBeNull()
 	})
 	
@@ -147,7 +147,7 @@ describe("ETypedElementImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setOrdered(value)
@@ -155,10 +155,10 @@ describe("ETypedElementImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(true)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(true)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -180,7 +180,7 @@ describe("ETypedElementImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setUnique(value)
@@ -188,10 +188,10 @@ describe("ETypedElementImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(true)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(true)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -208,7 +208,7 @@ describe("ETypedElementImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setLowerBound(value)
@@ -216,10 +216,10 @@ describe("ETypedElementImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(0)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(0)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -236,7 +236,7 @@ describe("ETypedElementImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setUpperBound(value)
@@ -244,10 +244,10 @@ describe("ETypedElementImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(1)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(1)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	

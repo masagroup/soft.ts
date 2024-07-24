@@ -36,15 +36,15 @@ class ResourcesList extends AbstractNotifyingList<EResource> {
         super()
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._resourceSet
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return EResourceSetConstants.RESOURCE_SET__RESOURCES
     }
 

@@ -67,7 +67,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
             let newEClassifier = this.eResolveProxy(oldEClassifier) as EClassifier
             this._eClassifier = newEClassifier
             if (newEClassifier != oldEClassifier) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, oldEClassifier, newEClassifier))
                 }
             }
@@ -80,7 +80,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     setEClassifier(newEClassifier : EClassifier ): void {
         let oldEClassifier = this._eClassifier
         this._eClassifier = newEClassifier
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, oldEClassifier, newEClassifier))
         }
     
@@ -122,7 +122,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         let oldELowerBound = this._eLowerBound
         this._eLowerBound = newELowerBound
         let notifications = msgs
-        if ( this.eNotificationRequired ) {
+        if ( this.eNotificationRequired() ) {
             let notification = new Notification(this, EventType.SET, EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, oldELowerBound, newELowerBound)
             if (notifications != null ) {
                 notifications.add( notification )
@@ -140,7 +140,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
             let newERawType = this.eResolveProxy(oldERawType) as EClassifier
             this._eRawType = newERawType
             if (newERawType != oldERawType) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, oldERawType, newERawType))
                 }
             }
@@ -179,7 +179,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     setETypeParameter(newETypeParameter : ETypeParameter ): void {
         let oldETypeParameter = this._eTypeParameter
         this._eTypeParameter = newETypeParameter
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER, oldETypeParameter, newETypeParameter))
         }
     
@@ -216,7 +216,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         let oldEUpperBound = this._eUpperBound
         this._eUpperBound = newEUpperBound
         let notifications = msgs
-        if ( this.eNotificationRequired ) {
+        if ( this.eNotificationRequired() ) {
             let notification = new Notification(this, EventType.SET, EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, oldEUpperBound, newEUpperBound)
             if (notifications != null ) {
                 notifications.add( notification )

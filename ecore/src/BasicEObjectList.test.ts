@@ -15,9 +15,9 @@ describe("BasicEObjectList", () => {
     test("constructor", () => {
         {
             let l = new BasicEObjectList(null, 1, 2, false, false, false, false, false)
-            expect(l.notifier).toBe(null)
-            expect(l.featureID).toBe(1)
-            expect(l.feature).toBe(null)
+            expect(l.getNotifier()).toBe(null)
+            expect(l.getFeatureID()).toBe(1)
+            expect(l.getFeature()).toBe(null)
         }
         {
             // mocks
@@ -31,12 +31,12 @@ describe("BasicEObjectList", () => {
             const cls = instance(mockClass)
 
             let l = new BasicEObjectList(owner, 1, 2, false, false, false, false, false)
-            expect(l.notifier).toBe(owner)
-            expect(l.featureID).toBe(1)
+            expect(l.getNotifier()).toBe(owner)
+            expect(l.getFeatureID()).toBe(1)
 
             when(mockOwner.eClass()).thenReturn(cls)
             when(mockClass.getEStructuralFeature(1)).thenReturn(feature)
-            expect(l.feature).toBe(feature)
+            expect(l.getFeature()).toBe(feature)
         }
     })
 
@@ -50,7 +50,7 @@ describe("BasicEObjectList", () => {
 
         let l = new BasicEObjectList(owner, 1, -1, false, true, false, false, false)
 
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
         when(mockOwner.eInverseAdd(owner, -2, null)).thenReturn(null)
         expect(l.add(object)).toBeTruthy()
 
@@ -68,7 +68,7 @@ describe("BasicEObjectList", () => {
 
         let l = new BasicEObjectList(owner, 1, 2, false, true, true, false, false)
 
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
         when(mockOwner.eInverseAdd(owner, 2, null)).thenReturn(null)
         expect(l.add(object)).toBeTruthy()
 
@@ -80,7 +80,7 @@ describe("BasicEObjectList", () => {
         // mocks
         const mockOwner = mock<EObjectInternal>()
         const owner = instance(mockOwner)
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
 
         {
             let l = new BasicEObjectList(owner, 1, 2, false, true, true, false, false)
@@ -112,7 +112,7 @@ describe("BasicEObjectList", () => {
         // mocks
         const mockOwner = mock<EObjectInternal>()
         const owner = instance(mockOwner)
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
 
         // no proxy
         {
@@ -160,7 +160,7 @@ describe("BasicEObjectList", () => {
         // mocks
         const mockOwner = mock<EObjectInternal>()
         const owner = instance(mockOwner)
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
 
         // no proxy
         {
@@ -181,7 +181,7 @@ describe("BasicEObjectList", () => {
         // mocks
         const mockOwner = mock<EObjectInternal>()
         const owner = instance(mockOwner)
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
 
         let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false)
         let u = l.getUnResolvedList()
@@ -210,7 +210,7 @@ describe("BasicEObjectList", () => {
         // mocks
         const mockOwner = mock<EObjectInternal>()
         const owner = instance(mockOwner)
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
 
         let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false)
         let u = l.getUnResolvedList()
@@ -237,7 +237,7 @@ describe("BasicEObjectList", () => {
         // mocks
         const mockOwner = mock<EObjectInternal>()
         const owner = instance(mockOwner)
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
 
         // add an object to unresolved
         let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false)
@@ -259,7 +259,7 @@ describe("BasicEObjectList", () => {
     test("toJSON", () => {
         const mockOwner = mock<EObjectInternal>()
         const owner = instance(mockOwner)
-        when(mockOwner.eDeliver).thenReturn(false)
+        when(mockOwner.eDeliver()).thenReturn(false)
         let l = new BasicEObjectList(owner, 1, 2, false, false, false, true, false)
         expect(l.toJSON()).toEqual({
             _featureID: 1,

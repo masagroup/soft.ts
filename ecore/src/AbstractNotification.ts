@@ -17,33 +17,52 @@ import {
 } from "./internal.js"
 
 export abstract class AbstractNotification implements ENotification, ENotificationChain {
-    abstract readonly feature: EStructuralFeature
-    abstract readonly featureID: number
-    abstract readonly notifier: ENotifier
-    eventType: EventType
-    oldValue: any
-    newValue: any
-    position: number
+    private _eventType: EventType
+    private _oldValue: any
+    private _newValue: any
+    private _position: number
     private _next: ENotificationChain
 
     constructor(eventType: EventType, oldValue: any, newValue: any, position: number) {
-        this.eventType = eventType
-        this.oldValue = oldValue
-        this.newValue = newValue
-        this.position = position
+        this._eventType = eventType
+        this._oldValue = oldValue
+        this._newValue = newValue
+        this._position = position
         this._next = null
     }
 
+    getEventType(): EventType {
+        return this._eventType
+    }
+
+    abstract getNotifier(): ENotifier
+
+    abstract getFeature(): EStructuralFeature
+
+    abstract getFeatureID(): number
+
+    getOldValue() {
+        return this._oldValue
+    }
+
+    getNewValue() {
+        return this._newValue
+    }
+
+    getPosition(): number {
+        return this._position
+    }
+
     merge(notification: ENotification): boolean {
-        switch (this.eventType) {
+        switch (this._eventType) {
             case EventType.SET:
             case EventType.UNSET: {
-                switch (notification.eventType) {
+                switch (notification.getEventType()) {
                     case EventType.SET:
                     case EventType.UNSET: {
-                        if (this.notifier == notification.notifier && this.featureID == notification.featureID) {
-                            this.newValue = notification.newValue
-                            if (notification.eventType == EventType.SET) this.eventType = EventType.SET
+                        if (this.getNotifier() == notification.getNotifier() && this.getFeatureID() == notification.getFeatureID()) {
+                            this._newValue = notification.getNewValue()
+                            if (notification.getEventType() == EventType.SET) this._eventType = EventType.SET
                             return true
                         }
                         break
@@ -52,23 +71,23 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                 break
             }
             case EventType.REMOVE: {
-                switch (notification.eventType) {
+                switch (notification.getEventType()) {
                     case EventType.REMOVE: {
-                        if (this.notifier == notification.notifier && this.featureID == notification.featureID) {
-                            this.eventType = EventType.REMOVE_MANY
-                            let originalPosition = this.position
-                            let notificationPosition = notification.position
+                        if (this.getNotifier() == notification.getNotifier() && this.getFeatureID() == notification.getFeatureID()) {
+                            this._eventType = EventType.REMOVE_MANY
+                            let originalPosition = this._position
+                            let notificationPosition = notification.getPosition()
                             let removedValues: any[] = []
                             if (originalPosition <= notificationPosition) {
-                                removedValues = [this.oldValue, notification.oldValue]
-                                this.position = originalPosition
-                                this.newValue = [originalPosition, notificationPosition + 1]
+                                removedValues = [this.getOldValue(), notification.getOldValue()]
+                                this._position = originalPosition
+                                this._newValue = [originalPosition, notificationPosition + 1]
                             } else {
-                                removedValues = [notification.oldValue, this.oldValue]
-                                this.position = notificationPosition
-                                this.newValue = [notificationPosition, originalPosition]
+                                removedValues = [notification.getOldValue(), this.getOldValue()]
+                                this._position = notificationPosition
+                                this._newValue = [notificationPosition, originalPosition]
                             }
-                            this.oldValue = removedValues
+                            this._oldValue = removedValues
                             return true
                         }
                         break
@@ -77,11 +96,11 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                 break
             }
             case EventType.REMOVE_MANY: {
-                switch (notification.eventType) {
+                switch (notification.getEventType()) {
                     case EventType.REMOVE: {
-                        if (this.notifier == notification.notifier && this.featureID == notification.featureID) {
-                            let notificationPosition = notification.position
-                            let positions: number[] = this.newValue || []
+                        if (this.getNotifier() == notification.getNotifier() && this.getFeatureID() == notification.getFeatureID()) {
+                            let notificationPosition = notification.getPosition()
+                            let positions: number[] = this._newValue || []
                             let newPositions: number[] = new Array(positions.length + 1)
 
                             let index = 0
@@ -92,14 +111,14 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                                 } else break
                             }
 
-                            let oldValue: any[] = this.oldValue || []
-                            oldValue.splice(index, 0, notification.oldValue)
+                            let oldValue: any[] = this._oldValue || []
+                            oldValue.splice(index, 0, notification.getOldValue())
 
                             newPositions[index] = notificationPosition
                             while (++index < positions.length + 1) newPositions[index] = positions[index - 1]
 
-                            this.oldValue = oldValue
-                            this.newValue = newPositions
+                            this._oldValue = oldValue
+                            this._newValue = newPositions
                             return true
                         }
                         break
@@ -126,7 +145,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
     }
 
     dispatch(): void {
-        if (this.notifier) this.notifier.eNotify(this)
+        if (this.getNotifier()) this.getNotifier().eNotify(this)
         if (this._next) this._next.dispatch()
     }
 }

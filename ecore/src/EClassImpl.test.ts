@@ -143,7 +143,7 @@ describe("EClassImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setAbstract(value)
@@ -151,10 +151,10 @@ describe("EClassImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(false)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(false)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -171,7 +171,7 @@ describe("EClassImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setInterface(value)
@@ -179,10 +179,10 @@ describe("EClassImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(false)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(false)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	

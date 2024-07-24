@@ -101,7 +101,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
             if ( notifications != null ) {
                 notifications.dispatch()
             }
-        } else if (this.eNotificationRequired) {
+        } else if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, newEModelElement, newEModelElement))
         }
     
@@ -132,7 +132,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     setSource(newSource : string ): void {
         let oldSource = this._source
         this._source = newSource
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__SOURCE, oldSource, newSource))
         }
     

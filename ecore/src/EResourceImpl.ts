@@ -62,15 +62,15 @@ class ResourceNotification extends AbstractNotification {
         this._featureID = featureID
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._notifier
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return this._featureID
     }
 }
@@ -83,15 +83,15 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
         this._resource = resource
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._resource
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return EResourceConstants.RESOURCE__CONTENTS
     }
 

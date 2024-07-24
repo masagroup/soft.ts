@@ -123,13 +123,13 @@ class ContentsListAdapter extends AbstractEAdapter {
         super()
         this._obj = obj
         this._getFeatureFn = getFeatureFn
-        obj.eAdapters.add(this)
+        obj.eAdapters().add(this)
     }
 
     notifyChanged(notification: ENotification): void {
         if (this._list) {
             let features = this._getFeatureFn(this._obj.eClass())
-            if (features.contains(notification.feature)) delete this._list
+            if (features.contains(notification.getFeature())) delete this._list
         }
     }
 
@@ -149,18 +149,18 @@ export class BasicEObject extends AbstractEObject {
     private _adapters: EList<EAdapter> = null
     private _deliver: boolean = true
 
-    get eAdapters(): EList<EAdapter> {
+    eAdapters(): EList<EAdapter> {
         if (!this._adapters) {
             this._adapters = new AbstractENotifierList(this)
         }
         return this._adapters
     }
 
-    get eDeliver(): boolean {
+    eDeliver(): boolean {
         return this._deliver
     }
 
-    set eDeliver(deliver: boolean) {
+    eSetDeliver(deliver: boolean) {
         this._deliver = deliver
     }
 

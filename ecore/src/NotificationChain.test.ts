@@ -28,8 +28,8 @@ describe("NotificationChain", () => {
         const notification = instance(mockNotification)
 
         // when
-        when(mockNotification.eventType).thenReturn(EventType.ADD)
-        when(mockNotification.notifier).thenReturn(notifier)
+        when(mockNotification.getEventType()).thenReturn(EventType.ADD)
+        when(mockNotification.getNotifier()).thenReturn(notifier)
         when(mockNotification.merge(notification)).thenReturn(false)
 
         // test
@@ -45,8 +45,8 @@ describe("NotificationChain", () => {
         const notification = instance(mockNotification)
 
         // when
-        when(mockNotification.eventType).thenReturn(EventType.ADD)
-        when(mockNotification.notifier).thenReturn(notifier)
+        when(mockNotification.getEventType()).thenReturn(EventType.ADD)
+        when(mockNotification.getNotifier()).thenReturn(notifier)
 
         // test
         let c = new NotificationChain()

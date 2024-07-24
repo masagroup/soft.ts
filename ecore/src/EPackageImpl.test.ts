@@ -69,7 +69,7 @@ describe("EPackageImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 		
 		// first value
 		let mockValue = mock<EFactoryInternal>()
@@ -79,9 +79,9 @@ describe("EPackageImpl", () => {
 		verify(mockAdapter.notifyChanged(anything())).once() 
 		{
 			let [notification] = capture(mockAdapter.notifyChanged).last()
-			expect(notification.notifier).toBe(o)
-			expect(notification.oldValue).toBeNull()
-			expect(notification.newValue).toBe(value)
+			expect(notification.getNotifier()).toBe(o)
+			expect(notification.getOldValue()).toBeNull()
+			expect(notification.getNewValue()).toBe(value)
 		}
 	
 		// set with other value
@@ -95,10 +95,10 @@ describe("EPackageImpl", () => {
 		verify(mockAdapter.notifyChanged(anything())).once()
 		{
 			let [notification] = capture(mockAdapter.notifyChanged).last()
-			expect(notification.notifier).toBe(o)
-			expect(notification.oldValue).toBe(value)
-			expect(notification.newValue).toBe(other)
-			expect(notification.position).toBe(-1)
+			expect(notification.getNotifier()).toBe(o)
+			expect(notification.getOldValue()).toBe(value)
+			expect(notification.getNewValue()).toBe(other)
+			expect(notification.getPosition()).toBe(-1)
 		}
 	})
 	
@@ -111,7 +111,7 @@ describe("EPackageImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// notification chain
 		let mockNotifications = mock<ENotificationChain>()
@@ -124,12 +124,12 @@ describe("EPackageImpl", () => {
 		// checks
 		verify(mockNotifications.add(anything())).once()
 		const [notification] = capture(mockNotifications.add).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.eventType).toBe(EventType.SET)
-		expect(notification.featureID).toBe(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getEventType()).toBe(EventType.SET)
+		expect(notification.getFeatureID()).toBe(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -168,7 +168,7 @@ describe("EPackageImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setNsPrefix(value)
@@ -176,10 +176,10 @@ describe("EPackageImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe("")
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe("")
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -196,7 +196,7 @@ describe("EPackageImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setNsURI(value)
@@ -204,10 +204,10 @@ describe("EPackageImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe("")
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe("")
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	

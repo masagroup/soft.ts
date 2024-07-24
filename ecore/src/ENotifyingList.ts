@@ -10,11 +10,11 @@
 import { EList, ENotificationChain, ENotifier, EStructuralFeature } from "./internal.js"
 
 export interface ENotifyingList<E> extends EList<E> {
-    readonly notifier: ENotifier
+    getNotifier(): ENotifier
 
-    readonly feature: EStructuralFeature
+    getFeature(): EStructuralFeature
 
-    readonly featureID: number
+    getFeatureID(): number
 
     addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain
 

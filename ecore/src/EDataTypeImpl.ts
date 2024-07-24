@@ -56,7 +56,7 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
     setSerializable(newIsSerializable : boolean ): void {
         let oldIsSerializable = this._isSerializable
         this._isSerializable = newIsSerializable
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EDATA_TYPE__SERIALIZABLE, oldIsSerializable, newIsSerializable))
         }
     

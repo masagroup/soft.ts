@@ -27,15 +27,15 @@ class AbstractENotifierNotification extends AbstractNotification {
         this._notifier = notifier
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return -1
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._notifier
     }
 }
@@ -49,11 +49,11 @@ export class AbstractENotifierList extends BasicEList<EAdapter> {
     }
 
     protected didAdd(index: number, adapter: EAdapter): void {
-        adapter.target = this._notifier
+        adapter.setTarget(this._notifier)
     }
 
     protected didRemove(index: number, adapter: EAdapter): void {
-        if (this._notifier.eDeliver) {
+        if (this._notifier.eDeliver()) {
             adapter.notifyChanged(
                 new AbstractENotifierNotification(this._notifier, EventType.REMOVING_ADAPTER, adapter, null, index)
             )
@@ -76,24 +76,24 @@ export abstract class AbstractENotifier implements ENotifier {
         return adapters && !adapters.isEmpty()
     }
 
-    get eAdapters(): EList<EAdapter> {
+    eAdapters(): EList<EAdapter> {
         return new ImmutableEList()
     }
 
-    get eDeliver(): boolean {
+    eDeliver(): boolean {
         return false
     }
 
-    set eDeliver(boolean) {
+    eSetDeliver(_ : boolean) {
         throw new Error("Unsupported operation.")
     }
 
-    get eNotificationRequired(): boolean {
-        return this.eBasicHasAdapters() && this.eDeliver
+    eNotificationRequired(): boolean {
+        return this.eBasicHasAdapters() && this.eDeliver()
     }
 
     eNotify(notification: ENotification): void {
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             for (const adapter of this.eBasicAdapters()) {
                 adapter.notifyChanged(notification)
             }

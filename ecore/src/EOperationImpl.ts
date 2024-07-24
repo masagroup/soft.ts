@@ -102,7 +102,7 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
     setOperationID(newOperationID : number ): void {
         let oldOperationID = this._operationID
         this._operationID = newOperationID
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EOPERATION__OPERATION_ID, oldOperationID, newOperationID))
         }
     

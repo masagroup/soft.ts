@@ -73,7 +73,7 @@ describe("EFactoryImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 		
 		// set value
 		when(mockValue.eInverseAdd(o,EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,null)).thenReturn(null)
@@ -83,9 +83,9 @@ describe("EFactoryImpl", () => {
 		verify(mockAdapter.notifyChanged(anything())).once()
 		{ 
 			let [notification] = capture(mockAdapter.notifyChanged).last()
-			expect(notification.notifier).toBe(o)
-			expect(notification.oldValue).toBeNull()
-			expect(notification.newValue).toBe(value)
+			expect(notification.getNotifier()).toBe(o)
+			expect(notification.getOldValue()).toBeNull()
+			expect(notification.getNewValue()).toBe(value)
 		}	
 		// set with the same value
 		reset(mockAdapter)
@@ -110,10 +110,10 @@ describe("EFactoryImpl", () => {
 		verify(mockAdapter.notifyChanged(anything())).once()
 		{
 			let [notification] = capture(mockAdapter.notifyChanged).last()
-			expect(notification.notifier).toBe(o)
-			expect(notification.oldValue).toBe(value)
-			expect(notification.newValue).toBe(other)
-			expect(notification.position).toBe(-1)
+			expect(notification.getNotifier()).toBe(o)
+			expect(notification.getOldValue()).toBe(value)
+			expect(notification.getNewValue()).toBe(other)
+			expect(notification.getPosition()).toBe(-1)
 		}
 	})
 	
@@ -126,7 +126,7 @@ describe("EFactoryImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// notification chain
 		let mockNotifications = mock<ENotificationChain>()
@@ -140,12 +140,12 @@ describe("EFactoryImpl", () => {
 		// checks
 		verify(mockNotifications.add(anything())).once()
 		const [notification] = capture(mockNotifications.add).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.eventType).toBe(EventType.SET)
-		expect(notification.featureID).toBe(EcoreConstants.EFACTORY__EPACKAGE)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getEventType()).toBe(EventType.SET)
+		expect(notification.getFeatureID()).toBe(EcoreConstants.EFACTORY__EPACKAGE)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	

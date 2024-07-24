@@ -19,47 +19,47 @@ describe("Notification", () => {
         const f = instance(mockFeature)
         {
             let n = new Notification(o, EventType.ADD, 0, 1, 2)
-            expect(n.notifier).toBe(o)
-            expect(n.eventType).toBe(EventType.ADD)
-            expect(n.featureID).toBe(0)
-            expect(n.oldValue).toBe(1)
-            expect(n.newValue).toBe(2)
-            expect(n.position).toBe(-1)
+            expect(n.getNotifier()).toBe(o)
+            expect(n.getEventType()).toBe(EventType.ADD)
+            expect(n.getFeatureID()).toBe(0)
+            expect(n.getOldValue()).toBe(1)
+            expect(n.getNewValue()).toBe(2)
+            expect(n.getPosition()).toBe(-1)
 
             let mockClass = mock<EClass>()
             let c = instance(mockClass)
             when(mockObject.eClass()).thenReturn(c)
             when(mockClass.getEStructuralFeature(0)).thenReturn(f)
-            expect(n.feature).toBe(f)
+            expect(n.getFeature()).toBe(f)
         }
         {
             let n = new Notification(o, EventType.ADD, f, 1, 2, 3)
-            expect(n.notifier).toBe(o)
-            expect(n.eventType).toBe(EventType.ADD)
-            expect(n.feature).toBe(f)
-            expect(n.oldValue).toBe(1)
-            expect(n.newValue).toBe(2)
-            expect(n.position).toBe(3)
+            expect(n.getNotifier()).toBe(o)
+            expect(n.getEventType()).toBe(EventType.ADD)
+            expect(n.getFeature()).toBe(f)
+            expect(n.getOldValue()).toBe(1)
+            expect(n.getNewValue()).toBe(2)
+            expect(n.getPosition()).toBe(3)
 
             when(mockFeature.getFeatureID()).thenReturn(1)
-            expect(n.featureID).toBe(1)
+            expect(n.getFeatureID()).toBe(1)
         }
         {
             let n = new Notification(o, EventType.ADD, null, 1, 2, 3)
-            expect(n.notifier).toBe(o)
-            expect(n.eventType).toBe(EventType.ADD)
-            expect(n.oldValue).toBe(1)
-            expect(n.newValue).toBe(2)
-            expect(n.position).toBe(3)
+            expect(n.getNotifier()).toBe(o)
+            expect(n.getEventType()).toBe(EventType.ADD)
+            expect(n.getOldValue()).toBe(1)
+            expect(n.getNewValue()).toBe(2)
+            expect(n.getPosition()).toBe(3)
 
             let mockClass = mock<EClass>()
             let c = instance(mockClass)
             when(mockObject.eClass()).thenReturn(c)
             when(mockClass.getEStructuralFeature(0)).thenReturn(f)
-            expect(n.feature).toBeNull()
+            expect(n.getFeature()).toBeNull()
 
-            f.featureID = -1
-            expect(n.featureID).toBe(-1)
+            f.setFeatureID(-1)
+            expect(n.getFeatureID()).toBe(-1)
         }
     })
 
@@ -80,9 +80,9 @@ describe("Notification", () => {
         let n1 = new Notification(o, EventType.SET, 1, 1, 2)
         let n2 = new Notification(o, EventType.SET, 1, 2, 3)
         expect(n1.merge(n2)).toBeTruthy()
-        expect(n1.eventType).toBe(EventType.SET)
-        expect(n1.oldValue).toBe(1)
-        expect(n1.newValue).toBe(3)
+        expect(n1.getEventType()).toBe(EventType.SET)
+        expect(n1.getOldValue()).toBe(1)
+        expect(n1.getNewValue()).toBe(3)
     })
 
     test("mergeUnSet", () => {
@@ -92,17 +92,17 @@ describe("Notification", () => {
             let n1 = new Notification(o, EventType.SET, 1, 1, 2)
             let n2 = new Notification(o, EventType.UNSET, 1, 2, 0)
             expect(n1.merge(n2)).toBeTruthy()
-            expect(n1.eventType).toBe(EventType.SET)
-            expect(n1.oldValue).toBe(1)
-            expect(n1.newValue).toBe(0)
+            expect(n1.getEventType()).toBe(EventType.SET)
+            expect(n1.getOldValue()).toBe(1)
+            expect(n1.getNewValue()).toBe(0)
         }
         {
             let n1 = new Notification(o, EventType.UNSET, 1, 1, 0)
             let n2 = new Notification(o, EventType.SET, 1, 0, 2)
             expect(n1.merge(n2)).toBeTruthy()
-            expect(n1.eventType).toBe(EventType.SET)
-            expect(n1.oldValue).toBe(1)
-            expect(n1.newValue).toBe(2)
+            expect(n1.getEventType()).toBe(EventType.SET)
+            expect(n1.getOldValue()).toBe(1)
+            expect(n1.getNewValue()).toBe(2)
         }
     })
 
@@ -119,17 +119,17 @@ describe("Notification", () => {
             let n1 = new Notification(o, EventType.REMOVE, 1, o1, null, 2)
             let n2 = new Notification(o, EventType.REMOVE, 1, o2, null, 2)
             expect(n1.merge(n2)).toBeTruthy()
-            expect(n1.eventType).toBe(EventType.REMOVE_MANY)
-            expect(n1.oldValue).toEqual(expect.arrayContaining([o1, o2]))
-            expect(n1.newValue).toEqual([2, 3])
+            expect(n1.getEventType()).toBe(EventType.REMOVE_MANY)
+            expect(n1.getOldValue()).toEqual(expect.arrayContaining([o1, o2]))
+            expect(n1.getNewValue()).toEqual([2, 3])
         }
         {
             let n1 = new Notification(o, EventType.REMOVE_MANY, 1, [o1, o2], [2, 3])
             let n2 = new Notification(o, EventType.REMOVE, 1, o3, null, 2)
             expect(n1.merge(n2)).toBeTruthy()
-            expect(n1.eventType).toBe(EventType.REMOVE_MANY)
-            expect(n1.oldValue).toEqual(expect.arrayContaining([o1, o2, o3]))
-            expect(n1.newValue).toEqual([2, 3, 4])
+            expect(n1.getEventType()).toBe(EventType.REMOVE_MANY)
+            expect(n1.getOldValue()).toEqual(expect.arrayContaining([o1, o2, o3]))
+            expect(n1.getNewValue()).toEqual([2, 3, 4])
         }
     })
 

@@ -20,58 +20,72 @@ import {
 } from "./internal.js"
 
 describe("AbstractENotifierList", () => {
-    let mockNotifier = mock<AbstractENotifier>()
-    let notifier = instance(mockNotifier)
-    let l: AbstractENotifierList = null
-    beforeEach(() => {
-        l = new AbstractENotifierList(notifier)
-        expect(l).not.toBeNull()
-    })
-
+   
     test("add", () => {
+        let mockNotifier = mock<AbstractENotifier>()
+        let notifier = instance(mockNotifier)
+        let l: AbstractENotifierList = new AbstractENotifierList(notifier)
+        expect(l).not.toBeNull()
+
         let mockAdapter = mock<EAdapter>()
         let adapter = instance(mockAdapter)
         l.add(adapter)
-        expect(adapter.target).toBe(notifier)
+        verify(mockAdapter.setTarget(notifier)).once()
     })
 
     test("remove-notification", () => {
+        let mockNotifier = mock<AbstractENotifier>()
+        let notifier = instance(mockNotifier)
+        let l: AbstractENotifierList = new AbstractENotifierList(notifier)
+        expect(l).not.toBeNull()
+
         let mockAdapter = mock<EAdapter>()
         let adapter = instance(mockAdapter)
         // add adapter
         l.add(adapter)
-        expect(adapter.target).toBe(notifier)
+        verify(mockAdapter.setTarget(notifier)).once()
 
         // remove adapter
+        when(mockNotifier.eDeliver()).thenReturn(true)
         l.remove(adapter)
+        verify(mockNotifier.eDeliver()).once()
         verify(mockAdapter.notifyChanged(anything())).once()
         verify(mockAdapter.unsetTarget(notifier)).once()
         let [n] = capture(mockAdapter.notifyChanged).last()
         expect(n).not.toBeNull()
-        expect(n.notifier).toBe(notifier)
-        expect(n.eventType).toBe(EventType.REMOVING_ADAPTER)
-        expect(n.oldValue).toBe(adapter)
-        expect(n.newValue).toBeNull()
-        expect(n.position).toBe(0)
-        expect(n.featureID).toBe(-1)
-        expect(n.feature).toBeNull()
+        expect(n.getNotifier()).toBe(notifier)
+        expect(n.getEventType()).toBe(EventType.REMOVING_ADAPTER)
+        expect(n.getOldValue()).toBe(adapter)
+        expect(n.getNewValue()).toBeNull()
+        expect(n.getPosition()).toBe(0)
+        expect(n.getFeatureID()).toBe(-1)
+        expect(n.getFeature()).toBeNull()
     })
 
     test("remove", () => {
+        let mockNotifier = mock<AbstractENotifier>()
+        let notifier = instance(mockNotifier)
+        let l: AbstractENotifierList = new AbstractENotifierList(notifier)
+        expect(l).not.toBeNull()
+
         let mockAdapter = mock<EAdapter>()
         let adapter = instance(mockAdapter)
         // add adapter
         l.add(adapter)
-        expect(adapter.target).toBe(notifier)
+        verify(mockAdapter.setTarget(notifier)).once()
 
         // remove adapter
-        notifier.eDeliver = false
+        when(mockNotifier.eDeliver()).thenReturn(true)
         l.remove(adapter)
-        verify(mockAdapter.notifyChanged(anything())).never()
+        verify(mockNotifier.eDeliver()).once()
+        verify(mockAdapter.notifyChanged(anything())).once()
         verify(mockAdapter.unsetTarget(notifier)).once()
     })
 
     test("toJSON", () => {
+        let mockNotifier = mock<AbstractENotifier>()
+        let notifier = instance(mockNotifier)
+        let l: AbstractENotifierList = new AbstractENotifierList(notifier)
         expect(l.toJSON()).toStrictEqual({})
     })
 })
@@ -88,12 +102,12 @@ class ENotifierTestImpl extends ENotifierTest {
         this.adapters = null
     }
 
-    get eDeliver(): boolean {
+    eDeliver(): boolean {
         return this.deliver
     }
 
-    set eDeliver(eDeliver: boolean) {
-        super.eDeliver = eDeliver
+    eSetDeliver(eDeliver: boolean) {
+        this.deliver = eDeliver
     }
 
     protected eBasicAdapters(): EList<EAdapter> {
@@ -108,29 +122,29 @@ describe("AbstractENotifier", () => {
     describe("eDeliver ", () => {
         test("get", () => {
             let n = new ENotifierTest()
-            expect(n.eDeliver).toBeFalsy()
+            expect(n.eDeliver()).toBeFalsy()
         })
         test("set", () => {
             let n = new ENotifierTest()
             expect(() => {
-                n.eDeliver = true
+                n.eSetDeliver(true)
             }).toThrow(Error)
         })
     })
     test("eAdapters", () => {
         let n = new ENotifierTest()
-        expect(n.eAdapters).not.toBeNull()
-        expect(n.eAdapters.isEmpty()).toBeTruthy()
+        expect(n.eAdapters()).not.toBeNull()
+        expect(n.eAdapters().isEmpty()).toBeTruthy()
     })
     describe("eNotificationRequired", () => {
         test("default", () => {
             let n = new ENotifierTest()
-            expect(n.eNotificationRequired).toBeFalsy()
+            expect(n.eNotificationRequired()).toBeFalsy()
         })
         test("deliver", () => {
             let n = new ENotifierTestImpl()
             n.deliver = true
-            expect(n.eNotificationRequired).toBeFalsy()
+            expect(n.eNotificationRequired()).toBeFalsy()
         })
         test("adapters", () => {
             let n = new ENotifierTestImpl()
@@ -139,10 +153,10 @@ describe("AbstractENotifier", () => {
             n.deliver = true
             n.adapters = instanceAdapters
             when(mockAdapters.isEmpty()).thenReturn(true)
-            expect(n.eNotificationRequired).toBeFalsy()
+            expect(n.eNotificationRequired()).toBeFalsy()
 
             when(mockAdapters.isEmpty()).thenReturn(false)
-            expect(n.eNotificationRequired).toBeTruthy()
+            expect(n.eNotificationRequired()).toBeTruthy()
 
             verify(mockAdapters.isEmpty()).twice()
         })

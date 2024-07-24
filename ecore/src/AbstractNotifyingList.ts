@@ -21,16 +21,18 @@ import {
 } from "./internal.js"
 
 export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements ENotifyingList<E> {
-    abstract readonly notifier: ENotifier
-    abstract readonly feature: EStructuralFeature
-    abstract readonly featureID: number
-
     constructor(iterable: Iterable<E> | ArrayLike<E> = []) {
         super(iterable, true)
     }
 
-    get isNotificationRequired(): boolean {
-        return this.notifier != null && this.notifier.eDeliver && !this.notifier.eAdapters.isEmpty()
+    abstract getNotifier(): ENotifier
+
+    abstract getFeature(): EStructuralFeature
+
+    abstract getFeatureID(): number
+
+    isNotificationRequired(): boolean {
+        return this.getNotifier() != null && this.getNotifier().eDeliver() && !this.getNotifier().eAdapters().isEmpty()
     }
 
     addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
@@ -128,16 +130,16 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
                 super(eventType, oldValue, newValue, position)
             }
 
-            get feature(): EStructuralFeature {
-                return this.list.feature
+            getFeature(): EStructuralFeature {
+                return this.list.getFeature()
             }
 
-            get featureID(): number {
-                return this.list.featureID
+            getFeatureID(): number {
+                return this.list.getFeatureID()
             }
 
-            get notifier(): ENotifier {
-                return this.list.notifier
+            getNotifier(): ENotifier {
+                return this.list.getNotifier()
             }
         })(this)
     }
@@ -150,12 +152,12 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         position: number = -1
     ): ENotificationChain {
         let notifications = nc
-        if (this.isNotificationRequired) {
+        if (this.isNotificationRequired()) {
             let notification = this.createNotification(eventType, oldValue, newValue, position)
             if (notifications != null) {
                 notifications.add(notification)
             } else {
-                notifications = <ENotificationChain>notification
+                notifications = notification as ENotificationChain
             }
         }
         return notifications
@@ -177,13 +179,13 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         notifications: ENotificationChain,
         createNotification: () => ENotification
     ) {
-        if (this.isNotificationRequired) {
+        if (this.isNotificationRequired()) {
             let notification = createNotification()
             if (notifications != null) {
                 notifications.add(notification)
                 notifications.dispatch()
             } else {
-                let notifier = this.notifier
+                let notifier = this.getNotifier()
                 if (notifier != null) {
                     notifier.eNotify(notification)
                 }

@@ -70,7 +70,7 @@ describe("EReferenceImpl", () => {
 		// events
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 		
 		// set object resource
 		let mockResourceSet = mock<EResourceSet>()
@@ -105,7 +105,7 @@ describe("EReferenceImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setEOpposite(value)
@@ -113,10 +113,10 @@ describe("EReferenceImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -143,7 +143,7 @@ describe("EReferenceImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setContainment(value)
@@ -151,10 +151,10 @@ describe("EReferenceImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(false)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(false)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -171,7 +171,7 @@ describe("EReferenceImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setResolveProxies(value)
@@ -179,10 +179,10 @@ describe("EReferenceImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe(true)
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe(true)
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	

@@ -14,19 +14,19 @@ import { EAdapter, ENotification, ENotifierImpl } from "./internal.js"
 describe("ENotifierImpl", () => {
     test("constructor", () => {
         let n = new ENotifierImpl()
-        expect(n.eDeliver).toBeTruthy()
-        expect(n.eAdapters.isEmpty()).toBeTruthy()
+        expect(n.eDeliver()).toBeTruthy()
+        expect(n.eAdapters().isEmpty()).toBeTruthy()
     })
     test("eDeliver", () => {
         let n = new ENotifierImpl()
-        expect(n.eDeliver).toBeTruthy()
-        n.eDeliver = false
-        expect(n.eDeliver).toBeFalsy()
+        expect(n.eDeliver()).toBeTruthy()
+        n.eSetDeliver(false)
+        expect(n.eDeliver()).toBeFalsy()
     })
     test("eAdapters", () => {
         let n = new ENotifierImpl()
         expect(n.eBasicAdapters()).toBeNull()
-        expect(n.eAdapters).not.toBeNull()
+        expect(n.eAdapters()).not.toBeNull()
         expect(n.eBasicAdapters()).not.toBeNull()
     })
     test("eNotify", () => {
@@ -38,7 +38,7 @@ describe("ENotifierImpl", () => {
 
         // call
         let n = new ENotifierImpl()
-        n.eAdapters.add(adapter)
+        n.eAdapters().add(adapter)
         n.eNotify(notification)
 
         // checks

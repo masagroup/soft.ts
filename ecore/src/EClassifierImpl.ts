@@ -64,7 +64,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     setClassifierID(newClassifierID : number ): void {
         let oldClassifierID = this._classifierID
         this._classifierID = newClassifierID
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, oldClassifierID, newClassifierID))
         }
     
@@ -98,7 +98,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     setInstanceClass(newInstanceClass : any ): void {
         let oldInstanceClass = this._instanceClass
         this._instanceClass = newInstanceClass
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, oldInstanceClass, newInstanceClass))
         }
     
@@ -115,7 +115,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     setInstanceClassName(newInstanceClassName : string ): void {
         let oldInstanceClassName = this._instanceClassName
         this._instanceClassName = newInstanceClassName
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, oldInstanceClassName, newInstanceClassName))
         }
     

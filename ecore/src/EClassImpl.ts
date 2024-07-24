@@ -224,7 +224,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
     setAbstract(newIsAbstract : boolean ): void {
         let oldIsAbstract = this._isAbstract
         this._isAbstract = newIsAbstract
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldIsAbstract, newIsAbstract))
         }
     
@@ -241,7 +241,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
     setInterface(newIsInterface : boolean ): void {
         let oldIsInterface = this._isInterface
         this._isInterface = newIsInterface
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldIsInterface, newIsInterface))
         }
     

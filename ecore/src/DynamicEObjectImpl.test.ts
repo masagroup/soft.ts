@@ -37,7 +37,7 @@ describe("DynamicEObjectImpl", () => {
         let eClass = instance(mockClass)
         let eAdapters = instance(mockAdapters)
         when(mockClass.getFeatureCount()).thenReturn(0)
-        when(mockClass.eAdapters).thenReturn(eAdapters)
+        when(mockClass.eAdapters()).thenReturn(eAdapters)
         when(mockAdapters.add(anything())).thenReturn(true)
         o.setEClass(eClass)
         expect(o.eClass()).toBe(eClass)

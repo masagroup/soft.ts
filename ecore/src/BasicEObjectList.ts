@@ -55,15 +55,15 @@ export class BasicEObjectList<O extends EObject>
         this._unset = unset
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._owner
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return this._owner != null ? this._owner.eClass().getEStructuralFeature(this._featureID) : null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return this._featureID
     }
 
@@ -75,16 +75,16 @@ export class BasicEObjectList<O extends EObject>
                       this._v = _delegate.toArray()
                   }
 
-                  get notifier(): ENotifier {
-                      return this._delegate.notifier
+                  getNotifier(): ENotifier {
+                      return this._delegate.getNotifier()
                   }
 
-                  get feature(): EStructuralFeature {
-                      return this._delegate.feature
+                  getFeature(): EStructuralFeature {
+                      return this._delegate.getFeature()
                   }
 
-                  get featureID(): number {
-                      return this._delegate.featureID
+                  getFeatureID(): number {
+                      return this._delegate.getFeatureID()
                   }
 
                   getUnResolvedList(): EList<O> {

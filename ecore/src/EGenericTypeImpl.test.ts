@@ -64,7 +64,7 @@ describe("EGenericTypeImpl", () => {
 		// events
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 		
 		// set object resource
 		let mockResourceSet = mock<EResourceSet>()
@@ -99,7 +99,7 @@ describe("EGenericTypeImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setEClassifier(value)
@@ -107,10 +107,10 @@ describe("EGenericTypeImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -129,7 +129,7 @@ describe("EGenericTypeImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setELowerBound(value)
@@ -137,10 +137,10 @@ describe("EGenericTypeImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -152,7 +152,7 @@ describe("EGenericTypeImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// notification chain
 		let mockNotifications = mock<ENotificationChain>()
@@ -165,12 +165,12 @@ describe("EGenericTypeImpl", () => {
 		// checks
 		verify(mockNotifications.add(anything())).once()
 		const [notification] = capture(mockNotifications.add).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.eventType).toBe(EventType.SET)
-		expect(notification.featureID).toBe(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getEventType()).toBe(EventType.SET)
+		expect(notification.getFeatureID()).toBe(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -188,7 +188,7 @@ describe("EGenericTypeImpl", () => {
 		// events
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 		
 		// set object resource
 		let mockResourceSet = mock<EResourceSet>()
@@ -235,7 +235,7 @@ describe("EGenericTypeImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setETypeParameter(value)
@@ -243,10 +243,10 @@ describe("EGenericTypeImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -265,7 +265,7 @@ describe("EGenericTypeImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setEUpperBound(value)
@@ -273,10 +273,10 @@ describe("EGenericTypeImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -288,7 +288,7 @@ describe("EGenericTypeImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// notification chain
 		let mockNotifications = mock<ENotificationChain>()
@@ -301,12 +301,12 @@ describe("EGenericTypeImpl", () => {
 		// checks
 		verify(mockNotifications.add(anything())).once()
 		const [notification] = capture(mockNotifications.add).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.eventType).toBe(EventType.SET)
-		expect(notification.featureID).toBe(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getEventType()).toBe(EventType.SET)
+		expect(notification.getFeatureID()).toBe(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	

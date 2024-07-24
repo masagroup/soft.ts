@@ -99,7 +99,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         let oldEFactoryInstance = this._eFactoryInstance
         this._eFactoryInstance = newEFactoryInstance
         let notifications = msgs
-        if ( this.eNotificationRequired ) {
+        if ( this.eNotificationRequired() ) {
             let notification = new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, oldEFactoryInstance, newEFactoryInstance)
             if (notifications != null ) {
                 notifications.add( notification )
@@ -140,7 +140,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     setNsPrefix(newNsPrefix : string ): void {
         let oldNsPrefix = this._nsPrefix
         this._nsPrefix = newNsPrefix
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_PREFIX, oldNsPrefix, newNsPrefix))
         }
     
@@ -157,7 +157,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     setNsURI(newNsURI : string ): void {
         let oldNsURI = this._nsURI
         this._nsURI = newNsURI
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_URI, oldNsURI, newNsURI))
         }
     

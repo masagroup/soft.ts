@@ -34,34 +34,34 @@ class ESuperAdapter extends AbstractEAdapter {
     }
 
     notifyChanged(notification: ENotification): void {
-        let eventType = notification.eventType
-        let notifier = notification.notifier as EClassExt
+        let eventType = notification.getEventType()
+        let notifier = notification.getNotifier() as EClassExt
         if (eventType != EventType.REMOVING_ADAPTER) {
-            if (notification.featureID == EcoreConstants.ECLASS__ESUPER_TYPES) {
+            if (notification.getFeatureID() == EcoreConstants.ECLASS__ESUPER_TYPES) {
                 switch (eventType) {
                     case EventType.SET:
                     case EventType.RESOLVE: {
-                        if (notification.oldValue != null) {
-                            let eClass = notification.oldValue as EClassExt
+                        if (notification.getOldValue() != null) {
+                            let eClass = notification.getOldValue() as EClassExt
                             let index = eClass._subClasses.findIndex((c) => c == notifier)
                             if (index != -1) eClass._subClasses.splice(index, 1)
                         }
-                        if (notification.newValue != null) {
-                            let eClass = notification.newValue as EClassExt
+                        if (notification.getNewValue() != null) {
+                            let eClass = notification.getNewValue() as EClassExt
                             eClass._subClasses.push(notifier)
                         }
                         break
                     }
                     case EventType.ADD: {
-                        if (notification.newValue != null) {
-                            let eClass = notification.newValue as EClassExt
+                        if (notification.getNewValue() != null) {
+                            let eClass = notification.getNewValue() as EClassExt
                             eClass._subClasses.push(notifier)
                         }
                         break
                     }
                     case EventType.ADD_MANY: {
-                        if (notification.newValue != null) {
-                            let classes = notification.newValue as EClassExt[]
+                        if (notification.getNewValue() != null) {
+                            let classes = notification.getNewValue() as EClassExt[]
                             for (const cls of classes) {
                                 cls._subClasses.push(notifier)
                             }
@@ -69,8 +69,8 @@ class ESuperAdapter extends AbstractEAdapter {
                         break
                     }
                     case EventType.REMOVE: {
-                        if (notification.oldValue != null) {
-                            let eClass = notification.oldValue as EClassExt
+                        if (notification.getOldValue() != null) {
+                            let eClass = notification.getOldValue() as EClassExt
                             for (const [i, subClass] of eClass._subClasses.entries()) {
                                 if (subClass == notifier) {
                                     eClass._subClasses.splice(i, 1)
@@ -81,8 +81,8 @@ class ESuperAdapter extends AbstractEAdapter {
                         break
                     }
                     case EventType.REMOVE_MANY: {
-                        if (notification.oldValue != null) {
-                            let classes = notification.oldValue as EClassExt[]
+                        if (notification.getOldValue() != null) {
+                            let classes = notification.getOldValue() as EClassExt[]
                             for (const eClass of classes) {
                                 for (const [i, subClass] of eClass._subClasses.entries()) {
                                     if (subClass == notifier) {
@@ -96,7 +96,7 @@ class ESuperAdapter extends AbstractEAdapter {
                     }
                 }
             }
-            this._eClass.setModified(notification.featureID)
+            this._eClass.setModified(notification.getFeatureID())
         }
     }
 }
@@ -110,7 +110,7 @@ export class EClassExt extends EClassImpl {
     constructor() {
         super()
         this._adapter = new ESuperAdapter(this)
-        this.eAdapters.add(this._adapter)
+        this.eAdapters().add(this._adapter)
     }
 
     isSuperTypeOf(someClass: EClass): boolean {

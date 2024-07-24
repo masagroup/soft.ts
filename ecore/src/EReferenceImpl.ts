@@ -73,7 +73,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
             let newEOpposite = this.eResolveProxy(oldEOpposite) as EReference
             this._eOpposite = newEOpposite
             if (newEOpposite != oldEOpposite) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite))
                 }
             }
@@ -86,7 +86,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     setEOpposite(newEOpposite : EReference ): void {
         let oldEOpposite = this._eOpposite
         this._eOpposite = newEOpposite
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite))
         }
     
@@ -127,7 +127,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     setContainment(newIsContainment : boolean ): void {
         let oldIsContainment = this._isContainment
         this._isContainment = newIsContainment
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__CONTAINMENT, oldIsContainment, newIsContainment))
         }
     
@@ -144,7 +144,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     setResolveProxies(newIsResolveProxies : boolean ): void {
         let oldIsResolveProxies = this._isResolveProxies
         this._isResolveProxies = newIsResolveProxies
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__RESOLVE_PROXIES, oldIsResolveProxies, newIsResolveProxies))
         }
     

@@ -19,15 +19,15 @@ export class BasicEDataTypeList<E> extends AbstractNotifyingList<E> {
         this._featureID = featureID
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._owner
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return this._owner != null ? this._owner.eClass().getEStructuralFeature(this._featureID) : null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return this._featureID
     }
 }

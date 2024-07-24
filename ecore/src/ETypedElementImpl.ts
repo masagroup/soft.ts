@@ -62,7 +62,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
             let newEType = this.eResolveProxy(oldEType) as EClassifier
             this._eType = newEType
             if (newEType != oldEType) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
                 }
             }
@@ -75,7 +75,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     setEType(newEType : EClassifier ): void {
         let oldEType = this._eType
         this._eType = newEType
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
         }
     
@@ -83,7 +83,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     
     // unSetEType unset the value of _eType
     unSetEType() : void {
-            if (this.eNotificationRequired) {
+            if (this.eNotificationRequired()) {
                 this.eNotify(new Notification(this,EventType.UNSET, EcoreConstants.ETYPED_ELEMENT__ETYPE,null,null))
             }
     }
@@ -111,7 +111,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     setOrdered(newIsOrdered : boolean ): void {
         let oldIsOrdered = this._isOrdered
         this._isOrdered = newIsOrdered
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ORDERED, oldIsOrdered, newIsOrdered))
         }
     
@@ -135,7 +135,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     setUnique(newIsUnique : boolean ): void {
         let oldIsUnique = this._isUnique
         this._isUnique = newIsUnique
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldIsUnique, newIsUnique))
         }
     
@@ -152,7 +152,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     setLowerBound(newLowerBound : number ): void {
         let oldLowerBound = this._lowerBound
         this._lowerBound = newLowerBound
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, oldLowerBound, newLowerBound))
         }
     
@@ -169,7 +169,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     setUpperBound(newUpperBound : number ): void {
         let oldUpperBound = this._upperBound
         this._upperBound = newUpperBound
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, oldUpperBound, newUpperBound))
         }
     

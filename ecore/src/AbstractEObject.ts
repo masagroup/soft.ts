@@ -85,7 +85,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 if (notifications) {
                     notifications.dispatch()
                 }
-                if (this.eNotificationRequired && containerFeatureID >= EOPPOSITE_FEATURE_BASE) {
+                if (this.eNotificationRequired() && containerFeatureID >= EOPPOSITE_FEATURE_BASE) {
                     this.eNotify(new Notification(this, EventType.RESOLVE, containerFeatureID, eContainer, resolved))
                 }
             }
@@ -307,7 +307,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                 notifications.dispatch()
                             }
                         }
-                        if (this.eNotificationRequired) {
+                        if (this.eNotificationRequired()) {
                             this.eNotify(new Notification(this, EventType.RESOLVE, dynamicFeature, oldValue, newValue))
                         }
                     }
@@ -405,7 +405,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 if (notifications) {
                     notifications.dispatch()
                 }
-            } else if (this.eNotificationRequired) {
+            } else if (this.eNotificationRequired()) {
                 this.eNotify(new Notification(this, EventType.SET, dynamicFeature, newValue, newValue))
             }
         } else if (isBidirectional(dynamicFeature) || isContains(dynamicFeature)) {
@@ -444,7 +444,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 properties.eDynamicSet(dynamicFeatureID, newValue)
 
                 // create notification
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     let notification = new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue)
                     if (notifications) {
                         notifications.add(notification)
@@ -464,7 +464,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             properties.eDynamicSet(dynamicFeatureID, newValue)
 
             // notify
-            if (this.eNotificationRequired) {
+            if (this.eNotificationRequired()) {
                 this.eNotify(new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue))
             }
         }
@@ -549,7 +549,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 if (notifications) {
                     notifications.dispatch()
                 }
-            } else if (this.eNotificationRequired) {
+            } else if (this.eNotificationRequired()) {
                 this.eNotify(new Notification(this, EventType.SET, dynamicFeature, null, null))
             }
         } else if (isBidirectional(dynamicFeature) || isContains(dynamicFeature)) {
@@ -579,7 +579,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 properties.eDynamicUnset(dynamicFeatureID)
 
                 // create notification
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
                     let eventType = dynamicFeature.isUnsettable ? EventType.UNSET : EventType.SET
                     let notification = new Notification(this, eventType, dynamicFeature, oldValue, null)
                     if (notifications) {
@@ -597,7 +597,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         } else {
             let oldValue = properties.eDynamicGet(dynamicFeatureID)
             properties.eDynamicUnset(dynamicFeatureID)
-            if (this.eNotificationRequired) {
+            if (this.eNotificationRequired()) {
                 this.eNotify(new Notification(this, EventType.UNSET, dynamicFeature, oldValue, null))
             }
         }
@@ -684,7 +684,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             properties.eDynamicSet(dynamicFeatureID, otherEnd)
 
             // create notification
-            if (this.eNotificationRequired) {
+            if (this.eNotificationRequired()) {
                 let notification = new Notification(this, EventType.SET, dynamicFeature, oldValue, otherEnd)
                 if (notifications) {
                     notifications.add(notification)
@@ -743,7 +743,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             properties.eDynamicUnset(dynamicFeatureID)
 
             // create notification
-            if (this.eNotificationRequired) {
+            if (this.eNotificationRequired()) {
                 let notification = new Notification(this, EventType.SET, dynamicFeature, oldValue, null)
                 if (notifications) {
                     notifications.add(notification)
@@ -799,7 +799,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         this.eSetInternalContainer(newContainer, newContainerFeatureID)
 
         // notification
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             if (oldContainer != null && oldContainerFeatureID >= 0 && oldContainerFeatureID != newContainerFeatureID) {
                 let notification = new Notification(this, EventType.SET, oldContainerFeatureID, oldContainer, null)
                 if (notifications != null) {

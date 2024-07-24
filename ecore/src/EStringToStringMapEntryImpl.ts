@@ -57,7 +57,7 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     setKey(newKey : string ): void {
         let oldKey = this._key
         this._key = newKey
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, oldKey, newKey))
         }
     
@@ -74,7 +74,7 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
     setValue(newValue : string ): void {
         let oldValue = this._value
         this._value = newValue
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, oldValue, newValue))
         }
     

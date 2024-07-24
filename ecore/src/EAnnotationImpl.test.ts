@@ -87,7 +87,7 @@ describe("EAnnotationImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 		
 		// set value
 		when(mockValue.eInverseAdd(o,EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS,null)).thenReturn(null)
@@ -97,9 +97,9 @@ describe("EAnnotationImpl", () => {
 		verify(mockAdapter.notifyChanged(anything())).once()
 		{ 
 			let [notification] = capture(mockAdapter.notifyChanged).last()
-			expect(notification.notifier).toBe(o)
-			expect(notification.oldValue).toBeNull()
-			expect(notification.newValue).toBe(value)
+			expect(notification.getNotifier()).toBe(o)
+			expect(notification.getOldValue()).toBeNull()
+			expect(notification.getNewValue()).toBe(value)
 		}	
 		// set with the same value
 		reset(mockAdapter)
@@ -124,10 +124,10 @@ describe("EAnnotationImpl", () => {
 		verify(mockAdapter.notifyChanged(anything())).once()
 		{
 			let [notification] = capture(mockAdapter.notifyChanged).last()
-			expect(notification.notifier).toBe(o)
-			expect(notification.oldValue).toBe(value)
-			expect(notification.newValue).toBe(other)
-			expect(notification.position).toBe(-1)
+			expect(notification.getNotifier()).toBe(o)
+			expect(notification.getOldValue()).toBe(value)
+			expect(notification.getNewValue()).toBe(other)
+			expect(notification.getPosition()).toBe(-1)
 		}
 	})
 	
@@ -140,7 +140,7 @@ describe("EAnnotationImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// notification chain
 		let mockNotifications = mock<ENotificationChain>()
@@ -154,12 +154,12 @@ describe("EAnnotationImpl", () => {
 		// checks
 		verify(mockNotifications.add(anything())).once()
 		const [notification] = capture(mockNotifications.add).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.eventType).toBe(EventType.SET)
-		expect(notification.featureID).toBe(EcoreConstants.EANNOTATION__EMODEL_ELEMENT)
-		expect(notification.oldValue).toBeNull()
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getEventType()).toBe(EventType.SET)
+		expect(notification.getFeatureID()).toBe(EcoreConstants.EANNOTATION__EMODEL_ELEMENT)
+		expect(notification.getOldValue()).toBeNull()
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	
@@ -181,7 +181,7 @@ describe("EAnnotationImpl", () => {
 		// add listener
 		let mockAdapter = mock<EAdapter>()
 		let adapter = instance(mockAdapter)
-		o.eAdapters.add(adapter)
+		o.eAdapters().add(adapter)
 	
 		// set value
 		o.setSource(value)
@@ -189,10 +189,10 @@ describe("EAnnotationImpl", () => {
 		// checks
 		verify(mockAdapter.notifyChanged(anything())).once()
 		const [notification] = capture(mockAdapter.notifyChanged).last()
-		expect(notification.notifier).toBe(o)
-		expect(notification.oldValue).toBe("")
-		expect(notification.newValue).toBe(value)
-		expect(notification.position).toBe(-1)
+		expect(notification.getNotifier()).toBe(o)
+		expect(notification.getOldValue()).toBe("")
+		expect(notification.getNewValue()).toBe(value)
+		expect(notification.getPosition()).toBe(-1)
 	})
 	
 	

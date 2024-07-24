@@ -28,7 +28,7 @@ export class NotificationChain implements ENotificationChain {
     }
     dispatch(): void {
         for (const notification of this._notifications) {
-            if (notification.notifier) notification.notifier.eNotify(notification)
+            if (notification.getNotifier()) notification.getNotifier().eNotify(notification)
         }
     }
 }

@@ -42,8 +42,8 @@ class EPackageExtAdapter extends AbstractEAdapter {
 
     notifyChanged(notification: ENotification): void {
         if (
-            notification.eventType != EventType.REMOVING_ADAPTER &&
-            notification.featureID == EcoreConstants.EPACKAGE__ECLASSIFIERS
+            notification.getEventType() != EventType.REMOVING_ADAPTER &&
+            notification.getFeatureID() == EcoreConstants.EPACKAGE__ECLASSIFIERS
         ) {
             this._pack._nameToClassifier = null
         }
@@ -58,7 +58,7 @@ export class EPackageExt extends EPackageImpl {
         super()
         this.setEFactoryInstance(new EFactoryExt())
         this._adapter = new EPackageExtAdapter(this)
-        this.eAdapters.add(this._adapter)
+        this.eAdapters().add(this._adapter)
     }
 
     getEClassifier(name: string): EClassifier {
