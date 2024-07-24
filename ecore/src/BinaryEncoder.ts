@@ -70,7 +70,7 @@ export class BinaryEncoder implements EEncoder {
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext
-        this._baseURI = this._resource?.eURI
+        this._baseURI = this._resource?.getURI()
         this._isIDAttributeEncoded = options?.get(BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE) ?? false
     }
 
@@ -141,7 +141,7 @@ export class BinaryEncoder implements EEncoder {
                         let eResource = eObjectInternal.eInternalResource()
                         if (eResource) {
                             this.encodeNumber(-2)
-                            this.encodeURIWithFragment(eResource.eURI, eResource.getURIFragment(eObjectInternal))
+                            this.encodeURIWithFragment(eResource.getURI(), eResource.getURIFragment(eObjectInternal))
                             saveFeatureValues = false
                         }
                     }
@@ -159,7 +159,7 @@ export class BinaryEncoder implements EEncoder {
                                 (this._objectRoot != null && !EcoreUtils.isAncestor(this._objectRoot, eObjectInternal)))
                         ) {
                             this.encodeNumber(-2)
-                            this.encodeURIWithFragment(eResource.eURI, eResource.getURIFragment(eObjectInternal))
+                            this.encodeURIWithFragment(eResource.getURI(), eResource.getURIFragment(eObjectInternal))
                             saveFeatureValues = false
                         }
                     }
@@ -170,7 +170,7 @@ export class BinaryEncoder implements EEncoder {
                     break
             }
             if (saveFeatureValues) {
-                let objectIDManager = this._resource.eObjectIDManager
+                let objectIDManager = this._resource.getObjectIDManager()
                 if (this._isIDAttributeEncoded && objectIDManager) {
                     let id = objectIDManager.getID(eObject)
                     if (id) {

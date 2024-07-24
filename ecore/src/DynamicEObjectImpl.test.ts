@@ -162,7 +162,7 @@ describe("DynamicEObjectImpl", () => {
 
         // add to resource to enable proxy resolution
         let resource = new EResourceImpl()
-        resource.eURI = new URI("file:///" + __dirname + "/r.txt")
+        resource.setURI(new URI("file:///" + __dirname + "/r.txt"))
         resource.eContents().addAll(new ImmutableEList<EObject>([o1, o3]))
 
         let resourceSet = new EResourceSetImpl()

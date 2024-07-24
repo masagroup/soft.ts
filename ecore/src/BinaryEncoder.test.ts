@@ -19,7 +19,7 @@ function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor()
     let uri = new URI("testdata/" + filename)
     let resource = xmiProcessor.loadSync(uri)
-    expect(resource.isLoaded).toBeTruthy()
+    expect(resource.isLoaded()).toBeTruthy()
     expect(resource.getErrors().isEmpty()).toBeTruthy()
     expect(resource.eContents().isEmpty()).toBeFalsy()
     return resource.eContents().get(0) as EPackage
@@ -33,7 +33,7 @@ describe("BinaryEncoder", () => {
         let expectedURI = new URI("testdata/library.complex.bin")
         let xmlProcessor = new XMLProcessor([ePackage])
         let eResource = xmlProcessor.loadSync(resourceURI)
-        expect(eResource.isLoaded).toBeTruthy()
+        expect(eResource.isLoaded()).toBeTruthy()
         expect(eResource.getErrors().isEmpty()).toBeTruthy()
         expect(eResource.eContents().isEmpty()).toBeFalsy()
         let e = new BinaryEncoder(eResource)
@@ -52,14 +52,14 @@ describe("BinaryEncoder", () => {
 
         let eResource = new EResourceImpl()
         let idManager = new UUIDManager()
-        eResource.eObjectIDManager = idManager
-        eResource.eURI = resourceURI
+        eResource.setObjectIDManager(idManager)
+        eResource.setURI(resourceURI)
 
         let eResourceSet = new EResourceSetImpl()
         eResourceSet.getResources().add(eResource)
         eResourceSet.getPackageRegistry().registerPackage(ePackage)
         eResource.loadSync(new Map<string, any>([[XMLOptions.ID_ATTRIBUTE_NAME, "id"]]))
-        expect(eResource.isLoaded).toBeTruthy()
+        expect(eResource.isLoaded()).toBeTruthy()
         expect(eResource.getErrors().isEmpty()).toBeTruthy()
         expect(eResource.eContents().isEmpty()).toBeFalsy()
 

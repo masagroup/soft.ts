@@ -103,7 +103,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
 
     createResource(uri: URI): EResource {
         let resource = new EResourceImpl()
-        resource.eURI = uri
+        resource.setURI(uri)
         this._resources.add(resource)
         return resource
     }
@@ -112,7 +112,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         if (this._uriResourceMap) {
             let resource = this._uriResourceMap.get(uri.toString())
             if (resource) {
-                if (loadOnDemand && !resource.isLoaded) {
+                if (loadOnDemand && !resource.isLoaded()) {
                     resource.loadSync()
                 }
                 return resource
@@ -121,9 +121,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
 
         let normalizedURI = this._uriConverter.normalize(uri)
         for (const resource of this._resources) {
-            let resourceURI = this._uriConverter.normalize(resource.eURI)
+            let resourceURI = this._uriConverter.normalize(resource.getURI())
             if (resourceURI.toString() == normalizedURI.toString()) {
-                if (loadOnDemand && !resource.isLoaded) {
+                if (loadOnDemand && !resource.isLoaded()) {
                     resource.loadSync()
                 }
                 if (this._uriResourceMap) {
@@ -156,7 +156,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             if (rs._uriResourceMap) {
                 let resource = rs._uriResourceMap.get(uri.toString())
                 if (resource) {
-                    if (loadOnDemand && !resource.isLoaded) {
+                    if (loadOnDemand && !resource.isLoaded()) {
                         resource.load().then(function () {
                             resolve(resource)
                         }, reject)
@@ -169,9 +169,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
 
             let normalizedURI = rs._uriConverter.normalize(uri)
             for (const resource of rs._resources) {
-                let resourceURI = rs._uriConverter.normalize(resource.eURI)
+                let resourceURI = rs._uriConverter.normalize(resource.getURI())
                 if (resourceURI.toString() == normalizedURI.toString()) {
-                    if (loadOnDemand && !resource.isLoaded) {
+                    if (loadOnDemand && !resource.isLoaded()) {
                         resource.load().then(function () {
                             if (rs._uriResourceMap) {
                                 rs._uriResourceMap.set(uri.toString(), resource)

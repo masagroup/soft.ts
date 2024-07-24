@@ -131,7 +131,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 
     private loaded(): void {
-        if (!this._resource.isLoaded) {
+        if (!this._resource.isLoaded()) {
             let n = this._resource.basicSetLoaded(true, null)
             if (n) {
                 n.dispatch()
@@ -140,7 +140,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 
     private unloaded(): void {
-        if (this._resource.isLoaded) {
+        if (this._resource.isLoaded()) {
             let n = this._resource.basicSetLoaded(false, null)
             if (n) {
                 n.dispatch()
@@ -160,11 +160,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _warnings: EList<EDiagnostic> = null
     private static _defaultURIConverter = new EURIConverterImpl()
 
-    get eURI(): URI {
+    getURI(): URI {
         return this._uri
     }
 
-    set eURI(uri: URI) {
+    setURI(uri: URI) {
         let oldURI = this._uri
         this._uri = uri
         if (this.eNotificationRequired) {
@@ -174,19 +174,19 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    get eObjectIDManager() {
+    getObjectIDManager() {
         return this._objectIDManager
     }
 
-    set eObjectIDManager(eObjectIDManager: EObjectIDManager) {
+    setObjectIDManager(eObjectIDManager: EObjectIDManager) {
         this._objectIDManager = eObjectIDManager
     }
 
-    get isLoaded() {
+    isLoaded() {
         return this._isLoaded
     }
 
-    get isLoading() {
+    isLoading() {
         return this._isLoading
     }
 

@@ -14,15 +14,15 @@ import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, U
 describe("XMICodec", () => {
     describe("load.library.simple", () => {
         let resource = new EResourceImpl()
-        resource.eURI = new URI("testdata/library.simple.ecore")
+        resource.setURI(new URI("testdata/library.simple.ecore"))
 
         beforeEach(() => {
             resource.unload()
-            expect(resource.isLoaded).toBeFalsy()
+            expect(resource.isLoaded()).toBeFalsy()
         })
 
         afterEach(() => {
-            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
@@ -78,7 +78,7 @@ describe("XMICodec", () => {
         })
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resource.eURI)
+            let path = uriToFilePath(resource.getURI())
             let stream = fs.createReadStream(path)
             await resource.loadFromStream(stream)
         })
@@ -86,15 +86,15 @@ describe("XMICodec", () => {
 
     describe("load.library.noroot", () => {
         let resource = new EResourceImpl()
-        resource.eURI = new URI("testdata/library.noroot.ecore")
+        resource.setURI(new URI("testdata/library.noroot.ecore"))
 
         beforeEach(() => {
             resource.unload()
-            expect(resource.isLoaded).toBeFalsy()
+            expect(resource.isLoaded()).toBeFalsy()
         })
 
         afterEach(() => {
-            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
@@ -129,7 +129,7 @@ describe("XMICodec", () => {
         })
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resource.eURI)
+            let path = uriToFilePath(resource.getURI())
             let stream = fs.createReadStream(path)
             await resource.loadFromStream(stream)
         })
@@ -137,15 +137,15 @@ describe("XMICodec", () => {
 
     describe("load.library.complex", () => {
         let resource = new EResourceImpl()
-        resource.eURI = new URI("testdata/library.complex.ecore")
+        resource.setURI(new URI("testdata/library.complex.ecore"))
 
         beforeEach(() => {
             resource.unload()
-            expect(resource.isLoaded).toBeFalsy()
+            expect(resource.isLoaded()).toBeFalsy()
         })
 
         afterEach(() => {
-            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
@@ -173,13 +173,13 @@ describe("XMICodec", () => {
         })
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resource.eURI)
+            let path = uriToFilePath(resource.getURI())
             let stream = fs.createReadStream(path)
             await resource.loadFromStream(stream)
         })
 
         test("loadFromString", () => {
-            let path = uriToFilePath(resource.eURI)
+            let path = uriToFilePath(resource.getURI())
             let buffer = fs.readFileSync(path)
             resource.loadFromString(buffer.toString())
         })
@@ -188,12 +188,12 @@ describe("XMICodec", () => {
     describe("save.library.simple", () => {
         test("saveToString", async () => {
             let resource = new EResourceImpl()
-            resource.eURI = new URI("testdata/library.simple.ecore")
+            resource.setURI(new URI("testdata/library.simple.ecore"))
             await resource.load()
 
             let result = resource.saveToString()
             let expected = fs
-                .readFileSync(uriToFilePath(resource.eURI))
+                .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n")
 
@@ -204,12 +204,12 @@ describe("XMICodec", () => {
     describe("save.library.complex", () => {
         test("saveToString", async () => {
             let resource = new EResourceImpl()
-            resource.eURI = new URI("testdata/library.complex.ecore")
+            resource.setURI(new URI("testdata/library.complex.ecore"))
             await resource.load()
 
             let result = resource.saveToString()
             let expected = fs
-                .readFileSync(uriToFilePath(resource.eURI))
+                .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n")
 

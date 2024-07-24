@@ -65,7 +65,7 @@ export class BinaryDecoder implements EDecoder {
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext
-        this._baseURI = this._resource.eURI
+        this._baseURI = this._resource.getURI()
     }
 
     decode(buffer: BufferLike): Result<EResource, Error> {
@@ -90,7 +90,7 @@ export class BinaryDecoder implements EDecoder {
                     let err = e as Error
                     this._resource
                         .getErrors()
-                        .add(new EDiagnosticImpl(err.message, this._resource.eURI.toString(), -1, -1))
+                        .add(new EDiagnosticImpl(err.message, this._resource.getURI().toString(), -1, -1))
                 }
             }
             return Err(e)
@@ -208,7 +208,7 @@ export class BinaryDecoder implements EDecoder {
             if (featureID == -2) {
                 // object id attribute
                 let objectID = this.decodeAny()
-                let objectIDManager = this._resource.eObjectIDManager
+                let objectIDManager = this._resource.getObjectIDManager()
                 if (objectIDManager) {
                     objectIDManager.setID(eObject, objectID)
                 }

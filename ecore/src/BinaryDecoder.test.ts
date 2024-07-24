@@ -23,7 +23,7 @@ function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor()
     let uri = new URI("testdata/" + filename)
     let resource = xmiProcessor.loadSync(uri)
-    expect(resource.isLoaded).toBeTruthy()
+    expect(resource.isLoaded()).toBeTruthy()
     expect(resource.getErrors().isEmpty()).toBeTruthy()
     expect(resource.eContents().isEmpty()).toBeFalsy()
     return resource.eContents().get(0) as EPackage
@@ -38,7 +38,7 @@ describe("BinaryDecoder", () => {
 
         // context
         let eResource = new EResourceImpl()
-        eResource.eURI = resourceURI
+        eResource.setURI(resourceURI)
         let eResourceSet = new EResourceSetImpl()
         eResourceSet.getResources().add(eResource)
         eResourceSet.getPackageRegistry().registerPackage(ePackage)
@@ -137,8 +137,8 @@ describe("BinaryDecoder", () => {
 
         let eResource = new EResourceImpl()
         let idManager = new UUIDManager()
-        eResource.eObjectIDManager = idManager
-        eResource.eURI = resourceURI
+        eResource.setObjectIDManager(idManager)
+        eResource.setURI(resourceURI)
 
         let eResourceSet = new EResourceSetImpl()
         eResourceSet.getResources().add(eResource)

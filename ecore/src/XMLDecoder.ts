@@ -316,7 +316,7 @@ export class XMLDecoder implements EDecoder {
 
     private onError(err: Error) {
         this.error(
-            new EDiagnosticImpl(err.message, this._resource.eURI.toString(), this._parser.line, this._parser.column)
+            new EDiagnosticImpl(err.message, this._resource.getURI().toString(), this._parser.line, this._parser.column)
         )
     }
 
@@ -419,7 +419,7 @@ export class XMLDecoder implements EDecoder {
             this.error(
                 new EDiagnosticImpl(
                     "Class {'" + uri + +"':'" + typeName + "}' not found",
-                    this._resource.eURI.toString(),
+                    this._resource.getURI().toString(),
                     this._parser.line,
                     this._parser.column
                 )
@@ -636,7 +636,7 @@ export class XMLDecoder implements EDecoder {
                 this.error(
                     new EDiagnosticImpl(
                         "Unresolved reference '" + reference.id + "'",
-                        this._resource.eURI.toString(),
+                        this._resource.getURI().toString(),
                         this._parser.line,
                         this._parser.column
                     )
@@ -650,7 +650,7 @@ export class XMLDecoder implements EDecoder {
             for (let i in this._attributes) {
                 let attr = this._attributes[i]
                 if (attr.local == this._idAttributeName) {
-                    let idManager = this._resource.eObjectIDManager
+                    let idManager = this._resource.getObjectIDManager()
                     if (idManager) idManager.setID(eObject, attr.value)
                 } else if (attr.local == XMLConstants.href) {
                     this.handleProxy(eObject, attr.value)
@@ -672,7 +672,7 @@ export class XMLDecoder implements EDecoder {
     }
 
     private handleProxy(eProxy: EObject, id: string): void {
-        let resourceURI = this._resource.eURI
+        let resourceURI = this._resource.getURI()
         if (!resourceURI) {
             return
         }
@@ -695,7 +695,7 @@ export class XMLDecoder implements EDecoder {
 
         let ndx = id.indexOf("#")
         let trimmedURI: string = ndx != -1 ? (ndx > 0 ? id.slice(0, ndx - 1) : "") : id
-        if (this._resource.eURI?.toString() == trimmedURI) {
+        if (this._resource.getURI()?.toString() == trimmedURI) {
             this._sameDocumentProxies.push(eProxy)
         }
     }
@@ -882,7 +882,7 @@ export class XMLDecoder implements EDecoder {
         this.error(
             new EDiagnosticImpl(
                 "Feature " + name + " not found",
-                this._resource.eURI?.toString(),
+                this._resource.getURI()?.toString(),
                 this._parser.column,
                 this._parser.line
             )
@@ -893,7 +893,7 @@ export class XMLDecoder implements EDecoder {
         this.error(
             new EDiagnosticImpl(
                 "Package " + name + " not found",
-                this._resource.eURI?.toString(),
+                this._resource.getURI()?.toString(),
                 this._parser.column,
                 this._parser.line
             )
@@ -904,7 +904,7 @@ export class XMLDecoder implements EDecoder {
         this.error(
             new EDiagnosticImpl(
                 "URI " + name + " not found",
-                this._resource.eURI?.toString(),
+                this._resource.getURI()?.toString(),
                 this._parser.column,
                 this._parser.line
             )

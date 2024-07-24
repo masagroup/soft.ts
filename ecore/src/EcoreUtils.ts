@@ -148,7 +148,7 @@ export class EcoreUtils {
         } else {
             let resource = eObject.eResource()
             if (resource) {
-                let uri = resource.eURI
+                let uri = resource.getURI()
                 return new URI({
                     scheme: uri.scheme,
                     host: uri.host,

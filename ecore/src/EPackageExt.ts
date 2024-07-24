@@ -76,7 +76,7 @@ export class EPackageExt extends EPackageImpl {
         if (!resource) {
             let uri = new URI(this.getNsURI())
             resource = new EResourceImpl()
-            resource.eURI = uri
+            resource.setURI(uri)
             resource.eContents().add(this)
         }
         return resource

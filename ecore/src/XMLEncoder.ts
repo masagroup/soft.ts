@@ -244,8 +244,8 @@ export class XMLEncoder implements EEncoder {
     }
 
     protected saveElementID(eObject: EObject) {
-        if (this._idAttributeName && this._resource.eObjectIDManager) {
-            let id = this._resource.eObjectIDManager.getID(eObject)
+        if (this._idAttributeName && this._resource.getObjectIDManager()) {
+            let id = this._resource.getObjectIDManager().getID(eObject)
             if (id) {
                 this._str.addAttribute(this._idAttributeName, String(id))
             }
@@ -661,7 +661,7 @@ export class XMLEncoder implements EEncoder {
                 if (eResource) {
                     uri = this.getResourceHRef(eResource, eObject)
                 } else {
-                    if (this._resource && this._resource.eObjectIDManager) {
+                    if (this._resource && this._resource.getObjectIDManager()) {
                         uri = this.getResourceHRef(this._resource, eObject)
                     } else {
                         this.handleDanglingHREF(eObject)
@@ -669,14 +669,14 @@ export class XMLEncoder implements EEncoder {
                     }    
                 }
             }
-            uri = this._resource.eURI.relativize(uri)
+            uri = this._resource.getURI().relativize(uri)
             return uri.toString()
         }
         return ""
     }
 
     private handleDanglingHREF(eObject: EObject) {
-        this.error(new EDiagnosticImpl("Object is not contained in a resource.", this._resource.eURI.toString(), 0, 0))
+        this.error(new EDiagnosticImpl("Object is not contained in a resource.", this._resource.getURI().toString(), 0, 0))
     }
 
     private error(d: EDiagnostic) {
@@ -684,7 +684,7 @@ export class XMLEncoder implements EEncoder {
     }
 
     private getResourceHRef(resource: EResource, object: EObject): URI {
-        let uri = resource.eURI
+        let uri = resource.getURI()
         return new URI({
             scheme: uri.scheme,
             user: uri.user,

@@ -34,7 +34,7 @@ function loadPackage(filename: string): EPackage {
     let xmiProcessor = new XMIProcessor()
     let uri = new URI("testdata/" + filename)
     let resource = xmiProcessor.loadSync(uri)
-    expect(resource.isLoaded).toBeTruthy()
+    expect(resource.isLoaded()).toBeTruthy()
     expect(resource.getErrors().isEmpty()).toBeTruthy()
     expect(resource.eContents().isEmpty()).toBeFalsy()
     let ePackage = resource.eContents().get(0) as EPackage
@@ -57,7 +57,7 @@ describe("XMLResource", () => {
 
         afterEach(() => {
             expect(resource).not.toBeNull()
-            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
@@ -94,7 +94,7 @@ describe("XMLResource", () => {
         let originURI = new URI("testdata/library.noroot.xml")
         let resultURI = new URI("testdata/library.noroot.result.xml")
         let resource = xmlProcessor.loadSync(originURI)
-        resource.eURI = resultURI
+        resource.setURI(resultURI)
 
         test("saveToString", () => {
             const expected = fs
@@ -147,7 +147,7 @@ describe("XMLResource", () => {
 
         afterEach(() => {
             expect(resource).not.toBeNull()
-            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
@@ -193,7 +193,7 @@ describe("XMLResource", () => {
         resourceSet.getPackageRegistry().registerPackage(ePackage)
         let resourceURI = new URI("testdata/library.complex.id.xml")
         let resource = resourceSet.createResource(resourceURI)
-        resource.eObjectIDManager = idManager
+        resource.setObjectIDManager(idManager)
         let options = new Map<string, any>([
             [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true],
             [XMLOptions.ID_ATTRIBUTE_NAME, "id"]
@@ -201,7 +201,7 @@ describe("XMLResource", () => {
 
         afterEach(() => {
             expect(resource).not.toBeNull()
-            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
@@ -239,7 +239,7 @@ describe("XMLResource", () => {
 
         afterEach(() => {
             expect(resource).not.toBeNull()
-            expect(resource.isLoaded).toBeTruthy()
+            expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 

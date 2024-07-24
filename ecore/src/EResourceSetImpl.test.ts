@@ -46,11 +46,11 @@ describe("EResourceSetImpl", () => {
         rs.getResources().add(eResource)
 
         // get registered resource - no loading
-        when(mockEResource.eURI).thenReturn(uriResource)
+        when(mockEResource.getURI()).thenReturn(uriResource)
         expect(rs.getResource(uriResource, false)).toBe(eResource)
 
         // get registered resource - loading
-        when(mockEResource.isLoaded).thenReturn(false)
+        when(mockEResource.isLoaded()).thenReturn(false)
         expect(rs.getResource(uriResource, true)).toBe(eResource)
         verify(mockEResource.loadSync()).once()
     })

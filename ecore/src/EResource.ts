@@ -30,8 +30,11 @@ export class EResourceConstants {
 }
 
 export interface EResource extends ENotifier {
-    eURI: URI
-    eObjectIDManager: EObjectIDManager
+    getURI(): URI
+    setURI(uri : URI): void
+
+    getObjectIDManager(): EObjectIDManager
+    setObjectIDManager(objectIDManager : EObjectIDManager): void
 
     eResourceSet(): EResourceSet
     eContents(): EList<EObject>
@@ -45,8 +48,8 @@ export interface EResource extends ENotifier {
     loadFromBuffer(buffer: BufferLike, options?: Map<string, any>): void
 
     unload(): void
-    readonly isLoaded: boolean
-    readonly isLoading: boolean
+    isLoaded(): boolean
+    isLoading(): boolean
 
     save(options?: Map<string, any>): Promise<void>
     saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void>
