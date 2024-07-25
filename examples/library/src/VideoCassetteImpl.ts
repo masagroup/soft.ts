@@ -33,6 +33,18 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
 
     // get the value of cast
     get cast(): ecore.EList<Person> {
+        return this.getCast()
+    }
+
+    // set the value of cast
+    set cast(newCast: ecore.EList<Person>) {
+        const l = this.getCast()
+        l.clear()
+        l.addAll(newCast)
+    }
+
+    // get the value of cast
+    getCast(): ecore.EList<Person> {
         if (this._cast == null) {
             this._cast = new ecore.BasicEObjectList<Person>(
                 this,
@@ -49,8 +61,8 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
     }
 
     // set the value of cast
-    set cast(newCast: ecore.EList<Person>) {
-        const l = this.cast
+    setCast(newCast: ecore.EList<Person>) {
+        const l = this.getCast()
         l.clear()
         l.addAll(newCast)
     }
@@ -58,7 +70,7 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.VIDEO_CASSETTE__CAST: {
-                const list = this.cast
+                const list = this.getCast()
                 return !resolve && ecore.isEObjectList(list) ? list.getUnResolvedList() : list
             }
             default: {
@@ -67,10 +79,14 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.VIDEO_CASSETTE__CAST: {
-                const list = this.cast
+                const list = this.getCast()
                 list.clear()
                 list.addAll(newValue as ecore.EList<Person>)
                 break
@@ -84,7 +100,7 @@ export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCasse
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.VIDEO_CASSETTE__CAST: {
-                this.cast.clear()
+                this.getCast().clear()
                 break
             }
             default: {

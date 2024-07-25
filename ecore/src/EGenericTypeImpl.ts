@@ -73,6 +73,29 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         return this._eClassifier
     }
 
+    // get the value of eClassifier asynchronously
+    async getEClassifierAsync(): Promise<EClassifier> {
+        if (this._eClassifier != null && this._eClassifier.eIsProxy()) {
+            let oldEClassifier = this._eClassifier
+            let newEClassifier = (await this.eResolveProxyAsync(oldEClassifier)) as EClassifier
+            this._eClassifier = newEClassifier
+            if (newEClassifier != oldEClassifier) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new Notification(
+                            this,
+                            EventType.RESOLVE,
+                            EcoreConstants.EGENERIC_TYPE__ECLASSIFIER,
+                            oldEClassifier,
+                            newEClassifier
+                        )
+                    )
+                }
+            }
+        }
+        return this._eClassifier
+    }
+
     // set the value of eClassifier
     setEClassifier(newEClassifier: EClassifier): void {
         let oldEClassifier = this._eClassifier
@@ -152,6 +175,29 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         if (this._eRawType != null && this._eRawType.eIsProxy()) {
             let oldERawType = this._eRawType
             let newERawType = this.eResolveProxy(oldERawType) as EClassifier
+            this._eRawType = newERawType
+            if (newERawType != oldERawType) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new Notification(
+                            this,
+                            EventType.RESOLVE,
+                            EcoreConstants.EGENERIC_TYPE__ERAW_TYPE,
+                            oldERawType,
+                            newERawType
+                        )
+                    )
+                }
+            }
+        }
+        return this._eRawType
+    }
+
+    // get the value of eRawType asynchronously
+    async getERawTypeAsync(): Promise<EClassifier> {
+        if (this._eRawType != null && this._eRawType.eIsProxy()) {
+            let oldERawType = this._eRawType
+            let newERawType = (await this.eResolveProxyAsync(oldERawType)) as EClassifier
             this._eRawType = newERawType
             if (newERawType != oldERawType) {
                 if (this.eNotificationRequired()) {
@@ -311,6 +357,18 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case EcoreConstants.EGENERIC_TYPE__ECLASSIFIER:
+                    return this.getEClassifierAsync()
+                case EcoreConstants.EGENERIC_TYPE__ERAW_TYPE:
+                    return this.getERawTypeAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

@@ -12,7 +12,8 @@
 import { Addressable } from "./internal.js"
 
 export interface Person extends Addressable {
-    // Attributes
+    // firstName property
     firstName: string
+    // lastName property
     lastName: string
 }

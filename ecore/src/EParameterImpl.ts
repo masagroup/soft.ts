@@ -48,6 +48,10 @@ export class EParameterImpl extends ETypedElementExt implements EParameter {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EPARAMETER__EOPERATION: {

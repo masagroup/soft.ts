@@ -12,23 +12,30 @@
 import { EClassifier, EList, EObject, ETypeParameter } from "./internal.js"
 
 export interface EGenericType extends EObject {
-    // References
+    // eUpperBound
     getEUpperBound(): EGenericType
     setEUpperBound(newEUpperBound: EGenericType): void
 
+    // eTypeArguments
     getETypeArguments(): EList<EGenericType>
 
+    // eRawType
     getERawType(): EClassifier
+    getERawTypeAsync(): Promise<EClassifier>
 
+    // eLowerBound
     getELowerBound(): EGenericType
     setELowerBound(newELowerBound: EGenericType): void
 
+    // eTypeParameter
     getETypeParameter(): ETypeParameter
     setETypeParameter(newETypeParameter: ETypeParameter): void
 
+    // eClassifier
     getEClassifier(): EClassifier
+    getEClassifierAsync(): Promise<EClassifier>
     setEClassifier(newEClassifier: EClassifier): void
 
-    // Operations
+    // operations
     isInstance(object: any): boolean
 }

@@ -48,12 +48,12 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // get the value of defaultValue
     getDefaultValue(): any {
-        throw new Error("get defaultValue not implemented")
+        throw new Error("getDefaultValue not implemented")
     }
 
     // set the value of defaultValue
     setDefaultValue(newDefaultValue: any): void {
-        throw new Error("set defaultValue not implemented")
+        throw new Error("setDefaultValue not implemented")
     }
 
     // get the value of defaultValueLiteral
@@ -256,6 +256,10 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

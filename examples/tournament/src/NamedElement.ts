@@ -12,7 +12,7 @@
 import * as ecore from "@masagroup/ecore"
 
 export interface NamedElement extends ecore.EObject {
-    // Attributes
+    // name
     getName(): string
     setName(newName: string): void
 }

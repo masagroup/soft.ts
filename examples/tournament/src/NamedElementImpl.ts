@@ -57,6 +57,10 @@ export class NamedElementImpl extends ecore.EObjectImpl implements NamedElement 
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case TournamentConstants.NAMED_ELEMENT__NAME: {

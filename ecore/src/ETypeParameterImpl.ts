@@ -74,6 +74,10 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {

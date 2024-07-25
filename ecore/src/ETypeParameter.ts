@@ -12,6 +12,6 @@
 import { EGenericType, EList, ENamedElement } from "./internal.js"
 
 export interface ETypeParameter extends ENamedElement {
-    // References
+    // eBounds
     getEBounds(): EList<EGenericType>
 }

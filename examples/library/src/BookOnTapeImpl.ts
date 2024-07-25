@@ -36,6 +36,26 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
 
     // get the value of author
     get author(): Writer {
+        return this.getAuthor()
+    }
+
+    // set the value of author
+    set author(newAuthor: Writer) {
+        this.setAuthor(newAuthor)
+    }
+
+    // get the value of reader
+    get reader(): Person {
+        return this.getReader()
+    }
+
+    // set the value of reader
+    set reader(newReader: Person) {
+        this.setReader(newReader)
+    }
+
+    // get the value of author
+    getAuthor(): Writer {
         if (this._author != null && this._author.eIsProxy()) {
             let oldAuthor = this._author
             let newAuthor = this.eResolveProxy(oldAuthor) as Writer
@@ -57,8 +77,31 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
         return this._author
     }
 
+    // get the value of author asynchronously
+    async getAuthorAsync(): Promise<Writer> {
+        if (this._author != null && this._author.eIsProxy()) {
+            let oldAuthor = this._author
+            let newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
+            this._author = newAuthor
+            if (newAuthor != oldAuthor) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            LibraryConstants.BOOK_ON_TAPE__AUTHOR,
+                            oldAuthor,
+                            newAuthor
+                        )
+                    )
+                }
+            }
+        }
+        return this._author
+    }
+
     // set the value of author
-    set author(newAuthor: Writer) {
+    setAuthor(newAuthor: Writer): void {
         let oldAuthor = this._author
         this._author = newAuthor
         if (this.eNotificationRequired()) {
@@ -80,7 +123,7 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     }
 
     // get the value of reader
-    get reader(): Person {
+    getReader(): Person {
         if (this._reader != null && this._reader.eIsProxy()) {
             let oldReader = this._reader
             let newReader = this.eResolveProxy(oldReader) as Person
@@ -102,8 +145,31 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
         return this._reader
     }
 
+    // get the value of reader asynchronously
+    async getReaderAsync(): Promise<Person> {
+        if (this._reader != null && this._reader.eIsProxy()) {
+            let oldReader = this._reader
+            let newReader = (await this.eResolveProxyAsync(oldReader)) as Person
+            this._reader = newReader
+            if (newReader != oldReader) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            LibraryConstants.BOOK_ON_TAPE__READER,
+                            oldReader,
+                            newReader
+                        )
+                    )
+                }
+            }
+        }
+        return this._reader
+    }
+
     // set the value of reader
-    set reader(newReader: Person) {
+    setReader(newReader: Person): void {
         let oldReader = this._reader
         this._reader = newReader
         if (this.eNotificationRequired()) {
@@ -127,10 +193,10 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.BOOK_ON_TAPE__AUTHOR: {
-                return resolve ? this.author : this.basicGetAuthor()
+                return resolve ? this.getAuthor() : this.basicGetAuthor()
             }
             case LibraryConstants.BOOK_ON_TAPE__READER: {
-                return resolve ? this.reader : this.basicGetReader()
+                return resolve ? this.getReader() : this.basicGetReader()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -138,14 +204,26 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case LibraryConstants.BOOK_ON_TAPE__AUTHOR:
+                    return this.getAuthorAsync()
+                case LibraryConstants.BOOK_ON_TAPE__READER:
+                    return this.getReaderAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.BOOK_ON_TAPE__AUTHOR: {
-                this.author = newValue as Writer
+                this.setAuthor(newValue as Writer)
                 break
             }
             case LibraryConstants.BOOK_ON_TAPE__READER: {
-                this.reader = newValue as Person
+                this.setReader(newValue as Person)
                 break
             }
             default: {
@@ -157,11 +235,11 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.BOOK_ON_TAPE__AUTHOR: {
-                this.author = null
+                this.setAuthor(null)
                 break
             }
             case LibraryConstants.BOOK_ON_TAPE__READER: {
-                this.reader = null
+                this.setReader(null)
                 break
             }
             default: {

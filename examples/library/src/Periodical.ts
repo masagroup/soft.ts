@@ -12,7 +12,8 @@
 import { Item } from "./internal.js"
 
 export interface Periodical extends Item {
-    // Attributes
+    // title property
     title: string
+    // issuesPerYear property
     issuesPerYear: number
 }

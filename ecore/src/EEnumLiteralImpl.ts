@@ -112,6 +112,10 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EENUM_LITERAL__INSTANCE: {

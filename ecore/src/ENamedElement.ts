@@ -12,7 +12,7 @@
 import { EModelElement } from "./internal.js"
 
 export interface ENamedElement extends EModelElement {
-    // Attributes
+    // name
     getName(): string
     setName(newName: string): void
 }

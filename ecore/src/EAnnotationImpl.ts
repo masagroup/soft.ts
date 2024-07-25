@@ -207,6 +207,10 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {

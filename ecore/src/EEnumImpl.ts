@@ -89,6 +89,10 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {

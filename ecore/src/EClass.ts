@@ -12,45 +12,60 @@
 import { EAttribute, EClassifier, EList, EOperation, EReference, EStructuralFeature } from "./internal.js"
 
 export interface EClass extends EClassifier {
-    // Attributes
+    // abstract
     isAbstract(): boolean
     setAbstract(newIsAbstract: boolean): void
 
+    // interface
     isInterface(): boolean
     setInterface(newIsInterface: boolean): void
 
-    // References
+    // eStructuralFeatures
     getEStructuralFeatures(): EList<EStructuralFeature>
 
+    // eAttributes
     getEAttributes(): EList<EAttribute>
 
+    // eReferences
     getEReferences(): EList<EReference>
 
+    // eSuperTypes
     getESuperTypes(): EList<EClass>
 
+    // eOperations
     getEOperations(): EList<EOperation>
 
+    // eContainmentFeatures
     getEContainmentFeatures(): EList<EStructuralFeature>
 
+    // eCrossReferenceFeatures
     getECrossReferenceFeatures(): EList<EStructuralFeature>
 
+    // eAllAttributes
     getEAllAttributes(): EList<EAttribute>
 
+    // eAllReferences
     getEAllReferences(): EList<EReference>
 
+    // eAllContainments
     getEAllContainments(): EList<EReference>
 
+    // eAllCrossReferences
     getEAllCrossReferences(): EList<EReference>
 
+    // eAllOperations
     getEAllOperations(): EList<EOperation>
 
+    // eAllStructuralFeatures
     getEAllStructuralFeatures(): EList<EStructuralFeature>
 
+    // eAllSuperTypes
     getEAllSuperTypes(): EList<EClass>
 
+    // eIDAttribute
     getEIDAttribute(): EAttribute
 
-    // Operations
+    // operations
     isSuperTypeOf(someClass: EClass): boolean
     getFeatureCount(): number
     getEStructuralFeature(featureID: number): EStructuralFeature

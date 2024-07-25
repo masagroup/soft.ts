@@ -12,7 +12,8 @@
 import { Group, NamedElement } from "./internal.js"
 
 export interface Team extends NamedElement {
-    // References
+    // group
     getGroup(): Group
+    getGroupAsync(): Promise<Group>
     setGroup(newGroup: Group): void
 }

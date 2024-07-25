@@ -13,6 +13,6 @@ import * as ecore from "@masagroup/ecore"
 import { NamedElement, Team } from "./internal.js"
 
 export interface Group extends NamedElement {
-    // References
+    // teams
     getTeams(): ecore.EList<Team>
 }

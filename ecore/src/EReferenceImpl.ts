@@ -79,6 +79,29 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         return this._eOpposite
     }
 
+    // get the value of eOpposite asynchronously
+    async getEOppositeAsync(): Promise<EReference> {
+        if (this._eOpposite != null && this._eOpposite.eIsProxy()) {
+            let oldEOpposite = this._eOpposite
+            let newEOpposite = (await this.eResolveProxyAsync(oldEOpposite)) as EReference
+            this._eOpposite = newEOpposite
+            if (newEOpposite != oldEOpposite) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new Notification(
+                            this,
+                            EventType.RESOLVE,
+                            EcoreConstants.EREFERENCE__EOPPOSITE,
+                            oldEOpposite,
+                            newEOpposite
+                        )
+                    )
+                }
+            }
+        }
+        return this._eOpposite
+    }
+
     // set the value of eOpposite
     setEOpposite(newEOpposite: EReference): void {
         let oldEOpposite = this._eOpposite
@@ -97,7 +120,12 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
 
     // get the value of eReferenceType
     getEReferenceType(): EClass {
-        throw new Error("get eReferenceType not implemented")
+        throw new Error("getEReferenceType not implemented")
+    }
+
+    // get the value of eReferenceType asynchronously
+    async getEReferenceTypeAsync(): Promise<EClass> {
+        throw new Error("getEReferenceTypeAsync not implemented")
     }
 
     // get the basic value of eReferenceType with no proxy resolution
@@ -107,7 +135,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
 
     // get the value of container
     isContainer(): boolean {
-        throw new Error("get isContainer not implemented")
+        throw new Error("isContainer not implemented")
     }
 
     // get the value of containment
@@ -192,6 +220,18 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case EcoreConstants.EREFERENCE__EOPPOSITE:
+                    return this.getEOppositeAsync()
+                case EcoreConstants.EREFERENCE__EREFERENCE_TYPE:
+                    return this.getEReferenceTypeAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

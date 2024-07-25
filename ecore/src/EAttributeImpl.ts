@@ -34,7 +34,12 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
 
     // get the value of eAttributeType
     getEAttributeType(): EDataType {
-        throw new Error("get eAttributeType not implemented")
+        throw new Error("getEAttributeType not implemented")
+    }
+
+    // get the value of eAttributeType asynchronously
+    async getEAttributeTypeAsync(): Promise<EDataType> {
+        throw new Error("getEAttributeTypeAsync not implemented")
     }
 
     // get the basic value of eAttributeType with no proxy resolution
@@ -68,6 +73,16 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE:
+                    return this.getEAttributeTypeAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

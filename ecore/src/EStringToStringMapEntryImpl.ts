@@ -85,6 +85,10 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY: {

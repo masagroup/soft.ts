@@ -12,6 +12,6 @@
 import * as ecore from "@masagroup/ecore"
 
 export interface Item extends ecore.EObject {
-    // Attributes
+    // publicationDate property
     publicationDate: Date
 }

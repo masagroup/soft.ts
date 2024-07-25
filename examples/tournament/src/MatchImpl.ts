@@ -75,6 +75,29 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         return this._group
     }
 
+    // get the value of group asynchronously
+    async getGroupAsync(): Promise<Group> {
+        if (this._group != null && this._group.eIsProxy()) {
+            let oldGroup = this._group
+            let newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
+            this._group = newGroup
+            if (newGroup != oldGroup) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            TournamentConstants.MATCH__GROUP,
+                            oldGroup,
+                            newGroup
+                        )
+                    )
+                }
+            }
+        }
+        return this._group
+    }
+
     // set the value of group
     setGroup(newGroup: Group): void {
         let oldGroup = this._group
@@ -96,6 +119,29 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._guestTeam != null && this._guestTeam.eIsProxy()) {
             let oldGuestTeam = this._guestTeam
             let newGuestTeam = this.eResolveProxy(oldGuestTeam) as Team
+            this._guestTeam = newGuestTeam
+            if (newGuestTeam != oldGuestTeam) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            TournamentConstants.MATCH__GUEST_TEAM,
+                            oldGuestTeam,
+                            newGuestTeam
+                        )
+                    )
+                }
+            }
+        }
+        return this._guestTeam
+    }
+
+    // get the value of guestTeam asynchronously
+    async getGuestTeamAsync(): Promise<Team> {
+        if (this._guestTeam != null && this._guestTeam.eIsProxy()) {
+            let oldGuestTeam = this._guestTeam
+            let newGuestTeam = (await this.eResolveProxyAsync(oldGuestTeam)) as Team
             this._guestTeam = newGuestTeam
             if (newGuestTeam != oldGuestTeam) {
                 if (this.eNotificationRequired()) {
@@ -141,6 +187,29 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._homeTeam != null && this._homeTeam.eIsProxy()) {
             let oldHomeTeam = this._homeTeam
             let newHomeTeam = this.eResolveProxy(oldHomeTeam) as Team
+            this._homeTeam = newHomeTeam
+            if (newHomeTeam != oldHomeTeam) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            TournamentConstants.MATCH__HOME_TEAM,
+                            oldHomeTeam,
+                            newHomeTeam
+                        )
+                    )
+                }
+            }
+        }
+        return this._homeTeam
+    }
+
+    // get the value of homeTeam asynchronously
+    async getHomeTeamAsync(): Promise<Team> {
+        if (this._homeTeam != null && this._homeTeam.eIsProxy()) {
+            let oldHomeTeam = this._homeTeam
+            let newHomeTeam = (await this.eResolveProxyAsync(oldHomeTeam)) as Team
             this._homeTeam = newHomeTeam
             if (newHomeTeam != oldHomeTeam) {
                 if (this.eNotificationRequired()) {
@@ -268,6 +337,20 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case TournamentConstants.MATCH__GROUP:
+                    return this.getGroupAsync()
+                case TournamentConstants.MATCH__GUEST_TEAM:
+                    return this.getGuestTeamAsync()
+                case TournamentConstants.MATCH__HOME_TEAM:
+                    return this.getHomeTeamAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

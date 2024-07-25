@@ -66,7 +66,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 
     // get the value of defaultValue
     getDefaultValue(): any {
-        throw new Error("get defaultValue not implemented")
+        throw new Error("getDefaultValue not implemented")
     }
 
     // get the value of ePackage
@@ -123,12 +123,12 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 
     // get the value of instanceTypeName
     getInstanceTypeName(): string {
-        throw new Error("get instanceTypeName not implemented")
+        throw new Error("getInstanceTypeName not implemented")
     }
 
     // set the value of instanceTypeName
     setInstanceTypeName(newInstanceTypeName: string): void {
-        throw new Error("set instanceTypeName not implemented")
+        throw new Error("setInstanceTypeName not implemented")
     }
 
     // isInstance default implementation
@@ -164,6 +164,10 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

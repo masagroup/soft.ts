@@ -13,10 +13,12 @@ import * as ecore from "@masagroup/ecore"
 import { Group, Match, NamedElement, Team } from "./internal.js"
 
 export interface Tournament extends NamedElement {
-    // References
+    // groups
     getGroups(): ecore.EList<Group>
 
+    // teams
     getTeams(): ecore.EList<Team>
 
+    // matches
     getMatches(): ecore.EList<Match>
 }

@@ -79,6 +79,10 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {

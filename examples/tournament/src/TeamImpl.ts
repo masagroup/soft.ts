@@ -47,6 +47,29 @@ export class TeamImpl extends NamedElementImpl implements Team {
         return this._group
     }
 
+    // get the value of group asynchronously
+    async getGroupAsync(): Promise<Group> {
+        if (this._group != null && this._group.eIsProxy()) {
+            let oldGroup = this._group
+            let newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
+            this._group = newGroup
+            if (newGroup != oldGroup) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            TournamentConstants.TEAM__GROUP,
+                            oldGroup,
+                            newGroup
+                        )
+                    )
+                }
+            }
+        }
+        return this._group
+    }
+
     // set the value of group
     setGroup(newGroup: Group): void {
         let oldGroup = this._group
@@ -100,6 +123,16 @@ export class TeamImpl extends NamedElementImpl implements Team {
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case TournamentConstants.TEAM__GROUP:
+                    return this.getGroupAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

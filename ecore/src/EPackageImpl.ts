@@ -220,6 +220,10 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {

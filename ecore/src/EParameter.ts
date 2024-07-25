@@ -12,6 +12,6 @@
 import { EOperation, ETypedElement } from "./internal.js"
 
 export interface EParameter extends ETypedElement {
-    // References
+    // eOperation
     getEOperation(): EOperation
 }

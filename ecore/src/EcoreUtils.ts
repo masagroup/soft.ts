@@ -284,7 +284,8 @@ export class EcoreUtils {
                                             resolve({ index: i, oldValue: oldValue, newValue: newValue })
                                         })
                                         .catch((e: Error) => reject(e))
-                                }))
+                                })
+                            )
                         }
                     }
                     for (const resolve of await Promise.all(promises)) {

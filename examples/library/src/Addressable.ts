@@ -12,6 +12,6 @@
 import * as ecore from "@masagroup/ecore"
 
 export interface Addressable extends ecore.EObject {
-    // Attributes
+    // address property
     address: string
 }

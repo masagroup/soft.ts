@@ -63,6 +63,29 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         return this._eType
     }
 
+    // get the value of eType asynchronously
+    async getETypeAsync(): Promise<EClassifier> {
+        if (this._eType != null && this._eType.eIsProxy()) {
+            let oldEType = this._eType
+            let newEType = (await this.eResolveProxyAsync(oldEType)) as EClassifier
+            this._eType = newEType
+            if (newEType != oldEType) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new Notification(
+                            this,
+                            EventType.RESOLVE,
+                            EcoreConstants.ETYPED_ELEMENT__ETYPE,
+                            oldEType,
+                            newEType
+                        )
+                    )
+                }
+            }
+        }
+        return this._eType
+    }
+
     // set the value of eType
     setEType(newEType: EClassifier): void {
         let oldEType = this._eType
@@ -88,7 +111,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // get the value of many
     isMany(): boolean {
-        throw new Error("get isMany not implemented")
+        throw new Error("isMany not implemented")
     }
 
     // get the value of ordered
@@ -115,7 +138,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // get the value of required
     isRequired(): boolean {
-        throw new Error("get isRequired not implemented")
+        throw new Error("isRequired not implemented")
     }
 
     // get the value of unique
@@ -205,6 +228,16 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
                 return super.eGetFromID(featureID, resolve)
             }
         }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case EcoreConstants.ETYPED_ELEMENT__ETYPE:
+                    return this.getETypeAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
     }
 
     eSetFromID(featureID: number, newValue: any) {

@@ -13,17 +13,24 @@ import * as ecore from "@masagroup/ecore"
 import { Addressable, Book, Borrower, Employee, Item, Person, Writer } from "./internal.js"
 
 export interface Library extends Addressable {
-    // Attributes
+    // name property
     name: string
-    readonly people: ecore.EList<any>
-
-    // References
+    // writers property
     readonly writers: ecore.EList<Writer>
+    // employees property
     readonly employees: ecore.EList<Employee>
+    // borrowers property
     readonly borrowers: ecore.EList<Borrower>
+    // stock property
     readonly stock: ecore.EList<Item>
+    // books property
     readonly books: ecore.EList<Book>
+    // branches property
     readonly branches: ecore.EList<Library>
+    // parentBranch property
     parentBranch: Library
+    // people property
+    readonly people: ecore.EList<any>
+    // proprietary property
     proprietary: Person
 }

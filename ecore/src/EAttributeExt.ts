@@ -18,6 +18,10 @@ export class EAttributeExt extends EAttributeImpl {
         return this.getEType() as EDataType
     }
 
+    async getEAttributeTypeAsync(): Promise<EDataType> {
+        return (await this.getETypeAsync()) as EDataType
+    }
+
     basicGetEAttributeType(): EDataType {
         return this.basicGetEType() as EDataType
     }

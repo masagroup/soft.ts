@@ -126,6 +126,10 @@ export class TournamentImpl extends NamedElementImpl implements Tournament {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case TournamentConstants.TOURNAMENT__GROUPS: {

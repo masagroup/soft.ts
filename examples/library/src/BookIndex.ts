@@ -12,7 +12,8 @@
 import * as ecore from "@masagroup/ecore"
 
 export interface BookIndex extends ecore.EObject, ecore.EMapEntry<string, ecore.EList<number>> {
-    // Attributes
+    // key property
     key: string
+    // value property
     readonly value: ecore.EList<number>
 }

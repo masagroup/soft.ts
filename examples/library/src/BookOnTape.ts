@@ -12,7 +12,8 @@
 import { AudioVisualItem, Person, Writer } from "./internal.js"
 
 export interface BookOnTape extends AudioVisualItem {
-    // References
+    // reader property
     reader: Person
+    // author property
     author: Writer
 }

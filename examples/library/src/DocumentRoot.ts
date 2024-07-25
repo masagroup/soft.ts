@@ -13,8 +13,10 @@ import * as ecore from "@masagroup/ecore"
 import { Library } from "./internal.js"
 
 export interface DocumentRoot extends ecore.EObject {
-    // References
+    // xMLNSPrefixMap property
     readonly xMLNSPrefixMap: ecore.EMap<string, string>
+    // xSISchemaLocation property
     readonly xSISchemaLocation: ecore.EMap<string, string>
+    // library property
     library: Library
 }

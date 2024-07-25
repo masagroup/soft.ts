@@ -13,9 +13,8 @@ import * as ecore from "@masagroup/ecore"
 import { Book, Person } from "./internal.js"
 
 export interface Writer extends Person {
-    // Attributes
+    // name property
     name: string
-
-    // References
+    // books property
     readonly books: ecore.EList<Book>
 }

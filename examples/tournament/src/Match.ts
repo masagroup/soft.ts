@@ -13,26 +13,34 @@ import * as ecore from "@masagroup/ecore"
 import { Group, MatchKind, Team } from "./internal.js"
 
 export interface Match extends ecore.EObject {
-    // Attributes
+    // group
+    getGroup(): Group
+    getGroupAsync(): Promise<Group>
+    setGroup(newGroup: Group): void
+
+    // homeTeam
+    getHomeTeam(): Team
+    getHomeTeamAsync(): Promise<Team>
+    setHomeTeam(newHomeTeam: Team): void
+
+    // guestTeam
+    getGuestTeam(): Team
+    getGuestTeamAsync(): Promise<Team>
+    setGuestTeam(newGuestTeam: Team): void
+
+    // date
     getDate(): Date
     setDate(newDate: Date): void
 
+    // location
     getLocation(): string
     setLocation(newLocation: string): void
 
+    // kind
     getKind(): MatchKind
     setKind(newKind: MatchKind): void
 
+    // result
     getResult(): string
     setResult(newResult: string): void
-
-    // References
-    getGroup(): Group
-    setGroup(newGroup: Group): void
-
-    getHomeTeam(): Team
-    setHomeTeam(newHomeTeam: Team): void
-
-    getGuestTeam(): Team
-    setGuestTeam(newGuestTeam: Team): void
 }

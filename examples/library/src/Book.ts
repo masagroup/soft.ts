@@ -13,13 +13,16 @@ import * as ecore from "@masagroup/ecore"
 import { BookCategory, CirculatingItem, Writer } from "./internal.js"
 
 export interface Book extends CirculatingItem {
-    // Attributes
+    // title property
     title: string
+    // pages property
     pages: number
+    // category property
     category: BookCategory
-    readonly tableOfContents: ecore.EList<string>
-
-    // References
+    // author property
     author: Writer
+    // tableOfContents property
+    readonly tableOfContents: ecore.EList<string>
+    // indexes property
     readonly indexes: ecore.EMap<string, number>
 }

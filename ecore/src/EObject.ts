@@ -12,7 +12,7 @@
 import { EClass, EList, ENotifier, EOperation, EReference, EResource, EStructuralFeature } from "./internal.js"
 
 export interface EObject extends ENotifier {
-    // Operations
+    // operations
     eClass(): EClass
     eIsProxy(): boolean
     eResource(): EResource

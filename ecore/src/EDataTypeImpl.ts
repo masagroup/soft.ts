@@ -64,6 +64,10 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EDATA_TYPE__SERIALIZABLE: {

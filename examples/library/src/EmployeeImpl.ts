@@ -26,6 +26,16 @@ export class EmployeeImpl extends PersonImpl implements Employee {
 
     // get the value of manager
     get manager(): Employee {
+        return this.getManager()
+    }
+
+    // set the value of manager
+    set manager(newManager: Employee) {
+        this.setManager(newManager)
+    }
+
+    // get the value of manager
+    getManager(): Employee {
         if (this._manager != null && this._manager.eIsProxy()) {
             let oldManager = this._manager
             let newManager = this.eResolveProxy(oldManager) as Employee
@@ -47,8 +57,31 @@ export class EmployeeImpl extends PersonImpl implements Employee {
         return this._manager
     }
 
+    // get the value of manager asynchronously
+    async getManagerAsync(): Promise<Employee> {
+        if (this._manager != null && this._manager.eIsProxy()) {
+            let oldManager = this._manager
+            let newManager = (await this.eResolveProxyAsync(oldManager)) as Employee
+            this._manager = newManager
+            if (newManager != oldManager) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            LibraryConstants.EMPLOYEE__MANAGER,
+                            oldManager,
+                            newManager
+                        )
+                    )
+                }
+            }
+        }
+        return this._manager
+    }
+
     // set the value of manager
-    set manager(newManager: Employee) {
+    setManager(newManager: Employee): void {
         let oldManager = this._manager
         this._manager = newManager
         if (this.eNotificationRequired()) {
@@ -72,7 +105,7 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.EMPLOYEE__MANAGER: {
-                return resolve ? this.manager : this.basicGetManager()
+                return resolve ? this.getManager() : this.basicGetManager()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -80,10 +113,20 @@ export class EmployeeImpl extends PersonImpl implements Employee {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case LibraryConstants.EMPLOYEE__MANAGER:
+                    return this.getManagerAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.EMPLOYEE__MANAGER: {
-                this.manager = newValue as Employee
+                this.setManager(newValue as Employee)
                 break
             }
             default: {
@@ -95,7 +138,7 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.EMPLOYEE__MANAGER: {
-                this.manager = null
+                this.setManager(null)
                 break
             }
             default: {

@@ -597,6 +597,10 @@ export class EClassImpl extends EClassifierExt implements EClass {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ECLASS__ABSTRACT: {

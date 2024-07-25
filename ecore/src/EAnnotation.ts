@@ -12,17 +12,20 @@
 import { EList, EMap, EModelElement, EObject } from "./internal.js"
 
 export interface EAnnotation extends EModelElement {
-    // Attributes
+    // source
     getSource(): string
     setSource(newSource: string): void
 
-    // References
+    // details
     getDetails(): EMap<string, string>
 
+    // eModelElement
     getEModelElement(): EModelElement
     setEModelElement(newEModelElement: EModelElement): void
 
+    // contents
     getContents(): EList<EObject>
 
+    // references
     getReferences(): EList<EObject>
 }

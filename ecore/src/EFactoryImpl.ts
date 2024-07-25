@@ -96,6 +96,10 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EFACTORY__EPACKAGE: {
