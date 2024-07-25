@@ -150,7 +150,7 @@ tournament.install:
 .PHONY: tournament.generate
 tournament.generate:
 	@echo "[tournament.generate]"
-	@$(call GENERATE,examples,tournament.ecore,)
+	@$(call GENERATE,examples,tournament.ecore,-p async=true)
 
 .PHONY: tournament.format
 tournament.format:
