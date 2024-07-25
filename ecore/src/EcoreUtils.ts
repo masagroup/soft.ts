@@ -17,6 +17,8 @@ import {
     EObjectInternal,
     EResource,
     EResourceSet,
+    EventType,
+    Notification,
     URI,
     getPackageRegistry,
     isEObjectInternal
@@ -53,8 +55,16 @@ export class EcoreUtils {
         return this.resolveInResourceSet(proxy, context?.eResource()?.eResourceSet())
     }
 
+    static async resolveInObjectAsync(proxy: EObject, context: EObject): Promise<EObject> {
+        return this.resolveInResourceSetAsync(proxy, context?.eResource()?.eResourceSet())
+    }
+
     static resolveInResource(proxy: EObject, resource: EResource): EObject {
         return this.resolveInResourceSet(proxy, resource?.eResourceSet())
+    }
+
+    static async resolveInResourceAsync(proxy: EObject, resource: EResource): Promise<EObject> {
+        return this.resolveInResourceSetAsync(proxy, resource?.eResourceSet())
     }
 
     static resolveInResourceSet(proxy: EObject, resourceSet: EResourceSet): EObject {
@@ -78,6 +88,32 @@ export class EcoreUtils {
             }
             if (resolved && resolved != proxy) {
                 return this.resolveInResourceSet(resolved, resourceSet)
+            }
+        }
+        return proxy
+    }
+
+    static async resolveInResourceSetAsync(proxy: EObject, resourceSet: EResourceSet): Promise<EObject> {
+        let proxyURI = (proxy as EObjectInternal).eProxyURI()
+        if (proxyURI) {
+            let resolved: EObject
+            if (resourceSet) {
+                resolved = await resourceSet.getEObjectAsync(proxyURI, true)
+            } else {
+                let proxyURIStr = proxyURI.toString()
+                let ndxHash = proxyURIStr.lastIndexOf("#")
+                let ePackage = getPackageRegistry().getPackage(
+                    ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr
+                )
+                if (ePackage) {
+                    let eResource = ePackage.eResource()
+                    if (eResource) {
+                        resolved = eResource.getEObject(ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "")
+                    }
+                }
+            }
+            if (resolved && resolved != proxy) {
+                return this.resolveInResourceSetAsync(resolved, resourceSet)
             }
         }
         return proxy
@@ -191,5 +227,87 @@ export class EcoreUtils {
             throw Error("The ancestor not found")
         }
         return paths.join("/")
+    }
+
+    static resolveAllInResourceSet(resourceSet: EResourceSet) {
+        for (const resource of resourceSet.getResources()) this.resolveAllInResource(resource)
+    }
+
+    static resolveAllInResource(resource: EResource) {
+        for (const object of resource.eContents()) this.resolveAll(object)
+    }
+
+    static resolveAll(eObject: EObject) {
+        this.resolveCrossReferences(eObject)
+        for (const child of eObject.eAllContents()) this.resolveCrossReferences(child)
+    }
+
+    private static resolveCrossReferences(eObject: EObject) {
+        for (const _ of eObject.eCrossReferences()) {
+            // The loop resolves the cross references by visiting them.
+        }
+    }
+
+    static async resolveAllInResourceSetAsync(resourceSet: EResourceSet): Promise<void> {
+        const promises = []
+        for (const resource of resourceSet.getResources()) promises.push(this.resolveAllInResourceAsync(resource))
+        await Promise.all(promises)
+    }
+
+    static async resolveAllInResourceAsync(resource: EResource): Promise<void> {
+        const promises = []
+        for (const object of resource.eContents()) promises.push(this.resolveAllAsync(object))
+        await Promise.all(promises)
+    }
+
+    static async resolveAllAsync(eObject: EObject): Promise<void> {
+        const promises = [this.resolveCrossReferencesAsync(eObject)]
+        for (const child of eObject.eAllContents()) promises.push(this.resolveCrossReferencesAsync(child))
+        await Promise.all(promises)
+    }
+
+    private static async resolveCrossReferencesAsync(eObject: EObject): Promise<void> {
+        const eClass = eObject.eClass()
+        const eFeatures = eClass.getECrossReferenceFeatures()
+        for (const eFeature of eFeatures) {
+            if (eObject.eIsSet(eFeature)) {
+                if (eFeature.isMany()) {
+                    const promises = []
+                    const list = eObject.eGetResolve(eFeature, false) as EList<EObject>
+                    for (let i = 0; i < list.size(); i++) {
+                        const oldValue = list.get(i)
+                        if (oldValue?.eIsProxy()) {
+                            promises.push(
+                                new Promise(function (resolve, reject) {
+                                    this.resolveInObjectAsync(oldValue, eObject)
+                                        .then(function (newValue: EObject) {
+                                            resolve({ index: i, oldValue: oldValue, newValue: newValue })
+                                        })
+                                        .catch((e: Error) => reject(e))
+                                }))
+                        }
+                    }
+                    for (const resolve of await Promise.all(promises)) {
+                        const eDeliver = eObject.eDeliver()
+                        list.set(resolve.index, resolve.newValue)
+                        eObject.eSetDeliver(eDeliver)
+                        if (eDeliver && !eObject.eAdapters().isEmpty()) {
+                            eObject.eNotify(
+                                new Notification(
+                                    eObject,
+                                    EventType.RESOLVE,
+                                    eFeature,
+                                    resolve.oldValue,
+                                    resolve.newValue,
+                                    resolve.index
+                                )
+                            )
+                        }
+                    }
+                } else {
+                    await eObject.eGetResolveAsync(eFeature, true)
+                }
+            }
+        }
     }
 }
