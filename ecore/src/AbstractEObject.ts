@@ -74,6 +74,10 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return EcoreUtils.resolveInObject(proxy, this)
     }
 
+    async eResolveProxyAsync(proxy: EObject): Promise<EObject> {
+        return EcoreUtils.resolveInObjectAsync(proxy,this)
+    }
+
     eContainer(): EObject {
         let eContainer = this.eInternalContainer()
         if (eContainer && eContainer.eIsProxy()) {
@@ -208,14 +212,30 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return this.eGetFromFeature(feature, true)
     }
 
+    async eGetAsync(feature: EStructuralFeature): Promise<any> {
+        return this.eGetFromFeatureAsync(feature, true)
+    }
+
     eGetResolve(feature: EStructuralFeature, resolve: boolean): any {
         return this.eGetFromFeature(feature, resolve)
+    }
+
+    async eGetResolveAsync(feature: EStructuralFeature, resolve: boolean): Promise<any> {
+        return this.eGetFromFeatureAsync(feature, resolve)
     }
 
     private eGetFromFeature(feature: EStructuralFeature, resolve: boolean): any {
         let featureID = this.eFeatureID(feature)
         if (featureID >= 0) {
             return this.eGetFromID(featureID, resolve)
+        }
+        throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
+    }
+
+    private async eGetFromFeatureAsync(feature: EStructuralFeature, resolve: boolean): Promise<any> {
+        let featureID = this.eFeatureID(feature)
+        if (featureID >= 0) {
+            return this.eGetFromIDAsync(featureID, resolve)
         }
         throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
     }
@@ -232,6 +252,24 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             let properties = this.eDynamicProperties()
             if (properties) {
                 return this.eDynamicPropertiesGet(properties, feature, dynamicFeatureID, resolve)
+            } else {
+                throw new Error("EObject doesn't define any dynamic properties")
+            }
+        }
+    }
+
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        let feature = this.eClass().getEStructuralFeature(featureID)
+        if (!feature) {
+            throw new Error("Invalid featureID: " + featureID)
+        }
+        let dynamicFeatureID = featureID - this.eStaticFeatureCount()
+        if (dynamicFeatureID < 0) {
+            return this.eGetResolveAsync(feature, resolve)
+        } else {
+            let properties = this.eDynamicProperties()
+            if (properties) {
+                return this.eDynamicPropertiesGetAsync(properties, feature, dynamicFeatureID, resolve)
             } else {
                 throw new Error("EObject doesn't define any dynamic properties")
             }
@@ -266,6 +304,86 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 if (isEObject(result)) {
                     let oldValue = result
                     let newValue = this.eResolveProxy(oldValue)
+                    result = newValue
+                    if (oldValue != newValue) {
+                        properties.eDynamicSet(dynamicFeatureID, newValue)
+                        if (isContains(dynamicFeature)) {
+                            let notifications: ENotificationChain = null
+                            if (!isBidirectional(dynamicFeature)) {
+                                let featureID = this.eClass().getFeatureID(dynamicFeature)
+                                if (oldValue) {
+                                    let oldObject = oldValue as EObjectInternal
+                                    notifications = oldObject.eInverseRemove(
+                                        this,
+                                        EOPPOSITE_FEATURE_BASE - featureID,
+                                        notifications
+                                    )
+                                }
+                                if (newValue) {
+                                    let newObject = newValue as EObjectInternal
+                                    notifications = newObject.eInverseAdd(
+                                        this,
+                                        EOPPOSITE_FEATURE_BASE - featureID,
+                                        notifications
+                                    )
+                                }
+                            } else {
+                                let dynamicReference = dynamicFeature as EReference
+                                let reverseFeature = dynamicReference.getEOpposite()
+                                if (oldValue) {
+                                    let oldObject = oldValue as EObjectInternal
+                                    let featureID = oldObject.eClass().getFeatureID(reverseFeature)
+                                    notifications = oldObject.eInverseRemove(this, featureID, notifications)
+                                }
+                                if (newValue) {
+                                    let newObject = newValue as EObjectInternal
+                                    let featureID = newObject.eClass().getFeatureID(reverseFeature)
+                                    notifications = newObject.eInverseAdd(this, featureID, notifications)
+                                }
+                            }
+                            if (notifications) {
+                                notifications.dispatch()
+                            }
+                        }
+                        if (this.eNotificationRequired()) {
+                            this.eNotify(new Notification(this, EventType.RESOLVE, dynamicFeature, oldValue, newValue))
+                        }
+                    }
+                }
+            }
+            return result
+        }
+        return null
+    }
+
+    protected async eDynamicPropertiesGetAsync(
+        properties: EDynamicProperties,
+        dynamicFeature: EStructuralFeature,
+        dynamicFeatureID: number,
+        resolve: boolean
+    ): Promise<any> {
+        if (isContainer(dynamicFeature)) {
+            let featureID = this.eClass().getFeatureID(dynamicFeature)
+            if (this.eInternalContainerFeatureID() == featureID) {
+                return resolve ? this.eContainer() : this.eInternalContainer()
+            }
+        } else {
+            let result = properties.eDynamicGet(dynamicFeatureID)
+            if (!result) {
+                if (dynamicFeature.isMany()) {
+                    if (isMapType(dynamicFeature)) {
+                        result = this.eDynamicPropertiesCreateMap(dynamicFeature)
+                    } else {
+                        result = this.eDynamicPropertiesCreateList(dynamicFeature)
+                    }
+                    properties.eDynamicSet(dynamicFeatureID, result)
+                } else if (dynamicFeature.getDefaultValue()) {
+                    result = dynamicFeature.getDefaultValue()
+                }
+            } else if (resolve && isProxy(dynamicFeature)) {
+                if (isEObject(result)) {
+                    let oldValue = result
+                    let newValue = await this.eResolveProxyAsync(oldValue)
                     result = newValue
                     if (oldValue != newValue) {
                         properties.eDynamicSet(dynamicFeatureID, newValue)
