@@ -75,7 +75,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     async eResolveProxyAsync(proxy: EObject): Promise<EObject> {
-        return EcoreUtils.resolveInObjectAsync(proxy,this)
+        return EcoreUtils.resolveInObjectAsync(proxy, this)
     }
 
     eContainer(): EObject {

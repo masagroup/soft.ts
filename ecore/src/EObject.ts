@@ -23,7 +23,9 @@ export interface EObject extends ENotifier {
     eAllContents(): IterableIterator<EObject>
     eCrossReferences(): EList<EObject>
     eGet(feature: EStructuralFeature): any
+    eGetAsync(feature: EStructuralFeature): Promise<any>
     eGetResolve(feature: EStructuralFeature, resolve: boolean): any
+    eGetResolveAsync(feature: EStructuralFeature, resolve: boolean): Promise<any>
     eSet(feature: EStructuralFeature, newValue: any): void
     eIsSet(feature: EStructuralFeature): boolean
     eUnset(feature: EStructuralFeature): void

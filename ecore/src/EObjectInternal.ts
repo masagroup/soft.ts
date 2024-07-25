@@ -39,9 +39,9 @@ export interface EObjectInternal extends EObject {
     eGetFromIDAsync(featureID: number, resolve: boolean, core: boolean): Promise<any>
     eSetFromID(featureID: number, newValue: any): void
     eUnsetFromID(featureID: number): void
-    eIsSetFromID(featureID: number): boolean    
+    eIsSetFromID(featureID: number): boolean
     eInvokeFromID(operationID: number, args: EList<any>): any
-    
+
     eObjectForFragmentSegment(fragment: string): EObject
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string
 
