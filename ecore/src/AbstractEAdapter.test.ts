@@ -6,6 +6,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
+
 import { instance, mock } from "ts-mockito"
 import { describe, expect, test } from "vitest"
 import { AbstractEAdapter, ENotification, ENotifier } from "./internal.js"
