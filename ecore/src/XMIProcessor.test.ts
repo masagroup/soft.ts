@@ -13,16 +13,16 @@ import { EResourceSet, XMIProcessor } from "./internal.js"
 
 describe("XMIProcessor", () => {
     test("constructor.no.resourceset", () => {
-        let xmlProcessor = new XMIProcessor()
+        const xmlProcessor = new XMIProcessor()
         expect(xmlProcessor).not.toBeNull()
         expect(xmlProcessor.getResourceSet()).not.toBeNull()
     })
 
     test("constructor.resourceset", () => {
-        let mockEResourceSet = mock<EResourceSet>()
-        let eResourceSet = instance(mockEResourceSet)
+        const mockEResourceSet = mock<EResourceSet>()
+        const eResourceSet = instance(mockEResourceSet)
         when(mockEResourceSet.getResources()).thenReturn(null)
-        let xmlProcessor = new XMIProcessor(eResourceSet)
+        const xmlProcessor = new XMIProcessor(eResourceSet)
         expect(xmlProcessor).not.toBeNull()
         expect(xmlProcessor.getResourceSet()).toBe(eResourceSet)
     })

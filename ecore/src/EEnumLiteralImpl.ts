@@ -53,7 +53,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
 
     // set the value of instance
     setInstance(newInstance: any): void {
-        let oldInstance = this._instance
+        const oldInstance = this._instance
         this._instance = newInstance
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -69,7 +69,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
 
     // set the value of literal
     setLiteral(newLiteral: string): void {
-        let oldLiteral = this._literal
+        const oldLiteral = this._literal
         this._literal = newLiteral
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -85,7 +85,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
 
     // set the value of value
     setValue(newValue: number): void {
-        let oldValue = this._value
+        const oldValue = this._value
         this._value = newValue
         if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__VALUE, oldValue, newValue))

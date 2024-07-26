@@ -20,28 +20,28 @@ import {
 
 describe("EAttributeExt", () => {
     test("basicGetEAttributeType", () => {
-        let a = new EAttributeExt()
+        const a = new EAttributeExt()
         expect(a.basicGetEAttributeType()).toBeNull()
 
-        let mockDataType = mock<EDataType>()
-        let dataType = instance(mockDataType)
+        const mockDataType = mock<EDataType>()
+        const dataType = instance(mockDataType)
         a.setEType(dataType)
         expect(a.basicGetEAttributeType()).toBe(dataType)
     })
 
     test("isEAttribute", () => {
-        let feature = new EStructuralFeatureExt()
+        const feature = new EStructuralFeatureExt()
         expect(isEAttribute(feature)).toBeFalsy()
 
-        let attribute = new EAttributeExt()
+        const attribute = new EAttributeExt()
         expect(isEAttribute(attribute)).toBeTruthy()
 
-        let mockFeature = mock<EStructuralFeature>()
-        let mockFeatureInstance = instance(mockFeature)
+        const mockFeature = mock<EStructuralFeature>()
+        const mockFeatureInstance = instance(mockFeature)
         expect(isEAttribute(mockFeatureInstance)).toBeFalsy()
 
-        let mockAttribute = mock<EAttribute>()
-        let mockAttributeInstance = instance(mockAttribute)
+        const mockAttribute = mock<EAttribute>()
+        const mockAttributeInstance = instance(mockAttribute)
         when(mockAttribute.getEAttributeType()).thenReturn(null)
         expect(isEAttribute(mockAttributeInstance)).toBeTruthy()
     })

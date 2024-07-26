@@ -25,21 +25,21 @@ import {
 
 describe("EContentAdapter", () => {
     test("convert", () => {
-        let o: EObject = null
-        let n: ENotifier = o as ENotifier
-        let o2: EObject = n as EObject
+        const o: EObject = null
+        const n: ENotifier = o as ENotifier
+        const o2: EObject = n as EObject
         expect(o2).toBeNull()
     })
 
     test("setTarget", () => {
-        let adapter = new EContentAdapter()
-        let children: EObject[] = []
-        let nb = Math.floor(Math.random() * 10) + 1
+        const adapter = new EContentAdapter()
+        const children: EObject[] = []
+        const nb = Math.floor(Math.random() * 10) + 1
         for (let index = 0; index < nb; index++) {
-            let mockObject = mock<EObject>()
-            let mockAdapters = mock<EList<EAdapter>>()
-            let object = instance(mockObject)
-            let adapters = instance(mockAdapters)
+            const mockObject = mock<EObject>()
+            const mockAdapters = mock<EList<EAdapter>>()
+            const object = instance(mockObject)
+            const adapters = instance(mockAdapters)
 
             when(mockObject.eAdapters()).thenReturn(adapters)
             when(mockAdapters.contains(adapter)).thenReturn(false)
@@ -47,11 +47,11 @@ describe("EContentAdapter", () => {
             when(mockAdapters.remove(adapter)).thenReturn(true)
             children.push(object)
         }
-        let mockChildren = new ImmutableEList<EObject>(children)
-        let mockObject = mock<EObject>()
+        const mockChildren = new ImmutableEList<EObject>(children)
+        const mockObject = mock<EObject>()
         when(mockObject.eContents()).thenReturn(mockChildren)
 
-        let object = instance(mockObject)
+        const object = instance(mockObject)
 
         adapter.setTarget(object)
         adapter.setTarget(null)
@@ -59,13 +59,13 @@ describe("EContentAdapter", () => {
 
     describe("notifyChanged", () => {
         test("simple", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockAttribute = mock<EAttribute>()
-            let attribute = instance(mockAttribute)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockAttribute = mock<EAttribute>()
+            const attribute = instance(mockAttribute)
 
             when(mockNotification.getNotifier()).thenReturn(object)
             when(mockNotification.getFeature()).thenReturn(attribute)
@@ -75,8 +75,8 @@ describe("EContentAdapter", () => {
             verify(mockNotification.getFeature()).once()
             resetCalls(mockNotification)
 
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(false)
             when(mockNotification.getNotifier()).thenReturn(object)
@@ -88,17 +88,17 @@ describe("EContentAdapter", () => {
         })
 
         test("resolve", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockOldObject = mock<EObject>()
-            let oldObject = instance(mockOldObject)
-            let mockOldAdapters = mock<EList<EAdapter>>()
-            let oldAdapters = instance(mockOldAdapters)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockOldObject = mock<EObject>()
+            const oldObject = instance(mockOldObject)
+            const mockOldAdapters = mock<EList<EAdapter>>()
+            const oldAdapters = instance(mockOldAdapters)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
@@ -119,21 +119,21 @@ describe("EContentAdapter", () => {
         })
 
         test("resolveContains", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockOldObject = mock<EObject>()
-            let oldObject = instance(mockOldObject)
-            let mockNewObject = mock<EObject>()
-            let newObject = instance(mockNewObject)
-            let mockOldAdapters = mock<EList<EAdapter>>()
-            let oldAdapters = instance(mockOldAdapters)
-            let mockNewAdapters = mock<EList<EAdapter>>()
-            let newAdapters = instance(mockNewAdapters)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockOldObject = mock<EObject>()
+            const oldObject = instance(mockOldObject)
+            const mockNewObject = mock<EObject>()
+            const newObject = instance(mockNewObject)
+            const mockOldAdapters = mock<EList<EAdapter>>()
+            const oldAdapters = instance(mockOldAdapters)
+            const mockNewAdapters = mock<EList<EAdapter>>()
+            const newAdapters = instance(mockNewAdapters)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
@@ -166,21 +166,21 @@ describe("EContentAdapter", () => {
         })
 
         test("unSet", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockOldObject = mock<EObjectInternal>()
-            let oldObject = instance(mockOldObject)
-            let mockNewObject = mock<EObjectInternal>()
-            let newObject = instance(mockNewObject)
-            let mockOldAdapters = mock<EList<EAdapter>>()
-            let oldAdapters = instance(mockOldAdapters)
-            let mockNewAdapters = mock<EList<EAdapter>>()
-            let newAdapters = instance(mockNewAdapters)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockOldObject = mock<EObjectInternal>()
+            const oldObject = instance(mockOldObject)
+            const mockNewObject = mock<EObjectInternal>()
+            const newObject = instance(mockNewObject)
+            const mockOldAdapters = mock<EList<EAdapter>>()
+            const oldAdapters = instance(mockOldAdapters)
+            const mockNewAdapters = mock<EList<EAdapter>>()
+            const newAdapters = instance(mockNewAdapters)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
@@ -212,21 +212,21 @@ describe("EContentAdapter", () => {
         })
 
         test("set", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockOldObject = mock<EObjectInternal>()
-            let oldObject = instance(mockOldObject)
-            let mockNewObject = mock<EObjectInternal>()
-            let newObject = instance(mockNewObject)
-            let mockOldAdapters = mock<EList<EAdapter>>()
-            let oldAdapters = instance(mockOldAdapters)
-            let mockNewAdapters = mock<EList<EAdapter>>()
-            let newAdapters = instance(mockNewAdapters)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockOldObject = mock<EObjectInternal>()
+            const oldObject = instance(mockOldObject)
+            const mockNewObject = mock<EObjectInternal>()
+            const newObject = instance(mockNewObject)
+            const mockOldAdapters = mock<EList<EAdapter>>()
+            const oldAdapters = instance(mockOldAdapters)
+            const mockNewAdapters = mock<EList<EAdapter>>()
+            const newAdapters = instance(mockNewAdapters)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
@@ -258,17 +258,17 @@ describe("EContentAdapter", () => {
         })
 
         test("add", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNewObject = mock<EObjectInternal>()
-            let newObject = instance(mockNewObject)
-            let mockNewAdapters = mock<EList<EAdapter>>()
-            let newAdapters = instance(mockNewAdapters)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNewObject = mock<EObjectInternal>()
+            const newObject = instance(mockNewObject)
+            const mockNewAdapters = mock<EList<EAdapter>>()
+            const newAdapters = instance(mockNewAdapters)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
@@ -293,24 +293,24 @@ describe("EContentAdapter", () => {
         })
 
         test("addMany", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
 
-            let children: EObject[] = []
-            let nb = Math.floor(Math.random() * 10) + 1
+            const children: EObject[] = []
+            const nb = Math.floor(Math.random() * 10) + 1
             for (let index = 0; index < nb; index++) {
-                let mockObject = mock<EObject>()
-                let mockAdapters = mock<EList<EAdapter>>()
-                let object = instance(mockObject)
-                let adapters = instance(mockAdapters)
+                const mockObject = mock<EObject>()
+                const mockAdapters = mock<EList<EAdapter>>()
+                const object = instance(mockObject)
+                const adapters = instance(mockAdapters)
 
                 when(mockObject.eAdapters()).thenReturn(adapters)
                 when(mockAdapters.contains(adapter)).thenReturn(false)
@@ -326,17 +326,17 @@ describe("EContentAdapter", () => {
         })
 
         test("remove", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObjectInternal>()
-            let object = instance(mockObject)
-            let mockOldObject = mock<EObjectInternal>()
-            let oldObject = instance(mockOldObject)
-            let mockOldAdapters = mock<EList<EAdapter>>()
-            let oldAdapters = instance(mockOldAdapters)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObjectInternal>()
+            const object = instance(mockObject)
+            const mockOldObject = mock<EObjectInternal>()
+            const oldObject = instance(mockOldObject)
+            const mockOldAdapters = mock<EList<EAdapter>>()
+            const oldAdapters = instance(mockOldAdapters)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
@@ -360,24 +360,24 @@ describe("EContentAdapter", () => {
         })
 
         test("removeMany", () => {
-            let adapter = new EContentAdapter()
-            let mockNotification = mock<ENotification>()
-            let notification = instance(mockNotification)
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockReference = mock<EReference>()
-            let reference = instance(mockReference)
+            const adapter = new EContentAdapter()
+            const mockNotification = mock<ENotification>()
+            const notification = instance(mockNotification)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockReference = mock<EReference>()
+            const reference = instance(mockReference)
 
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
 
-            let children: EObject[] = []
-            let nb = Math.floor(Math.random() * 10) + 1
+            const children: EObject[] = []
+            const nb = Math.floor(Math.random() * 10) + 1
             for (let index = 0; index < nb; index++) {
-                let mockObject = mock<EObjectInternal>()
-                let mockAdapters = mock<EList<EAdapter>>()
-                let object = instance(mockObject)
-                let adapters = instance(mockAdapters)
+                const mockObject = mock<EObjectInternal>()
+                const mockAdapters = mock<EList<EAdapter>>()
+                const object = instance(mockObject)
+                const adapters = instance(mockAdapters)
 
                 when(mockObject.eAdapters()).thenReturn(adapters)
                 when(mockObject.eInternalResource()).thenReturn(null)

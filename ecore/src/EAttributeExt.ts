@@ -28,9 +28,10 @@ export class EAttributeExt extends EAttributeImpl {
 
     setID(newIsID: boolean) {
         super.setID(newIsID)
-        let eClass = this.getEContainingClass()
+        const eClass = this.getEContainingClass()
         if (eClass != null) {
-            ;(eClass as EClassExt).setModified(EcoreConstants.ECLASS__EATTRIBUTES)
+            const eClassExt = eClass as EClassExt
+            eClassExt.setModified(EcoreConstants.ECLASS__EATTRIBUTES)
         }
     }
 }

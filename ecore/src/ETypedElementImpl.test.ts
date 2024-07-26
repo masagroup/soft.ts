@@ -28,31 +28,31 @@ interface EClassifierInternal extends EClassifier, EObjectInternal {}
 
 describe("ETypedElementImpl", () => {
     test("eStaticClass", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getETypedElement())
     })
 
     test("getEType", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
 
         // get default value
         expect(o.getEType()).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<EClassifierInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<EClassifierInternal>()
+        const value = instance(mockValue)
         o.setEType(value)
 
         // events
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -61,9 +61,9 @@ describe("ETypedElementImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new URI("test:///uri")
-        let mockResolved = mock<EClassifierInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new URI("test:///uri")
+        const mockResolved = mock<EClassifierInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -73,13 +73,13 @@ describe("ETypedElementImpl", () => {
     })
 
     test("setEType", () => {
-        let o = new ETypedElementImpl()
-        let mockValue = mock<EClassifierInternal>()
-        let value = instance(mockValue)
+        const o = new ETypedElementImpl()
+        const mockValue = mock<EClassifierInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -95,11 +95,11 @@ describe("ETypedElementImpl", () => {
     })
 
     test("unsetEType", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // unset
@@ -115,23 +115,23 @@ describe("ETypedElementImpl", () => {
     })
 
     test("getMany", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         expect(() => o.isMany()).toThrow(Error)
     })
 
     test("getOrdered", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         // get default value
         expect(o.isOrdered()).toBe(true)
     })
 
     test("setOrdered", () => {
-        let o = new ETypedElementImpl()
-        let value = true
+        const o = new ETypedElementImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -147,23 +147,23 @@ describe("ETypedElementImpl", () => {
     })
 
     test("getRequired", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         expect(() => o.isRequired()).toThrow(Error)
     })
 
     test("getUnique", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         // get default value
         expect(o.isUnique()).toBe(true)
     })
 
     test("setUnique", () => {
-        let o = new ETypedElementImpl()
-        let value = true
+        const o = new ETypedElementImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -179,18 +179,18 @@ describe("ETypedElementImpl", () => {
     })
 
     test("getLowerBound", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         // get default value
         expect(o.getLowerBound()).toBe(0)
     })
 
     test("setLowerBound", () => {
-        let o = new ETypedElementImpl()
-        let value = 45
+        const o = new ETypedElementImpl()
+        const value = 45
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -206,18 +206,18 @@ describe("ETypedElementImpl", () => {
     })
 
     test("getUpperBound", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         // get default value
         expect(o.getUpperBound()).toBe(1)
     })
 
     test("setUpperBound", () => {
-        let o = new ETypedElementImpl()
-        let value = 45
+        const o = new ETypedElementImpl()
+        const value = 45
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -233,7 +233,7 @@ describe("ETypedElementImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE, true)).toStrictEqual(o.getEType())
         expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, true)).toStrictEqual(o.getLowerBound())
@@ -247,38 +247,38 @@ describe("ETypedElementImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let mockValue = mock<EClassifierInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EClassifierInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE, value)
             expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE, false)).toBe(value)
         }
         {
-            let value = 45
+            const value = 45
             o.eSetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, false)).toBe(value)
         }
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.ETYPED_ELEMENT__ORDERED, value)
             expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ORDERED, false)).toBe(value)
         }
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.ETYPED_ELEMENT__UNIQUE, value)
             expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UNIQUE, false)).toBe(value)
         }
         {
-            let value = 45
+            const value = 45
             o.eSetFromID(EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE)).toBeFalsy()
         expect(o.eIsSetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND)).toBeFalsy()
@@ -290,7 +290,7 @@ describe("ETypedElementImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new ETypedElementImpl()
+        const o = new ETypedElementImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE)
@@ -298,22 +298,22 @@ describe("ETypedElementImpl", () => {
         }
         {
             o.eUnsetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND)
-            let v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, false)
+            const v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, false)
             expect(v).toBe(0)
         }
         {
             o.eUnsetFromID(EcoreConstants.ETYPED_ELEMENT__ORDERED)
-            let v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ORDERED, false)
+            const v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__ORDERED, false)
             expect(v).toBe(true)
         }
         {
             o.eUnsetFromID(EcoreConstants.ETYPED_ELEMENT__UNIQUE)
-            let v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UNIQUE, false)
+            const v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UNIQUE, false)
             expect(v).toBe(true)
         }
         {
             o.eUnsetFromID(EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND)
-            let v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, false)
+            const v = o.eGetFromID(EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, false)
             expect(v).toBe(1)
         }
     })

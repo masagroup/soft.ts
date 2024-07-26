@@ -146,7 +146,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
 
     // set the value of source
     setSource(newSource: string): void {
-        let oldSource = this._source
+        const oldSource = this._source
         this._source = newSource
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -314,8 +314,8 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
-                let list = this.getContents() as ENotifyingList<EObject>
-                let end = otherEnd as EObject
+                const list = this.getContents() as ENotifyingList<EObject>
+                const end = otherEnd as EObject
                 return list.removeWithNotification(end, notifications)
             }
             case EcoreConstants.EANNOTATION__DETAILS: {

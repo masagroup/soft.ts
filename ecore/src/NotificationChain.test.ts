@@ -13,13 +13,13 @@ import { ENotification, ENotifier, EventType, NotificationChain } from "./intern
 
 describe("NotificationChain", () => {
     test("constructor", () => {
-        let c = new NotificationChain()
+        const c = new NotificationChain()
         expect(c).not.toBeNull()
     })
 
     test("add", () => {
         // chain
-        let c = new NotificationChain()
+        const c = new NotificationChain()
 
         // mocks
         const mockNotifier = mock<ENotifier>()
@@ -49,7 +49,7 @@ describe("NotificationChain", () => {
         when(mockNotification.getNotifier()).thenReturn(notifier)
 
         // test
-        let c = new NotificationChain()
+        const c = new NotificationChain()
         expect(c.add(notification)).toBeTruthy()
         c.dispatch()
 

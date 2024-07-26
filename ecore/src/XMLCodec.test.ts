@@ -32,24 +32,24 @@ import {
 } from "./internal.js"
 
 function loadPackage(filename: string): EPackage {
-    let xmiProcessor = new XMIProcessor()
-    let uri = new URI("testdata/" + filename)
-    let resource = xmiProcessor.loadSync(uri)
+    const xmiProcessor = new XMIProcessor()
+    const uri = new URI("testdata/" + filename)
+    const resource = xmiProcessor.loadSync(uri)
     expect(resource.isLoaded()).toBeTruthy()
     expect(resource.getErrors().isEmpty()).toBeTruthy()
     expect(resource.eContents().isEmpty()).toBeFalsy()
-    let ePackage = resource.eContents().get(0) as EPackage
+    const ePackage = resource.eContents().get(0) as EPackage
     ePackage.setEFactoryInstance(new EFactoryExt())
     return ePackage
 }
 
 describe("XMLResource", () => {
     describe("load.library.noroot", () => {
-        let ePackage = loadPackage("library.noroot.ecore")
+        const ePackage = loadPackage("library.noroot.ecore")
         expect(ePackage).not.toBeNull()
-        let xmlProcessor = new XMLProcessor([ePackage])
+        const xmlProcessor = new XMLProcessor([ePackage])
         expect(xmlProcessor).not.toBeNull()
-        let resourceURI = new URI("testdata/library.noroot.xml")
+        const resourceURI = new URI("testdata/library.noroot.xml")
         let resource: EResource = null
 
         afterEach(() => {
@@ -58,13 +58,13 @@ describe("XMLResource", () => {
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
-            let eLibraryClass = ePackage.getEClassifier("Library") as EClass
+            const eLibraryClass = ePackage.getEClassifier("Library") as EClass
             expect(eLibraryClass).not.toBeNull()
-            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute
+            const eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute
             expect(eLibraryNameAttribute).not.toBeNull()
 
             // check library name
-            let eLibrary = resource.eContents().get(0)
+            const eLibrary = resource.eContents().get(0)
             expect(eLibrary.eGet(eLibraryNameAttribute)).toBe("My Library")
         })
 
@@ -73,8 +73,8 @@ describe("XMLResource", () => {
         })
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resourceURI)
-            let stream = fs.createReadStream(path)
+            const path = uriToFilePath(resourceURI)
+            const stream = fs.createReadStream(path)
             resource = await xmlProcessor.loadFromStream(stream)
         })
 
@@ -84,13 +84,13 @@ describe("XMLResource", () => {
     })
 
     describe("save.library.noroot", () => {
-        let ePackage = loadPackage("library.noroot.ecore")
+        const ePackage = loadPackage("library.noroot.ecore")
         expect(ePackage).not.toBeNull()
-        let xmlProcessor = new XMLProcessor([ePackage])
+        const xmlProcessor = new XMLProcessor([ePackage])
         expect(xmlProcessor).not.toBeNull()
-        let originURI = new URI("testdata/library.noroot.xml")
-        let resultURI = new URI("testdata/library.noroot.result.xml")
-        let resource = xmlProcessor.loadSync(originURI)
+        const originURI = new URI("testdata/library.noroot.xml")
+        const resultURI = new URI("testdata/library.noroot.result.xml")
+        const resource = xmlProcessor.loadSync(originURI)
         resource.setURI(resultURI)
 
         test("saveToString", () => {
@@ -116,30 +116,30 @@ describe("XMLResource", () => {
     })
 
     describe("load.library.complex", () => {
-        let ePackage = loadPackage("library.complex.ecore")
+        const ePackage = loadPackage("library.complex.ecore")
         expect(ePackage).not.toBeNull()
-        let eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass
+        const eDocumentRootClass = ePackage.getEClassifier("DocumentRoot") as EClass
         expect(eDocumentRootClass).not.toBeNull()
-        let eLibraryAttribure = eDocumentRootClass.getEStructuralFeatureFromName("library")
+        const eLibraryAttribure = eDocumentRootClass.getEStructuralFeatureFromName("library")
         expect(eLibraryAttribure).not.toBeNull()
-        let eLibraryClass = ePackage.getEClassifier("Library") as EClass
+        const eLibraryClass = ePackage.getEClassifier("Library") as EClass
         expect(eLibraryClass).not.toBeNull()
-        let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute
+        const eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute
         expect(eLibraryNameAttribute).not.toBeNull()
-        let eLibraryBooksReference = eLibraryClass.getEStructuralFeatureFromName("books") as EAttribute
+        const eLibraryBooksReference = eLibraryClass.getEStructuralFeatureFromName("books") as EAttribute
         expect(eLibraryBooksReference).not.toBeNull()
-        let eBookClass = ePackage.getEClassifier("Book") as EClass
+        const eBookClass = ePackage.getEClassifier("Book") as EClass
         expect(eBookClass).not.toBeNull()
-        let eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName("title") as EAttribute
+        const eBookTitleAttribute = eBookClass.getEStructuralFeatureFromName("title") as EAttribute
         expect(eBookTitleAttribute).not.toBeNull()
-        let eBookDateAttribute = eBookClass.getEStructuralFeatureFromName("publicationDate") as EAttribute
+        const eBookDateAttribute = eBookClass.getEStructuralFeatureFromName("publicationDate") as EAttribute
         expect(eBookDateAttribute).not.toBeNull()
-        let eBookCopiesAttribute = eBookClass.getEStructuralFeatureFromName("copies") as EAttribute
+        const eBookCopiesAttribute = eBookClass.getEStructuralFeatureFromName("copies") as EAttribute
         expect(eBookCopiesAttribute).not.toBeNull()
 
-        let xmlProcessor = new XMLProcessor([ePackage])
+        const xmlProcessor = new XMLProcessor([ePackage])
         expect(xmlProcessor).not.toBeNull()
-        let resourceURI = new URI("testdata/library.complex.xml")
+        const resourceURI = new URI("testdata/library.complex.xml")
         let resource: EResource = null
 
         afterEach(() => {
@@ -148,20 +148,20 @@ describe("XMLResource", () => {
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
-            let eDocumentRoot = resource.eContents().get(0)
+            const eDocumentRoot = resource.eContents().get(0)
 
             // check library name
-            let eLibrary = eDocumentRoot.eGet(eLibraryAttribure) as EClass
+            const eLibrary = eDocumentRoot.eGet(eLibraryAttribure) as EClass
             expect(eLibrary).not.toBeNull()
             expect(eLibrary.eGet(eLibraryNameAttribute)).toBe("My Library")
 
             // books
-            let books = eLibrary.eGet(eLibraryBooksReference) as EList<any>
+            const books = eLibrary.eGet(eLibraryBooksReference) as EList<any>
             expect(books).not.toBeNull()
             expect(books.size()).toBe(2)
 
             // book
-            let book = books.get(0)
+            const book = books.get(0)
             expect(book.eGet(eBookTitleAttribute)).toBe("Title 0")
             expect(book.eGet(eBookCopiesAttribute)).toBe(4)
             expect(book.eGet(eBookDateAttribute)).toStrictEqual(new Date(Date.UTC(2015, 8, 6, 4, 24, 46, 0)))
@@ -172,7 +172,7 @@ describe("XMLResource", () => {
         })
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(uriToFilePath(resourceURI))
+            const stream = fs.createReadStream(uriToFilePath(resourceURI))
             resource = await xmlProcessor.loadFromStream(stream)
         })
 
@@ -182,16 +182,16 @@ describe("XMLResource", () => {
     })
 
     describe("load.library.complex.ids", () => {
-        let ePackage = loadPackage("library.complex.ecore")
+        const ePackage = loadPackage("library.complex.ecore")
         expect(ePackage).not.toBeNull()
 
-        let idManager = new UUIDManager()
-        let resourceSet = new EResourceSetImpl()
+        const idManager = new UUIDManager()
+        const resourceSet = new EResourceSetImpl()
         resourceSet.getPackageRegistry().registerPackage(ePackage)
-        let resourceURI = new URI("testdata/library.complex.id.xml")
-        let resource = resourceSet.createResource(resourceURI)
+        const resourceURI = new URI("testdata/library.complex.id.xml")
+        const resource = resourceSet.createResource(resourceURI)
         resource.setObjectIDManager(idManager)
-        let options = new Map<string, any>([
+        const options = new Map<string, any>([
             [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true],
             [XMLOptions.ID_ATTRIBUTE_NAME, "id"]
         ])
@@ -202,9 +202,9 @@ describe("XMLResource", () => {
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
-            let eLibrary = resource.eContents().get(0)
-            let expectedUUID = id128.Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
-            let receivedUUID = idManager.getID(eLibrary)
+            const eLibrary = resource.eContents().get(0)
+            const expectedUUID = id128.Uuid4.fromCanonical("75aa92db-b419-4259-93c4-0e542d33aa35")
+            const receivedUUID = idManager.getID(eLibrary)
             expect(expectedUUID.equal(receivedUUID)).toBeTruthy()
         })
 
@@ -213,7 +213,7 @@ describe("XMLResource", () => {
         })
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(uriToFilePath(resourceURI))
+            const stream = fs.createReadStream(uriToFilePath(resourceURI))
             await resource.loadFromStream(stream, options)
         })
 
@@ -223,13 +223,13 @@ describe("XMLResource", () => {
     })
 
     describe("load.library.complex.options", () => {
-        let ePackage = loadPackage("library.complex.ecore")
+        const ePackage = loadPackage("library.complex.ecore")
         expect(ePackage).not.toBeNull()
-        let xmlProcessor = new XMLProcessor([ePackage])
+        const xmlProcessor = new XMLProcessor([ePackage])
         expect(xmlProcessor).not.toBeNull()
-        let resourceURI = new URI("testdata/library.complex.noroot.xml")
+        const resourceURI = new URI("testdata/library.complex.noroot.xml")
         let resource: EResource = null
-        let options = new Map<string, any>([
+        const options = new Map<string, any>([
             [XMLOptions.EXTENDED_META_DATA, new ExtendedMetaData()],
             [XMLOptions.SUPPRESS_DOCUMENT_ROOT, true]
         ])
@@ -240,13 +240,13 @@ describe("XMLResource", () => {
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
-            let eLibraryClass = ePackage.getEClassifier("Library") as EClass
+            const eLibraryClass = ePackage.getEClassifier("Library") as EClass
             expect(eLibraryClass).not.toBeNull()
-            let eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute
+            const eLibraryNameAttribute = eLibraryClass.getEStructuralFeatureFromName("name") as EAttribute
             expect(eLibraryNameAttribute).not.toBeNull()
 
             // check library name
-            let eLibrary = resource.eContents().get(0)
+            const eLibrary = resource.eContents().get(0)
             expect(eLibrary.eGet(eLibraryNameAttribute)).toBe("My Library")
         })
 
@@ -255,7 +255,7 @@ describe("XMLResource", () => {
         })
 
         test("loadFromStream", async () => {
-            let stream = fs.createReadStream(uriToFilePath(resourceURI))
+            const stream = fs.createReadStream(uriToFilePath(resourceURI))
             resource = await xmlProcessor.loadFromStream(stream, options)
         })
 
@@ -265,31 +265,30 @@ describe("XMLResource", () => {
     })
 
     describe("load.object", () => {
-        let ePackage = loadPackage("library.simple.ecore")
+        const ePackage = loadPackage("library.simple.ecore")
         expect(ePackage).not.toBeNull()
-        let eBookClass = ePackage.getEClassifier("Book") as EClass
+        const eBookClass = ePackage.getEClassifier("Book") as EClass
         expect(eBookClass).not.toBeNull()
-        let eBookNameAttribute = eBookClass.getEStructuralFeatureFromName("name") as EAttribute
+        const eBookNameAttribute = eBookClass.getEStructuralFeatureFromName("name") as EAttribute
         expect(eBookNameAttribute).not.toBeNull()
 
-        let eResourceSet = new EResourceSetImpl()
+        const eResourceSet = new EResourceSetImpl()
         eResourceSet.getPackageRegistry().registerPackage(ePackage)
-        let eResource = eResourceSet.createResource(new URI("file://$tmp.xml"))
+        const eResource = eResourceSet.createResource(new URI("file://$tmp.xml"))
         let eObject: EObject = null
-
-        let eObjectURI = new URI("testdata/book.simple.xml")
-        let decoder = new XMLDecoder(eResource, null)
+        const eObjectURI = new URI("testdata/book.simple.xml")
+        const decoder = new XMLDecoder(eResource, null)
 
         test("decodeObject", () => {
-            let path = uriToFilePath(eObjectURI)
-            let buffer = fs.readFileSync(path)
-            let result = decoder.decodeObject(buffer)
+            const path = uriToFilePath(eObjectURI)
+            const buffer = fs.readFileSync(path)
+            const result = decoder.decodeObject(buffer)
             if (result.isOk()) eObject = result.value
         })
 
         test("decodeObjectAsync", async () => {
-            let path = uriToFilePath(eObjectURI)
-            let stream = fs.createReadStream(path)
+            const path = uriToFilePath(eObjectURI)
+            const stream = fs.createReadStream(path)
             eObject = await decoder.decodeObjectAsync(stream)
         })
 
@@ -300,12 +299,12 @@ describe("XMLResource", () => {
     })
 
     describe("save.library.complex", () => {
-        let ePackage = loadPackage("library.complex.ecore")
+        const ePackage = loadPackage("library.complex.ecore")
         expect(ePackage).not.toBeNull()
-        let xmlProcessor = new XMLProcessor([ePackage])
+        const xmlProcessor = new XMLProcessor([ePackage])
         expect(xmlProcessor).not.toBeNull()
-        let originURI = new URI("testdata/library.complex.xml")
-        let resource = xmlProcessor.loadSync(originURI)
+        const originURI = new URI("testdata/library.complex.xml")
+        const resource = xmlProcessor.loadSync(originURI)
 
         test("saveToString", () => {
             const expected = fs
@@ -319,25 +318,25 @@ describe("XMLResource", () => {
 
     describe("save.library.complex.sub", () => {
         test("saveToString", () => {
-            let ePackage = loadPackage("library.complex.ecore")
+            const ePackage = loadPackage("library.complex.ecore")
             expect(ePackage).not.toBeNull()
-            let xmlProcessor = new XMLProcessor([ePackage])
+            const xmlProcessor = new XMLProcessor([ePackage])
             expect(xmlProcessor).not.toBeNull()
-            let originURI = new URI("testdata/library.complex.xml")
-            let eResource = xmlProcessor.loadSync(originURI)
+            const originURI = new URI("testdata/library.complex.xml")
+            const eResource = xmlProcessor.loadSync(originURI)
 
-            let eObject = eResource.getEObject("//@library/@employees.0")
+            const eObject = eResource.getEObject("//@library/@employees.0")
             expect(eObject).not.toBeNull()
-            let eContainer = eObject.eContainer()
+            const eContainer = eObject.eContainer()
             expect(eContainer).not.toBeNull()
 
             // create a new resource
-            let subURI = new URI("testdata/library.complex.sub.xml")
-            let eNewResource = eResource.eResourceSet().createResource(subURI)
+            const subURI = new URI("testdata/library.complex.sub.xml")
+            const eNewResource = eResource.eResourceSet().createResource(subURI)
             // add object to new resource
             eNewResource.eContents().add(eObject)
             // save it
-            let result = xmlProcessor.saveToString(eNewResource)
+            const result = xmlProcessor.saveToString(eNewResource)
             const expected = fs
                 .readFileSync(uriToFilePath(subURI))
                 .toString()
@@ -347,38 +346,38 @@ describe("XMLResource", () => {
     })
 
     describe("save.object", () => {
-        let ePackage = loadPackage("library.simple.ecore")
+        const ePackage = loadPackage("library.simple.ecore")
         expect(ePackage).not.toBeNull()
-        let eBookClass = ePackage.getEClassifier("Book") as EClass
+        const eBookClass = ePackage.getEClassifier("Book") as EClass
         expect(eBookClass).not.toBeNull()
-        let resourceURI = new URI("testdata/library.simple.xml")
-        let xmlProcessor = new XMLProcessor([ePackage])
-        let eResource = xmlProcessor.loadSync(resourceURI)
+        const resourceURI = new URI("testdata/library.simple.xml")
+        const xmlProcessor = new XMLProcessor([ePackage])
+        const eResource = xmlProcessor.loadSync(resourceURI)
         expect(eResource.getErrors().isEmpty()).toBeTruthy()
 
         // retrieve second book
-        let libraryClass = ePackage.getEClassifier("Library") as EClass
+        const libraryClass = ePackage.getEClassifier("Library") as EClass
         expect(libraryClass).not.toBeNull()
-        let libraryBooksFeature = libraryClass.getEStructuralFeatureFromName("books")
+        const libraryBooksFeature = libraryClass.getEStructuralFeatureFromName("books")
         expect(libraryBooksFeature).not.toBeNull()
 
         expect(eResource.eContents().size()).toBe(1)
-        let eLibrary = eResource.eContents().get(0)
+        const eLibrary = eResource.eContents().get(0)
         expect(eLibrary).not.toBeNull()
 
-        let eBooks = eLibrary.eGet(libraryBooksFeature) as EList<EObject>
+        const eBooks = eLibrary.eGet(libraryBooksFeature) as EList<EObject>
         expect(eBooks).not.toBeNull()
         expect(eBooks.size()).toBe(4)
-        let eBook = eBooks.get(1)
+        const eBook = eBooks.get(1)
 
-        let xmlEncoder = new XMLEncoder(eResource, null)
-        let expected = fs
+        const xmlEncoder = new XMLEncoder(eResource, null)
+        const expected = fs
             .readFileSync("testdata/book.simple.xml")
             .toString()
             .replace(/\r?\n|\r/g, "\n")
 
         test("encodeObject", () => {
-            let result = xmlEncoder.encodeObject(eBook)
+            const result = xmlEncoder.encodeObject(eBook)
             if (result.isOk()) {
                 expect(new TextDecoder().decode(Buffer.from(result.value))).toBe(expected)
             }
@@ -405,21 +404,21 @@ describe("XMLResource", () => {
             expect(resource).not.toBeNull()
             expect(resource.isLoaded()).toBeTruthy()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
-    
+
             const tournament = resource.eContents().get(0)
             expect(tournament.eClass()).toEqual(eTournamentClass)
             expect(tournament.eGet(eTournamentNameAttribute)).toBe("Tournament")
-    
+
             const matchs = tournament.eGet(eTournameMatchsReference) as EList<EObject>
             expect(matchs.size()).toBe(112)
-            
+
             const match = matchs.get(0)
-            const homeTeam = match.eGetResolve(eMatchHomeTeamReference,false)
+            const homeTeam = match.eGetResolve(eMatchHomeTeamReference, false)
             expect(homeTeam.eGet(eTeamNameAttribute)).toBe("Team0")
-            const guestTeam = match.eGetResolve(eMatchGuestTeamReference,false)
+            const guestTeam = match.eGetResolve(eMatchGuestTeamReference, false)
             expect(guestTeam.eGet(eTeamNameAttribute)).toBe("Team4")
-            const group = match.eGetResolve(eMatchGroupReference,false)
+            const group = match.eGetResolve(eMatchGroupReference, false)
             expect(group.eGet(eGroupNameAttribute)).toBe("Group0")
-        })     
+        })
     })
 })

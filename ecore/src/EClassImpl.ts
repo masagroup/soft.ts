@@ -279,7 +279,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
 
     // set the value of abstract
     setAbstract(newIsAbstract: boolean): void {
-        let oldIsAbstract = this._isAbstract
+        const oldIsAbstract = this._isAbstract
         this._isAbstract = newIsAbstract
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -295,7 +295,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
 
     // set the value of interface
     setInterface(newIsInterface: boolean): void {
-        let oldIsInterface = this._isInterface
+        const oldIsInterface = this._isInterface
         this._isInterface = newIsInterface
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -763,13 +763,13 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                let list = this.getEOperations() as ENotifyingList<EOperation>
-                let end = otherEnd as EOperation
+                const list = this.getEOperations() as ENotifyingList<EOperation>
+                const end = otherEnd as EOperation
                 return list.addWithNotification(end, notifications)
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                let list = this.getEStructuralFeatures() as ENotifyingList<EStructuralFeature>
-                let end = otherEnd as EStructuralFeature
+                const list = this.getEStructuralFeatures() as ENotifyingList<EStructuralFeature>
+                const end = otherEnd as EStructuralFeature
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -781,13 +781,13 @@ export class EClassImpl extends EClassifierExt implements EClass {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ECLASS__EOPERATIONS: {
-                let list = this.getEOperations() as ENotifyingList<EOperation>
-                let end = otherEnd as EOperation
+                const list = this.getEOperations() as ENotifyingList<EOperation>
+                const end = otherEnd as EOperation
                 return list.removeWithNotification(end, notifications)
             }
             case EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES: {
-                let list = this.getEStructuralFeatures() as ENotifyingList<EStructuralFeature>
-                let end = otherEnd as EStructuralFeature
+                const list = this.getEStructuralFeatures() as ENotifyingList<EStructuralFeature>
+                const end = otherEnd as EStructuralFeature
                 return list.removeWithNotification(end, notifications)
             }
             default: {

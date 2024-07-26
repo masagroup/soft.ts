@@ -12,7 +12,7 @@ import { getCodecRegistry } from "./ECodecRegistry.js"
 
 describe("ECodecRegistry", () => {
     test("singleton ", () => {
-        let r = getCodecRegistry()
+        const r = getCodecRegistry()
         expect(r).not.toBeNull()
         expect(r.getExtensionToCodecMap().size).toBe(3)
     })

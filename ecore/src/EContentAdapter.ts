@@ -39,7 +39,7 @@ export class EContentAdapter extends AbstractEAdapter {
             } else if (isEResourceSet(notifier)) {
                 l = notifier.getResources()
             }
-            for (let n of l) {
+            for (const n of l) {
                 this.addAdapter(n)
             }
         }
@@ -48,24 +48,24 @@ export class EContentAdapter extends AbstractEAdapter {
     unsetTarget(notifier: ENotifier) {
         super.unsetTarget(notifier)
         if (isEObject(notifier)) {
-            for (let n of notifier.eContents()) {
+            for (const n of notifier.eContents()) {
                 this.removeAdapterWithChecks(n, false, true)
             }
         } else if (isEResource(notifier)) {
-            for (let n of notifier.eContents()) {
+            for (const n of notifier.eContents()) {
                 this.removeAdapterWithChecks(n, true, false)
             }
         } else if (isEResourceSet(notifier)) {
-            for (let n of notifier.getResources()) {
+            for (const n of notifier.getResources()) {
                 this.removeAdapterWithChecks(n, false, false)
             }
         }
     }
 
     private selfAdapt(notification: ENotification) {
-        let notifier = notification.getNotifier()
+        const notifier = notification.getNotifier()
         if (isEObject(notifier)) {
-            let feature = notification.getFeature()
+            const feature = notification.getFeature()
             if (isEReference(feature) && feature.isContainment()) {
                 this.handleContainment(notification)
             }
@@ -88,7 +88,7 @@ export class EContentAdapter extends AbstractEAdapter {
                 // and also attaching it again as we walk the eContents() later.
                 // Checking here avoids having to check during addAdapter.
                 //
-                let oldNotifier = notification.getOldValue() as ENotifier
+                const oldNotifier = notification.getOldValue() as ENotifier
                 if (oldNotifier.eAdapters().contains(this)) {
                     this.removeAdapter(oldNotifier)
                     this.addAdapter(notification.getNewValue() as ENotifier)
@@ -110,25 +110,25 @@ export class EContentAdapter extends AbstractEAdapter {
                 break
             }
             case EventType.ADD_MANY: {
-                let newValues = notification.getNewValue() as any[]
-                for (let notifier of newValues) {
+                const newValues = notification.getNewValue() as any[]
+                for (const notifier of newValues) {
                     this.addAdapter(notifier)
                 }
                 break
             }
             case EventType.REMOVE: {
                 if (notification.getOldValue()) {
-                    let checkContainer = isEResource(notification.getNotifier())
-                    let checkResource = notification.getFeature() != null
+                    const checkContainer = isEResource(notification.getNotifier())
+                    const checkResource = notification.getFeature() != null
                     this.removeAdapterWithChecks(notification.getOldValue() as ENotifier, checkContainer, checkResource)
                 }
                 break
             }
             case EventType.REMOVE_MANY: {
-                let checkContainer = isEResource(notification.getNotifier())
-                let checkResource = notification.getFeature() != null
-                let oldValues = notification.getOldValue() as any[]
-                for (let notifier of oldValues) {
+                const checkContainer = isEResource(notification.getNotifier())
+                const checkResource = notification.getFeature() != null
+                const oldValues = notification.getOldValue() as any[]
+                for (const notifier of oldValues) {
                     this.removeAdapterWithChecks(notifier, checkContainer, checkResource)
                 }
                 break

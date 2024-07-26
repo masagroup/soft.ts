@@ -670,7 +670,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     private createPackageContents(): void {
-        let factory = getEcoreFactory()
+        const factory = getEcoreFactory()
 
         this._eAnnotationClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EANNOTATION)
         factory.createEAttributeFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__SOURCE)
@@ -1508,44 +1508,44 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEClass_IsSuperTypeOf_EClass()
+            const operation = this.getEClass_IsSuperTypeOf_EClass()
             this.initEOperation(operation, this.getEBoolean(), "isSuperTypeOf", 0, 1, true, true)
             this.addEParameter(operation, this.getEClass(), "someClass", 0, 1, true, true)
         }
         this.initEOperation(this.getEClass_GetFeatureCount(), this.getEInt(), "getFeatureCount", 0, 1, true, true)
         {
-            let operation = this.getEClass_GetEStructuralFeature_EInt()
+            const operation = this.getEClass_GetEStructuralFeature_EInt()
             this.initEOperation(operation, this.getEStructuralFeature(), "getEStructuralFeature", 0, 1, true, true)
             this.addEParameter(operation, this.getEInt(), "featureID", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetEStructuralFeature_EString()
+            const operation = this.getEClass_GetEStructuralFeature_EString()
             this.initEOperation(operation, this.getEStructuralFeature(), "getEStructuralFeature", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "featureName", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetFeatureID_EStructuralFeature()
+            const operation = this.getEClass_GetFeatureID_EStructuralFeature()
             this.initEOperation(operation, this.getEInt(), "getFeatureID", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
         this.initEOperation(this.getEClass_GetOperationCount(), this.getEInt(), "getOperationCount", 0, 1, true, true)
         {
-            let operation = this.getEClass_GetEOperation_EInt()
+            const operation = this.getEClass_GetEOperation_EInt()
             this.initEOperation(operation, this.getEOperation(), "getEOperation", 0, 1, true, true)
             this.addEParameter(operation, this.getEInt(), "operationID", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetOperationID_EOperation()
+            const operation = this.getEClass_GetOperationID_EOperation()
             this.initEOperation(operation, this.getEInt(), "getOperationID", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "operation", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetOverride_EOperation()
+            const operation = this.getEClass_GetOverride_EOperation()
             this.initEOperation(operation, this.getEOperation(), "getOverride", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "operation", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetFeatureType_EStructuralFeature()
+            const operation = this.getEClass_GetFeatureType_EStructuralFeature()
             this.initEOperation(operation, this.getEClassifierClass(), "getFeatureType", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
@@ -1650,7 +1650,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEClassifier_IsInstance_EJavaObject()
+            const operation = this.getEClassifier_IsInstance_EJavaObject()
             this.initEOperation(operation, this.getEBoolean(), "isInstance", 0, 1, true, true)
             this.addEParameter(operation, this.getEJavaObject(), "object", 0, 1, true, true)
         }
@@ -1693,17 +1693,17 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEEnum_GetEEnumLiteral_EString()
+            const operation = this.getEEnum_GetEEnumLiteral_EString()
             this.initEOperation(operation, this.getEEnumLiteral(), "getEEnumLiteral", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "name", 0, 1, true, true)
         }
         {
-            let operation = this.getEEnum_GetEEnumLiteral_EInt()
+            const operation = this.getEEnum_GetEEnumLiteral_EInt()
             this.initEOperation(operation, this.getEEnumLiteral(), "getEEnumLiteral", 0, 1, true, true)
             this.addEParameter(operation, this.getEInt(), "value", 0, 1, true, true)
         }
         {
-            let operation = this.getEEnum_GetEEnumLiteralByLiteral_EString()
+            const operation = this.getEEnum_GetEEnumLiteralByLiteral_EString()
             this.initEOperation(operation, this.getEEnumLiteral(), "getEEnumLiteralByLiteral", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "literal", 0, 1, true, true)
         }
@@ -1796,18 +1796,18 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEFactory_Create_EClass()
+            const operation = this.getEFactory_Create_EClass()
             this.initEOperation(operation, this.getEObject(), "create", 0, 1, true, true)
             this.addEParameter(operation, this.getEClass(), "eClass", 0, 1, true, true)
         }
         {
-            let operation = this.getEFactory_CreateFromString_EDataType_EString()
+            const operation = this.getEFactory_CreateFromString_EDataType_EString()
             this.initEOperation(operation, this.getEJavaObject(), "createFromString", 0, 1, true, true)
             this.addEParameter(operation, this.getEDataType(), "eDataType", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "literalValue", 0, 1, true, true)
         }
         {
-            let operation = this.getEFactory_ConvertToString_EDataType_EJavaObject()
+            const operation = this.getEFactory_ConvertToString_EDataType_EJavaObject()
             this.initEOperation(operation, this.getEString(), "convertToString", 0, 1, true, true)
             this.addEParameter(operation, this.getEDataType(), "eDataType", 0, 1, true, true)
             this.addEParameter(operation, this.getEJavaObject(), "instanceValue", 0, 1, true, true)
@@ -1923,7 +1923,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEGenericType_IsInstance_EJavaObject()
+            const operation = this.getEGenericType_IsInstance_EJavaObject()
             this.initEOperation(operation, this.getEBoolean(), "isInstance", 0, 1, true, true)
             this.addEParameter(operation, this.getEJavaObject(), "object", 0, 1, true, true)
         }
@@ -1948,7 +1948,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEModelElement_GetEAnnotation_EString()
+            const operation = this.getEModelElement_GetEAnnotation_EString()
             this.initEOperation(operation, this.getEAnnotationClass(), "getEAnnotation", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "source", 0, 1, true, true)
         }
@@ -1998,34 +1998,34 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this.initEOperation(this.getEObject_EAllContents(), this.getETreeIterator(), "eAllContents", 0, 1, true, true)
         this.initEOperation(this.getEObject_ECrossReferences(), this.getEEList(), "eCrossReferences", 0, 1, true, true)
         {
-            let operation = this.getEObject_EGet_EStructuralFeature()
+            const operation = this.getEObject_EGet_EStructuralFeature()
             this.initEOperation(operation, this.getEJavaObject(), "eGet", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EGet_EStructuralFeature_EBoolean()
+            const operation = this.getEObject_EGet_EStructuralFeature_EBoolean()
             this.initEOperation(operation, this.getEJavaObject(), "eGet", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
             this.addEParameter(operation, this.getEBoolean(), "resolve", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_ESet_EStructuralFeature_EJavaObject()
+            const operation = this.getEObject_ESet_EStructuralFeature_EJavaObject()
             this.initEOperation(operation, null, "eSet", 0, 1, true, true)
             this.addEParameter(operation, null, "feature", 0, 1, true, true)
             this.addEParameter(operation, null, "newValue", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EIsSet_EStructuralFeature()
+            const operation = this.getEObject_EIsSet_EStructuralFeature()
             this.initEOperation(operation, this.getEBoolean(), "eIsSet", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EUnset_EStructuralFeature()
+            const operation = this.getEObject_EUnset_EStructuralFeature()
             this.initEOperation(operation, null, "eUnset", 0, 1, true, true)
             this.addEParameter(operation, null, "feature", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EInvoke_EOperation_EEList()
+            const operation = this.getEObject_EInvoke_EOperation_EEList()
             this.initEOperation(operation, this.getEJavaObject(), "eInvoke", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "operation", 0, 1, true, true)
             this.addEParameter(operation, this.getEEList(), "arguments", 0, 1, true, true)
@@ -2103,7 +2103,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEOperation_IsOverrideOf_EOperation()
+            const operation = this.getEOperation_IsOverrideOf_EOperation()
             this.initEOperation(operation, this.getEBoolean(), "isOverrideOf", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "someOperation", 0, 1, true, true)
         }
@@ -2214,7 +2214,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEPackage_GetEClassifier_EString()
+            const operation = this.getEPackage_GetEClassifier_EString()
             this.initEOperation(operation, this.getEClassifierClass(), "getEClassifier", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "name", 0, 1, true, true)
         }

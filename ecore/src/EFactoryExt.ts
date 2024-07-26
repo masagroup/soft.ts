@@ -17,7 +17,7 @@ export class EFactoryExt extends EFactoryImpl {
     create(eClass: EClass): EObject {
         if (this.getEPackage() != eClass.getEPackage() || eClass.isAbstract())
             throw new Error("The class '" + eClass.getName() + "' is not a valid classifier")
-        let eObject = new DynamicEObjectImpl()
+        const eObject = new DynamicEObjectImpl()
         eObject.setEClass(eClass)
         return eObject
     }
@@ -29,7 +29,7 @@ export class EFactoryExt extends EFactoryImpl {
         }
 
         if (isEEnum(eDataType)) {
-            let result = eDataType.getEEnumLiteralByLiteral(literalValue)
+            const result = eDataType.getEEnumLiteralByLiteral(literalValue)
             if (!result) {
                 throw new Error(
                     "The value '" + literalValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"
@@ -56,7 +56,7 @@ export class EFactoryExt extends EFactoryImpl {
         }
 
         if (isEEnum(eDataType)) {
-            let result = eDataType.getEEnumLiteralByValue(instanceValue)
+            const result = eDataType.getEEnumLiteralByValue(instanceValue)
             if (!result) {
                 throw new Error(
                     "The value '" + instanceValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"

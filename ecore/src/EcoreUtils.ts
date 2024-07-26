@@ -26,28 +26,28 @@ import {
 
 export class EcoreUtils {
     static getEObjectID(eObject: EObject): string {
-        let eClass = eObject.eClass()
-        let eIDAttribute = eClass.getEIDAttribute()
+        const eClass = eObject.eClass()
+        const eIDAttribute = eClass.getEIDAttribute()
         return !eIDAttribute || !eObject.eIsSet(eIDAttribute)
             ? ""
             : this.convertToString(eIDAttribute.getEAttributeType(), eObject.eGet(eIDAttribute))
     }
 
     static setEObjectID(eObject: EObject, id: string) {
-        let eClass = eObject.eClass()
-        let eIDAttribute = eClass.getEIDAttribute()
-        if ((eIDAttribute = null)) throw new Error("The object doesn't have an ID feature.")
+        const eClass = eObject.eClass()
+        const eIDAttribute = eClass.getEIDAttribute()
+        if (!eIDAttribute) throw new Error("The object doesn't have an ID feature.")
         else if (id.length == 0) eObject.eUnset(eIDAttribute)
         else eObject.eSet(eIDAttribute, this.createFromString(eIDAttribute.getEAttributeType(), id))
     }
 
     static convertToString(eDataType: EDataType, value: any): string {
-        let eFactory = eDataType.getEPackage().getEFactoryInstance()
+        const eFactory = eDataType.getEPackage().getEFactoryInstance()
         return eFactory.convertToString(eDataType, value)
     }
 
     static createFromString(eDataType: EDataType, literal: string): any {
-        let eFactory = eDataType.getEPackage().getEFactoryInstance()
+        const eFactory = eDataType.getEPackage().getEFactoryInstance()
         return eFactory.createFromString(eDataType, literal)
     }
 
@@ -68,19 +68,19 @@ export class EcoreUtils {
     }
 
     static resolveInResourceSet(proxy: EObject, resourceSet: EResourceSet): EObject {
-        let proxyURI = (proxy as EObjectInternal).eProxyURI()
+        const proxyURI = (proxy as EObjectInternal).eProxyURI()
         if (proxyURI) {
             let resolved: EObject
             if (resourceSet) {
                 resolved = resourceSet.getEObject(proxyURI, true)
             } else {
-                let proxyURIStr = proxyURI.toString()
-                let ndxHash = proxyURIStr.lastIndexOf("#")
-                let ePackage = getPackageRegistry().getPackage(
+                const proxyURIStr = proxyURI.toString()
+                const ndxHash = proxyURIStr.lastIndexOf("#")
+                const ePackage = getPackageRegistry().getPackage(
                     ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr
                 )
                 if (ePackage) {
-                    let eResource = ePackage.eResource()
+                    const eResource = ePackage.eResource()
                     if (eResource) {
                         resolved = eResource.getEObject(ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "")
                     }
@@ -94,19 +94,19 @@ export class EcoreUtils {
     }
 
     static async resolveInResourceSetAsync(proxy: EObject, resourceSet: EResourceSet): Promise<EObject> {
-        let proxyURI = (proxy as EObjectInternal).eProxyURI()
+        const proxyURI = (proxy as EObjectInternal).eProxyURI()
         if (proxyURI) {
             let resolved: EObject
             if (resourceSet) {
                 resolved = await resourceSet.getEObjectAsync(proxyURI, true)
             } else {
-                let proxyURIStr = proxyURI.toString()
-                let ndxHash = proxyURIStr.lastIndexOf("#")
-                let ePackage = getPackageRegistry().getPackage(
+                const proxyURIStr = proxyURI.toString()
+                const ndxHash = proxyURIStr.lastIndexOf("#")
+                const ePackage = getPackageRegistry().getPackage(
                     ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr
                 )
                 if (ePackage) {
-                    let eResource = ePackage.eResource()
+                    const eResource = ePackage.eResource()
                     if (eResource) {
                         resolved = eResource.getEObject(ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "")
                     }
@@ -120,42 +120,42 @@ export class EcoreUtils {
     }
 
     static copy(eObject: EObject): EObject {
-        let dc = new DeepCopy(true, true)
-        let c = dc.copy(eObject)
+        const dc = new DeepCopy(true, true)
+        const c = dc.copy(eObject)
         dc.copyReferences()
         return c
     }
 
     static copyAll(l: EList<EObject>): EList<EObject> {
-        let dc = new DeepCopy(true, true)
-        let c = dc.copyAll(l)
+        const dc = new DeepCopy(true, true)
+        const c = dc.copyAll(l)
         dc.copyReferences()
         return c
     }
 
     static equals(eObj1: EObject, eObj2: EObject): boolean {
-        let dE = new DeepEqual()
+        const dE = new DeepEqual()
         return dE.equals(eObj1, eObj2)
     }
 
     static equalsAll(l1: EList<EObject>, l2: EList<EObject>): boolean {
-        let dE = new DeepEqual()
+        const dE = new DeepEqual()
         return dE.equalsAll(l1, l2)
     }
 
     static remove(eObject: EObject) {
         if (isEObjectInternal(eObject)) {
-            let eContainer = eObject.eInternalContainer()
-            let eFeature = eObject.eContainmentFeature()
+            const eContainer = eObject.eInternalContainer()
+            const eFeature = eObject.eContainmentFeature()
             if (eContainer && eFeature) {
                 if (eFeature.isMany()) {
-                    let l = eContainer.eGet(eFeature) as EList<EObject>
+                    const l = eContainer.eGet(eFeature) as EList<EObject>
                     l.remove(eObject)
                 } else {
                     eContainer.eUnset(eFeature)
                 }
             }
-            let eResource = eObject.eInternalResource()
+            const eResource = eObject.eInternalResource()
             if (eResource) {
                 eResource.eContents().remove(eObject)
             }
@@ -182,9 +182,9 @@ export class EcoreUtils {
         if (eObject.eIsProxy()) {
             return (eObject as EObjectInternal).eProxyURI()
         } else {
-            let resource = eObject.eResource()
+            const resource = eObject.eResource()
             if (resource) {
-                let uri = resource.getURI()
+                const uri = resource.getURI()
                 return new URI({
                     scheme: uri.scheme,
                     host: uri.host,
@@ -195,7 +195,7 @@ export class EcoreUtils {
                     fragment: resource.getURIFragment(eObject)
                 })
             } else {
-                let id = EcoreUtils.getEObjectID(eObject)
+                const id = EcoreUtils.getEObjectID(eObject)
                 if (id.length == 0) {
                     return new URI({ fragment: "//" + EcoreUtils.getRelativeURIFragmentPath(null, eObject, false) })
                 } else {
@@ -211,11 +211,11 @@ export class EcoreUtils {
         }
         let eObject = descendant
         let eContainer = eObject.eContainer()
-        let visited = new Set<EObject>()
-        let paths = []
+        const visited = new Set<EObject>()
+        const paths = []
         while (eContainer != null && !visited.has(eObject)) {
             visited.add(eObject)
-            let path = (eContainer as EObjectInternal).eURIFragmentSegment(eObject.eContainingFeature(), eObject)
+            const path = (eContainer as EObjectInternal).eURIFragmentSegment(eObject.eContainingFeature(), eObject)
             paths.slice().unshift(path)
             eObject = eContainer
             if (eContainer == ancestor) {

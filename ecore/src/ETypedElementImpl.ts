@@ -43,8 +43,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     // get the value of eType
     getEType(): EClassifier {
         if (this._eType != null && this._eType.eIsProxy()) {
-            let oldEType = this._eType
-            let newEType = this.eResolveProxy(oldEType) as EClassifier
+            const oldEType = this._eType
+            const newEType = this.eResolveProxy(oldEType) as EClassifier
             this._eType = newEType
             if (newEType != oldEType) {
                 if (this.eNotificationRequired()) {
@@ -66,8 +66,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     // get the value of eType asynchronously
     async getETypeAsync(): Promise<EClassifier> {
         if (this._eType != null && this._eType.eIsProxy()) {
-            let oldEType = this._eType
-            let newEType = (await this.eResolveProxyAsync(oldEType)) as EClassifier
+            const oldEType = this._eType
+            const newEType = (await this.eResolveProxyAsync(oldEType)) as EClassifier
             this._eType = newEType
             if (newEType != oldEType) {
                 if (this.eNotificationRequired()) {
@@ -88,7 +88,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // set the value of eType
     setEType(newEType: EClassifier): void {
-        let oldEType = this._eType
+        const oldEType = this._eType
         this._eType = newEType
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -121,7 +121,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // set the value of ordered
     setOrdered(newIsOrdered: boolean): void {
-        let oldIsOrdered = this._isOrdered
+        const oldIsOrdered = this._isOrdered
         this._isOrdered = newIsOrdered
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -148,7 +148,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // set the value of unique
     setUnique(newIsUnique: boolean): void {
-        let oldIsUnique = this._isUnique
+        const oldIsUnique = this._isUnique
         this._isUnique = newIsUnique
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -164,7 +164,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // set the value of lowerBound
     setLowerBound(newLowerBound: number): void {
-        let oldLowerBound = this._lowerBound
+        const oldLowerBound = this._lowerBound
         this._lowerBound = newLowerBound
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -186,7 +186,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // set the value of upperBound
     setUpperBound(newUpperBound: number): void {
-        let oldUpperBound = this._upperBound
+        const oldUpperBound = this._upperBound
         this._upperBound = newUpperBound
         if (this.eNotificationRequired()) {
             this.eNotify(

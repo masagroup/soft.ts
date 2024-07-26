@@ -134,8 +134,8 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                let list = this.getEAnnotations() as ENotifyingList<EAnnotation>
-                let end = otherEnd as EAnnotation
+                const list = this.getEAnnotations() as ENotifyingList<EAnnotation>
+                const end = otherEnd as EAnnotation
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -147,8 +147,8 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                let list = this.getEAnnotations() as ENotifyingList<EAnnotation>
-                let end = otherEnd as EAnnotation
+                const list = this.getEAnnotations() as ENotifyingList<EAnnotation>
+                const end = otherEnd as EAnnotation
                 return list.removeWithNotification(end, notifications)
             }
             default: {

@@ -35,36 +35,36 @@ interface EReferenceInternal extends EReference, EObjectInternal {}
 
 describe("EReferenceImpl", () => {
     test("eStaticClass", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEReference())
     })
 
     test("getEKeys", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(o.getEKeys()).not.toBeNull()
     })
 
     test("getEOpposite", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
 
         // get default value
         expect(o.getEOpposite()).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<EReferenceInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<EReferenceInternal>()
+        const value = instance(mockValue)
         o.setEOpposite(value)
 
         // events
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -73,9 +73,9 @@ describe("EReferenceImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new URI("test:///uri")
-        let mockResolved = mock<EReferenceInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new URI("test:///uri")
+        const mockResolved = mock<EReferenceInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -85,13 +85,13 @@ describe("EReferenceImpl", () => {
     })
 
     test("setEOpposite", () => {
-        let o = new EReferenceImpl()
-        let mockValue = mock<EReferenceInternal>()
-        let value = instance(mockValue)
+        const o = new EReferenceImpl()
+        const mockValue = mock<EReferenceInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -107,28 +107,28 @@ describe("EReferenceImpl", () => {
     })
 
     test("getEReferenceType", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(() => o.getEReferenceType()).toThrow(Error)
     })
 
     test("getContainer", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(() => o.isContainer()).toThrow(Error)
     })
 
     test("getContainment", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         // get default value
         expect(o.isContainment()).toBe(false)
     })
 
     test("setContainment", () => {
-        let o = new EReferenceImpl()
-        let value = true
+        const o = new EReferenceImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -144,18 +144,18 @@ describe("EReferenceImpl", () => {
     })
 
     test("getResolveProxies", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         // get default value
         expect(o.isResolveProxies()).toBe(true)
     })
 
     test("setResolveProxies", () => {
-        let o = new EReferenceImpl()
-        let value = true
+        const o = new EReferenceImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -171,7 +171,7 @@ describe("EReferenceImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINER, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINER, false)).toThrow(Error)
@@ -190,18 +190,18 @@ describe("EReferenceImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, value)
             expect(o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, false)).toBe(value)
         }
         {
             // list with a value
-            let mockValue = mock<EAttributeInternal>()
-            let value = instance(mockValue)
-            let l = new ImmutableEList<EAttribute>([value])
+            const mockValue = mock<EAttributeInternal>()
+            const value = instance(mockValue)
+            const l = new ImmutableEList<EAttribute>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
 
             // set list with new contents
@@ -212,20 +212,20 @@ describe("EReferenceImpl", () => {
         }
 
         {
-            let mockValue = mock<EReferenceInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EReferenceInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(EcoreConstants.EREFERENCE__EOPPOSITE, value)
             expect(o.eGetFromID(EcoreConstants.EREFERENCE__EOPPOSITE, false)).toBe(value)
         }
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, value)
             expect(o.eGetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(() => o.eIsSetFromID(EcoreConstants.EREFERENCE__CONTAINER)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.EREFERENCE__CONTAINMENT)).toBeFalsy()
@@ -236,18 +236,18 @@ describe("EReferenceImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new EReferenceImpl()
+        const o = new EReferenceImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.EREFERENCE__CONTAINMENT)
-            let v = o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, false)
+            const v = o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, false)
             expect(v).toBe(false)
         }
         {
             o.eUnsetFromID(EcoreConstants.EREFERENCE__EKEYS)
-            let v = o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, false)
+            const v = o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, false)
             expect(v).not.toBeNull()
-            let l = v as EList<EAttribute>
+            const l = v as EList<EAttribute>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
@@ -256,7 +256,7 @@ describe("EReferenceImpl", () => {
         }
         {
             o.eUnsetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES)
-            let v = o.eGetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, false)
+            const v = o.eGetFromID(EcoreConstants.EREFERENCE__RESOLVE_PROXIES, false)
             expect(v).toBe(true)
         }
     })

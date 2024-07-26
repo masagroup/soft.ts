@@ -12,10 +12,10 @@ import { getEcoreFactory } from "./index.js"
 
 describe("EObject", () => {
     test("eContents", () => {
-        let c = getEcoreFactory().createEClass()
-        let a1 = getEcoreFactory().createEAttribute()
-        let a2 = getEcoreFactory().createEAttribute()
-        let o1 = getEcoreFactory().createEOperation()
+        const c = getEcoreFactory().createEClass()
+        const a1 = getEcoreFactory().createEAttribute()
+        const a2 = getEcoreFactory().createEAttribute()
+        const o1 = getEcoreFactory().createEOperation()
         c.getEStructuralFeatures().add(a1)
         c.getEStructuralFeatures().add(a2)
         c.getEOperations().add(o1)

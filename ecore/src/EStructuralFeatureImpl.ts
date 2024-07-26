@@ -63,7 +63,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // set the value of defaultValueLiteral
     setDefaultValueLiteral(newDefaultValueLiteral: string): void {
-        let oldDefaultValueLiteral = this._defaultValueLiteral
+        const oldDefaultValueLiteral = this._defaultValueLiteral
         this._defaultValueLiteral = newDefaultValueLiteral
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -93,7 +93,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // set the value of featureID
     setFeatureID(newFeatureID: number): void {
-        let oldFeatureID = this._featureID
+        const oldFeatureID = this._featureID
         this._featureID = newFeatureID
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -115,7 +115,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // set the value of changeable
     setChangeable(newIsChangeable: boolean): void {
-        let oldIsChangeable = this._isChangeable
+        const oldIsChangeable = this._isChangeable
         this._isChangeable = newIsChangeable
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -137,7 +137,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // set the value of derived
     setDerived(newIsDerived: boolean): void {
-        let oldIsDerived = this._isDerived
+        const oldIsDerived = this._isDerived
         this._isDerived = newIsDerived
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -159,7 +159,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // set the value of transient
     setTransient(newIsTransient: boolean): void {
-        let oldIsTransient = this._isTransient
+        const oldIsTransient = this._isTransient
         this._isTransient = newIsTransient
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -181,7 +181,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // set the value of unsettable
     setUnsettable(newIsUnsettable: boolean): void {
-        let oldIsUnsettable = this._isUnsettable
+        const oldIsUnsettable = this._isUnsettable
         this._isUnsettable = newIsUnsettable
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -203,7 +203,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
 
     // set the value of volatile
     setVolatile(newIsVolatile: boolean): void {
-        let oldIsVolatile = this._isVolatile
+        const oldIsVolatile = this._isVolatile
         this._isVolatile = newIsVolatile
         if (this.eNotificationRequired()) {
             this.eNotify(

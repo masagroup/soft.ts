@@ -22,26 +22,26 @@ export class EURIConverterImpl implements EURIConverter {
     }
 
     async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createReadStream(normalized) : null
     }
 
     async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createWriteStream(normalized) : null
     }
 
     readSync(uri: URI): Uint8Array {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.readSync(normalized) : null
     }
 
     writeSync(uri: URI, arr: Uint8Array): void {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         if (uriHandler) {
             uriHandler.writeSync(normalized, arr)
         }
@@ -61,13 +61,13 @@ export class EURIConverterImpl implements EURIConverter {
     }
 
     normalize(uri: URI): URI {
-        let normalized = this.getURIFromMap(uri)
+        const normalized = this.getURIFromMap(uri)
         return uri == normalized ? normalized : this.normalize(normalized)
     }
 
     private getURIFromMap(uri: URI): URI {
-        for (let [oldPrefix, newPrefix] of this._uriMap) {
-            let r = uri.replacePrefix(oldPrefix, newPrefix)
+        for (const [oldPrefix, newPrefix] of this._uriMap) {
+            const r = uri.replacePrefix(oldPrefix, newPrefix)
             if (r) {
                 return r
             }

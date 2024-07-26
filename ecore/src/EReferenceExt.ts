@@ -43,7 +43,7 @@ export class EReferenceExt extends EReferenceImpl {
     // get the value of eReferenceType
     getEReferenceType(): EClass {
         if (!this._referenceType || this._referenceType.eIsProxy()) {
-            let eType = this.getEType()
+            const eType = this.getEType()
             if (isEClass(eType)) {
                 this._referenceType = eType
             }
@@ -54,7 +54,7 @@ export class EReferenceExt extends EReferenceImpl {
     // get the basic value of eReferenceType with no proxy resolution
     basicGetEReferenceType(): EClass {
         if (!this._referenceType) {
-            let eType = this.basicGetEType()
+            const eType = this.basicGetEType()
             if (isEClass(eType)) {
                 this._referenceType = eType
             }

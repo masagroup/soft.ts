@@ -34,9 +34,9 @@ export class ECodecRegistryImpl implements ECodecRegistry {
         if (factory) {
             return factory
         }
-        let ndx = uri.path.lastIndexOf(".")
+        const ndx = uri.path.lastIndexOf(".")
         if (ndx != -1) {
-            let extension = uri.path.slice(ndx + 1)
+            const extension = uri.path.slice(ndx + 1)
             factory = this._extensionToCodec.get(extension)
             if (factory) {
                 return factory

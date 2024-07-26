@@ -14,10 +14,10 @@ import { EObject, ETreeIterator, ImmutableEList } from "./internal.js"
 
 describe("ETreeIterator", () => {
     test("iteratorWithRoot", () => {
-        let emptyList = new ImmutableEList<EObject>()
-        let mockObject = mock<EObject>()
-        let object = instance<EObject>(mockObject)
-        let it = new ETreeIterator<EObject, EObject>(object, true, function (o: EObject): Iterator<EObject> {
+        const emptyList = new ImmutableEList<EObject>()
+        const mockObject = mock<EObject>()
+        const object = instance<EObject>(mockObject)
+        const it = new ETreeIterator<EObject, EObject>(object, true, function (o: EObject): Iterator<EObject> {
             return emptyList[Symbol.iterator]()
         })
         expect(deepEqual(it.next(), { value: object, done: false })).toBeTruthy()
@@ -25,44 +25,44 @@ describe("ETreeIterator", () => {
     })
 
     test("iteratorNoRoot", () => {
-        let emptyList = new ImmutableEList<EObject>()
-        let mockObject = mock<EObject>()
-        let object = instance<EObject>(mockObject)
-        let it = new ETreeIterator<EObject, EObject>(object, false, function (o: EObject): Iterator<EObject> {
+        const emptyList = new ImmutableEList<EObject>()
+        const mockObject = mock<EObject>()
+        const object = instance<EObject>(mockObject)
+        const it = new ETreeIterator<EObject, EObject>(object, false, function (o: EObject): Iterator<EObject> {
             return emptyList[Symbol.iterator]()
         })
         expect(deepEqual(it.next(), { value: undefined, done: true })).toBeTruthy()
     })
 
     test("iteratorWithRootIteration", () => {
-        let emptyList = new ImmutableEList<EObject>()
-        let mockObject = mock<EObject>()
-        let object = instance<EObject>(mockObject)
-        let it = new ETreeIterator<EObject, EObject>(object, true, function (o: EObject): Iterator<EObject> {
+        const emptyList = new ImmutableEList<EObject>()
+        const mockObject = mock<EObject>()
+        const object = instance<EObject>(mockObject)
+        const it = new ETreeIterator<EObject, EObject>(object, true, function (o: EObject): Iterator<EObject> {
             return emptyList[Symbol.iterator]()
         })
         expect(deepEqual([...it], [object])).toBeTruthy()
     })
 
     test("iteratorEContents", () => {
-        let emptyList = new ImmutableEList<EObject>()
-        let mockObject = mock<EObject>()
-        let mockChild1 = mock<EObject>()
-        let mockChild2 = mock<EObject>()
-        let mockGrandChild1 = mock<EObject>()
-        let mockGrandChild2 = mock<EObject>()
-        let object = instance<EObject>(mockObject)
-        let child1 = instance<EObject>(mockChild1)
-        let child2 = instance<EObject>(mockChild2)
-        let grandChild1 = instance<EObject>(mockGrandChild1)
-        let grandChild2 = instance<EObject>(mockGrandChild2)
+        const emptyList = new ImmutableEList<EObject>()
+        const mockObject = mock<EObject>()
+        const mockChild1 = mock<EObject>()
+        const mockChild2 = mock<EObject>()
+        const mockGrandChild1 = mock<EObject>()
+        const mockGrandChild2 = mock<EObject>()
+        const object = instance<EObject>(mockObject)
+        const child1 = instance<EObject>(mockChild1)
+        const child2 = instance<EObject>(mockChild2)
+        const grandChild1 = instance<EObject>(mockGrandChild1)
+        const grandChild2 = instance<EObject>(mockGrandChild2)
         when(mockObject.eContents()).thenReturn(new ImmutableEList<EObject>([child1, child2]))
         when(mockChild1.eContents()).thenReturn(new ImmutableEList<EObject>([grandChild1, grandChild2]))
         when(mockChild2.eContents()).thenReturn(emptyList)
         when(mockGrandChild1.eContents()).thenReturn(emptyList)
         when(mockGrandChild2.eContents()).thenReturn(emptyList)
 
-        let it = new ETreeIterator<EObject, EObject>(object, false, function (o: EObject): Iterator<EObject> {
+        const it = new ETreeIterator<EObject, EObject>(object, false, function (o: EObject): Iterator<EObject> {
             return o.eContents()[Symbol.iterator]()
         })
         expect(deepEqual([...it], [child1, grandChild1, grandChild2, child2])).toBeTruthy()

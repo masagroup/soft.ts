@@ -12,22 +12,22 @@ import { XMLNamespaces } from "./XMLNamespaces.js"
 
 describe("XMLNamespaces", () => {
     test("constructor", () => {
-        let n = new XMLNamespaces()
+        const n = new XMLNamespaces()
         expect(n.getPrefix("uri")).toBeNull()
         expect(n.getURI("prefix")).toBeNull()
     })
 
     test("empty", () => {
-        let n = new XMLNamespaces()
+        const n = new XMLNamespaces()
         n.pushContext()
         expect(n.getPrefix("uri")).toBeNull()
         expect(n.getURI("prefix")).toBeNull()
-        let c = n.popContext()
+        const c = n.popContext()
         expect(c.length).toBe(0)
     })
 
     test("context ", () => {
-        let n = new XMLNamespaces()
+        const n = new XMLNamespaces()
         n.pushContext()
         expect(n.declarePrefix("prefix", "uri")).toBeFalsy()
         expect(n.getPrefix("uri")).toBe("prefix")
@@ -48,7 +48,7 @@ describe("XMLNamespaces", () => {
     })
 
     test("contextRemap", () => {
-        let n = new XMLNamespaces()
+        const n = new XMLNamespaces()
         n.pushContext()
         expect(n.declarePrefix("prefix", "uri")).toBeFalsy()
         expect(n.getPrefix("uri")).toBe("prefix")
@@ -60,7 +60,7 @@ describe("XMLNamespaces", () => {
     })
 
     test("contextNoRemap ", () => {
-        let n = new XMLNamespaces()
+        const n = new XMLNamespaces()
         n.pushContext()
         expect(n.declarePrefix("prefix", "uri")).toBeFalsy()
         expect(n.getPrefix("uri")).toBe("prefix")

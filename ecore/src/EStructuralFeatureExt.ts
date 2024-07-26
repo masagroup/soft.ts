@@ -18,8 +18,8 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
 
     // get the value of defaultValue
     getDefaultValue(): any {
-        let eType = this.getEType()
-        let defaultValueLiteral = this.getDefaultValueLiteral()
+        const eType = this.getEType()
+        const defaultValueLiteral = this.getDefaultValueLiteral()
         if (eType && defaultValueLiteral.length == 0) {
             if (this.isMany()) {
                 return null
@@ -27,7 +27,7 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
                 return eType.getDefaultValue()
             }
         } else if (isEDataType(eType)) {
-            let factory = eType.getEPackage()?.getEFactoryInstance()
+            const factory = eType.getEPackage()?.getEFactoryInstance()
             if (factory && factory != this._defaultValueFactory) {
                 if (eType.isSerializable()) {
                     this._defaultValue = factory.createFromString(eType, defaultValueLiteral)
@@ -41,10 +41,10 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
 
     // set the value of defaultValue
     setDefaultValue(newDefaultValue: any) {
-        let eType = this.getEType()
+        const eType = this.getEType()
         if (isEDataType(eType)) {
-            let factory = eType.getEPackage().getEFactoryInstance()
-            let literal = factory.convertToString(eType, newDefaultValue)
+            const factory = eType.getEPackage().getEFactoryInstance()
+            const literal = factory.convertToString(eType, newDefaultValue)
             super.setDefaultValue(literal)
             this._defaultValueFactory = null // reset default value
         } else {

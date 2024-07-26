@@ -38,7 +38,7 @@ export class ENamedElementImpl extends EModelElementExt implements ENamedElement
 
     // set the value of name
     setName(newName: string): void {
-        let oldName = this._name
+        const oldName = this._name
         this._name = newName
         if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ENAMED_ELEMENT__NAME, oldName, newName))

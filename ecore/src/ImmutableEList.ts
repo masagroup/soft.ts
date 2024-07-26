@@ -93,7 +93,7 @@ export class ImmutableEList<E> implements EList<E> {
 }
 
 export function getNonDuplicates<E>(c: Collection<E>, ref: Collection<E>): Collection<E> {
-    let s = new Set<E>(ref)
+    const s = new Set<E>(ref)
     for (const e of c) {
         s.delete(e)
     }

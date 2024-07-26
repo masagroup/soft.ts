@@ -74,7 +74,7 @@ export class EPackageExt extends EPackageImpl {
     protected createResource(): EResource {
         let resource = this.eResource()
         if (!resource) {
-            let uri = new URI(this.getNsURI())
+            const uri = new URI(this.getNsURI())
             resource = new EResourceImpl()
             resource.setURI(uri)
             resource.eContents().add(this)
@@ -222,7 +222,7 @@ export class EPackageExt extends EPackageImpl {
         isUnique: boolean,
         isOrdered: boolean
     ) {
-        let parameter = getEcoreFactory().createEParameterFromContainer(aOperation)
+        const parameter = getEcoreFactory().createEParameterFromContainer(aOperation)
         parameter.setName(name)
         parameter.setEType(aType)
         parameter.setLowerBound(lowerBound)
@@ -246,7 +246,7 @@ export class EPackageExt extends EPackageImpl {
         this.initEClassifier(aDataType, name, instanceTypeName)
         aDataType.setSerializable(isSerializable)
         if (defaultValue.length > 0) {
-            let aDataTypeInternal = aDataType as EDataTypeInternal
+            const aDataTypeInternal = aDataType as EDataTypeInternal
             aDataTypeInternal.setDefaultValue(this._eFactoryInstance.createFromString(aDataType, defaultValue))
         }
     }
@@ -256,7 +256,7 @@ export class EPackageExt extends EPackageImpl {
     }
 
     protected addEEnumLiteral(aEnum: EEnum, name: string, literal: string, value: number) {
-        let enumLiteral = getEcoreFactory().createEEnumLiteralFromContainer(aEnum)
+        const enumLiteral = getEcoreFactory().createEEnumLiteralFromContainer(aEnum)
         enumLiteral.setName(name)
         enumLiteral.setLiteral(literal)
         enumLiteral.setValue(value)

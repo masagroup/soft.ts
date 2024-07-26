@@ -13,7 +13,7 @@ import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, U
 
 describe("XMICodec", () => {
     describe("load.library.simple", () => {
-        let resource = new EResourceImpl()
+        const resource = new EResourceImpl()
         resource.setURI(new URI("testdata/library.simple.ecore"))
 
         beforeEach(() => {
@@ -26,47 +26,47 @@ describe("XMICodec", () => {
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
-            let contents = resource.eContents()
+            const contents = resource.eContents()
             expect(contents.size()).toBe(1)
 
-            let ePackage = contents.get(0) as EPackage
+            const ePackage = contents.get(0) as EPackage
             expect(ePackage).not.toBeNull()
             expect(ePackage.getName()).toBe("library")
             expect(ePackage.getNsPrefix()).toBe("lib")
             expect(ePackage.getNsURI()).toBe("http:///org/eclipse/emf/examples/library/library.simple.ecore/1.0.0")
 
-            let eClassifiers = ePackage.getEClassifiers()
+            const eClassifiers = ePackage.getEClassifiers()
             expect(eClassifiers.size()).toBe(2)
 
-            let eBookStore = eClassifiers.get(0) as EClassifier
+            const eBookStore = eClassifiers.get(0) as EClassifier
             expect(eBookStore).not.toBeNull()
             expect(eBookStore.getName()).toBe("Library")
 
-            let eBookStoreClass = eBookStore as EClass
+            const eBookStoreClass = eBookStore as EClass
             expect(eBookStoreClass).not.toBeNull()
             expect(eBookStoreClass.getFeatureCount()).toBe(3)
 
-            let eOwnerAttribute = eBookStoreClass.getEStructuralFeature(0) as EAttribute
+            const eOwnerAttribute = eBookStoreClass.getEStructuralFeature(0) as EAttribute
             expect(eOwnerAttribute.getName()).toBe("owner")
-            let eOwnerAttributeType = eOwnerAttribute.getEAttributeType()
+            const eOwnerAttributeType = eOwnerAttribute.getEAttributeType()
             expect(eOwnerAttributeType.getName()).toBe("EString")
 
-            let eLocationAttribute = eBookStoreClass.getEStructuralFeature(1) as EAttribute
+            const eLocationAttribute = eBookStoreClass.getEStructuralFeature(1) as EAttribute
             expect(eLocationAttribute.getName()).toBe("location")
-            let eLocationType = eLocationAttribute.getEAttributeType()
+            const eLocationType = eLocationAttribute.getEAttributeType()
             expect(eLocationType).not.toBeNull()
 
-            let eBooksReference = eBookStoreClass.getEStructuralFeature(2) as EReference
+            const eBooksReference = eBookStoreClass.getEStructuralFeature(2) as EReference
             expect(eBooksReference.getName()).toBe("books")
 
-            let eBookClass = eClassifiers.get(1) as EClass
+            const eBookClass = eClassifiers.get(1) as EClass
             expect(eBookClass.getName()).toBe("Book")
             expect(eBookClass.getFeatureCount()).toBe(2)
 
-            let eNameAttribute = eBookClass.getEStructuralFeature(0) as EAttribute
+            const eNameAttribute = eBookClass.getEStructuralFeature(0) as EAttribute
             expect(eNameAttribute.getName()).toBe("name")
 
-            let eISBNFeature = eBookClass.getEStructuralFeature(1) as EAttribute
+            const eISBNFeature = eBookClass.getEStructuralFeature(1) as EAttribute
             expect(eISBNFeature.getName()).toBe("isbn")
 
             // check resolved reference
@@ -78,14 +78,14 @@ describe("XMICodec", () => {
         })
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resource.getURI())
-            let stream = fs.createReadStream(path)
+            const path = uriToFilePath(resource.getURI())
+            const stream = fs.createReadStream(path)
             await resource.loadFromStream(stream)
         })
     })
 
     describe("load.library.noroot", () => {
-        let resource = new EResourceImpl()
+        const resource = new EResourceImpl()
         resource.setURI(new URI("testdata/library.noroot.ecore"))
 
         beforeEach(() => {
@@ -98,28 +98,28 @@ describe("XMICodec", () => {
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
-            let contents = resource.eContents()
+            const contents = resource.eContents()
             expect(contents.size()).toBe(1)
 
-            let ePackage = contents.get(0) as EPackage
+            const ePackage = contents.get(0) as EPackage
             expect(ePackage).not.toBeNull()
 
-            let eClassifiers = ePackage.getEClassifiers()
-            let eBook = eClassifiers.get(0) as EClassifier
+            const eClassifiers = ePackage.getEClassifiers()
+            const eBook = eClassifiers.get(0) as EClassifier
             expect(eBook).not.toBeNull()
             expect(eBook.getName()).toBe("Book")
 
-            let eBookClass = eBook as EClass
+            const eBookClass = eBook as EClass
             expect(eBookClass).not.toBeNull()
-            let eSuperTypes = eBookClass.getESuperTypes()
+            const eSuperTypes = eBookClass.getESuperTypes()
             expect(eSuperTypes.size()).toBe(1)
-            let eCirculatingItemClass = eSuperTypes.get(0)
+            const eCirculatingItemClass = eSuperTypes.get(0)
             expect(eCirculatingItemClass.getName()).toBe("CirculatingItem")
 
-            let eWriterClass = eClassifiers.get(2) as EClass
+            const eWriterClass = eClassifiers.get(2) as EClass
             expect(eWriterClass).not.toBeNull()
             expect(eWriterClass.getEAnnotations().isEmpty()).toBeFalsy()
-            let eAnnotation = eWriterClass.getEAnnotation("http://net.masagroup/soft/2020/GenTS")
+            const eAnnotation = eWriterClass.getEAnnotation("http://net.masagroup/soft/2020/GenTS")
             expect(eAnnotation).not.toBeNull()
             expect(eAnnotation.getDetails().getValue("extension")).toBe("true")
         })
@@ -129,14 +129,14 @@ describe("XMICodec", () => {
         })
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resource.getURI())
-            let stream = fs.createReadStream(path)
+            const path = uriToFilePath(resource.getURI())
+            const stream = fs.createReadStream(path)
             await resource.loadFromStream(stream)
         })
     })
 
     describe("load.library.complex", () => {
-        let resource = new EResourceImpl()
+        const resource = new EResourceImpl()
         resource.setURI(new URI("testdata/library.complex.ecore"))
 
         beforeEach(() => {
@@ -149,20 +149,20 @@ describe("XMICodec", () => {
             expect(resource.getErrors().isEmpty()).toBeTruthy()
             expect(resource.getWarnings().isEmpty()).toBeTruthy()
 
-            let contents = resource.eContents()
+            const contents = resource.eContents()
             expect(contents.size()).toBe(1)
 
-            let ePackage = contents.get(0) as EPackage
-            let eClassifiers = ePackage.getEClassifiers()
+            const ePackage = contents.get(0) as EPackage
+            const eClassifiers = ePackage.getEClassifiers()
 
-            let eDocumentRootClass = eClassifiers.get(0) as EClass
+            const eDocumentRootClass = eClassifiers.get(0) as EClass
             expect(eDocumentRootClass).not.toBeNull()
             expect(eDocumentRootClass.getName()).toBe("DocumentRoot")
 
-            let eXMNLSPrefixFeature = eDocumentRootClass.getEStructuralFeatureFromName("xMLNSPrefixMap") as EReference
+            const eXMNLSPrefixFeature = eDocumentRootClass.getEStructuralFeatureFromName("xMLNSPrefixMap") as EReference
             expect(eXMNLSPrefixFeature).not.toBeNull()
 
-            let eType = eXMNLSPrefixFeature.getEType()
+            const eType = eXMNLSPrefixFeature.getEType()
             expect(eType).not.toBeNull()
             expect(eType.getName()).toBe("EStringToStringMapEntry")
             expect(eType.eIsProxy()).toBeFalsy()
@@ -173,26 +173,26 @@ describe("XMICodec", () => {
         })
 
         test("loadFromStream", async () => {
-            let path = uriToFilePath(resource.getURI())
-            let stream = fs.createReadStream(path)
+            const path = uriToFilePath(resource.getURI())
+            const stream = fs.createReadStream(path)
             await resource.loadFromStream(stream)
         })
 
         test("loadFromString", () => {
-            let path = uriToFilePath(resource.getURI())
-            let buffer = fs.readFileSync(path)
+            const path = uriToFilePath(resource.getURI())
+            const buffer = fs.readFileSync(path)
             resource.loadFromString(buffer.toString())
         })
     })
 
     describe("save.library.simple", () => {
         test("saveToString", async () => {
-            let resource = new EResourceImpl()
+            const resource = new EResourceImpl()
             resource.setURI(new URI("testdata/library.simple.ecore"))
             await resource.load()
 
-            let result = resource.saveToString()
-            let expected = fs
+            const result = resource.saveToString()
+            const expected = fs
                 .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n")
@@ -203,12 +203,12 @@ describe("XMICodec", () => {
 
     describe("save.library.complex", () => {
         test("saveToString", async () => {
-            let resource = new EResourceImpl()
+            const resource = new EResourceImpl()
             resource.setURI(new URI("testdata/library.complex.ecore"))
             await resource.load()
 
-            let result = resource.saveToString()
-            let expected = fs
+            const result = resource.saveToString()
+            const expected = fs
                 .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n")

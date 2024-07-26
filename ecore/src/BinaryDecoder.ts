@@ -185,7 +185,7 @@ export class BinaryDecoder implements EDecoder {
         } else if (this._objects.length <= id) {
             const eClassData = this.decodeClass()
             const eObject = eClassData.eFactory.create(eClassData.eClass) as EObjectInternal
-            let eResult : EObject = eObject
+            let eResult: EObject = eObject
             let featureID = this.decodeNumber() - 1
 
             if (featureID == -3) {

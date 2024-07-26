@@ -95,7 +95,7 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
 
     // set the value of operationID
     setOperationID(newOperationID: number): void {
-        let oldOperationID = this._operationID
+        const oldOperationID = this._operationID
         this._operationID = newOperationID
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -250,8 +250,8 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
                 return this.eBasicSetContainer(otherEnd, EcoreConstants.EOPERATION__ECONTAINING_CLASS, msgs)
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                let list = this.getEParameters() as ENotifyingList<EParameter>
-                let end = otherEnd as EParameter
+                const list = this.getEParameters() as ENotifyingList<EParameter>
+                const end = otherEnd as EParameter
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -266,8 +266,8 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
                 return this.eBasicSetContainer(null, EcoreConstants.EOPERATION__ECONTAINING_CLASS, notifications)
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                let list = this.getEParameters() as ENotifyingList<EParameter>
-                let end = otherEnd as EParameter
+                const list = this.getEParameters() as ENotifyingList<EParameter>
+                const end = otherEnd as EParameter
                 return list.removeWithNotification(end, notifications)
             }
             default: {

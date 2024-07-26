@@ -14,7 +14,7 @@ import { EObjectImpl, getEcorePackage } from "./internal.js"
 
 describe("EObjectImpl", () => {
     test("eStaticClass", () => {
-        let o = new EObjectImpl()
+        const o = new EObjectImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEObject())
     })
 })

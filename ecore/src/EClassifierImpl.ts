@@ -49,7 +49,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 
     // set the value of classifierID
     setClassifierID(newClassifierID: number): void {
-        let oldClassifierID = this._classifierID
+        const oldClassifierID = this._classifierID
         this._classifierID = newClassifierID
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -84,7 +84,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 
     // set the value of instanceClass
     setInstanceClass(newInstanceClass: any): void {
-        let oldInstanceClass = this._instanceClass
+        const oldInstanceClass = this._instanceClass
         this._instanceClass = newInstanceClass
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -106,7 +106,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
 
     // set the value of instanceClassName
     setInstanceClassName(newInstanceClassName: string): void {
-        let oldInstanceClassName = this._instanceClassName
+        const oldInstanceClassName = this._instanceClassName
         this._instanceClassName = newInstanceClassName
         if (this.eNotificationRequired()) {
             this.eNotify(

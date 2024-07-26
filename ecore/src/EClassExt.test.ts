@@ -26,18 +26,18 @@ function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
 
 describe("EClassExt", () => {
     test("instance", () => {
-        let eClass = new EClassExt()
+        const eClass = new EClassExt()
         eClass.setName("eClass")
         expect(eClass.getName()).toBe("eClass")
         expect(eClass.getEAllAttributes().isEmpty()).toBeTruthy()
     })
 
     test("superTypes", () => {
-        let eClass = new EClassExt()
-        let eSuperClass = new EClassExt()
-        let eSuperClass2 = new EClassExt()
-        let eSuperClass3 = new EClassExt()
-        let eSuperClassClass = new EClassExt()
+        const eClass = new EClassExt()
+        const eSuperClass = new EClassExt()
+        const eSuperClass2 = new EClassExt()
+        const eSuperClass3 = new EClassExt()
+        const eSuperClassClass = new EClassExt()
 
         eClass.getESuperTypes().add(eSuperClass)
         eSuperClass.getESuperTypes().add(eSuperClassClass)
@@ -63,8 +63,8 @@ describe("EClassExt", () => {
     })
 
     test("featuresAdd", () => {
-        let eClass = new EClassExt()
-        let eAttribute = new EAttributeExt()
+        const eClass = new EClassExt()
+        const eAttribute = new EAttributeExt()
         expect(eAttribute.getFeatureID()).toBe(-1)
 
         eClass.getEStructuralFeatures().add(eAttribute)
@@ -75,11 +75,11 @@ describe("EClassExt", () => {
     })
 
     test("featuresGetter", () => {
-        let eClass = new EClassExt()
-        let eAttribute1 = new EAttributeExt()
-        let eAttribute2 = new EAttributeExt()
-        let eReference1 = new EReferenceExt()
-        let eReference2 = new EReferenceExt()
+        const eClass = new EClassExt()
+        const eAttribute1 = new EAttributeExt()
+        const eAttribute2 = new EAttributeExt()
+        const eReference1 = new EReferenceExt()
+        const eReference2 = new EReferenceExt()
 
         eClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eReference1, eAttribute2, eReference2]))
 
@@ -112,7 +112,7 @@ describe("EClassExt", () => {
         expect(eClass.getEReferences().toArray()).toEqual([eReference1, eReference2])
 
         // insert another attribute front
-        let eAttribute3 = new EAttributeExt()
+        const eAttribute3 = new EAttributeExt()
         eClass.getEStructuralFeatures().insert(0, eAttribute3)
         expect(eClass.getEAllAttributes().toArray()).toEqual([eAttribute3, eAttribute1, eAttribute2])
         expect(eClass.getEAttributes().toArray()).toEqual([eAttribute3, eAttribute1, eAttribute2])
@@ -130,14 +130,14 @@ describe("EClassExt", () => {
     })
 
     test("featuresGettersWithSuperType", () => {
-        let eClass = new EClassExt()
-        let eSuperClass = new EClassExt()
+        const eClass = new EClassExt()
+        const eSuperClass = new EClassExt()
         eClass.getESuperTypes().add(eSuperClass)
 
-        let eAttribute1 = new EAttributeExt()
-        let eAttribute2 = new EAttributeExt()
-        let eReference1 = new EReferenceExt()
-        let eReference2 = new EReferenceExt()
+        const eAttribute1 = new EAttributeExt()
+        const eAttribute2 = new EAttributeExt()
+        const eReference1 = new EReferenceExt()
+        const eReference2 = new EReferenceExt()
 
         eClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eReference1]))
         eSuperClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute2, eReference2]))
@@ -170,10 +170,10 @@ describe("EClassExt", () => {
     })
 
     test("featuresGetFromName", () => {
-        let eClass = new EClassExt()
-        let eAttribute1 = new EAttributeExt()
+        const eClass = new EClassExt()
+        const eAttribute1 = new EAttributeExt()
         eAttribute1.setName("MyAttribute1")
-        let eAttribute2 = new EAttributeExt()
+        const eAttribute2 = new EAttributeExt()
         eAttribute2.setName("MyAttribute2")
         eClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
         expect(eClass.getEStructuralFeatureFromName("MyAttribute1")).toBe(eAttribute1)
@@ -182,10 +182,10 @@ describe("EClassExt", () => {
     })
 
     test("attributeID", () => {
-        let eClass = new EClassExt()
+        const eClass = new EClassExt()
         expect(eClass.getEIDAttribute()).toEqual(null)
 
-        let eAttribute = new EAttributeExt()
+        const eAttribute = new EAttributeExt()
         eClass.getEStructuralFeatures().add(eAttribute)
 
         eAttribute.setID(true)
@@ -196,9 +196,9 @@ describe("EClassExt", () => {
     })
 
     test("operationsGetter", () => {
-        let eClass = new EClassExt()
-        let eOperation1 = new EOperationExt()
-        let eOperation2 = new EOperationExt()
+        const eClass = new EClassExt()
+        const eOperation1 = new EOperationExt()
+        const eOperation2 = new EOperationExt()
 
         eClass.getEOperations().addAll(new ImmutableEList([eOperation1, eOperation2]))
 
@@ -214,7 +214,7 @@ describe("EClassExt", () => {
         expect(eClass.getEAllOperations().toArray()).toEqual([eOperation1, eOperation2])
         expect(eClass.getEOperations().toArray()).toEqual([eOperation1, eOperation2])
 
-        let eOperation3 = new EOperationExt()
+        const eOperation3 = new EOperationExt()
         eClass.getEOperations().insert(0, eOperation3)
 
         expect(eClass.getOperationCount()).toBe(3)
@@ -230,12 +230,12 @@ describe("EClassExt", () => {
     })
 
     test("operationsGetterWithSuperTypes", () => {
-        let eClass = new EClassExt()
-        let eSuperClass = new EClassExt()
+        const eClass = new EClassExt()
+        const eSuperClass = new EClassExt()
         eClass.getESuperTypes().add(eSuperClass)
 
-        let eOperation1 = new EOperationExt()
-        let eOperation2 = new EOperationExt()
+        const eOperation1 = new EOperationExt()
+        const eOperation2 = new EOperationExt()
 
         eClass.getEOperations().add(eOperation1)
         eSuperClass.getEOperations().add(eOperation2)
@@ -253,16 +253,16 @@ describe("EClassExt", () => {
     })
 
     test("eAllContainments", () => {
-        let eClass = new EClassExt()
-        let eSuperClass = new EClassExt()
+        const eClass = new EClassExt()
+        const eSuperClass = new EClassExt()
         eClass.getESuperTypes().add(eSuperClass)
 
-        let eReference0 = new EReferenceExt()
+        const eReference0 = new EReferenceExt()
         eReference0.setName("ref0")
-        let eReference1 = new EReferenceExt()
+        const eReference1 = new EReferenceExt()
         eReference1.setName("ref1")
         eReference1.setContainment(true)
-        let eReference2 = new EReferenceExt()
+        const eReference2 = new EReferenceExt()
         eReference2.setName("ref2")
         eReference2.setContainment(true)
 
@@ -273,14 +273,14 @@ describe("EClassExt", () => {
     })
 
     test("eContainmentsFeatures", () => {
-        let eClass = new EClassExt()
+        const eClass = new EClassExt()
 
-        let eReference0 = new EReferenceExt()
+        const eReference0 = new EReferenceExt()
         eReference0.setName("ref0")
-        let eReference1 = new EReferenceExt()
+        const eReference1 = new EReferenceExt()
         eReference1.setName("ref1")
         eReference1.setContainment(true)
-        let eReference2 = new EReferenceExt()
+        const eReference2 = new EReferenceExt()
         eReference2.setName("ref2")
 
         eClass.getEStructuralFeatures().addAll(new ImmutableEList([eReference0, eReference1, eReference2]))
@@ -290,9 +290,9 @@ describe("EClassExt", () => {
     })
 
     test("isSuperTypeOf", () => {
-        let eClass = new EClassExt()
-        let eOther = new EClassExt()
-        let eSuperClass = new EClassExt()
+        const eClass = new EClassExt()
+        const eOther = new EClassExt()
+        const eSuperClass = new EClassExt()
         eClass.getESuperTypes().add(eSuperClass)
 
         expect(eClass.isSuperTypeOf(eClass)).toBeTruthy()
@@ -302,14 +302,14 @@ describe("EClassExt", () => {
     })
 
     test("getOverride", () => {
-        let eClass = new EClassExt()
-        let eSuperClass = new EClassExt()
+        const eClass = new EClassExt()
+        const eSuperClass = new EClassExt()
         eClass.getESuperTypes().add(eSuperClass)
 
-        let mockOperation1 = mock<EOperation>()
-        let mockOperation2 = mock<EOperation>()
-        let operation1 = instance(mockOperation1)
-        let operation2 = instance(mockOperation2)
+        const mockOperation1 = mock<EOperation>()
+        const mockOperation2 = mock<EOperation>()
+        const operation1 = instance(mockOperation1)
+        const operation2 = instance(mockOperation2)
 
         eClass.getEOperations().add(operation1)
         eSuperClass.getEOperations().add(operation2)

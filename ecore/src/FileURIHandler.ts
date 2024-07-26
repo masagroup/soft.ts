@@ -42,22 +42,22 @@ export class FileURIHandler implements EURIHandler {
     }
 
     async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
-        let path = uriToFilePath(uri)
+        const path = uriToFilePath(uri)
         return fs.existsSync(path) ? readableNodeStreamToWebStream(fs.createReadStream(path)) : null
     }
 
     async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
-        let path = uriToFilePath(uri)
+        const path = uriToFilePath(uri)
         return writableNodeStreamToWebStream(fs.createWriteStream(path))
     }
 
     readSync(uri: URI): Uint8Array {
-        let path = uriToFilePath(uri)
+        const path = uriToFilePath(uri)
         return fs.existsSync(path) ? fs.readFileSync(path) : null
     }
 
     writeSync(uri: URI, b: Uint8Array): void {
-        let path = uriToFilePath(uri)
+        const path = uriToFilePath(uri)
         fs.writeFileSync(path, b)
     }
 }

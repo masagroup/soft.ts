@@ -12,7 +12,7 @@ import { EDiagnosticImpl } from "./internal.js"
 
 describe("EDiagnosticImpl", () => {
     test("accessors", () => {
-        let d = new EDiagnosticImpl("message", "location", 1, 2)
+        const d = new EDiagnosticImpl("message", "location", 1, 2)
         expect(d.message).toEqual("message")
         expect(d.location).toEqual("location")
         expect(d.line).toEqual(1)

@@ -102,7 +102,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     }
 
     createResource(uri: URI): EResource {
-        let resource = new EResourceImpl()
+        const resource = new EResourceImpl()
         resource.setURI(uri)
         this._resources.add(resource)
         return resource
@@ -110,7 +110,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
 
     getResource(uri: URI, loadOnDemand: boolean): EResource {
         if (this._uriResourceMap) {
-            let resource = this._uriResourceMap.get(uri.toString())
+            const resource = this._uriResourceMap.get(uri.toString())
             if (resource) {
                 if (loadOnDemand && !resource.isLoaded()) {
                     resource.loadSync()
@@ -119,9 +119,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             }
         }
 
-        let normalizedURI = this._uriConverter.normalize(uri)
+        const normalizedURI = this._uriConverter.normalize(uri)
         for (const resource of this._resources) {
-            let resourceURI = this._uriConverter.normalize(resource.getURI())
+            const resourceURI = this._uriConverter.normalize(resource.getURI())
             if (resourceURI.toString() == normalizedURI.toString()) {
                 if (loadOnDemand && !resource.isLoaded()) {
                     resource.loadSync()
@@ -133,11 +133,11 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             }
         }
 
-        let ePackage = this.getPackageRegistry().getPackage(uri.toString())
+        const ePackage = this.getPackageRegistry().getPackage(uri.toString())
         if (ePackage) return ePackage.eResource()
 
         if (loadOnDemand) {
-            let resource = this.createResource(uri)
+            const resource = this.createResource(uri)
             if (resource) {
                 resource.loadSync()
             }
@@ -152,7 +152,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
 
     async getResourceAsync(uri: URI, loadOnDemand: boolean): Promise<EResource> {
         if (this._uriResourceMap) {
-            let resource = this._uriResourceMap.get(uri.toString())
+            const resource = this._uriResourceMap.get(uri.toString())
             if (resource) {
                 if (loadOnDemand && !resource.isLoaded()) {
                     await resource.load()
@@ -161,9 +161,9 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             }
         }
 
-        let normalizedURI = this._uriConverter.normalize(uri)
+        const normalizedURI = this._uriConverter.normalize(uri)
         for (const resource of this._resources) {
-            let resourceURI = this._uriConverter.normalize(resource.getURI())
+            const resourceURI = this._uriConverter.normalize(resource.getURI())
             if (resourceURI.toString() == normalizedURI.toString()) {
                 if (loadOnDemand && !resource.isLoaded()) {
                     await resource.load()
@@ -175,11 +175,11 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             }
         }
 
-        let ePackage = this.getPackageRegistry().getPackage(uri.toString())
+        const ePackage = this.getPackageRegistry().getPackage(uri.toString())
         if (ePackage) return ePackage.eResource()
 
         if (loadOnDemand) {
-            let resource = this.createResource(uri)
+            const resource = this.createResource(uri)
             if (resource) {
                 await resource.load()
             }
@@ -193,16 +193,16 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     }
 
     getEObject(uri: URI, loadOnDemand: boolean): EObject {
-        let uriStr = uri.toString()
-        let ndxHash = uriStr.lastIndexOf("#")
-        let resource = this.getResource(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand)
+        const uriStr = uri.toString()
+        const ndxHash = uriStr.lastIndexOf("#")
+        const resource = this.getResource(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand)
         return resource?.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "")
     }
 
     async getEObjectAsync(uri: URI, loadOnDemand: boolean): Promise<EObject> {
-        let uriStr = uri.toString()
-        let ndxHash = uriStr.lastIndexOf("#")
-        let resource = await this.getResourceAsync(
+        const uriStr = uri.toString()
+        const ndxHash = uriStr.lastIndexOf("#")
+        const resource = await this.getResourceAsync(
             ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri,
             loadOnDemand
         )

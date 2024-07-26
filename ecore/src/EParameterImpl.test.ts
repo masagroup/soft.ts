@@ -25,18 +25,18 @@ interface EOperationInternal extends EOperation, EObjectInternal {}
 
 describe("EParameterImpl", () => {
     test("eStaticClass", () => {
-        let o = new EParameterImpl()
+        const o = new EParameterImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEParameter())
     })
 
     test("getEOperation", () => {
         // default
-        let o = new EParameterImpl()
+        const o = new EParameterImpl()
         expect(o.getEOperation()).toBeNull()
 
         // set a mock container
-        let mockContainer = mock<EObject>()
-        let container = instance(mockContainer)
+        const mockContainer = mock<EObject>()
+        const container = instance(mockContainer)
         o.eSetInternalContainer(container, EcoreConstants.EPARAMETER__EOPERATION)
 
         // no proxy
@@ -46,37 +46,37 @@ describe("EParameterImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new EParameterImpl()
+        const o = new EParameterImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(EcoreConstants.EPARAMETER__EOPERATION, true)).toStrictEqual(o.getEOperation())
     })
 
     test("eIsSetFromID", () => {
-        let o = new EParameterImpl()
+        const o = new EParameterImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.EPARAMETER__EOPERATION)).toBeFalsy()
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new EParameterImpl()
+        const o = new EParameterImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EOperationInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EOperationInternal>()
+            const value = instance(mockValue)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EPARAMETER__EOPERATION, null)
             expect(o.getEOperation()).toBe(value)
 
             reset(mockValue)
-            let mockOther = mock<EOperationInternal>()
-            let other = instance(mockOther)
+            const mockOther = mock<EOperationInternal>()
+            const other = instance(mockOther)
             when(mockOther.eResource()).thenReturn(null)
             when(mockOther.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
@@ -87,17 +87,17 @@ describe("EParameterImpl", () => {
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new EParameterImpl()
+        const o = new EParameterImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EOperationInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EOperationInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, EcoreConstants.EPARAMETER__EOPERATION, null)
         }
     })

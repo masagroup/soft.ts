@@ -13,17 +13,17 @@ import { EPackage, EResourceSet, XMLProcessor } from "./internal.js"
 
 describe("XMLProcessor", () => {
     test("constructor.packages", () => {
-        let mockPackage = mock<EPackage>()
-        let ePackage = instance(mockPackage)
-        let xmlProcessor = new XMLProcessor([ePackage])
+        const mockPackage = mock<EPackage>()
+        const ePackage = instance(mockPackage)
+        const xmlProcessor = new XMLProcessor([ePackage])
         expect(xmlProcessor).not.toBeNull()
     })
 
     test("constructor.resourceset", () => {
-        let mockEResourceSet = mock<EResourceSet>()
-        let eResourceSet = instance(mockEResourceSet)
+        const mockEResourceSet = mock<EResourceSet>()
+        const eResourceSet = instance(mockEResourceSet)
         when(mockEResourceSet.getResources()).thenReturn(null)
-        let xmlProcessor = new XMLProcessor(eResourceSet)
+        const xmlProcessor = new XMLProcessor(eResourceSet)
         expect(xmlProcessor).not.toBeNull()
         expect(xmlProcessor.getResourceSet()).toBe(eResourceSet)
     })

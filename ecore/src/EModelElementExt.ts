@@ -36,19 +36,19 @@ export class EModelElementExt extends EModelElementImpl {
     eObjectForFragmentSegment(uriFragmentSegment: string): EObject {
         if (uriFragmentSegment && uriFragmentSegment.length > 0) {
             // Is the first character a special character, i.e., something other than '@'?
-            let firstCharacter = uriFragmentSegment.charAt(0)
+            const firstCharacter = uriFragmentSegment.charAt(0)
             if (firstCharacter != "@") {
                 // Is it the start of a source URI of an annotation?
                 if (firstCharacter == "%") {
                     // Find the closing '%' and make sure it's not just the opening '%'
-                    let index = uriFragmentSegment.lastIndexOf("%")
+                    const index = uriFragmentSegment.lastIndexOf("%")
                     let hasCount = false
                     if (index != 0) {
                         hasCount = uriFragmentSegment[index + 1] == "."
                         if (index == uriFragmentSegment.length - 1 || hasCount) {
                             // Decode all encoded characters.
                             let source = ""
-                            let encodedSource = uriFragmentSegment.slice(1, index)
+                            const encodedSource = uriFragmentSegment.slice(1, index)
                             if (encodedSource != "%") {
                                 source = decodeURI(encodedSource)
                             }
@@ -56,7 +56,7 @@ export class EModelElementExt extends EModelElementImpl {
                             // Check for a count, i.e., a '.' followed by a number.
                             let count = 0
                             if (hasCount) {
-                                let i = parseInt(uriFragmentSegment.slice(index + 2))
+                                const i = parseInt(uriFragmentSegment.slice(index + 2))
                                 if (!isNaN(i)) {
                                     count = i
                                 }
@@ -65,7 +65,7 @@ export class EModelElementExt extends EModelElementImpl {
                             // Look for the annotation with the matching source.
                             for (const eObject of this.eContents()) {
                                 if (isEAnnotation(eObject)) {
-                                    let otherSource = eObject.getSource()
+                                    const otherSource = eObject.getSource()
                                     if (eObject.getSource() == source) {
                                         if (count == 0) {
                                             return eObject
@@ -80,11 +80,11 @@ export class EModelElementExt extends EModelElementImpl {
                 }
 
                 // Look for trailing count.
-                let index = uriFragmentSegment.lastIndexOf(".")
+                const index = uriFragmentSegment.lastIndexOf(".")
                 let name = index != -1 ? uriFragmentSegment.slice(0, index) : uriFragmentSegment
                 let count = 0
                 if (index != -1) {
-                    let i = parseInt(uriFragmentSegment.slice(index + 1))
+                    const i = parseInt(uriFragmentSegment.slice(index + 1))
                     if (isNaN(i)) {
                         name = uriFragmentSegment
                     } else {

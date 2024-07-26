@@ -35,7 +35,7 @@ export class EPackageRegistryImpl implements EPackageRegistry {
     }
 
     getPackage(nsURI: string): EPackage {
-        let p = this._packages.get(nsURI)
+        const p = this._packages.get(nsURI)
         if (p) {
             return p
         } else {
@@ -47,7 +47,7 @@ export class EPackageRegistryImpl implements EPackageRegistry {
     }
 
     getFactory(nsURI: string): EFactory {
-        let p = this._packages.get(nsURI)
+        const p = this._packages.get(nsURI)
         if (p) {
             return p.getEFactoryInstance()
         } else {

@@ -118,8 +118,8 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {
-                let list = this.getEBounds() as ENotifyingList<EGenericType>
-                let end = otherEnd as EGenericType
+                const list = this.getEBounds() as ENotifyingList<EGenericType>
+                const end = otherEnd as EGenericType
                 return list.removeWithNotification(end, notifications)
             }
             default: {

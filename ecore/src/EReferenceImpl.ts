@@ -59,8 +59,8 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     // get the value of eOpposite
     getEOpposite(): EReference {
         if (this._eOpposite != null && this._eOpposite.eIsProxy()) {
-            let oldEOpposite = this._eOpposite
-            let newEOpposite = this.eResolveProxy(oldEOpposite) as EReference
+            const oldEOpposite = this._eOpposite
+            const newEOpposite = this.eResolveProxy(oldEOpposite) as EReference
             this._eOpposite = newEOpposite
             if (newEOpposite != oldEOpposite) {
                 if (this.eNotificationRequired()) {
@@ -82,8 +82,8 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     // get the value of eOpposite asynchronously
     async getEOppositeAsync(): Promise<EReference> {
         if (this._eOpposite != null && this._eOpposite.eIsProxy()) {
-            let oldEOpposite = this._eOpposite
-            let newEOpposite = (await this.eResolveProxyAsync(oldEOpposite)) as EReference
+            const oldEOpposite = this._eOpposite
+            const newEOpposite = (await this.eResolveProxyAsync(oldEOpposite)) as EReference
             this._eOpposite = newEOpposite
             if (newEOpposite != oldEOpposite) {
                 if (this.eNotificationRequired()) {
@@ -104,7 +104,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
 
     // set the value of eOpposite
     setEOpposite(newEOpposite: EReference): void {
-        let oldEOpposite = this._eOpposite
+        const oldEOpposite = this._eOpposite
         this._eOpposite = newEOpposite
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -145,7 +145,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
 
     // set the value of containment
     setContainment(newIsContainment: boolean): void {
-        let oldIsContainment = this._isContainment
+        const oldIsContainment = this._isContainment
         this._isContainment = newIsContainment
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -167,7 +167,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
 
     // set the value of resolveProxies
     setResolveProxies(newIsResolveProxies: boolean): void {
-        let oldIsResolveProxies = this._isResolveProxies
+        const oldIsResolveProxies = this._isResolveProxies
         this._isResolveProxies = newIsResolveProxies
         if (this.eNotificationRequired()) {
             this.eNotify(
