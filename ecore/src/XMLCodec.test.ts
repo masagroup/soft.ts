@@ -43,10 +43,6 @@ function loadPackage(filename: string): EPackage {
     return ePackage
 }
 
-class Test {
-    l: EList<string>
-}
-
 describe("XMLResource", () => {
     describe("load.library.noroot", () => {
         let ePackage = loadPackage("library.noroot.ecore")

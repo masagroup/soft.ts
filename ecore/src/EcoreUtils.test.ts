@@ -10,16 +10,35 @@
 import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
 import {
+    EAttribute,
     EClass,
     EcoreUtils,
+    EFactoryExt,
+    EList,
     EObject,
     EObjectInternal,
+    EPackage,
     EReference,
     getEcoreFactory,
     getEcorePackage,
     ImmutableEList,
-    URI
+    URI,
+    XMIProcessor,
+    XMLProcessor
 } from "./internal.js"
+
+function loadPackage(filename: string): EPackage {
+    let xmiProcessor = new XMIProcessor()
+    let uri = new URI("testdata/" + filename)
+    let resource = xmiProcessor.loadSync(uri)
+    expect(resource.isLoaded()).toBeTruthy()
+    expect(resource.getErrors().isEmpty()).toBeTruthy()
+    expect(resource.eContents().isEmpty()).toBeFalsy()
+    let ePackage = resource.eContents().get(0) as EPackage
+    ePackage.setEFactoryInstance(new EFactoryExt())
+    return ePackage
+}
+
 
 describe("EcoreUtils", () => {
     describe("equals", () => {
@@ -232,5 +251,54 @@ describe("EcoreUtils", () => {
             let eClassCopy = EcoreUtils.copy(eClass)
             expect(EcoreUtils.equals(eClass, eClassCopy)).toBeTruthy()
         })
+    })
+
+    describe("resolveAll", () => {
+
+        const shopPackage = loadPackage("shop.ecore")
+        const productClass = shopPackage.getEClassifier("Product") as EClass
+        const productAttibuteName = productClass.getEStructuralFeatureFromName("name") as EAttribute
+        const orderPackage = loadPackage("orders.ecore")
+        const ordersClass = orderPackage.getEClassifier("Orders") as EClass
+        const ordersOrderReference = ordersClass.getEStructuralFeatureFromName("order") as EReference
+        const orderClass = orderPackage.getEClassifier("Order") as EClass
+        const orderNbAttribute = orderClass.getEStructuralFeatureFromName("nb") as EAttribute
+        const orderProductReference = orderClass.getEStructuralFeatureFromName("product") as EReference
+        const xmlProcessor = new XMLProcessor([shopPackage,orderPackage])
+
+        test("resolveAll", () => {
+            const resource = xmlProcessor.loadSync(new URI("testdata/orders.xml"))
+            expect(resource).not.toBeNull()
+            expect(resource.getErrors().isEmpty()).toBeTruthy()
+
+            const orders = resource.eContents().get(0)
+            EcoreUtils.resolveAll(orders)
+
+            const ordersReferences = orders.eGet(ordersOrderReference) as EList<EObject>
+            expect(ordersReferences.size()).toBe(10)
+            const order = ordersReferences.get(0)
+            expect(order.eGet(orderNbAttribute)).toBe(2)
+            const product = order.eGetResolve(orderProductReference,false)
+            expect(product.eIsProxy()).toBeFalsy()
+            expect(product.eGet(productAttibuteName)).toBe("Product 0")
+        })
+
+        test("resolveAllAsync", async () => {
+            const resource = await xmlProcessor.load(new URI("testdata/orders.xml"))
+            expect(resource).not.toBeNull()
+            expect(resource.getErrors().isEmpty()).toBeTruthy()
+
+            const orders = resource.eContents().get(0)
+            await EcoreUtils.resolveAllAsync(orders)
+
+            const ordersReferences = orders.eGet(ordersOrderReference) as EList<EObject>
+            expect(ordersReferences.size()).toBe(10)
+            const order = ordersReferences.get(0)
+            expect(order.eGet(orderNbAttribute)).toBe(2)
+            const product = order.eGetResolve(orderProductReference,false)
+            expect(product.eIsProxy()).toBeFalsy()
+            expect(product.eGet(productAttibuteName)).toBe("Product 0")
+        })
+
     })
 })
