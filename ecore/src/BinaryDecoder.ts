@@ -75,8 +75,8 @@ export class BinaryDecoder implements EDecoder {
             this.decodeVersion()
 
             // objects
-            let size = this._decoder.decodeNumber()
-            let objects = []
+            const size = this._decoder.decodeNumber()
+            const objects = []
             for (let i = 0; i < size; i++) {
                 objects.push(this.decodeEObject())
             }
@@ -87,7 +87,7 @@ export class BinaryDecoder implements EDecoder {
         } catch (e) {
             switch (e.constructor) {
                 case Error: {
-                    let err = e as Error
+                    const err = e as Error
                     this._resource
                         .getErrors()
                         .add(new EDiagnosticImpl(err.message, this._resource.getURI().toString(), -1, -1))
@@ -119,8 +119,8 @@ export class BinaryDecoder implements EDecoder {
         this.decodeVersion()
 
         // objects
-        let size = this.decodeNumber()
-        let objects = []
+        const size = this.decodeNumber()
+        const objects = []
         for (let i = 0; i < size; i++) {
             objects.push(this.decodeEObject())
         }
@@ -143,8 +143,8 @@ export class BinaryDecoder implements EDecoder {
 
     private async getBuffer(streamLike: ReadableStreamLike<BufferLike>): Promise<Uint8Array> {
         // retrieve all stream arrays
-        let arrays = []
-        let iterable = ensureAsyncIterable(streamLike)
+        const arrays = []
+        const iterable = ensureAsyncIterable(streamLike)
         for await (const bufferLike of iterable) {
             arrays.push(ensureUint8Array(bufferLike))
         }
@@ -165,33 +165,32 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private decodeSignature() {
-        let signature = this.decodeBytes()
+        const signature = this.decodeBytes()
         if (!arraysAreEqual(signature, binarySignature)) {
             throw Error("Invalid signature for a binary EMF serialization")
         }
     }
 
     private decodeVersion() {
-        let version = this.decodeNumber()
+        const version = this.decodeNumber()
         if (version != binaryVersion) {
             throw Error("Invalid version for a binary EMF serialization")
         }
     }
 
     private decodeEObject(): EObject {
-        let id = this.decodeNumber()
+        const id = this.decodeNumber()
         if (id == -1) {
             return null
         } else if (this._objects.length <= id) {
-            var eResult: EObject
-            let eClassData = this.decodeClass()
-            let eObject = eClassData.eFactory.create(eClassData.eClass) as EObjectInternal
-            eResult = eObject
+            const eClassData = this.decodeClass()
+            const eObject = eClassData.eFactory.create(eClassData.eClass) as EObjectInternal
+            let eResult : EObject = eObject
             let featureID = this.decodeNumber() - 1
 
             if (featureID == -3) {
                 // proxy object
-                let eProxyURI = this.decodeURI()
+                const eProxyURI = this.decodeURI()
                 eObject.eSetProxyURI(eProxyURI)
                 if (this._isResolveProxies) {
                     eResult = EcoreUtils.resolveInResource(eObject, this._resource)
@@ -207,8 +206,8 @@ export class BinaryDecoder implements EDecoder {
 
             if (featureID == -2) {
                 // object id attribute
-                let objectID = this.decodeAny()
-                let objectIDManager = this._resource.getObjectIDManager()
+                const objectID = this.decodeAny()
+                const objectIDManager = this._resource.getObjectIDManager()
                 if (objectIDManager) {
                     objectIDManager.setID(eObject, objectID)
                 }
@@ -230,25 +229,25 @@ export class BinaryDecoder implements EDecoder {
 
     private decodeEObjects(list: EList<EObject>) {
         let size = this.decodeNumber()
-        let objects = []
+        const objects = []
         for (let i = 0; i < size; i++) {
             objects.push(this.decodeEObject())
         }
 
         // If the list is empty, we need to add all the objects,
         // otherwise, the reference is bidirectional and the list is at least partially populated.
-        let existingSize = list.size()
+        const existingSize = list.size()
         if (existingSize == 0) {
             list.addAll(new ImmutableEList<EObject>(objects))
         } else {
-            let indices = new Array(existingSize)
+            const indices = new Array(existingSize)
+            const existingObjects = [...list.toArray()]
             let duplicateCount = 0
-            let existingObjects = [...list.toArray()]
             LOOP: for (let i = 0; i < size; i++) {
-                let o = objects[i]
+                const o = objects[i]
                 let count = duplicateCount
                 for (let j = 0; j < existingSize; j++) {
-                    let existing = existingObjects[j]
+                    const existing = existingObjects[j]
                     if (existing == o) {
                         if (duplicateCount != count) {
                             list.moveTo(count, duplicateCount)
@@ -267,8 +266,8 @@ export class BinaryDecoder implements EDecoder {
             size -= existingSize
             list.addAll(new ImmutableEList<EObject>(objects))
             for (let i = 0; i < existingSize; i++) {
-                let newPosition = indices[i]
-                let oldPosition = size + i
+                const newPosition = indices[i]
+                const oldPosition = size + i
                 if (newPosition != oldPosition) {
                     list.moveTo(oldPosition, newPosition)
                 }
@@ -277,8 +276,8 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private decodeClass(): ClassData {
-        let ePackageData = this.decodePackage()
-        let id = this.decodeNumber()
+        const ePackageData = this.decodePackage()
+        const id = this.decodeNumber()
         let eClassData = ePackageData.eClassData[id]
         if (!eClassData) {
             eClassData = this.newClassData(ePackageData)
@@ -288,25 +287,25 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private decodePackage(): PackageData {
-        let id = this.decodeNumber()
+        const id = this.decodeNumber()
         if (this._packageData.length <= id) {
             // decode package parameters
-            let nsURI = this.decodeString()
-            let uri = this.decodeURI()
+            const nsURI = this.decodeString()
+            const uri = this.decodeURI()
 
             // retrieve package
-            let eResourceSet = this._resource.eResourceSet()
-            let packageRegistry = eResourceSet ? eResourceSet.getPackageRegistry() : getPackageRegistry()
+            const eResourceSet = this._resource.eResourceSet()
+            const packageRegistry = eResourceSet ? eResourceSet.getPackageRegistry() : getPackageRegistry()
             let ePackage = packageRegistry.getPackage(nsURI)
             if (!ePackage) {
-                let eObject = eResourceSet.getEObject(uri, true)
+                const eObject = eResourceSet.getEObject(uri, true)
                 if (isEPackage(eObject)) {
                     ePackage = eObject
                 }
             }
 
             // create new package data
-            let ePackageData = this.newPackageData(ePackage)
+            const ePackageData = this.newPackageData(ePackage)
             this._packageData.push(ePackageData)
             return ePackageData
         } else {
@@ -328,38 +327,38 @@ export class BinaryDecoder implements EDecoder {
             case BinaryFeatureKind.bfkObjectListProxy:
             case BinaryFeatureKind.bfkObjectContainmentList:
             case BinaryFeatureKind.bfkObjectContainmentListProxy: {
-                let l = eObject.eGetFromID(featureData.featureID, false, false) as EList<any>
+                const l = eObject.eGetFromID(featureData.featureID, false, false) as EList<any>
                 this.decodeEObjects(l)
                 break
             }
             case BinaryFeatureKind.bfkData: {
-                let valueStr = this.decodeString()
-                let value = featureData.eFactory.createFromString(featureData.eDataType, valueStr)
+                const valueStr = this.decodeString()
+                const value = featureData.eFactory.createFromString(featureData.eDataType, valueStr)
                 eObject.eSetFromID(featureData.featureID, value)
                 break
             }
             case BinaryFeatureKind.bfkDataList: {
-                let size = this.decodeNumber()
-                let values = []
+                const size = this.decodeNumber()
+                const values = []
                 for (let i = 0; i < size; i++) {
-                    let valueStr = this.decodeString()
-                    let value = featureData.eFactory.createFromString(featureData.eDataType, valueStr)
+                    const valueStr = this.decodeString()
+                    const value = featureData.eFactory.createFromString(featureData.eDataType, valueStr)
                     values.push(value)
                 }
-                let l = eObject.eGetResolve(featureData.eFeature, false) as EList<any>
+                const l = eObject.eGetResolve(featureData.eFeature, false) as EList<any>
                 l.addAll(new ImmutableEList<any>(values))
                 break
             }
             case BinaryFeatureKind.bfkEnum: {
-                var valueStr: string
-                let id = this.decodeNumber()
+                const id = this.decodeNumber()
+                let valueStr: string
                 if (this._enumLiterals.length <= id) {
                     valueStr = this.decodeString()
                     this._enumLiterals.push(valueStr)
                 } else {
                     valueStr = this._enumLiterals[id]
                 }
-                let value = featureData.eFactory.createFromString(featureData.eDataType, valueStr)
+                const value = featureData.eFactory.createFromString(featureData.eDataType, valueStr)
                 eObject.eSetFromID(featureData.featureID, value)
                 break
             }
@@ -383,11 +382,11 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private newClassData(ePackageData: PackageData): ClassData {
-        let className = this.decodeString()
-        let ePackage = ePackageData.ePackage
-        let eClassifier = ePackage.getEClassifier(className)
+        const className = this.decodeString()
+        const ePackage = ePackageData.ePackage
+        const eClassifier = ePackage.getEClassifier(className)
         if (isEClass(eClassifier)) {
-            let classData = new ClassData()
+            const classData = new ClassData()
             classData.eClass = eClassifier
             classData.eFactory = ePackage.getEFactoryInstance()
             classData.featureData = new Array(eClassifier.getFeatureCount())
@@ -397,18 +396,18 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private newPackageData(ePackage: EPackage): PackageData {
-        let packageData = new PackageData()
+        const packageData = new PackageData()
         packageData.ePackage = ePackage
         packageData.eClassData = new Array(ePackage.getEClassifiers().size())
         return packageData
     }
 
     private newFeatureData(eClassData: ClassData, featureID: number): FeatureData {
-        let eFeatureName = this.decodeString()
-        let eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName)
+        const eFeatureName = this.decodeString()
+        const eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName)
         if (!eFeature)
             throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.getName()} EClass`)
-        let featureData = new FeatureData()
+        const featureData = new FeatureData()
         featureData.eFeature = eFeature
         featureData.featureID = featureID
         featureData.featureKind = getBinaryCodecFeatureKind(eFeature)
@@ -420,13 +419,13 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private decodeURI(): URI {
-        let id = this.decodeNumber()
+        const id = this.decodeNumber()
         if (id == -1) return null
         else {
-            var uri: URI
+            let uri: URI
             if (this._uris.length <= id) {
                 // build uri
-                let uriStr = this.decodeString()
+                const uriStr = this.decodeString()
                 if (uriStr == "") {
                     uri = this._baseURI
                 } else {

@@ -23,7 +23,7 @@ describe("BasicEDataTypeList", () => {
         const mockClass = mock<EClass>()
         const cls = instance(mockClass)
 
-        let l = new BasicEDataTypeList<number>(owner, 1)
+        const l = new BasicEDataTypeList<number>(owner, 1)
         expect(l.getNotifier()).toBe(owner)
         expect(l.getFeatureID()).toBe(1)
 

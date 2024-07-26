@@ -8,10 +8,10 @@ function prettyByte(byte: number): string {
 }
 
 function uncomplement(val: number, bitwidth: number) {
-    var isnegative = val & (1 << (bitwidth - 1))
-    var boundary = 1 << bitwidth
-    var minval = -boundary
-    var mask = boundary - 1
+    const isnegative = val & (1 << (bitwidth - 1))
+    const boundary = 1 << bitwidth
+    const minval = -boundary
+    const mask = boundary - 1
     return isnegative ? minval + (val & mask) : val
 }
 
@@ -36,7 +36,7 @@ export class Decoder {
     }
 
     decode(): unknown {
-        let code = this.readU8()
+        const code = this.readU8()
         if (Types.isFixedNum(code)) {
             return code
         }
@@ -83,7 +83,7 @@ export class Decoder {
     }
 
     decodeBoolean(): boolean {
-        let code = this.readU8()
+        const code = this.readU8()
         return this.bool(code)
     }
 
@@ -98,7 +98,7 @@ export class Decoder {
     }
 
     decodeNumber(): number {
-        let code = this.readU8()
+        const code = this.readU8()
         return this.number(code)
     }
 
@@ -135,12 +135,12 @@ export class Decoder {
     }
 
     decodeString(): string {
-        let code = this.readU8()
+        const code = this.readU8()
         return this.string(code)
     }
 
     private string(code: number): string {
-        let len = this.bytesLen(code)
+        const len = this.bytesLen(code)
         let str = ""
         if (len > 0) {
             str = utf8Decode(this._bytes, this._pos, len)
@@ -150,13 +150,13 @@ export class Decoder {
     }
 
     decodeBinary(): Uint8Array {
-        let code = this.readU8()
+        const code = this.readU8()
         return this.bytes(code)
     }
 
     private bytes(code: number): Uint8Array {
-        let len = this.bytesLen(code)
-        let bytes = this._bytes.subarray(this._pos, this._pos + len)
+        const len = this.bytesLen(code)
+        const bytes = this._bytes.subarray(this._pos, this._pos + len)
         this._pos += len
         return bytes
     }
@@ -185,8 +185,8 @@ export class Decoder {
     }
 
     private decodeExt(c: number) {
-        let extLen = this.parseExtLen(c)
-        let extID = this.readI8()
+        const extLen = this.parseExtLen(c)
+        const extID = this.readI8()
         const data = this._bytes.subarray(this._pos, this._pos + extLen)
         this._pos += extLen
         return this._extensionCodec.decode(data, extID)

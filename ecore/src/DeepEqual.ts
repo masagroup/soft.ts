@@ -25,14 +25,14 @@ export class DeepEqual {
 
         // Both eObject1 and eObject2 are not null.
         // If eObject1 has been compared already...
-        let eObj1Mapped = this._objects.get(eObj1)
+        const eObj1Mapped = this._objects.get(eObj1)
         if (eObj1Mapped) {
             // Then eObject2 must be that previous match.
             return eObj1Mapped == eObj2
         }
 
         // If eObject2 has been compared already...
-        let eObj2Mapped = this._objects.get(eObj2)
+        const eObj2Mapped = this._objects.get(eObj2)
         if (eObj2Mapped) {
             // Then eObject1 must be that match.
             return eObj2Mapped == eObj1
@@ -51,8 +51,8 @@ export class DeepEqual {
 
         // If eObject1 is a proxy...
         if (eObj1.eIsProxy()) {
-            let eURI1 = (eObj1 as EObjectInternal).eProxyURI()
-            let eURI2 = (eObj2 as EObjectInternal).eProxyURI()
+            const eURI1 = (eObj1 as EObjectInternal).eProxyURI()
+            const eURI2 = (eObj2 as EObjectInternal).eProxyURI()
             if ((eURI1 == null && eURI2 == null) || (eURI1 && eURI2 && eURI1.toString() == eURI2.toString())) {
                 this._objects.set(eObj1, eObj2)
                 this._objects.set(eObj2, eObj1)
@@ -66,7 +66,7 @@ export class DeepEqual {
         }
 
         // If they don't have the same class, they can't be equal.
-        let eClass = eObj1.eClass()
+        const eClass = eObj1.eClass()
         if (eClass != eObj2.eClass()) {
             return false
         }
@@ -95,13 +95,13 @@ export class DeepEqual {
     }
 
     equalsAll(l1: EList<EObject>, l2: EList<EObject>): boolean {
-        let size = l1.size()
+        const size = l1.size()
         if (size != l2.size()) {
             return false
         }
         for (let i = 0; i < size; i++) {
-            let eObj1 = l1.get(i)
-            let eObj2 = l2.get(i)
+            const eObj1 = l1.get(i)
+            const eObj2 = l2.get(i)
             if (!this.equals(eObj1, eObj2)) {
                 return false
             }
@@ -110,22 +110,22 @@ export class DeepEqual {
     }
 
     private equalsAttribute(eObj1: EObject, eObj2: EObject, eAttribute: EAttribute): boolean {
-        let isSet1 = eObj1.eIsSet(eAttribute)
-        let isSet2 = eObj2.eIsSet(eAttribute)
+        const isSet1 = eObj1.eIsSet(eAttribute)
+        const isSet2 = eObj2.eIsSet(eAttribute)
         if (isSet1 && isSet2) {
-            let value1 = eObj1.eGet(eAttribute)
-            let value2 = eObj2.eGet(eAttribute)
+            const value1 = eObj1.eGet(eAttribute)
+            const value2 = eObj2.eGet(eAttribute)
             return value1 == value2
         }
         return isSet1 == isSet2
     }
 
     private equalsReference(eObj1: EObject, eObj2: EObject, eReference: EReference): boolean {
-        let isSet1 = eObj1.eIsSet(eReference)
-        let isSet2 = eObj2.eIsSet(eReference)
+        const isSet1 = eObj1.eIsSet(eReference)
+        const isSet2 = eObj2.eIsSet(eReference)
         if (isSet1 && isSet2) {
-            let value1 = eObj1.eGet(eReference)
-            let value2 = eObj2.eGet(eReference)
+            const value1 = eObj1.eGet(eReference)
+            const value2 = eObj2.eGet(eReference)
             if (eReference.isMany()) {
                 return this.equalsAll(value1 as EList<EObject>, value2 as EList<EObject>)
             } else {

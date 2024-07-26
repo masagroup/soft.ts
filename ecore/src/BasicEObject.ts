@@ -79,12 +79,12 @@ abstract class AbstractContentsList extends ImmutableEList<EObject> implements E
         if (this._initialized) return
 
         this._initialized = true
-        let features = this._getFeatureFn(this._obj.eClass())
+        const features = this._getFeatureFn(this._obj.eClass())
         for (const feature of features) {
             if (this._obj.eIsSet(feature)) {
-                let value = this._obj.eGetResolve(feature, this._resolve)
+                const value = this._obj.eGetResolve(feature, this._resolve)
                 if (feature.isMany()) {
-                    let l = value as EList<EObject>
+                    const l = value as EList<EObject>
                     this._v.push(...l.toArray())
                 } else if (value != null) {
                     this._v.push(value)
@@ -128,7 +128,7 @@ class ContentsListAdapter extends AbstractEAdapter {
 
     notifyChanged(notification: ENotification): void {
         if (this._list) {
-            let features = this._getFeatureFn(this._obj.eClass())
+            const features = this._getFeatureFn(this._obj.eClass())
             if (features.contains(notification.getFeature())) delete this._list
         }
     }

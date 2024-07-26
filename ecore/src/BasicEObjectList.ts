@@ -104,7 +104,7 @@ export class BasicEObjectList<O extends EObject>
 
     indexOf(o: O): number {
         if (this._proxies) {
-            for (var [index, value] of this._v.entries()) {
+            for (const [index, value] of this._v.entries()) {
                 if (value == o || this.resolve(index, value) == o) return index
             }
             return -1
@@ -141,18 +141,17 @@ export class BasicEObjectList<O extends EObject>
     }
 
     private forceCast<T>(input: any): T {
-        // @ts-ignore
         return input
     }
 
     private resolve(index: number, object: O): O {
-        let resolved = this.resolveProxy(object)
+        const resolved = this.resolveProxy(object)
         if (resolved != object) {
             this.doSet(index, resolved)
             let notifications: ENotificationChain = null
             if (this._containment) {
                 notifications = this.inverseRemove(object, notifications)
-                let resolvedInternal = this.forceCast<EObjectInternal>(resolved)
+                const resolvedInternal = this.forceCast<EObjectInternal>(resolved)
                 if (resolvedInternal != null) notifications = this.inverseAdd(resolved, notifications)
             }
             this.createAndDispatchNotification(notifications, EventType.RESOLVE, object, resolved, index)

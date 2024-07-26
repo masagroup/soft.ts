@@ -113,7 +113,7 @@ class DynamicModel {
     constructor(mm: DynamicMetaModel) {
         this.mm = mm
 
-        let bookFactoryInstance = mm.bookStoreEPackage.getEFactoryInstance()
+        const bookFactoryInstance = mm.bookStoreEPackage.getEFactoryInstance()
         /*
          * Create dynamic instance of BookStoreEClass and BookEClass
          */
@@ -125,7 +125,7 @@ class DynamicModel {
          */
         this.bookStoreObject.eSet(mm.bookStoreOwner, "David Brown")
         this.bookStoreObject.eSet(mm.bookStoreLocation, "Street#12, Top Town, NY")
-        let allBooks = this.bookStoreObject.eGet(mm.bookStoreBooks) as EList<EObject>
+        const allBooks = this.bookStoreObject.eGet(mm.bookStoreBooks) as EList<EObject>
         allBooks.add(this.bookObject)
 
         /*
@@ -138,8 +138,8 @@ class DynamicModel {
 
 describe("DynamicModel", () => {
     test("instance", () => {
-        let mm = new DynamicMetaModel()
-        let m = new DynamicModel(mm)
+        const mm = new DynamicMetaModel()
+        const m = new DynamicModel(mm)
 
         expect(mm.bookStoreEClass).toBe(m.bookStoreObject.eClass())
         expect(mm.bookEClass).toBe(m.bookObject.eClass())

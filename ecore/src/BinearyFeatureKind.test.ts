@@ -5,13 +5,13 @@ import { EAttribute, EDataType, EEnum, EReference, EStructuralFeature } from "./
 
 describe("BinaryFeatureKind", () => {
     test("unknown", () => {
-        let mockFeature = mock<EStructuralFeature>()
-        let feature = instance(mockFeature)
+        const mockFeature = mock<EStructuralFeature>()
+        const feature = instance(mockFeature)
         expect(getBinaryCodecFeatureKind(feature)).toBeNull()
     })
     test("reference", () => {
-        let mockReference = mock<EReference>()
-        let reference = instance(mockReference)
+        const mockReference = mock<EReference>()
+        const reference = instance(mockReference)
         when(mockReference.getEReferenceType()).thenReturn(null)
         when(mockReference.isContainment()).thenReturn(true)
         when(mockReference.isResolveProxies()).thenReturn(true)
@@ -78,22 +78,22 @@ describe("BinaryFeatureKind", () => {
     })
 
     test("attribute", () => {
-        let mockAttribute = mock<EAttribute>()
-        let attribute = instance(mockAttribute)
+        const mockAttribute = mock<EAttribute>()
+        const attribute = instance(mockAttribute)
 
         when(mockAttribute.getEAttributeType()).thenReturn(null)
         when(mockAttribute.isMany()).thenReturn(true)
         expect(getBinaryCodecFeatureKind(attribute)).toEqual(BinaryFeatureKind.bfkDataList)
 
-        let mockEnum = mock<EEnum>()
-        let eEnum = instance(mockEnum)
+        const mockEnum = mock<EEnum>()
+        const eEnum = instance(mockEnum)
         when(mockAttribute.isMany()).thenReturn(false)
         when(mockAttribute.getEAttributeType()).thenReturn(eEnum)
         when(mockEnum.getELiterals()).thenReturn(null)
         expect(getBinaryCodecFeatureKind(attribute)).toEqual(BinaryFeatureKind.bfkEnum)
 
-        let mockDataType = mock<EDataType>()
-        let dataType = instance(mockDataType)
+        const mockDataType = mock<EDataType>()
+        const dataType = instance(mockDataType)
         when(mockAttribute.isMany()).thenReturn(false)
         when(mockAttribute.getEAttributeType()).thenReturn(dataType)
         when(mockDataType.getInstanceTypeName()).thenReturn("number")

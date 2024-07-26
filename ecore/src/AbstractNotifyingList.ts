@@ -36,27 +36,27 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
     }
 
     addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
-        let index = this.size()
+        const index = this.size()
         this.doAdd(e)
         return this.createAndAddNotification(notifications, EventType.ADD, null, e, index)
     }
 
     removeWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
-        let index = this.indexOf(e)
+        const index = this.indexOf(e)
         if (index != -1) {
-            let old = this.removeAt(index)
+            const old = this.removeAt(index)
             return this.createAndAddNotification(notifications, EventType.REMOVE, old, null, index)
         }
         return notifications
     }
 
     setWithNotification(index: number, e: E, notifications: ENotificationChain): ENotificationChain {
-        let old = this.doSet(index, e)
+        const old = this.doSet(index, e)
         return this.createAndAddNotification(notifications, EventType.SET, old, e, index)
     }
 
     public removeAt(index: number): E {
-        let oldObject = super.removeAt(index)
+        const oldObject = super.removeAt(index)
         let notifications: ENotificationChain = null
         notifications = this.inverseRemove(oldObject, notifications)
         this.createAndDispatchNotification(notifications, EventType.REMOVE, oldObject, null, index)
@@ -72,9 +72,9 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
     }
 
     protected doAdd(e: E): void {
-        let index = this.size()
+        const index = this.size()
         super.doAdd(e)
-        let notifications = this.inverseAdd(e, null)
+        const notifications = this.inverseAdd(e, null)
         this.createAndDispatchNotification(notifications, EventType.ADD, null, e, index)
     }
 
@@ -84,7 +84,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
 
     protected doInsert(index: number, e: E) {
         super.doInsert(index, e)
-        let notifications = this.inverseAdd(e, null)
+        const notifications = this.inverseAdd(e, null)
         this.createAndDispatchNotification(notifications, EventType.ADD, null, e, index)
     }
 
@@ -93,7 +93,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
             return false
         }
 
-        let result = super.doInsertAll(index, c)
+        const result = super.doInsertAll(index, c)
         let notifications: ENotificationChain = new NotificationChain()
         for (const e of c) {
             notifications = this.inverseAdd(e, notifications)
@@ -109,7 +109,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
     }
 
     protected doSet(index: number, newObject: E): E {
-        let oldObject = super.doSet(index, newObject)
+        const oldObject = super.doSet(index, newObject)
         if (newObject != oldObject) {
             let notifications: ENotificationChain = null
             notifications = this.inverseRemove(oldObject, notifications)
@@ -153,7 +153,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
     ): ENotificationChain {
         let notifications = nc
         if (this.isNotificationRequired()) {
-            let notification = this.createNotification(eventType, oldValue, newValue, position)
+            const notification = this.createNotification(eventType, oldValue, newValue, position)
             if (notifications != null) {
                 notifications.add(notification)
             } else {
@@ -180,12 +180,12 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         createNotification: () => ENotification
     ) {
         if (this.isNotificationRequired()) {
-            let notification = createNotification()
+            const notification = createNotification()
             if (notifications != null) {
                 notifications.add(notification)
                 notifications.dispatch()
             } else {
-                let notifier = this.getNotifier()
+                const notifier = this.getNotifier()
                 if (notifier != null) {
                     notifier.eNotify(notification)
                 }

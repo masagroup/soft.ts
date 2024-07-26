@@ -18,21 +18,21 @@ class EAdapterTest extends AbstractEAdapter {
 
 describe("AbstractEAdapter", () => {
     test("get", () => {
-        let a = new EAdapterTest()
+        const a = new EAdapterTest()
         expect(a.getTarget()).toBeNull()
     })
     test("set", () => {
-        let a = new EAdapterTest()
-        let mockNotifier = mock<ENotifier>()
-        let notifier = instance(mockNotifier)
+        const a = new EAdapterTest()
+        const mockNotifier = mock<ENotifier>()
+        const notifier = instance(mockNotifier)
         a.setTarget(notifier)
         expect(a.getTarget()).not.toBeNull()
         expect(a.getTarget()).toBe(notifier)
     })
     test("unset", () => {
-        let a = new EAdapterTest()
-        let mockNotifier = mock<ENotifier>()
-        let notifier = instance(mockNotifier)
+        const a = new EAdapterTest()
+        const mockNotifier = mock<ENotifier>()
+        const notifier = instance(mockNotifier)
         a.unsetTarget(notifier)
         expect(a.getTarget()).toBeNull()
         a.setTarget(notifier)

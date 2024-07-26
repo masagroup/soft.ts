@@ -7,7 +7,7 @@
 export type ReadableStreamLike<T> = AsyncIterable<T> | ReadableStream<T>
 
 export function isAsyncIterable<T>(object: ReadableStreamLike<T>): object is AsyncIterable<T> {
-    return (object as any)[Symbol.asyncIterator] != null
+    return object[Symbol.asyncIterator] != null
 }
 
 function assertNonNull<T>(value: T | null | undefined): asserts value is T {

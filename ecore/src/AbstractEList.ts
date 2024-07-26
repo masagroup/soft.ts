@@ -53,7 +53,7 @@ export abstract class AbstractEList<E> implements EList<E> {
     }
 
     remove(e: E): boolean {
-        let index = this.indexOf(e)
+        const index = this.indexOf(e)
         if (index == -1) return false
         this.removeAt(index)
         return true
@@ -93,7 +93,7 @@ export abstract class AbstractEList<E> implements EList<E> {
         if (index < 0 || index >= this.size())
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
         if (this._isUnique) {
-            let currIndex = this.indexOf(e)
+            const currIndex = this.indexOf(e)
             if (currIndex >= 0 && currIndex != index)
                 throw new Error("element already in list : uniqueness constraint is not respected")
         }
@@ -110,7 +110,7 @@ export abstract class AbstractEList<E> implements EList<E> {
     }
 
     move(newIndex: number, e: E): void {
-        let oldIndex = this.indexOf(e)
+        const oldIndex = this.indexOf(e)
         if (oldIndex == -1) throw new Error("Object not found")
         this.moveTo(oldIndex, newIndex)
     }

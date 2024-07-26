@@ -42,8 +42,8 @@ export class XMLProcessor {
     }
 
     async load(uri: URI, options?: Map<string, any>): Promise<EResource> {
-        let rs = this.getResourceSet()
-        let r = rs.createResource(uri)
+        const rs = this.getResourceSet()
+        const r = rs.createResource(uri)
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
         await r.load(options)
@@ -51,8 +51,8 @@ export class XMLProcessor {
     }
 
     async loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<EResource> {
-        let rs = this.getResourceSet()
-        let r = rs.createResource(new URI("file:///*.xml"))
+        const rs = this.getResourceSet()
+        const r = rs.createResource(new URI("file:///*.xml"))
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
         await r.loadFromStream(stream, o)
@@ -60,8 +60,8 @@ export class XMLProcessor {
     }
 
     loadSync(uri: URI, options?: Map<string, any>): EResource {
-        let rs = this.getResourceSet()
-        let r = rs.createResource(uri)
+        const rs = this.getResourceSet()
+        const r = rs.createResource(uri)
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
         r.loadSync(o)
@@ -81,8 +81,8 @@ export class XMLProcessor {
     }
 
     private createResourceSet(packages: EPackage[]): EResourceSet {
-        let rs = new EResourceSetImpl()
-        let packageRegistry = rs.getPackageRegistry()
+        const rs = new EResourceSetImpl()
+        const packageRegistry = rs.getPackageRegistry()
         packageRegistry.registerPackage(getEcorePackage())
         if (packages) {
             packages.forEach((p) => {

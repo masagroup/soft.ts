@@ -25,17 +25,17 @@ import {
 
 describe("DynamicEObjectImpl", () => {
     test("constructor", () => {
-        let o = new DynamicEObjectImpl()
+        const o = new DynamicEObjectImpl()
         expect(o).not.toBeNull()
         expect(o.eClass()).toBe(getEcorePackage().getEObject())
     })
 
     test("mockClass", () => {
-        let o = new DynamicEObjectImpl()
-        let mockClass = mock<EClass>()
-        let mockAdapters = mock<EList<EAdapter>>()
-        let eClass = instance(mockClass)
-        let eAdapters = instance(mockAdapters)
+        const o = new DynamicEObjectImpl()
+        const mockClass = mock<EClass>()
+        const mockAdapters = mock<EList<EAdapter>>()
+        const eClass = instance(mockClass)
+        const eAdapters = instance(mockAdapters)
         when(mockClass.getFeatureCount()).thenReturn(0)
         when(mockClass.eAdapters()).thenReturn(eAdapters)
         when(mockAdapters.add(anything())).thenReturn(true)
@@ -44,18 +44,18 @@ describe("DynamicEObjectImpl", () => {
     })
 
     test("eClass", () => {
-        let o = new DynamicEObjectImpl()
-        let c = getEcoreFactory().createEClass()
+        const o = new DynamicEObjectImpl()
+        const c = getEcoreFactory().createEClass()
         o.setEClass(c)
         expect(o.eClass()).toBe(c)
     })
 
     test("getSet", () => {
-        let c = getEcoreFactory().createEClass()
-        let a = getEcoreFactory().createEAttribute()
+        const c = getEcoreFactory().createEClass()
+        const a = getEcoreFactory().createEAttribute()
         c.getEStructuralFeatures().add(a)
 
-        let o = new DynamicEObjectImpl()
+        const o = new DynamicEObjectImpl()
         o.setEClass(c)
         expect(o.eClass()).toBe(c)
         expect(o.eGet(a)).toBeNull()
@@ -65,11 +65,11 @@ describe("DynamicEObjectImpl", () => {
     })
 
     test("unset", () => {
-        let c = getEcoreFactory().createEClass()
-        let a = getEcoreFactory().createEAttribute()
+        const c = getEcoreFactory().createEClass()
+        const a = getEcoreFactory().createEAttribute()
         c.getEStructuralFeatures().add(a)
 
-        let o = new DynamicEObjectImpl()
+        const o = new DynamicEObjectImpl()
         o.setEClass(c)
         expect(o.eClass()).toBe(c)
         expect(o.eGet(a)).toBeNull()
@@ -79,24 +79,24 @@ describe("DynamicEObjectImpl", () => {
     })
 
     test("container", () => {
-        let r1 = getEcoreFactory().createEReference()
+        const r1 = getEcoreFactory().createEReference()
         r1.setContainment(true)
         r1.setName("ref")
 
-        let r2 = getEcoreFactory().createEReference()
+        const r2 = getEcoreFactory().createEReference()
         r2.setEOpposite(r1)
         r2.setName("parent")
 
-        let c1 = getEcoreFactory().createEClass()
+        const c1 = getEcoreFactory().createEClass()
         c1.getEStructuralFeatures().add(r1)
 
-        let c2 = getEcoreFactory().createEClass()
+        const c2 = getEcoreFactory().createEClass()
         c2.getEStructuralFeatures().add(r2)
 
-        let o1 = new DynamicEObjectImpl()
+        const o1 = new DynamicEObjectImpl()
         o1.setEClass(c1)
 
-        let o2 = new DynamicEObjectImpl()
+        const o2 = new DynamicEObjectImpl()
         o2.setEClass(c2)
 
         expect(o2.eIsSet(r2)).toBeFalsy()
@@ -118,18 +118,18 @@ describe("DynamicEObjectImpl", () => {
     })
 
     test("proxy", () => {
-        let c1 = getEcoreFactory().createEClass()
-        let c2 = getEcoreFactory().createEClass()
-        let c3 = getEcoreFactory().createEClass()
+        const c1 = getEcoreFactory().createEClass()
+        const c2 = getEcoreFactory().createEClass()
+        const c3 = getEcoreFactory().createEClass()
 
-        let r1 = getEcoreFactory().createEReference()
+        const r1 = getEcoreFactory().createEReference()
         r1.setContainment(true)
         r1.setName("r1")
         r1.setLowerBound(0)
         r1.setUpperBound(-1)
         r1.setEType(c2)
 
-        let r3 = getEcoreFactory().createEReference()
+        const r3 = getEcoreFactory().createEReference()
         r3.setName("r3")
         r3.setEType(c2)
         r3.setResolveProxies(true)
@@ -144,31 +144,31 @@ describe("DynamicEObjectImpl", () => {
 
         // model - a container object with two children and another object
         // with one of these child reference
-        let o1 = new DynamicEObjectImpl()
+        const o1 = new DynamicEObjectImpl()
         o1.setEClass(c1)
 
-        let o1c1 = new DynamicEObjectImpl()
+        const o1c1 = new DynamicEObjectImpl()
         o1c1.setEClass(c2)
 
-        let o1c2 = new DynamicEObjectImpl()
+        const o1c2 = new DynamicEObjectImpl()
         o1c2.setEClass(c2)
 
         expect(o1.eGet(r1)).not.toBeNull()
-        let o1cs = o1.eGet(r1) as EList<EObject>
+        const o1cs = o1.eGet(r1) as EList<EObject>
         o1cs.addAll(new ImmutableEList<EObject>([o1c1, o1c2]))
 
-        let o3 = new DynamicEObjectImpl()
+        const o3 = new DynamicEObjectImpl()
         o3.setEClass(c3)
 
         // add to resource to enable proxy resolution
-        let resource = new EResourceImpl()
+        const resource = new EResourceImpl()
         resource.setURI(new URI("file:///" + __dirname + "/r.txt"))
         resource.eContents().addAll(new ImmutableEList<EObject>([o1, o3]))
 
-        let resourceSet = new EResourceSetImpl()
+        const resourceSet = new EResourceSetImpl()
         resourceSet.getResources().add(resource)
 
-        let oproxy = new DynamicEObjectImpl()
+        const oproxy = new DynamicEObjectImpl()
         oproxy.eSetProxyURI(new URI("file:///" + __dirname + "/r.txt#//@r1.1"))
 
         expect(o3.eIsSet(r3)).toBeFalsy()

@@ -60,7 +60,7 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
         if (eFeature.isMany()) {
             return BinaryFeatureKind.bfkDataList
         } else {
-            let eDataType = eFeature.getEAttributeType()
+            const eDataType = eFeature.getEAttributeType()
             if (isEEnum(eDataType)) return BinaryFeatureKind.bfkEnum
 
             switch (eDataType.getInstanceTypeName()) {

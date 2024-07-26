@@ -56,7 +56,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
         // remove from map data
         this._mapData.delete(key)
         // remove from list
-        let e = this.getEntry(key)
+        const e = this.getEntry(key)
         if (e) {
             this.remove(e)
             return e.getValue()
@@ -69,7 +69,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     containsValue(value: V): boolean {
-        for (let [_, v] of this._mapData) {
+        for (const [_, v] of this._mapData) {
             if (v == value) {
                 return true
             }

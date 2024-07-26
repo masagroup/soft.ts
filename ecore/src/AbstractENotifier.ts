@@ -72,7 +72,7 @@ export abstract class AbstractENotifier implements ENotifier {
     }
 
     protected eBasicHasAdapters(): boolean {
-        let adapters = this.eBasicAdapters()
+        const adapters = this.eBasicAdapters()
         return adapters && !adapters.isEmpty()
     }
 

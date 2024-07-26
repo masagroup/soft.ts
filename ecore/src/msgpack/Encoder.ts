@@ -160,7 +160,7 @@ export class Encoder {
     }
 
     private encodeExtension(ext: ExtData) {
-        let size = ext.data.length
+        const size = ext.data.length
         switch (size) {
             case 1:
                 this.writeU8(Types.FixExt1)

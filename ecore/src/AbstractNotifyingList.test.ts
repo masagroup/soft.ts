@@ -78,7 +78,7 @@ class NotifyingListTest<E> extends AbstractNotifyingList<E> {
 describe("AbstractNotifyingList", () => {
     test("add", () => {
         // add
-        let l = new NotifyingListTest<number>()
+        const l = new NotifyingListTest<number>()
         l.add(3)
         // check notification
         verify(l.getMockNotifier().eNotify(anything())).once()
@@ -112,7 +112,7 @@ describe("AbstractNotifyingList", () => {
 
     test("addAll", () => {
         // add many
-        let l = new NotifyingListTest<number>()
+        const l = new NotifyingListTest<number>()
         l.addAll(new ImmutableEList<number>([2, 3]))
         // check notification
         verify(l.getMockNotifier().eNotify(anything())).once()
@@ -145,7 +145,7 @@ describe("AbstractNotifyingList", () => {
     })
 
     test("insert", () => {
-        let l = new NotifyingListTest<number>()
+        const l = new NotifyingListTest<number>()
         l.insert(0, 1)
         // check notification
         verify(l.getMockNotifier().eNotify(anything())).once()
@@ -192,7 +192,7 @@ describe("AbstractNotifyingList", () => {
     })
 
     test("insertAll", () => {
-        let l = new NotifyingListTest<number>()
+        const l = new NotifyingListTest<number>()
         expect(l.insertAll(0, new ImmutableEList([1, 2, 3]))).toBeTruthy()
         verify(l.getMockNotifier().eNotify(anything())).once()
         let n = capture(l.getMockNotifier().eNotify).last()[0]
@@ -226,10 +226,10 @@ describe("AbstractNotifyingList", () => {
     })
 
     test("set", () => {
-        let l = new NotifyingListTest<number>([1, 2])
+        const l = new NotifyingListTest<number>([1, 2])
         l.set(1, 3)
         verify(l.getMockNotifier().eNotify(anything())).once()
-        let n = capture(l.getMockNotifier().eNotify).last()[0]
+        const n = capture(l.getMockNotifier().eNotify).last()[0]
         expect(n).not.toBeNull()
         expect(n.getEventType()).toBe(EventType.SET)
         expect(n.getNotifier()).toBe(l.getNotifier())
@@ -242,10 +242,10 @@ describe("AbstractNotifyingList", () => {
     })
 
     test("removeAt", () => {
-        let l = new NotifyingListTest<number>([1, 2])
+        const l = new NotifyingListTest<number>([1, 2])
         l.removeAt(1)
         verify(l.getMockNotifier().eNotify(anything())).once()
-        let n = capture(l.getMockNotifier().eNotify).last()[0]
+        const n = capture(l.getMockNotifier().eNotify).last()[0]
         expect(n).not.toBeNull()
         expect(n.getEventType()).toBe(EventType.REMOVE)
         expect(n.getNotifier()).toBe(l.getNotifier())
@@ -258,10 +258,10 @@ describe("AbstractNotifyingList", () => {
     })
 
     test("addWithNotification", () => {
-        let l = new NotifyingListTest<number>()
+        const l = new NotifyingListTest<number>()
         l.addWithNotification(1, l.getChain())
         verify(l.getMockChain().add(anything())).once()
-        let n = capture(l.getMockChain().add).last()[0]
+        const n = capture(l.getMockChain().add).last()[0]
         expect(n).not.toBeNull()
         expect(n.getEventType()).toBe(EventType.ADD)
         expect(n.getNotifier()).toBe(l.getNotifier())
@@ -274,10 +274,10 @@ describe("AbstractNotifyingList", () => {
     })
 
     test("removeWithNotification", () => {
-        let l = new NotifyingListTest<number>([1])
+        const l = new NotifyingListTest<number>([1])
         l.removeWithNotification(1, l.getChain())
         verify(l.getMockChain().add(anything())).once()
-        let n = capture(l.getMockChain().add).last()[0]
+        const n = capture(l.getMockChain().add).last()[0]
         expect(n).not.toBeNull()
         expect(n.getEventType()).toBe(EventType.REMOVE)
         expect(n.getNotifier()).toBe(l.getNotifier())
@@ -292,10 +292,10 @@ describe("AbstractNotifyingList", () => {
     })
 
     test("setWithNotification", () => {
-        let l = new NotifyingListTest<number>([1])
+        const l = new NotifyingListTest<number>([1])
         l.setWithNotification(0, 2, l.getChain())
         verify(l.getMockChain().add(anything())).once()
-        let n = capture(l.getMockChain().add).last()[0]
+        const n = capture(l.getMockChain().add).last()[0]
         expect(n).not.toBeNull()
         expect(n.getEventType()).toBe(EventType.SET)
         expect(n.getNotifier()).toBe(l.getNotifier())

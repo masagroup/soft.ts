@@ -81,8 +81,8 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                             this.getFeatureID() == notification.getFeatureID()
                         ) {
                             this._eventType = EventType.REMOVE_MANY
-                            let originalPosition = this._position
-                            let notificationPosition = notification.getPosition()
+                            const originalPosition = this._position
+                            const notificationPosition = notification.getPosition()
                             let removedValues: any[] = []
                             if (originalPosition <= notificationPosition) {
                                 removedValues = [this.getOldValue(), notification.getOldValue()]
@@ -109,9 +109,8 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                             this.getFeatureID() == notification.getFeatureID()
                         ) {
                             let notificationPosition = notification.getPosition()
-                            let positions: number[] = this._newValue || []
-                            let newPositions: number[] = new Array(positions.length + 1)
-
+                            const positions: number[] = this._newValue || []
+                            const newPositions: number[] = new Array(positions.length + 1)
                             let index = 0
                             for (const oldPosition of positions) {
                                 if (oldPosition <= notificationPosition) {
@@ -120,7 +119,7 @@ export abstract class AbstractNotification implements ENotification, ENotificati
                                 } else break
                             }
 
-                            let oldValue: any[] = this._oldValue || []
+                            const oldValue: any[] = this._oldValue || []
                             oldValue.splice(index, 0, notification.getOldValue())
 
                             newPositions[index] = notificationPosition
