@@ -17,6 +17,7 @@ import {
     EList,
     EObject,
     EPackage,
+    EReference,
     EResource,
     EResourceSetImpl,
     ExtendedMetaData,
@@ -386,5 +387,43 @@ describe("XMLResource", () => {
                 expect(new TextDecoder().decode(Buffer.from(result.value))).toBe(expected)
             }
         })
+    })
+
+    describe("load.tournament", function () {
+        const ePackage = loadPackage("tournament.ecore")
+        const eTournamentClass = ePackage.getEClassifier("Tournament") as EClass
+        const eTournamentNameAttribute = eTournamentClass.getEStructuralFeatureFromName("name") as EAttribute
+        const eTournameMatchsReference = eTournamentClass.getEStructuralFeatureFromName("matches") as EReference
+        const eGroupClass = ePackage.getEClassifier("Group") as EClass
+        const eGroupNameAttribute = eGroupClass.getEStructuralFeatureFromName("name") as EAttribute
+        const eTeamClass = ePackage.getEClassifier("Team") as EClass
+        const eTeamNameAttribute = eTeamClass.getEStructuralFeatureFromName("name") as EAttribute
+        const eMachClass = ePackage.getEClassifier("Match") as EClass
+        const eMatchHomeTeamReference = eMachClass.getEStructuralFeatureFromName("homeTeam") as EReference
+        const eMatchGuestTeamReference = eMachClass.getEStructuralFeatureFromName("guestTeam") as EReference
+        const eMatchGroupReference = eMachClass.getEStructuralFeatureFromName("group") as EReference
+
+        test("loadWithReferences", () => {
+            const xmlProcessor = new XMLProcessor([ePackage])
+            const resource = xmlProcessor.loadSync(new URI("testdata/tournament.xml"))
+            expect(resource).not.toBeNull()
+            expect(resource.isLoaded()).toBeTruthy()
+            expect(resource.getErrors().isEmpty()).toBeTruthy()
+    
+            const tournament = resource.eContents().get(0)
+            expect(tournament.eClass()).toEqual(eTournamentClass)
+            expect(tournament.eGet(eTournamentNameAttribute)).toBe("Tournament")
+    
+            const matchs = tournament.eGet(eTournameMatchsReference) as EList<EObject>
+            expect(matchs.size()).toBe(112)
+            
+            const match = matchs.get(0)
+            const homeTeam = match.eGetResolve(eMatchHomeTeamReference,false)
+            expect(homeTeam.eGet(eTeamNameAttribute)).toBe("Team0")
+            const guestTeam = match.eGetResolve(eMatchGuestTeamReference,false)
+            expect(guestTeam.eGet(eTeamNameAttribute)).toBe("Team4")
+            const group = match.eGetResolve(eMatchGroupReference,false)
+            expect(group.eGet(eGroupNameAttribute)).toBe("Group0")
+        })     
     })
 })
