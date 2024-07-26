@@ -31,7 +31,7 @@ export class NamedElementImpl extends ecore.EObjectImpl implements NamedElement 
 
     // set the value of name
     setName(newName: string): void {
-        let oldName = this._name
+        const oldName = this._name
         this._name = newName
         if (this.eNotificationRequired()) {
             this.eNotify(

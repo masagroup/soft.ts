@@ -79,7 +79,7 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
 
     // set the value of copies
     setCopies(newCopies: number): void {
-        let oldCopies = this._copies
+        const oldCopies = this._copies
         this._copies = newCopies
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -186,8 +186,8 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                let list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
-                let end = otherEnd as Borrower
+                const list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
+                const end = otherEnd as Borrower
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -203,8 +203,8 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                let list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
-                let end = otherEnd as Borrower
+                const list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
+                const end = otherEnd as Borrower
                 return list.removeWithNotification(end, notifications)
             }
             default: {

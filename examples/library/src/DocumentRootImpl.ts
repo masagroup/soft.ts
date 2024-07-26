@@ -69,7 +69,7 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
 
     // set the value of library
     setLibrary(newLibrary: Library): void {
-        let oldLibrary = this._library
+        const oldLibrary = this._library
         if (newLibrary != oldLibrary) {
             let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldLibrary)) {
@@ -94,11 +94,11 @@ export class DocumentRootImpl extends ecore.EObjectImpl implements DocumentRoot 
     }
 
     basicSetLibrary(newLibrary: Library, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
-        let oldLibrary = this._library
+        const oldLibrary = this._library
         this._library = newLibrary
         let notifications = msgs
         if (this.eNotificationRequired()) {
-            let notification = new ecore.Notification(
+            const notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
                 LibraryConstants.DOCUMENT_ROOT__LIBRARY,

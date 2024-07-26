@@ -256,7 +256,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     private createPackageContents(): void {
-        let factory = ecore.getEcoreFactory()
+        const factory = ecore.getEcoreFactory()
 
         this._addressableClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.ADDRESSABLE)
         factory.createEAttributeFromContainerAndClassID(this._addressableClass, LibraryConstants.ADDRESSABLE__ADDRESS)
@@ -1079,92 +1079,92 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     private initializeExtendedMetaDataAnnotations(): void {
-        let source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
-        let factory = ecore.getEcoreFactory()
+        const source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
+        const factory = ecore.getEcoreFactory()
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Writers())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Writers())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("group", "#people")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Employees())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Employees())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("group", "#people")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Borrowers())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Borrowers())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("group", "#people")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_ParentBranch())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_ParentBranch())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "parent-branch")
             eAnnotation.getDetails().put("kind", "element")
             eAnnotation.getDetails().put("namespace", "##targetNamespace")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_People())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_People())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("kind", "group")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Proprietary())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Proprietary())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "owner-pdg")
             eAnnotation.getDetails().put("kind", "element")
             eAnnotation.getDetails().put("namespace", "##targetNamespace")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getItem_PublicationDate())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getItem_PublicationDate())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "publication-date")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getPeriodical_IssuesPerYear())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getPeriodical_IssuesPerYear())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "issues-per-year")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getAudioVisualItem_MinutesLength())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getAudioVisualItem_MinutesLength())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "minutes-length")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_FirstName())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_FirstName())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "first-name")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_LastName())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_LastName())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "last-name")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "")
             eAnnotation.getDetails().put("kind", "mixed")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XMLNSPrefixMap())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XMLNSPrefixMap())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("kind", "attribute")
             eAnnotation.getDetails().put("name", "xmlns:prefix")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XSISchemaLocation())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XSISchemaLocation())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("kind", "attribute")
             eAnnotation.getDetails().put("name", "xsi:schemaLocation")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_Library())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_Library())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "library")
             eAnnotation.getDetails().put("kind", "element")
@@ -1173,10 +1173,10 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     private initializeGenTSAnnotations(): void {
-        let source = "http://net.masagroup/soft/2020/GenTS"
-        let factory = ecore.getEcoreFactory()
+        const source = "http://net.masagroup/soft/2020/GenTS"
+        const factory = ecore.getEcoreFactory()
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this)
+            const eAnnotation = factory.createEAnnotationFromContainer(this)
             eAnnotation.setSource(source)
             eAnnotation
                 .getDetails()
@@ -1186,7 +1186,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
                 )
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getWriter())
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getWriter())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("extension", "true")
         }

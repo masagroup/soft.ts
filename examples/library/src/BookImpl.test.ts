@@ -28,31 +28,31 @@ interface WriterInternal extends Writer, ecore.EObjectInternal {}
 
 describe("BookImpl", () => {
     test("eStaticClass", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getBook())
     })
 
     test("getAuthor", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
 
         // get default value
         expect(o.author).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<WriterInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<WriterInternal>()
+        const value = instance(mockValue)
         o.author = value
 
         // events
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<ecore.EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<ecore.EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -61,9 +61,9 @@ describe("BookImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new ecore.URI("test:///uri")
-        let mockResolved = mock<WriterInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new ecore.URI("test:///uri")
+        const mockResolved = mock<WriterInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -73,29 +73,29 @@ describe("BookImpl", () => {
     })
 
     test("setAuthor", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // first value
-        let mockValue = mock<WriterInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<WriterInternal>()
+        const value = instance(mockValue)
         when(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
         o.author = value
         verify(mockAdapter.notifyChanged(anything())).once()
         {
-            let [notification] = capture(mockAdapter.notifyChanged).last()
+            const [notification] = capture(mockAdapter.notifyChanged).last()
             expect(notification.getNotifier()).toBe(o)
             expect(notification.getOldValue()).toBeNull()
             expect(notification.getNewValue()).toBe(value)
         }
 
         // set with other value
-        let mockOther = mock<WriterInternal>()
-        let other = instance(mockOther)
+        const mockOther = mock<WriterInternal>()
+        const other = instance(mockOther)
         reset(mockAdapter)
         reset(mockValue)
         when(mockValue.eInverseRemove(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
@@ -103,7 +103,7 @@ describe("BookImpl", () => {
         o.author = other
         verify(mockAdapter.notifyChanged(anything())).once()
         {
-            let [notification] = capture(mockAdapter.notifyChanged).last()
+            const [notification] = capture(mockAdapter.notifyChanged).last()
             expect(notification.getNotifier()).toBe(o)
             expect(notification.getOldValue()).toBe(value)
             expect(notification.getNewValue()).toBe(other)
@@ -112,18 +112,18 @@ describe("BookImpl", () => {
     })
 
     test("basicSetAuthor", () => {
-        let o = new BookImpl()
-        let mockValue = mock<WriterInternal>()
-        let value = instance(mockValue)
+        const o = new BookImpl()
+        const mockValue = mock<WriterInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // notification chain
-        let mockNotifications = mock<ecore.ENotificationChain>()
-        let notifications = instance(mockNotifications)
+        const mockNotifications = mock<ecore.ENotificationChain>()
+        const notifications = instance(mockNotifications)
 
         // set value
         when(mockNotifications.add(anything())).thenReturn(true)
@@ -141,18 +141,18 @@ describe("BookImpl", () => {
     })
 
     test("getCategory", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         // get default value
         expect(o.category).toBe(BookCategory.MYSTERY)
     })
 
     test("setCategory", () => {
-        let o = new BookImpl()
-        let value = BookCategory.SCIENCE_FICTION
+        const o = new BookImpl()
+        const value = BookCategory.SCIENCE_FICTION
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -168,23 +168,23 @@ describe("BookImpl", () => {
     })
 
     test("getIndexes", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         expect(o.indexes).not.toBeNull()
     })
 
     test("getPages", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         // get default value
         expect(o.pages).toBe(100)
     })
 
     test("setPages", () => {
-        let o = new BookImpl()
-        let value = 45
+        const o = new BookImpl()
+        const value = 45
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -200,23 +200,23 @@ describe("BookImpl", () => {
     })
 
     test("getTableOfContents", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         expect(o.tableOfContents).not.toBeNull()
     })
 
     test("getTitle", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         // get default value
         expect(o.title).toBe("")
     })
 
     test("setTitle", () => {
-        let o = new BookImpl()
-        let value = "Test String"
+        const o = new BookImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -232,7 +232,7 @@ describe("BookImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.BOOK__AUTHOR, true)).toStrictEqual(o.author)
         expect(o.eGetFromID(LibraryConstants.BOOK__CATEGORY, true)).toStrictEqual(o.category)
@@ -243,30 +243,30 @@ describe("BookImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let mockValue = mock<WriterInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<WriterInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
             o.eSetFromID(LibraryConstants.BOOK__AUTHOR, value)
             expect(o.eGetFromID(LibraryConstants.BOOK__AUTHOR, false)).toBe(value)
             verify(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).once()
         }
         {
-            let value = BookCategory.SCIENCE_FICTION
+            const value = BookCategory.SCIENCE_FICTION
             o.eSetFromID(LibraryConstants.BOOK__CATEGORY, value)
             expect(o.eGetFromID(LibraryConstants.BOOK__CATEGORY, false)).toBe(value)
         }
         {
-            let mockMap = mock<ecore.EMap<string, number>>()
-            let map = instance(mockMap)
-            let mockIterator = mock<Iterator<ecore.EMapEntry<string, number>>>()
-            let iterator = instance(mockIterator)
-            let mockEntry = mock<ecore.EMapEntry<string, number>>()
-            let entry = instance(mockEntry)
-            let key = "Test String"
-            let value = 45
+            const mockMap = mock<ecore.EMap<string, number>>()
+            const map = instance(mockMap)
+            const mockIterator = mock<Iterator<ecore.EMapEntry<string, number>>>()
+            const iterator = instance(mockIterator)
+            const mockEntry = mock<ecore.EMapEntry<string, number>>()
+            const entry = instance(mockEntry)
+            const key = "Test String"
+            const value = 45
             when(mockMap[Symbol.iterator]()).thenReturn(iterator)
             when(mockIterator.next())
                 .thenReturn({ value: entry, done: false })
@@ -277,25 +277,25 @@ describe("BookImpl", () => {
             expect(o.indexes.toMap()).toEqual(new Map<string, number>([[key, value]]))
         }
         {
-            let value = 45
+            const value = 45
             o.eSetFromID(LibraryConstants.BOOK__PAGES, value)
             expect(o.eGetFromID(LibraryConstants.BOOK__PAGES, false)).toBe(value)
         }
         {
-            let l = new ecore.ImmutableEList<string>()
+            const l = new ecore.ImmutableEList<string>()
             o.eSetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS, l)
             expect(o.tableOfContents.isEmpty()).toBeTruthy()
         }
 
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(LibraryConstants.BOOK__TITLE, value)
             expect(o.eGetFromID(LibraryConstants.BOOK__TITLE, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.BOOK__AUTHOR)).toBeFalsy()
         expect(o.eIsSetFromID(LibraryConstants.BOOK__CATEGORY)).toBeFalsy()
@@ -306,7 +306,7 @@ describe("BookImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.BOOK__AUTHOR)
@@ -314,54 +314,54 @@ describe("BookImpl", () => {
         }
         {
             o.eUnsetFromID(LibraryConstants.BOOK__CATEGORY)
-            let v = o.eGetFromID(LibraryConstants.BOOK__CATEGORY, false)
+            const v = o.eGetFromID(LibraryConstants.BOOK__CATEGORY, false)
             expect(v).toBe(BookCategory.MYSTERY)
         }
         {
             o.eUnsetFromID(LibraryConstants.BOOK__INDEXES)
-            let v = o.eGetFromID(LibraryConstants.BOOK__INDEXES, false)
+            const v = o.eGetFromID(LibraryConstants.BOOK__INDEXES, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<BookIndex>
+            const l = v as ecore.EList<BookIndex>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.BOOK__PAGES)
-            let v = o.eGetFromID(LibraryConstants.BOOK__PAGES, false)
+            const v = o.eGetFromID(LibraryConstants.BOOK__PAGES, false)
             expect(v).toBe(100)
         }
         {
             o.eUnsetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS)
-            let v = o.eGetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS, false)
+            const v = o.eGetFromID(LibraryConstants.BOOK__TABLE_OF_CONTENTS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<string>
+            const l = v as ecore.EList<string>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.BOOK__TITLE)
-            let v = o.eGetFromID(LibraryConstants.BOOK__TITLE, false)
+            const v = o.eGetFromID(LibraryConstants.BOOK__TITLE, false)
             expect(v).toBe("")
         }
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<WriterInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<WriterInternal>()
+            const value = instance(mockValue)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, LibraryConstants.BOOK__AUTHOR, null)
             expect(o.author).toBe(value)
 
             reset(mockValue)
-            let mockOther = mock<WriterInternal>()
-            let other = instance(mockOther)
+            const mockOther = mock<WriterInternal>()
+            const other = instance(mockOther)
             when(mockOther.eIsProxy()).thenReturn(false)
             when(mockValue.eInverseRemove(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
             o.eBasicInverseAdd(other, LibraryConstants.BOOK__AUTHOR, null)
@@ -370,17 +370,17 @@ describe("BookImpl", () => {
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new BookImpl()
+        const o = new BookImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<WriterInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<WriterInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, LibraryConstants.BOOK__AUTHOR, null)
         }
     })

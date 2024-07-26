@@ -183,7 +183,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
 
     // set the value of address
     setAddress(newAddress: string): void {
-        let oldAddress = this._address
+        const oldAddress = this._address
         this._address = newAddress
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -301,7 +301,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
 
     // set the value of name
     setName(newName: string): void {
-        let oldName = this._name
+        const oldName = this._name
         this._name = newName
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -374,7 +374,7 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
 
     // set the value of proprietary
     setProprietary(newProprietary: Person): void {
-        let oldProprietary = this._proprietary
+        const oldProprietary = this._proprietary
         if (newProprietary != oldProprietary) {
             let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldProprietary)) {
@@ -399,11 +399,11 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     }
 
     basicSetProprietary(newProprietary: Person, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
-        let oldProprietary = this._proprietary
+        const oldProprietary = this._proprietary
         this._proprietary = newProprietary
         let notifications = msgs
         if (this.eNotificationRequired()) {
-            let notification = new ecore.Notification(
+            const notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
                 LibraryConstants.LIBRARY__PROPRIETARY,
@@ -678,8 +678,8 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.LIBRARY__BRANCHES: {
-                let list = this.getBranches() as ecore.ENotifyingList<Library>
-                let end = otherEnd as Library
+                const list = this.getBranches() as ecore.ENotifyingList<Library>
+                const end = otherEnd as Library
                 return list.addWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
@@ -702,23 +702,23 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.LIBRARY__BOOKS: {
-                let list = this.getBooks() as ecore.ENotifyingList<Book>
-                let end = otherEnd as Book
+                const list = this.getBooks() as ecore.ENotifyingList<Book>
+                const end = otherEnd as Book
                 return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__BORROWERS: {
-                let list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
-                let end = otherEnd as Borrower
+                const list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
+                const end = otherEnd as Borrower
                 return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__BRANCHES: {
-                let list = this.getBranches() as ecore.ENotifyingList<Library>
-                let end = otherEnd as Library
+                const list = this.getBranches() as ecore.ENotifyingList<Library>
+                const end = otherEnd as Library
                 return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__EMPLOYEES: {
-                let list = this.getEmployees() as ecore.ENotifyingList<Employee>
-                let end = otherEnd as Employee
+                const list = this.getEmployees() as ecore.ENotifyingList<Employee>
+                const end = otherEnd as Employee
                 return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__PARENT_BRANCH: {
@@ -728,13 +728,13 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 return this.basicSetProprietary(null, notifications)
             }
             case LibraryConstants.LIBRARY__STOCK: {
-                let list = this.getStock() as ecore.ENotifyingList<Item>
-                let end = otherEnd as Item
+                const list = this.getStock() as ecore.ENotifyingList<Item>
+                const end = otherEnd as Item
                 return list.removeWithNotification(end, notifications)
             }
             case LibraryConstants.LIBRARY__WRITERS: {
-                let list = this.getWriters() as ecore.ENotifyingList<Writer>
-                let end = otherEnd as Writer
+                const list = this.getWriters() as ecore.ENotifyingList<Writer>
+                const end = otherEnd as Writer
                 return list.removeWithNotification(end, notifications)
             }
             default: {

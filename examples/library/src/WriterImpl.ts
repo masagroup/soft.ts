@@ -154,8 +154,8 @@ export class WriterImpl extends PersonImpl implements Writer {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                let list = this.getBooks() as ecore.ENotifyingList<Book>
-                let end = otherEnd as Book
+                const list = this.getBooks() as ecore.ENotifyingList<Book>
+                const end = otherEnd as Book
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -171,8 +171,8 @@ export class WriterImpl extends PersonImpl implements Writer {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.WRITER__BOOKS: {
-                let list = this.getBooks() as ecore.ENotifyingList<Book>
-                let end = otherEnd as Book
+                const list = this.getBooks() as ecore.ENotifyingList<Book>
+                const end = otherEnd as Book
                 return list.removeWithNotification(end, notifications)
             }
             default: {

@@ -18,31 +18,31 @@ interface EmployeeInternal extends Employee, ecore.EObjectInternal {}
 
 describe("EmployeeImpl", () => {
     test("eStaticClass", () => {
-        let o = new EmployeeImpl()
+        const o = new EmployeeImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getEmployee())
     })
 
     test("getManager", () => {
-        let o = new EmployeeImpl()
+        const o = new EmployeeImpl()
 
         // get default value
         expect(o.manager).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<EmployeeInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<EmployeeInternal>()
+        const value = instance(mockValue)
         o.manager = value
 
         // events
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<ecore.EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<ecore.EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -51,9 +51,9 @@ describe("EmployeeImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new ecore.URI("test:///uri")
-        let mockResolved = mock<EmployeeInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new ecore.URI("test:///uri")
+        const mockResolved = mock<EmployeeInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -63,13 +63,13 @@ describe("EmployeeImpl", () => {
     })
 
     test("setManager", () => {
-        let o = new EmployeeImpl()
-        let mockValue = mock<EmployeeInternal>()
-        let value = instance(mockValue)
+        const o = new EmployeeImpl()
+        const mockValue = mock<EmployeeInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -85,30 +85,30 @@ describe("EmployeeImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new EmployeeImpl()
+        const o = new EmployeeImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.EMPLOYEE__MANAGER, true)).toStrictEqual(o.manager)
     })
 
     test("eSetFromID", () => {
-        let o = new EmployeeImpl()
+        const o = new EmployeeImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let mockValue = mock<EmployeeInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EmployeeInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(LibraryConstants.EMPLOYEE__MANAGER, value)
             expect(o.eGetFromID(LibraryConstants.EMPLOYEE__MANAGER, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EmployeeImpl()
+        const o = new EmployeeImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.EMPLOYEE__MANAGER)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new EmployeeImpl()
+        const o = new EmployeeImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.EMPLOYEE__MANAGER)

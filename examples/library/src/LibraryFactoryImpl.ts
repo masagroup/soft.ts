@@ -98,7 +98,7 @@ export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFact
     }
 
     createLibraryFromContainer(eContainer: Library): Library {
-        let element = new LibraryImpl()
+        const element = new LibraryImpl()
         if (eContainer != null) {
             eContainer.branches.add(element)
         }

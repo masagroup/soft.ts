@@ -108,8 +108,8 @@ export class GroupImpl extends NamedElementImpl implements Group {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case TournamentConstants.GROUP__TEAMS: {
-                let list = this.getTeams() as ecore.ENotifyingList<Team>
-                let end = otherEnd as Team
+                const list = this.getTeams() as ecore.ENotifyingList<Team>
+                const end = otherEnd as Team
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -125,8 +125,8 @@ export class GroupImpl extends NamedElementImpl implements Group {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case TournamentConstants.GROUP__TEAMS: {
-                let list = this.getTeams() as ecore.ENotifyingList<Team>
-                let end = otherEnd as Team
+                const list = this.getTeams() as ecore.ENotifyingList<Team>
+                const end = otherEnd as Team
                 return list.removeWithNotification(end, notifications)
             }
             default: {

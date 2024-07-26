@@ -16,23 +16,23 @@ import { NamedElementImpl, TournamentConstants, getTournamentPackage } from "./i
 
 describe("NamedElementImpl", () => {
     test("eStaticClass", () => {
-        let o = new NamedElementImpl()
+        const o = new NamedElementImpl()
         expect(o.eStaticClass()).toBe(getTournamentPackage().getNamedElement())
     })
 
     test("getName", () => {
-        let o = new NamedElementImpl()
+        const o = new NamedElementImpl()
         // get default value
         expect(o.getName()).toBe("")
     })
 
     test("setName", () => {
-        let o = new NamedElementImpl()
-        let value = "Test String"
+        const o = new NamedElementImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -48,33 +48,33 @@ describe("NamedElementImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new NamedElementImpl()
+        const o = new NamedElementImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(TournamentConstants.NAMED_ELEMENT__NAME, true)).toStrictEqual(o.getName())
     })
 
     test("eSetFromID", () => {
-        let o = new NamedElementImpl()
+        const o = new NamedElementImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(TournamentConstants.NAMED_ELEMENT__NAME, value)
             expect(o.eGetFromID(TournamentConstants.NAMED_ELEMENT__NAME, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new NamedElementImpl()
+        const o = new NamedElementImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(TournamentConstants.NAMED_ELEMENT__NAME)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new NamedElementImpl()
+        const o = new NamedElementImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(TournamentConstants.NAMED_ELEMENT__NAME)
-            let v = o.eGetFromID(TournamentConstants.NAMED_ELEMENT__NAME, false)
+            const v = o.eGetFromID(TournamentConstants.NAMED_ELEMENT__NAME, false)
             expect(v).toBe("")
         }
     })

@@ -37,8 +37,8 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     // get the value of manager
     getManager(): Employee {
         if (this._manager != null && this._manager.eIsProxy()) {
-            let oldManager = this._manager
-            let newManager = this.eResolveProxy(oldManager) as Employee
+            const oldManager = this._manager
+            const newManager = this.eResolveProxy(oldManager) as Employee
             this._manager = newManager
             if (newManager != oldManager) {
                 if (this.eNotificationRequired()) {
@@ -60,8 +60,8 @@ export class EmployeeImpl extends PersonImpl implements Employee {
     // get the value of manager asynchronously
     async getManagerAsync(): Promise<Employee> {
         if (this._manager != null && this._manager.eIsProxy()) {
-            let oldManager = this._manager
-            let newManager = (await this.eResolveProxyAsync(oldManager)) as Employee
+            const oldManager = this._manager
+            const newManager = (await this.eResolveProxyAsync(oldManager)) as Employee
             this._manager = newManager
             if (newManager != oldManager) {
                 if (this.eNotificationRequired()) {
@@ -82,7 +82,7 @@ export class EmployeeImpl extends PersonImpl implements Employee {
 
     // set the value of manager
     setManager(newManager: Employee): void {
-        let oldManager = this._manager
+        const oldManager = this._manager
         this._manager = newManager
         if (this.eNotificationRequired()) {
             this.eNotify(

@@ -20,25 +20,25 @@ interface LibraryInternal extends Library, ecore.EObjectInternal {}
 
 describe("DocumentRootImpl", () => {
     test("eStaticClass", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getDocumentRoot())
     })
 
     test("getLibrary", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
 
         // get default value
         expect(o.library).toBeNull()
     })
 
     test("setLibrary", () => {
-        let o = new DocumentRootImpl()
-        let mockValue = mock<LibraryInternal>()
-        let value = instance(mockValue)
+        const o = new DocumentRootImpl()
+        const mockValue = mock<LibraryInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -54,18 +54,18 @@ describe("DocumentRootImpl", () => {
     })
 
     test("basicSetLibrary", () => {
-        let o = new DocumentRootImpl()
-        let mockValue = mock<LibraryInternal>()
-        let value = instance(mockValue)
+        const o = new DocumentRootImpl()
+        const mockValue = mock<LibraryInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // notification chain
-        let mockNotifications = mock<ecore.ENotificationChain>()
-        let notifications = instance(mockNotifications)
+        const mockNotifications = mock<ecore.ENotificationChain>()
+        const notifications = instance(mockNotifications)
 
         // set value
         when(mockNotifications.add(anything())).thenReturn(true)
@@ -83,17 +83,17 @@ describe("DocumentRootImpl", () => {
     })
 
     test("getXMLNSPrefixMap", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         expect(o.xMLNSPrefixMap).not.toBeNull()
     })
 
     test("getXSISchemaLocation", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         expect(o.xSISchemaLocation).not.toBeNull()
     })
 
     test("eGetFromID", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.DOCUMENT_ROOT__LIBRARY, true)).toStrictEqual(o.library)
         expect(o.eGetFromID(LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP, true)).toStrictEqual(o.xMLNSPrefixMap)
@@ -103,11 +103,11 @@ describe("DocumentRootImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -126,14 +126,14 @@ describe("DocumentRootImpl", () => {
             ).once()
         }
         {
-            let mockMap = mock<ecore.EMap<string, string>>()
-            let map = instance(mockMap)
-            let mockIterator = mock<Iterator<ecore.EMapEntry<string, string>>>()
-            let iterator = instance(mockIterator)
-            let mockEntry = mock<ecore.EMapEntry<string, string>>()
-            let entry = instance(mockEntry)
-            let key = "Test String"
-            let value = "Test String"
+            const mockMap = mock<ecore.EMap<string, string>>()
+            const map = instance(mockMap)
+            const mockIterator = mock<Iterator<ecore.EMapEntry<string, string>>>()
+            const iterator = instance(mockIterator)
+            const mockEntry = mock<ecore.EMapEntry<string, string>>()
+            const entry = instance(mockEntry)
+            const key = "Test String"
+            const value = "Test String"
             when(mockMap[Symbol.iterator]()).thenReturn(iterator)
             when(mockIterator.next())
                 .thenReturn({ value: entry, done: false })
@@ -144,14 +144,14 @@ describe("DocumentRootImpl", () => {
             expect(o.xMLNSPrefixMap.toMap()).toEqual(new Map<string, string>([[key, value]]))
         }
         {
-            let mockMap = mock<ecore.EMap<string, string>>()
-            let map = instance(mockMap)
-            let mockIterator = mock<Iterator<ecore.EMapEntry<string, string>>>()
-            let iterator = instance(mockIterator)
-            let mockEntry = mock<ecore.EMapEntry<string, string>>()
-            let entry = instance(mockEntry)
-            let key = "Test String"
-            let value = "Test String"
+            const mockMap = mock<ecore.EMap<string, string>>()
+            const map = instance(mockMap)
+            const mockIterator = mock<Iterator<ecore.EMapEntry<string, string>>>()
+            const iterator = instance(mockIterator)
+            const mockEntry = mock<ecore.EMapEntry<string, string>>()
+            const entry = instance(mockEntry)
+            const key = "Test String"
+            const value = "Test String"
             when(mockMap[Symbol.iterator]()).thenReturn(iterator)
             when(mockIterator.next())
                 .thenReturn({ value: entry, done: false })
@@ -164,7 +164,7 @@ describe("DocumentRootImpl", () => {
     })
 
     test("eIsSetFromID", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.DOCUMENT_ROOT__LIBRARY)).toBeFalsy()
         expect(o.eIsSetFromID(LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP)).toBeFalsy()
@@ -172,7 +172,7 @@ describe("DocumentRootImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.DOCUMENT_ROOT__LIBRARY)
@@ -180,43 +180,43 @@ describe("DocumentRootImpl", () => {
         }
         {
             o.eUnsetFromID(LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP)
-            let v = o.eGetFromID(LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP, false)
+            const v = o.eGetFromID(LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<ecore.EStringToStringMapEntry>
+            const l = v as ecore.EList<ecore.EStringToStringMapEntry>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION)
-            let v = o.eGetFromID(LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION, false)
+            const v = o.eGetFromID(LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<ecore.EStringToStringMapEntry>
+            const l = v as ecore.EList<ecore.EStringToStringMapEntry>
             expect(l.isEmpty()).toBeTruthy()
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new DocumentRootImpl()
+        const o = new DocumentRootImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, LibraryConstants.DOCUMENT_ROOT__LIBRARY, null)
         }
         {
-            let mockValue = mock<EStringToStringMapEntryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EStringToStringMapEntryInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(mockValue, LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP, null)
             expect(o.xMLNSPrefixMap.isEmpty())
         }
         {
-            let mockValue = mock<EStringToStringMapEntryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EStringToStringMapEntryInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(mockValue, LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION, null)
             expect(o.xSISchemaLocation.isEmpty())
         }

@@ -53,7 +53,7 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
 
     // set the value of issuesPerYear
     setIssuesPerYear(newIssuesPerYear: number): void {
-        let oldIssuesPerYear = this._issuesPerYear
+        const oldIssuesPerYear = this._issuesPerYear
         this._issuesPerYear = newIssuesPerYear
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -75,7 +75,7 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
 
     // set the value of title
     setTitle(newTitle: string): void {
-        let oldTitle = this._title
+        const oldTitle = this._title
         this._title = newTitle
         if (this.eNotificationRequired()) {
             this.eNotify(

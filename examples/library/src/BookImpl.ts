@@ -108,8 +108,8 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     // get the value of author
     getAuthor(): Writer {
         if (this._author != null && this._author.eIsProxy()) {
-            let oldAuthor = this._author
-            let newAuthor = this.eResolveProxy(oldAuthor) as Writer
+            const oldAuthor = this._author
+            const newAuthor = this.eResolveProxy(oldAuthor) as Writer
             this._author = newAuthor
             if (newAuthor != oldAuthor) {
                 if (this.eNotificationRequired()) {
@@ -131,8 +131,8 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     // get the value of author asynchronously
     async getAuthorAsync(): Promise<Writer> {
         if (this._author != null && this._author.eIsProxy()) {
-            let oldAuthor = this._author
-            let newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
+            const oldAuthor = this._author
+            const newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
             this._author = newAuthor
             if (newAuthor != oldAuthor) {
                 if (this.eNotificationRequired()) {
@@ -153,7 +153,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
 
     // set the value of author
     setAuthor(newAuthor: Writer): void {
-        let oldAuthor = this._author
+        const oldAuthor = this._author
         if (newAuthor != oldAuthor) {
             let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldAuthor)) {
@@ -175,11 +175,11 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     }
 
     basicSetAuthor(newAuthor: Writer, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
-        let oldAuthor = this._author
+        const oldAuthor = this._author
         this._author = newAuthor
         let notifications = msgs
         if (this.eNotificationRequired()) {
-            let notification = new ecore.Notification(
+            const notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
                 LibraryConstants.BOOK__AUTHOR,
@@ -202,7 +202,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
 
     // set the value of category
     setCategory(newCategory: BookCategory): void {
-        let oldCategory = this._category
+        const oldCategory = this._category
         this._category = newCategory
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -248,7 +248,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
 
     // set the value of pages
     setPages(newPages: number): void {
-        let oldPages = this._pages
+        const oldPages = this._pages
         this._pages = newPages
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -279,7 +279,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
 
     // set the value of title
     setTitle(newTitle: string): void {
-        let oldTitle = this._title
+        const oldTitle = this._title
         this._title = newTitle
         if (this.eNotificationRequired()) {
             this.eNotify(

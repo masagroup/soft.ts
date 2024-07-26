@@ -44,7 +44,6 @@ import {
     EcoreConstants,
     EcoreFactory
 } from "./internal.js"
-import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
 
 export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     private static _instance: EcoreFactoryImpl = null
@@ -450,14 +449,11 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEByteArrayFromString(eDataType: EDataType, literalValue: string): any {
-        const a = new Uint8Array(utf8Count(literalValue))
-        utf8Encode(literalValue,a,0)
-        return a
+        return new TextEncoder().encode(literalValue)
     }
 
     convertEByteArrayToString(eDataType: EDataType, instanceValue: any): string {
-        const a = instanceValue as Uint8Array
-        return utf8Decode( a, 0, a.length)
+        return new TextDecoder().decode(instanceValue as Uint8Array)
     }
 
     createEByteObjectFromString(eDataType: EDataType, literalValue: string): any {

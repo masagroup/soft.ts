@@ -120,8 +120,8 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                let list = this.getBorrowed() as ecore.ENotifyingList<Lendable>
-                let end = otherEnd as Lendable
+                const list = this.getBorrowed() as ecore.ENotifyingList<Lendable>
+                const end = otherEnd as Lendable
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -137,8 +137,8 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                let list = this.getBorrowed() as ecore.ENotifyingList<Lendable>
-                let end = otherEnd as Lendable
+                const list = this.getBorrowed() as ecore.ENotifyingList<Lendable>
+                const end = otherEnd as Lendable
                 return list.removeWithNotification(end, notifications)
             }
             default: {

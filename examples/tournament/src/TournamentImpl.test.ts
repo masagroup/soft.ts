@@ -29,27 +29,27 @@ interface TeamInternal extends Team, ecore.EObjectInternal {}
 
 describe("TournamentImpl", () => {
     test("eStaticClass", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(o.eStaticClass()).toBe(getTournamentPackage().getTournament())
     })
 
     test("getGroups", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(o.getGroups()).not.toBeNull()
     })
 
     test("getMatches", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(o.getMatches()).not.toBeNull()
     })
 
     test("getTeams", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(o.getTeams()).not.toBeNull()
     })
 
     test("eGetFromID", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(TournamentConstants.TOURNAMENT__GROUPS, true)).toStrictEqual(o.getGroups())
         expect(
@@ -75,13 +75,13 @@ describe("TournamentImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<GroupInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Group>([value])
+            const mockValue = mock<GroupInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Group>([value])
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -106,9 +106,9 @@ describe("TournamentImpl", () => {
 
         {
             // list with a value
-            let mockValue = mock<MatchInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Match>([value])
+            const mockValue = mock<MatchInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Match>([value])
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -133,9 +133,9 @@ describe("TournamentImpl", () => {
 
         {
             // list with a value
-            let mockValue = mock<TeamInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Team>([value])
+            const mockValue = mock<TeamInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Team>([value])
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -160,7 +160,7 @@ describe("TournamentImpl", () => {
     })
 
     test("eIsSetFromID", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(TournamentConstants.TOURNAMENT__GROUPS)).toBeFalsy()
         expect(o.eIsSetFromID(TournamentConstants.TOURNAMENT__MATCHES)).toBeFalsy()
@@ -168,44 +168,44 @@ describe("TournamentImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(TournamentConstants.TOURNAMENT__GROUPS)
-            let v = o.eGetFromID(TournamentConstants.TOURNAMENT__GROUPS, false)
+            const v = o.eGetFromID(TournamentConstants.TOURNAMENT__GROUPS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Group>
+            const l = v as ecore.EList<Group>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(TournamentConstants.TOURNAMENT__MATCHES)
-            let v = o.eGetFromID(TournamentConstants.TOURNAMENT__MATCHES, false)
+            const v = o.eGetFromID(TournamentConstants.TOURNAMENT__MATCHES, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Match>
+            const l = v as ecore.EList<Match>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(TournamentConstants.TOURNAMENT__TEAMS)
-            let v = o.eGetFromID(TournamentConstants.TOURNAMENT__TEAMS, false)
+            const v = o.eGetFromID(TournamentConstants.TOURNAMENT__TEAMS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Team>
+            const l = v as ecore.EList<Team>
             expect(l.isEmpty()).toBeTruthy()
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new TournamentImpl()
+        const o = new TournamentImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<GroupInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<GroupInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -224,8 +224,8 @@ describe("TournamentImpl", () => {
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<MatchInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<MatchInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -244,8 +244,8 @@ describe("TournamentImpl", () => {
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<TeamInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<TeamInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(
                     o,

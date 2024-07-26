@@ -17,23 +17,23 @@ import { BookIndexImpl, LibraryConstants, getLibraryPackage } from "./internal.j
 
 describe("BookIndexImpl", () => {
     test("eStaticClass", () => {
-        let o = new BookIndexImpl()
+        const o = new BookIndexImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getBookIndex())
     })
 
     test("getKey", () => {
-        let o = new BookIndexImpl()
+        const o = new BookIndexImpl()
         // get default value
         expect(o.key).toBe("")
     })
 
     test("setKey", () => {
-        let o = new BookIndexImpl()
-        let value = "Test String"
+        const o = new BookIndexImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -49,52 +49,52 @@ describe("BookIndexImpl", () => {
     })
 
     test("getValue", () => {
-        let o = new BookIndexImpl()
+        const o = new BookIndexImpl()
         expect(o.value).not.toBeNull()
     })
 
     test("eGetFromID", () => {
-        let o = new BookIndexImpl()
+        const o = new BookIndexImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.BOOK_INDEX__KEY, true)).toStrictEqual(o.key)
         expect(o.eGetFromID(LibraryConstants.BOOK_INDEX__VALUE, true)).toStrictEqual(o.value)
     })
 
     test("eSetFromID", () => {
-        let o = new BookIndexImpl()
+        const o = new BookIndexImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(LibraryConstants.BOOK_INDEX__KEY, value)
             expect(o.eGetFromID(LibraryConstants.BOOK_INDEX__KEY, false)).toBe(value)
         }
         {
-            let l = new ecore.ImmutableEList<number>()
+            const l = new ecore.ImmutableEList<number>()
             o.eSetFromID(LibraryConstants.BOOK_INDEX__VALUE, l)
             expect(o.value.isEmpty()).toBeTruthy()
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new BookIndexImpl()
+        const o = new BookIndexImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.BOOK_INDEX__KEY)).toBeFalsy()
         expect(o.eIsSetFromID(LibraryConstants.BOOK_INDEX__VALUE)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new BookIndexImpl()
+        const o = new BookIndexImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.BOOK_INDEX__KEY)
-            let v = o.eGetFromID(LibraryConstants.BOOK_INDEX__KEY, false)
+            const v = o.eGetFromID(LibraryConstants.BOOK_INDEX__KEY, false)
             expect(v).toBe("")
         }
         {
             o.eUnsetFromID(LibraryConstants.BOOK_INDEX__VALUE)
-            let v = o.eGetFromID(LibraryConstants.BOOK_INDEX__VALUE, false)
+            const v = o.eGetFromID(LibraryConstants.BOOK_INDEX__VALUE, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<number>
+            const l = v as ecore.EList<number>
             expect(l.isEmpty()).toBeTruthy()
         }
     })

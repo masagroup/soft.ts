@@ -43,7 +43,7 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
 
     // set the value of date
     setDate(newDate: Date): void {
-        let oldDate = this._date
+        const oldDate = this._date
         this._date = newDate
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -55,8 +55,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
     // get the value of group
     getGroup(): Group {
         if (this._group != null && this._group.eIsProxy()) {
-            let oldGroup = this._group
-            let newGroup = this.eResolveProxy(oldGroup) as Group
+            const oldGroup = this._group
+            const newGroup = this.eResolveProxy(oldGroup) as Group
             this._group = newGroup
             if (newGroup != oldGroup) {
                 if (this.eNotificationRequired()) {
@@ -78,8 +78,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
     // get the value of group asynchronously
     async getGroupAsync(): Promise<Group> {
         if (this._group != null && this._group.eIsProxy()) {
-            let oldGroup = this._group
-            let newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
+            const oldGroup = this._group
+            const newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
             this._group = newGroup
             if (newGroup != oldGroup) {
                 if (this.eNotificationRequired()) {
@@ -100,7 +100,7 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
 
     // set the value of group
     setGroup(newGroup: Group): void {
-        let oldGroup = this._group
+        const oldGroup = this._group
         this._group = newGroup
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -117,8 +117,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
     // get the value of guestTeam
     getGuestTeam(): Team {
         if (this._guestTeam != null && this._guestTeam.eIsProxy()) {
-            let oldGuestTeam = this._guestTeam
-            let newGuestTeam = this.eResolveProxy(oldGuestTeam) as Team
+            const oldGuestTeam = this._guestTeam
+            const newGuestTeam = this.eResolveProxy(oldGuestTeam) as Team
             this._guestTeam = newGuestTeam
             if (newGuestTeam != oldGuestTeam) {
                 if (this.eNotificationRequired()) {
@@ -140,8 +140,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
     // get the value of guestTeam asynchronously
     async getGuestTeamAsync(): Promise<Team> {
         if (this._guestTeam != null && this._guestTeam.eIsProxy()) {
-            let oldGuestTeam = this._guestTeam
-            let newGuestTeam = (await this.eResolveProxyAsync(oldGuestTeam)) as Team
+            const oldGuestTeam = this._guestTeam
+            const newGuestTeam = (await this.eResolveProxyAsync(oldGuestTeam)) as Team
             this._guestTeam = newGuestTeam
             if (newGuestTeam != oldGuestTeam) {
                 if (this.eNotificationRequired()) {
@@ -162,7 +162,7 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
 
     // set the value of guestTeam
     setGuestTeam(newGuestTeam: Team): void {
-        let oldGuestTeam = this._guestTeam
+        const oldGuestTeam = this._guestTeam
         this._guestTeam = newGuestTeam
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -185,8 +185,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
     // get the value of homeTeam
     getHomeTeam(): Team {
         if (this._homeTeam != null && this._homeTeam.eIsProxy()) {
-            let oldHomeTeam = this._homeTeam
-            let newHomeTeam = this.eResolveProxy(oldHomeTeam) as Team
+            const oldHomeTeam = this._homeTeam
+            const newHomeTeam = this.eResolveProxy(oldHomeTeam) as Team
             this._homeTeam = newHomeTeam
             if (newHomeTeam != oldHomeTeam) {
                 if (this.eNotificationRequired()) {
@@ -208,8 +208,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
     // get the value of homeTeam asynchronously
     async getHomeTeamAsync(): Promise<Team> {
         if (this._homeTeam != null && this._homeTeam.eIsProxy()) {
-            let oldHomeTeam = this._homeTeam
-            let newHomeTeam = (await this.eResolveProxyAsync(oldHomeTeam)) as Team
+            const oldHomeTeam = this._homeTeam
+            const newHomeTeam = (await this.eResolveProxyAsync(oldHomeTeam)) as Team
             this._homeTeam = newHomeTeam
             if (newHomeTeam != oldHomeTeam) {
                 if (this.eNotificationRequired()) {
@@ -230,7 +230,7 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
 
     // set the value of homeTeam
     setHomeTeam(newHomeTeam: Team): void {
-        let oldHomeTeam = this._homeTeam
+        const oldHomeTeam = this._homeTeam
         this._homeTeam = newHomeTeam
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -257,7 +257,7 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
 
     // set the value of kind
     setKind(newKind: MatchKind): void {
-        let oldKind = this._kind
+        const oldKind = this._kind
         this._kind = newKind
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -273,7 +273,7 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
 
     // set the value of location
     setLocation(newLocation: string): void {
-        let oldLocation = this._location
+        const oldLocation = this._location
         this._location = newLocation
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -295,7 +295,7 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
 
     // set the value of result
     setResult(newResult: string): void {
-        let oldResult = this._result
+        const oldResult = this._result
         this._result = newResult
         if (this.eNotificationRequired()) {
             this.eNotify(

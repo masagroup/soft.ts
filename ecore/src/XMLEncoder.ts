@@ -34,9 +34,9 @@ import {
     URI,
     XMLOptions
 } from "./internal.js"
+import { utf8Count, utf8Encode } from "./utils/UTF8.js"
 import { XMLConstants } from "./XMLConstants.js"
 import { XMLString } from "./XMLString.js"
-import { utf8Count, utf8Encode } from "./utils/UTF8.js"
 
 enum SaveFeatureKind {
     Transient,
@@ -141,8 +141,8 @@ export class XMLEncoder implements EEncoder {
         const errors = this._resource.getErrors()
         if (errors.isEmpty()) {
             const r = this._str.toString()
-            const e  = new Uint8Array(utf8Count(r))
-            utf8Encode(r,e,0)
+            const e = new Uint8Array(utf8Count(r))
+            utf8Encode(r, e, 0)
             return Ok(e)
         } else {
             return Err(errors.get(0))
@@ -159,8 +159,8 @@ export class XMLEncoder implements EEncoder {
             return Err(error)
         } else {
             const r = this._str.toString()
-            const e  = new Uint8Array(utf8Count(r))
-            utf8Encode(r,e,0)
+            const e = new Uint8Array(utf8Count(r))
+            utf8Encode(r, e, 0)
             return Ok(e)
         }
     }

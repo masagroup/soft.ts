@@ -200,18 +200,18 @@ export class TournamentImpl extends NamedElementImpl implements Tournament {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case TournamentConstants.TOURNAMENT__GROUPS: {
-                let list = this.getGroups() as ecore.ENotifyingList<Group>
-                let end = otherEnd as Group
+                const list = this.getGroups() as ecore.ENotifyingList<Group>
+                const end = otherEnd as Group
                 return list.removeWithNotification(end, notifications)
             }
             case TournamentConstants.TOURNAMENT__MATCHES: {
-                let list = this.getMatches() as ecore.ENotifyingList<Match>
-                let end = otherEnd as Match
+                const list = this.getMatches() as ecore.ENotifyingList<Match>
+                const end = otherEnd as Match
                 return list.removeWithNotification(end, notifications)
             }
             case TournamentConstants.TOURNAMENT__TEAMS: {
-                let list = this.getTeams() as ecore.ENotifyingList<Team>
-                let end = otherEnd as Team
+                const list = this.getTeams() as ecore.ENotifyingList<Team>
+                const end = otherEnd as Team
                 return list.removeWithNotification(end, notifications)
             }
             default: {

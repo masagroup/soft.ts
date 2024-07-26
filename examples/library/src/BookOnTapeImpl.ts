@@ -57,8 +57,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     // get the value of author
     getAuthor(): Writer {
         if (this._author != null && this._author.eIsProxy()) {
-            let oldAuthor = this._author
-            let newAuthor = this.eResolveProxy(oldAuthor) as Writer
+            const oldAuthor = this._author
+            const newAuthor = this.eResolveProxy(oldAuthor) as Writer
             this._author = newAuthor
             if (newAuthor != oldAuthor) {
                 if (this.eNotificationRequired()) {
@@ -80,8 +80,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     // get the value of author asynchronously
     async getAuthorAsync(): Promise<Writer> {
         if (this._author != null && this._author.eIsProxy()) {
-            let oldAuthor = this._author
-            let newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
+            const oldAuthor = this._author
+            const newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
             this._author = newAuthor
             if (newAuthor != oldAuthor) {
                 if (this.eNotificationRequired()) {
@@ -102,7 +102,7 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
 
     // set the value of author
     setAuthor(newAuthor: Writer): void {
-        let oldAuthor = this._author
+        const oldAuthor = this._author
         this._author = newAuthor
         if (this.eNotificationRequired()) {
             this.eNotify(
@@ -125,8 +125,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     // get the value of reader
     getReader(): Person {
         if (this._reader != null && this._reader.eIsProxy()) {
-            let oldReader = this._reader
-            let newReader = this.eResolveProxy(oldReader) as Person
+            const oldReader = this._reader
+            const newReader = this.eResolveProxy(oldReader) as Person
             this._reader = newReader
             if (newReader != oldReader) {
                 if (this.eNotificationRequired()) {
@@ -148,8 +148,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     // get the value of reader asynchronously
     async getReaderAsync(): Promise<Person> {
         if (this._reader != null && this._reader.eIsProxy()) {
-            let oldReader = this._reader
-            let newReader = (await this.eResolveProxyAsync(oldReader)) as Person
+            const oldReader = this._reader
+            const newReader = (await this.eResolveProxyAsync(oldReader)) as Person
             this._reader = newReader
             if (newReader != oldReader) {
                 if (this.eNotificationRequired()) {
@@ -170,7 +170,7 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
 
     // set the value of reader
     setReader(newReader: Person): void {
-        let oldReader = this._reader
+        const oldReader = this._reader
         this._reader = newReader
         if (this.eNotificationRequired()) {
             this.eNotify(

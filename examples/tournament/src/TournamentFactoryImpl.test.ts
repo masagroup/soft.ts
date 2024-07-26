@@ -28,34 +28,34 @@ import {
 
 describe("TournamentFactoryImpl", () => {
     test("createFromEClass", () => {
-        let factory = TournamentFactoryImpl.getInstance()
+        const factory = TournamentFactoryImpl.getInstance()
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(-1)
             expect(() => factory.create(eClass)).toThrow(Error)
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(TournamentConstants.GROUP)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(TournamentConstants.MATCH)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(TournamentConstants.TEAM)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(TournamentConstants.TOURNAMENT)
             expect(factory.create(eClass)).not.toBeNull()
         }
@@ -78,21 +78,21 @@ describe("TournamentFactoryImpl", () => {
     })
 
     test("createFromStringInvalid", () => {
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => TournamentFactoryImpl.getInstance().createFromString(eDataType, "")).toThrow(Error)
     })
     test("convertToStringInvalid", () => {
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => TournamentFactoryImpl.getInstance().convertToString(eDataType, null)).toThrow(Error)
     })
     test("createMatchKindFromString", () => {
-        let factory = TournamentFactoryImpl.getInstance()
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const factory = TournamentFactoryImpl.getInstance()
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(TournamentConstants.MATCH_KIND)
         expect(factory.createFromString(eDataType, "Final")).toStrictEqual(MatchKind.FINAL)
         expect(factory.createFromString(eDataType, "QuarterFinal")).toStrictEqual(MatchKind.QUARTER_FINAL)
@@ -102,9 +102,9 @@ describe("TournamentFactoryImpl", () => {
     })
 
     test("convertMatchKindToString", () => {
-        let factory = TournamentFactoryImpl.getInstance()
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const factory = TournamentFactoryImpl.getInstance()
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(TournamentConstants.MATCH_KIND)
         expect(factory.convertToString(eDataType, MatchKind.FINAL)).toStrictEqual("Final")
         expect(factory.convertToString(eDataType, MatchKind.QUARTER_FINAL)).toStrictEqual("QuarterFinal")

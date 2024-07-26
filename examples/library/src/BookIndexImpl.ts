@@ -54,7 +54,7 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
 
     // set the value of key
     setKey(newKey: string): void {
-        let oldKey = this._key
+        const oldKey = this._key
         this._key = newKey
         if (this.eNotificationRequired()) {
             this.eNotify(

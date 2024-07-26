@@ -39,70 +39,70 @@ import {
 
 describe("LibraryFactoryImpl", () => {
     test("createFromEClass", () => {
-        let factory = LibraryFactoryImpl.getInstance()
+        const factory = LibraryFactoryImpl.getInstance()
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(-1)
             expect(() => factory.create(eClass)).toThrow(Error)
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BOOK)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BOOK_INDEX)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BOOK_ON_TAPE)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.BORROWER)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.DOCUMENT_ROOT)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.EMPLOYEE)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.LIBRARY)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.PERSON)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.VIDEO_CASSETTE)
             expect(factory.create(eClass)).not.toBeNull()
         }
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
             when(mockEClass.getClassifierID()).thenReturn(LibraryConstants.WRITER)
             expect(factory.create(eClass)).not.toBeNull()
         }
@@ -137,10 +137,10 @@ describe("LibraryFactoryImpl", () => {
     })
 
     test("createLibraryFromContainer", () => {
-        let mockContainer = mock<Library>()
-        let container = instance(mockContainer)
-        let mockList = mock<ecore.EList<Library>>()
-        let list = instance(mockList)
+        const mockContainer = mock<Library>()
+        const container = instance(mockContainer)
+        const mockList = mock<ecore.EList<Library>>()
+        const list = instance(mockList)
         when(mockList.add(anything())).thenReturn(true)
         when(mockContainer.branches).thenReturn(list)
         expect(LibraryFactoryImpl.getInstance().createLibraryFromContainer(container)).not.toBeNull()
@@ -159,21 +159,21 @@ describe("LibraryFactoryImpl", () => {
     })
 
     test("createFromStringInvalid", () => {
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => LibraryFactoryImpl.getInstance().createFromString(eDataType, "")).toThrow(Error)
     })
     test("convertToStringInvalid", () => {
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => LibraryFactoryImpl.getInstance().convertToString(eDataType, null)).toThrow(Error)
     })
     test("createBookCategoryFromString", () => {
-        let factory = LibraryFactoryImpl.getInstance()
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const factory = LibraryFactoryImpl.getInstance()
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(LibraryConstants.BOOK_CATEGORY)
         expect(factory.createFromString(eDataType, "Biography")).toStrictEqual(BookCategory.BIOGRAPHY)
         expect(factory.createFromString(eDataType, "Mystery")).toStrictEqual(BookCategory.MYSTERY)
@@ -181,9 +181,9 @@ describe("LibraryFactoryImpl", () => {
     })
 
     test("convertBookCategoryToString", () => {
-        let factory = LibraryFactoryImpl.getInstance()
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
+        const factory = LibraryFactoryImpl.getInstance()
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(LibraryConstants.BOOK_CATEGORY)
         expect(factory.convertToString(eDataType, BookCategory.BIOGRAPHY)).toStrictEqual("Biography")
         expect(factory.convertToString(eDataType, BookCategory.MYSTERY)).toStrictEqual("Mystery")

@@ -27,8 +27,8 @@ export class TeamImpl extends NamedElementImpl implements Team {
     // get the value of group
     getGroup(): Group {
         if (this._group != null && this._group.eIsProxy()) {
-            let oldGroup = this._group
-            let newGroup = this.eResolveProxy(oldGroup) as Group
+            const oldGroup = this._group
+            const newGroup = this.eResolveProxy(oldGroup) as Group
             this._group = newGroup
             if (newGroup != oldGroup) {
                 if (this.eNotificationRequired()) {
@@ -50,8 +50,8 @@ export class TeamImpl extends NamedElementImpl implements Team {
     // get the value of group asynchronously
     async getGroupAsync(): Promise<Group> {
         if (this._group != null && this._group.eIsProxy()) {
-            let oldGroup = this._group
-            let newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
+            const oldGroup = this._group
+            const newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
             this._group = newGroup
             if (newGroup != oldGroup) {
                 if (this.eNotificationRequired()) {
@@ -72,7 +72,7 @@ export class TeamImpl extends NamedElementImpl implements Team {
 
     // set the value of group
     setGroup(newGroup: Group): void {
-        let oldGroup = this._group
+        const oldGroup = this._group
         if (newGroup != oldGroup) {
             let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldGroup)) {
@@ -94,11 +94,11 @@ export class TeamImpl extends NamedElementImpl implements Team {
     }
 
     basicSetGroup(newGroup: Group, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
-        let oldGroup = this._group
+        const oldGroup = this._group
         this._group = newGroup
         let notifications = msgs
         if (this.eNotificationRequired()) {
-            let notification = new ecore.Notification(
+            const notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
                 TournamentConstants.TEAM__GROUP,

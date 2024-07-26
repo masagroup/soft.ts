@@ -19,17 +19,17 @@ interface LendableInternal extends Lendable, ecore.EObjectInternal {}
 
 describe("BorrowerImpl", () => {
     test("eStaticClass", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getBorrower())
     })
 
     test("getBorrowed", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         expect(o.borrowed).not.toBeNull()
     })
 
     test("eGetFromID", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.BORROWER__BORROWED, true)).toStrictEqual(o.borrowed)
         expect(
@@ -41,13 +41,13 @@ describe("BorrowerImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<LendableInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Lendable>([value])
+            const mockValue = mock<LendableInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Lendable>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eInverseAdd(o, LibraryConstants.LENDABLE__BORROWERS, anything())).thenReturn(null)
 
@@ -61,53 +61,53 @@ describe("BorrowerImpl", () => {
     })
 
     test("eIsSetFromID", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.BORROWER__BORROWED)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.BORROWER__BORROWED)
-            let v = o.eGetFromID(LibraryConstants.BORROWER__BORROWED, false)
+            const v = o.eGetFromID(LibraryConstants.BORROWER__BORROWED, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Lendable>
+            const l = v as ecore.EList<Lendable>
             expect(l.isEmpty()).toBeTruthy()
         }
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<LendableInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LendableInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, LibraryConstants.BORROWER__BORROWED, null)
             expect(o.borrowed.contains(value)).toBeTruthy()
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new BorrowerImpl()
+        const o = new BorrowerImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<LendableInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LendableInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, LibraryConstants.LENDABLE__BORROWERS, anything())).thenReturn(null)
 
             o.borrowed.add(value)

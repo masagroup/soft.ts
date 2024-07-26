@@ -19,23 +19,23 @@ interface TeamInternal extends Team, ecore.EObjectInternal {}
 
 describe("MatchImpl", () => {
     test("eStaticClass", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         expect(o.eStaticClass()).toBe(getTournamentPackage().getMatch())
     })
 
     test("getDate", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         // get default value
         expect(o.getDate()).toBe(null)
     })
 
     test("setDate", () => {
-        let o = new MatchImpl()
-        let value = new Date()
+        const o = new MatchImpl()
+        const value = new Date()
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -51,26 +51,26 @@ describe("MatchImpl", () => {
     })
 
     test("getGroup", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
 
         // get default value
         expect(o.getGroup()).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<GroupInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<GroupInternal>()
+        const value = instance(mockValue)
         o.setGroup(value)
 
         // events
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<ecore.EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<ecore.EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -79,9 +79,9 @@ describe("MatchImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new ecore.URI("test:///uri")
-        let mockResolved = mock<GroupInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new ecore.URI("test:///uri")
+        const mockResolved = mock<GroupInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -91,13 +91,13 @@ describe("MatchImpl", () => {
     })
 
     test("setGroup", () => {
-        let o = new MatchImpl()
-        let mockValue = mock<GroupInternal>()
-        let value = instance(mockValue)
+        const o = new MatchImpl()
+        const mockValue = mock<GroupInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -113,26 +113,26 @@ describe("MatchImpl", () => {
     })
 
     test("getGuestTeam", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
 
         // get default value
         expect(o.getGuestTeam()).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<TeamInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<TeamInternal>()
+        const value = instance(mockValue)
         o.setGuestTeam(value)
 
         // events
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<ecore.EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<ecore.EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -141,9 +141,9 @@ describe("MatchImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new ecore.URI("test:///uri")
-        let mockResolved = mock<TeamInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new ecore.URI("test:///uri")
+        const mockResolved = mock<TeamInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -153,13 +153,13 @@ describe("MatchImpl", () => {
     })
 
     test("setGuestTeam", () => {
-        let o = new MatchImpl()
-        let mockValue = mock<TeamInternal>()
-        let value = instance(mockValue)
+        const o = new MatchImpl()
+        const mockValue = mock<TeamInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -175,26 +175,26 @@ describe("MatchImpl", () => {
     })
 
     test("getHomeTeam", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
 
         // get default value
         expect(o.getHomeTeam()).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<TeamInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<TeamInternal>()
+        const value = instance(mockValue)
         o.setHomeTeam(value)
 
         // events
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<ecore.EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<ecore.EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -203,9 +203,9 @@ describe("MatchImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new ecore.URI("test:///uri")
-        let mockResolved = mock<TeamInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new ecore.URI("test:///uri")
+        const mockResolved = mock<TeamInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -215,13 +215,13 @@ describe("MatchImpl", () => {
     })
 
     test("setHomeTeam", () => {
-        let o = new MatchImpl()
-        let mockValue = mock<TeamInternal>()
-        let value = instance(mockValue)
+        const o = new MatchImpl()
+        const mockValue = mock<TeamInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -237,18 +237,18 @@ describe("MatchImpl", () => {
     })
 
     test("getKind", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         // get default value
         expect(o.getKind()).toBe(MatchKind.ROUND_OF32)
     })
 
     test("setKind", () => {
-        let o = new MatchImpl()
-        let value = MatchKind.ROUND_OF16
+        const o = new MatchImpl()
+        const value = MatchKind.ROUND_OF16
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -264,18 +264,18 @@ describe("MatchImpl", () => {
     })
 
     test("getLocation", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         // get default value
         expect(o.getLocation()).toBe("")
     })
 
     test("setLocation", () => {
-        let o = new MatchImpl()
-        let value = "Test String"
+        const o = new MatchImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -291,18 +291,18 @@ describe("MatchImpl", () => {
     })
 
     test("getResult", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         // get default value
         expect(o.getResult()).toBe("")
     })
 
     test("setResult", () => {
-        let o = new MatchImpl()
-        let value = "Test String"
+        const o = new MatchImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -318,7 +318,7 @@ describe("MatchImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(TournamentConstants.MATCH__DATE, true)).toStrictEqual(o.getDate())
         expect(o.eGetFromID(TournamentConstants.MATCH__GROUP, true)).toStrictEqual(o.getGroup())
@@ -330,50 +330,50 @@ describe("MatchImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = new Date()
+            const value = new Date()
             o.eSetFromID(TournamentConstants.MATCH__DATE, value)
             expect(o.eGetFromID(TournamentConstants.MATCH__DATE, false)).toBe(value)
         }
         {
-            let mockValue = mock<GroupInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<GroupInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(TournamentConstants.MATCH__GROUP, value)
             expect(o.eGetFromID(TournamentConstants.MATCH__GROUP, false)).toBe(value)
         }
         {
-            let mockValue = mock<TeamInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<TeamInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(TournamentConstants.MATCH__GUEST_TEAM, value)
             expect(o.eGetFromID(TournamentConstants.MATCH__GUEST_TEAM, false)).toBe(value)
         }
         {
-            let mockValue = mock<TeamInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<TeamInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(TournamentConstants.MATCH__HOME_TEAM, value)
             expect(o.eGetFromID(TournamentConstants.MATCH__HOME_TEAM, false)).toBe(value)
         }
         {
-            let value = MatchKind.ROUND_OF16
+            const value = MatchKind.ROUND_OF16
             o.eSetFromID(TournamentConstants.MATCH__KIND, value)
             expect(o.eGetFromID(TournamentConstants.MATCH__KIND, false)).toBe(value)
         }
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(TournamentConstants.MATCH__LOCATION, value)
             expect(o.eGetFromID(TournamentConstants.MATCH__LOCATION, false)).toBe(value)
         }
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(TournamentConstants.MATCH__RESULT, value)
             expect(o.eGetFromID(TournamentConstants.MATCH__RESULT, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(TournamentConstants.MATCH__DATE)).toBeFalsy()
         expect(o.eIsSetFromID(TournamentConstants.MATCH__GROUP)).toBeFalsy()
@@ -385,11 +385,11 @@ describe("MatchImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new MatchImpl()
+        const o = new MatchImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(TournamentConstants.MATCH__DATE)
-            let v = o.eGetFromID(TournamentConstants.MATCH__DATE, false)
+            const v = o.eGetFromID(TournamentConstants.MATCH__DATE, false)
             expect(v).toBeNull()
         }
         {
@@ -406,17 +406,17 @@ describe("MatchImpl", () => {
         }
         {
             o.eUnsetFromID(TournamentConstants.MATCH__KIND)
-            let v = o.eGetFromID(TournamentConstants.MATCH__KIND, false)
+            const v = o.eGetFromID(TournamentConstants.MATCH__KIND, false)
             expect(v).toBe(MatchKind.ROUND_OF32)
         }
         {
             o.eUnsetFromID(TournamentConstants.MATCH__LOCATION)
-            let v = o.eGetFromID(TournamentConstants.MATCH__LOCATION, false)
+            const v = o.eGetFromID(TournamentConstants.MATCH__LOCATION, false)
             expect(v).toBe("")
         }
         {
             o.eUnsetFromID(TournamentConstants.MATCH__RESULT)
-            let v = o.eGetFromID(TournamentConstants.MATCH__RESULT, false)
+            const v = o.eGetFromID(TournamentConstants.MATCH__RESULT, false)
             expect(v).toBe("")
         }
     })

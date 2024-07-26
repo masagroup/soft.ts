@@ -37,23 +37,23 @@ interface WriterInternal extends Writer, ecore.EObjectInternal {}
 
 describe("LibraryImpl", () => {
     test("eStaticClass", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getLibrary())
     })
 
     test("getAddress", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         // get default value
         expect(o.address).toBe("")
     })
 
     test("setAddress", () => {
-        let o = new LibraryImpl()
-        let value = "Test String"
+        const o = new LibraryImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -69,38 +69,38 @@ describe("LibraryImpl", () => {
     })
 
     test("getBooks", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.books).not.toBeNull()
     })
 
     test("getBorrowers", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.borrowers).not.toBeNull()
     })
 
     test("getBranches", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.branches).not.toBeNull()
     })
 
     test("getEmployees", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.employees).not.toBeNull()
     })
 
     test("getName", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         // get default value
         expect(o.name).toBe("")
     })
 
     test("setName", () => {
-        let o = new LibraryImpl()
-        let value = "Test String"
+        const o = new LibraryImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -117,12 +117,12 @@ describe("LibraryImpl", () => {
 
     test("getParentBranch", () => {
         // default
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.parentBranch).toBeNull()
 
         // set a mock container
-        let mockContainer = mock<ecore.EObject>()
-        let container = instance(mockContainer)
+        const mockContainer = mock<ecore.EObject>()
+        const container = instance(mockContainer)
         o.eSetInternalContainer(container, LibraryConstants.LIBRARY__PARENT_BRANCH)
 
         // no proxy
@@ -132,15 +132,15 @@ describe("LibraryImpl", () => {
     })
 
     test("setParentBranch", () => {
-        let o = new LibraryImpl()
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
-        let mockValue = mock<LibraryInternal>()
-        let value = instance(mockValue)
+        const o = new LibraryImpl()
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
+        const mockValue = mock<LibraryInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -150,7 +150,7 @@ describe("LibraryImpl", () => {
         verify(mockResource.attached(o)).once()
         verify(mockAdapter.notifyChanged(anything())).once()
         {
-            let [notification] = capture(mockAdapter.notifyChanged).last()
+            const [notification] = capture(mockAdapter.notifyChanged).last()
             expect(notification.getNotifier()).toBe(o)
             expect(notification.getOldValue()).toBeNull()
             expect(notification.getNewValue()).toBe(value)
@@ -161,10 +161,10 @@ describe("LibraryImpl", () => {
         verify(mockAdapter.notifyChanged(anything())).once()
 
         // set with another value in a different resource
-        let mockOther = mock<LibraryInternal>()
-        let other = instance(mockOther)
-        let mockOtherResource = mock<ecore.EResource>()
-        let otherResource = instance(mockOtherResource)
+        const mockOther = mock<LibraryInternal>()
+        const other = instance(mockOther)
+        const mockOtherResource = mock<ecore.EResource>()
+        const otherResource = instance(mockOtherResource)
         reset(mockAdapter)
         reset(mockValue)
         reset(mockResource)
@@ -177,7 +177,7 @@ describe("LibraryImpl", () => {
         verify(mockOtherResource.attached(o)).once()
         verify(mockAdapter.notifyChanged(anything())).once()
         {
-            let [notification] = capture(mockAdapter.notifyChanged).last()
+            const [notification] = capture(mockAdapter.notifyChanged).last()
             expect(notification.getNotifier()).toBe(o)
             expect(notification.getOldValue()).toBe(value)
             expect(notification.getNewValue()).toBe(other)
@@ -186,18 +186,18 @@ describe("LibraryImpl", () => {
     })
 
     test("basicSetParentBranch", () => {
-        let o = new LibraryImpl()
-        let mockValue = mock<LibraryInternal>()
-        let value = instance(mockValue)
+        const o = new LibraryImpl()
+        const mockValue = mock<LibraryInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // notification chain
-        let mockNotifications = mock<ecore.ENotificationChain>()
-        let notifications = instance(mockNotifications)
+        const mockNotifications = mock<ecore.ENotificationChain>()
+        const notifications = instance(mockNotifications)
 
         // set value
         when(mockValue.eResource()).thenReturn(null)
@@ -216,25 +216,25 @@ describe("LibraryImpl", () => {
     })
 
     test("getPeople", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.people).toBeNull()
     })
 
     test("getProprietary", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
 
         // get default value
         expect(o.proprietary).toBeNull()
     })
 
     test("setProprietary", () => {
-        let o = new LibraryImpl()
-        let mockValue = mock<PersonInternal>()
-        let value = instance(mockValue)
+        const o = new LibraryImpl()
+        const mockValue = mock<PersonInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // set value
@@ -250,18 +250,18 @@ describe("LibraryImpl", () => {
     })
 
     test("basicSetProprietary", () => {
-        let o = new LibraryImpl()
-        let mockValue = mock<PersonInternal>()
-        let value = instance(mockValue)
+        const o = new LibraryImpl()
+        const mockValue = mock<PersonInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
         o.eAdapters().add(adapter)
 
         // notification chain
-        let mockNotifications = mock<ecore.ENotificationChain>()
-        let notifications = instance(mockNotifications)
+        const mockNotifications = mock<ecore.ENotificationChain>()
+        const notifications = instance(mockNotifications)
 
         // set value
         when(mockNotifications.add(anything())).thenReturn(true)
@@ -279,17 +279,17 @@ describe("LibraryImpl", () => {
     })
 
     test("getStock", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.stock).not.toBeNull()
     })
 
     test("getWriters", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(o.writers).not.toBeNull()
     })
 
     test("eGetFromID", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.LIBRARY__ADDRESS, true)).toStrictEqual(o.address)
         expect(o.eGetFromID(LibraryConstants.LIBRARY__BOOKS, true)).toStrictEqual(o.books)
@@ -341,18 +341,18 @@ describe("LibraryImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(LibraryConstants.LIBRARY__ADDRESS, value)
             expect(o.eGetFromID(LibraryConstants.LIBRARY__ADDRESS, false)).toBe(value)
         }
         {
             // list with a value
-            let mockValue = mock<BookInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Book>([value])
+            const mockValue = mock<BookInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Book>([value])
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BOOKS, anything())
             ).thenReturn(null)
@@ -369,9 +369,9 @@ describe("LibraryImpl", () => {
 
         {
             // list with a value
-            let mockValue = mock<BorrowerInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Borrower>([value])
+            const mockValue = mock<BorrowerInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Borrower>([value])
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BORROWERS, anything())
             ).thenReturn(null)
@@ -388,9 +388,9 @@ describe("LibraryImpl", () => {
 
         {
             // list with a value
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Library>([value])
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Library>([value])
             when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__PARENT_BRANCH, anything())).thenReturn(null)
 
             // set list with new contents
@@ -403,9 +403,9 @@ describe("LibraryImpl", () => {
 
         {
             // list with a value
-            let mockValue = mock<EmployeeInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Employee>([value])
+            const mockValue = mock<EmployeeInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Employee>([value])
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__EMPLOYEES, anything())
             ).thenReturn(null)
@@ -421,13 +421,13 @@ describe("LibraryImpl", () => {
         }
 
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(LibraryConstants.LIBRARY__NAME, value)
             expect(o.eGetFromID(LibraryConstants.LIBRARY__NAME, false)).toBe(value)
         }
         {
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
@@ -438,8 +438,8 @@ describe("LibraryImpl", () => {
             verify(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__BRANCHES, null)).once()
         }
         {
-            let mockValue = mock<PersonInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<PersonInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -459,9 +459,9 @@ describe("LibraryImpl", () => {
         }
         {
             // list with a value
-            let mockValue = mock<ItemInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Item>([value])
+            const mockValue = mock<ItemInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Item>([value])
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__STOCK, anything())
             ).thenReturn(null)
@@ -478,9 +478,9 @@ describe("LibraryImpl", () => {
 
         {
             // list with a value
-            let mockValue = mock<WriterInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Writer>([value])
+            const mockValue = mock<WriterInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Writer>([value])
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__WRITERS, anything())
             ).thenReturn(null)
@@ -497,7 +497,7 @@ describe("LibraryImpl", () => {
     })
 
     test("eIsSetFromID", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.LIBRARY__ADDRESS)).toBeFalsy()
         expect(o.eIsSetFromID(LibraryConstants.LIBRARY__BOOKS)).toBeFalsy()
@@ -512,44 +512,44 @@ describe("LibraryImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__ADDRESS)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__ADDRESS, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__ADDRESS, false)
             expect(v).toBe("")
         }
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__BOOKS)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__BOOKS, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__BOOKS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Book>
+            const l = v as ecore.EList<Book>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__BORROWERS)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__BORROWERS, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__BORROWERS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Borrower>
+            const l = v as ecore.EList<Borrower>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__BRANCHES)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__BRANCHES, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__BRANCHES, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Library>
+            const l = v as ecore.EList<Library>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__EMPLOYEES)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__EMPLOYEES, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__EMPLOYEES, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Employee>
+            const l = v as ecore.EList<Employee>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__NAME)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__NAME, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__NAME, false)
             expect(v).toBe("")
         }
         {
@@ -562,46 +562,46 @@ describe("LibraryImpl", () => {
         }
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__STOCK)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__STOCK, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__STOCK, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Item>
+            const l = v as ecore.EList<Item>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.LIBRARY__WRITERS)
-            let v = o.eGetFromID(LibraryConstants.LIBRARY__WRITERS, false)
+            const v = o.eGetFromID(LibraryConstants.LIBRARY__WRITERS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Writer>
+            const l = v as ecore.EList<Writer>
             expect(l.isEmpty()).toBeTruthy()
         }
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, LibraryConstants.LIBRARY__BRANCHES, null)
             expect(o.branches.contains(value)).toBeTruthy()
         }
         {
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, LibraryConstants.LIBRARY__PARENT_BRANCH, null)
             expect(o.parentBranch).toBe(value)
 
             reset(mockValue)
-            let mockOther = mock<LibraryInternal>()
-            let other = instance(mockOther)
+            const mockOther = mock<LibraryInternal>()
+            const other = instance(mockOther)
             when(mockOther.eResource()).thenReturn(null)
             when(mockOther.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
@@ -612,18 +612,18 @@ describe("LibraryImpl", () => {
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new LibraryImpl()
+        const o = new LibraryImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<BookInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<BookInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BOOKS, anything())
             ).thenReturn(null)
@@ -638,8 +638,8 @@ describe("LibraryImpl", () => {
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<BorrowerInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<BorrowerInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BORROWERS, anything())
             ).thenReturn(null)
@@ -654,8 +654,8 @@ describe("LibraryImpl", () => {
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__PARENT_BRANCH, anything())).thenReturn(null)
 
             o.branches.add(value)
@@ -668,8 +668,8 @@ describe("LibraryImpl", () => {
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<EmployeeInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EmployeeInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__EMPLOYEES, anything())
             ).thenReturn(null)
@@ -683,19 +683,19 @@ describe("LibraryImpl", () => {
             expect(o.employees.contains(value)).toBeFalsy()
         }
         {
-            let mockValue = mock<LibraryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<LibraryInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, LibraryConstants.LIBRARY__PARENT_BRANCH, null)
         }
         {
-            let mockValue = mock<PersonInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<PersonInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, LibraryConstants.LIBRARY__PROPRIETARY, null)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<ItemInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<ItemInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__STOCK, anything())
             ).thenReturn(null)
@@ -710,8 +710,8 @@ describe("LibraryImpl", () => {
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<WriterInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<WriterInternal>()
+            const value = instance(mockValue)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__WRITERS, anything())
             ).thenReturn(null)

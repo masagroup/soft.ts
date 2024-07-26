@@ -391,9 +391,9 @@ export class XMLDecoder implements EDecoder {
         }
     }
 
-    protected handleXSISchemaLocation(loc: string): void { }
+    protected handleXSISchemaLocation(loc: string): void {}
 
-    protected handleXSINoNamespaceSchemaLocation(loc: string): void { }
+    protected handleXSINoNamespaceSchemaLocation(loc: string): void {}
 
     protected getXSIType(): string {
         return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib)
@@ -762,11 +762,10 @@ export class XMLDecoder implements EDecoder {
                     eList.move(position, value)
                 }
                 break
-            }         
+            }
             default: {
                 eObject.eSet(eFeature, value)
             }
-                
         }
     }
 

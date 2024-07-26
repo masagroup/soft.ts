@@ -110,7 +110,7 @@ export class TournamentPackageImpl extends ecore.EPackageExt implements Tourname
     }
 
     private createPackageContents(): void {
-        let factory = ecore.getEcoreFactory()
+        const factory = ecore.getEcoreFactory()
 
         this._groupClass = factory.createEClassFromContainerAndClassID(this, TournamentConstants.GROUP)
         factory.createEReferenceFromContainerAndClassID(this._groupClass, TournamentConstants.GROUP__TEAMS)
