@@ -114,17 +114,17 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // set the value of changeable
-    setChangeable(newIsChangeable: boolean): void {
-        const oldIsChangeable = this._isChangeable
-        this._isChangeable = newIsChangeable
+    setChangeable(newChangeable: boolean): void {
+        const oldChangeable = this._isChangeable
+        this._isChangeable = newChangeable
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE,
-                    oldIsChangeable,
-                    newIsChangeable
+                    oldChangeable,
+                    newChangeable
                 )
             )
         }
@@ -136,17 +136,17 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // set the value of derived
-    setDerived(newIsDerived: boolean): void {
-        const oldIsDerived = this._isDerived
-        this._isDerived = newIsDerived
+    setDerived(newDerived: boolean): void {
+        const oldDerived = this._isDerived
+        this._isDerived = newDerived
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED,
-                    oldIsDerived,
-                    newIsDerived
+                    oldDerived,
+                    newDerived
                 )
             )
         }
@@ -158,17 +158,17 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // set the value of transient
-    setTransient(newIsTransient: boolean): void {
-        const oldIsTransient = this._isTransient
-        this._isTransient = newIsTransient
+    setTransient(newTransient: boolean): void {
+        const oldTransient = this._isTransient
+        this._isTransient = newTransient
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT,
-                    oldIsTransient,
-                    newIsTransient
+                    oldTransient,
+                    newTransient
                 )
             )
         }
@@ -180,17 +180,17 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // set the value of unsettable
-    setUnsettable(newIsUnsettable: boolean): void {
-        const oldIsUnsettable = this._isUnsettable
-        this._isUnsettable = newIsUnsettable
+    setUnsettable(newUnsettable: boolean): void {
+        const oldUnsettable = this._isUnsettable
+        this._isUnsettable = newUnsettable
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE,
-                    oldIsUnsettable,
-                    newIsUnsettable
+                    oldUnsettable,
+                    newUnsettable
                 )
             )
         }
@@ -202,17 +202,17 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // set the value of volatile
-    setVolatile(newIsVolatile: boolean): void {
-        const oldIsVolatile = this._isVolatile
-        this._isVolatile = newIsVolatile
+    setVolatile(newVolatile: boolean): void {
+        const oldVolatile = this._isVolatile
+        this._isVolatile = newVolatile
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE,
-                    oldIsVolatile,
-                    newIsVolatile
+                    oldVolatile,
+                    newVolatile
                 )
             )
         }

@@ -53,11 +53,11 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
     }
 
     // set the value of iD
-    setID(newIsID: boolean): void {
-        const oldIsID = this._isID
-        this._isID = newIsID
+    setID(newID: boolean): void {
+        const oldID = this._isID
+        this._isID = newID
         if (this.eNotificationRequired()) {
-            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EATTRIBUTE__ID, oldIsID, newIsID))
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EATTRIBUTE__ID, oldID, newID))
         }
     }
 

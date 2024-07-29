@@ -144,17 +144,17 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     }
 
     // set the value of containment
-    setContainment(newIsContainment: boolean): void {
-        const oldIsContainment = this._isContainment
-        this._isContainment = newIsContainment
+    setContainment(newContainment: boolean): void {
+        const oldContainment = this._isContainment
+        this._isContainment = newContainment
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.EREFERENCE__CONTAINMENT,
-                    oldIsContainment,
-                    newIsContainment
+                    oldContainment,
+                    newContainment
                 )
             )
         }
@@ -166,17 +166,17 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     }
 
     // set the value of resolveProxies
-    setResolveProxies(newIsResolveProxies: boolean): void {
-        const oldIsResolveProxies = this._isResolveProxies
-        this._isResolveProxies = newIsResolveProxies
+    setResolveProxies(newResolveProxies: boolean): void {
+        const oldResolveProxies = this._isResolveProxies
+        this._isResolveProxies = newResolveProxies
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.EREFERENCE__RESOLVE_PROXIES,
-                    oldIsResolveProxies,
-                    newIsResolveProxies
+                    oldResolveProxies,
+                    newResolveProxies
                 )
             )
         }

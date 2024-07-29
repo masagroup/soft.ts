@@ -278,12 +278,12 @@ export class EClassImpl extends EClassifierExt implements EClass {
     }
 
     // set the value of abstract
-    setAbstract(newIsAbstract: boolean): void {
-        const oldIsAbstract = this._isAbstract
-        this._isAbstract = newIsAbstract
+    setAbstract(newAbstract: boolean): void {
+        const oldAbstract = this._isAbstract
+        this._isAbstract = newAbstract
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldIsAbstract, newIsAbstract)
+                new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldAbstract, newAbstract)
             )
         }
     }
@@ -294,12 +294,12 @@ export class EClassImpl extends EClassifierExt implements EClass {
     }
 
     // set the value of interface
-    setInterface(newIsInterface: boolean): void {
-        const oldIsInterface = this._isInterface
-        this._isInterface = newIsInterface
+    setInterface(newInterface: boolean): void {
+        const oldInterface = this._isInterface
+        this._isInterface = newInterface
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldIsInterface, newIsInterface)
+                new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldInterface, newInterface)
             )
         }
     }

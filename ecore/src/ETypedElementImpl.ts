@@ -120,18 +120,12 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     }
 
     // set the value of ordered
-    setOrdered(newIsOrdered: boolean): void {
-        const oldIsOrdered = this._isOrdered
-        this._isOrdered = newIsOrdered
+    setOrdered(newOrdered: boolean): void {
+        const oldOrdered = this._isOrdered
+        this._isOrdered = newOrdered
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ETYPED_ELEMENT__ORDERED,
-                    oldIsOrdered,
-                    newIsOrdered
-                )
+                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ORDERED, oldOrdered, newOrdered)
             )
         }
     }
@@ -147,12 +141,12 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     }
 
     // set the value of unique
-    setUnique(newIsUnique: boolean): void {
-        const oldIsUnique = this._isUnique
-        this._isUnique = newIsUnique
+    setUnique(newUnique: boolean): void {
+        const oldUnique = this._isUnique
+        this._isUnique = newUnique
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldIsUnique, newIsUnique)
+                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldUnique, newUnique)
             )
         }
     }
