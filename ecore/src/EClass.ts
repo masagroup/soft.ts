@@ -12,28 +12,60 @@
 import { EAttribute, EClassifier, EList, EOperation, EReference, EStructuralFeature } from "./internal.js"
 
 export interface EClass extends EClassifier {
-    // Attributes
-    isAbstract: boolean
-    isInterface: boolean
+    // abstract
+    isAbstract(): boolean
+    setAbstract(newIsAbstract: boolean): void
 
-    // References
-    readonly eStructuralFeatures: EList<EStructuralFeature>
-    readonly eAttributes: EList<EAttribute>
-    readonly eReferences: EList<EReference>
-    readonly eSuperTypes: EList<EClass>
-    readonly eOperations: EList<EOperation>
-    readonly eContainmentFeatures: EList<EStructuralFeature>
-    readonly eCrossReferenceFeatures: EList<EStructuralFeature>
-    readonly eAllAttributes: EList<EAttribute>
-    readonly eAllReferences: EList<EReference>
-    readonly eAllContainments: EList<EReference>
-    readonly eAllCrossReferences: EList<EReference>
-    readonly eAllOperations: EList<EOperation>
-    readonly eAllStructuralFeatures: EList<EStructuralFeature>
-    readonly eAllSuperTypes: EList<EClass>
-    readonly eIDAttribute: EAttribute
+    // interface
+    isInterface(): boolean
+    setInterface(newIsInterface: boolean): void
 
-    // Operations
+    // eStructuralFeatures
+    getEStructuralFeatures(): EList<EStructuralFeature>
+
+    // eAttributes
+    getEAttributes(): EList<EAttribute>
+
+    // eReferences
+    getEReferences(): EList<EReference>
+
+    // eSuperTypes
+    getESuperTypes(): EList<EClass>
+
+    // eOperations
+    getEOperations(): EList<EOperation>
+
+    // eContainmentFeatures
+    getEContainmentFeatures(): EList<EStructuralFeature>
+
+    // eCrossReferenceFeatures
+    getECrossReferenceFeatures(): EList<EStructuralFeature>
+
+    // eAllAttributes
+    getEAllAttributes(): EList<EAttribute>
+
+    // eAllReferences
+    getEAllReferences(): EList<EReference>
+
+    // eAllContainments
+    getEAllContainments(): EList<EReference>
+
+    // eAllCrossReferences
+    getEAllCrossReferences(): EList<EReference>
+
+    // eAllOperations
+    getEAllOperations(): EList<EOperation>
+
+    // eAllStructuralFeatures
+    getEAllStructuralFeatures(): EList<EStructuralFeature>
+
+    // eAllSuperTypes
+    getEAllSuperTypes(): EList<EClass>
+
+    // eIDAttribute
+    getEIDAttribute(): EAttribute
+
+    // operations
     isSuperTypeOf(someClass: EClass): boolean
     getFeatureCount(): number
     getEStructuralFeature(featureID: number): EStructuralFeature

@@ -13,6 +13,6 @@ import * as ecore from "@masagroup/ecore"
 import { Lendable, Person } from "./internal.js"
 
 export interface Borrower extends Person {
-    // References
+    // borrowed property
     readonly borrowed: ecore.EList<Lendable>
 }

@@ -36,74 +36,74 @@ interface EPackageInternal extends EPackage, EObjectInternal {}
 
 describe("EPackageImpl", () => {
     test("eStaticClass", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEPackage())
     })
 
     test("getEClassifiers", () => {
-        let o = new EPackageImpl()
-        expect(o.eClassifiers).not.toBeNull()
+        const o = new EPackageImpl()
+        expect(o.getEClassifiers()).not.toBeNull()
     })
 
     test("getEFactoryInstance", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
 
         // get default value
-        expect(o.eFactoryInstance).toBeNull()
+        expect(o.getEFactoryInstance()).toBeNull()
     })
 
     test("setEFactoryInstance", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // first value
-        let mockValue = mock<EFactoryInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<EFactoryInternal>()
+        const value = instance(mockValue)
         when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
-        o.eFactoryInstance = value
+        o.setEFactoryInstance(value)
         verify(mockAdapter.notifyChanged(anything())).once()
         {
-            let [notification] = capture(mockAdapter.notifyChanged).last()
-            expect(notification.notifier).toBe(o)
-            expect(notification.oldValue).toBeNull()
-            expect(notification.newValue).toBe(value)
+            const [notification] = capture(mockAdapter.notifyChanged).last()
+            expect(notification.getNotifier()).toBe(o)
+            expect(notification.getOldValue()).toBeNull()
+            expect(notification.getNewValue()).toBe(value)
         }
 
         // set with other value
-        let mockOther = mock<EFactoryInternal>()
-        let other = instance(mockOther)
+        const mockOther = mock<EFactoryInternal>()
+        const other = instance(mockOther)
         reset(mockAdapter)
         reset(mockValue)
         when(mockValue.eInverseRemove(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
         when(mockOther.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
-        o.eFactoryInstance = other
+        o.setEFactoryInstance(other)
         verify(mockAdapter.notifyChanged(anything())).once()
         {
-            let [notification] = capture(mockAdapter.notifyChanged).last()
-            expect(notification.notifier).toBe(o)
-            expect(notification.oldValue).toBe(value)
-            expect(notification.newValue).toBe(other)
-            expect(notification.position).toBe(-1)
+            const [notification] = capture(mockAdapter.notifyChanged).last()
+            expect(notification.getNotifier()).toBe(o)
+            expect(notification.getOldValue()).toBe(value)
+            expect(notification.getNewValue()).toBe(other)
+            expect(notification.getPosition()).toBe(-1)
         }
     })
 
     test("basicSetEFactoryInstance", () => {
-        let o = new EPackageImpl()
-        let mockValue = mock<EFactoryInternal>()
-        let value = instance(mockValue)
+        const o = new EPackageImpl()
+        const mockValue = mock<EFactoryInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // notification chain
-        let mockNotifications = mock<ENotificationChain>()
-        let notifications = instance(mockNotifications)
+        const mockNotifications = mock<ENotificationChain>()
+        const notifications = instance(mockNotifications)
 
         // set value
         when(mockNotifications.add(anything())).thenReturn(true)
@@ -112,138 +112,138 @@ describe("EPackageImpl", () => {
         // checks
         verify(mockNotifications.add(anything())).once()
         const [notification] = capture(mockNotifications.add).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.eventType).toBe(EventType.SET)
-        expect(notification.featureID).toBe(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getEventType()).toBe(EventType.SET)
+        expect(notification.getFeatureID()).toBe(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getESubPackages", () => {
-        let o = new EPackageImpl()
-        expect(o.eSubPackages).not.toBeNull()
+        const o = new EPackageImpl()
+        expect(o.getESubPackages()).not.toBeNull()
     })
 
     test("getESuperPackage", () => {
         // default
-        let o = new EPackageImpl()
-        expect(o.eSuperPackage).toBeNull()
+        const o = new EPackageImpl()
+        expect(o.getESuperPackage()).toBeNull()
 
         // set a mock container
-        let mockContainer = mock<EObject>()
-        let container = instance(mockContainer)
+        const mockContainer = mock<EObject>()
+        const container = instance(mockContainer)
         o.eSetInternalContainer(container, EcoreConstants.EPACKAGE__ESUPER_PACKAGE)
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.eSuperPackage).toBe(container)
+        expect(o.getESuperPackage()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("getNsPrefix", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         // get default value
-        expect(o.nsPrefix).toBe("")
+        expect(o.getNsPrefix()).toBe("")
     })
 
     test("setNsPrefix", () => {
-        let o = new EPackageImpl()
-        let value = "Test String"
+        const o = new EPackageImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.nsPrefix = value
+        o.setNsPrefix(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getNsURI", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         // get default value
-        expect(o.nsURI).toBe("")
+        expect(o.getNsURI()).toBe("")
     })
 
     test("setNsURI", () => {
-        let o = new EPackageImpl()
-        let value = "Test String"
+        const o = new EPackageImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.nsURI = value
+        o.setNsURI(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getEClassifier", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         expect(() => o.getEClassifier("")).toThrow(Error)
     })
 
     test("eGetFromID", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, true)).toStrictEqual(o.eClassifiers)
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, true)).toStrictEqual(o.getEClassifiers())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, false),
-                (o.eClassifiers as EObjectList<EClassifier>).getUnResolvedList()
+                (o.getEClassifiers() as EObjectList<EClassifier>).getUnResolvedList()
             )
         ).toBeTruthy()
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, true)).toStrictEqual(o.eFactoryInstance)
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, true)).toStrictEqual(o.eSubPackages)
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, true)).toStrictEqual(o.getEFactoryInstance())
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, true)).toStrictEqual(o.getESubPackages())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, false),
-                (o.eSubPackages as EObjectList<EPackage>).getUnResolvedList()
+                (o.getESubPackages() as EObjectList<EPackage>).getUnResolvedList()
             )
         ).toBeTruthy()
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUPER_PACKAGE, true)).toStrictEqual(o.eSuperPackage)
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, true)).toStrictEqual(o.nsPrefix)
-        expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_URI, true)).toStrictEqual(o.nsURI)
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__ESUPER_PACKAGE, true)).toStrictEqual(o.getESuperPackage())
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, true)).toStrictEqual(o.getNsPrefix())
+        expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_URI, true)).toStrictEqual(o.getNsURI())
     })
 
     test("eSetFromID", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<EClassifierInternal>()
-            let value = instance(mockValue)
-            let l = new ImmutableEList<EClassifier>([value])
+            const mockValue = mock<EClassifierInternal>()
+            const value = instance(mockValue)
+            const l = new ImmutableEList<EClassifier>([value])
             when(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, l)
             // checks
-            expect(o.eClassifiers.size()).toBe(1)
-            expect(o.eClassifiers.get(0)).toBe(value)
+            expect(o.getEClassifiers().size()).toBe(1)
+            expect(o.getEClassifiers().get(0)).toBe(value)
             verify(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).once()
         }
 
         {
-            let mockValue = mock<EFactoryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EFactoryInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
             o.eSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, value)
             expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, false)).toBe(value)
@@ -251,33 +251,33 @@ describe("EPackageImpl", () => {
         }
         {
             // list with a value
-            let mockValue = mock<EPackageInternal>()
-            let value = instance(mockValue)
-            let l = new ImmutableEList<EPackage>([value])
+            const mockValue = mock<EPackageInternal>()
+            const value = instance(mockValue)
+            const l = new ImmutableEList<EPackage>([value])
             when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, l)
             // checks
-            expect(o.eSubPackages.size()).toBe(1)
-            expect(o.eSubPackages.get(0)).toBe(value)
+            expect(o.getESubPackages().size()).toBe(1)
+            expect(o.getESubPackages().get(0)).toBe(value)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).once()
         }
 
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, value)
             expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, false)).toBe(value)
         }
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(EcoreConstants.EPACKAGE__NS_URI, value)
             expect(o.eGetFromID(EcoreConstants.EPACKAGE__NS_URI, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS)).toBeFalsy()
         expect(o.eIsSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)).toBeFalsy()
@@ -288,13 +288,13 @@ describe("EPackageImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS)
-            let v = o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, false)
+            const v = o.eGetFromID(EcoreConstants.EPACKAGE__ECLASSIFIERS, false)
             expect(v).not.toBeNull()
-            let l = v as EList<EClassifier>
+            const l = v as EList<EClassifier>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
@@ -303,130 +303,130 @@ describe("EPackageImpl", () => {
         }
         {
             o.eUnsetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES)
-            let v = o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, false)
+            const v = o.eGetFromID(EcoreConstants.EPACKAGE__ESUB_PACKAGES, false)
             expect(v).not.toBeNull()
-            let l = v as EList<EPackage>
+            const l = v as EList<EPackage>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(EcoreConstants.EPACKAGE__NS_PREFIX)
-            let v = o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, false)
+            const v = o.eGetFromID(EcoreConstants.EPACKAGE__NS_PREFIX, false)
             expect(v).toBe("")
         }
         {
             o.eUnsetFromID(EcoreConstants.EPACKAGE__NS_URI)
-            let v = o.eGetFromID(EcoreConstants.EPACKAGE__NS_URI, false)
+            const v = o.eGetFromID(EcoreConstants.EPACKAGE__NS_URI, false)
             expect(v).toBe("")
         }
     })
 
     test("eInvokeFromID", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error)
         expect(() => o.eInvokeFromID(EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING, null)).toThrow(Error)
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EClassifierInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EClassifierInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, EcoreConstants.EPACKAGE__ECLASSIFIERS, null)
-            expect(o.eClassifiers.contains(value)).toBeTruthy()
+            expect(o.getEClassifiers().contains(value)).toBeTruthy()
         }
         {
-            let mockValue = mock<EFactoryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EFactoryInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
-            expect(o.eFactoryInstance).toBe(value)
+            expect(o.getEFactoryInstance()).toBe(value)
 
             reset(mockValue)
-            let mockOther = mock<EFactoryInternal>()
-            let other = instance(mockOther)
+            const mockOther = mock<EFactoryInternal>()
+            const other = instance(mockOther)
             when(
                 mockValue.eInverseRemove(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
             ).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
-            expect(o.eFactoryInstance).toBe(other)
+            expect(o.getEFactoryInstance()).toBe(other)
         }
         {
-            let mockValue = mock<EPackageInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EPackageInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, EcoreConstants.EPACKAGE__ESUB_PACKAGES, null)
-            expect(o.eSubPackages.contains(value)).toBeTruthy()
+            expect(o.getESubPackages().contains(value)).toBeTruthy()
         }
         {
-            let mockValue = mock<EPackageInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EPackageInternal>()
+            const value = instance(mockValue)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, null)
-            expect(o.eSuperPackage).toBe(value)
+            expect(o.getESuperPackage()).toBe(value)
 
             reset(mockValue)
-            let mockOther = mock<EPackageInternal>()
-            let other = instance(mockOther)
+            const mockOther = mock<EPackageInternal>()
+            const other = instance(mockOther)
             when(mockOther.eResource()).thenReturn(null)
             when(mockOther.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ESUB_PACKAGES, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, null)
-            expect(o.eSuperPackage).toBe(other)
+            expect(o.getESuperPackage()).toBe(other)
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new EPackageImpl()
+        const o = new EPackageImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<EClassifierInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EClassifierInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).thenReturn(null)
 
-            o.eClassifiers.add(value)
+            o.getEClassifiers().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.EPACKAGE__ECLASSIFIERS, null)
 
             // check it was removed
-            expect(o.eClassifiers.contains(value)).toBeFalsy()
+            expect(o.getEClassifiers().contains(value)).toBeFalsy()
         }
         {
-            let mockValue = mock<EFactoryInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EFactoryInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<EPackageInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EPackageInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).thenReturn(null)
 
-            o.eSubPackages.add(value)
+            o.getESubPackages().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.EPACKAGE__ESUB_PACKAGES, null)
 
             // check it was removed
-            expect(o.eSubPackages.contains(value)).toBeFalsy()
+            expect(o.getESubPackages().contains(value)).toBeFalsy()
         }
         {
-            let mockValue = mock<EPackageInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EPackageInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, null)
         }
     })

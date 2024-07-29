@@ -36,11 +36,18 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     }
 
     // get the value of eAnnotations
-    get eAnnotations(): EList<EAnnotation> {
+    getEAnnotations(): EList<EAnnotation> {
         if (this._eAnnotations == null) {
             this._eAnnotations = this.initEAnnotations()
         }
         return this._eAnnotations
+    }
+
+    // set the value of eAnnotations
+    setEAnnotations(newEAnnotations: EList<EAnnotation>) {
+        const l = this.getEAnnotations()
+        l.clear()
+        l.addAll(newEAnnotations)
     }
 
     // getEAnnotation default implementation
@@ -64,7 +71,7 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                return this.eAnnotations
+                return this.getEAnnotations()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -72,11 +79,16 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                this.eAnnotations.clear()
-                this.eAnnotations.addAll(newValue as EList<EAnnotation>)
+                const list = this.getEAnnotations()
+                list.clear()
+                list.addAll(newValue as EList<EAnnotation>)
                 break
             }
             default: {
@@ -88,7 +100,7 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                this.eAnnotations.clear()
+                this.getEAnnotations().clear()
                 break
             }
             default: {
@@ -100,7 +112,7 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                return this.eAnnotations != null && this.eAnnotations.size() != 0
+                return this._eAnnotations && !this._eAnnotations.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)
@@ -122,8 +134,8 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                let list = this.eAnnotations as ENotifyingList<EAnnotation>
-                let end = otherEnd as EAnnotation
+                const list = this.getEAnnotations() as ENotifyingList<EAnnotation>
+                const end = otherEnd as EAnnotation
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -135,8 +147,8 @@ export class EModelElementImpl extends EObjectImpl implements EModelElement {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS: {
-                let list = this.eAnnotations as ENotifyingList<EAnnotation>
-                let end = otherEnd as EAnnotation
+                const list = this.getEAnnotations() as ENotifyingList<EAnnotation>
+                const end = otherEnd as EAnnotation
                 return list.removeWithNotification(end, notifications)
             }
             default: {

@@ -26,293 +26,293 @@ interface EClassInternal extends EClass, EObjectInternal {}
 
 describe("EStructuralFeatureImpl", () => {
     test("eStaticClass", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEStructuralFeature())
     })
 
     test("getDefaultValue", () => {
-        let o = new EStructuralFeatureImpl()
-        expect(() => o.defaultValue).toThrow(Error)
+        const o = new EStructuralFeatureImpl()
+        expect(() => o.getDefaultValue()).toThrow(Error)
     })
 
     test("setDefaultValue", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = null
-        expect(() => (o.defaultValue = value)).toThrow(Error)
+        const o = new EStructuralFeatureImpl()
+        const value = null
+        expect(() => o.setDefaultValue(value)).toThrow(Error)
     })
 
     test("getDefaultValueLiteral", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.defaultValueLiteral).toBe("")
+        expect(o.getDefaultValueLiteral()).toBe("")
     })
 
     test("setDefaultValueLiteral", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = "Test String"
+        const o = new EStructuralFeatureImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.defaultValueLiteral = value
+        o.setDefaultValueLiteral(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getEContainingClass", () => {
         // default
-        let o = new EStructuralFeatureImpl()
-        expect(o.eContainingClass).toBeNull()
+        const o = new EStructuralFeatureImpl()
+        expect(o.getEContainingClass()).toBeNull()
 
         // set a mock container
-        let mockContainer = mock<EObject>()
-        let container = instance(mockContainer)
+        const mockContainer = mock<EObject>()
+        const container = instance(mockContainer)
         o.eSetInternalContainer(container, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS)
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.eContainingClass).toBe(container)
+        expect(o.getEContainingClass()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("getFeatureID", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.featureID).toBe(-1)
+        expect(o.getFeatureID()).toBe(-1)
     })
 
     test("setFeatureID", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = 45
+        const o = new EStructuralFeatureImpl()
+        const value = 45
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.featureID = value
+        o.setFeatureID(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(-1)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(-1)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getChangeable", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isChangeable).toBe(true)
+        expect(o.isChangeable()).toBe(true)
     })
 
     test("setChangeable", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = true
+        const o = new EStructuralFeatureImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.isChangeable = value
+        o.setChangeable(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(true)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(true)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getDerived", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isDerived).toBe(false)
+        expect(o.isDerived()).toBe(false)
     })
 
     test("setDerived", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = true
+        const o = new EStructuralFeatureImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.isDerived = value
+        o.setDerived(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(false)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(false)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getTransient", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isTransient).toBe(false)
+        expect(o.isTransient()).toBe(false)
     })
 
     test("setTransient", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = true
+        const o = new EStructuralFeatureImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.isTransient = value
+        o.setTransient(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(false)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(false)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getUnsettable", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isUnsettable).toBe(false)
+        expect(o.isUnsettable()).toBe(false)
     })
 
     test("setUnsettable", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = true
+        const o = new EStructuralFeatureImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.isUnsettable = value
+        o.setUnsettable(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(false)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(false)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getVolatile", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         // get default value
-        expect(o.isVolatile).toBe(false)
+        expect(o.isVolatile()).toBe(false)
     })
 
     test("setVolatile", () => {
-        let o = new EStructuralFeatureImpl()
-        let value = true
+        const o = new EStructuralFeatureImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.isVolatile = value
+        o.setVolatile(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(false)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(false)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getContainerClass", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         expect(() => o.getContainerClass()).toThrow(Error)
     })
 
     test("eGetFromID", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, true)).toStrictEqual(o.isChangeable)
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, true)).toStrictEqual(o.isChangeable())
         expect(() => o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, false)).toThrow(Error)
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, true)).toStrictEqual(
-            o.defaultValueLiteral
+            o.getDefaultValueLiteral()
         )
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, true)).toStrictEqual(o.isDerived)
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, true)).toStrictEqual(o.isDerived())
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, true)).toStrictEqual(
-            o.eContainingClass
+            o.getEContainingClass()
         )
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, true)).toStrictEqual(o.featureID)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, true)).toStrictEqual(o.isTransient)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, true)).toStrictEqual(o.isUnsettable)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, true)).toStrictEqual(o.isVolatile)
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, true)).toStrictEqual(o.getFeatureID())
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, true)).toStrictEqual(o.isTransient())
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, true)).toStrictEqual(o.isUnsettable())
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, true)).toStrictEqual(o.isVolatile())
     })
 
     test("eSetFromID", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, value)
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, false)).toBe(value)
         }
         expect(() => o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, null)).toThrow(Error)
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, value)
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, false)).toBe(value)
         }
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, value)
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, false)).toBe(value)
         }
         {
-            let value = 45
+            const value = 45
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, value)
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, false)).toBe(value)
         }
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, value)
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, false)).toBe(value)
         }
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, value)
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, false)).toBe(value)
         }
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, value)
             expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE)).toBeFalsy()
         expect(() => o.eIsSetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE)).toThrow(Error)
@@ -326,11 +326,11 @@ describe("EStructuralFeatureImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE)
-            let v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, false)
             expect(v).toBe(true)
         }
         {
@@ -338,83 +338,83 @@ describe("EStructuralFeatureImpl", () => {
         }
         {
             o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL)
-            let v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, false)
             expect(v).toBe("")
         }
         {
             o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED)
-            let v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, false)
             expect(v).toBe(false)
         }
         {
             o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID)
-            let v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, false)
             expect(v).toBe(-1)
         }
         {
             o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT)
-            let v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, false)
             expect(v).toBe(false)
         }
         {
             o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE)
-            let v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, false)
             expect(v).toBe(false)
         }
         {
             o.eUnsetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE)
-            let v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, false)
             expect(v).toBe(false)
         }
     })
 
     test("eInvokeFromID", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error)
         expect(() => o.eInvokeFromID(EcoreConstants.ESTRUCTURAL_FEATURE__GET_CONTAINER_CLASS, null)).toThrow(Error)
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EClassInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EClassInternal>()
+            const value = instance(mockValue)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, null)
-            expect(o.eContainingClass).toBe(value)
+            expect(o.getEContainingClass()).toBe(value)
 
             reset(mockValue)
-            let mockOther = mock<EClassInternal>()
-            let other = instance(mockOther)
+            const mockOther = mock<EClassInternal>()
+            const other = instance(mockOther)
             when(mockOther.eResource()).thenReturn(null)
             when(mockOther.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, null)
-            expect(o.eContainingClass).toBe(other)
+            expect(o.getEContainingClass()).toBe(other)
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new EStructuralFeatureImpl()
+        const o = new EStructuralFeatureImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EClassInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EClassInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, null)
         }
     })

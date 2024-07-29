@@ -24,10 +24,10 @@ export class EmptyPackageImpl extends ecore.EPackageExt implements EmptyPackage 
 
     private constructor() {
         super()
-        this.name = EmptyConstants.eNAME
-        this.nsPrefix = EmptyConstants.eNS_PREFIX
-        this.nsURI = EmptyConstants.eNS_URI
-        this.eFactoryInstance = getEmptyFactory()
+        this.setName(EmptyConstants.eNAME)
+        this.setNsPrefix(EmptyConstants.eNS_PREFIX)
+        this.setNsURI(EmptyConstants.eNS_URI)
+        this.setEFactoryInstance(getEmptyFactory())
         this.createPackageContents()
         this.initializePackageContents()
         this.createResource()

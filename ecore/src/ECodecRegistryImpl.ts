@@ -1,3 +1,12 @@
+// *****************************************************************************
+// Copyright(c) 2021 MASA Group
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// *****************************************************************************
+
 import { BinaryCodec } from "./BinaryCodec.js"
 import { ECodec } from "./ECodec.js"
 import { ECodecRegistry } from "./ECodecRegistry.js"
@@ -34,9 +43,9 @@ export class ECodecRegistryImpl implements ECodecRegistry {
         if (factory) {
             return factory
         }
-        let ndx = uri.path.lastIndexOf(".")
+        const ndx = uri.path.lastIndexOf(".")
         if (ndx != -1) {
-            let extension = uri.path.slice(ndx + 1)
+            const extension = uri.path.slice(ndx + 1)
             factory = this._extensionToCodec.get(extension)
             if (factory) {
                 return factory

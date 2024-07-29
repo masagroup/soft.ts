@@ -14,18 +14,19 @@ export function isEDataType(e: EClassifier): e is EDataType {
 }
 
 export interface EDataTypeInternal extends EDataType {
-    defaultValue: any
+    getDefaultValue(): any
+    setDefaultValue(newDefaultValue: any): void
 }
 
 export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
     private _defaultValue: any
 
-    get defaultValue(): any {
+    getDefaultValue(): any {
         return this._defaultValue
     }
 
-    set defaultValue(newDefaultValue: any) {
-        let oldDefaultValue = this._defaultValue
+    setDefaultValue(newDefaultValue: any): void {
+        const oldDefaultValue = this._defaultValue
         this._defaultValue = newDefaultValue
         if (this.eNotificationRequired) {
             this.eNotify(

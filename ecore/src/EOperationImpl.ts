@@ -44,7 +44,7 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
     }
 
     // get the value of eContainingClass
-    get eContainingClass(): EClass {
+    getEContainingClass(): EClass {
         if (this.eContainerFeatureID() == EcoreConstants.EOPERATION__ECONTAINING_CLASS) {
             return this.eContainer() as EClass
         }
@@ -52,11 +52,18 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
     }
 
     // get the value of eExceptions
-    get eExceptions(): EList<EClassifier> {
+    getEExceptions(): EList<EClassifier> {
         if (this._eExceptions == null) {
             this._eExceptions = this.initEExceptions()
         }
         return this._eExceptions
+    }
+
+    // set the value of eExceptions
+    setEExceptions(newEExceptions: EList<EClassifier>) {
+        const l = this.getEExceptions()
+        l.clear()
+        l.addAll(newEExceptions)
     }
 
     // unSetEExceptions unset the value of _eExceptions
@@ -67,23 +74,30 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
     }
 
     // get the value of eParameters
-    get eParameters(): EList<EParameter> {
+    getEParameters(): EList<EParameter> {
         if (this._eParameters == null) {
             this._eParameters = this.initEParameters()
         }
         return this._eParameters
     }
 
+    // set the value of eParameters
+    setEParameters(newEParameters: EList<EParameter>) {
+        const l = this.getEParameters()
+        l.clear()
+        l.addAll(newEParameters)
+    }
+
     // get the value of operationID
-    get operationID(): number {
+    getOperationID(): number {
         return this._operationID
     }
 
     // set the value of operationID
-    set operationID(newOperationID: number) {
-        let oldOperationID = this._operationID
+    setOperationID(newOperationID: number): void {
+        const oldOperationID = this._operationID
         this._operationID = newOperationID
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
@@ -129,18 +143,17 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EOPERATION__ECONTAINING_CLASS: {
-                return this.eContainingClass
+                return this.getEContainingClass()
             }
             case EcoreConstants.EOPERATION__EEXCEPTIONS: {
-                return !resolve && isEObjectList(this.eExceptions)
-                    ? this.eExceptions.getUnResolvedList()
-                    : this.eExceptions
+                const list = this.getEExceptions()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                return this.eParameters
+                return this.getEParameters()
             }
             case EcoreConstants.EOPERATION__OPERATION_ID: {
-                return this.operationID
+                return this.getOperationID()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -148,20 +161,26 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EOPERATION__EEXCEPTIONS: {
-                this.eExceptions.clear()
-                this.eExceptions.addAll(newValue as EList<EClassifier>)
+                const list = this.getEExceptions()
+                list.clear()
+                list.addAll(newValue as EList<EClassifier>)
                 break
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                this.eParameters.clear()
-                this.eParameters.addAll(newValue as EList<EParameter>)
+                const list = this.getEParameters()
+                list.clear()
+                list.addAll(newValue as EList<EParameter>)
                 break
             }
             case EcoreConstants.EOPERATION__OPERATION_ID: {
-                this.operationID = newValue as number
+                this.setOperationID(newValue as number)
                 break
             }
             default: {
@@ -177,11 +196,11 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
                 break
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                this.eParameters.clear()
+                this.getEParameters().clear()
                 break
             }
             case EcoreConstants.EOPERATION__OPERATION_ID: {
-                this.operationID = -1
+                this.setOperationID(-1)
                 break
             }
             default: {
@@ -193,13 +212,13 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EOPERATION__ECONTAINING_CLASS: {
-                return this.eContainingClass != null
+                return this.getEContainingClass() != null
             }
             case EcoreConstants.EOPERATION__EEXCEPTIONS: {
-                return this.eExceptions != null && this.eExceptions.size() != 0
+                return this._eExceptions && !this._eExceptions.isEmpty()
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                return this.eParameters != null && this.eParameters.size() != 0
+                return this._eParameters && !this._eParameters.isEmpty()
             }
             case EcoreConstants.EOPERATION__OPERATION_ID: {
                 return this._operationID != -1
@@ -231,8 +250,8 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
                 return this.eBasicSetContainer(otherEnd, EcoreConstants.EOPERATION__ECONTAINING_CLASS, msgs)
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                let list = this.eParameters as ENotifyingList<EParameter>
-                let end = otherEnd as EParameter
+                const list = this.getEParameters() as ENotifyingList<EParameter>
+                const end = otherEnd as EParameter
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -247,8 +266,8 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
                 return this.eBasicSetContainer(null, EcoreConstants.EOPERATION__ECONTAINING_CLASS, notifications)
             }
             case EcoreConstants.EOPERATION__EPARAMETERS: {
-                let list = this.eParameters as ENotifyingList<EParameter>
-                let end = otherEnd as EParameter
+                const list = this.getEParameters() as ENotifyingList<EParameter>
+                const end = otherEnd as EParameter
                 return list.removeWithNotification(end, notifications)
             }
             default: {

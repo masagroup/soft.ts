@@ -7,17 +7,16 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import { URI } from "./URI.js"
 
 export interface EURIHandler {
     canHandle(uri: URI): boolean
 
-    createReadStream(uri: URI): fs.ReadStream
+    createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null>
 
-    createWriteStream(uri: URI): fs.WriteStream
+    createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null>
 
-    readSync(uri: URI): null | Buffer
+    readSync(uri: URI): Uint8Array
 
-    writeSync(uri: URI, s: Buffer): void
+    writeSync(uri: URI, arr: Uint8Array): void
 }

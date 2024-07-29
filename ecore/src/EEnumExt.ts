@@ -1,18 +1,18 @@
 import { EEnum, EEnumImpl, EEnumLiteral } from "./internal.js"
 
 export function isEEnum(o: any): o is EEnum {
-    return o == undefined ? undefined : "eLiterals" in o
+    return o == undefined ? undefined : "getELiterals" in o
 }
 
 export class EEnumExt extends EEnumImpl {
-    get defaultValue(): any {
-        return this.eLiterals.isEmpty() ? null : this.eLiterals.get(0).value
+    getDefaultValue(): any {
+        return this.getELiterals().isEmpty() ? null : this.getELiterals().get(0).getValue()
     }
 
     // getEEnumLiteralByLiteral default implementation
     getEEnumLiteralByLiteral(literal: string): EEnumLiteral {
-        for (const eLiteral of this.eLiterals) {
-            if (eLiteral.literal == literal) {
+        for (const eLiteral of this.getELiterals()) {
+            if (eLiteral.getLiteral() == literal) {
                 return eLiteral
             }
         }
@@ -21,8 +21,8 @@ export class EEnumExt extends EEnumImpl {
 
     // getEEnumLiteralByName default implementation
     getEEnumLiteralByName(name: string): EEnumLiteral {
-        for (const eLiteral of this.eLiterals) {
-            if (eLiteral.name == name) {
+        for (const eLiteral of this.getELiterals()) {
+            if (eLiteral.getName() == name) {
                 return eLiteral
             }
         }
@@ -31,8 +31,8 @@ export class EEnumExt extends EEnumImpl {
 
     // getEEnumLiteralByValue default implementation
     getEEnumLiteralByValue(value: number): EEnumLiteral {
-        for (const eLiteral of this.eLiterals) {
-            if (eLiteral.value == value) {
+        for (const eLiteral of this.getELiterals()) {
+            if (eLiteral.getValue() == value) {
                 return eLiteral
             }
         }

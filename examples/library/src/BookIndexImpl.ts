@@ -27,14 +27,36 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
 
     // get the value of key
     get key(): string {
-        return this._key
+        return this.getKey()
     }
 
     // set the value of key
     set key(newKey: string) {
-        let oldKey = this._key
+        this.setKey(newKey)
+    }
+
+    // get the value of value
+    get value(): ecore.EList<number> {
+        return this.getValue()
+    }
+
+    // set the value of value
+    set value(newValue: ecore.EList<number>) {
+        const l = this.getValue()
+        l.clear()
+        l.addAll(newValue)
+    }
+
+    // get the value of key
+    getKey(): string {
+        return this._key
+    }
+
+    // set the value of key
+    setKey(newKey: string): void {
+        const oldKey = this._key
         this._key = newKey
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK_INDEX__KEY, oldKey, newKey)
             )
@@ -42,20 +64,27 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
     }
 
     // get the value of value
-    get value(): ecore.EList<number> {
+    getValue(): ecore.EList<number> {
         if (this._value == null) {
             this._value = new ecore.BasicEDataTypeList<number>(this, LibraryConstants.BOOK_INDEX__VALUE)
         }
         return this._value
     }
 
+    // set the value of value
+    setValue(newValue: ecore.EList<number>) {
+        const l = this.getValue()
+        l.clear()
+        l.addAll(newValue)
+    }
+
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.BOOK_INDEX__KEY: {
-                return this.key
+                return this.getKey()
             }
             case LibraryConstants.BOOK_INDEX__VALUE: {
-                return this.value
+                return this.getValue()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -63,15 +92,20 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.BOOK_INDEX__KEY: {
-                this.key = newValue as string
+                this.setKey(newValue as string)
                 break
             }
             case LibraryConstants.BOOK_INDEX__VALUE: {
-                this.value.clear()
-                this.value.addAll(newValue as ecore.EList<number>)
+                const list = this.getValue()
+                list.clear()
+                list.addAll(newValue as ecore.EList<number>)
                 break
             }
             default: {
@@ -83,11 +117,11 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.BOOK_INDEX__KEY: {
-                this.key = ""
+                this.setKey("")
                 break
             }
             case LibraryConstants.BOOK_INDEX__VALUE: {
-                this.value.clear()
+                this.getValue().clear()
                 break
             }
             default: {
@@ -102,7 +136,7 @@ export class BookIndexImpl extends ecore.EObjectImpl implements BookIndex {
                 return this._key != ""
             }
             case LibraryConstants.BOOK_INDEX__VALUE: {
-                return this.value != null && this.value.size() != 0
+                return this._value && !this._value.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)

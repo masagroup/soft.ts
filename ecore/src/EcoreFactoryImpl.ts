@@ -60,7 +60,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     create(eClass: EClass): EObject {
-        switch (eClass.classifierID) {
+        switch (eClass.getClassifierID()) {
             case EcoreConstants.EATTRIBUTE:
                 return this.createEAttribute()
             case EcoreConstants.EANNOTATION:
@@ -92,7 +92,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
             case EcoreConstants.ETYPE_PARAMETER:
                 return this.createETypeParameter()
             default:
-                throw new Error("create: " + eClass.classifierID + " not found")
+                throw new Error(`create: ${eClass.getClassifierID()} not found`)
         }
     }
 
@@ -101,18 +101,18 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEAttributeFromContainer(eContainer: EClass): EAttribute {
-        let element = new EAttributeExt()
+        const element = new EAttributeExt()
         if (eContainer != null) {
-            eContainer.eStructuralFeatures.add(element)
+            eContainer.getEStructuralFeatures().add(element)
         }
         return element
     }
 
     createEAttributeFromContainerAndClassID(eContainer: EClass, classID: number): EAttribute {
-        let element = new EAttributeExt()
-        element.featureID = classID
+        const element = new EAttributeExt()
+        element.setFeatureID(classID)
         if (eContainer != null) {
-            eContainer.eStructuralFeatures.add(element)
+            eContainer.getEStructuralFeatures().add(element)
         }
         return element
     }
@@ -122,9 +122,9 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEAnnotationFromContainer(eContainer: EModelElement): EAnnotation {
-        let element = new EAnnotationImpl()
+        const element = new EAnnotationImpl()
         if (eContainer != null) {
-            eContainer.eAnnotations.add(element)
+            eContainer.getEAnnotations().add(element)
         }
         return element
     }
@@ -134,18 +134,18 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEClassFromContainer(eContainer: EPackage): EClass {
-        let element = new EClassExt()
+        const element = new EClassExt()
         if (eContainer != null) {
-            eContainer.eClassifiers.add(element)
+            eContainer.getEClassifiers().add(element)
         }
         return element
     }
 
     createEClassFromContainerAndClassID(eContainer: EPackage, classID: number): EClass {
-        let element = new EClassExt()
-        element.classifierID = classID
+        const element = new EClassExt()
+        element.setClassifierID(classID)
         if (eContainer != null) {
-            eContainer.eClassifiers.add(element)
+            eContainer.getEClassifiers().add(element)
         }
         return element
     }
@@ -155,18 +155,18 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEDataTypeFromContainer(eContainer: EPackage): EDataType {
-        let element = new EDataTypeExt()
+        const element = new EDataTypeExt()
         if (eContainer != null) {
-            eContainer.eClassifiers.add(element)
+            eContainer.getEClassifiers().add(element)
         }
         return element
     }
 
     createEDataTypeFromContainerAndClassID(eContainer: EPackage, classID: number): EDataType {
-        let element = new EDataTypeExt()
-        element.classifierID = classID
+        const element = new EDataTypeExt()
+        element.setClassifierID(classID)
         if (eContainer != null) {
-            eContainer.eClassifiers.add(element)
+            eContainer.getEClassifiers().add(element)
         }
         return element
     }
@@ -176,18 +176,18 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEEnumFromContainer(eContainer: EPackage): EEnum {
-        let element = new EEnumExt()
+        const element = new EEnumExt()
         if (eContainer != null) {
-            eContainer.eClassifiers.add(element)
+            eContainer.getEClassifiers().add(element)
         }
         return element
     }
 
     createEEnumFromContainerAndClassID(eContainer: EPackage, classID: number): EEnum {
-        let element = new EEnumExt()
-        element.classifierID = classID
+        const element = new EEnumExt()
+        element.setClassifierID(classID)
         if (eContainer != null) {
-            eContainer.eClassifiers.add(element)
+            eContainer.getEClassifiers().add(element)
         }
         return element
     }
@@ -197,9 +197,9 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEEnumLiteralFromContainer(eContainer: EEnum): EEnumLiteral {
-        let element = new EEnumLiteralExt()
+        const element = new EEnumLiteralExt()
         if (eContainer != null) {
-            eContainer.eLiterals.add(element)
+            eContainer.getELiterals().add(element)
         }
         return element
     }
@@ -209,9 +209,9 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEFactoryFromContainer(eContainer: EPackage): EFactory {
-        let element = new EFactoryExt()
+        const element = new EFactoryExt()
         if (eContainer != null) {
-            eContainer.eFactoryInstance = element
+            eContainer.setEFactoryInstance(element)
         }
         return element
     }
@@ -225,18 +225,18 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEOperationFromContainer(eContainer: EClass): EOperation {
-        let element = new EOperationExt()
+        const element = new EOperationExt()
         if (eContainer != null) {
-            eContainer.eOperations.add(element)
+            eContainer.getEOperations().add(element)
         }
         return element
     }
 
     createEOperationFromContainerAndClassID(eContainer: EClass, classID: number): EOperation {
-        let element = new EOperationExt()
-        element.operationID = classID
+        const element = new EOperationExt()
+        element.setOperationID(classID)
         if (eContainer != null) {
-            eContainer.eOperations.add(element)
+            eContainer.getEOperations().add(element)
         }
         return element
     }
@@ -246,9 +246,9 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEPackageFromContainer(eContainer: EPackage): EPackage {
-        let element = new EPackageExt()
+        const element = new EPackageExt()
         if (eContainer != null) {
-            eContainer.eSubPackages.add(element)
+            eContainer.getESubPackages().add(element)
         }
         return element
     }
@@ -258,9 +258,9 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEParameterFromContainer(eContainer: EOperation): EParameter {
-        let element = new EParameterImpl()
+        const element = new EParameterImpl()
         if (eContainer != null) {
-            eContainer.eParameters.add(element)
+            eContainer.getEParameters().add(element)
         }
         return element
     }
@@ -270,18 +270,18 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEReferenceFromContainer(eContainer: EClass): EReference {
-        let element = new EReferenceExt()
+        const element = new EReferenceExt()
         if (eContainer != null) {
-            eContainer.eStructuralFeatures.add(element)
+            eContainer.getEStructuralFeatures().add(element)
         }
         return element
     }
 
     createEReferenceFromContainerAndClassID(eContainer: EClass, classID: number): EReference {
-        let element = new EReferenceExt()
-        element.featureID = classID
+        const element = new EReferenceExt()
+        element.setFeatureID(classID)
         if (eContainer != null) {
-            eContainer.eStructuralFeatures.add(element)
+            eContainer.getEStructuralFeatures().add(element)
         }
         return element
     }
@@ -299,7 +299,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createFromString(eDataType: EDataType, literalValue: string): any {
-        switch (eDataType.classifierID) {
+        switch (eDataType.getClassifierID()) {
             case EcoreConstants.EBIG_DECIMAL:
                 return this.createEBigDecimalFromString(eDataType, literalValue)
             case EcoreConstants.EBIG_INTEGER:
@@ -347,12 +347,12 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
             case EcoreConstants.ESTRING:
                 return this.createEStringFromString(eDataType, literalValue)
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+                throw new Error(`The datatype '${eDataType.getName()}' is not a valid classifier`)
         }
     }
 
     convertToString(eDataType: EDataType, instanceValue: any): string {
-        switch (eDataType.classifierID) {
+        switch (eDataType.getClassifierID()) {
             case EcoreConstants.EBIG_DECIMAL:
                 return this.convertEBigDecimalToString(eDataType, instanceValue)
             case EcoreConstants.EBIG_INTEGER:
@@ -400,7 +400,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
             case EcoreConstants.ESTRING:
                 return this.convertEStringToString(eDataType, instanceValue)
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+                throw new Error(`The datatype '${eDataType.getName()}' is not a valid classifier`)
         }
     }
 

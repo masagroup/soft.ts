@@ -12,11 +12,11 @@ import { EAdapter, ENotification, ENotifier } from "./internal.js"
 export abstract class AbstractEAdapter implements EAdapter {
     private _target: ENotifier = null
 
-    get target(): ENotifier {
+    getTarget(): ENotifier {
         return this._target
     }
 
-    set target(notifier: ENotifier) {
+    setTarget(notifier: ENotifier) {
         this._target = notifier
     }
 

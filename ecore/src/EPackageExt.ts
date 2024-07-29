@@ -42,8 +42,8 @@ class EPackageExtAdapter extends AbstractEAdapter {
 
     notifyChanged(notification: ENotification): void {
         if (
-            notification.eventType != EventType.REMOVING_ADAPTER &&
-            notification.featureID == EcoreConstants.EPACKAGE__ECLASSIFIERS
+            notification.getEventType() != EventType.REMOVING_ADAPTER &&
+            notification.getFeatureID() == EcoreConstants.EPACKAGE__ECLASSIFIERS
         ) {
             this._pack._nameToClassifier = null
         }
@@ -56,16 +56,16 @@ export class EPackageExt extends EPackageImpl {
 
     constructor() {
         super()
-        this.eFactoryInstance = new EFactoryExt()
+        this.setEFactoryInstance(new EFactoryExt())
         this._adapter = new EPackageExtAdapter(this)
-        this.eAdapters.add(this._adapter)
+        this.eAdapters().add(this._adapter)
     }
 
     getEClassifier(name: string): EClassifier {
         if (!this._nameToClassifier) {
             this._nameToClassifier = new Map<string, EClassifier>()
-            for (const classifier of this.eClassifiers) {
-                this._nameToClassifier.set(classifier.name, classifier)
+            for (const classifier of this.getEClassifiers()) {
+                this._nameToClassifier.set(classifier.getName(), classifier)
             }
         }
         return this._nameToClassifier.get(name)
@@ -74,9 +74,9 @@ export class EPackageExt extends EPackageImpl {
     protected createResource(): EResource {
         let resource = this.eResource()
         if (!resource) {
-            let uri = new URI(this.nsURI)
+            const uri = new URI(this.getNsURI())
             resource = new EResourceImpl()
-            resource.eURI = uri
+            resource.setURI(uri)
             resource.eContents().add(this)
         }
         return resource
@@ -89,10 +89,10 @@ export class EPackageExt extends EPackageImpl {
         isAbstract: boolean,
         isInterface: boolean
     ) {
-        eClass.name = name
-        eClass.isAbstract = isAbstract
-        eClass.isInterface = isInterface
-        eClass.instanceTypeName = instanceTypeName
+        eClass.setName(name)
+        eClass.setAbstract(isAbstract)
+        eClass.setInterface(isInterface)
+        eClass.setInstanceTypeName(instanceTypeName)
     }
 
     protected initEStructuralFeature(
@@ -110,18 +110,18 @@ export class EPackageExt extends EPackageImpl {
         isDerived: boolean,
         isOrdered: boolean
     ) {
-        aFeature.name = name
-        aFeature.eType = aClassifier
-        aFeature.defaultValueLiteral = defaultValue
-        aFeature.lowerBound = lowerBound
-        aFeature.upperBound = upperBound
-        aFeature.isTransient = isTransient
-        aFeature.isVolatile = isVolatile
-        aFeature.isChangeable = isChangeable
-        aFeature.isUnsettable = isUnSettable
-        aFeature.isUnique = isUnique
-        aFeature.isDerived = isDerived
-        aFeature.isOrdered = isOrdered
+        aFeature.setName(name)
+        aFeature.setEType(aClassifier)
+        aFeature.setDefaultValueLiteral(defaultValue)
+        aFeature.setLowerBound(lowerBound)
+        aFeature.setUpperBound(upperBound)
+        aFeature.setTransient(isTransient)
+        aFeature.setVolatile(isVolatile)
+        aFeature.setChangeable(isChangeable)
+        aFeature.setUnsettable(isUnSettable)
+        aFeature.setUnique(isUnique)
+        aFeature.setDerived(isDerived)
+        aFeature.setOrdered(isOrdered)
     }
 
     protected initEAttribute(
@@ -155,7 +155,7 @@ export class EPackageExt extends EPackageImpl {
             isDerived,
             isOrdered
         )
-        aAttribute.isID = isID
+        aAttribute.setID(isID)
     }
 
     protected initEReference(
@@ -191,9 +191,9 @@ export class EPackageExt extends EPackageImpl {
             isDerived,
             isOrdered
         )
-        aReference.isContainment = isContainment
-        aReference.isResolveProxies = isResolveProxies
-        aReference.eOpposite = aOtherEnd
+        aReference.setContainment(isContainment)
+        aReference.setResolveProxies(isResolveProxies)
+        aReference.setEOpposite(aOtherEnd)
     }
 
     protected initEOperation(
@@ -205,12 +205,12 @@ export class EPackageExt extends EPackageImpl {
         isUnique: boolean,
         isOrdered: boolean
     ) {
-        aOperation.name = name
-        aOperation.eType = aType
-        aOperation.lowerBound = lowerBound
-        aOperation.upperBound = upperBound
-        aOperation.isUnique = isUnique
-        aOperation.isOrdered = isOrdered
+        aOperation.setName(name)
+        aOperation.setEType(aType)
+        aOperation.setLowerBound(lowerBound)
+        aOperation.setUpperBound(upperBound)
+        aOperation.setUnique(isUnique)
+        aOperation.setOrdered(isOrdered)
     }
 
     protected addEParameter(
@@ -222,18 +222,18 @@ export class EPackageExt extends EPackageImpl {
         isUnique: boolean,
         isOrdered: boolean
     ) {
-        let parameter = getEcoreFactory().createEParameterFromContainer(aOperation)
-        parameter.name = name
-        parameter.eType = aType
-        parameter.lowerBound = lowerBound
-        parameter.upperBound = upperBound
-        parameter.isUnique = isUnique
-        parameter.isOrdered = isOrdered
+        const parameter = getEcoreFactory().createEParameterFromContainer(aOperation)
+        parameter.setName(name)
+        parameter.setEType(aType)
+        parameter.setLowerBound(lowerBound)
+        parameter.setUpperBound(upperBound)
+        parameter.setUnique(isUnique)
+        parameter.setOrdered(isOrdered)
     }
 
     protected initEClassifier(aClassifier: EClassifier, name: string, instanceTypeName: string) {
-        aClassifier.name = name
-        aClassifier.instanceTypeName = instanceTypeName
+        aClassifier.setName(name)
+        aClassifier.setInstanceTypeName(instanceTypeName)
     }
 
     protected initEDataType(
@@ -244,10 +244,10 @@ export class EPackageExt extends EPackageImpl {
         isSerializable: boolean
     ) {
         this.initEClassifier(aDataType, name, instanceTypeName)
-        aDataType.isSerializable = isSerializable
+        aDataType.setSerializable(isSerializable)
         if (defaultValue.length > 0) {
-            let aDataTypeInternal = aDataType as EDataTypeInternal
-            aDataTypeInternal.defaultValue = this.eFactoryInstance.createFromString(aDataType, defaultValue)
+            const aDataTypeInternal = aDataType as EDataTypeInternal
+            aDataTypeInternal.setDefaultValue(this._eFactoryInstance.createFromString(aDataType, defaultValue))
         }
     }
 
@@ -256,9 +256,9 @@ export class EPackageExt extends EPackageImpl {
     }
 
     protected addEEnumLiteral(aEnum: EEnum, name: string, literal: string, value: number) {
-        let enumLiteral = getEcoreFactory().createEEnumLiteralFromContainer(aEnum)
-        enumLiteral.name = name
-        enumLiteral.literal = literal
-        enumLiteral.value = value
+        const enumLiteral = getEcoreFactory().createEEnumLiteralFromContainer(aEnum)
+        enumLiteral.setName(name)
+        enumLiteral.setLiteral(literal)
+        enumLiteral.setValue(value)
     }
 }

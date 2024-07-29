@@ -13,9 +13,8 @@ import * as ecore from "@masagroup/ecore"
 import { Borrower } from "./internal.js"
 
 export interface Lendable extends ecore.EObject {
-    // Attributes
+    // copies property
     copies: number
-
-    // References
+    // borrowers property
     readonly borrowers: ecore.EList<Borrower>
 }

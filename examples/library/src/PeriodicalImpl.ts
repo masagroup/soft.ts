@@ -28,14 +28,34 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
 
     // get the value of issuesPerYear
     get issuesPerYear(): number {
-        return this._issuesPerYear
+        return this.getIssuesPerYear()
     }
 
     // set the value of issuesPerYear
     set issuesPerYear(newIssuesPerYear: number) {
-        let oldIssuesPerYear = this._issuesPerYear
+        this.setIssuesPerYear(newIssuesPerYear)
+    }
+
+    // get the value of title
+    get title(): string {
+        return this.getTitle()
+    }
+
+    // set the value of title
+    set title(newTitle: string) {
+        this.setTitle(newTitle)
+    }
+
+    // get the value of issuesPerYear
+    getIssuesPerYear(): number {
+        return this._issuesPerYear
+    }
+
+    // set the value of issuesPerYear
+    setIssuesPerYear(newIssuesPerYear: number): void {
+        const oldIssuesPerYear = this._issuesPerYear
         this._issuesPerYear = newIssuesPerYear
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -49,15 +69,15 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     }
 
     // get the value of title
-    get title(): string {
+    getTitle(): string {
         return this._title
     }
 
     // set the value of title
-    set title(newTitle: string) {
-        let oldTitle = this._title
+    setTitle(newTitle: string): void {
+        const oldTitle = this._title
         this._title = newTitle
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -73,10 +93,10 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.PERIODICAL__ISSUES_PER_YEAR: {
-                return this.issuesPerYear
+                return this.getIssuesPerYear()
             }
             case LibraryConstants.PERIODICAL__TITLE: {
-                return this.title
+                return this.getTitle()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -84,14 +104,18 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.PERIODICAL__ISSUES_PER_YEAR: {
-                this.issuesPerYear = newValue as number
+                this.setIssuesPerYear(newValue as number)
                 break
             }
             case LibraryConstants.PERIODICAL__TITLE: {
-                this.title = newValue as string
+                this.setTitle(newValue as string)
                 break
             }
             default: {
@@ -103,11 +127,11 @@ export class PeriodicalImpl extends ItemImpl implements Periodical {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.PERIODICAL__ISSUES_PER_YEAR: {
-                this.issuesPerYear = 0
+                this.setIssuesPerYear(0)
                 break
             }
             case LibraryConstants.PERIODICAL__TITLE: {
-                this.title = ""
+                this.setTitle("")
                 break
             }
             default: {

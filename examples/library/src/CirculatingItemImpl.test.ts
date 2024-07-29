@@ -19,29 +19,29 @@ interface BorrowerInternal extends Borrower, ecore.EObjectInternal {}
 
 describe("CirculatingItemImpl", () => {
     test("eStaticClass", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getCirculatingItem())
     })
 
     test("getBorrowers", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         expect(o.borrowers).not.toBeNull()
     })
 
     test("getCopies", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         // get default value
         expect(o.copies).toBe(0)
     })
 
     test("setCopies", () => {
-        let o = new CirculatingItemImpl()
-        let value = 45
+        const o = new CirculatingItemImpl()
+        const value = 45
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.copies = value
@@ -49,21 +49,21 @@ describe("CirculatingItemImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(0)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(0)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("eDerivedFeatureID", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         {
-            let mockClass = mock<ecore.EClass>()
-            let cls = instance(mockClass)
+            const mockClass = mock<ecore.EClass>()
+            const cls = instance(mockClass)
             expect(o.eDerivedFeatureID(cls, 1)).toBe(1)
         }
         {
-            let cls = getLibraryPackage().getLendable()
+            const cls = getLibraryPackage().getLendable()
             expect(o.eDerivedFeatureID(cls, -1)).toBe(-1)
             expect(o.eDerivedFeatureID(cls, LibraryConstants.LENDABLE__COPIES)).toBe(
                 LibraryConstants.CIRCULATING_ITEM__COPIES
@@ -75,7 +75,7 @@ describe("CirculatingItemImpl", () => {
     })
 
     test("eGetFromID", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.CIRCULATING_ITEM__BORROWERS, true)).toStrictEqual(o.borrowers)
         expect(
@@ -88,13 +88,13 @@ describe("CirculatingItemImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<BorrowerInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Borrower>([value])
+            const mockValue = mock<BorrowerInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Borrower>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eInverseAdd(o, LibraryConstants.BORROWER__BORROWED, anything())).thenReturn(null)
 
@@ -107,66 +107,66 @@ describe("CirculatingItemImpl", () => {
         }
 
         {
-            let value = 45
+            const value = 45
             o.eSetFromID(LibraryConstants.CIRCULATING_ITEM__COPIES, value)
             expect(o.eGetFromID(LibraryConstants.CIRCULATING_ITEM__COPIES, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.CIRCULATING_ITEM__BORROWERS)).toBeFalsy()
         expect(o.eIsSetFromID(LibraryConstants.CIRCULATING_ITEM__COPIES)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.CIRCULATING_ITEM__BORROWERS)
-            let v = o.eGetFromID(LibraryConstants.CIRCULATING_ITEM__BORROWERS, false)
+            const v = o.eGetFromID(LibraryConstants.CIRCULATING_ITEM__BORROWERS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Borrower>
+            const l = v as ecore.EList<Borrower>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
             o.eUnsetFromID(LibraryConstants.CIRCULATING_ITEM__COPIES)
-            let v = o.eGetFromID(LibraryConstants.CIRCULATING_ITEM__COPIES, false)
+            const v = o.eGetFromID(LibraryConstants.CIRCULATING_ITEM__COPIES, false)
             expect(v).toBe(0)
         }
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<BorrowerInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<BorrowerInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, LibraryConstants.CIRCULATING_ITEM__BORROWERS, null)
             expect(o.borrowers.contains(value)).toBeTruthy()
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new CirculatingItemImpl()
+        const o = new CirculatingItemImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<BorrowerInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<BorrowerInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, LibraryConstants.BORROWER__BORROWED, anything())).thenReturn(null)
 
             o.borrowers.add(value)

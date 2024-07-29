@@ -36,15 +36,15 @@ class ResourcesList extends AbstractNotifyingList<EResource> {
         super()
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._resourceSet
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return EResourceSetConstants.RESOURCE_SET__RESOURCES
     }
 
@@ -102,28 +102,28 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     }
 
     createResource(uri: URI): EResource {
-        let resource = new EResourceImpl()
-        resource.eURI = uri
+        const resource = new EResourceImpl()
+        resource.setURI(uri)
         this._resources.add(resource)
         return resource
     }
 
     getResource(uri: URI, loadOnDemand: boolean): EResource {
         if (this._uriResourceMap) {
-            let resource = this._uriResourceMap.get(uri.toString())
+            const resource = this._uriResourceMap.get(uri.toString())
             if (resource) {
-                if (loadOnDemand && !resource.isLoaded) {
+                if (loadOnDemand && !resource.isLoaded()) {
                     resource.loadSync()
                 }
                 return resource
             }
         }
 
-        let normalizedURI = this._uriConverter.normalize(uri)
+        const normalizedURI = this._uriConverter.normalize(uri)
         for (const resource of this._resources) {
-            let resourceURI = this._uriConverter.normalize(resource.eURI)
+            const resourceURI = this._uriConverter.normalize(resource.getURI())
             if (resourceURI.toString() == normalizedURI.toString()) {
-                if (loadOnDemand && !resource.isLoaded) {
+                if (loadOnDemand && !resource.isLoaded()) {
                     resource.loadSync()
                 }
                 if (this._uriResourceMap) {
@@ -133,11 +133,11 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
             }
         }
 
-        let ePackage = this.getPackageRegistry().getPackage(uri.toString())
+        const ePackage = this.getPackageRegistry().getPackage(uri.toString())
         if (ePackage) return ePackage.eResource()
 
         if (loadOnDemand) {
-            let resource = this.createResource(uri)
+            const resource = this.createResource(uri)
             if (resource) {
                 resource.loadSync()
             }
@@ -150,75 +150,63 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         return null
     }
 
-    getResourceAsync(uri: URI, loadOnDemand: boolean): Promise<EResource> {
-        let rs = this
-        return new Promise(function (resolve, reject) {
-            if (rs._uriResourceMap) {
-                let resource = rs._uriResourceMap.get(uri.toString())
-                if (resource) {
-                    if (loadOnDemand && !resource.isLoaded) {
-                        resource.load().then(function () {
-                            resolve(resource)
-                        }, reject)
-                    } else {
-                        resolve(resource)
-                    }
-                    return
+    async getResourceAsync(uri: URI, loadOnDemand: boolean): Promise<EResource> {
+        if (this._uriResourceMap) {
+            const resource = this._uriResourceMap.get(uri.toString())
+            if (resource) {
+                if (loadOnDemand && !resource.isLoaded()) {
+                    await resource.load()
                 }
+                return resource
             }
+        }
 
-            let normalizedURI = rs._uriConverter.normalize(uri)
-            for (const resource of rs._resources) {
-                let resourceURI = rs._uriConverter.normalize(resource.eURI)
-                if (resourceURI.toString() == normalizedURI.toString()) {
-                    if (loadOnDemand && !resource.isLoaded) {
-                        resource.load().then(function () {
-                            if (rs._uriResourceMap) {
-                                rs._uriResourceMap.set(uri.toString(), resource)
-                            }
-                            resolve(resource)
-                        }, reject)
-                    } else {
-                        resolve(resource)
-                    }
-                    return
+        const normalizedURI = this._uriConverter.normalize(uri)
+        for (const resource of this._resources) {
+            const resourceURI = this._uriConverter.normalize(resource.getURI())
+            if (resourceURI.toString() == normalizedURI.toString()) {
+                if (loadOnDemand && !resource.isLoaded()) {
+                    await resource.load()
                 }
-            }
-
-            let ePackage = rs.getPackageRegistry().getPackage(uri.toString())
-            if (ePackage) return ePackage.eResource()
-
-            if (loadOnDemand) {
-                let resource = rs.createResource(uri)
-                if (resource) {
-                    resource.load().then(function () {
-                        if (this._uriResourceMap) {
-                            this._uriResourceMap.set(uri.toString(), resource)
-                        }
-                        resolve(resource)
-                    }, reject)
-                } else {
-                    resolve(resource)
+                if (this._uriResourceMap) {
+                    this._uriResourceMap.set(uri.toString(), resource)
                 }
-                return
+                return resource
             }
-            resolve(null)
-        })
+        }
+
+        const ePackage = this.getPackageRegistry().getPackage(uri.toString())
+        if (ePackage) return ePackage.eResource()
+
+        if (loadOnDemand) {
+            const resource = this.createResource(uri)
+            if (resource) {
+                await resource.load()
+            }
+            if (this._uriResourceMap) {
+                this._uriResourceMap.set(uri.toString(), resource)
+            }
+            return resource
+        }
+
+        return null
     }
 
     getEObject(uri: URI, loadOnDemand: boolean): EObject {
-        let uriStr = uri.toString()
-        let ndxHash = uriStr.lastIndexOf("#")
-        let resource = this.getResource(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand)
+        const uriStr = uri.toString()
+        const ndxHash = uriStr.lastIndexOf("#")
+        const resource = this.getResource(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand)
         return resource?.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "")
     }
 
-    getEObjectAsync(objectURI: URI, loadOnDemand: boolean): Promise<EObject> {
-        let objectURIStr = objectURI.toString()
-        let ndxHash = objectURIStr.lastIndexOf("#")
-        let resourceURI = ndxHash != -1 ? new URI(objectURIStr.slice(0, ndxHash)) : objectURI
-        let objectFragment = ndxHash != -1 ? objectURIStr.slice(ndxHash + 1) : ""
-        return this.getResourceAsync(resourceURI, loadOnDemand).then((resource) => resource?.getEObject(objectFragment))
+    async getEObjectAsync(uri: URI, loadOnDemand: boolean): Promise<EObject> {
+        const uriStr = uri.toString()
+        const ndxHash = uriStr.lastIndexOf("#")
+        const resource = await this.getResourceAsync(
+            ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri,
+            loadOnDemand
+        )
+        return resource?.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "")
     }
 
     getURIConverter(): EURIConverter {

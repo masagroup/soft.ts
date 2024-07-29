@@ -12,10 +12,10 @@
 import { EDataType, EEnumLiteral, EList } from "./internal.js"
 
 export interface EEnum extends EDataType {
-    // References
-    readonly eLiterals: EList<EEnumLiteral>
+    // eLiterals
+    getELiterals(): EList<EEnumLiteral>
 
-    // Operations
+    // operations
     getEEnumLiteralByName(name: string): EEnumLiteral
     getEEnumLiteralByValue(value: number): EEnumLiteral
     getEEnumLiteralByLiteral(literal: string): EEnumLiteral

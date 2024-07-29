@@ -26,15 +26,11 @@ export class EContentAdapter extends AbstractEAdapter {
         this.selfAdapt(notification)
     }
 
-    get target(): ENotifier {
-        return super.target
-    }
-
-    set target(notifier: ENotifier) {
+    setTarget(notifier: ENotifier) {
         if (notifier == null) {
-            this.unsetTarget(this.target)
+            this.unsetTarget(this.getTarget())
         } else {
-            super.target = notifier
+            super.setTarget(notifier)
             let l: Iterable<ENotifier> = null
             if (isEObject(notifier)) {
                 l = notifier.eContents()
@@ -43,7 +39,7 @@ export class EContentAdapter extends AbstractEAdapter {
             } else if (isEResourceSet(notifier)) {
                 l = notifier.getResources()
             }
-            for (let n of l) {
+            for (const n of l) {
                 this.addAdapter(n)
             }
         }
@@ -52,87 +48,87 @@ export class EContentAdapter extends AbstractEAdapter {
     unsetTarget(notifier: ENotifier) {
         super.unsetTarget(notifier)
         if (isEObject(notifier)) {
-            for (let n of notifier.eContents()) {
+            for (const n of notifier.eContents()) {
                 this.removeAdapterWithChecks(n, false, true)
             }
         } else if (isEResource(notifier)) {
-            for (let n of notifier.eContents()) {
+            for (const n of notifier.eContents()) {
                 this.removeAdapterWithChecks(n, true, false)
             }
         } else if (isEResourceSet(notifier)) {
-            for (let n of notifier.getResources()) {
+            for (const n of notifier.getResources()) {
                 this.removeAdapterWithChecks(n, false, false)
             }
         }
     }
 
     private selfAdapt(notification: ENotification) {
-        let notifier = notification.notifier
+        const notifier = notification.getNotifier()
         if (isEObject(notifier)) {
-            let feature = notification.feature
-            if (isEReference(feature) && feature.isContainment) {
+            const feature = notification.getFeature()
+            if (isEReference(feature) && feature.isContainment()) {
                 this.handleContainment(notification)
             }
         } else if (isEResource(notifier)) {
-            if (notification.featureID == EResourceConstants.RESOURCE__CONTENTS) {
+            if (notification.getFeatureID() == EResourceConstants.RESOURCE__CONTENTS) {
                 this.handleContainment(notification)
             }
         } else if (isEResourceSet(notifier)) {
-            if (notification.featureID == EResourceSetConstants.RESOURCE_SET__RESOURCES) {
+            if (notification.getFeatureID() == EResourceSetConstants.RESOURCE_SET__RESOURCES) {
                 this.handleContainment(notification)
             }
         }
     }
 
     handleContainment(notification: ENotification) {
-        switch (notification.eventType) {
+        switch (notification.getEventType()) {
             case EventType.RESOLVE: {
                 // We need to be careful that the proxy may be resolved while we are attaching this adapter.
                 // We need to avoid attaching the adapter during the resolve
                 // and also attaching it again as we walk the eContents() later.
                 // Checking here avoids having to check during addAdapter.
                 //
-                let oldNotifier = notification.oldValue as ENotifier
-                if (oldNotifier.eAdapters.contains(this)) {
+                const oldNotifier = notification.getOldValue() as ENotifier
+                if (oldNotifier.eAdapters().contains(this)) {
                     this.removeAdapter(oldNotifier)
-                    this.addAdapter(notification.newValue as ENotifier)
+                    this.addAdapter(notification.getNewValue() as ENotifier)
                 }
                 break
             }
             case EventType.UNSET: {
-                this.removeAdapterWithChecks(notification.oldValue as ENotifier, false, true)
-                this.addAdapter(notification.newValue as ENotifier)
+                this.removeAdapterWithChecks(notification.getOldValue() as ENotifier, false, true)
+                this.addAdapter(notification.getNewValue() as ENotifier)
                 break
             }
             case EventType.SET: {
-                this.removeAdapterWithChecks(notification.oldValue as ENotifier, false, true)
-                this.addAdapter(notification.newValue as ENotifier)
+                this.removeAdapterWithChecks(notification.getOldValue() as ENotifier, false, true)
+                this.addAdapter(notification.getNewValue() as ENotifier)
                 break
             }
             case EventType.ADD: {
-                this.addAdapter(notification.newValue as ENotifier)
+                this.addAdapter(notification.getNewValue() as ENotifier)
                 break
             }
             case EventType.ADD_MANY: {
-                let newValues = notification.newValue as any[]
-                for (let notifier of newValues) {
+                const newValues = notification.getNewValue() as any[]
+                for (const notifier of newValues) {
                     this.addAdapter(notifier)
                 }
                 break
             }
             case EventType.REMOVE: {
-                if (notification.oldValue) {
-                    let checkContainer = isEResource(notification.notifier)
-                    let checkResource = notification.feature != null
-                    this.removeAdapterWithChecks(notification.oldValue as ENotifier, checkContainer, checkResource)
+                if (notification.getOldValue()) {
+                    const checkContainer = isEResource(notification.getNotifier())
+                    const checkResource = notification.getFeature() != null
+                    this.removeAdapterWithChecks(notification.getOldValue() as ENotifier, checkContainer, checkResource)
                 }
                 break
             }
             case EventType.REMOVE_MANY: {
-                let checkContainer = isEResource(notification.notifier)
-                let checkResource = notification.feature != null
-                let oldValues = notification.oldValue as any[]
-                for (let notifier of oldValues) {
+                const checkContainer = isEResource(notification.getNotifier())
+                const checkResource = notification.getFeature() != null
+                const oldValues = notification.getOldValue() as any[]
+                for (const notifier of oldValues) {
                     this.removeAdapterWithChecks(notifier, checkContainer, checkResource)
                 }
                 break
@@ -142,15 +138,15 @@ export class EContentAdapter extends AbstractEAdapter {
 
     private addAdapter(notifier: ENotifier): void {
         if (notifier) {
-            if (!notifier.eAdapters.contains(this)) {
-                notifier.eAdapters.add(this)
+            if (!notifier.eAdapters().contains(this)) {
+                notifier.eAdapters().add(this)
             }
         }
     }
 
     private removeAdapter(notifier: ENotifier): void {
         if (notifier) {
-            notifier.eAdapters.remove(this)
+            notifier.eAdapters().remove(this)
         }
     }
 
@@ -159,12 +155,12 @@ export class EContentAdapter extends AbstractEAdapter {
             if (checkContainer || checkResource) {
                 if (isEObjectInternal(notifier)) {
                     if (checkResource) {
-                        if (notifier.eInternalResource() && notifier.eInternalResource().eAdapters.contains(this)) {
+                        if (notifier.eInternalResource() && notifier.eInternalResource().eAdapters().contains(this)) {
                             return
                         }
                     }
                     if (checkContainer) {
-                        if (notifier.eInternalContainer() && notifier.eInternalResource().eAdapters.contains(this)) {
+                        if (notifier.eInternalContainer() && notifier.eInternalResource().eAdapters().contains(this)) {
                             return
                         }
                     }

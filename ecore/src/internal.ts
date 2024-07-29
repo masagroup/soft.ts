@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+export * from "./Buffer.js"
 export * from "./Collection.js"
 export * from "./Constants.js"
 export * from "./EAdapter.js"

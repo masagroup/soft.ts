@@ -26,14 +26,24 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
 
     // get the value of publicationDate
     get publicationDate(): Date {
-        return this._publicationDate
+        return this.getPublicationDate()
     }
 
     // set the value of publicationDate
     set publicationDate(newPublicationDate: Date) {
-        let oldPublicationDate = this._publicationDate
+        this.setPublicationDate(newPublicationDate)
+    }
+
+    // get the value of publicationDate
+    getPublicationDate(): Date {
+        return this._publicationDate
+    }
+
+    // set the value of publicationDate
+    setPublicationDate(newPublicationDate: Date): void {
+        const oldPublicationDate = this._publicationDate
         this._publicationDate = newPublicationDate
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -49,7 +59,7 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.ITEM__PUBLICATION_DATE: {
-                return this.publicationDate
+                return this.getPublicationDate()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -57,10 +67,14 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.ITEM__PUBLICATION_DATE: {
-                this.publicationDate = newValue as Date
+                this.setPublicationDate(newValue as Date)
                 break
             }
             default: {
@@ -72,7 +86,7 @@ export class ItemImpl extends ecore.EObjectImpl implements Item {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.ITEM__PUBLICATION_DATE: {
-                this.publicationDate = null
+                this.setPublicationDate(null)
                 break
             }
             default: {

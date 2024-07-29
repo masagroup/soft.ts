@@ -12,8 +12,10 @@
 import { CirculatingItem } from "./internal.js"
 
 export interface AudioVisualItem extends CirculatingItem {
-    // Attributes
+    // title property
     title: string
+    // minutesLength property
     minutesLength: number
+    // damaged property
     isDamaged: boolean
 }

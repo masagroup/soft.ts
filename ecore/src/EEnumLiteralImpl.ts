@@ -39,7 +39,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
     }
 
     // get the value of eEnum
-    get eEnum(): EEnum {
+    getEEnum(): EEnum {
         if (this.eContainerFeatureID() == EcoreConstants.EENUM_LITERAL__EENUM) {
             return this.eContainer() as EEnum
         }
@@ -47,15 +47,15 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
     }
 
     // get the value of instance
-    get instance(): any {
+    getInstance(): any {
         return this._instance
     }
 
     // set the value of instance
-    set instance(newInstance: any) {
-        let oldInstance = this._instance
+    setInstance(newInstance: any): void {
+        const oldInstance = this._instance
         this._instance = newInstance
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__INSTANCE, oldInstance, newInstance)
             )
@@ -63,15 +63,15 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
     }
 
     // get the value of literal
-    get literal(): string {
+    getLiteral(): string {
         return this._literal
     }
 
     // set the value of literal
-    set literal(newLiteral: string) {
-        let oldLiteral = this._literal
+    setLiteral(newLiteral: string): void {
+        const oldLiteral = this._literal
         this._literal = newLiteral
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__LITERAL, oldLiteral, newLiteral)
             )
@@ -79,15 +79,15 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
     }
 
     // get the value of value
-    get value(): number {
+    getValue(): number {
         return this._value
     }
 
     // set the value of value
-    set value(newValue: number) {
-        let oldValue = this._value
+    setValue(newValue: number): void {
+        const oldValue = this._value
         this._value = newValue
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__VALUE, oldValue, newValue))
         }
     }
@@ -95,16 +95,16 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EENUM_LITERAL__EENUM: {
-                return this.eEnum
+                return this.getEEnum()
             }
             case EcoreConstants.EENUM_LITERAL__INSTANCE: {
-                return this.instance
+                return this.getInstance()
             }
             case EcoreConstants.EENUM_LITERAL__LITERAL: {
-                return this.literal
+                return this.getLiteral()
             }
             case EcoreConstants.EENUM_LITERAL__VALUE: {
-                return this.value
+                return this.getValue()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -112,18 +112,22 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EENUM_LITERAL__INSTANCE: {
-                this.instance = newValue as any
+                this.setInstance(newValue as any)
                 break
             }
             case EcoreConstants.EENUM_LITERAL__LITERAL: {
-                this.literal = newValue as string
+                this.setLiteral(newValue as string)
                 break
             }
             case EcoreConstants.EENUM_LITERAL__VALUE: {
-                this.value = newValue as number
+                this.setValue(newValue as number)
                 break
             }
             default: {
@@ -135,15 +139,15 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EENUM_LITERAL__INSTANCE: {
-                this.instance = null
+                this.setInstance(null)
                 break
             }
             case EcoreConstants.EENUM_LITERAL__LITERAL: {
-                this.literal = ""
+                this.setLiteral("")
                 break
             }
             case EcoreConstants.EENUM_LITERAL__VALUE: {
-                this.value = 0
+                this.setValue(0)
                 break
             }
             default: {
@@ -155,10 +159,10 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EENUM_LITERAL__EENUM: {
-                return this.eEnum != null
+                return this.getEEnum() != null
             }
             case EcoreConstants.EENUM_LITERAL__INSTANCE: {
-                return this.instance != null
+                return this._instance != null
             }
             case EcoreConstants.EENUM_LITERAL__LITERAL: {
                 return this._literal != ""

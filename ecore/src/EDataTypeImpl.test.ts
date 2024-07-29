@@ -15,65 +15,65 @@ import { EAdapter, EDataTypeImpl, EcoreConstants, getEcorePackage } from "./inte
 
 describe("EDataTypeImpl", () => {
     test("eStaticClass", () => {
-        let o = new EDataTypeImpl()
+        const o = new EDataTypeImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEDataType())
     })
 
     test("getSerializable", () => {
-        let o = new EDataTypeImpl()
+        const o = new EDataTypeImpl()
         // get default value
-        expect(o.isSerializable).toBe(true)
+        expect(o.isSerializable()).toBe(true)
     })
 
     test("setSerializable", () => {
-        let o = new EDataTypeImpl()
-        let value = true
+        const o = new EDataTypeImpl()
+        const value = true
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.isSerializable = value
+        o.setSerializable(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(true)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(true)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("eGetFromID", () => {
-        let o = new EDataTypeImpl()
+        const o = new EDataTypeImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, true)).toStrictEqual(o.isSerializable)
+        expect(o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, true)).toStrictEqual(o.isSerializable())
     })
 
     test("eSetFromID", () => {
-        let o = new EDataTypeImpl()
+        const o = new EDataTypeImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = true
+            const value = true
             o.eSetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, value)
             expect(o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EDataTypeImpl()
+        const o = new EDataTypeImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new EDataTypeImpl()
+        const o = new EDataTypeImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE)
-            let v = o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, false)
+            const v = o.eGetFromID(EcoreConstants.EDATA_TYPE__SERIALIZABLE, false)
             expect(v).toBe(true)
         }
     })

@@ -34,10 +34,10 @@ else
 endif
 
 .PHONY: all
-all: ecore empty library
+all: ecore empty library tournament
 
 .PHONY: ci
-ci: ecore.ci empty.ci library.ci
+ci: ecore.ci empty.ci library.ci tournament.ci
 
 .PHONY: ecore
 ecore: ecore.install ecore.generate ecore.format ecore.build ecore.test
@@ -88,7 +88,7 @@ library.install:
 .PHONY: library.generate
 library.generate:
 	@echo "[library.generate]"
-	@$(call GENERATE,examples,library.ecore,)
+	@$(call GENERATE,examples,library.ecore,-p accessors=property)
 
 .PHONY: library.format
 library.format:
@@ -135,6 +135,38 @@ empty.build:
 empty.test:
 	@echo "[empty.test]"
 	@(cd examples/empty && $(NPM) run test)
+
+.PHONY: tournament
+tournament: tournament.install tournament.generate tournament.format tournament.build tournament.test
+
+.PHONY: tournament.ci
+tournament.ci: tournament.install tournament.build tournament.test
+
+.PHONY: tournament.install
+tournament.install:
+	@echo "[tournament.install]"
+	@(cd examples/tournament && $(NPM) install --no-fund --loglevel=error)
+
+.PHONY: tournament.generate
+tournament.generate:
+	@echo "[tournament.generate]"
+	@$(call GENERATE,examples,tournament.ecore,-p async=true)
+
+.PHONY: tournament.format
+tournament.format:
+	@echo "[tournament.format]"
+	@(cd examples/tournament && $(NPM) run pretty)
+
+.PHONY: tournament.build
+tournament.build:
+	@echo "[tournament.build]"
+	@(cd examples/tournament && $(NPM) run build)
+
+.PHONY: tournament.test
+tournament.test:
+	@echo "[tournament.test]"
+	@(cd examples/tournament && $(NPM) run test)
+
 
 .PHONY: versions
 versions:

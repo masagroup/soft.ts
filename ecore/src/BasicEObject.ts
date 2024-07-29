@@ -79,12 +79,12 @@ abstract class AbstractContentsList extends ImmutableEList<EObject> implements E
         if (this._initialized) return
 
         this._initialized = true
-        let features = this._getFeatureFn(this._obj.eClass())
+        const features = this._getFeatureFn(this._obj.eClass())
         for (const feature of features) {
             if (this._obj.eIsSet(feature)) {
-                let value = this._obj.eGetResolve(feature, this._resolve)
-                if (feature.isMany) {
-                    let l = value as EList<EObject>
+                const value = this._obj.eGetResolve(feature, this._resolve)
+                if (feature.isMany()) {
+                    const l = value as EList<EObject>
                     this._v.push(...l.toArray())
                 } else if (value != null) {
                     this._v.push(value)
@@ -123,13 +123,13 @@ class ContentsListAdapter extends AbstractEAdapter {
         super()
         this._obj = obj
         this._getFeatureFn = getFeatureFn
-        obj.eAdapters.add(this)
+        obj.eAdapters().add(this)
     }
 
     notifyChanged(notification: ENotification): void {
         if (this._list) {
-            let features = this._getFeatureFn(this._obj.eClass())
-            if (features.contains(notification.feature)) delete this._list
+            const features = this._getFeatureFn(this._obj.eClass())
+            if (features.contains(notification.getFeature())) delete this._list
         }
     }
 
@@ -149,18 +149,18 @@ export class BasicEObject extends AbstractEObject {
     private _adapters: EList<EAdapter> = null
     private _deliver: boolean = true
 
-    get eAdapters(): EList<EAdapter> {
+    eAdapters(): EList<EAdapter> {
         if (!this._adapters) {
             this._adapters = new AbstractENotifierList(this)
         }
         return this._adapters
     }
 
-    get eDeliver(): boolean {
+    eDeliver(): boolean {
         return this._deliver
     }
 
-    set eDeliver(deliver: boolean) {
+    eSetDeliver(deliver: boolean) {
         this._deliver = deliver
     }
 
@@ -192,7 +192,7 @@ export class BasicEObject extends AbstractEObject {
     eContents(): EList<EObject> {
         if (!this._contentsListAdapter)
             this._contentsListAdapter = new ContentsListAdapter(this, function (c: EClass): EList<EStructuralFeature> {
-                return c.eContainmentFeatures
+                return c.getEContainmentFeatures()
             })
         return this._contentsListAdapter.getList()
     }
@@ -202,7 +202,7 @@ export class BasicEObject extends AbstractEObject {
             this._crossReferencesListAdapter = new ContentsListAdapter(this, function (
                 c: EClass
             ): EList<EStructuralFeature> {
-                return c.eCrossReferenceFeatures
+                return c.getECrossReferenceFeatures()
             })
         return this._crossReferencesListAdapter.getList()
     }

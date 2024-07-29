@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shop:Shop xmlns:shop="http:///net/masagroup/shop.ecore/1.0.0">
+  <products name="Product 0"/>
+  <products name="Product 1"/>
+  <products name="Product 2"/>
+  <products name="Product 3"/>
+  <products name="Product 4"/>
+  <products name="Product 5"/>
+  <products name="Product 6"/>
+  <products name="Product 7"/>
+  <products name="Product 8"/>
+  <products name="Product 9"/>
+</shop:Shop>

@@ -7,8 +7,17 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
-import { EDiagnostic, EList, ENotifier, EObject, EObjectIDManager, EResourceSet, URI } from "./internal.js"
+import {
+    BufferLike,
+    EDiagnostic,
+    EList,
+    ENotifier,
+    EObject,
+    EObjectIDManager,
+    EResourceSet,
+    ReadableStreamLike,
+    URI
+} from "./internal.js"
 
 export class EResourceConstants {
     public static readonly RESOURCE__RESOURCE_SET: number = 0
@@ -21,26 +30,33 @@ export class EResourceConstants {
 }
 
 export interface EResource extends ENotifier {
-    eURI: URI
-    eObjectIDManager: EObjectIDManager
+    getURI(): URI
+    setURI(uri: URI): void
+
+    getObjectIDManager(): EObjectIDManager
+    setObjectIDManager(objectIDManager: EObjectIDManager): void
 
     eResourceSet(): EResourceSet
     eContents(): EList<EObject>
     eAllContents(): IterableIterator<EObject>
 
     load(options?: Map<string, any>): Promise<void>
-    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void>
+    loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void>
+
     loadSync(options?: Map<string, any>): void
     loadFromString(s: string, options?: Map<string, any>): void
+    loadFromBuffer(buffer: BufferLike, options?: Map<string, any>): void
 
     unload(): void
-    readonly isLoaded: boolean
-    readonly isLoading: boolean
+    isLoaded(): boolean
+    isLoading(): boolean
 
     save(options?: Map<string, any>): Promise<void>
-    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void>
+    saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void>
+
     saveSync(options?: Map<string, any>): void
     saveToString(options?: Map<string, any>): string
+    saveToBuffer(options?: Map<string, any>): Uint8Array
 
     attached(object: EObject): void
     detached(object: EObject): void
@@ -53,5 +69,5 @@ export interface EResource extends ENotifier {
 }
 
 export function isEResource(o: any): o is EResource {
-    return o == undefined ? undefined : typeof o["eResourceSet"] === "function"
+    return o == undefined ? undefined : "eResourceSet" in o
 }

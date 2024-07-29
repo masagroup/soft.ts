@@ -12,13 +12,26 @@
 import { EAttribute, EClass, EList, EStructuralFeature } from "./internal.js"
 
 export interface EReference extends EStructuralFeature {
-    // Attributes
-    isContainment: boolean
-    readonly isContainer: boolean
-    isResolveProxies: boolean
+    // containment
+    isContainment(): boolean
+    setContainment(newIsContainment: boolean): void
 
-    // References
-    eOpposite: EReference
-    readonly eReferenceType: EClass
-    readonly eKeys: EList<EAttribute>
+    // container
+    isContainer(): boolean
+
+    // resolveProxies
+    isResolveProxies(): boolean
+    setResolveProxies(newIsResolveProxies: boolean): void
+
+    // eOpposite
+    getEOpposite(): EReference
+    getEOppositeAsync(): Promise<EReference>
+    setEOpposite(newEOpposite: EReference): void
+
+    // eReferenceType
+    getEReferenceType(): EClass
+    getEReferenceTypeAsync(): Promise<EClass>
+
+    // eKeys
+    getEKeys(): EList<EAttribute>
 }

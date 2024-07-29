@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="orders" nsURI="http:///net/masagroup/orders.ecore/1.0.0" nsPrefix="orders">
+  <eAnnotations source="http://net.masagroup/soft/2019/GenGo">
+    <details key="supressAnnotations" value="http://www.eclipse.org/emf/2002/GenModel http://www.eclipse.org/emf/2002/Ecore http://net.masagroup/soft/2018/GenCpp http://net.masagroup/soft/2020/GenTS"/>
+    <details key="imports" value="shop-generator/shop"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Orders">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="order" upperBound="-1"
+        eType="#//Order" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Order">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nb" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product" eType="ecore:EClass shop.ecore#//Product"/>
+  </eClassifiers>
+</ecore:EPackage>

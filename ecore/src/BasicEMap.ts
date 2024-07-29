@@ -18,19 +18,19 @@ class BasicEMapEntry<K, V> implements EMapEntry<K, V> {
         this._value = value
     }
 
-    get key(): K {
+    getKey(): K {
         return this._key
     }
 
-    set key(newKey: K) {
+    setKey(newKey: K) {
         this._key = newKey
     }
 
-    get value(): V {
+    getValue(): V {
         return this._value
     }
 
-    set value(newValue: V) {
+    setValue(newValue: V) {
         this._value = newValue
     }
 }
@@ -56,10 +56,10 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
         // remove from map data
         this._mapData.delete(key)
         // remove from list
-        let e = this.getEntry(key)
+        const e = this.getEntry(key)
         if (e) {
             this.remove(e)
-            return e.value
+            return e.getValue()
         }
         return undefined
     }
@@ -69,7 +69,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     containsValue(value: V): boolean {
-        for (let [_, v] of this._mapData) {
+        for (const [_, v] of this._mapData) {
             if (v == value) {
                 return true
             }
@@ -83,7 +83,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
 
     private getEntry(key: K): EMapEntry<K, V> {
         for (const entry of this) {
-            if (entry.key == key) {
+            if (entry.getKey() == key) {
                 return entry
             }
         }
@@ -95,11 +95,11 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     protected didAdd(index: number, e: EMapEntry<K, V>): void {
-        this._mapData.set(e.key, e.value)
+        this._mapData.set(e.getKey(), e.getValue())
     }
 
     protected didRemove(index: number, e: EMapEntry<K, V>): void {
-        this._mapData.delete(e.key)
+        this._mapData.delete(e.getKey())
     }
 
     protected didClear(elements: EMapEntry<K, V>[]): void {
@@ -107,7 +107,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     protected didSet(index: number, newE: EMapEntry<K, V>, oldE: EMapEntry<K, V>): void {
-        this._mapData.delete(oldE.key)
-        this._mapData.set(newE.key, newE.value)
+        this._mapData.delete(oldE.getKey())
+        this._mapData.set(newE.getKey(), newE.getValue())
     }
 }

@@ -15,104 +15,104 @@ import { EAdapter, EStringToStringMapEntryImpl, EcoreConstants, getEcorePackage 
 
 describe("EStringToStringMapEntryImpl", () => {
     test("eStaticClass", () => {
-        let o = new EStringToStringMapEntryImpl()
+        const o = new EStringToStringMapEntryImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEStringToStringMapEntry())
     })
 
     test("getKey", () => {
-        let o = new EStringToStringMapEntryImpl()
+        const o = new EStringToStringMapEntryImpl()
         // get default value
-        expect(o.key).toBe("")
+        expect(o.getKey()).toBe("")
     })
 
     test("setKey", () => {
-        let o = new EStringToStringMapEntryImpl()
-        let value = "Test String"
+        const o = new EStringToStringMapEntryImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.key = value
+        o.setKey(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getValue", () => {
-        let o = new EStringToStringMapEntryImpl()
+        const o = new EStringToStringMapEntryImpl()
         // get default value
-        expect(o.value).toBe("")
+        expect(o.getValue()).toBe("")
     })
 
     test("setValue", () => {
-        let o = new EStringToStringMapEntryImpl()
-        let value = "Test String"
+        const o = new EStringToStringMapEntryImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.value = value
+        o.setValue(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("eGetFromID", () => {
-        let o = new EStringToStringMapEntryImpl()
+        const o = new EStringToStringMapEntryImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, true)).toStrictEqual(o.key)
-        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, true)).toStrictEqual(o.value)
+        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, true)).toStrictEqual(o.getKey())
+        expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, true)).toStrictEqual(o.getValue())
     })
 
     test("eSetFromID", () => {
-        let o = new EStringToStringMapEntryImpl()
+        const o = new EStringToStringMapEntryImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, value)
             expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, false)).toBe(value)
         }
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, value)
             expect(o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EStringToStringMapEntryImpl()
+        const o = new EStringToStringMapEntryImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY)).toBeFalsy()
         expect(o.eIsSetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new EStringToStringMapEntryImpl()
+        const o = new EStringToStringMapEntryImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY)
-            let v = o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, false)
             expect(v).toBe("")
         }
         {
             o.eUnsetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE)
-            let v = o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, false)
+            const v = o.eGetFromID(EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, false)
             expect(v).toBe("")
         }
     })

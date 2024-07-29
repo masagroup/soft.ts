@@ -29,7 +29,7 @@ export class XMIDecoder extends XMLDecoder {
     }
 
     protected getXSIType(): string {
-        let xsiType = super.getXSIType()
+        const xsiType = super.getXSIType()
         if ((xsiType == null || xsiType.length == 0) && this._attributes) {
             return this.getAttributeValue(XMIConstants.xmiURI, XMIConstants.typeAttrib)
         }
@@ -37,7 +37,7 @@ export class XMIDecoder extends XMLDecoder {
     }
 
     protected handleAttributes(object: EObject) {
-        let version = this.getAttributeValue(XMIConstants.xmiURI, XMIConstants.versionAttrib)
+        const version = this.getAttributeValue(XMIConstants.xmiURI, XMIConstants.versionAttrib)
         if (version && version.length > 0) {
             this._xmiVersion = version
         }

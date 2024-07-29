@@ -16,25 +16,25 @@ import { EmptyConstants, EmptyFactory, EmptyFactoryImpl } from "./internal.js"
 
 describe("EmptyFactoryImpl", () => {
     test("createFromEClass", () => {
-        let factory = EmptyFactoryImpl.getInstance()
+        const factory = EmptyFactoryImpl.getInstance()
         {
-            let mockEClass = mock<ecore.EClass>()
-            let eClass = instance(mockEClass)
-            when(mockEClass.classifierID).thenReturn(-1)
+            const mockEClass = mock<ecore.EClass>()
+            const eClass = instance(mockEClass)
+            when(mockEClass.getClassifierID()).thenReturn(-1)
             expect(() => factory.create(eClass)).toThrow(Error)
         }
     })
 
     test("createFromStringInvalid", () => {
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(-1)
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
+        when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => EmptyFactoryImpl.getInstance().createFromString(eDataType, "")).toThrow(Error)
     })
     test("convertToStringInvalid", () => {
-        let mockDataType = mock<ecore.EDataType>()
-        let eDataType = instance(mockDataType)
-        when(mockDataType.classifierID).thenReturn(-1)
+        const mockDataType = mock<ecore.EDataType>()
+        const eDataType = instance(mockDataType)
+        when(mockDataType.getClassifierID()).thenReturn(-1)
         expect(() => EmptyFactoryImpl.getInstance().convertToString(eDataType, null)).toThrow(Error)
     })
 })

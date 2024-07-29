@@ -29,114 +29,114 @@ interface EAnnotationInternal extends EAnnotation, EObjectInternal {}
 
 describe("EModelElementImpl", () => {
     test("eStaticClass", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEModelElement())
     })
 
     test("getEAnnotations", () => {
-        let o = new EModelElementImpl()
-        expect(o.eAnnotations).not.toBeNull()
+        const o = new EModelElementImpl()
+        expect(o.getEAnnotations()).not.toBeNull()
     })
 
     test("getEAnnotation", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         expect(() => o.getEAnnotation("")).toThrow(Error)
     })
 
     test("eGetFromID", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, true)).toStrictEqual(o.eAnnotations)
+        expect(o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, true)).toStrictEqual(o.getEAnnotations())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, false),
-                (o.eAnnotations as EObjectList<EAnnotation>).getUnResolvedList()
+                (o.getEAnnotations() as EObjectList<EAnnotation>).getUnResolvedList()
             )
         ).toBeTruthy()
     })
 
     test("eSetFromID", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<EAnnotationInternal>()
-            let value = instance(mockValue)
-            let l = new ImmutableEList<EAnnotation>([value])
+            const mockValue = mock<EAnnotationInternal>()
+            const value = instance(mockValue)
+            const l = new ImmutableEList<EAnnotation>([value])
             when(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, l)
             // checks
-            expect(o.eAnnotations.size()).toBe(1)
-            expect(o.eAnnotations.get(0)).toBe(value)
+            expect(o.getEAnnotations().size()).toBe(1)
+            expect(o.getEAnnotations().get(0)).toBe(value)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).once()
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS)
-            let v = o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, false)
+            const v = o.eGetFromID(EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, false)
             expect(v).not.toBeNull()
-            let l = v as EList<EAnnotation>
+            const l = v as EList<EAnnotation>
             expect(l.isEmpty()).toBeTruthy()
         }
     })
 
     test("eInvokeFromID", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error)
         expect(() => o.eInvokeFromID(EcoreConstants.EMODEL_ELEMENT__GET_EANNOTATION_ESTRING, null)).toThrow(Error)
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EAnnotationInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EAnnotationInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, null)
-            expect(o.eAnnotations.contains(value)).toBeTruthy()
+            expect(o.getEAnnotations().contains(value)).toBeTruthy()
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new EModelElementImpl()
+        const o = new EModelElementImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<EAnnotationInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EAnnotationInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).thenReturn(null)
 
-            o.eAnnotations.add(value)
+            o.getEAnnotations().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, null)
 
             // check it was removed
-            expect(o.eAnnotations.contains(value)).toBeFalsy()
+            expect(o.getEAnnotations().contains(value)).toBeFalsy()
         }
     })
 })

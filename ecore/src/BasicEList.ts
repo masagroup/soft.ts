@@ -24,7 +24,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     removeAt(index: number): E {
         if (index < 0 || index >= this._v.length)
             throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length)
-        let e = this._v[index]
+        const e = this._v[index]
         this._v.splice(index, 1)
         this.didRemove(index, e)
         this.didChange()
@@ -48,7 +48,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     protected doSet(index: number, e: E): E {
-        let o = this._v[index]
+        const o = this._v[index]
         this._v[index] = e
         this.didSet(index, e, o)
         this.didChange()
@@ -56,21 +56,21 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     protected doClear(): E[] {
-        let oldData = this._v
+        const oldData = this._v
         this._v = []
         this.didClear(oldData)
         return oldData
     }
 
     protected doAdd(e: E): void {
-        let size = this._v.length
+        const size = this._v.length
         this._v.push(e)
         this.didAdd(size, e)
         this.didChange()
     }
 
     protected doAddAll(c: Collection<E>): boolean {
-        let oldSize = this._v.length
+        const oldSize = this._v.length
         this._v.push(...c.toArray())
         for (let i = oldSize; i < this._v.length; i++) {
             this.didAdd(i, this._v[i])
@@ -98,7 +98,7 @@ export class BasicEList<E> extends AbstractEList<E> {
         if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
             throw new RangeError("Index out of bounds: from=" + from + " to=" + to + " size=" + this.size())
         }
-        let e = this._v[from]
+        const e = this._v[from]
         if (from != to) {
             this._v.splice(from, 1)
             this._v.splice(to, 0, e)

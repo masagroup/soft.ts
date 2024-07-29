@@ -13,7 +13,7 @@ export class ENotifierImpl extends AbstractENotifier {
     private _adapters: EList<EAdapter> = null
     private _deliver: boolean = true
 
-    get eAdapters(): EList<EAdapter> {
+    eAdapters(): EList<EAdapter> {
         if (!this._adapters) {
             this._adapters = new AbstractENotifierList(this)
         }
@@ -24,11 +24,11 @@ export class ENotifierImpl extends AbstractENotifier {
         return this._adapters
     }
 
-    get eDeliver(): boolean {
+    eDeliver(): boolean {
         return this._deliver
     }
 
-    set eDeliver(deliver: boolean) {
+    eSetDeliver(deliver: boolean) {
         this._deliver = deliver
     }
 }

@@ -10,33 +10,51 @@
 import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
 import {
+    EAttribute,
     EClass,
     EcoreUtils,
+    EFactoryExt,
+    EList,
     EObject,
     EObjectInternal,
+    EPackage,
     EReference,
     getEcoreFactory,
     getEcorePackage,
     ImmutableEList,
-    URI
+    URI,
+    XMIProcessor,
+    XMLProcessor
 } from "./internal.js"
+
+function loadPackage(filename: string): EPackage {
+    const xmiProcessor = new XMIProcessor()
+    const uri = new URI("testdata/" + filename)
+    const resource = xmiProcessor.loadSync(uri)
+    expect(resource.isLoaded()).toBeTruthy()
+    expect(resource.getErrors().isEmpty()).toBeTruthy()
+    expect(resource.eContents().isEmpty()).toBeFalsy()
+    const ePackage = resource.eContents().get(0) as EPackage
+    ePackage.setEFactoryInstance(new EFactoryExt())
+    return ePackage
+}
 
 describe("EcoreUtils", () => {
     describe("equals", () => {
         test("null", () => {
             expect(EcoreUtils.equals(null, null)).toBeTruthy()
 
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
             expect(EcoreUtils.equals(object, null)).toBeFalsy()
             expect(EcoreUtils.equals(null, object)).toBeFalsy()
         })
 
         test("proxy", () => {
-            let mockObject1 = mock<EObjectInternal>()
-            let mockObject2 = mock<EObjectInternal>()
-            let obj1 = instance(mockObject1)
-            let obj2 = instance(mockObject2)
+            const mockObject1 = mock<EObjectInternal>()
+            const mockObject2 = mock<EObjectInternal>()
+            const obj1 = instance(mockObject1)
+            const obj2 = instance(mockObject2)
 
             when(mockObject1.eIsProxy()).thenReturn(true)
             when(mockObject1.eProxyURI()).thenReturn(new URI("file://test"))
@@ -59,12 +77,12 @@ describe("EcoreUtils", () => {
         })
 
         test("class", () => {
-            let mockObject1 = mock<EObjectInternal>()
-            let mockObject2 = mock<EObjectInternal>()
-            let obj1 = instance(mockObject1)
-            let obj2 = instance(mockObject2)
-            let mockClass1 = mock<EClass>()
-            let mockClass2 = mock<EClass>()
+            const mockObject1 = mock<EObjectInternal>()
+            const mockObject2 = mock<EObjectInternal>()
+            const obj1 = instance(mockObject1)
+            const obj2 = instance(mockObject2)
+            const mockClass1 = mock<EClass>()
+            const mockClass2 = mock<EClass>()
             when(mockObject1.eIsProxy()).thenReturn(false)
             when(mockObject1.eClass()).thenReturn(instance(mockClass1))
             when(mockObject2.eIsProxy()).thenReturn(false)
@@ -79,25 +97,25 @@ describe("EcoreUtils", () => {
 
         test("attribute", () => {
             // the meta model
-            let ePackage = getEcoreFactory().createEPackage()
-            let eFactory = getEcoreFactory().createEFactory()
-            let eClass = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.add(eClass)
-            let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
-            let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            const ePackage = getEcoreFactory().createEPackage()
+            const eFactory = getEcoreFactory().createEFactory()
+            const eClass = getEcoreFactory().createEClass()
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().add(eClass)
+            const eAttribute1 = getEcoreFactory().createEAttribute()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
+            const eAttribute2 = getEcoreFactory().createEAttribute()
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
             // the model
-            let eObject = eFactory.create(eClass)
+            const eObject = eFactory.create(eClass)
             eObject.eSet(eAttribute1, 2)
             eObject.eSet(eAttribute2, "test")
 
-            let eObjectCopy = EcoreUtils.copy(eObject)
+            const eObjectCopy = EcoreUtils.copy(eObject)
             expect(EcoreUtils.equals(eObject, eObjectCopy)).toBeTruthy()
 
             eObject.eSet(eAttribute2, "test2")
@@ -106,64 +124,64 @@ describe("EcoreUtils", () => {
 
         test("allAttribute", () => {
             // the meta model
-            let ePackage = getEcoreFactory().createEPackage()
-            let eFactory = getEcoreFactory().createEFactory()
-            let eClass = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.add(eClass)
-            let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
-            let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            const ePackage = getEcoreFactory().createEPackage()
+            const eFactory = getEcoreFactory().createEFactory()
+            const eClass = getEcoreFactory().createEClass()
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().add(eClass)
+            const eAttribute1 = getEcoreFactory().createEAttribute()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
+            const eAttribute2 = getEcoreFactory().createEAttribute()
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
             // the model
-            let eObject1 = eFactory.create(eClass)
+            const eObject1 = eFactory.create(eClass)
             eObject1.eSet(eAttribute1, 2)
             eObject1.eSet(eAttribute2, "test")
 
-            let eObject2 = eFactory.create(eClass)
+            const eObject2 = eFactory.create(eClass)
             eObject2.eSet(eAttribute1, 2)
             eObject2.eSet(eAttribute2, "test2")
 
-            let list = new ImmutableEList<EObject>([eObject1, eObject2])
-            let listCopy = EcoreUtils.copyAll(list)
+            const list = new ImmutableEList<EObject>([eObject1, eObject2])
+            const listCopy = EcoreUtils.copyAll(list)
             expect(EcoreUtils.equalsAll(list, listCopy)).toBeTruthy()
         })
 
         test("containment", () => {
             // the meta model
-            let ePackage = getEcoreFactory().createEPackage()
-            let eFactory = getEcoreFactory().createEFactory()
-            let eClass1 = getEcoreFactory().createEClass()
-            let eClass2 = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
+            const ePackage = getEcoreFactory().createEPackage()
+            const eFactory = getEcoreFactory().createEFactory()
+            const eClass1 = getEcoreFactory().createEClass()
+            const eClass2 = getEcoreFactory().createEClass()
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
 
-            let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
-            let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass2.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            const eAttribute1 = getEcoreFactory().createEAttribute()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
+            const eAttribute2 = getEcoreFactory().createEAttribute()
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass2.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
-            let eReference1 = getEcoreFactory().createEReference()
-            eReference1.name = "reference1"
-            eReference1.isContainment = true
-            eReference1.eType = eClass2
-            eClass1.eStructuralFeatures.add(eReference1)
+            const eReference1 = getEcoreFactory().createEReference()
+            eReference1.setName("reference1")
+            eReference1.setContainment(true)
+            eReference1.setEType(eClass2)
+            eClass1.getEStructuralFeatures().add(eReference1)
 
             // the model
-            let eObject1 = eFactory.create(eClass1)
-            let eObject2 = eFactory.create(eClass2)
+            const eObject1 = eFactory.create(eClass1)
+            const eObject2 = eFactory.create(eClass2)
             eObject2.eSet(eAttribute1, 2)
             eObject2.eSet(eAttribute2, "test1")
             eObject1.eSet(eReference1, eObject2)
 
-            let eObject1Copy = EcoreUtils.copy(eObject1)
+            const eObject1Copy = EcoreUtils.copy(eObject1)
             expect(EcoreUtils.equals(eObject1, eObject1Copy)).toBeTruthy()
 
             eObject2.eSet(eAttribute2, "test2")
@@ -172,40 +190,40 @@ describe("EcoreUtils", () => {
 
         test("references", () => {
             // the meta model
-            let ePackage = getEcoreFactory().createEPackage()
-            let eFactory = getEcoreFactory().createEFactory()
-            let eClass1 = getEcoreFactory().createEClass()
-            let eClass2 = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
+            const ePackage = getEcoreFactory().createEPackage()
+            const eFactory = getEcoreFactory().createEFactory()
+            const eClass1 = getEcoreFactory().createEClass()
+            const eClass2 = getEcoreFactory().createEClass()
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().addAll(new ImmutableEList<EClass>([eClass1, eClass2]))
 
-            let eAttribute1 = getEcoreFactory().createEAttribute()
-            eAttribute1.name = "attribute1"
-            eAttribute1.eType = getEcorePackage().getEInt()
-            let eAttribute2 = getEcoreFactory().createEAttribute()
-            eAttribute2.name = "attribute2"
-            eAttribute2.eType = getEcorePackage().getEString()
-            eClass2.eStructuralFeatures.addAll(new ImmutableEList([eAttribute1, eAttribute2]))
+            const eAttribute1 = getEcoreFactory().createEAttribute()
+            eAttribute1.setName("attribute1")
+            eAttribute1.setEType(getEcorePackage().getEInt())
+            const eAttribute2 = getEcoreFactory().createEAttribute()
+            eAttribute2.setName("attribute2")
+            eAttribute2.setEType(getEcorePackage().getEString())
+            eClass2.getEStructuralFeatures().addAll(new ImmutableEList([eAttribute1, eAttribute2]))
 
-            let eReference1 = getEcoreFactory().createEReference()
-            eReference1.name = "reference1"
-            eReference1.isContainment = true
-            eReference1.eType = eClass2
-            let eReference2 = getEcoreFactory().createEReference()
-            eReference2.name = "reference2"
-            eReference2.isContainment = false
-            eReference2.eType = eClass2
-            eClass1.eStructuralFeatures.addAll(new ImmutableEList<EReference>([eReference1, eReference2]))
+            const eReference1 = getEcoreFactory().createEReference()
+            eReference1.setName("reference1")
+            eReference1.setContainment(true)
+            eReference1.setEType(eClass2)
+            const eReference2 = getEcoreFactory().createEReference()
+            eReference2.setName("reference2")
+            eReference2.setContainment(false)
+            eReference2.setEType(eClass2)
+            eClass1.getEStructuralFeatures().addAll(new ImmutableEList<EReference>([eReference1, eReference2]))
 
             // the model
-            let eObject1 = eFactory.create(eClass1)
-            let eObject2 = eFactory.create(eClass2)
+            const eObject1 = eFactory.create(eClass1)
+            const eObject2 = eFactory.create(eClass2)
             eObject2.eSet(eAttribute1, 2)
             eObject2.eSet(eAttribute2, "test")
             eObject1.eSet(eReference1, eObject2)
             eObject1.eSet(eReference2, eObject2)
 
-            let eObject1Copy = EcoreUtils.copy(eObject1)
+            const eObject1Copy = EcoreUtils.copy(eObject1)
             expect(EcoreUtils.equals(eObject1, eObject1Copy)).toBeTruthy()
 
             eObject2.eSet(eAttribute2, "test2")
@@ -213,24 +231,71 @@ describe("EcoreUtils", () => {
         })
 
         test("proxy", () => {
-            let ePackage = getEcoreFactory().createEPackage()
-            let eFactory = getEcoreFactory().createEFactory()
-            let eClass = getEcoreFactory().createEClass()
-            ePackage.eFactoryInstance = eFactory
-            ePackage.eClassifiers.add(eClass)
+            const ePackage = getEcoreFactory().createEPackage()
+            const eFactory = getEcoreFactory().createEFactory()
+            const eClass = getEcoreFactory().createEClass()
+            ePackage.setEFactoryInstance(eFactory)
+            ePackage.getEClassifiers().add(eClass)
 
             // the model
-            let eObject = eFactory.create(eClass)
+            const eObject = eFactory.create(eClass)
             ;(eObject as EObjectInternal).eSetProxyURI(new URI("file://test"))
 
-            let eObjectCopy = EcoreUtils.copy(eObject)
+            const eObjectCopy = EcoreUtils.copy(eObject)
             expect(EcoreUtils.equals(eObject, eObjectCopy)).toBeTruthy()
         })
 
         test("real", () => {
-            let eClass = getEcorePackage().getEClass()
-            let eClassCopy = EcoreUtils.copy(eClass)
+            const eClass = getEcorePackage().getEClass()
+            const eClassCopy = EcoreUtils.copy(eClass)
             expect(EcoreUtils.equals(eClass, eClassCopy)).toBeTruthy()
+        })
+    })
+
+    describe("resolveAll", () => {
+        const shopPackage = loadPackage("shop.ecore")
+        const productClass = shopPackage.getEClassifier("Product") as EClass
+        const productAttibuteName = productClass.getEStructuralFeatureFromName("name") as EAttribute
+        const orderPackage = loadPackage("orders.ecore")
+        const ordersClass = orderPackage.getEClassifier("Orders") as EClass
+        const ordersOrderReference = ordersClass.getEStructuralFeatureFromName("order") as EReference
+        const orderClass = orderPackage.getEClassifier("Order") as EClass
+        const orderNbAttribute = orderClass.getEStructuralFeatureFromName("nb") as EAttribute
+        const orderProductReference = orderClass.getEStructuralFeatureFromName("product") as EReference
+        const xmlProcessor = new XMLProcessor([shopPackage, orderPackage])
+
+        test("resolveAll", () => {
+            const resource = xmlProcessor.loadSync(new URI("testdata/orders.xml"))
+            expect(resource).not.toBeNull()
+            expect(resource.getErrors().isEmpty()).toBeTruthy()
+
+            const orders = resource.eContents().get(0)
+            EcoreUtils.resolveAll(orders)
+
+            const ordersReferences = orders.eGet(ordersOrderReference) as EList<EObject>
+            expect(ordersReferences.size()).toBe(10)
+            const order = ordersReferences.get(0)
+            expect(order.eGet(orderNbAttribute)).toBe(2)
+            const product = order.eGetResolve(orderProductReference, false)
+            expect(product.eIsProxy()).toBeFalsy()
+            expect(product.eGet(productAttibuteName)).toBe("Product 0")
+        })
+
+        test("resolveAllAsync", async () => {
+            const resource = await xmlProcessor.load(new URI("testdata/orders.xml"))
+            expect(resource).not.toBeNull()
+            expect(resource.getErrors().isEmpty()).toBeTruthy()
+
+            const orders = resource.eContents().get(0)
+            await EcoreUtils.resolveAllAsync(orders)
+
+            const ordersReferences = orders.eGet(ordersOrderReference) as EList<EObject>
+            expect(ordersReferences.size()).toBe(10)
+            const order = ordersReferences.get(0)
+            expect(order.eGet(orderNbAttribute)).toBe(2)
+            const product = order.eGetResolve(orderProductReference, false)
+            expect(product.eIsProxy()).toBeFalsy()
+            expect(product.eGet(productAttibuteName)).toBe("Product 0")
         })
     })
 })

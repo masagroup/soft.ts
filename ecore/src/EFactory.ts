@@ -12,10 +12,11 @@
 import { EClass, EDataType, EModelElement, EObject, EPackage } from "./internal.js"
 
 export interface EFactory extends EModelElement {
-    // References
-    ePackage: EPackage
+    // ePackage
+    getEPackage(): EPackage
+    setEPackage(newEPackage: EPackage): void
 
-    // Operations
+    // operations
     create(eClass: EClass): EObject
     createFromString(eDataType: EDataType, literalValue: string): any
     convertToString(eDataType: EDataType, instanceValue: any): string

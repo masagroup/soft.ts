@@ -1,9 +1,18 @@
+// *****************************************************************************
+// Copyright(c) 2021 MASA Group
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// *****************************************************************************
+
 import { describe, expect, test } from "vitest"
 import { URI } from "./URI.js"
 
 describe("URI", () => {
     test("constructor", () => {
-        let uri = new URI("file:///path#fragment")
+        const uri = new URI("file:///path#fragment")
         expect(uri.scheme).toBe("file")
         expect(uri.host).toBe("")
         expect(uri.port).toBe("")
@@ -13,7 +22,7 @@ describe("URI", () => {
     })
 
     test("constructor-host", () => {
-        let uri = new URI("http://user@host:10/path#fragment")
+        const uri = new URI("http://user@host:10/path#fragment")
         expect(uri.scheme).toBe("http")
         expect(uri.user).toBe("user")
         expect(uri.host).toBe("host")
@@ -24,7 +33,7 @@ describe("URI", () => {
     })
 
     test("constructor-relative", () => {
-        let uri = new URI("path#fragment")
+        const uri = new URI("path#fragment")
         expect(uri.scheme).toBe("")
         expect(uri.user).toBe("")
         expect(uri.host).toBe("")
@@ -85,27 +94,27 @@ describe("URI", () => {
         expect(new URI("http://host").replacePrefix(new URI("http://host2/path"), null)).toBeNull()
         expect(new URI("test/toto").replacePrefix(new URI("info"), null)).toBeNull()
         {
-            let uri = new URI("test:///toto").replacePrefix(new URI({ scheme: "test" }), new URI({ scheme: "file" }))
+            const uri = new URI("test:///toto").replacePrefix(new URI({ scheme: "test" }), new URI({ scheme: "file" }))
             expect(uri).not.toBeNull()
             expect(uri.scheme).toBe("file")
         }
         {
-            let uri = new URI().replacePrefix(new URI(), new URI("file"))
+            const uri = new URI().replacePrefix(new URI(), new URI("file"))
             expect(uri).not.toBeNull()
             expect(uri.path).toBe("file")
         }
         {
-            let uri = new URI("toto").replacePrefix(new URI(), new URI("test/"))
+            const uri = new URI("toto").replacePrefix(new URI(), new URI("test/"))
             expect(uri).not.toBeNull()
             expect(uri.path).toBe("test/toto")
         }
         {
-            let uri = new URI("test/toto").replacePrefix(new URI("test/toto"), new URI("test2"))
+            const uri = new URI("test/toto").replacePrefix(new URI("test/toto"), new URI("test2"))
             expect(uri).not.toBeNull()
             expect(uri.path).toBe("test2")
         }
         {
-            let uri = new URI("test/toto").replacePrefix(new URI("test"), new URI("test2"))
+            const uri = new URI("test/toto").replacePrefix(new URI("test"), new URI("test2"))
             expect(uri).not.toBeNull()
             expect(uri.path).toBe("test2/toto")
         }

@@ -7,13 +7,13 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 import { EEncoder } from "./EEncoder.js"
 import {
     AbstractNotification,
     AbstractNotifyingList,
     BasicEList,
+    BufferLike,
     ECodecRegistry,
     EcoreUtils,
     EDecoder,
@@ -38,8 +38,12 @@ import {
     EURIConverterImpl,
     EventType,
     NotificationChain,
+    ReadableStreamLike,
     URI
 } from "./internal.js"
+import { ensureAsyncIterable } from "./utils/Stream.js"
+import { ensureUint8Array } from "./utils/TypedArray.js"
+import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier
@@ -58,15 +62,15 @@ class ResourceNotification extends AbstractNotification {
         this._featureID = featureID
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._notifier
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return this._featureID
     }
 }
@@ -79,15 +83,15 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
         this._resource = resource
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._resource
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         return null
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         return EResourceConstants.RESOURCE__CONTENTS
     }
 
@@ -96,14 +100,14 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 
     protected inverseAdd(eObject: EObject, notifications: ENotificationChain): ENotificationChain {
-        let n = (eObject as EObjectInternal).eSetResource(this._resource, notifications)
+        const n = (eObject as EObjectInternal).eSetResource(this._resource, notifications)
         this._resource.attached(eObject)
         return n
     }
 
     protected inverseRemove(eObject: EObject, notifications: ENotificationChain): ENotificationChain {
         this._resource.detached(eObject)
-        let n = (eObject as EObjectInternal).eSetResource(null, notifications)
+        const n = (eObject as EObjectInternal).eSetResource(null, notifications)
         return n
     }
 
@@ -127,8 +131,8 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 
     private loaded(): void {
-        if (!this._resource.isLoaded) {
-            let n = this._resource.basicSetLoaded(true, null)
+        if (!this._resource.isLoaded()) {
+            const n = this._resource.basicSetLoaded(true, null)
             if (n) {
                 n.dispatch()
             }
@@ -136,8 +140,8 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 
     private unloaded(): void {
-        if (this._resource.isLoaded) {
-            let n = this._resource.basicSetLoaded(false, null)
+        if (this._resource.isLoaded()) {
+            const n = this._resource.basicSetLoaded(false, null)
             if (n) {
                 n.dispatch()
             }
@@ -156,12 +160,12 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _warnings: EList<EDiagnostic> = null
     private static _defaultURIConverter = new EURIConverterImpl()
 
-    get eURI(): URI {
+    getURI(): URI {
         return this._uri
     }
 
-    set eURI(uri: URI) {
-        let oldURI = this._uri
+    setURI(uri: URI) {
+        const oldURI = this._uri
         this._uri = uri
         if (this.eNotificationRequired) {
             this.eNotify(
@@ -170,19 +174,19 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    get eObjectIDManager() {
+    getObjectIDManager() {
         return this._objectIDManager
     }
 
-    set eObjectIDManager(eObjectIDManager: EObjectIDManager) {
+    setObjectIDManager(eObjectIDManager: EObjectIDManager) {
         this._objectIDManager = eObjectIDManager
     }
 
-    get isLoaded() {
+    isLoaded() {
         return this._isLoaded
     }
 
-    get isLoading() {
+    isLoading() {
         return this._isLoading
     }
 
@@ -207,7 +211,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 path = path.splice(1)
                 return this.getObjectByPath(path)
             } else if (uriFragment.charAt(uriFragment.length - 1) == "?") {
-                let index = uriFragment.slice(0, -2).lastIndexOf("?")
+                const index = uriFragment.slice(0, -2).lastIndexOf("?")
                 if (index != -1) id = uriFragment.slice(0, index)
             }
         }
@@ -224,7 +228,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 id = this.getIDForObject(eObject)
                 return id.length > 0 ? id : "/" + this.getURIFragmentRootSegment(eObject)
             } else {
-                let fragmentPath: string[] = []
+                const fragmentPath: string[] = []
                 let isContained = false
                 for (
                     let eContainer = internalEObject.eInternalContainer() as EObjectInternal;
@@ -271,78 +275,67 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return this._warnings
     }
 
-    load(options?: Map<string, any>): Promise<void> {
+    async load(options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
-            let uriConverter = this.getURIConverter()
+            const uriConverter = this.getURIConverter()
             if (uriConverter) {
-                let s = uriConverter.createReadStream(this._uri)
+                const s = await uriConverter.createReadStream(this._uri)
                 if (s) {
-                    return this.loadFromStream(s, options)
+                    await this.loadFromStream(s, options)
                 }
             }
         }
-        return Promise.resolve()
     }
 
-    loadFromStream(s: fs.ReadStream, options?: Map<string, any>): Promise<void> {
+    async loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
-            let codecs = this.getCodecRegistry()
-            let codec = codecs.getCodec(this._uri)
-            if (codec) {
-                let decoder = codec.newDecoder(this, options)
-                if (decoder) {
-                    this._isLoading = true
-                    let n = this.basicSetLoaded(true, null)
-                    return this.doLoadFromStream(decoder, s).then(() => {
-                        if (n) {
-                            n.dispatch()
-                        }
-                        this._isLoading = false
-                    })
-                } else {
-                    let errors = this.getErrors()
-                    errors.clear()
-                    errors.add(
-                        new EDiagnosticImpl(
-                            "Unable to create decoder for '" + this._uri.toString() + "'",
-                            this._uri.toString(),
-                            0,
-                            0
-                        )
-                    )
-                    return Promise.resolve()
-                }
-            } else {
-                let errors = this.getErrors()
+            const codecs = this.getCodecRegistry()
+
+            // find codec
+            const codec = codecs.getCodec(this._uri)
+            if (!codec) {
+                const uri = this._uri.toString()
+                const msg = `Unable to find decoder for ':${uri}'`
+                const errors = this.getErrors()
                 errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        "Unable to find codec for '" + this._uri.toString() + "'",
-                        this._uri.toString(),
-                        0,
-                        0
-                    )
-                )
-                return Promise.resolve()
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                throw new Error(msg)
+            }
+
+            // find decoder
+            const decoder = codec.newDecoder(this, options)
+            if (!decoder) {
+                const uri = this._uri.toString()
+                const msg = `Unable to find codec for ':${uri}'`
+                const errors = this.getErrors()
+                errors.clear()
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                throw new Error(msg)
+            }
+
+            this._isLoading = true
+            const n = this.basicSetLoaded(true, null)
+            const iterable = ensureAsyncIterable(stream)
+            try {
+                await this.doLoadFromStream(decoder, iterable)
+                if (n) {
+                    n.dispatch()
+                }
+            } finally {
+                this._isLoading = false
             }
         }
-        return Promise.resolve()
     }
 
-    protected doLoadFromStream(decoder: EDecoder, s: fs.ReadStream): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            decoder
-                .decodeAsync(s)
-                .then(() => resolve())
-                .catch((reason) => reject(reason))
-        })
+    protected async doLoadFromStream(decoder: EDecoder, stream: ReadableStreamLike<BufferLike>): Promise<void> {
+        await decoder.decodeAsync(stream)
     }
 
     loadSync(options?: Map<string, any>) {
         if (!this._isLoaded) {
-            let uriConverter = this.getURIConverter()
+            const uriConverter = this.getURIConverter()
             if (uriConverter) {
-                let buffer = uriConverter.readSync(this._uri)
+                const buffer = uriConverter.readSync(this._uri)
                 if (buffer) {
                     this.loadFromBuffer(buffer, options)
                 }
@@ -350,58 +343,58 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
     }
 
-    loadFromString(s: string, options?: Map<string, any>) {
-        this.loadFromBuffer(Buffer.from(s), options)
-    }
-
-    private loadFromBuffer(buffer: Buffer, options?: Map<string, any>) {
+    loadFromBuffer(buffer: BufferLike, options?: Map<string, any>) {
         if (!this._isLoaded) {
-            let codecs = this.getCodecRegistry()
-            let codec = codecs.getCodec(this._uri)
-            if (codec) {
-                let decoder = codec.newDecoder(this, options)
-                if (decoder) {
-                    this._isLoading = true
-                    let n = this.basicSetLoaded(true, null)
-                    this.doLoadFromBuffer(decoder, buffer)
-                    if (n) {
-                        n.dispatch()
-                    }
-                    this._isLoading = false
-                } else {
-                    let errors = this.getErrors()
-                    errors.clear()
-                    errors.add(
-                        new EDiagnosticImpl(
-                            "Unable to create decoder for '" + this._uri.toString() + "'",
-                            this._uri.toString(),
-                            0,
-                            0
-                        )
-                    )
-                }
-            } else {
-                let errors = this.getErrors()
+            const codecs = this.getCodecRegistry()
+
+            //find codec
+            const codec = codecs.getCodec(this._uri)
+            if (!codec) {
+                const uri = this._uri.toString()
+                const msg = `Unable to find codec for ':${uri}'`
+                const errors = this.getErrors()
                 errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        "Unable to find codec for '" + this._uri.toString() + "'",
-                        this._uri.toString(),
-                        0,
-                        0
-                    )
-                )
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                throw new Error(msg)
             }
+
+            // find decoder
+            const decoder = codec.newDecoder(this, options)
+            if (!decoder) {
+                const uri = this._uri.toString()
+                const msg = `Unable to find decoder for ':${uri}'`
+                const errors = this.getErrors()
+                errors.clear()
+                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                throw new Error(msg)
+            }
+
+            // decode from bytes
+            this._isLoading = true
+            const n = this.basicSetLoaded(true, null)
+            const array = ensureUint8Array(buffer)
+            this.doLoadFromBytes(decoder, array)
+            if (n) {
+                n.dispatch()
+            }
+            this._isLoading = false
         }
     }
 
-    protected doLoadFromBuffer(decoder: EDecoder, buffer: Buffer): void {
+    loadFromString(s: string, options?: Map<string, any>) {
+        const byteLength = utf8Count(s)
+        const bytes = new Uint8Array(byteLength)
+        utf8Encode(s, bytes, 0)
+        this.loadFromBuffer(bytes, options)
+    }
+
+    protected doLoadFromBytes(decoder: EDecoder, buffer: BufferLike): void {
         decoder.decode(buffer)
     }
 
     unload(): void {
         if (this._isLoaded) {
-            let n = this.basicSetLoaded(false, null)
+            const n = this.basicSetLoaded(false, null)
             this.doUnload()
             if (n) {
                 n.dispatch()
@@ -416,120 +409,96 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._objectIDManager?.clear()
     }
 
-    save(options?: Map<string, any>): Promise<void> {
-        let uriConverter = this.getURIConverter()
-        if (uriConverter) {
-            let s = uriConverter.createWriteStream(this._uri)
-            if (s) {
-                return new Promise<void>((resolve, reject) => {
-                    this.saveToStream(s, options)
-                        .then(() => resolve())
-                        .catch((reason) => reject(reason))
-                        .finally(() => s.end())
-                })
+    async save(options?: Map<string, any>): Promise<void> {
+        const uriConverter = this.getURIConverter()
+        if (!uriConverter) throw new Error(`Unable to find converter for ':${this._uri}'`)
+        const s = await uriConverter.createWriteStream(this._uri)
+        if (s) {
+            try {
+                await this.saveToStream(s, options)
+            } finally {
+                await s.close()
             }
         }
-        return Promise.reject()
     }
 
-    saveToStream(s: fs.WriteStream, options?: Map<string, any>): Promise<void> {
-        let codecs = this.getCodecRegistry()
-        let codec = codecs.getCodec(this._uri)
-        if (codec) {
-            let encoder = codec.newEncoder(this, options)
-            if (encoder) {
-                return this.doSaveToStream(encoder, s)
-            } else {
-                let errors = this.getErrors()
-                errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        "Unable to create decoder for '" + this._uri.toString() + "'",
-                        this._uri.toString(),
-                        0,
-                        0
-                    )
-                )
-            }
-        } else {
-            let errors = this.getErrors()
+    async saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
+        // find codec
+        const codecs = this.getCodecRegistry()
+        const codec = codecs.getCodec(this._uri)
+        if (!codec) {
+            const uri = this._uri.toString()
+            const msg = `Unable to find codec for ':${uri}'`
+            const errors = this.getErrors()
             errors.clear()
-            errors.add(
-                new EDiagnosticImpl(
-                    "Unable to find codec for '" + this._uri.toString() + "'",
-                    this._uri.toString(),
-                    0,
-                    0
-                )
-            )
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+            throw new Error(msg)
         }
-        return Promise.reject()
+        // find encoder
+        const encoder = codec.newEncoder(this, options)
+        if (!encoder) {
+            const uri = this._uri.toString()
+            const msg = `Unable to find encoder for ':${uri}'`
+            const errors = this.getErrors()
+            errors.clear()
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+            throw new Error(msg)
+        }
+        // encode resource
+        await this.doSaveToStream(encoder, stream)
     }
 
     saveSync(options?: Map<string, any>) {
-        let uriConverter = this.getURIConverter()
+        const uriConverter = this.getURIConverter()
         if (uriConverter) {
             uriConverter.writeSync(this._uri, this.saveToBuffer(options))
         }
     }
 
     saveToString(options?: Map<string, any>): string {
-        let buffer = this.saveToBuffer()
-        return buffer ? buffer.toString() : ""
+        const buffer = this.saveToBuffer()
+        return buffer ? utf8Decode(buffer, 0, buffer.length) : ""
     }
 
-    private saveToBuffer(options?: Map<string, any>): Buffer {
-        let codecs = this.getCodecRegistry()
-        let codec = codecs.getCodec(this._uri)
-        if (codec) {
-            let encoder = codec.newEncoder(this, options)
-            if (encoder) {
-                return this.doSaveToBuffer(encoder)
-            } else {
-                let errors = this.getErrors()
-                errors.clear()
-                errors.add(
-                    new EDiagnosticImpl(
-                        "Unable to create decoder for '" + this._uri.toString() + "'",
-                        this._uri.toString(),
-                        0,
-                        0
-                    )
-                )
-            }
-        } else {
-            let errors = this.getErrors()
+    saveToBuffer(options?: Map<string, any>): Uint8Array {
+        const codecs = this.getCodecRegistry()
+        const codec = codecs.getCodec(this._uri)
+        if (!codec) {
+            const uri = this._uri.toString()
+            const msg = `Unable to find codec for ':${uri}'`
+            const errors = this.getErrors()
             errors.clear()
-            errors.add(
-                new EDiagnosticImpl(
-                    "Unable to find codec for '" + this._uri.toString() + "'",
-                    this._uri.toString(),
-                    0,
-                    0
-                )
-            )
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+            throw new Error(msg)
         }
-        return null
+
+        const encoder = codec.newEncoder(this, options)
+        if (!encoder) {
+            const uri = this._uri.toString()
+            const msg = `Unable to find encoder for ':${uri}'`
+            const errors = this.getErrors()
+            errors.clear()
+            errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+            throw new Error(msg)
+        }
+
+        return this.doSaveToBytes(encoder)
     }
 
-    protected doSaveToStream(encoder: EEncoder, s: fs.WriteStream): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            encoder
-                .encodeAsync(this, s)
-                .then((r) => {
-                    resolve()
-                })
-                .catch((reason) => reject(reason))
-                .finally(() => s.end())
-        })
-    }
-
-    protected doSaveToBuffer(encoder: EEncoder): Buffer {
-        let r = encoder.encode(this)
+    protected doSaveToBytes(encoder: EEncoder): Uint8Array {
+        const r = encoder.encode(this)
         if (r.isOk()) {
-            return Buffer.from(r.value)
+            return r.value
         }
         return null
+    }
+
+    protected async doSaveToStream(encoder: EEncoder, stream: WritableStream): Promise<void> {
+        try {
+            await encoder.encodeAsync(this, stream)
+        } finally {
+            await stream.close()
+        }
     }
 
     protected isAttachedDetachedRequired(): boolean {
@@ -564,7 +533,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain {
         let notifications = msgs
-        let oldLoaded = this._isLoaded
+        const oldLoaded = this._isLoaded
         this._isLoaded = isLoaded
         if (this.eNotificationRequired) {
             if (!notifications) {
@@ -585,9 +554,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     basicSetResourceSet(resourceSet: EResourceSet, msgs: ENotificationChain): ENotificationChain {
         let notifications = msgs
-        let oldResourseSet = this._resourceSet
+        const oldResourseSet = this._resourceSet
         if (oldResourseSet) {
-            let list = oldResourseSet.getResources() as ENotifyingList<EResource>
+            const list = oldResourseSet.getResources() as ENotifyingList<EResource>
             notifications = list.removeWithNotification(this, notifications)
         }
         this._resourceSet = resourceSet
@@ -620,7 +589,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         if (this._objectIDManager) return this._objectIDManager.getEObject(id)
 
         for (const eObject of this.eAllContentsResolve(this, false)) {
-            let objectID = EcoreUtils.getEObjectID(eObject)
+            const objectID = EcoreUtils.getEObjectID(eObject)
             if (id == objectID) return eObject
         }
 
@@ -628,7 +597,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     private getIDForObject(eObject: EObject): string {
-        let id = this._objectIDManager?.getID(eObject)
+        const id = this._objectIDManager?.getID(eObject)
         return id !== undefined && id !== null ? String(id) : EcoreUtils.getEObjectID(eObject)
     }
 
@@ -656,7 +625,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     private getURIFragmentRootSegment(eObject: EObject): string {
-        let contents = this.eContents()
+        const contents = this.eContents()
         if (contents.size() > 1) {
             return contents.indexOf(eObject).toString()
         } else {

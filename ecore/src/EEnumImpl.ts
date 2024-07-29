@@ -36,11 +36,18 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
     }
 
     // get the value of eLiterals
-    get eLiterals(): EList<EEnumLiteral> {
+    getELiterals(): EList<EEnumLiteral> {
         if (this._eLiterals == null) {
             this._eLiterals = this.initELiterals()
         }
         return this._eLiterals
+    }
+
+    // set the value of eLiterals
+    setELiterals(newELiterals: EList<EEnumLiteral>) {
+        const l = this.getELiterals()
+        l.clear()
+        l.addAll(newELiterals)
     }
 
     // getEEnumLiteralByLiteral default implementation
@@ -74,7 +81,7 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
-                return this.eLiterals
+                return this.getELiterals()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -82,11 +89,16 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
-                this.eLiterals.clear()
-                this.eLiterals.addAll(newValue as EList<EEnumLiteral>)
+                const list = this.getELiterals()
+                list.clear()
+                list.addAll(newValue as EList<EEnumLiteral>)
                 break
             }
             default: {
@@ -98,7 +110,7 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
-                this.eLiterals.clear()
+                this.getELiterals().clear()
                 break
             }
             default: {
@@ -110,7 +122,7 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
-                return this.eLiterals != null && this.eLiterals.size() != 0
+                return this._eLiterals && !this._eLiterals.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)
@@ -138,8 +150,8 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
     eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
-                let list = this.eLiterals as ENotifyingList<EEnumLiteral>
-                let end = otherEnd as EEnumLiteral
+                const list = this.getELiterals() as ENotifyingList<EEnumLiteral>
+                const end = otherEnd as EEnumLiteral
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -151,8 +163,8 @@ export class EEnumImpl extends EDataTypeExt implements EEnum {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EENUM__ELITERALS: {
-                let list = this.eLiterals as ENotifyingList<EEnumLiteral>
-                let end = otherEnd as EEnumLiteral
+                const list = this.getELiterals() as ENotifyingList<EEnumLiteral>
+                const end = otherEnd as EEnumLiteral
                 return list.removeWithNotification(end, notifications)
             }
             default: {

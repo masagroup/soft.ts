@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tournament:Tournament xmlns:tournament="http://mattsch.com/emf/examples/tournament" name="Tournament">
+  <groups name="Group0" teams="#//@teams.0 #//@teams.4 #//@teams.8 #//@teams.12 #//@teams.16 #//@teams.20 #//@teams.24 #//@teams.28"/>
+  <groups name="Group1" teams="#//@teams.1 #//@teams.5 #//@teams.9 #//@teams.13 #//@teams.17 #//@teams.21 #//@teams.25 #//@teams.29"/>
+  <groups name="Group2" teams="#//@teams.2 #//@teams.6 #//@teams.10 #//@teams.14 #//@teams.18 #//@teams.22 #//@teams.26 #//@teams.30"/>
+  <groups name="Group3" teams="#//@teams.3 #//@teams.7 #//@teams.11 #//@teams.15 #//@teams.19 #//@teams.23 #//@teams.27 #//@teams.31"/>
+  <groups name="Group4"/>
+  <groups name="Group5"/>
+  <groups name="Group6"/>
+  <groups name="Group7"/>
+  <teams name="Team0" group="#//@groups.0"/>
+  <teams name="Team1" group="#//@groups.1"/>
+  <teams name="Team2" group="#//@groups.2"/>
+  <teams name="Team3" group="#//@groups.3"/>
+  <teams name="Team4" group="#//@groups.0"/>
+  <teams name="Team5" group="#//@groups.1"/>
+  <teams name="Team6" group="#//@groups.2"/>
+  <teams name="Team7" group="#//@groups.3"/>
+  <teams name="Team8" group="#//@groups.0"/>
+  <teams name="Team9" group="#//@groups.1"/>
+  <teams name="Team10" group="#//@groups.2"/>
+  <teams name="Team11" group="#//@groups.3"/>
+  <teams name="Team12" group="#//@groups.0"/>
+  <teams name="Team13" group="#//@groups.1"/>
+  <teams name="Team14" group="#//@groups.2"/>
+  <teams name="Team15" group="#//@groups.3"/>
+  <teams name="Team16" group="#//@groups.0"/>
+  <teams name="Team17" group="#//@groups.1"/>
+  <teams name="Team18" group="#//@groups.2"/>
+  <teams name="Team19" group="#//@groups.3"/>
+  <teams name="Team20" group="#//@groups.0"/>
+  <teams name="Team21" group="#//@groups.1"/>
+  <teams name="Team22" group="#//@groups.2"/>
+  <teams name="Team23" group="#//@groups.3"/>
+  <teams name="Team24" group="#//@groups.0"/>
+  <teams name="Team25" group="#//@groups.1"/>
+  <teams name="Team26" group="#//@groups.2"/>
+  <teams name="Team27" group="#//@groups.3"/>
+  <teams name="Team28" group="#//@groups.0"/>
+  <teams name="Team29" group="#//@groups.1"/>
+  <teams name="Team30" group="#//@groups.2"/>
+  <teams name="Team31" group="#//@groups.3"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.0" guestTeam="#//@teams.4" location="Team0 vs Team4" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.0" guestTeam="#//@teams.8" location="Team0 vs Team8" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.0" guestTeam="#//@teams.12" location="Team0 vs Team12" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.0" guestTeam="#//@teams.16" location="Team0 vs Team16" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.0" guestTeam="#//@teams.20" location="Team0 vs Team20" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.0" guestTeam="#//@teams.24" location="Team0 vs Team24" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.0" guestTeam="#//@teams.28" location="Team0 vs Team28" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.4" guestTeam="#//@teams.8" location="Team4 vs Team8" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.4" guestTeam="#//@teams.12" location="Team4 vs Team12" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.4" guestTeam="#//@teams.16" location="Team4 vs Team16" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.4" guestTeam="#//@teams.20" location="Team4 vs Team20" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.4" guestTeam="#//@teams.24" location="Team4 vs Team24" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.4" guestTeam="#//@teams.28" location="Team4 vs Team28" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.8" guestTeam="#//@teams.12" location="Team8 vs Team12" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.8" guestTeam="#//@teams.16" location="Team8 vs Team16" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.8" guestTeam="#//@teams.20" location="Team8 vs Team20" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.8" guestTeam="#//@teams.24" location="Team8 vs Team24" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.8" guestTeam="#//@teams.28" location="Team8 vs Team28" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.12" guestTeam="#//@teams.16" location="Team12 vs Team16" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.12" guestTeam="#//@teams.20" location="Team12 vs Team20" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.12" guestTeam="#//@teams.24" location="Team12 vs Team24" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.12" guestTeam="#//@teams.28" location="Team12 vs Team28" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.16" guestTeam="#//@teams.20" location="Team16 vs Team20" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.16" guestTeam="#//@teams.24" location="Team16 vs Team24" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.16" guestTeam="#//@teams.28" location="Team16 vs Team28" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.20" guestTeam="#//@teams.24" location="Team20 vs Team24" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.20" guestTeam="#//@teams.28" location="Team20 vs Team28" kind="RoundOf16"/>
+  <matches group="#//@groups.0" homeTeam="#//@teams.24" guestTeam="#//@teams.28" location="Team24 vs Team28" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.1" guestTeam="#//@teams.5" location="Team1 vs Team5" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.1" guestTeam="#//@teams.9" location="Team1 vs Team9" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.1" guestTeam="#//@teams.13" location="Team1 vs Team13" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.1" guestTeam="#//@teams.17" location="Team1 vs Team17" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.1" guestTeam="#//@teams.21" location="Team1 vs Team21" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.1" guestTeam="#//@teams.25" location="Team1 vs Team25" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.1" guestTeam="#//@teams.29" location="Team1 vs Team29" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.5" guestTeam="#//@teams.9" location="Team5 vs Team9" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.5" guestTeam="#//@teams.13" location="Team5 vs Team13" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.5" guestTeam="#//@teams.17" location="Team5 vs Team17" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.5" guestTeam="#//@teams.21" location="Team5 vs Team21" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.5" guestTeam="#//@teams.25" location="Team5 vs Team25" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.5" guestTeam="#//@teams.29" location="Team5 vs Team29" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.9" guestTeam="#//@teams.13" location="Team9 vs Team13" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.9" guestTeam="#//@teams.17" location="Team9 vs Team17" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.9" guestTeam="#//@teams.21" location="Team9 vs Team21" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.9" guestTeam="#//@teams.25" location="Team9 vs Team25" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.9" guestTeam="#//@teams.29" location="Team9 vs Team29" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.13" guestTeam="#//@teams.17" location="Team13 vs Team17" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.13" guestTeam="#//@teams.21" location="Team13 vs Team21" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.13" guestTeam="#//@teams.25" location="Team13 vs Team25" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.13" guestTeam="#//@teams.29" location="Team13 vs Team29" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.17" guestTeam="#//@teams.21" location="Team17 vs Team21" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.17" guestTeam="#//@teams.25" location="Team17 vs Team25" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.17" guestTeam="#//@teams.29" location="Team17 vs Team29" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.21" guestTeam="#//@teams.25" location="Team21 vs Team25" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.21" guestTeam="#//@teams.29" location="Team21 vs Team29" kind="RoundOf16"/>
+  <matches group="#//@groups.1" homeTeam="#//@teams.25" guestTeam="#//@teams.29" location="Team25 vs Team29" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.2" guestTeam="#//@teams.6" location="Team2 vs Team6" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.2" guestTeam="#//@teams.10" location="Team2 vs Team10" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.2" guestTeam="#//@teams.14" location="Team2 vs Team14" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.2" guestTeam="#//@teams.18" location="Team2 vs Team18" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.2" guestTeam="#//@teams.22" location="Team2 vs Team22" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.2" guestTeam="#//@teams.26" location="Team2 vs Team26" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.2" guestTeam="#//@teams.30" location="Team2 vs Team30" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.6" guestTeam="#//@teams.10" location="Team6 vs Team10" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.6" guestTeam="#//@teams.14" location="Team6 vs Team14" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.6" guestTeam="#//@teams.18" location="Team6 vs Team18" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.6" guestTeam="#//@teams.22" location="Team6 vs Team22" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.6" guestTeam="#//@teams.26" location="Team6 vs Team26" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.6" guestTeam="#//@teams.30" location="Team6 vs Team30" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.10" guestTeam="#//@teams.14" location="Team10 vs Team14" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.10" guestTeam="#//@teams.18" location="Team10 vs Team18" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.10" guestTeam="#//@teams.22" location="Team10 vs Team22" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.10" guestTeam="#//@teams.26" location="Team10 vs Team26" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.10" guestTeam="#//@teams.30" location="Team10 vs Team30" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.14" guestTeam="#//@teams.18" location="Team14 vs Team18" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.14" guestTeam="#//@teams.22" location="Team14 vs Team22" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.14" guestTeam="#//@teams.26" location="Team14 vs Team26" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.14" guestTeam="#//@teams.30" location="Team14 vs Team30" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.18" guestTeam="#//@teams.22" location="Team18 vs Team22" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.18" guestTeam="#//@teams.26" location="Team18 vs Team26" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.18" guestTeam="#//@teams.30" location="Team18 vs Team30" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.22" guestTeam="#//@teams.26" location="Team22 vs Team26" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.22" guestTeam="#//@teams.30" location="Team22 vs Team30" kind="RoundOf16"/>
+  <matches group="#//@groups.2" homeTeam="#//@teams.26" guestTeam="#//@teams.30" location="Team26 vs Team30" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.3" guestTeam="#//@teams.7" location="Team3 vs Team7" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.3" guestTeam="#//@teams.11" location="Team3 vs Team11" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.3" guestTeam="#//@teams.15" location="Team3 vs Team15" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.3" guestTeam="#//@teams.19" location="Team3 vs Team19" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.3" guestTeam="#//@teams.23" location="Team3 vs Team23" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.3" guestTeam="#//@teams.27" location="Team3 vs Team27" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.3" guestTeam="#//@teams.31" location="Team3 vs Team31" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.7" guestTeam="#//@teams.11" location="Team7 vs Team11" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.7" guestTeam="#//@teams.15" location="Team7 vs Team15" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.7" guestTeam="#//@teams.19" location="Team7 vs Team19" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.7" guestTeam="#//@teams.23" location="Team7 vs Team23" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.7" guestTeam="#//@teams.27" location="Team7 vs Team27" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.7" guestTeam="#//@teams.31" location="Team7 vs Team31" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.11" guestTeam="#//@teams.15" location="Team11 vs Team15" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.11" guestTeam="#//@teams.19" location="Team11 vs Team19" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.11" guestTeam="#//@teams.23" location="Team11 vs Team23" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.11" guestTeam="#//@teams.27" location="Team11 vs Team27" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.11" guestTeam="#//@teams.31" location="Team11 vs Team31" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.15" guestTeam="#//@teams.19" location="Team15 vs Team19" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.15" guestTeam="#//@teams.23" location="Team15 vs Team23" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.15" guestTeam="#//@teams.27" location="Team15 vs Team27" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.15" guestTeam="#//@teams.31" location="Team15 vs Team31" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.19" guestTeam="#//@teams.23" location="Team19 vs Team23" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.19" guestTeam="#//@teams.27" location="Team19 vs Team27" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.19" guestTeam="#//@teams.31" location="Team19 vs Team31" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.23" guestTeam="#//@teams.27" location="Team23 vs Team27" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.23" guestTeam="#//@teams.31" location="Team23 vs Team31" kind="RoundOf16"/>
+  <matches group="#//@groups.3" homeTeam="#//@teams.27" guestTeam="#//@teams.31" location="Team27 vs Team31" kind="RoundOf16"/>
+</tournament:Tournament>

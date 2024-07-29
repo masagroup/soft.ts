@@ -49,23 +49,37 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     }
 
     // get the value of contents
-    get contents(): EList<EObject> {
+    getContents(): EList<EObject> {
         if (this._contents == null) {
             this._contents = this.initContents()
         }
         return this._contents
     }
 
+    // set the value of contents
+    setContents(newContents: EList<EObject>) {
+        const l = this.getContents()
+        l.clear()
+        l.addAll(newContents)
+    }
+
     // get the value of details
-    get details(): EMap<string, string> {
+    getDetails(): EMap<string, string> {
         if (this._details == null) {
             this._details = this.initDetails()
         }
         return this._details
     }
 
+    // set the value of details
+    setDetails(newDetails: EMap<string, string>) {
+        const l = this.getDetails()
+        l.clear()
+        l.addAll(newDetails)
+    }
+
     // get the value of eModelElement
-    get eModelElement(): EModelElement {
+    getEModelElement(): EModelElement {
         if (this.eContainerFeatureID() == EcoreConstants.EANNOTATION__EMODEL_ELEMENT) {
             return this.eContainer() as EModelElement
         }
@@ -73,7 +87,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     }
 
     // set the value of eModelElement
-    set eModelElement(newEModelElement: EModelElement) {
+    setEModelElement(newEModelElement: EModelElement): void {
         if (
             newEModelElement != this.eInternalContainer() ||
             (newEModelElement != null && this.eContainerFeatureID() != EcoreConstants.EANNOTATION__EMODEL_ELEMENT)
@@ -93,7 +107,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
             if (notifications != null) {
                 notifications.dispatch()
             }
-        } else if (this.eNotificationRequired) {
+        } else if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
@@ -111,23 +125,30 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     }
 
     // get the value of references
-    get references(): EList<EObject> {
+    getReferences(): EList<EObject> {
         if (this._references == null) {
             this._references = this.initReferences()
         }
         return this._references
     }
 
+    // set the value of references
+    setReferences(newReferences: EList<EObject>) {
+        const l = this.getReferences()
+        l.clear()
+        l.addAll(newReferences)
+    }
+
     // get the value of source
-    get source(): string {
+    getSource(): string {
         return this._source
     }
 
     // set the value of source
-    set source(newSource: string) {
-        let oldSource = this._source
+    setSource(newSource: string): void {
+        const oldSource = this._source
         this._source = newSource
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__SOURCE, oldSource, newSource)
             )
@@ -165,21 +186,20 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
-                return this.contents
+                return this.getContents()
             }
             case EcoreConstants.EANNOTATION__DETAILS: {
-                return this.details
+                return this.getDetails()
             }
             case EcoreConstants.EANNOTATION__EMODEL_ELEMENT: {
-                return this.eModelElement
+                return this.getEModelElement()
             }
             case EcoreConstants.EANNOTATION__REFERENCES: {
-                return !resolve && isEObjectList(this.references)
-                    ? this.references.getUnResolvedList()
-                    : this.references
+                const list = this.getReferences()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.EANNOTATION__SOURCE: {
-                return this.source
+                return this.getSource()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -187,29 +207,36 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
-                this.contents.clear()
-                this.contents.addAll(newValue as EList<EObject>)
+                const list = this.getContents()
+                list.clear()
+                list.addAll(newValue as EList<EObject>)
                 break
             }
             case EcoreConstants.EANNOTATION__DETAILS: {
-                this.details.clear()
-                this.details.addAll(newValue as EList<EMapEntry<string, string>>)
+                const list = this.getDetails()
+                list.clear()
+                list.addAll(newValue as EList<EMapEntry<string, string>>)
                 break
             }
             case EcoreConstants.EANNOTATION__EMODEL_ELEMENT: {
-                this.eModelElement = newValue as EModelElement
+                this.setEModelElement(newValue as EModelElement)
                 break
             }
             case EcoreConstants.EANNOTATION__REFERENCES: {
-                this.references.clear()
-                this.references.addAll(newValue as EList<EObject>)
+                const list = this.getReferences()
+                list.clear()
+                list.addAll(newValue as EList<EObject>)
                 break
             }
             case EcoreConstants.EANNOTATION__SOURCE: {
-                this.source = newValue as string
+                this.setSource(newValue as string)
                 break
             }
             default: {
@@ -221,23 +248,23 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
-                this.contents.clear()
+                this.getContents().clear()
                 break
             }
             case EcoreConstants.EANNOTATION__DETAILS: {
-                this.details.clear()
+                this.getDetails().clear()
                 break
             }
             case EcoreConstants.EANNOTATION__EMODEL_ELEMENT: {
-                this.eModelElement = null
+                this.setEModelElement(null)
                 break
             }
             case EcoreConstants.EANNOTATION__REFERENCES: {
-                this.references.clear()
+                this.getReferences().clear()
                 break
             }
             case EcoreConstants.EANNOTATION__SOURCE: {
-                this.source = ""
+                this.setSource("")
                 break
             }
             default: {
@@ -249,16 +276,16 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
-                return this.contents != null && this.contents.size() != 0
+                return this._contents && !this._contents.isEmpty()
             }
             case EcoreConstants.EANNOTATION__DETAILS: {
-                return this.details != null && this.details.size() != 0
+                return this._details && !this._details.isEmpty()
             }
             case EcoreConstants.EANNOTATION__EMODEL_ELEMENT: {
-                return this.eModelElement != null
+                return this.getEModelElement() != null
             }
             case EcoreConstants.EANNOTATION__REFERENCES: {
-                return this.references != null && this.references.size() != 0
+                return this._references && !this._references.isEmpty()
             }
             case EcoreConstants.EANNOTATION__SOURCE: {
                 return this._source != ""
@@ -287,8 +314,8 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EANNOTATION__CONTENTS: {
-                let list = this.contents as ENotifyingList<EObject>
-                let end = otherEnd as EObject
+                const list = this.getContents() as ENotifyingList<EObject>
+                const end = otherEnd as EObject
                 return list.removeWithNotification(end, notifications)
             }
             case EcoreConstants.EANNOTATION__DETAILS: {

@@ -29,79 +29,79 @@ interface EEnumLiteralInternal extends EEnumLiteral, EObjectInternal {}
 
 describe("EEnumImpl", () => {
     test("eStaticClass", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEEnum())
     })
 
     test("getELiterals", () => {
-        let o = new EEnumImpl()
-        expect(o.eLiterals).not.toBeNull()
+        const o = new EEnumImpl()
+        expect(o.getELiterals()).not.toBeNull()
     })
 
     test("getEEnumLiteralByLiteral", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.getEEnumLiteralByLiteral("")).toThrow(Error)
     })
     test("getEEnumLiteralByName", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.getEEnumLiteralByName("")).toThrow(Error)
     })
     test("getEEnumLiteralByValue", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.getEEnumLiteralByValue(0)).toThrow(Error)
     })
 
     test("eGetFromID", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.EENUM__ELITERALS, true)).toStrictEqual(o.eLiterals)
+        expect(o.eGetFromID(EcoreConstants.EENUM__ELITERALS, true)).toStrictEqual(o.getELiterals())
         expect(
             deepEqual(
                 o.eGetFromID(EcoreConstants.EENUM__ELITERALS, false),
-                (o.eLiterals as EObjectList<EEnumLiteral>).getUnResolvedList()
+                (o.getELiterals() as EObjectList<EEnumLiteral>).getUnResolvedList()
             )
         ).toBeTruthy()
     })
 
     test("eSetFromID", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<EEnumLiteralInternal>()
-            let value = instance(mockValue)
-            let l = new ImmutableEList<EEnumLiteral>([value])
+            const mockValue = mock<EEnumLiteralInternal>()
+            const value = instance(mockValue)
+            const l = new ImmutableEList<EEnumLiteral>([value])
             when(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EENUM__ELITERALS, l)
             // checks
-            expect(o.eLiterals.size()).toBe(1)
-            expect(o.eLiterals.get(0)).toBe(value)
+            expect(o.getELiterals().size()).toBe(1)
+            expect(o.getELiterals().get(0)).toBe(value)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).once()
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.EENUM__ELITERALS)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.EENUM__ELITERALS)
-            let v = o.eGetFromID(EcoreConstants.EENUM__ELITERALS, false)
+            const v = o.eGetFromID(EcoreConstants.EENUM__ELITERALS, false)
             expect(v).not.toBeNull()
-            let l = v as EList<EEnumLiteral>
+            const l = v as EList<EEnumLiteral>
             expect(l.isEmpty()).toBeTruthy()
         }
     })
 
     test("eInvokeFromID", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error)
         expect(() => o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_BY_LITERAL_ESTRING, null)).toThrow(Error)
         expect(() => o.eInvokeFromID(EcoreConstants.EENUM__GET_EENUM_LITERAL_EINT, null)).toThrow(Error)
@@ -109,44 +109,44 @@ describe("EEnumImpl", () => {
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EEnumLiteralInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EEnumLiteralInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, EcoreConstants.EENUM__ELITERALS, null)
-            expect(o.eLiterals.contains(value)).toBeTruthy()
+            expect(o.getELiterals().contains(value)).toBeTruthy()
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new EEnumImpl()
+        const o = new EEnumImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<EEnumLiteralInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EEnumLiteralInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).thenReturn(null)
 
-            o.eLiterals.add(value)
+            o.getELiterals().add(value)
 
             // basic inverse remove
             o.eBasicInverseRemove(value, EcoreConstants.EENUM__ELITERALS, null)
 
             // check it was removed
-            expect(o.eLiterals.contains(value)).toBeFalsy()
+            expect(o.getELiterals().contains(value)).toBeFalsy()
         }
     })
 })

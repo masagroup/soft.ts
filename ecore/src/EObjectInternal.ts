@@ -28,36 +28,27 @@ export interface EObjectInternal extends EObject {
     eSetResource(resource: EResource, notifications: ENotificationChain): ENotificationChain
 
     eInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
-
     eInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
+    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
+    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
 
     eDerivedFeatureID(container: EObject, featureID: number): number
-
     eDerivedOperationID(container: EObject, operationID: number): number
 
     eGetFromID(featureID: number, resolve: boolean, core: boolean): any
-
+    eGetFromIDAsync(featureID: number, resolve: boolean, core: boolean): Promise<any>
     eSetFromID(featureID: number, newValue: any): void
-
     eUnsetFromID(featureID: number): void
-
     eIsSetFromID(featureID: number): boolean
-
     eInvokeFromID(operationID: number, args: EList<any>): any
 
-    eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
-
-    eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain
-
     eObjectForFragmentSegment(fragment: string): EObject
-
     eURIFragmentSegment(feature: EStructuralFeature, o: EObject): string
 
     eProxyURI(): URI
-
     eSetProxyURI(uri: URI): void
-
     eResolveProxy(proxy: EObject): EObject
+    eResolveProxyAsync(proxy: EObject): Promise<EObject>
 }
 
 export function isEObject(o: any): o is EObject {

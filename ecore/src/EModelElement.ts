@@ -12,9 +12,9 @@
 import { EAnnotation, EList, EObject } from "./internal.js"
 
 export interface EModelElement extends EObject {
-    // References
-    readonly eAnnotations: EList<EAnnotation>
+    // eAnnotations
+    getEAnnotations(): EList<EAnnotation>
 
-    // Operations
+    // operations
     getEAnnotation(source: string): EAnnotation
 }

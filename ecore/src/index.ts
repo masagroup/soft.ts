@@ -48,6 +48,8 @@ export {
     EParameter,
     EReference,
     EResource,
+    BufferLike,
+    ReadableStreamLike,
     ECodec,
     EEncoder,
     EDecoder,

@@ -12,16 +12,27 @@
 import { EClassifier, EFactory, EList, ENamedElement } from "./internal.js"
 
 export interface EPackage extends ENamedElement {
-    // Attributes
-    nsURI: string
-    nsPrefix: string
+    // nsURI
+    getNsURI(): string
+    setNsURI(newNsURI: string): void
 
-    // References
-    eFactoryInstance: EFactory
-    readonly eClassifiers: EList<EClassifier>
-    readonly eSubPackages: EList<EPackage>
-    readonly eSuperPackage: EPackage
+    // nsPrefix
+    getNsPrefix(): string
+    setNsPrefix(newNsPrefix: string): void
 
-    // Operations
+    // eFactoryInstance
+    getEFactoryInstance(): EFactory
+    setEFactoryInstance(newEFactoryInstance: EFactory): void
+
+    // eClassifiers
+    getEClassifiers(): EList<EClassifier>
+
+    // eSubPackages
+    getESubPackages(): EList<EPackage>
+
+    // eSuperPackage
+    getESuperPackage(): EPackage
+
+    // operations
     getEClassifier(name: string): EClassifier
 }

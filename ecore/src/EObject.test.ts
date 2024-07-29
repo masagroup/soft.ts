@@ -12,13 +12,13 @@ import { getEcoreFactory } from "./index.js"
 
 describe("EObject", () => {
     test("eContents", () => {
-        let c = getEcoreFactory().createEClass()
-        let a1 = getEcoreFactory().createEAttribute()
-        let a2 = getEcoreFactory().createEAttribute()
-        let o1 = getEcoreFactory().createEOperation()
-        c.eStructuralFeatures.add(a1)
-        c.eStructuralFeatures.add(a2)
-        c.eOperations.add(o1)
+        const c = getEcoreFactory().createEClass()
+        const a1 = getEcoreFactory().createEAttribute()
+        const a2 = getEcoreFactory().createEAttribute()
+        const o1 = getEcoreFactory().createEOperation()
+        c.getEStructuralFeatures().add(a1)
+        c.getEStructuralFeatures().add(a2)
+        c.getEOperations().add(o1)
         expect(c.eContents().toArray()).toEqual([a1, a2, o1])
     })
 })

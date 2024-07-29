@@ -30,7 +30,7 @@ export class EParameterImpl extends ETypedElementExt implements EParameter {
     }
 
     // get the value of eOperation
-    get eOperation(): EOperation {
+    getEOperation(): EOperation {
         if (this.eContainerFeatureID() == EcoreConstants.EPARAMETER__EOPERATION) {
             return this.eContainer() as EOperation
         }
@@ -40,7 +40,7 @@ export class EParameterImpl extends ETypedElementExt implements EParameter {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EPARAMETER__EOPERATION: {
-                return this.eOperation
+                return this.getEOperation()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -48,10 +48,14 @@ export class EParameterImpl extends ETypedElementExt implements EParameter {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EPARAMETER__EOPERATION: {
-                return this.eOperation != null
+                return this.getEOperation() != null
             }
             default: {
                 return super.eIsSetFromID(featureID)

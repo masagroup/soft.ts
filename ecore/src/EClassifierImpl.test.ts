@@ -26,156 +26,158 @@ interface EPackageInternal extends EPackage, EObjectInternal {}
 
 describe("EClassifierImpl", () => {
     test("eStaticClass", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         expect(o.eStaticClass()).toBe(getEcorePackage().getEClassifierClass())
     })
 
     test("getClassifierID", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         // get default value
-        expect(o.classifierID).toBe(-1)
+        expect(o.getClassifierID()).toBe(-1)
     })
 
     test("setClassifierID", () => {
-        let o = new EClassifierImpl()
-        let value = 45
+        const o = new EClassifierImpl()
+        const value = 45
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.classifierID = value
+        o.setClassifierID(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe(-1)
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe(-1)
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getDefaultValue", () => {
-        let o = new EClassifierImpl()
-        expect(() => o.defaultValue).toThrow(Error)
+        const o = new EClassifierImpl()
+        expect(() => o.getDefaultValue()).toThrow(Error)
     })
 
     test("getEPackage", () => {
         // default
-        let o = new EClassifierImpl()
-        expect(o.ePackage).toBeNull()
+        const o = new EClassifierImpl()
+        expect(o.getEPackage()).toBeNull()
 
         // set a mock container
-        let mockContainer = mock<EObject>()
-        let container = instance(mockContainer)
+        const mockContainer = mock<EObject>()
+        const container = instance(mockContainer)
         o.eSetInternalContainer(container, EcoreConstants.ECLASSIFIER__EPACKAGE)
 
         // no proxy
         when(mockContainer.eIsProxy()).thenReturn(false)
-        expect(o.ePackage).toBe(container)
+        expect(o.getEPackage()).toBe(container)
         verify(mockContainer.eIsProxy()).once()
     })
 
     test("getInstanceClass", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         // get default value
-        expect(o.instanceClass).toBe(null)
+        expect(o.getInstanceClass()).toBe(null)
     })
 
     test("setInstanceClass", () => {
-        let o = new EClassifierImpl()
-        let value = null
+        const o = new EClassifierImpl()
+        const value = null
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.instanceClass = value
+        o.setInstanceClass(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getInstanceClassName", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         // get default value
-        expect(o.instanceClassName).toBe("")
+        expect(o.getInstanceClassName()).toBe("")
     })
 
     test("setInstanceClassName", () => {
-        let o = new EClassifierImpl()
-        let value = "Test String"
+        const o = new EClassifierImpl()
+        const value = "Test String"
 
         // add listener
-        let mockAdapter = mock<EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
-        o.instanceClassName = value
+        o.setInstanceClassName(value)
 
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBe("")
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBe("")
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getInstanceTypeName", () => {
-        let o = new EClassifierImpl()
-        expect(() => o.instanceTypeName).toThrow(Error)
+        const o = new EClassifierImpl()
+        expect(() => o.getInstanceTypeName()).toThrow(Error)
     })
 
     test("setInstanceTypeName", () => {
-        let o = new EClassifierImpl()
-        let value = "Test String"
-        expect(() => (o.instanceTypeName = value)).toThrow(Error)
+        const o = new EClassifierImpl()
+        const value = "Test String"
+        expect(() => o.setInstanceTypeName(value)).toThrow(Error)
     })
 
     test("isInstance", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         expect(() => o.isInstance(null)).toThrow(Error)
     })
 
     test("eGetFromID", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, true)).toStrictEqual(o.classifierID)
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, true)).toStrictEqual(o.getClassifierID())
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE, false)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__EPACKAGE, true)).toStrictEqual(o.ePackage)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, true)).toStrictEqual(o.instanceClass)
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, true)).toStrictEqual(o.instanceClassName)
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__EPACKAGE, true)).toStrictEqual(o.getEPackage())
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, true)).toStrictEqual(o.getInstanceClass())
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, true)).toStrictEqual(
+            o.getInstanceClassName()
+        )
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, false)).toThrow(Error)
     })
 
     test("eSetFromID", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let value = 45
+            const value = 45
             o.eSetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, value)
             expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, false)).toBe(value)
         }
         {
-            let value = null
+            const value = null
             o.eSetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, value)
             expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, false)).toBe(value)
         }
         {
-            let value = "Test String"
+            const value = "Test String"
             o.eSetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, value)
             expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, false)).toBe(value)
         }
@@ -183,7 +185,7 @@ describe("EClassifierImpl", () => {
     })
 
     test("eIsSetFromID", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID)).toBeFalsy()
         expect(() => o.eIsSetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE)).toThrow(Error)
@@ -194,21 +196,21 @@ describe("EClassifierImpl", () => {
     })
 
     test("eUnsetFromID", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID)
-            let v = o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, false)
+            const v = o.eGetFromID(EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, false)
             expect(v).toBe(-1)
         }
         {
             o.eUnsetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS)
-            let v = o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, false)
+            const v = o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, false)
             expect(v).toBeNull()
         }
         {
             o.eUnsetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME)
-            let v = o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, false)
+            const v = o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, false)
             expect(v).toBe("")
         }
         {
@@ -217,52 +219,52 @@ describe("EClassifierImpl", () => {
     })
 
     test("eInvokeFromID", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error)
         expect(() => o.eInvokeFromID(EcoreConstants.ECLASSIFIER__IS_INSTANCE_EJAVAOBJECT, null)).toThrow(Error)
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EPackageInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EPackageInternal>()
+            const value = instance(mockValue)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.ECLASSIFIER__EPACKAGE, null)
-            expect(o.ePackage).toBe(value)
+            expect(o.getEPackage()).toBe(value)
 
             reset(mockValue)
-            let mockOther = mock<EPackageInternal>()
-            let other = instance(mockOther)
+            const mockOther = mock<EPackageInternal>()
+            const other = instance(mockOther)
             when(mockOther.eResource()).thenReturn(null)
             when(mockOther.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__ECLASSIFIERS, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.ECLASSIFIER__EPACKAGE, null)
-            expect(o.ePackage).toBe(other)
+            expect(o.getEPackage()).toBe(other)
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new EClassifierImpl()
+        const o = new EClassifierImpl()
         {
-            let mockObject = mock<EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<EPackageInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<EPackageInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseRemove(value, EcoreConstants.ECLASSIFIER__EPACKAGE, null)
         }
     })

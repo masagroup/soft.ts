@@ -13,6 +13,6 @@ import * as ecore from "@masagroup/ecore"
 import { AudioVisualItem, Person } from "./internal.js"
 
 export interface VideoCassette extends AudioVisualItem {
-    // References
+    // cast property
     readonly cast: ecore.EList<Person>
 }

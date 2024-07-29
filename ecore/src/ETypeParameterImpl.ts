@@ -36,11 +36,18 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     }
 
     // get the value of eBounds
-    get eBounds(): EList<EGenericType> {
+    getEBounds(): EList<EGenericType> {
         if (this._eBounds == null) {
             this._eBounds = this.initEBounds()
         }
         return this._eBounds
+    }
+
+    // set the value of eBounds
+    setEBounds(newEBounds: EList<EGenericType>) {
+        const l = this.getEBounds()
+        l.clear()
+        l.addAll(newEBounds)
     }
 
     protected initEBounds(): EList<EGenericType> {
@@ -59,7 +66,7 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {
-                return this.eBounds
+                return this.getEBounds()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -67,11 +74,16 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {
-                this.eBounds.clear()
-                this.eBounds.addAll(newValue as EList<EGenericType>)
+                const list = this.getEBounds()
+                list.clear()
+                list.addAll(newValue as EList<EGenericType>)
                 break
             }
             default: {
@@ -83,7 +95,7 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {
-                this.eBounds.clear()
+                this.getEBounds().clear()
                 break
             }
             default: {
@@ -95,7 +107,7 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {
-                return this.eBounds != null && this.eBounds.size() != 0
+                return this._eBounds && !this._eBounds.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)
@@ -106,8 +118,8 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ETYPE_PARAMETER__EBOUNDS: {
-                let list = this.eBounds as ENotifyingList<EGenericType>
-                let end = otherEnd as EGenericType
+                const list = this.getEBounds() as ENotifyingList<EGenericType>
+                const end = otherEnd as EGenericType
                 return list.removeWithNotification(end, notifications)
             }
             default: {

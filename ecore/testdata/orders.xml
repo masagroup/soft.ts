@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<orders:Orders xmlns:orders="http:///net/masagroup/orders.ecore/1.0.0">
+  <order nb="2">
+    <product href="shop.xml#//@products.0"/>
+  </order>
+  <order nb="4">
+    <product href="shop.xml#//@products.6"/>
+  </order>
+  <order nb="3">
+    <product href="shop.xml#//@products.0"/>
+  </order>
+  <order>
+    <product href="shop.xml#//@products.4"/>
+  </order>
+  <order>
+    <product href="shop.xml#//@products.5"/>
+  </order>
+  <order nb="1">
+    <product href="shop.xml#//@products.3"/>
+  </order>
+  <order nb="4">
+    <product href="shop.xml#//@products.1"/>
+  </order>
+  <order nb="4">
+    <product href="shop.xml#//@products.7"/>
+  </order>
+  <order>
+    <product href="shop.xml#//@products.0"/>
+  </order>
+  <order nb="1">
+    <product href="shop.xml#//@products.6"/>
+  </order>
+</orders:Orders>

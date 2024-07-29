@@ -10,23 +10,23 @@
 import { EClass, EReference, EReferenceImpl, EStructuralFeature, isEClass } from "./internal.js"
 
 export function isEReference(s: EStructuralFeature): s is EReference {
-    return "eReferenceType" in s
+    return s == undefined ? undefined : "getEReferenceType" in s
 }
 
 export function isContainer(feature: EStructuralFeature): boolean {
-    return isEReference(feature) && feature.eOpposite && feature.eOpposite.isContainment
+    return isEReference(feature) && feature.getEOpposite() && feature.getEOpposite().isContainment()
 }
 
 export function isBidirectional(feature: EStructuralFeature): boolean {
-    return isEReference(feature) && feature.eOpposite != null
+    return isEReference(feature) && feature.getEOpposite() != null
 }
 
 export function isContains(feature: EStructuralFeature): boolean {
-    return isEReference(feature) && feature.isContainment
+    return isEReference(feature) && feature.isContainment()
 }
 
 export function isProxy(feature: EStructuralFeature): boolean {
-    return isEReference(feature) ? feature.isResolveProxies : false
+    return isEReference(feature) ? feature.isResolveProxies() : false
 }
 
 export class EReferenceExt extends EReferenceImpl {
@@ -36,14 +36,14 @@ export class EReferenceExt extends EReferenceImpl {
         super()
     }
 
-    get isContainer(): boolean {
-        return this.eOpposite && this.eOpposite.isContainment
+    isContainer(): boolean {
+        return this.getEOpposite() && this.getEOpposite().isContainment()
     }
 
     // get the value of eReferenceType
-    get eReferenceType(): EClass {
+    getEReferenceType(): EClass {
         if (!this._referenceType || this._referenceType.eIsProxy()) {
-            let eType = this.eType
+            const eType = this.getEType()
             if (isEClass(eType)) {
                 this._referenceType = eType
             }
@@ -54,7 +54,7 @@ export class EReferenceExt extends EReferenceImpl {
     // get the basic value of eReferenceType with no proxy resolution
     basicGetEReferenceType(): EClass {
         if (!this._referenceType) {
-            let eType = this.basicGetEType()
+            const eType = this.basicGetEType()
             if (isEClass(eType)) {
                 this._referenceType = eType
             }

@@ -1,6 +1,6 @@
 {
   "name": "@masagroup/ecore",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "ecore typescript library",
   "author": "MASA Group",
   "license": "MPL-2.0",
@@ -21,6 +21,7 @@
     "build-types": "tsc -b tsconfig.types.json",
     "build-server": "tsc -b tsconfig.esm.json tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
     "pretty": "prettier --write src/**/*.ts",
+    "lint": "eslint src/**/*.ts",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
@@ -28,15 +29,19 @@
     "node": ">=16"
   },
   "devDependencies": {
+    "@eslint/js": "^9.7.0",
     "@types/deep-equal": "^1.0.4",
+    "@types/eslint__js": "^8.42.3",
     "@vitest/coverage-v8": "^2.0.3",
     "deep-equal": "^2.2.3",
+    "eslint": "^8.57.0",
     "ncp": "^2.0.0",
     "prettier": "^3.3.2",
     "prettier-plugin-organize-imports": "^4.0.0",
     "ts-mockito": "^2.6.1",
     "tslib": "^2.6.3",
-    "typescript": "^5.5.2",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^7.17.0",
     "vitest": "^2.0.2"
   },
   "dependencies": {

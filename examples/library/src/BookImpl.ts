@@ -43,12 +43,99 @@ export class BookImpl extends CirculatingItemImpl implements Book {
 
     // get the value of author
     get author(): Writer {
+        return this.getAuthor()
+    }
+
+    // set the value of author
+    set author(newAuthor: Writer) {
+        this.setAuthor(newAuthor)
+    }
+
+    // get the value of category
+    get category(): BookCategory {
+        return this.getCategory()
+    }
+
+    // set the value of category
+    set category(newCategory: BookCategory) {
+        this.setCategory(newCategory)
+    }
+
+    // get the value of indexes
+    get indexes(): ecore.EMap<string, number> {
+        return this.getIndexes()
+    }
+
+    // set the value of indexes
+    set indexes(newIndexes: ecore.EMap<string, number>) {
+        const l = this.getIndexes()
+        l.clear()
+        l.addAll(newIndexes)
+    }
+
+    // get the value of pages
+    get pages(): number {
+        return this.getPages()
+    }
+
+    // set the value of pages
+    set pages(newPages: number) {
+        this.setPages(newPages)
+    }
+
+    // get the value of tableOfContents
+    get tableOfContents(): ecore.EList<string> {
+        return this.getTableOfContents()
+    }
+
+    // set the value of tableOfContents
+    set tableOfContents(newTableOfContents: ecore.EList<string>) {
+        const l = this.getTableOfContents()
+        l.clear()
+        l.addAll(newTableOfContents)
+    }
+
+    // get the value of title
+    get title(): string {
+        return this.getTitle()
+    }
+
+    // set the value of title
+    set title(newTitle: string) {
+        this.setTitle(newTitle)
+    }
+
+    // get the value of author
+    getAuthor(): Writer {
         if (this._author != null && this._author.eIsProxy()) {
-            let oldAuthor = this._author
-            let newAuthor = this.eResolveProxy(oldAuthor) as Writer
+            const oldAuthor = this._author
+            const newAuthor = this.eResolveProxy(oldAuthor) as Writer
             this._author = newAuthor
             if (newAuthor != oldAuthor) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new ecore.Notification(
+                            this,
+                            ecore.EventType.RESOLVE,
+                            LibraryConstants.BOOK__AUTHOR,
+                            oldAuthor,
+                            newAuthor
+                        )
+                    )
+                }
+            }
+        }
+        return this._author
+    }
+
+    // get the value of author asynchronously
+    async getAuthorAsync(): Promise<Writer> {
+        if (this._author != null && this._author.eIsProxy()) {
+            const oldAuthor = this._author
+            const newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
+            this._author = newAuthor
+            if (newAuthor != oldAuthor) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
                             this,
@@ -65,8 +152,8 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     }
 
     // set the value of author
-    set author(newAuthor: Writer) {
-        let oldAuthor = this._author
+    setAuthor(newAuthor: Writer): void {
+        const oldAuthor = this._author
         if (newAuthor != oldAuthor) {
             let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldAuthor)) {
@@ -88,11 +175,11 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     }
 
     basicSetAuthor(newAuthor: Writer, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
-        let oldAuthor = this._author
+        const oldAuthor = this._author
         this._author = newAuthor
         let notifications = msgs
-        if (this.eNotificationRequired) {
-            let notification = new ecore.Notification(
+        if (this.eNotificationRequired()) {
+            const notification = new ecore.Notification(
                 this,
                 ecore.EventType.SET,
                 LibraryConstants.BOOK__AUTHOR,
@@ -109,15 +196,15 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     }
 
     // get the value of category
-    get category(): BookCategory {
+    getCategory(): BookCategory {
         return this._category
     }
 
     // set the value of category
-    set category(newCategory: BookCategory) {
-        let oldCategory = this._category
+    setCategory(newCategory: BookCategory): void {
+        const oldCategory = this._category
         this._category = newCategory
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -132,7 +219,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
 
     // unSetCategory unset the value of _category
     unSetCategory(): void {
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.UNSET, LibraryConstants.BOOK__CATEGORY, null, null)
             )
@@ -140,23 +227,30 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     }
 
     // get the value of indexes
-    get indexes(): ecore.EMap<string, number> {
+    getIndexes(): ecore.EMap<string, number> {
         if (this._indexes == null) {
             this._indexes = new ecore.BasicEObjectMap<string, number>(getLibraryPackage().getBookIndex())
         }
         return this._indexes
     }
 
+    // set the value of indexes
+    setIndexes(newIndexes: ecore.EMap<string, number>) {
+        const l = this.getIndexes()
+        l.clear()
+        l.addAll(newIndexes)
+    }
+
     // get the value of pages
-    get pages(): number {
+    getPages(): number {
         return this._pages
     }
 
     // set the value of pages
-    set pages(newPages: number) {
-        let oldPages = this._pages
+    setPages(newPages: number): void {
+        const oldPages = this._pages
         this._pages = newPages
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK__PAGES, oldPages, newPages)
             )
@@ -164,23 +258,30 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     }
 
     // get the value of tableOfContents
-    get tableOfContents(): ecore.EList<string> {
+    getTableOfContents(): ecore.EList<string> {
         if (this._tableOfContents == null) {
             this._tableOfContents = new ecore.BasicEDataTypeList<string>(this, LibraryConstants.BOOK__TABLE_OF_CONTENTS)
         }
         return this._tableOfContents
     }
 
+    // set the value of tableOfContents
+    setTableOfContents(newTableOfContents: ecore.EList<string>) {
+        const l = this.getTableOfContents()
+        l.clear()
+        l.addAll(newTableOfContents)
+    }
+
     // get the value of title
-    get title(): string {
+    getTitle(): string {
         return this._title
     }
 
     // set the value of title
-    set title(newTitle: string) {
-        let oldTitle = this._title
+    setTitle(newTitle: string): void {
+        const oldTitle = this._title
         this._title = newTitle
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(this, ecore.EventType.SET, LibraryConstants.BOOK__TITLE, oldTitle, newTitle)
             )
@@ -190,22 +291,23 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                return resolve ? this.author : this.basicGetAuthor()
+                return resolve ? this.getAuthor() : this.basicGetAuthor()
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                return this.category
+                return this.getCategory()
             }
             case LibraryConstants.BOOK__INDEXES: {
-                return !resolve && ecore.isEObjectList(this.indexes) ? this.indexes.getUnResolvedList() : this.indexes
+                const list = this.getIndexes()
+                return !resolve && ecore.isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case LibraryConstants.BOOK__PAGES: {
-                return this.pages
+                return this.getPages()
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                return this.tableOfContents
+                return this.getTableOfContents()
             }
             case LibraryConstants.BOOK__TITLE: {
-                return this.title
+                return this.getTitle()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -213,32 +315,44 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case LibraryConstants.BOOK__AUTHOR:
+                    return this.getAuthorAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                this.author = newValue as Writer
+                this.setAuthor(newValue as Writer)
                 break
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                this.category = newValue as BookCategory
+                this.setCategory(newValue as BookCategory)
                 break
             }
             case LibraryConstants.BOOK__INDEXES: {
-                this.indexes.clear()
-                this.indexes.addAll(newValue as ecore.EList<ecore.EMapEntry<string, number>>)
+                const list = this.getIndexes()
+                list.clear()
+                list.addAll(newValue as ecore.EList<ecore.EMapEntry<string, number>>)
                 break
             }
             case LibraryConstants.BOOK__PAGES: {
-                this.pages = newValue as number
+                this.setPages(newValue as number)
                 break
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                this.tableOfContents.clear()
-                this.tableOfContents.addAll(newValue as ecore.EList<string>)
+                const list = this.getTableOfContents()
+                list.clear()
+                list.addAll(newValue as ecore.EList<string>)
                 break
             }
             case LibraryConstants.BOOK__TITLE: {
-                this.title = newValue as string
+                this.setTitle(newValue as string)
                 break
             }
             default: {
@@ -250,27 +364,27 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
-                this.author = null
+                this.setAuthor(null)
                 break
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                this.unSetCategory()
+                this.setCategory(BookCategory.MYSTERY)
                 break
             }
             case LibraryConstants.BOOK__INDEXES: {
-                this.indexes.clear()
+                this.getIndexes().clear()
                 break
             }
             case LibraryConstants.BOOK__PAGES: {
-                this.pages = 100
+                this.setPages(100)
                 break
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                this.tableOfContents.clear()
+                this.getTableOfContents().clear()
                 break
             }
             case LibraryConstants.BOOK__TITLE: {
-                this.title = ""
+                this.setTitle("")
                 break
             }
             default: {
@@ -288,13 +402,13 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 return this._category != BookCategory.MYSTERY
             }
             case LibraryConstants.BOOK__INDEXES: {
-                return this.indexes != null && this.indexes.size() != 0
+                return this._indexes && !this._indexes.isEmpty()
             }
             case LibraryConstants.BOOK__PAGES: {
                 return this._pages != 100
             }
             case LibraryConstants.BOOK__TABLE_OF_CONTENTS: {
-                return this.tableOfContents != null && this.tableOfContents.size() != 0
+                return this._tableOfContents && !this._tableOfContents.isEmpty()
             }
             case LibraryConstants.BOOK__TITLE: {
                 return this._title != ""
@@ -313,8 +427,9 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         switch (featureID) {
             case LibraryConstants.BOOK__AUTHOR: {
                 let msgs = notifications
-                if (ecore.isEObjectInternal(this.author)) {
-                    msgs = this.author.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, msgs)
+                const author = this.basicGetAuthor()
+                if (ecore.isEObjectInternal(author)) {
+                    msgs = author.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, msgs)
                 }
                 return this.basicSetAuthor(otherEnd as Writer, msgs)
             }

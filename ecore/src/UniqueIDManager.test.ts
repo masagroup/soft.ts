@@ -15,32 +15,32 @@ import { EObject, IncrementalIDManager, ULIDManager, UUIDManager } from "./inter
 describe("IDManager", () => {
     describe("IncrementalIDManager", () => {
         test("invalid", () => {
-            let m = new IncrementalIDManager()
+            const m = new IncrementalIDManager()
             expect(m.getEObject("invalid")).toBeUndefined()
         })
 
         test("register", () => {
-            let m = new IncrementalIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new IncrementalIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             expect(m.getID(eObject)).toBeUndefined()
 
             m.register(eObject)
             m.register(eObject)
-            let id = m.getID(eObject)
+            const id = m.getID(eObject)
             expect(id).not.toBeUndefined()
             expect(m.getEObject(id)).toBe(eObject)
         })
 
         test("unregister", () => {
-            let m = new IncrementalIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new IncrementalIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             m.unRegister(eObject)
             expect(m.getID(eObject)).toBeUndefined()
 
             m.register(eObject)
-            let id = m.getID(eObject)
+            const id = m.getID(eObject)
             expect(id).not.toBeUndefined()
 
             m.unRegister(eObject)
@@ -53,9 +53,9 @@ describe("IDManager", () => {
         })
 
         test("setID-undefined", () => {
-            let m = new IncrementalIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new IncrementalIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
 
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBe(2)
@@ -68,27 +68,27 @@ describe("IDManager", () => {
         })
 
         test("setID-number", () => {
-            let m = new IncrementalIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new IncrementalIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBe(2)
             expect(m.getEObject(2)).toBe(eObject)
         })
 
         test("setID-string", () => {
-            let m = new IncrementalIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new IncrementalIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             m.setID(eObject, "2")
             expect(m.getID(eObject)).toBe(2)
             expect(m.getEObject(2)).toBe(eObject)
         })
 
         test("clear", () => {
-            let m = new IncrementalIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new IncrementalIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
 
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBe(2)
@@ -100,17 +100,17 @@ describe("IDManager", () => {
 
     describe("UUIDManager", () => {
         test("undefined", () => {
-            let m = new UUIDManager()
+            const m = new UUIDManager()
             expect(m.getEObject(undefined)).toBeUndefined()
         })
 
         test("null", () => {
-            let m = new UUIDManager()
+            const m = new UUIDManager()
             expect(m.getEObject(null)).toBeUndefined()
         })
 
         test("invalid", () => {
-            let m = new UUIDManager()
+            const m = new UUIDManager()
             try {
                 m.getEObject("invalid")
             } catch (err) {
@@ -119,27 +119,27 @@ describe("IDManager", () => {
         })
 
         test("register", () => {
-            let m = new UUIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new UUIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             expect(m.getID(eObject)).toBeUndefined()
 
             m.register(eObject)
             m.register(eObject)
-            let id = m.getID(eObject)
+            const id = m.getID(eObject)
             expect(id).not.toBeUndefined()
             expect(m.getEObject(id)).toBe(eObject)
         })
 
         test("unregister", () => {
-            let m = new UUIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new UUIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             m.unRegister(eObject)
             expect(m.getID(eObject)).toBeUndefined()
 
             m.register(eObject)
-            let id = m.getID(eObject)
+            const id = m.getID(eObject)
             expect(id).not.toBeUndefined()
 
             m.unRegister(eObject)
@@ -152,10 +152,10 @@ describe("IDManager", () => {
         })
 
         test("setID-undefined", () => {
-            let m = new UUIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
-            let uuid = id128.Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
+            const m = new UUIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
+            const uuid = id128.Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
             m.setID(eObject, uuid)
             expect(m.getID(eObject)).toBe(uuid)
 
@@ -167,18 +167,18 @@ describe("IDManager", () => {
         })
 
         test("setID-invalid", () => {
-            let m = new UUIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new UUIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBeUndefined()
         })
 
         test("clear", () => {
-            let m = new UUIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
-            let uuid = id128.Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
+            const m = new UUIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
+            const uuid = id128.Uuid4.fromCanonical("d96dc8e1-a25c-4431-b58e-c39df80c64da")
 
             m.setID(eObject, uuid)
             expect(m.getID(eObject)).toBe(uuid)
@@ -190,7 +190,7 @@ describe("IDManager", () => {
 
     describe("ULIDManager", () => {
         test("invalid", () => {
-            let m = new UUIDManager()
+            const m = new UUIDManager()
             try {
                 m.getEObject("invalid")
             } catch (err) {
@@ -199,23 +199,23 @@ describe("IDManager", () => {
         })
 
         test("register", () => {
-            let m = new ULIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new ULIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             expect(m.getID(eObject)).toBeUndefined()
 
             m.register(eObject)
             m.register(eObject)
-            let id = m.getID(eObject)
+            const id = m.getID(eObject)
             expect(id).not.toBeUndefined()
             expect(m.getEObject(id)).toBe(eObject)
         })
 
         test("setID-undefined", () => {
-            let m = new ULIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
-            let ulid = id128.Ulid.fromCanonical("01HNBCDR3FC57NH9V4VNQ3VPYD")
+            const m = new ULIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
+            const ulid = id128.Ulid.fromCanonical("01HNBCDR3FC57NH9V4VNQ3VPYD")
             m.setID(eObject, ulid)
             expect(m.getID(eObject)).toBe(ulid)
 
@@ -227,9 +227,9 @@ describe("IDManager", () => {
         })
 
         test("setID-invalid", () => {
-            let m = new ULIDManager()
-            let mockObject = mock<EObject>()
-            let eObject = instance(mockObject)
+            const m = new ULIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBeUndefined()
         })

@@ -13,23 +13,23 @@ import { EcoreConstants, EcoreFactoryExt, EDataType } from "./internal.js"
 
 describe("EcoreFactoryExt", () => {
     test("convertDate", () => {
-        let mockEDataType = mock<EDataType>()
-        let eDataType = instance(mockEDataType)
-        when(mockEDataType.classifierID).thenReturn(EcoreConstants.EDATE)
+        const mockEDataType = mock<EDataType>()
+        const eDataType = instance(mockEDataType)
+        when(mockEDataType.getClassifierID()).thenReturn(EcoreConstants.EDATE)
 
         {
-            let date = EcoreFactoryExt.getInstance().createFromString(eDataType, "2020-05-12T17:33:10.770Z")
-            let expected = new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))
+            const date = EcoreFactoryExt.getInstance().createFromString(eDataType, "2020-05-12T17:33:10.770Z")
+            const expected = new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))
             expect(date).toEqual(expected)
         }
         {
-            let date = EcoreFactoryExt.getInstance().createFromString(eDataType, "2007-06-02T10:26:13.000Z")
-            let expected = new Date(Date.UTC(2007, 5, 2, 10, 26, 13))
+            const date = EcoreFactoryExt.getInstance().createFromString(eDataType, "2007-06-02T10:26:13.000Z")
+            const expected = new Date(Date.UTC(2007, 5, 2, 10, 26, 13))
             expect(date).toEqual(expected)
         }
         {
-            let date = new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))
-            let dateStr = EcoreFactoryExt.getInstance().convertToString(eDataType, date)
+            const date = new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))
+            const dateStr = EcoreFactoryExt.getInstance().convertToString(eDataType, date)
             expect(dateStr).toBe("2020-05-12T17:33:10.770Z")
         }
     })

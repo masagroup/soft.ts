@@ -35,7 +35,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
     }
 
     // get the value of ePackage
-    get ePackage(): EPackage {
+    getEPackage(): EPackage {
         if (this.eContainerFeatureID() == EcoreConstants.EFACTORY__EPACKAGE) {
             return this.eContainer() as EPackage
         }
@@ -43,7 +43,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
     }
 
     // set the value of ePackage
-    set ePackage(newEPackage: EPackage) {
+    setEPackage(newEPackage: EPackage): void {
         if (
             newEPackage != this.eInternalContainer() ||
             (newEPackage != null && this.eContainerFeatureID() != EcoreConstants.EFACTORY__EPACKAGE)
@@ -59,7 +59,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
             if (notifications != null) {
                 notifications.dispatch()
             }
-        } else if (this.eNotificationRequired) {
+        } else if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(this, EventType.SET, EcoreConstants.EFACTORY__EPACKAGE, newEPackage, newEPackage)
             )
@@ -88,7 +88,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EFACTORY__EPACKAGE: {
-                return this.ePackage
+                return this.getEPackage()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -96,10 +96,14 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EFACTORY__EPACKAGE: {
-                this.ePackage = newValue as EPackage
+                this.setEPackage(newValue as EPackage)
                 break
             }
             default: {
@@ -111,7 +115,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EFACTORY__EPACKAGE: {
-                this.ePackage = null
+                this.setEPackage(null)
                 break
             }
             default: {
@@ -123,7 +127,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EFACTORY__EPACKAGE: {
-                return this.ePackage != null
+                return this.getEPackage() != null
             }
             default: {
                 return super.eIsSetFromID(featureID)

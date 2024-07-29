@@ -42,21 +42,51 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     }
 
     // get the value of eKeys
-    get eKeys(): EList<EAttribute> {
+    getEKeys(): EList<EAttribute> {
         if (this._eKeys == null) {
             this._eKeys = this.initEKeys()
         }
         return this._eKeys
     }
 
+    // set the value of eKeys
+    setEKeys(newEKeys: EList<EAttribute>) {
+        const l = this.getEKeys()
+        l.clear()
+        l.addAll(newEKeys)
+    }
+
     // get the value of eOpposite
-    get eOpposite(): EReference {
+    getEOpposite(): EReference {
         if (this._eOpposite != null && this._eOpposite.eIsProxy()) {
-            let oldEOpposite = this._eOpposite
-            let newEOpposite = this.eResolveProxy(oldEOpposite) as EReference
+            const oldEOpposite = this._eOpposite
+            const newEOpposite = this.eResolveProxy(oldEOpposite) as EReference
             this._eOpposite = newEOpposite
             if (newEOpposite != oldEOpposite) {
-                if (this.eNotificationRequired) {
+                if (this.eNotificationRequired()) {
+                    this.eNotify(
+                        new Notification(
+                            this,
+                            EventType.RESOLVE,
+                            EcoreConstants.EREFERENCE__EOPPOSITE,
+                            oldEOpposite,
+                            newEOpposite
+                        )
+                    )
+                }
+            }
+        }
+        return this._eOpposite
+    }
+
+    // get the value of eOpposite asynchronously
+    async getEOppositeAsync(): Promise<EReference> {
+        if (this._eOpposite != null && this._eOpposite.eIsProxy()) {
+            const oldEOpposite = this._eOpposite
+            const newEOpposite = (await this.eResolveProxyAsync(oldEOpposite)) as EReference
+            this._eOpposite = newEOpposite
+            if (newEOpposite != oldEOpposite) {
+                if (this.eNotificationRequired()) {
                     this.eNotify(
                         new Notification(
                             this,
@@ -73,10 +103,10 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     }
 
     // set the value of eOpposite
-    set eOpposite(newEOpposite: EReference) {
-        let oldEOpposite = this._eOpposite
+    setEOpposite(newEOpposite: EReference): void {
+        const oldEOpposite = this._eOpposite
         this._eOpposite = newEOpposite
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite)
             )
@@ -89,8 +119,13 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     }
 
     // get the value of eReferenceType
-    get eReferenceType(): EClass {
-        throw new Error("get eReferenceType not implemented")
+    getEReferenceType(): EClass {
+        throw new Error("getEReferenceType not implemented")
+    }
+
+    // get the value of eReferenceType asynchronously
+    async getEReferenceTypeAsync(): Promise<EClass> {
+        throw new Error("getEReferenceTypeAsync not implemented")
     }
 
     // get the basic value of eReferenceType with no proxy resolution
@@ -98,50 +133,50 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         throw new Error("basicGetEReferenceType not implemented")
     }
 
-    // get the value of isContainer
-    get isContainer(): boolean {
-        throw new Error("get isContainer not implemented")
+    // get the value of container
+    isContainer(): boolean {
+        throw new Error("isContainer not implemented")
     }
 
-    // get the value of isContainment
-    get isContainment(): boolean {
+    // get the value of containment
+    isContainment(): boolean {
         return this._isContainment
     }
 
-    // set the value of isContainment
-    set isContainment(newIsContainment: boolean) {
-        let oldIsContainment = this._isContainment
-        this._isContainment = newIsContainment
-        if (this.eNotificationRequired) {
+    // set the value of containment
+    setContainment(newContainment: boolean): void {
+        const oldContainment = this._isContainment
+        this._isContainment = newContainment
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.EREFERENCE__CONTAINMENT,
-                    oldIsContainment,
-                    newIsContainment
+                    oldContainment,
+                    newContainment
                 )
             )
         }
     }
 
-    // get the value of isResolveProxies
-    get isResolveProxies(): boolean {
+    // get the value of resolveProxies
+    isResolveProxies(): boolean {
         return this._isResolveProxies
     }
 
-    // set the value of isResolveProxies
-    set isResolveProxies(newIsResolveProxies: boolean) {
-        let oldIsResolveProxies = this._isResolveProxies
-        this._isResolveProxies = newIsResolveProxies
-        if (this.eNotificationRequired) {
+    // set the value of resolveProxies
+    setResolveProxies(newResolveProxies: boolean): void {
+        const oldResolveProxies = this._isResolveProxies
+        this._isResolveProxies = newResolveProxies
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.EREFERENCE__RESOLVE_PROXIES,
-                    oldIsResolveProxies,
-                    newIsResolveProxies
+                    oldResolveProxies,
+                    newResolveProxies
                 )
             )
         }
@@ -163,22 +198,23 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EREFERENCE__CONTAINER: {
-                return this.isContainer
+                return this.isContainer()
             }
             case EcoreConstants.EREFERENCE__CONTAINMENT: {
-                return this.isContainment
+                return this.isContainment()
             }
             case EcoreConstants.EREFERENCE__EKEYS: {
-                return !resolve && isEObjectList(this.eKeys) ? this.eKeys.getUnResolvedList() : this.eKeys
+                const list = this.getEKeys()
+                return !resolve && isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case EcoreConstants.EREFERENCE__EOPPOSITE: {
-                return resolve ? this.eOpposite : this.basicGetEOpposite()
+                return resolve ? this.getEOpposite() : this.basicGetEOpposite()
             }
             case EcoreConstants.EREFERENCE__EREFERENCE_TYPE: {
-                return resolve ? this.eReferenceType : this.basicGetEReferenceType()
+                return resolve ? this.getEReferenceType() : this.basicGetEReferenceType()
             }
             case EcoreConstants.EREFERENCE__RESOLVE_PROXIES: {
-                return this.isResolveProxies
+                return this.isResolveProxies()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -186,23 +222,36 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case EcoreConstants.EREFERENCE__EOPPOSITE:
+                    return this.getEOppositeAsync()
+                case EcoreConstants.EREFERENCE__EREFERENCE_TYPE:
+                    return this.getEReferenceTypeAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EREFERENCE__CONTAINMENT: {
-                this.isContainment = newValue as boolean
+                this.setContainment(newValue as boolean)
                 break
             }
             case EcoreConstants.EREFERENCE__EKEYS: {
-                this.eKeys.clear()
-                this.eKeys.addAll(newValue as EList<EAttribute>)
+                const list = this.getEKeys()
+                list.clear()
+                list.addAll(newValue as EList<EAttribute>)
                 break
             }
             case EcoreConstants.EREFERENCE__EOPPOSITE: {
-                this.eOpposite = newValue as EReference
+                this.setEOpposite(newValue as EReference)
                 break
             }
             case EcoreConstants.EREFERENCE__RESOLVE_PROXIES: {
-                this.isResolveProxies = newValue as boolean
+                this.setResolveProxies(newValue as boolean)
                 break
             }
             default: {
@@ -214,19 +263,19 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EREFERENCE__CONTAINMENT: {
-                this.isContainment = false
+                this.setContainment(false)
                 break
             }
             case EcoreConstants.EREFERENCE__EKEYS: {
-                this.eKeys.clear()
+                this.getEKeys().clear()
                 break
             }
             case EcoreConstants.EREFERENCE__EOPPOSITE: {
-                this.eOpposite = null
+                this.setEOpposite(null)
                 break
             }
             case EcoreConstants.EREFERENCE__RESOLVE_PROXIES: {
-                this.isResolveProxies = true
+                this.setResolveProxies(true)
                 break
             }
             default: {
@@ -238,19 +287,19 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EREFERENCE__CONTAINER: {
-                return this.isContainer != false
+                return this.isContainer() != false
             }
             case EcoreConstants.EREFERENCE__CONTAINMENT: {
                 return this._isContainment != false
             }
             case EcoreConstants.EREFERENCE__EKEYS: {
-                return this.eKeys != null && this.eKeys.size() != 0
+                return this._eKeys && !this._eKeys.isEmpty()
             }
             case EcoreConstants.EREFERENCE__EOPPOSITE: {
                 return this._eOpposite != null
             }
             case EcoreConstants.EREFERENCE__EREFERENCE_TYPE: {
-                return this.eReferenceType != null
+                return this.getEReferenceType() != null
             }
             case EcoreConstants.EREFERENCE__RESOLVE_PROXIES: {
                 return this._isResolveProxies != true

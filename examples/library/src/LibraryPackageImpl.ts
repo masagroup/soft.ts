@@ -42,10 +42,10 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
 
     private constructor() {
         super()
-        this.name = LibraryConstants.eNAME
-        this.nsPrefix = LibraryConstants.eNS_PREFIX
-        this.nsURI = LibraryConstants.eNS_URI
-        this.eFactoryInstance = getLibraryFactory()
+        this.setName(LibraryConstants.eNAME)
+        this.setNsPrefix(LibraryConstants.eNS_PREFIX)
+        this.setNsURI(LibraryConstants.eNS_URI)
+        this.setEFactoryInstance(getLibraryFactory())
         this.createPackageContents()
         this.initializePackageContents()
         this.createResource()
@@ -56,7 +56,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getAddressable_Address(): ecore.EAttribute {
-        return this._addressableClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._addressableClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
 
     getAudioVisualItem(): ecore.EClass {
@@ -64,13 +64,13 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getAudioVisualItem_Damaged(): ecore.EAttribute {
-        return this._audioVisualItemClass.eStructuralFeatures.get(2) as ecore.EAttribute
+        return this._audioVisualItemClass.getEStructuralFeatures().get(2) as ecore.EAttribute
     }
     getAudioVisualItem_MinutesLength(): ecore.EAttribute {
-        return this._audioVisualItemClass.eStructuralFeatures.get(1) as ecore.EAttribute
+        return this._audioVisualItemClass.getEStructuralFeatures().get(1) as ecore.EAttribute
     }
     getAudioVisualItem_Title(): ecore.EAttribute {
-        return this._audioVisualItemClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._audioVisualItemClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
 
     getBook(): ecore.EClass {
@@ -78,23 +78,23 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getBook_Category(): ecore.EAttribute {
-        return this._bookClass.eStructuralFeatures.get(2) as ecore.EAttribute
+        return this._bookClass.getEStructuralFeatures().get(2) as ecore.EAttribute
     }
     getBook_Pages(): ecore.EAttribute {
-        return this._bookClass.eStructuralFeatures.get(1) as ecore.EAttribute
+        return this._bookClass.getEStructuralFeatures().get(1) as ecore.EAttribute
     }
     getBook_TableOfContents(): ecore.EAttribute {
-        return this._bookClass.eStructuralFeatures.get(4) as ecore.EAttribute
+        return this._bookClass.getEStructuralFeatures().get(4) as ecore.EAttribute
     }
     getBook_Title(): ecore.EAttribute {
-        return this._bookClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._bookClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
 
     getBook_Author(): ecore.EReference {
-        return this._bookClass.eStructuralFeatures.get(3) as ecore.EReference
+        return this._bookClass.getEStructuralFeatures().get(3) as ecore.EReference
     }
     getBook_Indexes(): ecore.EReference {
-        return this._bookClass.eStructuralFeatures.get(5) as ecore.EReference
+        return this._bookClass.getEStructuralFeatures().get(5) as ecore.EReference
     }
 
     getBookIndex(): ecore.EClass {
@@ -102,10 +102,10 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getBookIndex_Key(): ecore.EAttribute {
-        return this._bookIndexClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._bookIndexClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
     getBookIndex_Value(): ecore.EAttribute {
-        return this._bookIndexClass.eStructuralFeatures.get(1) as ecore.EAttribute
+        return this._bookIndexClass.getEStructuralFeatures().get(1) as ecore.EAttribute
     }
 
     getBookOnTape(): ecore.EClass {
@@ -113,10 +113,10 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getBookOnTape_Author(): ecore.EReference {
-        return this._bookOnTapeClass.eStructuralFeatures.get(1) as ecore.EReference
+        return this._bookOnTapeClass.getEStructuralFeatures().get(1) as ecore.EReference
     }
     getBookOnTape_Reader(): ecore.EReference {
-        return this._bookOnTapeClass.eStructuralFeatures.get(0) as ecore.EReference
+        return this._bookOnTapeClass.getEStructuralFeatures().get(0) as ecore.EReference
     }
 
     getBorrower(): ecore.EClass {
@@ -124,7 +124,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getBorrower_Borrowed(): ecore.EReference {
-        return this._borrowerClass.eStructuralFeatures.get(0) as ecore.EReference
+        return this._borrowerClass.getEStructuralFeatures().get(0) as ecore.EReference
     }
 
     getCirculatingItem(): ecore.EClass {
@@ -136,13 +136,13 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getDocumentRoot_Library(): ecore.EReference {
-        return this._documentRootClass.eStructuralFeatures.get(2) as ecore.EReference
+        return this._documentRootClass.getEStructuralFeatures().get(2) as ecore.EReference
     }
     getDocumentRoot_XMLNSPrefixMap(): ecore.EReference {
-        return this._documentRootClass.eStructuralFeatures.get(0) as ecore.EReference
+        return this._documentRootClass.getEStructuralFeatures().get(0) as ecore.EReference
     }
     getDocumentRoot_XSISchemaLocation(): ecore.EReference {
-        return this._documentRootClass.eStructuralFeatures.get(1) as ecore.EReference
+        return this._documentRootClass.getEStructuralFeatures().get(1) as ecore.EReference
     }
 
     getEmployee(): ecore.EClass {
@@ -150,7 +150,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getEmployee_Manager(): ecore.EReference {
-        return this._employeeClass.eStructuralFeatures.get(0) as ecore.EReference
+        return this._employeeClass.getEStructuralFeatures().get(0) as ecore.EReference
     }
 
     getItem(): ecore.EClass {
@@ -158,7 +158,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getItem_PublicationDate(): ecore.EAttribute {
-        return this._itemClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._itemClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
 
     getLendable(): ecore.EClass {
@@ -166,11 +166,11 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getLendable_Copies(): ecore.EAttribute {
-        return this._lendableClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._lendableClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
 
     getLendable_Borrowers(): ecore.EReference {
-        return this._lendableClass.eStructuralFeatures.get(1) as ecore.EReference
+        return this._lendableClass.getEStructuralFeatures().get(1) as ecore.EReference
     }
 
     getLibrary(): ecore.EClass {
@@ -178,35 +178,35 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getLibrary_Name(): ecore.EAttribute {
-        return this._libraryClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._libraryClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
     getLibrary_People(): ecore.EAttribute {
-        return this._libraryClass.eStructuralFeatures.get(8) as ecore.EAttribute
+        return this._libraryClass.getEStructuralFeatures().get(8) as ecore.EAttribute
     }
 
     getLibrary_Books(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(5) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(5) as ecore.EReference
     }
     getLibrary_Borrowers(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(3) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(3) as ecore.EReference
     }
     getLibrary_Branches(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(6) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(6) as ecore.EReference
     }
     getLibrary_Employees(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(2) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(2) as ecore.EReference
     }
     getLibrary_ParentBranch(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(7) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(7) as ecore.EReference
     }
     getLibrary_Proprietary(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(9) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(9) as ecore.EReference
     }
     getLibrary_Stock(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(4) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(4) as ecore.EReference
     }
     getLibrary_Writers(): ecore.EReference {
-        return this._libraryClass.eStructuralFeatures.get(1) as ecore.EReference
+        return this._libraryClass.getEStructuralFeatures().get(1) as ecore.EReference
     }
 
     getPeriodical(): ecore.EClass {
@@ -214,10 +214,10 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getPeriodical_IssuesPerYear(): ecore.EAttribute {
-        return this._periodicalClass.eStructuralFeatures.get(1) as ecore.EAttribute
+        return this._periodicalClass.getEStructuralFeatures().get(1) as ecore.EAttribute
     }
     getPeriodical_Title(): ecore.EAttribute {
-        return this._periodicalClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._periodicalClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
 
     getPerson(): ecore.EClass {
@@ -225,10 +225,10 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getPerson_FirstName(): ecore.EAttribute {
-        return this._personClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._personClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
     getPerson_LastName(): ecore.EAttribute {
-        return this._personClass.eStructuralFeatures.get(1) as ecore.EAttribute
+        return this._personClass.getEStructuralFeatures().get(1) as ecore.EAttribute
     }
 
     getVideoCassette(): ecore.EClass {
@@ -236,7 +236,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getVideoCassette_Cast(): ecore.EReference {
-        return this._videoCassetteClass.eStructuralFeatures.get(0) as ecore.EReference
+        return this._videoCassetteClass.getEStructuralFeatures().get(0) as ecore.EReference
     }
 
     getWriter(): ecore.EClass {
@@ -244,11 +244,11 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     getWriter_Name(): ecore.EAttribute {
-        return this._writerClass.eStructuralFeatures.get(0) as ecore.EAttribute
+        return this._writerClass.getEStructuralFeatures().get(0) as ecore.EAttribute
     }
 
     getWriter_Books(): ecore.EReference {
-        return this._writerClass.eStructuralFeatures.get(1) as ecore.EReference
+        return this._writerClass.getEStructuralFeatures().get(1) as ecore.EReference
     }
 
     getBookCategory(): ecore.EEnum {
@@ -256,7 +256,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     private createPackageContents(): void {
-        let factory = ecore.getEcoreFactory()
+        const factory = ecore.getEcoreFactory()
 
         this._addressableClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.ADDRESSABLE)
         factory.createEAttributeFromContainerAndClassID(this._addressableClass, LibraryConstants.ADDRESSABLE__ADDRESS)
@@ -360,18 +360,18 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     private initializePackageContents(): void {
-        this._audioVisualItemClass.eSuperTypes.add(this._circulatingItemClass)
-        this._bookClass.eSuperTypes.add(this._circulatingItemClass)
-        this._bookOnTapeClass.eSuperTypes.add(this._audioVisualItemClass)
-        this._borrowerClass.eSuperTypes.add(this._personClass)
-        this._circulatingItemClass.eSuperTypes.add(this._itemClass)
-        this._circulatingItemClass.eSuperTypes.add(this._lendableClass)
-        this._employeeClass.eSuperTypes.add(this._personClass)
-        this._libraryClass.eSuperTypes.add(this._addressableClass)
-        this._periodicalClass.eSuperTypes.add(this._itemClass)
-        this._personClass.eSuperTypes.add(this._addressableClass)
-        this._videoCassetteClass.eSuperTypes.add(this._audioVisualItemClass)
-        this._writerClass.eSuperTypes.add(this._personClass)
+        this._audioVisualItemClass.getESuperTypes().add(this._circulatingItemClass)
+        this._bookClass.getESuperTypes().add(this._circulatingItemClass)
+        this._bookOnTapeClass.getESuperTypes().add(this._audioVisualItemClass)
+        this._borrowerClass.getESuperTypes().add(this._personClass)
+        this._circulatingItemClass.getESuperTypes().add(this._itemClass)
+        this._circulatingItemClass.getESuperTypes().add(this._lendableClass)
+        this._employeeClass.getESuperTypes().add(this._personClass)
+        this._libraryClass.getESuperTypes().add(this._addressableClass)
+        this._periodicalClass.getESuperTypes().add(this._itemClass)
+        this._personClass.getESuperTypes().add(this._addressableClass)
+        this._videoCassetteClass.getESuperTypes().add(this._audioVisualItemClass)
+        this._writerClass.getESuperTypes().add(this._personClass)
 
         this.initEClass(this._addressableClass, "Addressable", "library/Addressable", true, true)
         this.initEAttribute(
@@ -1079,114 +1079,116 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     }
 
     private initializeExtendedMetaDataAnnotations(): void {
-        let source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
-        let factory = ecore.getEcoreFactory()
+        const source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
+        const factory = ecore.getEcoreFactory()
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Writers())
-            eAnnotation.source = source
-            eAnnotation.details.put("group", "#people")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Writers())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("group", "#people")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Employees())
-            eAnnotation.source = source
-            eAnnotation.details.put("group", "#people")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Employees())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("group", "#people")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Borrowers())
-            eAnnotation.source = source
-            eAnnotation.details.put("group", "#people")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Borrowers())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("group", "#people")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_ParentBranch())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "parent-branch")
-            eAnnotation.details.put("kind", "element")
-            eAnnotation.details.put("namespace", "##targetNamespace")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_ParentBranch())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "parent-branch")
+            eAnnotation.getDetails().put("kind", "element")
+            eAnnotation.getDetails().put("namespace", "##targetNamespace")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_People())
-            eAnnotation.source = source
-            eAnnotation.details.put("kind", "group")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_People())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("kind", "group")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Proprietary())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "owner-pdg")
-            eAnnotation.details.put("kind", "element")
-            eAnnotation.details.put("namespace", "##targetNamespace")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Proprietary())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "owner-pdg")
+            eAnnotation.getDetails().put("kind", "element")
+            eAnnotation.getDetails().put("namespace", "##targetNamespace")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getItem_PublicationDate())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "publication-date")
-            eAnnotation.details.put("kind", "attribute")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getItem_PublicationDate())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "publication-date")
+            eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getPeriodical_IssuesPerYear())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "issues-per-year")
-            eAnnotation.details.put("kind", "attribute")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getPeriodical_IssuesPerYear())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "issues-per-year")
+            eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getAudioVisualItem_MinutesLength())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "minutes-length")
-            eAnnotation.details.put("kind", "attribute")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getAudioVisualItem_MinutesLength())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "minutes-length")
+            eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_FirstName())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "first-name")
-            eAnnotation.details.put("kind", "attribute")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_FirstName())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "first-name")
+            eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_LastName())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "last-name")
-            eAnnotation.details.put("kind", "attribute")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_LastName())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "last-name")
+            eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "")
-            eAnnotation.details.put("kind", "mixed")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "")
+            eAnnotation.getDetails().put("kind", "mixed")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XMLNSPrefixMap())
-            eAnnotation.source = source
-            eAnnotation.details.put("kind", "attribute")
-            eAnnotation.details.put("name", "xmlns:prefix")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XMLNSPrefixMap())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("kind", "attribute")
+            eAnnotation.getDetails().put("name", "xmlns:prefix")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XSISchemaLocation())
-            eAnnotation.source = source
-            eAnnotation.details.put("kind", "attribute")
-            eAnnotation.details.put("name", "xsi:schemaLocation")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XSISchemaLocation())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("kind", "attribute")
+            eAnnotation.getDetails().put("name", "xsi:schemaLocation")
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_Library())
-            eAnnotation.source = source
-            eAnnotation.details.put("name", "library")
-            eAnnotation.details.put("kind", "element")
-            eAnnotation.details.put("namespace", "##targetNamespace")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_Library())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("name", "library")
+            eAnnotation.getDetails().put("kind", "element")
+            eAnnotation.getDetails().put("namespace", "##targetNamespace")
         }
     }
 
     private initializeGenTSAnnotations(): void {
-        let source = "http://net.masagroup/soft/2020/GenTS"
-        let factory = ecore.getEcoreFactory()
+        const source = "http://net.masagroup/soft/2020/GenTS"
+        const factory = ecore.getEcoreFactory()
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this)
-            eAnnotation.source = source
-            eAnnotation.details.put(
-                "supressAnnotations",
-                "http://www.eclipse.org/emf/2002/Ecore http://net.masagroup/soft/2018/GenCpp http://net.masagroup/soft/2019/GenGo"
-            )
+            const eAnnotation = factory.createEAnnotationFromContainer(this)
+            eAnnotation.setSource(source)
+            eAnnotation
+                .getDetails()
+                .put(
+                    "supressAnnotations",
+                    "http://www.eclipse.org/emf/2002/Ecore http://net.masagroup/soft/2018/GenCpp http://net.masagroup/soft/2019/GenGo"
+                )
         }
         {
-            let eAnnotation = factory.createEAnnotationFromContainer(this.getWriter())
-            eAnnotation.source = source
-            eAnnotation.details.put("extension", "true")
+            const eAnnotation = factory.createEAnnotationFromContainer(this.getWriter())
+            eAnnotation.setSource(source)
+            eAnnotation.getDetails().put("extension", "true")
         }
     }
 }

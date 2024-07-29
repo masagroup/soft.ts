@@ -8,30 +8,56 @@
 // *****************************************************************************
 
 import fs from "fs"
+import stream from "stream"
 import { EURIHandler, URI, uriToFilePath } from "./internal.js"
+
+function readableNodeStreamToWebStream(stream: stream.Readable): ReadableStream {
+    return new ReadableStream({
+        async pull(controller) {
+            for await (const chunk of stream) {
+                controller.enqueue(new Uint8Array(chunk))
+            }
+            controller.close()
+        }
+    })
+}
+
+function writableNodeStreamToWebStream(stream: stream.Writable): WritableStream {
+    return new WritableStream({
+        write(chunk, controller) {
+            stream.write(chunk)
+        },
+        close() {
+            stream.end()
+        },
+        abort(err) {
+            stream.destroy(err)
+        }
+    })
+}
 
 export class FileURIHandler implements EURIHandler {
     canHandle(uri: URI): boolean {
         return uri.scheme == "file" || (!uri.scheme && !uri.host && !uri.query)
     }
 
-    createReadStream(uri: URI): fs.ReadStream {
-        let path = uriToFilePath(uri)
-        return fs.existsSync(path) ? fs.createReadStream(path) : null
+    async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
+        const path = uriToFilePath(uri)
+        return fs.existsSync(path) ? readableNodeStreamToWebStream(fs.createReadStream(path)) : null
     }
 
-    createWriteStream(uri: URI): fs.WriteStream {
-        let path = uriToFilePath(uri)
-        return fs.createWriteStream(path)
+    async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
+        const path = uriToFilePath(uri)
+        return writableNodeStreamToWebStream(fs.createWriteStream(path))
     }
 
-    readSync(uri: URI): null | Buffer {
-        let path = uriToFilePath(uri)
+    readSync(uri: URI): Uint8Array {
+        const path = uriToFilePath(uri)
         return fs.existsSync(path) ? fs.readFileSync(path) : null
     }
 
-    writeSync(uri: URI, b: Buffer): void {
-        let path = uriToFilePath(uri)
+    writeSync(uri: URI, b: Uint8Array): void {
+        const path = uriToFilePath(uri)
         fs.writeFileSync(path, b)
     }
 }

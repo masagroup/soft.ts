@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2020",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": true,
+    "stripInternal": true,
+    "outDir": "dist",
+  },
+  "exclude": [
+    "dist",
+    "node_modules",
+    "testdata",
+    "src/*.test.ts",
+    "src/**/*.test.ts"
+  ],
+  "include": [
+    "src/*.ts",
+    "src/**/*.ts"
+  ]
+}

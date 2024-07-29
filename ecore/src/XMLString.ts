@@ -7,8 +7,6 @@
 //
 // *****************************************************************************
 
-import * as stream from "stream"
-
 class XMLStringSegment {
     buffer: string = ""
     lineWidth: number = 0
@@ -38,7 +36,8 @@ export class XMLString {
         return result
     }
 
-    write(w: stream.Writable) {
+    write(stream: WritableStream) {
+        const w = stream.getWriter()
         for (const segment of this.segments) {
             w.write(segment.buffer)
         }
@@ -83,7 +82,7 @@ export class XMLString {
         if (this.lastElementIsStart) {
             this.endEmptyElement()
         } else {
-            let name = this.removeLast()
+            const name = this.removeLast()
             if (name != "") {
                 this.add(this.getElementIndentWithExtra(1))
                 this.add("</")
@@ -102,7 +101,7 @@ export class XMLString {
     }
 
     removeLast(): string {
-        let result = this.elementNames.pop()
+        const result = this.elementNames.pop()
         if (result != "") {
             this.depth--
         }
@@ -178,7 +177,7 @@ export class XMLString {
     }
 
     getElementIndentWithExtra(extra: number): string {
-        let nesting = this.depth + extra - 1
+        const nesting = this.depth + extra - 1
         for (let i = this.indents.length - 1; i < nesting; i++) {
             this.indents.push(this.indents[i] + "  ")
         }
@@ -186,7 +185,7 @@ export class XMLString {
     }
 
     getAttributeIndent(): string {
-        let nesting = this.depth + 1
+        const nesting = this.depth + 1
         for (let i = this.indents.length - 1; i < nesting; i++) {
             this.indents.push(this.indents[i] + "  ")
         }
@@ -194,7 +193,7 @@ export class XMLString {
     }
 
     mark(): XMLStringSegment {
-        let r = this.currentSegment
+        const r = this.currentSegment
         this.currentSegment = new XMLStringSegment()
         this.segments.push(this.currentSegment)
         return r

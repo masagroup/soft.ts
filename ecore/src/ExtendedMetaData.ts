@@ -66,7 +66,7 @@ export class ExtendedMetaData {
     }
 
     getDocumentRoot(ePackage: EPackage): EClass {
-        let eClassifier = this.getType(ePackage, "")
+        const eClassifier = this.getType(ePackage, "")
         if (eClassifier) {
             return eClassifier as EClass
         }
@@ -74,7 +74,7 @@ export class ExtendedMetaData {
     }
 
     getXMLNSPrefixMapFeature(eClass: EClass): EReference {
-        for (const eReference of eClass.eAllReferences) {
+        for (const eReference of eClass.getEAllReferences()) {
             if (this.getName(eReference) == "xmlns:prefix") {
                 return eReference
             }
@@ -83,7 +83,7 @@ export class ExtendedMetaData {
     }
 
     getXSISchemaLocationMapFeature(eClass: EClass): EReference {
-        for (const eReference of eClass.eAllReferences) {
+        for (const eReference of eClass.getEAllReferences()) {
             if (this.getName(eReference) == "xsi:schemaLocation") {
                 return eReference
             }
@@ -92,23 +92,23 @@ export class ExtendedMetaData {
     }
 
     basicGetName(eElement: ENamedElement): string {
-        let annotation = eElement.getEAnnotation(annotationURI)
+        const annotation = eElement.getEAnnotation(annotationURI)
         if (annotation) {
-            let name = annotation.details.getValue("name")
+            const name = annotation.getDetails().getValue("name")
             if (name !== undefined) {
                 return name
             }
         }
-        return eElement.name
+        return eElement.getName()
     }
 
     basicGetNamespace(eFeature: EStructuralFeature): string {
-        let annotation = eFeature.getEAnnotation(annotationURI)
+        const annotation = eFeature.getEAnnotation(annotationURI)
         if (annotation) {
-            let namespace = annotation.details.getValue("namespace")
+            const namespace = annotation.getDetails().getValue("namespace")
             if (namespace !== undefined) {
                 if (namespace === "##targetNamespace") {
-                    let nsURI = eFeature.eContainingClass?.ePackage?.nsURI
+                    const nsURI = eFeature.getEContainingClass()?.getEPackage()?.getNsURI()
                     if (nsURI !== undefined) {
                         return nsURI
                     }
@@ -160,11 +160,11 @@ class EPackageExtentedMetaDataImpl implements EPackageExtentedMetaData {
     getType(name: string): EClassifier {
         let eResult = this._nameToClassifierMap?.get(name)
         if (!eResult) {
-            let eClassifiers = this._ePackage.eClassifiers
+            const eClassifiers = this._ePackage.getEClassifiers()
             if (!this._nameToClassifierMap || this._nameToClassifierMap.size != eClassifiers.size()) {
                 this._nameToClassifierMap = new Map<string, EClassifier>()
                 for (const eClassifier of eClassifiers) {
-                    let eClassifierName = this._emd.getName(eClassifier)
+                    const eClassifierName = this._emd.getName(eClassifier)
                     this._nameToClassifierMap.set(eClassifierName, eClassifier)
                     if (eClassifierName == name) {
                         eResult = eClassifier

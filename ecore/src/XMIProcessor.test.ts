@@ -7,22 +7,22 @@
 //
 // *****************************************************************************
 
-import { instance, mock } from "ts-mockito"
+import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import { EPackage, EResourceSet, XMIProcessor } from "./internal.js"
+import { EResourceSet, XMIProcessor } from "./internal.js"
 
 describe("XMIProcessor", () => {
     test("constructor.no.resourceset", () => {
-        let xmlProcessor = new XMIProcessor()
+        const xmlProcessor = new XMIProcessor()
         expect(xmlProcessor).not.toBeNull()
         expect(xmlProcessor.getResourceSet()).not.toBeNull()
     })
 
     test("constructor.resourceset", () => {
-        let mockPackage = mock<EPackage>()
-        let mockEResourceSet = mock<EResourceSet>()
-        let eResourceSet = instance(mockEResourceSet)
-        let xmlProcessor = new XMIProcessor(eResourceSet)
+        const mockEResourceSet = mock<EResourceSet>()
+        const eResourceSet = instance(mockEResourceSet)
+        when(mockEResourceSet.getResources()).thenReturn(null)
+        const xmlProcessor = new XMIProcessor(eResourceSet)
         expect(xmlProcessor).not.toBeNull()
         expect(xmlProcessor.getResourceSet()).toBe(eResourceSet)
     })

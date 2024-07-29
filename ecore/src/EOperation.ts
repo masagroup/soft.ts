@@ -12,15 +12,20 @@
 import { EClass, EClassifier, EList, EParameter, ETypedElement } from "./internal.js"
 
 export interface EOperation extends ETypedElement {
-    // Attributes
-    operationID: number
+    // eContainingClass
+    getEContainingClass(): EClass
 
-    // References
-    readonly eContainingClass: EClass
-    readonly eParameters: EList<EParameter>
-    readonly eExceptions: EList<EClassifier>
+    // eParameters
+    getEParameters(): EList<EParameter>
+
+    // eExceptions
+    getEExceptions(): EList<EClassifier>
     unSetEExceptions(): void
 
-    // Operations
+    // operationID
+    getOperationID(): number
+    setOperationID(newOperationID: number): void
+
+    // operations
     isOverrideOf(someOperation: EOperation): boolean
 }

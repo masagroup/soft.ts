@@ -18,10 +18,10 @@ export class BasicEObjectMap<K, V> extends BasicEMap<K, V> {
     }
 
     protected newEntry(key: K, value: V): EMapEntry<K, V> {
-        let eFactory = this._entryClass.ePackage.eFactoryInstance
-        let eEntry = eFactory.create(this._entryClass) as any as EMapEntry<K, V>
-        eEntry.key = key
-        eEntry.value = value
+        const eFactory = this._entryClass.getEPackage().getEFactoryInstance()
+        const eEntry = eFactory.create(this._entryClass) as any as EMapEntry<K, V>
+        eEntry.setKey(key)
+        eEntry.setValue(value)
         return eEntry
     }
 }

@@ -6,6 +6,7 @@
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 //
 // *****************************************************************************
+
 import { instance, mock } from "ts-mockito"
 import { describe, expect, test } from "vitest"
 import { AbstractEAdapter, ENotification, ENotifier } from "./internal.js"
@@ -18,25 +19,25 @@ class EAdapterTest extends AbstractEAdapter {
 
 describe("AbstractEAdapter", () => {
     test("get", () => {
-        let a = new EAdapterTest()
-        expect(a.target).toBeNull()
+        const a = new EAdapterTest()
+        expect(a.getTarget()).toBeNull()
     })
     test("set", () => {
-        let a = new EAdapterTest()
-        let mockNotifier = mock<ENotifier>()
-        let notifier = instance(mockNotifier)
-        a.target = notifier
-        expect(a.target).not.toBeNull()
-        expect(a.target).toBe(notifier)
+        const a = new EAdapterTest()
+        const mockNotifier = mock<ENotifier>()
+        const notifier = instance(mockNotifier)
+        a.setTarget(notifier)
+        expect(a.getTarget()).not.toBeNull()
+        expect(a.getTarget()).toBe(notifier)
     })
     test("unset", () => {
-        let a = new EAdapterTest()
-        let mockNotifier = mock<ENotifier>()
-        let notifier = instance(mockNotifier)
+        const a = new EAdapterTest()
+        const mockNotifier = mock<ENotifier>()
+        const notifier = instance(mockNotifier)
         a.unsetTarget(notifier)
-        expect(a.target).toBeNull()
-        a.target = notifier
+        expect(a.getTarget()).toBeNull()
+        a.setTarget(notifier)
         a.unsetTarget(notifier)
-        expect(a.target).toBeNull()
+        expect(a.getTarget()).toBeNull()
     })
 })

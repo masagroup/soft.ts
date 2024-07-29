@@ -10,23 +10,19 @@
 import { EClassifierImpl } from "./internal.js"
 
 export class EClassifierExt extends EClassifierImpl {
-    constructor() {
-        super()
-    }
-
     protected initClassifierID(): number {
-        return this.ePackage != null ? this.ePackage.eClassifiers.indexOf(this) : -1
+        return this.getEPackage() != null ? this.getEPackage().getEClassifiers().indexOf(this) : -1
     }
 
-    get defaultValue(): any {
+    getDefaultValue(): any {
         return null
     }
 
-    get instanceTypeName(): string {
-        return this.instanceClassName
+    getInstanceTypeName(): string {
+        return this.getInstanceClassName()
     }
 
-    set instanceTypeName(newInstanceTypeName: string) {
-        this.instanceClassName = newInstanceTypeName
+    setInstanceTypeName(newInstanceTypeName: string) {
+        this.setInstanceClassName(newInstanceTypeName)
     }
 }

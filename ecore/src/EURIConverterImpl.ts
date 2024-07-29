@@ -7,44 +7,43 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
-import { EList, EURIConverter, EURIHandler, FileURIHandler, ImmutableEList, URI } from "./internal.js"
+import { BasicEList, EList, EURIConverter, EURIHandler, FileURIHandler, URI } from "./internal.js"
 
 export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>
     private _uriMap: Map<URI, URI>
 
     constructor() {
-        this._uriHandlers = new ImmutableEList<EURIHandler>([new FileURIHandler()])
+        this._uriHandlers = new BasicEList<EURIHandler>([new FileURIHandler()])
         this._uriMap = new Map<URI, URI>()
     }
     getURIMap(): Map<URI, URI> {
         return this._uriMap
     }
 
-    createReadStream(uri: URI): fs.ReadStream {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+    async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createReadStream(normalized) : null
     }
 
-    createWriteStream(uri: URI): fs.WriteStream {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+    async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.createWriteStream(normalized) : null
     }
 
-    readSync(uri: URI): null | Buffer {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+    readSync(uri: URI): Uint8Array {
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         return uriHandler ? uriHandler.readSync(normalized) : null
     }
 
-    writeSync(uri: URI, s: Buffer): void {
-        let normalized = this.normalize(uri)
-        let uriHandler = this.getURIHandler(normalized)
+    writeSync(uri: URI, arr: Uint8Array): void {
+        const normalized = this.normalize(uri)
+        const uriHandler = this.getURIHandler(normalized)
         if (uriHandler) {
-            uriHandler.writeSync(normalized, s)
+            uriHandler.writeSync(normalized, arr)
         }
     }
 
@@ -62,13 +61,13 @@ export class EURIConverterImpl implements EURIConverter {
     }
 
     normalize(uri: URI): URI {
-        let normalized = this.getURIFromMap(uri)
+        const normalized = this.getURIFromMap(uri)
         return uri == normalized ? normalized : this.normalize(normalized)
     }
 
     private getURIFromMap(uri: URI): URI {
-        for (let [oldPrefix, newPrefix] of this._uriMap) {
-            let r = uri.replacePrefix(oldPrefix, newPrefix)
+        for (const [oldPrefix, newPrefix] of this._uriMap) {
+            const r = uri.replacePrefix(oldPrefix, newPrefix)
             if (r) {
                 return r
             }

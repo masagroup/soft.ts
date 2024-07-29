@@ -46,8 +46,8 @@ class EListTest<E> extends AbstractEList<E> {
 
 describe("AbstractEList", () => {
     test("clear", () => {
-        let l = new EListTest<number>(false)
-        let s = spy(l)
+        const l = new EListTest<number>(false)
+        const s = spy(l)
         when(s.size()).thenReturn(2)
         when(s.removeAt(1)).thenReturn(5)
         when(s.removeAt(0)).thenReturn(4)

@@ -23,7 +23,7 @@ export class XMLNamespaces {
     }
 
     popContext(): { prefix: string; uri: string }[] {
-        let oldPrefixSize = this._namespacesSize
+        const oldPrefixSize = this._namespacesSize
         this._namespacesSize = this._contexts[this._currentContext]
         this._currentContext--
         return this._namespaces.slice(this._namespacesSize, oldPrefixSize)
@@ -31,7 +31,7 @@ export class XMLNamespaces {
 
     declarePrefix(prefix: string, uri: string): boolean {
         for (let i = this._namespacesSize; i > this._contexts[this._currentContext]; i--) {
-            let p = this._namespaces[i - 1]
+            const p = this._namespaces[i - 1]
             if (p.prefix == prefix) {
                 p.uri = uri
                 return true
@@ -51,7 +51,7 @@ export class XMLNamespaces {
 
     getPrefix(uri: string): string {
         for (let i = this._namespacesSize; i > 0; i--) {
-            let p = this._namespaces[i - 1]
+            const p = this._namespaces[i - 1]
             if (p.uri == uri) {
                 return p.prefix
             }
@@ -61,7 +61,7 @@ export class XMLNamespaces {
 
     getURI(prefix: string): string {
         for (let i = this._namespacesSize; i > 0; i--) {
-            let p = this._namespaces[i - 1]
+            const p = this._namespaces[i - 1]
             if (p.prefix == prefix) {
                 return p.uri
             }

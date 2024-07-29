@@ -87,10 +87,10 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
 
     private constructor() {
         super()
-        this.name = EcoreConstants.eNAME
-        this.nsPrefix = EcoreConstants.eNS_PREFIX
-        this.nsURI = EcoreConstants.eNS_URI
-        this.eFactoryInstance = getEcoreFactory()
+        this.setName(EcoreConstants.eNAME)
+        this.setNsPrefix(EcoreConstants.eNS_PREFIX)
+        this.setNsURI(EcoreConstants.eNS_URI)
+        this.setEFactoryInstance(getEcoreFactory())
         this.createPackageContents()
         this.initializePackageContents()
         this.createResource()
@@ -101,20 +101,20 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEAnnotation_Source(): EAttribute {
-        return this._eAnnotationClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eAnnotationClass.getEStructuralFeatures().get(0) as EAttribute
     }
 
     getEAnnotation_Contents(): EReference {
-        return this._eAnnotationClass.eStructuralFeatures.get(3) as EReference
+        return this._eAnnotationClass.getEStructuralFeatures().get(3) as EReference
     }
     getEAnnotation_Details(): EReference {
-        return this._eAnnotationClass.eStructuralFeatures.get(1) as EReference
+        return this._eAnnotationClass.getEStructuralFeatures().get(1) as EReference
     }
     getEAnnotation_EModelElement(): EReference {
-        return this._eAnnotationClass.eStructuralFeatures.get(2) as EReference
+        return this._eAnnotationClass.getEStructuralFeatures().get(2) as EReference
     }
     getEAnnotation_References(): EReference {
-        return this._eAnnotationClass.eStructuralFeatures.get(4) as EReference
+        return this._eAnnotationClass.getEStructuralFeatures().get(4) as EReference
     }
 
     getEAttribute(): EClass {
@@ -122,11 +122,11 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEAttribute_ID(): EAttribute {
-        return this._eAttributeClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eAttributeClass.getEStructuralFeatures().get(0) as EAttribute
     }
 
     getEAttribute_EAttributeType(): EReference {
-        return this._eAttributeClass.eStructuralFeatures.get(1) as EReference
+        return this._eAttributeClass.getEStructuralFeatures().get(1) as EReference
     }
 
     getEClass(): EClass {
@@ -134,87 +134,87 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEClass_Abstract(): EAttribute {
-        return this._eClassClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eClassClass.getEStructuralFeatures().get(0) as EAttribute
     }
     getEClass_Interface(): EAttribute {
-        return this._eClassClass.eStructuralFeatures.get(1) as EAttribute
+        return this._eClassClass.getEStructuralFeatures().get(1) as EAttribute
     }
 
     getEClass_EAllAttributes(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(9) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(9) as EReference
     }
     getEClass_EAllContainments(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(11) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(11) as EReference
     }
     getEClass_EAllCrossReferences(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(12) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(12) as EReference
     }
     getEClass_EAllOperations(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(13) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(13) as EReference
     }
     getEClass_EAllReferences(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(10) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(10) as EReference
     }
     getEClass_EAllStructuralFeatures(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(14) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(14) as EReference
     }
     getEClass_EAllSuperTypes(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(15) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(15) as EReference
     }
     getEClass_EAttributes(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(3) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(3) as EReference
     }
     getEClass_EContainmentFeatures(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(7) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(7) as EReference
     }
     getEClass_ECrossReferenceFeatures(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(8) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(8) as EReference
     }
     getEClass_EIDAttribute(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(16) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(16) as EReference
     }
     getEClass_EOperations(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(6) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(6) as EReference
     }
     getEClass_EReferences(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(4) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(4) as EReference
     }
     getEClass_EStructuralFeatures(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(2) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(2) as EReference
     }
     getEClass_ESuperTypes(): EReference {
-        return this._eClassClass.eStructuralFeatures.get(5) as EReference
+        return this._eClassClass.getEStructuralFeatures().get(5) as EReference
     }
 
     getEClass_GetEOperation_EInt(): EOperation {
-        return this._eClassClass.eOperations.get(6) as EOperation
+        return this._eClassClass.getEOperations().get(6) as EOperation
     }
     getEClass_GetEStructuralFeature_EInt(): EOperation {
-        return this._eClassClass.eOperations.get(2) as EOperation
+        return this._eClassClass.getEOperations().get(2) as EOperation
     }
     getEClass_GetEStructuralFeature_EString(): EOperation {
-        return this._eClassClass.eOperations.get(3) as EOperation
+        return this._eClassClass.getEOperations().get(3) as EOperation
     }
     getEClass_GetFeatureCount(): EOperation {
-        return this._eClassClass.eOperations.get(1) as EOperation
+        return this._eClassClass.getEOperations().get(1) as EOperation
     }
     getEClass_GetFeatureID_EStructuralFeature(): EOperation {
-        return this._eClassClass.eOperations.get(4) as EOperation
+        return this._eClassClass.getEOperations().get(4) as EOperation
     }
     getEClass_GetFeatureType_EStructuralFeature(): EOperation {
-        return this._eClassClass.eOperations.get(9) as EOperation
+        return this._eClassClass.getEOperations().get(9) as EOperation
     }
     getEClass_GetOperationCount(): EOperation {
-        return this._eClassClass.eOperations.get(5) as EOperation
+        return this._eClassClass.getEOperations().get(5) as EOperation
     }
     getEClass_GetOperationID_EOperation(): EOperation {
-        return this._eClassClass.eOperations.get(7) as EOperation
+        return this._eClassClass.getEOperations().get(7) as EOperation
     }
     getEClass_GetOverride_EOperation(): EOperation {
-        return this._eClassClass.eOperations.get(8) as EOperation
+        return this._eClassClass.getEOperations().get(8) as EOperation
     }
     getEClass_IsSuperTypeOf_EClass(): EOperation {
-        return this._eClassClass.eOperations.get(0) as EOperation
+        return this._eClassClass.getEOperations().get(0) as EOperation
     }
 
     getEClassifierClass(): EClass {
@@ -222,27 +222,27 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEClassifier_ClassifierID(): EAttribute {
-        return this._eClassifierClass.eStructuralFeatures.get(5) as EAttribute
+        return this._eClassifierClass.getEStructuralFeatures().get(5) as EAttribute
     }
     getEClassifier_DefaultValue(): EAttribute {
-        return this._eClassifierClass.eStructuralFeatures.get(3) as EAttribute
+        return this._eClassifierClass.getEStructuralFeatures().get(3) as EAttribute
     }
     getEClassifier_InstanceClass(): EAttribute {
-        return this._eClassifierClass.eStructuralFeatures.get(1) as EAttribute
+        return this._eClassifierClass.getEStructuralFeatures().get(1) as EAttribute
     }
     getEClassifier_InstanceClassName(): EAttribute {
-        return this._eClassifierClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eClassifierClass.getEStructuralFeatures().get(0) as EAttribute
     }
     getEClassifier_InstanceTypeName(): EAttribute {
-        return this._eClassifierClass.eStructuralFeatures.get(2) as EAttribute
+        return this._eClassifierClass.getEStructuralFeatures().get(2) as EAttribute
     }
 
     getEClassifier_EPackage(): EReference {
-        return this._eClassifierClass.eStructuralFeatures.get(4) as EReference
+        return this._eClassifierClass.getEStructuralFeatures().get(4) as EReference
     }
 
     getEClassifier_IsInstance_EJavaObject(): EOperation {
-        return this._eClassifierClass.eOperations.get(0) as EOperation
+        return this._eClassifierClass.getEOperations().get(0) as EOperation
     }
 
     getEDataType(): EClass {
@@ -250,7 +250,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEDataType_Serializable(): EAttribute {
-        return this._eDataTypeClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eDataTypeClass.getEStructuralFeatures().get(0) as EAttribute
     }
 
     getEEnum(): EClass {
@@ -258,17 +258,17 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEEnum_ELiterals(): EReference {
-        return this._eEnumClass.eStructuralFeatures.get(0) as EReference
+        return this._eEnumClass.getEStructuralFeatures().get(0) as EReference
     }
 
     getEEnum_GetEEnumLiteral_EString(): EOperation {
-        return this._eEnumClass.eOperations.get(0) as EOperation
+        return this._eEnumClass.getEOperations().get(0) as EOperation
     }
     getEEnum_GetEEnumLiteral_EInt(): EOperation {
-        return this._eEnumClass.eOperations.get(1) as EOperation
+        return this._eEnumClass.getEOperations().get(1) as EOperation
     }
     getEEnum_GetEEnumLiteralByLiteral_EString(): EOperation {
-        return this._eEnumClass.eOperations.get(2) as EOperation
+        return this._eEnumClass.getEOperations().get(2) as EOperation
     }
 
     getEEnumLiteral(): EClass {
@@ -276,17 +276,17 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEEnumLiteral_Instance(): EAttribute {
-        return this._eEnumLiteralClass.eStructuralFeatures.get(1) as EAttribute
+        return this._eEnumLiteralClass.getEStructuralFeatures().get(1) as EAttribute
     }
     getEEnumLiteral_Literal(): EAttribute {
-        return this._eEnumLiteralClass.eStructuralFeatures.get(2) as EAttribute
+        return this._eEnumLiteralClass.getEStructuralFeatures().get(2) as EAttribute
     }
     getEEnumLiteral_Value(): EAttribute {
-        return this._eEnumLiteralClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eEnumLiteralClass.getEStructuralFeatures().get(0) as EAttribute
     }
 
     getEEnumLiteral_EEnum(): EReference {
-        return this._eEnumLiteralClass.eStructuralFeatures.get(3) as EReference
+        return this._eEnumLiteralClass.getEStructuralFeatures().get(3) as EReference
     }
 
     getEFactory(): EClass {
@@ -294,17 +294,17 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEFactory_EPackage(): EReference {
-        return this._eFactoryClass.eStructuralFeatures.get(0) as EReference
+        return this._eFactoryClass.getEStructuralFeatures().get(0) as EReference
     }
 
     getEFactory_ConvertToString_EDataType_EJavaObject(): EOperation {
-        return this._eFactoryClass.eOperations.get(2) as EOperation
+        return this._eFactoryClass.getEOperations().get(2) as EOperation
     }
     getEFactory_Create_EClass(): EOperation {
-        return this._eFactoryClass.eOperations.get(0) as EOperation
+        return this._eFactoryClass.getEOperations().get(0) as EOperation
     }
     getEFactory_CreateFromString_EDataType_EString(): EOperation {
-        return this._eFactoryClass.eOperations.get(1) as EOperation
+        return this._eFactoryClass.getEOperations().get(1) as EOperation
     }
 
     getEGenericType(): EClass {
@@ -312,26 +312,26 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEGenericType_EClassifier(): EReference {
-        return this._eGenericTypeClass.eStructuralFeatures.get(5) as EReference
+        return this._eGenericTypeClass.getEStructuralFeatures().get(5) as EReference
     }
     getEGenericType_ELowerBound(): EReference {
-        return this._eGenericTypeClass.eStructuralFeatures.get(3) as EReference
+        return this._eGenericTypeClass.getEStructuralFeatures().get(3) as EReference
     }
     getEGenericType_ERawType(): EReference {
-        return this._eGenericTypeClass.eStructuralFeatures.get(2) as EReference
+        return this._eGenericTypeClass.getEStructuralFeatures().get(2) as EReference
     }
     getEGenericType_ETypeArguments(): EReference {
-        return this._eGenericTypeClass.eStructuralFeatures.get(1) as EReference
+        return this._eGenericTypeClass.getEStructuralFeatures().get(1) as EReference
     }
     getEGenericType_ETypeParameter(): EReference {
-        return this._eGenericTypeClass.eStructuralFeatures.get(4) as EReference
+        return this._eGenericTypeClass.getEStructuralFeatures().get(4) as EReference
     }
     getEGenericType_EUpperBound(): EReference {
-        return this._eGenericTypeClass.eStructuralFeatures.get(0) as EReference
+        return this._eGenericTypeClass.getEStructuralFeatures().get(0) as EReference
     }
 
     getEGenericType_IsInstance_EJavaObject(): EOperation {
-        return this._eGenericTypeClass.eOperations.get(0) as EOperation
+        return this._eGenericTypeClass.getEOperations().get(0) as EOperation
     }
 
     getEModelElement(): EClass {
@@ -339,11 +339,11 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEModelElement_EAnnotations(): EReference {
-        return this._eModelElementClass.eStructuralFeatures.get(0) as EReference
+        return this._eModelElementClass.getEStructuralFeatures().get(0) as EReference
     }
 
     getEModelElement_GetEAnnotation_EString(): EOperation {
-        return this._eModelElementClass.eOperations.get(0) as EOperation
+        return this._eModelElementClass.getEOperations().get(0) as EOperation
     }
 
     getENamedElement(): EClass {
@@ -351,7 +351,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getENamedElement_Name(): EAttribute {
-        return this._eNamedElementClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eNamedElementClass.getEStructuralFeatures().get(0) as EAttribute
     }
 
     getEObject(): EClass {
@@ -359,49 +359,49 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEObject_EAllContents(): EOperation {
-        return this._eObjectClass.eOperations.get(7) as EOperation
+        return this._eObjectClass.getEOperations().get(7) as EOperation
     }
     getEObject_EClass(): EOperation {
-        return this._eObjectClass.eOperations.get(0) as EOperation
+        return this._eObjectClass.getEOperations().get(0) as EOperation
     }
     getEObject_EContainer(): EOperation {
-        return this._eObjectClass.eOperations.get(3) as EOperation
+        return this._eObjectClass.getEOperations().get(3) as EOperation
     }
     getEObject_EContainingFeature(): EOperation {
-        return this._eObjectClass.eOperations.get(4) as EOperation
+        return this._eObjectClass.getEOperations().get(4) as EOperation
     }
     getEObject_EContainmentFeature(): EOperation {
-        return this._eObjectClass.eOperations.get(5) as EOperation
+        return this._eObjectClass.getEOperations().get(5) as EOperation
     }
     getEObject_EContents(): EOperation {
-        return this._eObjectClass.eOperations.get(6) as EOperation
+        return this._eObjectClass.getEOperations().get(6) as EOperation
     }
     getEObject_ECrossReferences(): EOperation {
-        return this._eObjectClass.eOperations.get(8) as EOperation
+        return this._eObjectClass.getEOperations().get(8) as EOperation
     }
     getEObject_EGet_EStructuralFeature(): EOperation {
-        return this._eObjectClass.eOperations.get(9) as EOperation
+        return this._eObjectClass.getEOperations().get(9) as EOperation
     }
     getEObject_EGet_EStructuralFeature_EBoolean(): EOperation {
-        return this._eObjectClass.eOperations.get(10) as EOperation
+        return this._eObjectClass.getEOperations().get(10) as EOperation
     }
     getEObject_EInvoke_EOperation_EEList(): EOperation {
-        return this._eObjectClass.eOperations.get(14) as EOperation
+        return this._eObjectClass.getEOperations().get(14) as EOperation
     }
     getEObject_EIsProxy(): EOperation {
-        return this._eObjectClass.eOperations.get(1) as EOperation
+        return this._eObjectClass.getEOperations().get(1) as EOperation
     }
     getEObject_EIsSet_EStructuralFeature(): EOperation {
-        return this._eObjectClass.eOperations.get(12) as EOperation
+        return this._eObjectClass.getEOperations().get(12) as EOperation
     }
     getEObject_EResource(): EOperation {
-        return this._eObjectClass.eOperations.get(2) as EOperation
+        return this._eObjectClass.getEOperations().get(2) as EOperation
     }
     getEObject_ESet_EStructuralFeature_EJavaObject(): EOperation {
-        return this._eObjectClass.eOperations.get(11) as EOperation
+        return this._eObjectClass.getEOperations().get(11) as EOperation
     }
     getEObject_EUnset_EStructuralFeature(): EOperation {
-        return this._eObjectClass.eOperations.get(13) as EOperation
+        return this._eObjectClass.getEOperations().get(13) as EOperation
     }
 
     getEOperation(): EClass {
@@ -409,21 +409,21 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEOperation_OperationID(): EAttribute {
-        return this._eOperationClass.eStructuralFeatures.get(3) as EAttribute
+        return this._eOperationClass.getEStructuralFeatures().get(3) as EAttribute
     }
 
     getEOperation_EContainingClass(): EReference {
-        return this._eOperationClass.eStructuralFeatures.get(0) as EReference
+        return this._eOperationClass.getEStructuralFeatures().get(0) as EReference
     }
     getEOperation_EExceptions(): EReference {
-        return this._eOperationClass.eStructuralFeatures.get(2) as EReference
+        return this._eOperationClass.getEStructuralFeatures().get(2) as EReference
     }
     getEOperation_EParameters(): EReference {
-        return this._eOperationClass.eStructuralFeatures.get(1) as EReference
+        return this._eOperationClass.getEStructuralFeatures().get(1) as EReference
     }
 
     getEOperation_IsOverrideOf_EOperation(): EOperation {
-        return this._eOperationClass.eOperations.get(0) as EOperation
+        return this._eOperationClass.getEOperations().get(0) as EOperation
     }
 
     getEPackage(): EClass {
@@ -431,27 +431,27 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEPackage_NsPrefix(): EAttribute {
-        return this._ePackageClass.eStructuralFeatures.get(1) as EAttribute
+        return this._ePackageClass.getEStructuralFeatures().get(1) as EAttribute
     }
     getEPackage_NsURI(): EAttribute {
-        return this._ePackageClass.eStructuralFeatures.get(0) as EAttribute
+        return this._ePackageClass.getEStructuralFeatures().get(0) as EAttribute
     }
 
     getEPackage_EClassifiers(): EReference {
-        return this._ePackageClass.eStructuralFeatures.get(3) as EReference
+        return this._ePackageClass.getEStructuralFeatures().get(3) as EReference
     }
     getEPackage_EFactoryInstance(): EReference {
-        return this._ePackageClass.eStructuralFeatures.get(2) as EReference
+        return this._ePackageClass.getEStructuralFeatures().get(2) as EReference
     }
     getEPackage_ESubPackages(): EReference {
-        return this._ePackageClass.eStructuralFeatures.get(4) as EReference
+        return this._ePackageClass.getEStructuralFeatures().get(4) as EReference
     }
     getEPackage_ESuperPackage(): EReference {
-        return this._ePackageClass.eStructuralFeatures.get(5) as EReference
+        return this._ePackageClass.getEStructuralFeatures().get(5) as EReference
     }
 
     getEPackage_GetEClassifier_EString(): EOperation {
-        return this._ePackageClass.eOperations.get(0) as EOperation
+        return this._ePackageClass.getEOperations().get(0) as EOperation
     }
 
     getEParameter(): EClass {
@@ -459,7 +459,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEParameter_EOperation(): EReference {
-        return this._eParameterClass.eStructuralFeatures.get(0) as EReference
+        return this._eParameterClass.getEStructuralFeatures().get(0) as EReference
     }
 
     getEReference(): EClass {
@@ -467,23 +467,23 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEReference_Container(): EAttribute {
-        return this._eReferenceClass.eStructuralFeatures.get(1) as EAttribute
+        return this._eReferenceClass.getEStructuralFeatures().get(1) as EAttribute
     }
     getEReference_Containment(): EAttribute {
-        return this._eReferenceClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eReferenceClass.getEStructuralFeatures().get(0) as EAttribute
     }
     getEReference_ResolveProxies(): EAttribute {
-        return this._eReferenceClass.eStructuralFeatures.get(2) as EAttribute
+        return this._eReferenceClass.getEStructuralFeatures().get(2) as EAttribute
     }
 
     getEReference_EKeys(): EReference {
-        return this._eReferenceClass.eStructuralFeatures.get(5) as EReference
+        return this._eReferenceClass.getEStructuralFeatures().get(5) as EReference
     }
     getEReference_EOpposite(): EReference {
-        return this._eReferenceClass.eStructuralFeatures.get(3) as EReference
+        return this._eReferenceClass.getEStructuralFeatures().get(3) as EReference
     }
     getEReference_EReferenceType(): EReference {
-        return this._eReferenceClass.eStructuralFeatures.get(4) as EReference
+        return this._eReferenceClass.getEStructuralFeatures().get(4) as EReference
     }
 
     getEStringToStringMapEntry(): EClass {
@@ -491,10 +491,10 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEStringToStringMapEntry_Key(): EAttribute {
-        return this._eStringToStringMapEntryClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eStringToStringMapEntryClass.getEStructuralFeatures().get(0) as EAttribute
     }
     getEStringToStringMapEntry_Value(): EAttribute {
-        return this._eStringToStringMapEntryClass.eStructuralFeatures.get(1) as EAttribute
+        return this._eStringToStringMapEntryClass.getEStructuralFeatures().get(1) as EAttribute
     }
 
     getEStructuralFeature(): EClass {
@@ -502,36 +502,36 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getEStructuralFeature_Changeable(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(0) as EAttribute
     }
     getEStructuralFeature_DefaultValue(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(4) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(4) as EAttribute
     }
     getEStructuralFeature_DefaultValueLiteral(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(3) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(3) as EAttribute
     }
     getEStructuralFeature_Derived(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(6) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(6) as EAttribute
     }
     getEStructuralFeature_FeatureID(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(8) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(8) as EAttribute
     }
     getEStructuralFeature_Transient(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(2) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(2) as EAttribute
     }
     getEStructuralFeature_Unsettable(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(5) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(5) as EAttribute
     }
     getEStructuralFeature_Volatile(): EAttribute {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(1) as EAttribute
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(1) as EAttribute
     }
 
     getEStructuralFeature_EContainingClass(): EReference {
-        return this._eStructuralFeatureClass.eStructuralFeatures.get(7) as EReference
+        return this._eStructuralFeatureClass.getEStructuralFeatures().get(7) as EReference
     }
 
     getEStructuralFeature_GetContainerClass(): EOperation {
-        return this._eStructuralFeatureClass.eOperations.get(0) as EOperation
+        return this._eStructuralFeatureClass.getEOperations().get(0) as EOperation
     }
 
     getETypeParameter(): EClass {
@@ -539,7 +539,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getETypeParameter_EBounds(): EReference {
-        return this._eTypeParameterClass.eStructuralFeatures.get(0) as EReference
+        return this._eTypeParameterClass.getEStructuralFeatures().get(0) as EReference
     }
 
     getETypedElement(): EClass {
@@ -547,26 +547,26 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     getETypedElement_LowerBound(): EAttribute {
-        return this._eTypedElementClass.eStructuralFeatures.get(2) as EAttribute
+        return this._eTypedElementClass.getEStructuralFeatures().get(2) as EAttribute
     }
     getETypedElement_Many(): EAttribute {
-        return this._eTypedElementClass.eStructuralFeatures.get(4) as EAttribute
+        return this._eTypedElementClass.getEStructuralFeatures().get(4) as EAttribute
     }
     getETypedElement_Ordered(): EAttribute {
-        return this._eTypedElementClass.eStructuralFeatures.get(0) as EAttribute
+        return this._eTypedElementClass.getEStructuralFeatures().get(0) as EAttribute
     }
     getETypedElement_Required(): EAttribute {
-        return this._eTypedElementClass.eStructuralFeatures.get(5) as EAttribute
+        return this._eTypedElementClass.getEStructuralFeatures().get(5) as EAttribute
     }
     getETypedElement_Unique(): EAttribute {
-        return this._eTypedElementClass.eStructuralFeatures.get(1) as EAttribute
+        return this._eTypedElementClass.getEStructuralFeatures().get(1) as EAttribute
     }
     getETypedElement_UpperBound(): EAttribute {
-        return this._eTypedElementClass.eStructuralFeatures.get(3) as EAttribute
+        return this._eTypedElementClass.getEStructuralFeatures().get(3) as EAttribute
     }
 
     getETypedElement_EType(): EReference {
-        return this._eTypedElementClass.eStructuralFeatures.get(6) as EReference
+        return this._eTypedElementClass.getEStructuralFeatures().get(6) as EReference
     }
 
     getEBigDecimal(): EDataType {
@@ -670,7 +670,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     private createPackageContents(): void {
-        let factory = getEcoreFactory()
+        const factory = getEcoreFactory()
 
         this._eAnnotationClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EANNOTATION)
         factory.createEAttributeFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__SOURCE)
@@ -1061,22 +1061,22 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     }
 
     private initializePackageContents(): void {
-        this._eAnnotationClass.eSuperTypes.add(this._eModelElementClass)
-        this._eAttributeClass.eSuperTypes.add(this._eStructuralFeatureClass)
-        this._eClassClass.eSuperTypes.add(this._eClassifierClass)
-        this._eClassifierClass.eSuperTypes.add(this._eNamedElementClass)
-        this._eDataTypeClass.eSuperTypes.add(this._eClassifierClass)
-        this._eEnumClass.eSuperTypes.add(this._eDataTypeClass)
-        this._eEnumLiteralClass.eSuperTypes.add(this._eNamedElementClass)
-        this._eFactoryClass.eSuperTypes.add(this._eModelElementClass)
-        this._eNamedElementClass.eSuperTypes.add(this._eModelElementClass)
-        this._eOperationClass.eSuperTypes.add(this._eTypedElementClass)
-        this._ePackageClass.eSuperTypes.add(this._eNamedElementClass)
-        this._eParameterClass.eSuperTypes.add(this._eTypedElementClass)
-        this._eReferenceClass.eSuperTypes.add(this._eStructuralFeatureClass)
-        this._eStructuralFeatureClass.eSuperTypes.add(this._eTypedElementClass)
-        this._eTypeParameterClass.eSuperTypes.add(this._eNamedElementClass)
-        this._eTypedElementClass.eSuperTypes.add(this._eNamedElementClass)
+        this._eAnnotationClass.getESuperTypes().add(this._eModelElementClass)
+        this._eAttributeClass.getESuperTypes().add(this._eStructuralFeatureClass)
+        this._eClassClass.getESuperTypes().add(this._eClassifierClass)
+        this._eClassifierClass.getESuperTypes().add(this._eNamedElementClass)
+        this._eDataTypeClass.getESuperTypes().add(this._eClassifierClass)
+        this._eEnumClass.getESuperTypes().add(this._eDataTypeClass)
+        this._eEnumLiteralClass.getESuperTypes().add(this._eNamedElementClass)
+        this._eFactoryClass.getESuperTypes().add(this._eModelElementClass)
+        this._eNamedElementClass.getESuperTypes().add(this._eModelElementClass)
+        this._eOperationClass.getESuperTypes().add(this._eTypedElementClass)
+        this._ePackageClass.getESuperTypes().add(this._eNamedElementClass)
+        this._eParameterClass.getESuperTypes().add(this._eTypedElementClass)
+        this._eReferenceClass.getESuperTypes().add(this._eStructuralFeatureClass)
+        this._eStructuralFeatureClass.getESuperTypes().add(this._eTypedElementClass)
+        this._eTypeParameterClass.getESuperTypes().add(this._eNamedElementClass)
+        this._eTypedElementClass.getESuperTypes().add(this._eNamedElementClass)
 
         this.initEClass(this._eAnnotationClass, "EAnnotation", "@masagroup/ecore/EAnnotation", false, false)
         this.initEAttribute(
@@ -1508,44 +1508,44 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEClass_IsSuperTypeOf_EClass()
+            const operation = this.getEClass_IsSuperTypeOf_EClass()
             this.initEOperation(operation, this.getEBoolean(), "isSuperTypeOf", 0, 1, true, true)
             this.addEParameter(operation, this.getEClass(), "someClass", 0, 1, true, true)
         }
         this.initEOperation(this.getEClass_GetFeatureCount(), this.getEInt(), "getFeatureCount", 0, 1, true, true)
         {
-            let operation = this.getEClass_GetEStructuralFeature_EInt()
+            const operation = this.getEClass_GetEStructuralFeature_EInt()
             this.initEOperation(operation, this.getEStructuralFeature(), "getEStructuralFeature", 0, 1, true, true)
             this.addEParameter(operation, this.getEInt(), "featureID", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetEStructuralFeature_EString()
+            const operation = this.getEClass_GetEStructuralFeature_EString()
             this.initEOperation(operation, this.getEStructuralFeature(), "getEStructuralFeature", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "featureName", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetFeatureID_EStructuralFeature()
+            const operation = this.getEClass_GetFeatureID_EStructuralFeature()
             this.initEOperation(operation, this.getEInt(), "getFeatureID", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
         this.initEOperation(this.getEClass_GetOperationCount(), this.getEInt(), "getOperationCount", 0, 1, true, true)
         {
-            let operation = this.getEClass_GetEOperation_EInt()
+            const operation = this.getEClass_GetEOperation_EInt()
             this.initEOperation(operation, this.getEOperation(), "getEOperation", 0, 1, true, true)
             this.addEParameter(operation, this.getEInt(), "operationID", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetOperationID_EOperation()
+            const operation = this.getEClass_GetOperationID_EOperation()
             this.initEOperation(operation, this.getEInt(), "getOperationID", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "operation", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetOverride_EOperation()
+            const operation = this.getEClass_GetOverride_EOperation()
             this.initEOperation(operation, this.getEOperation(), "getOverride", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "operation", 0, 1, true, true)
         }
         {
-            let operation = this.getEClass_GetFeatureType_EStructuralFeature()
+            const operation = this.getEClass_GetFeatureType_EStructuralFeature()
             this.initEOperation(operation, this.getEClassifierClass(), "getFeatureType", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
@@ -1650,7 +1650,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEClassifier_IsInstance_EJavaObject()
+            const operation = this.getEClassifier_IsInstance_EJavaObject()
             this.initEOperation(operation, this.getEBoolean(), "isInstance", 0, 1, true, true)
             this.addEParameter(operation, this.getEJavaObject(), "object", 0, 1, true, true)
         }
@@ -1693,17 +1693,17 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEEnum_GetEEnumLiteral_EString()
+            const operation = this.getEEnum_GetEEnumLiteral_EString()
             this.initEOperation(operation, this.getEEnumLiteral(), "getEEnumLiteral", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "name", 0, 1, true, true)
         }
         {
-            let operation = this.getEEnum_GetEEnumLiteral_EInt()
+            const operation = this.getEEnum_GetEEnumLiteral_EInt()
             this.initEOperation(operation, this.getEEnumLiteral(), "getEEnumLiteral", 0, 1, true, true)
             this.addEParameter(operation, this.getEInt(), "value", 0, 1, true, true)
         }
         {
-            let operation = this.getEEnum_GetEEnumLiteralByLiteral_EString()
+            const operation = this.getEEnum_GetEEnumLiteralByLiteral_EString()
             this.initEOperation(operation, this.getEEnumLiteral(), "getEEnumLiteralByLiteral", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "literal", 0, 1, true, true)
         }
@@ -1796,18 +1796,18 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEFactory_Create_EClass()
+            const operation = this.getEFactory_Create_EClass()
             this.initEOperation(operation, this.getEObject(), "create", 0, 1, true, true)
             this.addEParameter(operation, this.getEClass(), "eClass", 0, 1, true, true)
         }
         {
-            let operation = this.getEFactory_CreateFromString_EDataType_EString()
+            const operation = this.getEFactory_CreateFromString_EDataType_EString()
             this.initEOperation(operation, this.getEJavaObject(), "createFromString", 0, 1, true, true)
             this.addEParameter(operation, this.getEDataType(), "eDataType", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "literalValue", 0, 1, true, true)
         }
         {
-            let operation = this.getEFactory_ConvertToString_EDataType_EJavaObject()
+            const operation = this.getEFactory_ConvertToString_EDataType_EJavaObject()
             this.initEOperation(operation, this.getEString(), "convertToString", 0, 1, true, true)
             this.addEParameter(operation, this.getEDataType(), "eDataType", 0, 1, true, true)
             this.addEParameter(operation, this.getEJavaObject(), "instanceValue", 0, 1, true, true)
@@ -1923,7 +1923,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEGenericType_IsInstance_EJavaObject()
+            const operation = this.getEGenericType_IsInstance_EJavaObject()
             this.initEOperation(operation, this.getEBoolean(), "isInstance", 0, 1, true, true)
             this.addEParameter(operation, this.getEJavaObject(), "object", 0, 1, true, true)
         }
@@ -1948,7 +1948,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEModelElement_GetEAnnotation_EString()
+            const operation = this.getEModelElement_GetEAnnotation_EString()
             this.initEOperation(operation, this.getEAnnotationClass(), "getEAnnotation", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "source", 0, 1, true, true)
         }
@@ -1998,34 +1998,34 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         this.initEOperation(this.getEObject_EAllContents(), this.getETreeIterator(), "eAllContents", 0, 1, true, true)
         this.initEOperation(this.getEObject_ECrossReferences(), this.getEEList(), "eCrossReferences", 0, 1, true, true)
         {
-            let operation = this.getEObject_EGet_EStructuralFeature()
+            const operation = this.getEObject_EGet_EStructuralFeature()
             this.initEOperation(operation, this.getEJavaObject(), "eGet", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EGet_EStructuralFeature_EBoolean()
+            const operation = this.getEObject_EGet_EStructuralFeature_EBoolean()
             this.initEOperation(operation, this.getEJavaObject(), "eGet", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
             this.addEParameter(operation, this.getEBoolean(), "resolve", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_ESet_EStructuralFeature_EJavaObject()
+            const operation = this.getEObject_ESet_EStructuralFeature_EJavaObject()
             this.initEOperation(operation, null, "eSet", 0, 1, true, true)
             this.addEParameter(operation, null, "feature", 0, 1, true, true)
             this.addEParameter(operation, null, "newValue", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EIsSet_EStructuralFeature()
+            const operation = this.getEObject_EIsSet_EStructuralFeature()
             this.initEOperation(operation, this.getEBoolean(), "eIsSet", 0, 1, true, true)
             this.addEParameter(operation, this.getEStructuralFeature(), "feature", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EUnset_EStructuralFeature()
+            const operation = this.getEObject_EUnset_EStructuralFeature()
             this.initEOperation(operation, null, "eUnset", 0, 1, true, true)
             this.addEParameter(operation, null, "feature", 0, 1, true, true)
         }
         {
-            let operation = this.getEObject_EInvoke_EOperation_EEList()
+            const operation = this.getEObject_EInvoke_EOperation_EEList()
             this.initEOperation(operation, this.getEJavaObject(), "eInvoke", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "operation", 0, 1, true, true)
             this.addEParameter(operation, this.getEEList(), "arguments", 0, 1, true, true)
@@ -2103,7 +2103,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEOperation_IsOverrideOf_EOperation()
+            const operation = this.getEOperation_IsOverrideOf_EOperation()
             this.initEOperation(operation, this.getEBoolean(), "isOverrideOf", 0, 1, true, true)
             this.addEParameter(operation, this.getEOperation(), "someOperation", 0, 1, true, true)
         }
@@ -2214,7 +2214,7 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
             true
         )
         {
-            let operation = this.getEPackage_GetEClassifier_EString()
+            const operation = this.getEPackage_GetEClassifier_EString()
             this.initEOperation(operation, this.getEClassifierClass(), "getEClassifier", 0, 1, true, true)
             this.addEParameter(operation, this.getEString(), "name", 0, 1, true, true)
         }

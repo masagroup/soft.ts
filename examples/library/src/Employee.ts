@@ -12,6 +12,6 @@
 import { Person } from "./internal.js"
 
 export interface Employee extends Person {
-    // References
+    // manager property
     manager: Employee
 }

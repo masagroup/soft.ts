@@ -30,14 +30,44 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
 
     // get the value of address
     get address(): string {
-        return this._address
+        return this.getAddress()
     }
 
     // set the value of address
     set address(newAddress: string) {
-        let oldAddress = this._address
+        this.setAddress(newAddress)
+    }
+
+    // get the value of firstName
+    get firstName(): string {
+        return this.getFirstName()
+    }
+
+    // set the value of firstName
+    set firstName(newFirstName: string) {
+        this.setFirstName(newFirstName)
+    }
+
+    // get the value of lastName
+    get lastName(): string {
+        return this.getLastName()
+    }
+
+    // set the value of lastName
+    set lastName(newLastName: string) {
+        this.setLastName(newLastName)
+    }
+
+    // get the value of address
+    getAddress(): string {
+        return this._address
+    }
+
+    // set the value of address
+    setAddress(newAddress: string): void {
+        const oldAddress = this._address
         this._address = newAddress
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -51,15 +81,15 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     }
 
     // get the value of firstName
-    get firstName(): string {
+    getFirstName(): string {
         return this._firstName
     }
 
     // set the value of firstName
-    set firstName(newFirstName: string) {
-        let oldFirstName = this._firstName
+    setFirstName(newFirstName: string): void {
+        const oldFirstName = this._firstName
         this._firstName = newFirstName
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -73,15 +103,15 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     }
 
     // get the value of lastName
-    get lastName(): string {
+    getLastName(): string {
         return this._lastName
     }
 
     // set the value of lastName
-    set lastName(newLastName: string) {
-        let oldLastName = this._lastName
+    setLastName(newLastName: string): void {
+        const oldLastName = this._lastName
         this._lastName = newLastName
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -97,13 +127,13 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.PERSON__ADDRESS: {
-                return this.address
+                return this.getAddress()
             }
             case LibraryConstants.PERSON__FIRST_NAME: {
-                return this.firstName
+                return this.getFirstName()
             }
             case LibraryConstants.PERSON__LAST_NAME: {
-                return this.lastName
+                return this.getLastName()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -111,18 +141,22 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.PERSON__ADDRESS: {
-                this.address = newValue as string
+                this.setAddress(newValue as string)
                 break
             }
             case LibraryConstants.PERSON__FIRST_NAME: {
-                this.firstName = newValue as string
+                this.setFirstName(newValue as string)
                 break
             }
             case LibraryConstants.PERSON__LAST_NAME: {
-                this.lastName = newValue as string
+                this.setLastName(newValue as string)
                 break
             }
             default: {
@@ -134,15 +168,15 @@ export class PersonImpl extends ecore.EObjectImpl implements Person {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.PERSON__ADDRESS: {
-                this.address = ""
+                this.setAddress("")
                 break
             }
             case LibraryConstants.PERSON__FIRST_NAME: {
-                this.firstName = ""
+                this.setFirstName("")
                 break
             }
             case LibraryConstants.PERSON__LAST_NAME: {
-                this.lastName = ""
+                this.setLastName("")
                 break
             }
             default: {

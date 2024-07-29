@@ -25,13 +25,13 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
 
     private setObjectID(eObject: EObject, newID: ID) {
         if (this._objectToID.has(eObject)) {
-            let oldID = this._objectToID.get(eObject)
-            let oldKey = this.toKey(oldID)
+            const oldID = this._objectToID.get(eObject)
+            const oldKey = this.toKey(oldID)
             this._idToObject.delete(oldKey)
         }
 
         if (this.isValid(newID)) {
-            let newKey = this.toKey(newID)
+            const newKey = this.toKey(newID)
             this.setCurrent(newID)
             this._objectToID.set(eObject, newID)
             this._idToObject.set(newKey, eObject)
@@ -59,9 +59,9 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
     }
 
     unRegister(eObject: EObject): void {
-        let id = this._objectToID.get(eObject)
+        const id = this._objectToID.get(eObject)
         if (id != undefined) {
-            let key = this.toKey(id)
+            const key = this.toKey(id)
             this._idToObject.delete(key)
             this._objectToID.delete(eObject)
             this._detachedToID.set(eObject, id)
@@ -69,7 +69,7 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
     }
 
     setID(eObject: EObject, id: any): void {
-        let newID = this.toID(id)
+        const newID = this.toID(id)
         this.setObjectID(eObject, newID)
     }
 
@@ -78,8 +78,8 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
     }
 
     getEObject(aid: any): EObject {
-        let id = this.toID(aid)
-        let key = this.toKey(id)
+        const id = this.toID(aid)
+        const key = this.toKey(id)
         return key != undefined ? this._idToObject.get(key) : undefined
     }
 

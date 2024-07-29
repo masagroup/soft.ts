@@ -24,8 +24,8 @@ import {
     isEReference
 } from "./internal.js"
 
-export function isEClass(e: EClassifier): e is EClass {
-    return "isAbstract" in e
+export function isEClass(c: EClassifier): c is EClass {
+    return c == undefined ? undefined : "isAbstract" in c
 }
 
 class ESuperAdapter extends AbstractEAdapter {
@@ -34,34 +34,34 @@ class ESuperAdapter extends AbstractEAdapter {
     }
 
     notifyChanged(notification: ENotification): void {
-        let eventType = notification.eventType
-        let notifier = notification.notifier as EClassExt
+        const eventType = notification.getEventType()
+        const notifier = notification.getNotifier() as EClassExt
         if (eventType != EventType.REMOVING_ADAPTER) {
-            if (notification.featureID == EcoreConstants.ECLASS__ESUPER_TYPES) {
+            if (notification.getFeatureID() == EcoreConstants.ECLASS__ESUPER_TYPES) {
                 switch (eventType) {
                     case EventType.SET:
                     case EventType.RESOLVE: {
-                        if (notification.oldValue != null) {
-                            let eClass = notification.oldValue as EClassExt
-                            let index = eClass._subClasses.findIndex((c) => c == notifier)
+                        if (notification.getOldValue() != null) {
+                            const eClass = notification.getOldValue() as EClassExt
+                            const index = eClass._subClasses.findIndex((c) => c == notifier)
                             if (index != -1) eClass._subClasses.splice(index, 1)
                         }
-                        if (notification.newValue != null) {
-                            let eClass = notification.newValue as EClassExt
+                        if (notification.getNewValue() != null) {
+                            const eClass = notification.getNewValue() as EClassExt
                             eClass._subClasses.push(notifier)
                         }
                         break
                     }
                     case EventType.ADD: {
-                        if (notification.newValue != null) {
-                            let eClass = notification.newValue as EClassExt
+                        if (notification.getNewValue() != null) {
+                            const eClass = notification.getNewValue() as EClassExt
                             eClass._subClasses.push(notifier)
                         }
                         break
                     }
                     case EventType.ADD_MANY: {
-                        if (notification.newValue != null) {
-                            let classes = notification.newValue as EClassExt[]
+                        if (notification.getNewValue() != null) {
+                            const classes = notification.getNewValue() as EClassExt[]
                             for (const cls of classes) {
                                 cls._subClasses.push(notifier)
                             }
@@ -69,8 +69,8 @@ class ESuperAdapter extends AbstractEAdapter {
                         break
                     }
                     case EventType.REMOVE: {
-                        if (notification.oldValue != null) {
-                            let eClass = notification.oldValue as EClassExt
+                        if (notification.getOldValue() != null) {
+                            const eClass = notification.getOldValue() as EClassExt
                             for (const [i, subClass] of eClass._subClasses.entries()) {
                                 if (subClass == notifier) {
                                     eClass._subClasses.splice(i, 1)
@@ -81,8 +81,8 @@ class ESuperAdapter extends AbstractEAdapter {
                         break
                     }
                     case EventType.REMOVE_MANY: {
-                        if (notification.oldValue != null) {
-                            let classes = notification.oldValue as EClassExt[]
+                        if (notification.getOldValue() != null) {
+                            const classes = notification.getOldValue() as EClassExt[]
                             for (const eClass of classes) {
                                 for (const [i, subClass] of eClass._subClasses.entries()) {
                                     if (subClass == notifier) {
@@ -96,7 +96,7 @@ class ESuperAdapter extends AbstractEAdapter {
                     }
                 }
             }
-            this._eClass.setModified(notification.featureID)
+            this._eClass.setModified(notification.getFeatureID())
         }
     }
 }
@@ -110,20 +110,20 @@ export class EClassExt extends EClassImpl {
     constructor() {
         super()
         this._adapter = new ESuperAdapter(this)
-        this.eAdapters.add(this._adapter)
+        this.eAdapters().add(this._adapter)
     }
 
     isSuperTypeOf(someClass: EClass): boolean {
-        return someClass == this || (someClass != null && someClass.eAllSuperTypes.contains(this))
+        return someClass == this || (someClass != null && someClass.getEAllSuperTypes().contains(this))
     }
 
     getFeatureCount(): number {
-        return this.eAllStructuralFeatures.size()
+        return this.getEAllStructuralFeatures().size()
     }
 
     getEStructuralFeature(featureID: number): EStructuralFeature {
-        return featureID >= 0 && featureID < this.eAllStructuralFeatures.size()
-            ? this.eAllStructuralFeatures.get(featureID)
+        return featureID >= 0 && featureID < this.getEAllStructuralFeatures().size()
+            ? this.getEAllStructuralFeatures().get(featureID)
             : null
     }
 
@@ -133,8 +133,8 @@ export class EClassExt extends EClassImpl {
     }
 
     getFeatureID(feature: EStructuralFeature): number {
-        let features = this.eAllStructuralFeatures
-        let featureID = feature.featureID
+        const features = this.getEAllStructuralFeatures()
+        let featureID = feature.getFeatureID()
         if (featureID != -1) {
             for (; featureID < features.size(); featureID++) {
                 if (features.get(featureID) == feature) return featureID
@@ -144,20 +144,20 @@ export class EClassExt extends EClassImpl {
     }
 
     getOperationCount(): number {
-        return this.eAllOperations.size()
+        return this.getEAllOperations().size()
     }
 
     getEOperation(operationID: number): EOperation {
-        return operationID >= 0 && operationID < this.eAllOperations.size()
-            ? this.eAllOperations.get(operationID)
+        return operationID >= 0 && operationID < this.getEAllOperations().size()
+            ? this.getEAllOperations().get(operationID)
             : null
     }
 
     getOperationID(operation: EOperation): number {
-        let operationID = operation.operationID
+        let operationID = operation.getOperationID()
         if (operationID != -1) {
-            for (; operationID < this.eAllOperations.size(); operationID++) {
-                if (this.eAllOperations.get(operationID) == operation) return operationID
+            for (; operationID < this.getEAllOperations().size(); operationID++) {
+                if (this.getEAllOperations().get(operationID) == operation) return operationID
             }
         }
         return -1
@@ -190,8 +190,8 @@ export class EClassExt extends EClassImpl {
         }
         this.initEAllStructuralFeatures()
         this._nameToFeatureMap = new Map<string, EStructuralFeature>()
-        for (const eFeature of this.eAllStructuralFeatures) {
-            this._nameToFeatureMap.set(eFeature.name, eFeature)
+        for (const eFeature of this.getEAllStructuralFeatures()) {
+            this._nameToFeatureMap.set(eFeature.getName(), eFeature)
         }
     }
 
@@ -200,12 +200,12 @@ export class EClassExt extends EClassImpl {
             return
         }
         this.initEAllOperations()
-        let size = this.eAllOperations.size()
+        const size = this.getEAllOperations().size()
         this._operationToOverrideMap = new Map<EOperation, EOperation>()
         for (let i = 0; i < size; i++) {
             for (let j = size - 1; j > i; j--) {
-                let oi = this.eAllOperations.get(i)
-                let oj = this.eAllOperations.get(j)
+                const oi = this.getEAllOperations().get(i)
+                const oj = this.getEAllOperations().get(j)
                 if (oj.isOverrideOf(oi)) {
                     this._operationToOverrideMap.set(oi, oj)
                 }
@@ -219,16 +219,16 @@ export class EClassExt extends EClassImpl {
         }
 
         this.initEAllStructuralFeatures()
-        let containments: EStructuralFeature[] = []
-        let crossreferences: EStructuralFeature[] = []
-        for (const eFeature of this.eStructuralFeatures) {
+        const containments: EStructuralFeature[] = []
+        const crossreferences: EStructuralFeature[] = []
+        for (const eFeature of this.getEStructuralFeatures()) {
             if (isEReference(eFeature)) {
-                if (eFeature.isContainment) {
-                    if (!eFeature.isDerived) {
+                if (eFeature.isContainment()) {
+                    if (!eFeature.isDerived()) {
                         containments.push(eFeature)
                     }
-                } else if (!eFeature.isContainer) {
-                    if (!eFeature.isDerived) {
+                } else if (!eFeature.isContainer()) {
+                    if (!eFeature.isDerived()) {
                         crossreferences.push(eFeature)
                     }
                 }
@@ -244,23 +244,23 @@ export class EClassExt extends EClassImpl {
             return
         }
 
-        let attributes: EAttribute[] = []
-        let allAttributes: EAttribute[] = []
+        const attributes: EAttribute[] = []
+        const allAttributes: EAttribute[] = []
         let eIDAttribute: EAttribute = null
-        for (const eSuperType of this.eSuperTypes) {
-            for (const eAttribute of eSuperType.eAllAttributes) {
+        for (const eSuperType of this.getESuperTypes()) {
+            for (const eAttribute of eSuperType.getEAllAttributes()) {
                 allAttributes.push(eAttribute)
-                if (eAttribute.isID && !eIDAttribute) {
+                if (eAttribute.isID() && !eIDAttribute) {
                     eIDAttribute = eAttribute
                 }
             }
         }
 
-        for (const eFeature of this.eStructuralFeatures) {
+        for (const eFeature of this.getEStructuralFeatures()) {
             if (isEAttribute(eFeature)) {
                 attributes.push(eFeature)
                 allAttributes.push(eFeature)
-                if (eFeature.isID && !eIDAttribute) {
+                if (eFeature.isID() && !eIDAttribute) {
                     eIDAttribute = eFeature
                 }
             }
@@ -276,13 +276,13 @@ export class EClassExt extends EClassImpl {
             return
         }
 
-        let references: EReference[] = []
-        let allReferences: EReference[] = []
-        for (const eSuperType of this.eSuperTypes) {
-            allReferences.push(...eSuperType.eAllReferences.toArray())
+        const references: EReference[] = []
+        const allReferences: EReference[] = []
+        for (const eSuperType of this.getESuperTypes()) {
+            allReferences.push(...eSuperType.getEAllReferences().toArray())
         }
 
-        for (const eFeature of this.eStructuralFeatures) {
+        for (const eFeature of this.getEStructuralFeatures()) {
             if (isEReference(eFeature)) {
                 references.push(eFeature)
                 allReferences.push(eFeature)
@@ -298,9 +298,9 @@ export class EClassExt extends EClassImpl {
             return
         }
 
-        let allContainments: EReference[] = []
-        for (const eReference of this.eAllReferences) {
-            if (eReference.isContainment) {
+        const allContainments: EReference[] = []
+        for (const eReference of this.getEAllReferences()) {
+            if (eReference.isContainment()) {
                 allContainments.push(eReference)
             }
         }
@@ -315,14 +315,14 @@ export class EClassExt extends EClassImpl {
 
         this._operationToOverrideMap = null
 
-        let allOperations: EOperation[] = []
-        for (const eSuperType of this.eSuperTypes) {
-            allOperations.push(...eSuperType.eAllOperations.toArray())
+        const allOperations: EOperation[] = []
+        for (const eSuperType of this.getESuperTypes()) {
+            allOperations.push(...eSuperType.getEAllOperations().toArray())
         }
 
         let operationID = allOperations.length
-        for (const eOperation of this.eOperations) {
-            eOperation.operationID = operationID++
+        for (const eOperation of this.getEOperations()) {
+            eOperation.setOperationID(operationID++)
             allOperations.push(eOperation)
         }
 
@@ -338,14 +338,14 @@ export class EClassExt extends EClassImpl {
         this._eContainmentFeatures = null
         this._nameToFeatureMap = null
 
-        let allFeatures: EStructuralFeature[] = []
-        for (const eSuperType of this.eSuperTypes) {
-            allFeatures.push(...eSuperType.eAllStructuralFeatures.toArray())
+        const allFeatures: EStructuralFeature[] = []
+        for (const eSuperType of this.getESuperTypes()) {
+            allFeatures.push(...eSuperType.getEAllStructuralFeatures().toArray())
         }
 
         let featureID = allFeatures.length
-        for (const eFeature of this.eStructuralFeatures) {
-            eFeature.featureID = featureID++
+        for (const eFeature of this.getEStructuralFeatures()) {
+            eFeature.setFeatureID(featureID++)
             allFeatures.push(eFeature)
         }
 
@@ -357,9 +357,9 @@ export class EClassExt extends EClassImpl {
             return
         }
 
-        let allSuperTypes: EClass[] = []
-        for (const eSuperType of this.eSuperTypes) {
-            allSuperTypes.push(...eSuperType.eAllSuperTypes.toArray())
+        const allSuperTypes: EClass[] = []
+        for (const eSuperType of this.getESuperTypes()) {
+            allSuperTypes.push(...eSuperType.getEAllSuperTypes().toArray())
             allSuperTypes.push(eSuperType)
         }
 

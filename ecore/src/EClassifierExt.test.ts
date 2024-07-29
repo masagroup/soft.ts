@@ -12,11 +12,11 @@ import { EClassifierExt, EPackageExt } from "./internal.js"
 
 describe("EClassifierExt", () => {
     test("classifierID", () => {
-        let c = new EClassifierExt()
-        expect(c.classifierID).toEqual(-1)
+        const c = new EClassifierExt()
+        expect(c.getClassifierID()).toEqual(-1)
 
-        let p = new EPackageExt()
-        p.eClassifiers.add(c)
-        expect(c.classifierID).toEqual(0)
+        const p = new EPackageExt()
+        p.getEClassifiers().add(c)
+        expect(c.getClassifierID()).toEqual(0)
     })
 })

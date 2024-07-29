@@ -11,10 +11,11 @@ import { EAdapter, EList, ENotification } from "./internal.js"
 
 export interface ENotifier {
     // list of the adapters associated with this notifier.
-    readonly eAdapters: EList<EAdapter>
+    eAdapters(): EList<EAdapter>
 
     // whether this notifier will deliver notifications to the adapters.
-    eDeliver: boolean
+    eDeliver(): boolean
+    eSetDeliver(deliver: boolean): void
 
     // Notifies a change to a feature of this notifier as described by the notification.
     eNotify(notification: ENotification): void

@@ -19,28 +19,28 @@ interface BookInternal extends Book, ecore.EObjectInternal {}
 
 describe("WriterImpl", () => {
     test("eStaticClass", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getWriter())
     })
 
     test("getBooks", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         expect(o.books).not.toBeNull()
     })
 
     test("getName", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         expect(() => o.name).toThrow(Error)
     })
 
     test("setName", () => {
-        let o = new WriterImpl()
-        let value = "Test String"
+        const o = new WriterImpl()
+        const value = "Test String"
         expect(() => (o.name = value)).toThrow(Error)
     })
 
     test("eGetFromID", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.WRITER__BOOKS, true)).toStrictEqual(o.books)
         expect(
@@ -54,13 +54,13 @@ describe("WriterImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<BookInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Book>([value])
+            const mockValue = mock<BookInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Book>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eInverseAdd(o, LibraryConstants.BOOK__AUTHOR, anything())).thenReturn(null)
 
@@ -76,20 +76,20 @@ describe("WriterImpl", () => {
     })
 
     test("eIsSetFromID", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.WRITER__BOOKS)).toBeFalsy()
         expect(() => o.eIsSetFromID(LibraryConstants.WRITER__NAME)).toThrow(Error)
     })
 
     test("eUnsetFromID", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.WRITER__BOOKS)
-            let v = o.eGetFromID(LibraryConstants.WRITER__BOOKS, false)
+            const v = o.eGetFromID(LibraryConstants.WRITER__BOOKS, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Book>
+            const l = v as ecore.EList<Book>
             expect(l.isEmpty()).toBeTruthy()
         }
         {
@@ -98,35 +98,35 @@ describe("WriterImpl", () => {
     })
 
     test("eBasicInverseAdd", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseAdd(object, -1, notifications)).toBe(notifications)
         }
         {
-            let mockValue = mock<BookInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<BookInternal>()
+            const value = instance(mockValue)
             o.eBasicInverseAdd(value, LibraryConstants.WRITER__BOOKS, null)
             expect(o.books.contains(value)).toBeTruthy()
         }
     })
 
     test("eBasicInverseRemove", () => {
-        let o = new WriterImpl()
+        const o = new WriterImpl()
         {
-            let mockObject = mock<ecore.EObject>()
-            let object = instance(mockObject)
-            let mockNotifications = mock<ecore.ENotificationChain>()
-            let notifications = instance(mockNotifications)
+            const mockObject = mock<ecore.EObject>()
+            const object = instance(mockObject)
+            const mockNotifications = mock<ecore.ENotificationChain>()
+            const notifications = instance(mockNotifications)
             expect(o.eBasicInverseRemove(object, -1, notifications)).toBe(notifications)
         }
         {
             // initialize list with a mock object
-            let mockValue = mock<BookInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<BookInternal>()
+            const value = instance(mockValue)
             when(mockValue.eInverseAdd(o, LibraryConstants.BOOK__AUTHOR, anything())).thenReturn(null)
 
             o.books.add(value)

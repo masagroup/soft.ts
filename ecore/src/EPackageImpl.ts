@@ -49,21 +49,28 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     }
 
     // get the value of eClassifiers
-    get eClassifiers(): EList<EClassifier> {
+    getEClassifiers(): EList<EClassifier> {
         if (this._eClassifiers == null) {
             this._eClassifiers = this.initEClassifiers()
         }
         return this._eClassifiers
     }
 
+    // set the value of eClassifiers
+    setEClassifiers(newEClassifiers: EList<EClassifier>) {
+        const l = this.getEClassifiers()
+        l.clear()
+        l.addAll(newEClassifiers)
+    }
+
     // get the value of eFactoryInstance
-    get eFactoryInstance(): EFactory {
+    getEFactoryInstance(): EFactory {
         return this._eFactoryInstance
     }
 
     // set the value of eFactoryInstance
-    set eFactoryInstance(newEFactoryInstance: EFactory) {
-        let oldEFactoryInstance = this._eFactoryInstance
+    setEFactoryInstance(newEFactoryInstance: EFactory): void {
+        const oldEFactoryInstance = this._eFactoryInstance
         if (newEFactoryInstance != oldEFactoryInstance) {
             let notifications: ENotificationChain = null
             if (isEObjectInternal(oldEFactoryInstance)) {
@@ -84,11 +91,11 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     }
 
     basicSetEFactoryInstance(newEFactoryInstance: EFactory, msgs: ENotificationChain): ENotificationChain {
-        let oldEFactoryInstance = this._eFactoryInstance
+        const oldEFactoryInstance = this._eFactoryInstance
         this._eFactoryInstance = newEFactoryInstance
         let notifications = msgs
-        if (this.eNotificationRequired) {
-            let notification = new Notification(
+        if (this.eNotificationRequired()) {
+            const notification = new Notification(
                 this,
                 EventType.SET,
                 EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,
@@ -105,15 +112,22 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     }
 
     // get the value of eSubPackages
-    get eSubPackages(): EList<EPackage> {
+    getESubPackages(): EList<EPackage> {
         if (this._eSubPackages == null) {
             this._eSubPackages = this.initESubPackages()
         }
         return this._eSubPackages
     }
 
+    // set the value of eSubPackages
+    setESubPackages(newESubPackages: EList<EPackage>) {
+        const l = this.getESubPackages()
+        l.clear()
+        l.addAll(newESubPackages)
+    }
+
     // get the value of eSuperPackage
-    get eSuperPackage(): EPackage {
+    getESuperPackage(): EPackage {
         if (this.eContainerFeatureID() == EcoreConstants.EPACKAGE__ESUPER_PACKAGE) {
             return this.eContainer() as EPackage
         }
@@ -121,15 +135,15 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     }
 
     // get the value of nsPrefix
-    get nsPrefix(): string {
+    getNsPrefix(): string {
         return this._nsPrefix
     }
 
     // set the value of nsPrefix
-    set nsPrefix(newNsPrefix: string) {
-        let oldNsPrefix = this._nsPrefix
+    setNsPrefix(newNsPrefix: string): void {
+        const oldNsPrefix = this._nsPrefix
         this._nsPrefix = newNsPrefix
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_PREFIX, oldNsPrefix, newNsPrefix)
             )
@@ -137,15 +151,15 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     }
 
     // get the value of nsURI
-    get nsURI(): string {
+    getNsURI(): string {
         return this._nsURI
     }
 
     // set the value of nsURI
-    set nsURI(newNsURI: string) {
-        let oldNsURI = this._nsURI
+    setNsURI(newNsURI: string): void {
+        const oldNsURI = this._nsURI
         this._nsURI = newNsURI
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_URI, oldNsURI, newNsURI))
         }
     }
@@ -183,22 +197,22 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
-                return this.eClassifiers
+                return this.getEClassifiers()
             }
             case EcoreConstants.EPACKAGE__EFACTORY_INSTANCE: {
-                return this.eFactoryInstance
+                return this.getEFactoryInstance()
             }
             case EcoreConstants.EPACKAGE__ESUB_PACKAGES: {
-                return this.eSubPackages
+                return this.getESubPackages()
             }
             case EcoreConstants.EPACKAGE__ESUPER_PACKAGE: {
-                return this.eSuperPackage
+                return this.getESuperPackage()
             }
             case EcoreConstants.EPACKAGE__NS_PREFIX: {
-                return this.nsPrefix
+                return this.getNsPrefix()
             }
             case EcoreConstants.EPACKAGE__NS_URI: {
-                return this.nsURI
+                return this.getNsURI()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -206,28 +220,34 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
-                this.eClassifiers.clear()
-                this.eClassifiers.addAll(newValue as EList<EClassifier>)
+                const list = this.getEClassifiers()
+                list.clear()
+                list.addAll(newValue as EList<EClassifier>)
                 break
             }
             case EcoreConstants.EPACKAGE__EFACTORY_INSTANCE: {
-                this.eFactoryInstance = newValue as EFactory
+                this.setEFactoryInstance(newValue as EFactory)
                 break
             }
             case EcoreConstants.EPACKAGE__ESUB_PACKAGES: {
-                this.eSubPackages.clear()
-                this.eSubPackages.addAll(newValue as EList<EPackage>)
+                const list = this.getESubPackages()
+                list.clear()
+                list.addAll(newValue as EList<EPackage>)
                 break
             }
             case EcoreConstants.EPACKAGE__NS_PREFIX: {
-                this.nsPrefix = newValue as string
+                this.setNsPrefix(newValue as string)
                 break
             }
             case EcoreConstants.EPACKAGE__NS_URI: {
-                this.nsURI = newValue as string
+                this.setNsURI(newValue as string)
                 break
             }
             default: {
@@ -239,23 +259,23 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
-                this.eClassifiers.clear()
+                this.getEClassifiers().clear()
                 break
             }
             case EcoreConstants.EPACKAGE__EFACTORY_INSTANCE: {
-                this.eFactoryInstance = null
+                this.setEFactoryInstance(null)
                 break
             }
             case EcoreConstants.EPACKAGE__ESUB_PACKAGES: {
-                this.eSubPackages.clear()
+                this.getESubPackages().clear()
                 break
             }
             case EcoreConstants.EPACKAGE__NS_PREFIX: {
-                this.nsPrefix = ""
+                this.setNsPrefix("")
                 break
             }
             case EcoreConstants.EPACKAGE__NS_URI: {
-                this.nsURI = ""
+                this.setNsURI("")
                 break
             }
             default: {
@@ -267,16 +287,16 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
-                return this.eClassifiers != null && this.eClassifiers.size() != 0
+                return this._eClassifiers && !this._eClassifiers.isEmpty()
             }
             case EcoreConstants.EPACKAGE__EFACTORY_INSTANCE: {
                 return this._eFactoryInstance != null
             }
             case EcoreConstants.EPACKAGE__ESUB_PACKAGES: {
-                return this.eSubPackages != null && this.eSubPackages.size() != 0
+                return this._eSubPackages && !this._eSubPackages.isEmpty()
             }
             case EcoreConstants.EPACKAGE__ESUPER_PACKAGE: {
-                return this.eSuperPackage != null
+                return this.getESuperPackage() != null
             }
             case EcoreConstants.EPACKAGE__NS_PREFIX: {
                 return this._nsPrefix != ""
@@ -304,14 +324,15 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     eBasicInverseAdd(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
-                let list = this.eClassifiers as ENotifyingList<EClassifier>
-                let end = otherEnd as EClassifier
+                const list = this.getEClassifiers() as ENotifyingList<EClassifier>
+                const end = otherEnd as EClassifier
                 return list.addWithNotification(end, notifications)
             }
             case EcoreConstants.EPACKAGE__EFACTORY_INSTANCE: {
                 let msgs = notifications
-                if (isEObjectInternal(this.eFactoryInstance)) {
-                    msgs = this.eFactoryInstance.eInverseRemove(
+                const eFactoryInstance = this.getEFactoryInstance()
+                if (isEObjectInternal(eFactoryInstance)) {
+                    msgs = eFactoryInstance.eInverseRemove(
                         this,
                         EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,
                         msgs
@@ -320,8 +341,8 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                 return this.basicSetEFactoryInstance(otherEnd as EFactory, msgs)
             }
             case EcoreConstants.EPACKAGE__ESUB_PACKAGES: {
-                let list = this.eSubPackages as ENotifyingList<EPackage>
-                let end = otherEnd as EPackage
+                const list = this.getESubPackages() as ENotifyingList<EPackage>
+                const end = otherEnd as EPackage
                 return list.addWithNotification(end, notifications)
             }
             case EcoreConstants.EPACKAGE__ESUPER_PACKAGE: {
@@ -340,16 +361,16 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.EPACKAGE__ECLASSIFIERS: {
-                let list = this.eClassifiers as ENotifyingList<EClassifier>
-                let end = otherEnd as EClassifier
+                const list = this.getEClassifiers() as ENotifyingList<EClassifier>
+                const end = otherEnd as EClassifier
                 return list.removeWithNotification(end, notifications)
             }
             case EcoreConstants.EPACKAGE__EFACTORY_INSTANCE: {
                 return this.basicSetEFactoryInstance(null, notifications)
             }
             case EcoreConstants.EPACKAGE__ESUB_PACKAGES: {
-                let list = this.eSubPackages as ENotifyingList<EPackage>
-                let end = otherEnd as EPackage
+                const list = this.getESubPackages() as ENotifyingList<EPackage>
+                const end = otherEnd as EPackage
                 return list.removeWithNotification(end, notifications)
             }
             case EcoreConstants.EPACKAGE__ESUPER_PACKAGE: {

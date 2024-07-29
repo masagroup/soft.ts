@@ -47,25 +47,25 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // get the value of defaultValue
-    get defaultValue(): any {
-        throw new Error("get defaultValue not implemented")
+    getDefaultValue(): any {
+        throw new Error("getDefaultValue not implemented")
     }
 
     // set the value of defaultValue
-    set defaultValue(newDefaultValue: any) {
-        throw new Error("set defaultValue not implemented")
+    setDefaultValue(newDefaultValue: any): void {
+        throw new Error("setDefaultValue not implemented")
     }
 
     // get the value of defaultValueLiteral
-    get defaultValueLiteral(): string {
+    getDefaultValueLiteral(): string {
         return this._defaultValueLiteral
     }
 
     // set the value of defaultValueLiteral
-    set defaultValueLiteral(newDefaultValueLiteral: string) {
-        let oldDefaultValueLiteral = this._defaultValueLiteral
+    setDefaultValueLiteral(newDefaultValueLiteral: string): void {
+        const oldDefaultValueLiteral = this._defaultValueLiteral
         this._defaultValueLiteral = newDefaultValueLiteral
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
@@ -79,7 +79,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // get the value of eContainingClass
-    get eContainingClass(): EClass {
+    getEContainingClass(): EClass {
         if (this.eContainerFeatureID() == EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS) {
             return this.eContainer() as EClass
         }
@@ -87,15 +87,15 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     }
 
     // get the value of featureID
-    get featureID(): number {
+    getFeatureID(): number {
         return this._featureID
     }
 
     // set the value of featureID
-    set featureID(newFeatureID: number) {
-        let oldFeatureID = this._featureID
+    setFeatureID(newFeatureID: number): void {
+        const oldFeatureID = this._featureID
         this._featureID = newFeatureID
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
@@ -108,111 +108,111 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         }
     }
 
-    // get the value of isChangeable
-    get isChangeable(): boolean {
+    // get the value of changeable
+    isChangeable(): boolean {
         return this._isChangeable
     }
 
-    // set the value of isChangeable
-    set isChangeable(newIsChangeable: boolean) {
-        let oldIsChangeable = this._isChangeable
-        this._isChangeable = newIsChangeable
-        if (this.eNotificationRequired) {
+    // set the value of changeable
+    setChangeable(newChangeable: boolean): void {
+        const oldChangeable = this._isChangeable
+        this._isChangeable = newChangeable
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE,
-                    oldIsChangeable,
-                    newIsChangeable
+                    oldChangeable,
+                    newChangeable
                 )
             )
         }
     }
 
-    // get the value of isDerived
-    get isDerived(): boolean {
+    // get the value of derived
+    isDerived(): boolean {
         return this._isDerived
     }
 
-    // set the value of isDerived
-    set isDerived(newIsDerived: boolean) {
-        let oldIsDerived = this._isDerived
-        this._isDerived = newIsDerived
-        if (this.eNotificationRequired) {
+    // set the value of derived
+    setDerived(newDerived: boolean): void {
+        const oldDerived = this._isDerived
+        this._isDerived = newDerived
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED,
-                    oldIsDerived,
-                    newIsDerived
+                    oldDerived,
+                    newDerived
                 )
             )
         }
     }
 
-    // get the value of isTransient
-    get isTransient(): boolean {
+    // get the value of transient
+    isTransient(): boolean {
         return this._isTransient
     }
 
-    // set the value of isTransient
-    set isTransient(newIsTransient: boolean) {
-        let oldIsTransient = this._isTransient
-        this._isTransient = newIsTransient
-        if (this.eNotificationRequired) {
+    // set the value of transient
+    setTransient(newTransient: boolean): void {
+        const oldTransient = this._isTransient
+        this._isTransient = newTransient
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT,
-                    oldIsTransient,
-                    newIsTransient
+                    oldTransient,
+                    newTransient
                 )
             )
         }
     }
 
-    // get the value of isUnsettable
-    get isUnsettable(): boolean {
+    // get the value of unsettable
+    isUnsettable(): boolean {
         return this._isUnsettable
     }
 
-    // set the value of isUnsettable
-    set isUnsettable(newIsUnsettable: boolean) {
-        let oldIsUnsettable = this._isUnsettable
-        this._isUnsettable = newIsUnsettable
-        if (this.eNotificationRequired) {
+    // set the value of unsettable
+    setUnsettable(newUnsettable: boolean): void {
+        const oldUnsettable = this._isUnsettable
+        this._isUnsettable = newUnsettable
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE,
-                    oldIsUnsettable,
-                    newIsUnsettable
+                    oldUnsettable,
+                    newUnsettable
                 )
             )
         }
     }
 
-    // get the value of isVolatile
-    get isVolatile(): boolean {
+    // get the value of volatile
+    isVolatile(): boolean {
         return this._isVolatile
     }
 
-    // set the value of isVolatile
-    set isVolatile(newIsVolatile: boolean) {
-        let oldIsVolatile = this._isVolatile
-        this._isVolatile = newIsVolatile
-        if (this.eNotificationRequired) {
+    // set the value of volatile
+    setVolatile(newVolatile: boolean): void {
+        const oldVolatile = this._isVolatile
+        this._isVolatile = newVolatile
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new Notification(
                     this,
                     EventType.SET,
                     EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE,
-                    oldIsVolatile,
-                    newIsVolatile
+                    oldVolatile,
+                    newVolatile
                 )
             )
         }
@@ -226,31 +226,31 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE: {
-                return this.isChangeable
+                return this.isChangeable()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE: {
-                return this.defaultValue
+                return this.getDefaultValue()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL: {
-                return this.defaultValueLiteral
+                return this.getDefaultValueLiteral()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED: {
-                return this.isDerived
+                return this.isDerived()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS: {
-                return this.eContainingClass
+                return this.getEContainingClass()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID: {
-                return this.featureID
+                return this.getFeatureID()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT: {
-                return this.isTransient
+                return this.isTransient()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE: {
-                return this.isUnsettable
+                return this.isUnsettable()
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE: {
-                return this.isVolatile
+                return this.isVolatile()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -258,38 +258,42 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE: {
-                this.isChangeable = newValue as boolean
+                this.setChangeable(newValue as boolean)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE: {
-                this.defaultValue = newValue as any
+                this.setDefaultValue(newValue as any)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL: {
-                this.defaultValueLiteral = newValue as string
+                this.setDefaultValueLiteral(newValue as string)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED: {
-                this.isDerived = newValue as boolean
+                this.setDerived(newValue as boolean)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID: {
-                this.featureID = newValue as number
+                this.setFeatureID(newValue as number)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT: {
-                this.isTransient = newValue as boolean
+                this.setTransient(newValue as boolean)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE: {
-                this.isUnsettable = newValue as boolean
+                this.setUnsettable(newValue as boolean)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE: {
-                this.isVolatile = newValue as boolean
+                this.setVolatile(newValue as boolean)
                 break
             }
             default: {
@@ -301,35 +305,35 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE: {
-                this.isChangeable = true
+                this.setChangeable(true)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE: {
-                this.defaultValue = null
+                this.setDefaultValue(null)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL: {
-                this.defaultValueLiteral = ""
+                this.setDefaultValueLiteral("")
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED: {
-                this.isDerived = false
+                this.setDerived(false)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID: {
-                this.featureID = -1
+                this.setFeatureID(-1)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT: {
-                this.isTransient = false
+                this.setTransient(false)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE: {
-                this.isUnsettable = false
+                this.setUnsettable(false)
                 break
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE: {
-                this.isVolatile = false
+                this.setVolatile(false)
                 break
             }
             default: {
@@ -344,7 +348,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                 return this._isChangeable != true
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE: {
-                return this.defaultValue != null
+                return this.getDefaultValue() != null
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL: {
                 return this._defaultValueLiteral != ""
@@ -353,7 +357,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
                 return this._isDerived != false
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS: {
-                return this.eContainingClass != null
+                return this.getEContainingClass() != null
             }
             case EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID: {
                 return this._featureID != -1

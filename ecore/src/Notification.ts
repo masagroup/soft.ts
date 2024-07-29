@@ -33,18 +33,18 @@ export class Notification extends AbstractNotification {
         }
     }
 
-    get feature(): EStructuralFeature {
+    getFeature(): EStructuralFeature {
         if (this._feature != null) return this._feature
         else return this._object.eClass().getEStructuralFeature(this._featureID)
     }
 
-    get featureID(): number {
+    getFeatureID(): number {
         if (this._featureID != -1) return this._featureID
-        if (this._feature != null) return this._feature.featureID
+        if (this._feature != null) return this._feature.getFeatureID()
         return -1
     }
 
-    get notifier(): ENotifier {
+    getNotifier(): ENotifier {
         return this._object
     }
 }

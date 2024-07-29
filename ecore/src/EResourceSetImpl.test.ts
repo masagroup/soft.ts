@@ -13,21 +13,21 @@ import { EResourceImpl, EResourceInternal, EResourceSetImpl, URI } from "./inter
 
 describe("EResourceSetImpl", () => {
     test("constructor", () => {
-        let rs = new EResourceSetImpl()
+        const rs = new EResourceSetImpl()
         expect(rs.getURIResourceMap()).toBeNull()
     })
 
     test("resourcesWithMock", () => {
-        let rs = new EResourceSetImpl()
-        let mockEResource = mock<EResourceInternal>()
-        let eResource = instance(mockEResource)
+        const rs = new EResourceSetImpl()
+        const mockEResource = mock<EResourceInternal>()
+        const eResource = instance(mockEResource)
         when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null)
         expect(rs.getResources().add(eResource)).toBeTruthy()
     })
 
     test("resourcesNoMock", () => {
-        let rs = new EResourceSetImpl()
-        let r = new EResourceImpl()
+        const rs = new EResourceSetImpl()
+        const r = new EResourceImpl()
 
         rs.getResources().add(r)
         expect(r.eResourceSet()).toBe(rs)
@@ -36,21 +36,21 @@ describe("EResourceSetImpl", () => {
     test("getResource", () => {})
 
     test("getRegisteredResource", () => {
-        let uriResource = new URI("test://file.t")
-        let rs = new EResourceSetImpl()
+        const uriResource = new URI("test://file.t")
+        const rs = new EResourceSetImpl()
 
         // register resource
-        let mockEResource = mock<EResourceInternal>()
-        let eResource = instance(mockEResource)
+        const mockEResource = mock<EResourceInternal>()
+        const eResource = instance(mockEResource)
         when(mockEResource.basicSetResourceSet(rs, null)).thenReturn(null)
         rs.getResources().add(eResource)
 
         // get registered resource - no loading
-        when(mockEResource.eURI).thenReturn(uriResource)
+        when(mockEResource.getURI()).thenReturn(uriResource)
         expect(rs.getResource(uriResource, false)).toBe(eResource)
 
         // get registered resource - loading
-        when(mockEResource.isLoaded).thenReturn(false)
+        when(mockEResource.isLoaded()).thenReturn(false)
         expect(rs.getResource(uriResource, true)).toBe(eResource)
         verify(mockEResource.loadSync()).once()
     })

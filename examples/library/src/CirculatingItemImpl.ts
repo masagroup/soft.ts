@@ -28,6 +28,28 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
 
     // get the value of borrowers
     get borrowers(): ecore.EList<Borrower> {
+        return this.getBorrowers()
+    }
+
+    // set the value of borrowers
+    set borrowers(newBorrowers: ecore.EList<Borrower>) {
+        const l = this.getBorrowers()
+        l.clear()
+        l.addAll(newBorrowers)
+    }
+
+    // get the value of copies
+    get copies(): number {
+        return this.getCopies()
+    }
+
+    // set the value of copies
+    set copies(newCopies: number) {
+        this.setCopies(newCopies)
+    }
+
+    // get the value of borrowers
+    getBorrowers(): ecore.EList<Borrower> {
         if (this._borrowers == null) {
             this._borrowers = new ecore.BasicEObjectList<Borrower>(
                 this,
@@ -43,16 +65,23 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
         return this._borrowers
     }
 
+    // set the value of borrowers
+    setBorrowers(newBorrowers: ecore.EList<Borrower>) {
+        const l = this.getBorrowers()
+        l.clear()
+        l.addAll(newBorrowers)
+    }
+
     // get the value of copies
-    get copies(): number {
+    getCopies(): number {
         return this._copies
     }
 
     // set the value of copies
-    set copies(newCopies: number) {
-        let oldCopies = this._copies
+    setCopies(newCopies: number): void {
+        const oldCopies = this._copies
         this._copies = newCopies
-        if (this.eNotificationRequired) {
+        if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
                     this,
@@ -86,12 +115,11 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                return !resolve && ecore.isEObjectList(this.borrowers)
-                    ? this.borrowers.getUnResolvedList()
-                    : this.borrowers
+                const list = this.getBorrowers()
+                return !resolve && ecore.isEObjectList(list) ? list.getUnResolvedList() : list
             }
             case LibraryConstants.CIRCULATING_ITEM__COPIES: {
-                return this.copies
+                return this.getCopies()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -99,15 +127,20 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                this.borrowers.clear()
-                this.borrowers.addAll(newValue as ecore.EList<Borrower>)
+                const list = this.getBorrowers()
+                list.clear()
+                list.addAll(newValue as ecore.EList<Borrower>)
                 break
             }
             case LibraryConstants.CIRCULATING_ITEM__COPIES: {
-                this.copies = newValue as number
+                this.setCopies(newValue as number)
                 break
             }
             default: {
@@ -119,11 +152,11 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                this.borrowers.clear()
+                this.getBorrowers().clear()
                 break
             }
             case LibraryConstants.CIRCULATING_ITEM__COPIES: {
-                this.copies = 0
+                this.setCopies(0)
                 break
             }
             default: {
@@ -135,7 +168,7 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                return this.borrowers != null && this.borrowers.size() != 0
+                return this._borrowers && !this._borrowers.isEmpty()
             }
             case LibraryConstants.CIRCULATING_ITEM__COPIES: {
                 return this._copies != 0
@@ -153,8 +186,8 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                let list = this.borrowers as ecore.ENotifyingList<Borrower>
-                let end = otherEnd as Borrower
+                const list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
+                const end = otherEnd as Borrower
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -170,8 +203,8 @@ export class CirculatingItemImpl extends ItemImpl implements CirculatingItem {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.CIRCULATING_ITEM__BORROWERS: {
-                let list = this.borrowers as ecore.ENotifyingList<Borrower>
-                let end = otherEnd as Borrower
+                const list = this.getBorrowers() as ecore.ENotifyingList<Borrower>
+                const end = otherEnd as Borrower
                 return list.removeWithNotification(end, notifications)
             }
             default: {

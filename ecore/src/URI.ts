@@ -1,3 +1,5 @@
+import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
+
 export type URIParts = Partial<
     Readonly<{
         scheme: string
@@ -10,14 +12,14 @@ export type URIParts = Partial<
     }>
 >
 
-var uriRegExp = new RegExp(
+const uriRegExp = new RegExp(
     "(([a-zA-Z][a-zA-Z0-9+.-]*):)?" + // scheme:
         "([^?#]*)" + // authority and path
         "(?:\\?([^#]*))?" + // ?query
         "(?:#(.*))?"
 ) // #fragment
-var authorityAndPathRegExp = new RegExp("^//([^/]*)(/.*)?$")
-var authorityRegExp = new RegExp(
+const authorityAndPathRegExp = new RegExp("^//([^/]*)(/.*)?$")
+const authorityRegExp = new RegExp(
     "(?:([^@:]*)(?::([^@]*))?@)?" + // username, password
         "(\\[[^\\]]*\\]|[^\\[:]*)" + // host (IP-literal (e.g. '['+IPv6+']',dotted-IPv4, or named host)
         "(?::(\\d*))?"
@@ -32,23 +34,23 @@ export function uriToFilePath(uri: URI): string {
 }
 
 function parseURI(u: string): URIParts {
-    let uri = u.replace(/\\/g, "/")
-    let uriMatchs = uriRegExp.exec(uri)
+    const uri = u.replace(/\\/g, "/")
+    const uriMatchs = uriRegExp.exec(uri)
     if (!uriMatchs) {
         throw new Error(`invalid uri: ${uri}`)
     }
-    let scheme = uriMatchs[2] ?? ""
+    const scheme = uriMatchs[2] ?? ""
     let path = ""
     let host = ""
     let port = ""
     let user = ""
-    let authorityAndPath = uriMatchs[3] ?? ""
-    let authorityAndPathMatches = authorityAndPathRegExp.exec(authorityAndPath)
+    const authorityAndPath = uriMatchs[3] ?? ""
+    const authorityAndPathMatches = authorityAndPathRegExp.exec(authorityAndPath)
     if (!authorityAndPathMatches) {
         path = authorityAndPath
     } else {
-        let authority = authorityAndPathMatches[1]
-        let authorityMatches = authorityRegExp.exec(authority)
+        const authority = authorityAndPathMatches[1]
+        const authorityMatches = authorityRegExp.exec(authority)
         if (!authorityMatches) {
             throw new Error(`invalid authority: ${authority}`)
         }
@@ -95,7 +97,7 @@ function serializeURI(parts: URIParts): string {
         }
     }
     if (parts.path) {
-        let path = parts.path
+        const path = parts.path
         // if the URI is not opaque and the path is not already prefixed
         // with a '/', add one.
         if (parts.host && parts.path && parts.path.charAt(0) != "/") {
@@ -126,7 +128,7 @@ export class URI {
     readonly rawURI: string
 
     constructor(input?: URIParts | string) {
-        var parts: URIParts
+        let parts: URIParts
         if (typeof input === "string") {
             parts = parseURI(input)
         } else {
@@ -177,7 +179,7 @@ export class URI {
         if (this.isOpaque()) {
             return this
         }
-        let np = normalize(this.path)
+        const np = normalize(this.path)
         if (np == this.path) {
             return this
         }
@@ -198,7 +200,7 @@ export class URI {
             return ref
         }
 
-        let refAuthority = ref.authority()
+        const refAuthority = ref.authority()
         // Reference to current document (lone fragment)
         if (!ref.scheme && !refAuthority && !ref.path && !ref.fragment && !ref.query) {
             if (!this.fragment || ref.fragment == this.fragment) {
@@ -251,9 +253,9 @@ export class URI {
         }
 
         let bp = normalize(this.path)
-        let cp = normalize(ref.path)
+        const cp = normalize(ref.path)
         if (bp != cp) {
-            let i = bp.lastIndexOf("/")
+            const i = bp.lastIndexOf("/")
             if (i != -1) {
                 bp = bp.substring(0, i + 1)
             }
@@ -274,7 +276,7 @@ export class URI {
         )
             return null
 
-        let oldLen = oldPrefix.path.length
+        const oldLen = oldPrefix.path.length
         if (this.path.length >= oldLen && this.path.slice(0, oldLen) == oldPrefix.path) {
             return new URI({
                 scheme: newPrefix.scheme,
@@ -313,16 +315,18 @@ export class URI {
 }
 
 function normalize(path: string): string {
-    let buffer = Buffer.from(path)
+    const bytesLength = utf8Count(path)
+    const buffer = new Uint8Array(bytesLength)
+    utf8Encode(path, buffer, 0)
 
     // Does this path need normalization?
-    let ns = needsNormalization(buffer) // Number of segments
+    const ns = needsNormalization(buffer) // Number of segments
     if (ns < 0) {
         // Nope -- just return it
         return path
     }
 
-    let segs = new Array<number>(ns)
+    const segs = new Array<number>(ns)
     split(buffer, segs)
 
     // Remove dots
@@ -332,9 +336,9 @@ function normalize(path: string): string {
     maybeAddLeadingDot(buffer, segs)
 
     // Join the remaining segments and return the result
-    let newSize = join(buffer, segs)
-    let newBuffer = buffer.subarray(0, newSize)
-    return newBuffer.toString()
+    const newSize = join(buffer, segs)
+    const newBuffer = buffer.subarray(0, newSize)
+    return utf8Decode(newBuffer, 0, newBuffer.length)
 }
 
 const SLASH = 47
@@ -360,10 +364,10 @@ const COLON = 58
 //
 // This method takes a string argument rather than a char array so that
 // this test can be performed without invoking path.toCharArray().
-function needsNormalization(path: Buffer): number {
+function needsNormalization(path: Uint8Array): number {
+    const end = path.length - 1 // Index of last char in path
     let normal = true
     let ns = 0 // Number of segments
-    let end = path.length - 1 // Index of last char in path
     let p = 0 // Index of next char in path
 
     // Skip initial slashes
@@ -391,7 +395,7 @@ function needsNormalization(path: Buffer): number {
 
         // Find beginning of next segment
         while (p <= end) {
-            let c = path[p]
+            const c = path[p]
             p++
             if (c != SLASH) {
                 continue
@@ -422,8 +426,8 @@ function needsNormalization(path: Buffer): number {
 //
 //	All slashes in path replaced by '\0'
 //	segs[i] == Index of first char in segment i (0 <= i < segs.length)
-function split(path: Buffer, segs: Array<number>) {
-    let end = path.length - 1 // Index of last char in path
+function split(path: Uint8Array, segs: Array<number>) {
+    const end = path.length - 1 // Index of last char in path
     let p = 0 // Index of next char in path
     let i = 0 // Index of current segment
 
@@ -443,7 +447,7 @@ function split(path: Buffer, segs: Array<number>) {
         i++
         // Find beginning of next segment
         while (p <= end) {
-            let c = path[p]
+            const c = path[p]
             p++
             if (c != SLASH) {
                 continue
@@ -466,15 +470,15 @@ function split(path: Buffer, segs: Array<number>) {
 
 // Remove "." segments from the given path, and remove segment pairs
 // consisting of a non-".." segment followed by a ".." segment.
-function removeDots(path: Buffer, segs: Array<number>) {
-    let ns = segs.length
-    let end = path.length - 1
+function removeDots(path: Uint8Array, segs: Array<number>) {
+    const ns = segs.length
+    const end = path.length - 1
     for (let i = 0; i < ns; i++) {
         let dots = 0 // Number of dots found (0, 1, or 2)
 
         // Find next occurrence of "." or ".."
         for (let ok = true; ok; ok = i < ns) {
-            let p = segs[i]
+            const p = segs[i]
             if (path[p] == DOT) {
                 if (p == end) {
                     dots = 1
@@ -501,7 +505,7 @@ function removeDots(path: Buffer, segs: Array<number>) {
             // If there is a preceding non-".." segment, remove both that
             // segment and this occurrence of ".."; otherwise, leave this
             // ".." segment as-is.
-            var j: number
+            let j: number
             for (j = i - 1; j >= 0; j--) {
                 if (segs[j] != -1) {
                     break
@@ -509,7 +513,7 @@ function removeDots(path: Buffer, segs: Array<number>) {
             }
 
             if (j >= 0) {
-                let q = segs[j]
+                const q = segs[j]
                 if (!(path[q] == DOT && path[q + 1] == DOT && path[q + 2] == 0)) {
                     segs[i] = -1
                     segs[j] = -1
@@ -521,13 +525,13 @@ function removeDots(path: Buffer, segs: Array<number>) {
 
 // DEVIATION: If the normalized path is relative, and if the first
 // segment could be parsed as a scheme name, then prepend a "." segment
-function maybeAddLeadingDot(path: Buffer, segs: Array<number>) {
+function maybeAddLeadingDot(path: Uint8Array, segs: Array<number>) {
     if (path[0] == 0) {
         // The path is absolute
         return
     }
 
-    let ns = segs.length
+    const ns = segs.length
     let f = 0 // Index of first segment
     while (f < ns) {
         if (segs[f] >= 0) {
@@ -571,9 +575,9 @@ function maybeAddLeadingDot(path: Buffer, segs: Array<number>) {
 // Postconditions:
 //
 //	path[0] .. path[return value] == Resulting path
-function join(path: Buffer, segs: ArrayLike<number>): number {
-    let ns = segs.length // Number of segments
-    let end = path.length - 1 // Index of last char in path
+function join(path: Uint8Array, segs: ArrayLike<number>): number {
+    const ns = segs.length // Number of segments
+    const end = path.length - 1 // Index of last char in path
     let p = 0 // Index of next path char to write
     if (path[p] == 0) {
         // Restore initial slash for absolute paths
@@ -616,8 +620,8 @@ function join(path: Buffer, segs: ArrayLike<number>): number {
 }
 
 function resolvePath(base: string, child: string, isAbsolute: boolean): string {
-    let i = base.lastIndexOf("/")
-    let cn = child.length
+    const i = base.lastIndexOf("/")
+    const cn = child.length
     let path = ""
     if (cn == 0) {
         if (i >= 0) {

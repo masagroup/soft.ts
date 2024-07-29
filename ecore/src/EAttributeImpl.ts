@@ -33,8 +33,13 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
     }
 
     // get the value of eAttributeType
-    get eAttributeType(): EDataType {
-        throw new Error("get eAttributeType not implemented")
+    getEAttributeType(): EDataType {
+        throw new Error("getEAttributeType not implemented")
+    }
+
+    // get the value of eAttributeType asynchronously
+    async getEAttributeTypeAsync(): Promise<EDataType> {
+        throw new Error("getEAttributeTypeAsync not implemented")
     }
 
     // get the basic value of eAttributeType with no proxy resolution
@@ -42,27 +47,27 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
         throw new Error("basicGetEAttributeType not implemented")
     }
 
-    // get the value of isID
-    get isID(): boolean {
+    // get the value of iD
+    isID(): boolean {
         return this._isID
     }
 
-    // set the value of isID
-    set isID(newIsID: boolean) {
-        let oldIsID = this._isID
-        this._isID = newIsID
-        if (this.eNotificationRequired) {
-            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EATTRIBUTE__ID, oldIsID, newIsID))
+    // set the value of iD
+    setID(newID: boolean): void {
+        const oldID = this._isID
+        this._isID = newID
+        if (this.eNotificationRequired()) {
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EATTRIBUTE__ID, oldID, newID))
         }
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE: {
-                return resolve ? this.eAttributeType : this.basicGetEAttributeType()
+                return resolve ? this.getEAttributeType() : this.basicGetEAttributeType()
             }
             case EcoreConstants.EATTRIBUTE__ID: {
-                return this.isID
+                return this.isID()
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -70,10 +75,20 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        if (resolve) {
+            switch (featureID) {
+                case EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE:
+                    return this.getEAttributeTypeAsync()
+            }
+        }
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case EcoreConstants.EATTRIBUTE__ID: {
-                this.isID = newValue as boolean
+                this.setID(newValue as boolean)
                 break
             }
             default: {
@@ -85,7 +100,7 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case EcoreConstants.EATTRIBUTE__ID: {
-                this.isID = false
+                this.setID(false)
                 break
             }
             default: {
@@ -97,7 +112,7 @@ export class EAttributeImpl extends EStructuralFeatureExt implements EAttribute 
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE: {
-                return this.eAttributeType != null
+                return this.getEAttributeType() != null
             }
             case EcoreConstants.EATTRIBUTE__ID: {
                 return this._isID != false

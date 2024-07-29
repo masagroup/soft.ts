@@ -26,6 +26,18 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
 
     // get the value of borrowed
     get borrowed(): ecore.EList<Lendable> {
+        return this.getBorrowed()
+    }
+
+    // set the value of borrowed
+    set borrowed(newBorrowed: ecore.EList<Lendable>) {
+        const l = this.getBorrowed()
+        l.clear()
+        l.addAll(newBorrowed)
+    }
+
+    // get the value of borrowed
+    getBorrowed(): ecore.EList<Lendable> {
         if (this._borrowed == null) {
             this._borrowed = new ecore.BasicEObjectList<Lendable>(
                 this,
@@ -41,12 +53,18 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
         return this._borrowed
     }
 
+    // set the value of borrowed
+    setBorrowed(newBorrowed: ecore.EList<Lendable>) {
+        const l = this.getBorrowed()
+        l.clear()
+        l.addAll(newBorrowed)
+    }
+
     eGetFromID(featureID: number, resolve: boolean): any {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                return !resolve && ecore.isEObjectList(this.borrowed)
-                    ? this.borrowed.getUnResolvedList()
-                    : this.borrowed
+                const list = this.getBorrowed()
+                return !resolve && ecore.isEObjectList(list) ? list.getUnResolvedList() : list
             }
             default: {
                 return super.eGetFromID(featureID, resolve)
@@ -54,11 +72,16 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
         }
     }
 
+    async eGetFromIDAsync(featureID: number, resolve: boolean): Promise<any> {
+        return this.eGetFromID(featureID, resolve)
+    }
+
     eSetFromID(featureID: number, newValue: any) {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                this.borrowed.clear()
-                this.borrowed.addAll(newValue as ecore.EList<Lendable>)
+                const list = this.getBorrowed()
+                list.clear()
+                list.addAll(newValue as ecore.EList<Lendable>)
                 break
             }
             default: {
@@ -70,7 +93,7 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     eUnsetFromID(featureID: number) {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                this.borrowed.clear()
+                this.getBorrowed().clear()
                 break
             }
             default: {
@@ -82,7 +105,7 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                return this.borrowed != null && this.borrowed.size() != 0
+                return this._borrowed && !this._borrowed.isEmpty()
             }
             default: {
                 return super.eIsSetFromID(featureID)
@@ -97,8 +120,8 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                let list = this.borrowed as ecore.ENotifyingList<Lendable>
-                let end = otherEnd as Lendable
+                const list = this.getBorrowed() as ecore.ENotifyingList<Lendable>
+                const end = otherEnd as Lendable
                 return list.addWithNotification(end, notifications)
             }
             default: {
@@ -114,8 +137,8 @@ export class BorrowerImpl extends PersonImpl implements Borrower {
     ): ecore.ENotificationChain {
         switch (featureID) {
             case LibraryConstants.BORROWER__BORROWED: {
-                let list = this.borrowed as ecore.ENotifyingList<Lendable>
-                let end = otherEnd as Lendable
+                const list = this.getBorrowed() as ecore.ENotifyingList<Lendable>
+                const end = otherEnd as Lendable
                 return list.removeWithNotification(end, notifications)
             }
             default: {

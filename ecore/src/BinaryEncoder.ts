@@ -1,4 +1,12 @@
-import { WriteStream } from "fs"
+// *****************************************************************************
+// Copyright(c) 2021 MASA Group
+//
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+//
+// *****************************************************************************
+
 import { Err, Ok, Result } from "ts-results-es"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
 import {
@@ -71,7 +79,7 @@ export class BinaryEncoder implements EEncoder {
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext
-        this._baseURI = this._resource?.eURI
+        this._baseURI = this._resource?.getURI()
         this._isIDAttributeEncoded = options?.get(BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE) ?? false
     }
 
@@ -120,16 +128,16 @@ export class BinaryEncoder implements EEncoder {
         } else if (this._objectToID.has(eObject)) {
             this.encodeNumber(this._objectToID.get(eObject))
         } else {
-            let eObjectInternal = eObject as EObjectInternal
+            const eObjectInternal = eObject as EObjectInternal
 
             // object id
-            let objectID = this._objectToID.size
+            const objectID = this._objectToID.size
             this._objectToID.set(eObject, objectID)
             this.encodeNumber(objectID)
 
             // object class
-            let eClass = eObject.eClass()
-            let eClassData = this.encodeClass(eClass)
+            const eClass = eObject.eClass()
+            const eClassData = this.encodeClass(eClass)
 
             let saveFeatureValues = true
             switch (check) {
@@ -139,10 +147,10 @@ export class BinaryEncoder implements EEncoder {
                         this.encodeURI(eObjectInternal.eProxyURI())
                         saveFeatureValues = false
                     } else {
-                        let eResource = eObjectInternal.eInternalResource()
+                        const eResource = eObjectInternal.eInternalResource()
                         if (eResource) {
                             this.encodeNumber(-2)
-                            this.encodeURIWithFragment(eResource.eURI, eResource.getURIFragment(eObjectInternal))
+                            this.encodeURIWithFragment(eResource.getURI(), eResource.getURIFragment(eObjectInternal))
                             saveFeatureValues = false
                         }
                     }
@@ -153,14 +161,14 @@ export class BinaryEncoder implements EEncoder {
                         this.encodeURI(eObjectInternal.eProxyURI())
                         saveFeatureValues = false
                     } else {
-                        let eResource = eObjectInternal.eInternalResource()
+                        const eResource = eObjectInternal.eInternalResource()
                         if (
                             eResource != null &&
                             (eResource != this._resource ||
                                 (this._objectRoot != null && !EcoreUtils.isAncestor(this._objectRoot, eObjectInternal)))
                         ) {
                             this.encodeNumber(-2)
-                            this.encodeURIWithFragment(eResource.eURI, eResource.getURIFragment(eObjectInternal))
+                            this.encodeURIWithFragment(eResource.getURI(), eResource.getURIFragment(eObjectInternal))
                             saveFeatureValues = false
                         }
                     }
@@ -171,9 +179,9 @@ export class BinaryEncoder implements EEncoder {
                     break
             }
             if (saveFeatureValues) {
-                let objectIDManager = this._resource.eObjectIDManager
+                const objectIDManager = this._resource.getObjectIDManager()
                 if (this._isIDAttributeEncoded && objectIDManager) {
-                    let id = objectIDManager.getID(eObject)
+                    const id = objectIDManager.getID(eObject)
                     if (id) {
                         this.encodeNumber(-1)
                         this.encodeAny(id)
@@ -181,7 +189,7 @@ export class BinaryEncoder implements EEncoder {
                 }
 
                 for (let featureID = 0; featureID < eClassData.featureData.length; featureID++) {
-                    let featureData = eClassData.featureData[featureID]
+                    const featureData = eClassData.featureData[featureID]
                     if (
                         !featureData.isTransient &&
                         (check == CheckType.CheckContainer ||
@@ -202,9 +210,9 @@ export class BinaryEncoder implements EEncoder {
         } else {
             ePackageData = new PackageData()
             ePackageData.id = this._packageDataMap.size
-            ePackageData.classData = new Array(ePackage.eClassifiers.size())
+            ePackageData.classData = new Array(ePackage.getEClassifiers().size())
             this.encodeNumber(ePackageData.id)
-            this.encodeString(ePackage.nsURI)
+            this.encodeString(ePackage.getNsURI())
             this.encodeURI(EcoreUtils.getURI(ePackage))
             this._packageDataMap.set(ePackage, ePackageData)
         }
@@ -219,7 +227,7 @@ export class BinaryEncoder implements EEncoder {
         } else {
             eClassData = this.newClassData(eClass)
             this.encodeNumber(eClassData.id)
-            this.encodeString(eClass.name)
+            this.encodeString(eClass.getName())
             this._classDataMap.set(eClass, eClassData)
         }
         return eClassData
@@ -237,11 +245,11 @@ export class BinaryEncoder implements EEncoder {
         if (uri == null) {
             this.encodeNumber(-1)
         } else {
-            let uriStr = uri.toString()
+            const uriStr = uri.toString()
             if (this._uriToIDMap.has(uriStr)) {
                 this.encodeNumber(this._uriToIDMap.get(uriStr))
             } else {
-                let id = this._uriToIDMap.size
+                const id = this._uriToIDMap.size
                 this._uriToIDMap.set(uriStr, id)
                 this.encodeNumber(id)
                 this.encodeString(this.relativizeURI(uri).toString())
@@ -261,80 +269,96 @@ export class BinaryEncoder implements EEncoder {
                 this.encodeString(featureData.name)
                 featureData.name = ""
             }
-            let value = eObject.eGetFromID(featureID, false, false)
+            const value = eObject.eGetFromID(featureID, false, false)
             switch (featureData.featureKind) {
                 case BinaryFeatureKind.bfkObject:
-                case BinaryFeatureKind.bfkObjectContainment:
+                case BinaryFeatureKind.bfkObjectContainment: {
                     this.encodeEObject(value as EObject, CheckType.CheckNothing)
                     break
-                case BinaryFeatureKind.bfkObjectContainerProxy:
+                }
+                case BinaryFeatureKind.bfkObjectContainerProxy: {
                     this.encodeEObject(value as EObject, CheckType.CheckResource)
                     break
-                case BinaryFeatureKind.bfkObjectContainmentProxy:
+                }
+                case BinaryFeatureKind.bfkObjectContainmentProxy: {
                     this.encodeEObject(value as EObject, CheckType.CheckDirectResource)
                     break
-                case BinaryFeatureKind.bfkObjectProxy:
+                }
+                case BinaryFeatureKind.bfkObjectProxy: {
                     this.encodeEObject(value as EObject, CheckType.CheckResource)
                     break
+                }
                 case BinaryFeatureKind.bfkObjectList:
-                case BinaryFeatureKind.bfkObjectContainmentList:
+                case BinaryFeatureKind.bfkObjectContainmentList: {
                     this.encodeEObjects(value as EList<EObject>, CheckType.CheckNothing)
                     break
-                case BinaryFeatureKind.bfkObjectContainmentListProxy:
+                }
+                case BinaryFeatureKind.bfkObjectContainmentListProxy: {
                     this.encodeEObjects(value as EList<EObject>, CheckType.CheckDirectResource)
                     break
-                case BinaryFeatureKind.bfkObjectListProxy:
+                }
+                case BinaryFeatureKind.bfkObjectListProxy: {
                     this.encodeEObjects(value as EList<EObject>, CheckType.CheckResource)
                     break
-                case BinaryFeatureKind.bfkData:
-                    let valueStr = featureData.factory.convertToString(featureData.dataType, value)
+                }
+                case BinaryFeatureKind.bfkData: {
+                    const valueStr = featureData.factory.convertToString(featureData.dataType, value)
                     this.encodeString(valueStr)
                     break
-                case BinaryFeatureKind.bfkDataList:
-                    let l = value as EList<any>
+                }
+                case BinaryFeatureKind.bfkDataList: {
+                    const l = value as EList<any>
                     this.encodeNumber(l.size())
                     for (const value of l) {
-                        let valueStr = featureData.factory.convertToString(featureData.dataType, value)
+                        const valueStr = featureData.factory.convertToString(featureData.dataType, value)
                         this.encodeString(valueStr)
                     }
                     break
-                case BinaryFeatureKind.bfkEnum:
-                    let literalStr = featureData.factory.convertToString(featureData.dataType, value)
+                }
+                case BinaryFeatureKind.bfkEnum: {
+                    const literalStr = featureData.factory.convertToString(featureData.dataType, value)
                     if (this._enumLiteralToIDMap.has(literalStr)) {
-                        let enumID = this._enumLiteralToIDMap.get(literalStr)
+                        const enumID = this._enumLiteralToIDMap.get(literalStr)
                         this.encodeNumber(enumID)
                     } else {
-                        let enumID = this._enumLiteralToIDMap.size
+                        const enumID = this._enumLiteralToIDMap.size
                         this._enumLiteralToIDMap.set(literalStr, enumID)
                         this.encodeNumber(enumID)
                         this.encodeString(literalStr)
                     }
                     break
-                case BinaryFeatureKind.bfkDate:
+                }
+                case BinaryFeatureKind.bfkDate: {
                     this.encodeDate(value as Date)
                     break
-                case BinaryFeatureKind.bfkNumber:
+                }
+                case BinaryFeatureKind.bfkNumber: {
                     this.encodeNumber(value as number)
                     break
-                case BinaryFeatureKind.bfkBool:
+                }
+                case BinaryFeatureKind.bfkBool: {
                     this.encodeBoolean(value as boolean)
                     break
-                case BinaryFeatureKind.bfkString:
+                }
+                case BinaryFeatureKind.bfkString: {
                     this.encodeString(value as string)
                     break
-                case BinaryFeatureKind.bfkByteArray:
+                }
+                case BinaryFeatureKind.bfkByteArray: {
                     this.encodeBytes(value as Uint8Array)
                     break
-                default:
+                }
+                default: {
                     throw new Error(`feature with feature kind '${featureData.featureKind}' is not supported`)
+                }
             }
         }
     }
 
     private newClassData(eClass: EClass): ClassData {
-        let eFeatures = eClass.eAllStructuralFeatures
-        let ePackageData = this.encodePackage(eClass.ePackage)
-        let eClassData = new ClassData(this.newClassID(ePackageData), ePackageData.id)
+        const eFeatures = eClass.getEAllStructuralFeatures()
+        const ePackageData = this.encodePackage(eClass.getEPackage())
+        const eClassData = new ClassData(this.newClassID(ePackageData), ePackageData.id)
         ePackageData.classData[eClassData.id] = eClassData
         for (const eFeature of eFeatures) {
             eClassData.featureData.push(this.newFeatureData(eFeature))
@@ -343,26 +367,26 @@ export class BinaryEncoder implements EEncoder {
     }
 
     private newFeatureData(eFeature: EStructuralFeature): FeatureData {
-        let eFeatureData = new FeatureData()
-        eFeatureData.name = eFeature.name
+        const eFeatureData = new FeatureData()
+        eFeatureData.name = eFeature.getName()
         eFeatureData.featureKind = getBinaryCodecFeatureKind(eFeature)
         if (isEReference(eFeature)) {
-            let eReference = eFeature as EReference
+            const eReference = eFeature as EReference
             eFeatureData.isTransient =
-                eReference.isTransient || (eReference.isContainer && !eReference.isResolveProxies)
+                eReference.isTransient() || (eReference.isContainer() && !eReference.isResolveProxies())
         } else if (isEAttribute(eFeature)) {
-            let eAttribute = eFeature as EAttribute
-            let eDataType = eAttribute.eAttributeType
-            eFeatureData.isTransient = eAttribute.isTransient
+            const eAttribute = eFeature as EAttribute
+            const eDataType = eAttribute.getEAttributeType()
+            eFeatureData.isTransient = eAttribute.isTransient()
             eFeatureData.dataType = eDataType
-            eFeatureData.factory = eDataType.ePackage.eFactoryInstance
+            eFeatureData.factory = eDataType.getEPackage().getEFactoryInstance()
         }
         return eFeatureData
     }
 
     private newClassID(ePackageData: PackageData): number {
         for (let i = 0; i < ePackageData.classData.length; i++) {
-            let c = ePackageData.classData[i]
+            const c = ePackageData.classData[i]
             if (c == null) {
                 return i
             }
@@ -398,27 +422,23 @@ export class BinaryEncoder implements EEncoder {
         }
     }
 
-    encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
-        return new Promise<Uint8Array>((resolve, reject) => {
-            let r = this.encode(eResource)
-            if (r.isOk()) {
-                s.write(r.value)
-                resolve(r.value)
-            } else {
-                reject(r.error)
-            }
-        })
+    async encodeAsync(eResource: EResource, stream: WritableStream): Promise<Uint8Array> {
+        const r = this.encode(eResource)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 
-    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
-        return new Promise<Uint8Array>((resolve, reject) => {
-            let r = this.encodeObject(eObject)
-            if (r.isOk()) {
-                s.write(r.value)
-                resolve(r.value)
-            } else {
-                reject(r.error)
-            }
-        })
+    async encodeObjectAsync(eObject: EObject, stream: WritableStream): Promise<Uint8Array> {
+        const r = this.encodeObject(eObject)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 }

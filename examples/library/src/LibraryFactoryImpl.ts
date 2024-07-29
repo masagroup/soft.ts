@@ -59,7 +59,7 @@ export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFact
     }
 
     create(eClass: ecore.EClass): ecore.EObject {
-        switch (eClass.classifierID) {
+        switch (eClass.getClassifierID()) {
             case LibraryConstants.BOOK:
                 return this.createBook()
             case LibraryConstants.BOOK_INDEX:
@@ -81,7 +81,7 @@ export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFact
             case LibraryConstants.DOCUMENT_ROOT:
                 return this.createDocumentRoot()
             default:
-                throw new Error("create: " + eClass.classifierID + " not found")
+                throw new Error(`create: ${eClass.getClassifierID()} not found`)
         }
     }
 
@@ -98,7 +98,7 @@ export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFact
     }
 
     createLibraryFromContainer(eContainer: Library): Library {
-        let element = new LibraryImpl()
+        const element = new LibraryImpl()
         if (eContainer != null) {
             eContainer.branches.add(element)
         }
@@ -134,20 +134,20 @@ export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFact
     }
 
     createFromString(eDataType: ecore.EDataType, literalValue: string): any {
-        switch (eDataType.classifierID) {
+        switch (eDataType.getClassifierID()) {
             case LibraryConstants.BOOK_CATEGORY:
                 return this.createBookCategoryFromString(eDataType, literalValue)
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+                throw new Error(`The datatype '${eDataType.getName()}' is not a valid classifier`)
         }
     }
 
     convertToString(eDataType: ecore.EDataType, instanceValue: any): string {
-        switch (eDataType.classifierID) {
+        switch (eDataType.getClassifierID()) {
             case LibraryConstants.BOOK_CATEGORY:
                 return this.convertBookCategoryToString(eDataType, instanceValue)
             default:
-                throw new Error("The datatype '" + eDataType.name + "' is not a valid classifier")
+                throw new Error(`The datatype '${eDataType.getName()}' is not a valid classifier`)
         }
     }
 

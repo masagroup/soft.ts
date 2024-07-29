@@ -19,31 +19,31 @@ interface WriterInternal extends Writer, ecore.EObjectInternal {}
 
 describe("BookOnTapeImpl", () => {
     test("eStaticClass", () => {
-        let o = new BookOnTapeImpl()
+        const o = new BookOnTapeImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getBookOnTape())
     })
 
     test("getAuthor", () => {
-        let o = new BookOnTapeImpl()
+        const o = new BookOnTapeImpl()
 
         // get default value
         expect(o.author).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<WriterInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<WriterInternal>()
+        const value = instance(mockValue)
         o.author = value
 
         // events
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<ecore.EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<ecore.EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -52,9 +52,9 @@ describe("BookOnTapeImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new ecore.URI("test:///uri")
-        let mockResolved = mock<WriterInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new ecore.URI("test:///uri")
+        const mockResolved = mock<WriterInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -64,14 +64,14 @@ describe("BookOnTapeImpl", () => {
     })
 
     test("setAuthor", () => {
-        let o = new BookOnTapeImpl()
-        let mockValue = mock<WriterInternal>()
-        let value = instance(mockValue)
+        const o = new BookOnTapeImpl()
+        const mockValue = mock<WriterInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.author = value
@@ -79,33 +79,33 @@ describe("BookOnTapeImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("getReader", () => {
-        let o = new BookOnTapeImpl()
+        const o = new BookOnTapeImpl()
 
         // get default value
         expect(o.reader).toBeNull()
 
         // initialize object with a mock value
-        let mockValue = mock<PersonInternal>()
-        let value = instance(mockValue)
+        const mockValue = mock<PersonInternal>()
+        const value = instance(mockValue)
         o.reader = value
 
         // events
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set object resource
-        let mockResourceSet = mock<ecore.EResourceSet>()
-        let resourceSet = instance(mockResourceSet)
-        let mockResource = mock<ecore.EResource>()
-        let resource = instance(mockResource)
+        const mockResourceSet = mock<ecore.EResourceSet>()
+        const resourceSet = instance(mockResourceSet)
+        const mockResource = mock<ecore.EResource>()
+        const resource = instance(mockResource)
         o.eSetInternalResource(resource)
 
         // get non resolved value
@@ -114,9 +114,9 @@ describe("BookOnTapeImpl", () => {
         verify(mockValue.eIsProxy()).once()
 
         // get a resolved value
-        let mockURI = new ecore.URI("test:///uri")
-        let mockResolved = mock<PersonInternal>()
-        let resolved = instance(mockResolved)
+        const mockURI = new ecore.URI("test:///uri")
+        const mockResolved = mock<PersonInternal>()
+        const resolved = instance(mockResolved)
         when(mockResolved.eProxyURI()).thenReturn(null)
         when(mockResource.eResourceSet()).thenReturn(resourceSet)
         when(mockResourceSet.getEObject(mockURI, true)).thenReturn(resolved)
@@ -126,14 +126,14 @@ describe("BookOnTapeImpl", () => {
     })
 
     test("setReader", () => {
-        let o = new BookOnTapeImpl()
-        let mockValue = mock<PersonInternal>()
-        let value = instance(mockValue)
+        const o = new BookOnTapeImpl()
+        const mockValue = mock<PersonInternal>()
+        const value = instance(mockValue)
 
         // add listener
-        let mockAdapter = mock<ecore.EAdapter>()
-        let adapter = instance(mockAdapter)
-        o.eAdapters.add(adapter)
+        const mockAdapter = mock<ecore.EAdapter>()
+        const adapter = instance(mockAdapter)
+        o.eAdapters().add(adapter)
 
         // set value
         o.reader = value
@@ -141,45 +141,45 @@ describe("BookOnTapeImpl", () => {
         // checks
         verify(mockAdapter.notifyChanged(anything())).once()
         const [notification] = capture(mockAdapter.notifyChanged).last()
-        expect(notification.notifier).toBe(o)
-        expect(notification.oldValue).toBeNull()
-        expect(notification.newValue).toBe(value)
-        expect(notification.position).toBe(-1)
+        expect(notification.getNotifier()).toBe(o)
+        expect(notification.getOldValue()).toBeNull()
+        expect(notification.getNewValue()).toBe(value)
+        expect(notification.getPosition()).toBe(-1)
     })
 
     test("eGetFromID", () => {
-        let o = new BookOnTapeImpl()
+        const o = new BookOnTapeImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.BOOK_ON_TAPE__AUTHOR, true)).toStrictEqual(o.author)
         expect(o.eGetFromID(LibraryConstants.BOOK_ON_TAPE__READER, true)).toStrictEqual(o.reader)
     })
 
     test("eSetFromID", () => {
-        let o = new BookOnTapeImpl()
+        const o = new BookOnTapeImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
-            let mockValue = mock<WriterInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<WriterInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(LibraryConstants.BOOK_ON_TAPE__AUTHOR, value)
             expect(o.eGetFromID(LibraryConstants.BOOK_ON_TAPE__AUTHOR, false)).toBe(value)
         }
         {
-            let mockValue = mock<PersonInternal>()
-            let value = instance(mockValue)
+            const mockValue = mock<PersonInternal>()
+            const value = instance(mockValue)
             o.eSetFromID(LibraryConstants.BOOK_ON_TAPE__READER, value)
             expect(o.eGetFromID(LibraryConstants.BOOK_ON_TAPE__READER, false)).toBe(value)
         }
     })
 
     test("eIsSetFromID", () => {
-        let o = new BookOnTapeImpl()
+        const o = new BookOnTapeImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.BOOK_ON_TAPE__AUTHOR)).toBeFalsy()
         expect(o.eIsSetFromID(LibraryConstants.BOOK_ON_TAPE__READER)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new BookOnTapeImpl()
+        const o = new BookOnTapeImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.BOOK_ON_TAPE__AUTHOR)

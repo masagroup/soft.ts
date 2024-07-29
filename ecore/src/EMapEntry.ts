@@ -8,6 +8,9 @@
 // *****************************************************************************
 
 export interface EMapEntry<K, V> {
-    key: K
-    value: V
+    getKey(): K
+    setKey(k: K): void
+
+    getValue(): V
+    setValue(v: V): void
 }

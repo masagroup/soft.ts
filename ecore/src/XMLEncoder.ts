@@ -7,7 +7,6 @@
 //
 // *****************************************************************************
 
-import { WriteStream } from "fs"
 import { Err, Ok, Result } from "ts-results-es"
 import {
     EClass,
@@ -35,6 +34,7 @@ import {
     URI,
     XMLOptions
 } from "./internal.js"
+import { utf8Count, utf8Encode } from "./utils/UTF8.js"
 import { XMLConstants } from "./XMLConstants.js"
 import { XMLString } from "./XMLString.js"
 
@@ -138,10 +138,11 @@ export class XMLEncoder implements EEncoder {
         }
         this.encodeTopObject(contents.get(0))
 
-        let errors = this._resource.getErrors()
+        const errors = this._resource.getErrors()
         if (errors.isEmpty()) {
-            let r = this._str.toString()
-            let e = new TextEncoder().encode(r)
+            const r = this._str.toString()
+            const e = new Uint8Array(utf8Count(r))
+            utf8Encode(r, e, 0)
             return Ok(e)
         } else {
             return Err(errors.get(0))
@@ -149,7 +150,7 @@ export class XMLEncoder implements EEncoder {
     }
 
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
-        var error: Error
+        let error: Error
         this._errorFn = (diagnostic: EDiagnostic) => {
             error = diagnostic
         }
@@ -157,34 +158,31 @@ export class XMLEncoder implements EEncoder {
         if (error) {
             return Err(error)
         } else {
-            let r = this._str.toString()
-            let e = new TextEncoder().encode(r)
+            const r = this._str.toString()
+            const e = new Uint8Array(utf8Count(r))
+            utf8Encode(r, e, 0)
             return Ok(e)
         }
     }
 
-    encodeAsync(eResource: EResource, s: WriteStream): Promise<Uint8Array> {
-        return new Promise((resolve, reject) => {
-            let result = this.encode(eResource)
-            if (result.isOk()) {
-                s.write(result.value)
-                resolve(result.value)
-            } else {
-                reject(result.error)
-            }
-        })
+    async encodeAsync(eResource: EResource, stream: WritableStream): Promise<Uint8Array> {
+        const r = this.encode(eResource)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 
-    encodeObjectAsync(eObject: EObject, s: WriteStream): Promise<Uint8Array> {
-        return new Promise((resolve, reject) => {
-            let result = this.encodeObject(eObject)
-            if (result.isOk()) {
-                s.write(result.value)
-                resolve(result.value)
-            } else {
-                reject(result.error)
-            }
-        })
+    async encodeObjectAsync(eObject: EObject, stream: WritableStream): Promise<Uint8Array> {
+        const r = this.encodeObject(eObject)
+        if (r.isOk()) {
+            stream.getWriter().write(r.value)
+            return r.value
+        } else {
+            return Promise.reject(r.error)
+        }
     }
 
     private encodeTopObject(eObject: EObject) {
@@ -193,10 +191,10 @@ export class XMLEncoder implements EEncoder {
 
         // initialize prefixes if any in top
         if (this._extendedMetaData) {
-            let eClass = eObject.eClass()
-            let ePrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(eClass)
+            const eClass = eObject.eClass()
+            const ePrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(eClass)
             if (ePrefixMapFeature) {
-                let m = eObject.eGet(ePrefixMapFeature) as EMap<string, string>
+                const m = eObject.eGet(ePrefixMapFeature) as EMap<string, string>
                 this.setPrefixToNamespace(m)
             }
         }
@@ -215,10 +213,10 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveTopObject(eObject: EObject) {
-        let eClass = eObject.eClass()
-        if (!this._extendedMetaData || this._extendedMetaData.getDocumentRoot(eClass.ePackage) != eClass) {
-            let rootFeature = this.getRootFeature(eClass)
-            let name = rootFeature ? this.getFeatureQName(rootFeature) : this.getClassQName(eClass)
+        const eClass = eObject.eClass()
+        if (!this._extendedMetaData || this._extendedMetaData.getDocumentRoot(eClass.getEPackage()) != eClass) {
+            const rootFeature = this.getRootFeature(eClass)
+            const name = rootFeature ? this.getFeatureQName(rootFeature) : this.getClassQName(eClass)
             this._str.startElement(name)
         } else {
             this._str.startElement("")
@@ -230,14 +228,14 @@ export class XMLEncoder implements EEncoder {
     private getRootFeature(eClassifier: EClassifier): EStructuralFeature {
         if (this._extendedMetaData) {
             while (eClassifier) {
-                let eClass = this._extendedMetaData.getDocumentRoot(eClassifier.ePackage)
+                const eClass = this._extendedMetaData.getDocumentRoot(eClassifier.getEPackage())
                 if (eClass) {
-                    for (const eFeature of eClass.eStructuralFeatures) {
-                        if (eFeature.eType == eClassifier && eFeature.isChangeable) return eFeature
+                    for (const eFeature of eClass.getEStructuralFeatures()) {
+                        if (eFeature.getEType() == eClassifier && eFeature.isChangeable()) return eFeature
                     }
                 }
                 if (isEClass(eClassifier)) {
-                    let eSuperTypes = eClassifier.eSuperTypes
+                    const eSuperTypes = eClassifier.getESuperTypes()
                     if (eSuperTypes.isEmpty()) eClassifier = null
                     else eClassifier = eSuperTypes.get(0)
                 } else {
@@ -249,8 +247,8 @@ export class XMLEncoder implements EEncoder {
     }
 
     protected saveElementID(eObject: EObject) {
-        if (this._idAttributeName && this._resource.eObjectIDManager) {
-            let id = this._resource.eObjectIDManager.getID(eObject)
+        if (this._idAttributeName && this._resource.getObjectIDManager()) {
+            const id = this._resource.getObjectIDManager().getID(eObject)
             if (id) {
                 this._str.addAttribute(this._idAttributeName, String(id))
             }
@@ -258,12 +256,12 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveFeatures(eObject: EObject, attributesOnly: boolean): boolean {
-        let eAllFeatures = eObject.eClass().eAllStructuralFeatures
+        const eAllFeatures = eObject.eClass().getEAllStructuralFeatures()
         let elementFeatures: number[]
         let elementCount = 0
 
         LOOP: for (let i = 0; i < eAllFeatures.size(); i++) {
-            let eFeature = eAllFeatures.get(i)
+            const eFeature = eAllFeatures.get(i)
             let kind = this._featureKinds.get(eFeature)
             if (kind === undefined) {
                 kind = this.getSaveFeatureKind(eFeature)
@@ -378,8 +376,8 @@ export class XMLEncoder implements EEncoder {
             return false
         }
         for (let i = 0; i < elementCount; i++) {
-            let eFeature = eAllFeatures.get(elementFeatures[i])
-            let kind = this._featureKinds.get(eFeature)
+            const eFeature = eAllFeatures.get(elementFeatures[i])
+            const kind = this._featureKinds.get(eFeature)
             switch (kind) {
                 case SaveFeatureKind.DataTypeSingleNillable: {
                     this.saveNil(eObject, eFeature)
@@ -431,7 +429,7 @@ export class XMLEncoder implements EEncoder {
     }
 
     protected saveNamespaces() {
-        let prefixes: string[] = [...this._prefixesToURI.keys()].sort()
+        const prefixes: string[] = [...this._prefixesToURI.keys()].sort()
         for (const prefix of prefixes) {
             let attribute = "xmlns"
             if (prefix.length > 0) attribute += ":" + prefix
@@ -440,19 +438,19 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveDataTypeSingle(eObject: EObject, eFeature: EStructuralFeature) {
-        let val = eObject.eGetResolve(eFeature, false)
-        let str = this.getDataType(val, eFeature, true)
+        const val = eObject.eGetResolve(eFeature, false)
+        const str = this.getDataType(val, eFeature, true)
         if (str) {
             this._str.addAttribute(this.getFeatureQName(eFeature), str)
         }
     }
 
     private saveDataTypeMany(eObject: EObject, eFeature: EStructuralFeature) {
-        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>
-        let d = eFeature.eType as EDataType
-        let p = d.ePackage
-        let f = p.eFactoryInstance
-        let name = this.getFeatureQName(eFeature)
+        const l = eObject.eGetResolve(eFeature, false) as EList<EObject>
+        const d = eFeature.getEType() as EDataType
+        const p = d.getEPackage()
+        const f = p.getEFactoryInstance()
+        const name = this.getFeatureQName(eFeature)
         for (const value of l) {
             if (!value) {
                 this._str.startElement(name)
@@ -461,7 +459,7 @@ export class XMLEncoder implements EEncoder {
                 this._uriToPrefixes.set(XMLConstants.xsiURI, [XMLConstants.xsiNS])
                 this._prefixesToURI.set(XMLConstants.xsiNS, XMLConstants.xsiURI)
             } else {
-                let str = f.convertToString(d, value)
+                const str = f.convertToString(d, value)
                 this._str.addContent(name, str)
             }
         }
@@ -472,21 +470,21 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveEObjectSingle(eObject: EObject, eFeature: EStructuralFeature) {
-        let value = eObject.eGetResolve(eFeature, false)
+        const value = eObject.eGetResolve(eFeature, false)
         if (value && isEObject(value)) {
-            let id = this.getHRef(value)
+            const id = this.getHRef(value)
             this._str.addAttribute(this.getFeatureQName(eFeature), id)
         }
     }
 
     private saveEObjectMany(eObject: EObject, eFeature: EStructuralFeature) {
-        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>
+        const l = eObject.eGetResolve(eFeature, false) as EList<EObject>
         let failure = false
         let first = true
         let buffer = ""
         for (const value of l) {
             if (value) {
-                let id = this.getHRef(value)
+                const id = this.getHRef(value)
                 if (id == "") {
                     failure = true
                 } else {
@@ -508,14 +506,14 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveContainedSingle(eObject: EObject, eFeature: EStructuralFeature) {
-        let value = eObject.eGetResolve(eFeature, false)
+        const value = eObject.eGetResolve(eFeature, false)
         if (value && isEObjectInternal(value)) {
             this.saveEObjectInternal(value, eFeature)
         }
     }
 
     private saveContainedMany(eObject: EObject, eFeature: EStructuralFeature) {
-        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>
+        const l = eObject.eGetResolve(eFeature, false) as EList<EObject>
         for (const o of l) {
             if (isEObjectInternal(o)) {
                 this.saveEObjectInternal(o, eFeature)
@@ -533,8 +531,8 @@ export class XMLEncoder implements EEncoder {
 
     private saveEObject(o: EObject, f: EStructuralFeature) {
         this._str.startElement(this.getFeatureQName(f))
-        let eClass = o.eClass()
-        let eType = f.eType
+        const eClass = o.eClass()
+        const eType = f.getEType()
         if (eType != eClass && eType != getEcorePackage().getEObject()) {
             this.saveTypeAttribute(eClass)
         }
@@ -549,26 +547,26 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveHRefSingle(eObject: EObject, eFeature: EStructuralFeature) {
-        let value = eObject.eGetResolve(eFeature, false)
+        const value = eObject.eGetResolve(eFeature, false)
         if (value && isEObject(value)) {
             this.saveHRef(value, eFeature)
         }
     }
 
     private saveHRefMany(eObject: EObject, eFeature: EStructuralFeature) {
-        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>
+        const l = eObject.eGetResolve(eFeature, false) as EList<EObject>
         for (const value of l) {
             this.saveHRef(value, eFeature)
         }
     }
 
     private saveHRef(eObject: EObject, eFeature: EStructuralFeature) {
-        let href = this.getHRef(eObject)
+        const href = this.getHRef(eObject)
         if (href != "") {
             this._str.startElement(this.getFeatureQName(eFeature))
-            let eClass = eObject.eClass()
-            let eType = eFeature.eType
-            if (eType && isEClass(eType) && eType != eClass && eType.isAbstract) {
+            const eClass = eObject.eClass()
+            const eType = eFeature.getEType()
+            if (eType && isEClass(eType) && eType != eClass && eType.isAbstract()) {
                 this.saveTypeAttribute(eClass)
             }
             this._str.addAttribute("href", href)
@@ -577,9 +575,9 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveIDRefSingle(eObject: EObject, eFeature: EStructuralFeature) {
-        let value = eObject.eGetResolve(eFeature, false)
+        const value = eObject.eGetResolve(eFeature, false)
         if (value && isEObject(value)) {
-            let id = this.getIDRef(value)
+            const id = this.getIDRef(value)
             if (id != "") {
                 this._str.addAttribute(this.getFeatureQName(eFeature), id)
             }
@@ -587,13 +585,13 @@ export class XMLEncoder implements EEncoder {
     }
 
     private saveIDRefMany(eObject: EObject, eFeature: EStructuralFeature) {
-        let l = eObject.eGetResolve(eFeature, false) as EList<EObject>
+        const l = eObject.eGetResolve(eFeature, false) as EList<EObject>
         let failure = false
         let buffer = ""
         let first = true
         for (const value of l) {
             if (value) {
-                let id = this.getIDRef(value)
+                const id = this.getIDRef(value)
                 if (id == "") {
                     failure = true
                 } else {
@@ -611,13 +609,13 @@ export class XMLEncoder implements EEncoder {
     }
 
     private getSaveResourceKindSingle(eObject: EObject, eFeature: EStructuralFeature): SaveResourceKind {
-        let value = eObject.eGetResolve(eFeature, false) as EObjectInternal
+        const value = eObject.eGetResolve(eFeature, false) as EObjectInternal
         if (!value) {
             return SaveResourceKind.Skip
         } else if (value.eIsProxy()) {
             return SaveResourceKind.Cross
         } else {
-            let resource = value.eResource()
+            const resource = value.eResource()
             if (resource == this._resource || !resource) {
                 return SaveResourceKind.Same
             }
@@ -626,18 +624,18 @@ export class XMLEncoder implements EEncoder {
     }
 
     private getSaveResourceKindMany(eObject: EObject, eFeature: EStructuralFeature): SaveResourceKind {
-        let list = eObject.eGetResolve(eFeature, false) as EList<EObject>
+        const list = eObject.eGetResolve(eFeature, false) as EList<EObject>
         if (!list || list.isEmpty()) {
             return SaveResourceKind.Skip
         }
         for (const e of list) {
-            let o = e as EObjectInternal
+            const o = e as EObjectInternal
             if (!o) {
                 return SaveResourceKind.Skip
             } else if (o.eIsProxy()) {
                 return SaveResourceKind.Cross
             } else {
-                let resource = o.eResource()
+                const resource = o.eResource()
                 if (resource && resource != this._resource) {
                     return SaveResourceKind.Cross
                 }
@@ -650,10 +648,10 @@ export class XMLEncoder implements EEncoder {
         if (value == null) {
             return null
         } else {
-            let d = feature.eType as EDataType
-            let p = d.ePackage
-            let f = p.eFactoryInstance
-            let s = f.convertToString(d, value)
+            const d = feature.getEType() as EDataType
+            const p = d.getEPackage()
+            const f = p.getEFactoryInstance()
+            const s = f.convertToString(d, value)
             return s
         }
     }
@@ -662,9 +660,11 @@ export class XMLEncoder implements EEncoder {
         if (isEObjectInternal(eObject)) {
             let uri = eObject.eProxyURI()
             if (!uri) {
-                let eResource = eObject.eResource()
-                if (!eResource) {
-                    if (this._resource && this._resource.eObjectIDManager) {
+                const eResource = eObject.eResource()
+                if (eResource) {
+                    uri = this.getResourceHRef(eResource, eObject)
+                } else {
+                    if (this._resource && this._resource.getObjectIDManager()) {
                         uri = this.getResourceHRef(this._resource, eObject)
                     } else {
                         this.handleDanglingHREF(eObject)
@@ -672,14 +672,16 @@ export class XMLEncoder implements EEncoder {
                     }
                 }
             }
-            uri = this._resource.eURI.relativize(uri)
+            uri = this._resource.getURI().relativize(uri)
             return uri.toString()
         }
         return ""
     }
 
     private handleDanglingHREF(eObject: EObject) {
-        this.error(new EDiagnosticImpl("Object is not contained in a resource.", this._resource.eURI.toString(), 0, 0))
+        this.error(
+            new EDiagnosticImpl("Object is not contained in a resource.", this._resource.getURI().toString(), 0, 0)
+        )
     }
 
     private error(d: EDiagnostic) {
@@ -687,7 +689,7 @@ export class XMLEncoder implements EEncoder {
     }
 
     private getResourceHRef(resource: EResource, object: EObject): URI {
-        let uri = resource.eURI
+        const uri = resource.getURI()
         return new URI({
             scheme: uri.scheme,
             user: uri.user,
@@ -704,26 +706,26 @@ export class XMLEncoder implements EEncoder {
     }
 
     private getClassQName(eClass: EClass): string {
-        return this.getElementQName(eClass.ePackage, this.getXmlName(eClass), false)
+        return this.getElementQName(eClass.getEPackage(), this.getXmlName(eClass), false)
     }
 
     private getFeatureQName(eFeature: EStructuralFeature): string {
         if (this._extendedMetaData) {
-            let name = this._extendedMetaData.getName(eFeature)
-            let namespace = this._extendedMetaData.getNamespace(eFeature)
-            let ePackage = this.getPackageForSpace(namespace)
+            const name = this._extendedMetaData.getName(eFeature)
+            const namespace = this._extendedMetaData.getNamespace(eFeature)
+            const ePackage = this.getPackageForSpace(namespace)
             if (ePackage) {
                 return this.getElementQName(ePackage, name, false)
             } else {
                 return name
             }
         } else {
-            return eFeature.name
+            return eFeature.getName()
         }
     }
 
     private getElementQName(ePackage: EPackage, name: string, mustHavePrefix: boolean): string {
-        let nsPrefix = this.getPrefix(ePackage, mustHavePrefix)
+        const nsPrefix = this.getPrefix(ePackage, mustHavePrefix)
         if (nsPrefix == "") {
             return name
         } else if (name.length == 0) {
@@ -737,15 +739,14 @@ export class XMLEncoder implements EEncoder {
         if (this._extendedMetaData) {
             return this._extendedMetaData.getName(eElement)
         }
-        return eElement.name
+        return eElement.getName()
     }
 
     private getPrefix(ePackage: EPackage, mustHavePrefix: boolean): string {
-        let nsPrefix = this._packages.get(ePackage.nsURI)
+        let nsPrefix = this._packages.get(ePackage.getNsURI())
         if (nsPrefix === undefined) {
-            let nsURI = ePackage.nsURI
             let found = false
-            let prefixes = this._uriToPrefixes.get(ePackage.nsURI)
+            const prefixes = this._uriToPrefixes.get(ePackage.getNsURI())
             if (prefixes) {
                 for (const prefix of prefixes) {
                     nsPrefix = prefix
@@ -756,14 +757,14 @@ export class XMLEncoder implements EEncoder {
                 }
             }
             if (!found) {
-                nsPrefix = ePackage.nsPrefix
+                nsPrefix = ePackage.getNsPrefix()
                 if (nsPrefix.length == 0 && mustHavePrefix) {
                     nsPrefix = "_"
                 }
 
                 if (this._prefixesToURI.has(nsPrefix)) {
-                    let currentValue = this._prefixesToURI.get(nsPrefix)
-                    if (currentValue ? currentValue != ePackage.nsURI : ePackage.nsURI) {
+                    const currentValue = this._prefixesToURI.get(nsPrefix)
+                    if (currentValue ? currentValue != ePackage.getNsURI() : ePackage.getNsURI()) {
                         let index = 1
                         while (this._prefixesToURI.has(nsPrefix + "_" + index.toString())) {
                             index++
@@ -771,24 +772,24 @@ export class XMLEncoder implements EEncoder {
                         nsPrefix += "_" + index.toString()
                     }
                 }
-                this._prefixesToURI.set(nsPrefix, ePackage.nsURI)
+                this._prefixesToURI.set(nsPrefix, ePackage.getNsURI())
             }
-            this._packages.set(ePackage.nsURI, nsPrefix)
+            this._packages.set(ePackage.getNsURI(), nsPrefix)
         }
         return nsPrefix
     }
 
     private setPrefixToNamespace(prefixToNamespaceMap: EMap<string, string>) {
         for (const mapEntry of prefixToNamespaceMap) {
-            let prefix = mapEntry.key
-            let nsURI = mapEntry.value
-            let ePackage = this.getPackageForSpace(nsURI)
+            const prefix = mapEntry.getKey()
+            const nsURI = mapEntry.getValue()
+            const ePackage = this.getPackageForSpace(nsURI)
             if (ePackage) {
-                this._packages.set(ePackage.nsURI, prefix)
+                this._packages.set(ePackage.getNsURI(), prefix)
             }
             this._prefixesToURI.set(prefix, nsURI)
             if (this._uriToPrefixes.has(nsURI)) {
-                let prefixes = this._uriToPrefixes.get(nsURI)
+                const prefixes = this._uriToPrefixes.get(nsURI)
                 prefixes.push(prefix)
                 this._uriToPrefixes.set(nsURI, prefixes)
             } else {
@@ -806,7 +807,7 @@ export class XMLEncoder implements EEncoder {
     }
 
     private shouldSaveFeature(o: EObject, f: EStructuralFeature): boolean {
-        return o.eIsSet(f) || (this._keepDefaults && f.defaultValueLiteral != "")
+        return o.eIsSet(f) || (this._keepDefaults && f.getDefaultValueLiteral() != "")
     }
 
     private isNil(eObject: EObject, eFeature: EStructuralFeature): boolean {
@@ -818,37 +819,37 @@ export class XMLEncoder implements EEncoder {
     }
 
     private getSaveFeatureKind(f: EStructuralFeature): SaveFeatureKind {
-        if (f.isTransient) {
+        if (f.isTransient()) {
             return SaveFeatureKind.Transient
         }
 
         if (isEReference(f)) {
-            if (f.isContainment) {
-                if (f.isMany) {
-                    if (f.isUnsettable) {
+            if (f.isContainment()) {
+                if (f.isMany()) {
+                    if (f.isUnsettable()) {
                         return SaveFeatureKind.ObjectContainManyUnsettable
                     } else {
                         return SaveFeatureKind.ObjectContainMany
                     }
                 } else {
-                    if (f.isUnsettable) {
+                    if (f.isUnsettable()) {
                         return SaveFeatureKind.ObjectContainSingleUnsettable
                     } else {
                         return SaveFeatureKind.ObjectContainSingle
                     }
                 }
             }
-            if (f.eOpposite && f.eOpposite.isContainment) {
+            if (f.getEOpposite()?.isContainment()) {
                 return SaveFeatureKind.Transient
             }
-            if (f.isMany) {
-                if (f.isUnsettable) {
+            if (f.isMany()) {
+                if (f.isUnsettable()) {
                     return SaveFeatureKind.ObjectHREFManyUnsettable
                 } else {
                     return SaveFeatureKind.ObjectHREFMany
                 }
             } else {
-                if (f.isUnsettable) {
+                if (f.isUnsettable()) {
                     return SaveFeatureKind.ObjectHREFSingleUnsettable
                 } else {
                     return SaveFeatureKind.ObjectHREFSingle
@@ -856,15 +857,15 @@ export class XMLEncoder implements EEncoder {
             }
         } else {
             // Attribute
-            let eType = f.eType
+            const eType = f.getEType()
             if (isEDataType(eType))
-                if (!eType.isSerializable) {
+                if (!eType.isSerializable()) {
                     return SaveFeatureKind.Transient
                 }
-            if (f.isMany) {
+            if (f.isMany()) {
                 return SaveFeatureKind.DataTypeMany
             }
-            if (f.isUnsettable) {
+            if (f.isUnsettable()) {
                 return SaveFeatureKind.DataTypeSingleNillable
             }
             return SaveFeatureKind.DataTypeSingle

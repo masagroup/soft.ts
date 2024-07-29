@@ -19,17 +19,17 @@ interface PersonInternal extends Person, ecore.EObjectInternal {}
 
 describe("VideoCassetteImpl", () => {
     test("eStaticClass", () => {
-        let o = new VideoCassetteImpl()
+        const o = new VideoCassetteImpl()
         expect(o.eStaticClass()).toBe(getLibraryPackage().getVideoCassette())
     })
 
     test("getCast", () => {
-        let o = new VideoCassetteImpl()
+        const o = new VideoCassetteImpl()
         expect(o.cast).not.toBeNull()
     })
 
     test("eGetFromID", () => {
-        let o = new VideoCassetteImpl()
+        const o = new VideoCassetteImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)
         expect(o.eGetFromID(LibraryConstants.VIDEO_CASSETTE__CAST, true)).toStrictEqual(o.cast)
         expect(
@@ -41,13 +41,13 @@ describe("VideoCassetteImpl", () => {
     })
 
     test("eSetFromID", () => {
-        let o = new VideoCassetteImpl()
+        const o = new VideoCassetteImpl()
         expect(() => o.eSetFromID(-1, null)).toThrow(Error)
         {
             // list with a value
-            let mockValue = mock<PersonInternal>()
-            let value = instance(mockValue)
-            let l = new ecore.ImmutableEList<Person>([value])
+            const mockValue = mock<PersonInternal>()
+            const value = instance(mockValue)
+            const l = new ecore.ImmutableEList<Person>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
 
             // set list with new contents
@@ -59,19 +59,19 @@ describe("VideoCassetteImpl", () => {
     })
 
     test("eIsSetFromID", () => {
-        let o = new VideoCassetteImpl()
+        const o = new VideoCassetteImpl()
         expect(() => o.eIsSetFromID(-1)).toThrow(Error)
         expect(o.eIsSetFromID(LibraryConstants.VIDEO_CASSETTE__CAST)).toBeFalsy()
     })
 
     test("eUnsetFromID", () => {
-        let o = new VideoCassetteImpl()
+        const o = new VideoCassetteImpl()
         expect(() => o.eUnsetFromID(-1)).toThrow(Error)
         {
             o.eUnsetFromID(LibraryConstants.VIDEO_CASSETTE__CAST)
-            let v = o.eGetFromID(LibraryConstants.VIDEO_CASSETTE__CAST, false)
+            const v = o.eGetFromID(LibraryConstants.VIDEO_CASSETTE__CAST, false)
             expect(v).not.toBeNull()
-            let l = v as ecore.EList<Person>
+            const l = v as ecore.EList<Person>
             expect(l.isEmpty()).toBeTruthy()
         }
     })

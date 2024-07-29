@@ -28,14 +28,14 @@ export class EPackageRegistryImpl implements EPackageRegistry {
     }
 
     registerPackage(pack: EPackage): void {
-        this._packages.set(pack.nsURI, pack)
+        this._packages.set(pack.getNsURI(), pack)
     }
     unregisterPackage(pack: EPackage): void {
-        this._packages.delete(pack.nsURI)
+        this._packages.delete(pack.getNsURI())
     }
 
     getPackage(nsURI: string): EPackage {
-        let p = this._packages.get(nsURI)
+        const p = this._packages.get(nsURI)
         if (p) {
             return p
         } else {
@@ -47,9 +47,9 @@ export class EPackageRegistryImpl implements EPackageRegistry {
     }
 
     getFactory(nsURI: string): EFactory {
-        let p = this._packages.get(nsURI)
+        const p = this._packages.get(nsURI)
         if (p) {
-            return p.eFactoryInstance
+            return p.getEFactoryInstance()
         } else {
             if (this._delegate) {
                 return this._delegate.getFactory(nsURI)
