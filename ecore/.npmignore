@@ -2,11 +2,13 @@
 .vscode
 coverage
 node_modules
+src
 testdata
-**/*.test.*
 
 # configs
 .prettier*
+*.config.js
+*.config.ts
 jest.config.json
 package-cjs.json
 tsconfig*
