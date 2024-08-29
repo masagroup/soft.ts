@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { Mutex } from "async-mutex"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 import { EEncoder } from "./EEncoder.js"
 import {
@@ -158,6 +159,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _contents: EList<EObject> = null
     private _errors: EList<EDiagnostic> = null
     private _warnings: EList<EDiagnostic> = null
+    private _mutex: Mutex = new Mutex()
     private static _defaultURIConverter = new EURIConverterImpl()
 
     getURI(): URI {
@@ -281,54 +283,62 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             if (uriConverter) {
                 const s = await uriConverter.createReadStream(this._uri)
                 if (s) {
-                    await this.loadFromStream(s, options)
+                    await this.doLoadFromStream(s, options)
                 }
             }
         }
     }
 
     async loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
-        if (!this._isLoaded) {
-            const codecs = this.getCodecRegistry()
-
-            // find codec
-            const codec = codecs.getCodec(this._uri)
-            if (!codec) {
-                const uri = this._uri.toString()
-                const msg = `Unable to find decoder for ':${uri}'`
-                const errors = this.getErrors()
-                errors.clear()
-                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
-                throw new Error(msg)
-            }
-
-            // find decoder
-            const decoder = codec.newDecoder(this, options)
-            if (!decoder) {
-                const uri = this._uri.toString()
-                const msg = `Unable to find codec for ':${uri}'`
-                const errors = this.getErrors()
-                errors.clear()
-                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
-                throw new Error(msg)
-            }
-
-            this._isLoading = true
-            const n = this.basicSetLoaded(true, null)
-            const iterable = ensureAsyncIterable(stream)
-            try {
-                await this.doLoadFromStream(decoder, iterable)
-                if (n) {
-                    n.dispatch()
-                }
-            } finally {
-                this._isLoading = false
-            }
-        }
+        await this.doLoadFromStream(stream, options)
     }
 
-    protected async doLoadFromStream(decoder: EDecoder, stream: ReadableStreamLike<BufferLike>): Promise<void> {
-        await decoder.decodeAsync(stream)
+    protected async doLoadFromStream(
+        stream: ReadableStreamLike<BufferLike>,
+        options?: Map<string, any>
+    ): Promise<void> {
+        const release = await this._mutex.acquire()
+        try {
+            if (!this._isLoaded) {
+                const codecs = this.getCodecRegistry()
+
+                // find codec
+                const codec = codecs.getCodec(this._uri)
+                if (!codec) {
+                    const uri = this._uri.toString()
+                    const msg = `Unable to find decoder for ':${uri}'`
+                    const errors = this.getErrors()
+                    errors.clear()
+                    errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                    throw new Error(msg)
+                }
+
+                // find decoder
+                const decoder = codec.newDecoder(this, options)
+                if (!decoder) {
+                    const uri = this._uri.toString()
+                    const msg = `Unable to find codec for ':${uri}'`
+                    const errors = this.getErrors()
+                    errors.clear()
+                    errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                    throw new Error(msg)
+                }
+
+                this._isLoading = true
+                const n = this.basicSetLoaded(true, null)
+                const iterable = ensureAsyncIterable(stream)
+                try {
+                    await decoder.decodeAsync(iterable)
+                    if (n) {
+                        n.dispatch()
+                    }
+                } finally {
+                    this._isLoading = false
+                }
+            }
+        } finally {
+            release()
+        }
     }
 
     loadSync(options?: Map<string, any>) {
@@ -415,7 +425,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const s = await uriConverter.createWriteStream(this._uri)
         if (s) {
             try {
-                await this.saveToStream(s, options)
+                await this.doSaveToStream(s, options)
             } finally {
                 await s.close()
             }
@@ -423,6 +433,10 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     async saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
+        await this.doSaveToStream(stream, options)
+    }
+
+    protected async doSaveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
         // find codec
         const codecs = this.getCodecRegistry()
         const codec = codecs.getCodec(this._uri)
@@ -445,7 +459,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             throw new Error(msg)
         }
         // encode resource
-        await this.doSaveToStream(encoder, stream)
+        await encoder.encodeAsync(this, stream)
     }
 
     saveSync(options?: Map<string, any>) {
@@ -491,14 +505,6 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             return r.value
         }
         return null
-    }
-
-    protected async doSaveToStream(encoder: EEncoder, stream: WritableStream): Promise<void> {
-        try {
-            await encoder.encodeAsync(this, stream)
-        } finally {
-            await stream.close()
-        }
     }
 
     protected isAttachedDetachedRequired(): boolean {
