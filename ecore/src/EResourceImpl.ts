@@ -192,6 +192,10 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return this._isLoading
     }
 
+    protected setLoading( isLoading : boolean ) : void {
+        this._isLoading = isLoading
+    }
+
     eResourceSet(): EResourceSet {
         return this._resourceSet
     }
@@ -324,7 +328,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                     throw new Error(msg)
                 }
 
-                this._isLoading = true
+                this.setLoading(true)
                 const n = this.basicSetLoaded(true, null)
                 const iterable = ensureAsyncIterable(stream)
                 try {
@@ -333,7 +337,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                         n.dispatch()
                     }
                 } finally {
-                    this._isLoading = false
+                    this.setLoading(false)
                 }
             }
         } finally {
@@ -380,14 +384,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             }
 
             // decode from bytes
-            this._isLoading = true
+            this.setLoading(true)
             const n = this.basicSetLoaded(true, null)
             const array = ensureUint8Array(buffer)
             this.doLoadFromBytes(decoder, array)
             if (n) {
                 n.dispatch()
             }
-            this._isLoading = false
+            this.setLoading(false)
         }
     }
 
