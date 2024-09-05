@@ -1,4 +1,5 @@
 import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
+import path from 'path-browserify'
 
 export type URIParts = Partial<
     Readonly<{
@@ -634,4 +635,12 @@ function resolvePath(base: string, child: string, isAbsolute: boolean): string {
         path = path + child
     }
     return normalize(path)
+}
+
+export function createFileURI(p : string) : URI {
+	return p === "" ? null : path.isAbsolute(p) ? new URI( {scheme : "file", path : p} ) : new URI({path : p})
+}
+
+export function createMemoryURI(p : string) : URI {
+	return p === "" ? null : new URI( { scheme : "file", path : p})
 }

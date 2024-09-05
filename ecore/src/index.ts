@@ -106,5 +106,7 @@ export {
     BinaryEncoder,
     URI,
     URIParts,
-    uriToFilePath
+    uriToFilePath,
+    createFileURI,
+    createMemoryURI
 } from "./internal.js"
