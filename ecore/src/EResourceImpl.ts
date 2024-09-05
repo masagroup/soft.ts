@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { Mutex } from "async-mutex"
+import { Mutex, MutexInterface } from "async-mutex"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 import { EEncoder } from "./EEncoder.js"
 import {
@@ -194,6 +194,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected setLoading( isLoading : boolean ) : void {
         this._isLoading = isLoading
+    }
+
+    protected lock() : Promise<MutexInterface.Releaser> {
+        return this._mutex.acquire()
+    }
+
+    protected unlock() : void {
+        this._mutex.release()
     }
 
     eResourceSet(): EResourceSet {
