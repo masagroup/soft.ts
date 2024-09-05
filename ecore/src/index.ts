@@ -19,6 +19,7 @@ export {
     EcoreUtils,
     EDataType,
     EDiagnostic,
+    EDiagnosticImpl,
     EEnum,
     EEnumLiteral,
     EFactory,
