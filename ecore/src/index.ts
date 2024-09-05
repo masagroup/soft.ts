@@ -1,5 +1,6 @@
 export {
     AbstractEAdapter,
+    AbstractNotification,
     BasicEList,
     BasicEMap,
     BasicEDataTypeList,
@@ -77,6 +78,8 @@ export {
     UUIDManager,
     ULIDManager,
     isEAttribute,
+    isEClass,
+    isEDataType,
     isEObject,
     isEEnum,
     isEObjectInternal,
