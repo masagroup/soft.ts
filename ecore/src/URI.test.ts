@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { URI } from "./URI.js"
+import { createMemoryURI, URI } from "./URI.js"
 
 describe("URI", () => {
     test("constructor", () => {
@@ -118,5 +118,8 @@ describe("URI", () => {
             expect(uri).not.toBeNull()
             expect(uri.path).toBe("test2/toto")
         }
+    })
+    test("toString", () => {
+        expect(createMemoryURI("clock.xml").toString()).toEqual("memory:clock.xml")
     })
 })

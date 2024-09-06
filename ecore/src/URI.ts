@@ -82,9 +82,10 @@ function serializeURI(parts: URIParts): string {
     }
     let uri = ""
     if (parts.scheme) {
-        uri += parts.scheme + "://"
+        uri += parts.scheme + ":"
     }
     if (parts.user || parts.host || parts.port) {
+        uri += "//"
         if (parts.user) {
             uri += parts.user + "@"
         }
@@ -642,5 +643,5 @@ export function createFileURI(p : string) : URI {
 }
 
 export function createMemoryURI(p : string) : URI {
-	return p === "" ? null : new URI( { scheme : "file", path : p})
+	return p === "" ? null : new URI( { scheme : "memory", path : p})
 }
