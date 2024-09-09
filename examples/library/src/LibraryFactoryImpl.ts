@@ -54,10 +54,6 @@ export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFact
         return this._instance
     }
 
-    protected constructor() {
-        super()
-    }
-
     create(eClass: ecore.EClass): ecore.EObject {
         switch (eClass.getClassifierID()) {
             case LibraryConstants.BOOK:
@@ -98,7 +94,7 @@ export class LibraryFactoryImpl extends ecore.EFactoryExt implements LibraryFact
     }
 
     createLibraryFromContainer(eContainer: Library): Library {
-        const element = new LibraryImpl()
+        const element = this.createLibrary()
         if (eContainer != null) {
             eContainer.branches.add(element)
         }

@@ -55,10 +55,6 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
         return this._instance
     }
 
-    protected constructor() {
-        super()
-    }
-
     create(eClass: EClass): EObject {
         switch (eClass.getClassifierID()) {
             case EcoreConstants.EATTRIBUTE:
@@ -101,7 +97,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEAttributeFromContainer(eContainer: EClass): EAttribute {
-        const element = new EAttributeExt()
+        const element = this.createEAttribute()
         if (eContainer != null) {
             eContainer.getEStructuralFeatures().add(element)
         }
@@ -109,7 +105,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEAttributeFromContainerAndClassID(eContainer: EClass, classID: number): EAttribute {
-        const element = new EAttributeExt()
+        const element = this.createEAttribute()
         element.setFeatureID(classID)
         if (eContainer != null) {
             eContainer.getEStructuralFeatures().add(element)
@@ -122,7 +118,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEAnnotationFromContainer(eContainer: EModelElement): EAnnotation {
-        const element = new EAnnotationImpl()
+        const element = this.createEAnnotation()
         if (eContainer != null) {
             eContainer.getEAnnotations().add(element)
         }
@@ -134,7 +130,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEClassFromContainer(eContainer: EPackage): EClass {
-        const element = new EClassExt()
+        const element = this.createEClass()
         if (eContainer != null) {
             eContainer.getEClassifiers().add(element)
         }
@@ -142,7 +138,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEClassFromContainerAndClassID(eContainer: EPackage, classID: number): EClass {
-        const element = new EClassExt()
+        const element = this.createEClass()
         element.setClassifierID(classID)
         if (eContainer != null) {
             eContainer.getEClassifiers().add(element)
@@ -155,7 +151,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEDataTypeFromContainer(eContainer: EPackage): EDataType {
-        const element = new EDataTypeExt()
+        const element = this.createEDataType()
         if (eContainer != null) {
             eContainer.getEClassifiers().add(element)
         }
@@ -163,7 +159,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEDataTypeFromContainerAndClassID(eContainer: EPackage, classID: number): EDataType {
-        const element = new EDataTypeExt()
+        const element = this.createEDataType()
         element.setClassifierID(classID)
         if (eContainer != null) {
             eContainer.getEClassifiers().add(element)
@@ -176,7 +172,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEEnumFromContainer(eContainer: EPackage): EEnum {
-        const element = new EEnumExt()
+        const element = this.createEEnum()
         if (eContainer != null) {
             eContainer.getEClassifiers().add(element)
         }
@@ -184,7 +180,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEEnumFromContainerAndClassID(eContainer: EPackage, classID: number): EEnum {
-        const element = new EEnumExt()
+        const element = this.createEEnum()
         element.setClassifierID(classID)
         if (eContainer != null) {
             eContainer.getEClassifiers().add(element)
@@ -197,7 +193,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEEnumLiteralFromContainer(eContainer: EEnum): EEnumLiteral {
-        const element = new EEnumLiteralExt()
+        const element = this.createEEnumLiteral()
         if (eContainer != null) {
             eContainer.getELiterals().add(element)
         }
@@ -209,7 +205,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEFactoryFromContainer(eContainer: EPackage): EFactory {
-        const element = new EFactoryExt()
+        const element = this.createEFactory()
         if (eContainer != null) {
             eContainer.setEFactoryInstance(element)
         }
@@ -225,7 +221,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEOperationFromContainer(eContainer: EClass): EOperation {
-        const element = new EOperationExt()
+        const element = this.createEOperation()
         if (eContainer != null) {
             eContainer.getEOperations().add(element)
         }
@@ -233,7 +229,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEOperationFromContainerAndClassID(eContainer: EClass, classID: number): EOperation {
-        const element = new EOperationExt()
+        const element = this.createEOperation()
         element.setOperationID(classID)
         if (eContainer != null) {
             eContainer.getEOperations().add(element)
@@ -246,7 +242,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEPackageFromContainer(eContainer: EPackage): EPackage {
-        const element = new EPackageExt()
+        const element = this.createEPackage()
         if (eContainer != null) {
             eContainer.getESubPackages().add(element)
         }
@@ -258,7 +254,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEParameterFromContainer(eContainer: EOperation): EParameter {
-        const element = new EParameterImpl()
+        const element = this.createEParameter()
         if (eContainer != null) {
             eContainer.getEParameters().add(element)
         }
@@ -270,7 +266,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEReferenceFromContainer(eContainer: EClass): EReference {
-        const element = new EReferenceExt()
+        const element = this.createEReference()
         if (eContainer != null) {
             eContainer.getEStructuralFeatures().add(element)
         }
@@ -278,7 +274,7 @@ export class EcoreFactoryImpl extends EFactoryExt implements EcoreFactory {
     }
 
     createEReferenceFromContainerAndClassID(eContainer: EClass, classID: number): EReference {
-        const element = new EReferenceExt()
+        const element = this.createEReference()
         element.setFeatureID(classID)
         if (eContainer != null) {
             eContainer.getEStructuralFeatures().add(element)

@@ -37,10 +37,6 @@ export class TournamentFactoryImpl extends ecore.EFactoryExt implements Tourname
         return this._instance
     }
 
-    protected constructor() {
-        super()
-    }
-
     create(eClass: ecore.EClass): ecore.EObject {
         switch (eClass.getClassifierID()) {
             case TournamentConstants.TOURNAMENT:

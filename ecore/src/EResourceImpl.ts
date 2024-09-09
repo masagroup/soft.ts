@@ -192,15 +192,15 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return this._isLoading
     }
 
-    protected setLoading( isLoading : boolean ) : void {
+    protected setLoading(isLoading: boolean): void {
         this._isLoading = isLoading
     }
 
-    protected lock() : Promise<MutexInterface.Releaser> {
+    protected lock(): Promise<MutexInterface.Releaser> {
         return this._mutex.acquire()
     }
 
-    protected unlock() : void {
+    protected unlock(): void {
         this._mutex.release()
     }
 
