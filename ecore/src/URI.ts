@@ -1,5 +1,5 @@
+import path from "path-browserify"
 import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
-import path from 'path-browserify'
 
 export type URIParts = Partial<
     Readonly<{
@@ -143,7 +143,7 @@ export class URI {
         this.path = parts?.path ?? ""
         this.query = parts?.query ?? ""
         this.fragment = parts?.fragment ?? ""
-        this.rawURI = serializeURI(parts)
+        this.rawURI = typeof input === "string" ? input : serializeURI(parts)
     }
 
     toString(): string {
@@ -638,10 +638,10 @@ function resolvePath(base: string, child: string, isAbsolute: boolean): string {
     return normalize(path)
 }
 
-export function createFileURI(p : string) : URI {
-	return p === "" ? null : path.isAbsolute(p) ? new URI( {scheme : "file", path : p} ) : new URI({path : p})
+export function createFileURI(p: string): URI {
+    return p === "" ? null : path.isAbsolute(p) ? new URI({ scheme: "file", path: p }) : new URI({ path: p })
 }
 
-export function createMemoryURI(p : string) : URI {
-	return p === "" ? null : new URI( { scheme : "memory", path : p})
+export function createMemoryURI(p: string): URI {
+    return p === "" ? null : new URI({ scheme: "memory", path: p })
 }
