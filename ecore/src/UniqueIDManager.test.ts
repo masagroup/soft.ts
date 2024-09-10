@@ -96,6 +96,17 @@ describe("IDManager", () => {
             m.clear()
             expect(m.getID(eObject)).toBeUndefined()
         })
+
+        test('detached', () => {
+            const m = new IncrementalIDManager()
+            const mockObject = mock<EObject>()
+            const eObject = instance(mockObject)
+            m.register(eObject)
+            const id = m.getID(eObject)
+            m.unRegister(eObject)
+            expect(m.getID(eObject)).toBeUndefined()
+            expect(m.getDetachedID(eObject)).toBe(id)
+        });
     })
 
     describe("UUIDManager", () => {
@@ -233,5 +244,7 @@ describe("IDManager", () => {
             m.setID(eObject, 2)
             expect(m.getID(eObject)).toBeUndefined()
         })
+        
+        
     })
 })
