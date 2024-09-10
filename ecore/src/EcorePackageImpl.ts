@@ -82,13 +82,9 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
     public static getInstance(): EcorePackageImpl {
         if (!this._instance) {
             this._instance = new EcorePackageImpl()
+            this._instance.initialize(getEcoreFactory(), getEcoreFactory())
         }
         return this._instance
-    }
-
-    constructor() {
-        super()
-        this.initialize(getEcoreFactory(), getEcoreFactory())
     }
 
     protected initialize(packageFactory: EcoreFactory, ecoreFactory: EcoreFactory) {
