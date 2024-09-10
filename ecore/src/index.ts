@@ -57,6 +57,7 @@ export {
     EPackage,
     EPackageExt,
     EPackageRegistry,
+    EPackageRegistryImpl,
     EParameter,
     EParameterImpl,
     EReference,
