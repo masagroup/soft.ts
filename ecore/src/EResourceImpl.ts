@@ -32,6 +32,7 @@ import {
     EResource,
     EResourceConstants,
     EResourceInternal,
+    EResourceListener,
     EResourceSet,
     EStructuralFeature,
     ETreeIterator,
@@ -152,6 +153,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _contents: EList<EObject> = null
     private _errors: EList<EDiagnostic> = null
     private _warnings: EList<EDiagnostic> = null
+    private _listeners: EList<EResourceListener> = null
     private _mutex: Mutex = new Mutex()
     private static _defaultURIConverter = new EURIConverterImpl()
 
@@ -276,6 +278,13 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             this._warnings = new BasicEList<EDiagnostic>()
         }
         return this._warnings
+    }
+
+    getResourceListeners(): EList<EResourceListener> {
+        if (!this._listeners) {
+            this._listeners = new BasicEList<EResourceListener>()
+        }
+        return this._listeners
     }
 
     async load(options?: Map<string, any>): Promise<void> {
@@ -506,7 +515,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     protected isAttachedDetachedRequired(): boolean {
-        return this._objectIDManager != null
+        return this._objectIDManager != null || (this._listeners != null && !this._listeners.isEmpty())
     }
 
     attached(object: EObject): void {
@@ -520,6 +529,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doAttached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.register(object)
+        if (this._listeners) {
+            for (const listener of this._listeners) {
+                listener.attached(object)
+            }
+        }
     }
 
     detached(object: EObject): void {
@@ -533,6 +547,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doDetached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.unRegister(object)
+        if (this._listeners) {
+            for (const listener of this._listeners) {
+                listener.detached(object)
+            }
+        }
     }
 
     basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain {
