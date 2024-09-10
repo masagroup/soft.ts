@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { LibraryConstants, LibraryPackage, getLibraryFactory } from "./internal.js"
+import { LibraryConstants, LibraryFactory, LibraryPackage, getLibraryFactory } from "./internal.js"
 
 export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPackage {
     private static _instance: LibraryPackageImpl = null
@@ -40,14 +40,18 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
         return this._instance
     }
 
-    private constructor() {
+    constructor() {
         super()
+        this.initialize(getLibraryFactory(), ecore.getEcoreFactory())
+    }
+
+    protected initialize(packageFactory: LibraryFactory, ecoreFactory: ecore.EcoreFactory) {
         this.setName(LibraryConstants.eNAME)
         this.setNsPrefix(LibraryConstants.eNS_PREFIX)
         this.setNsURI(LibraryConstants.eNS_URI)
-        this.setEFactoryInstance(getLibraryFactory())
-        this.createPackageContents()
-        this.initializePackageContents()
+        this.setEFactoryInstance(packageFactory)
+        this.createPackageContents(ecoreFactory)
+        this.initializePackageContents(ecoreFactory)
         this.createResource()
     }
 
@@ -255,111 +259,127 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
         return this._bookCategoryType
     }
 
-    private createPackageContents(): void {
-        const factory = ecore.getEcoreFactory()
+    private createPackageContents(ecoreFactory: ecore.EcoreFactory): void {
+        this._addressableClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.ADDRESSABLE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._addressableClass,
+            LibraryConstants.ADDRESSABLE__ADDRESS
+        )
 
-        this._addressableClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.ADDRESSABLE)
-        factory.createEAttributeFromContainerAndClassID(this._addressableClass, LibraryConstants.ADDRESSABLE__ADDRESS)
-
-        this._audioVisualItemClass = factory.createEClassFromContainerAndClassID(
+        this._audioVisualItemClass = ecoreFactory.createEClassFromContainerAndClassID(
             this,
             LibraryConstants.AUDIO_VISUAL_ITEM
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._audioVisualItemClass,
             LibraryConstants.AUDIO_VISUAL_ITEM__TITLE
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._audioVisualItemClass,
             LibraryConstants.AUDIO_VISUAL_ITEM__MINUTES_LENGTH
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._audioVisualItemClass,
             LibraryConstants.AUDIO_VISUAL_ITEM__DAMAGED
         )
 
-        this._bookClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.BOOK)
-        factory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__TITLE)
-        factory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__PAGES)
-        factory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__CATEGORY)
-        factory.createEReferenceFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__AUTHOR)
-        factory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__TABLE_OF_CONTENTS)
-        factory.createEReferenceFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__INDEXES)
+        this._bookClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.BOOK)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__TITLE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__PAGES)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__CATEGORY)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__AUTHOR)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__TABLE_OF_CONTENTS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._bookClass, LibraryConstants.BOOK__INDEXES)
 
-        this._bookIndexClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.BOOK_INDEX)
-        factory.createEAttributeFromContainerAndClassID(this._bookIndexClass, LibraryConstants.BOOK_INDEX__KEY)
-        factory.createEAttributeFromContainerAndClassID(this._bookIndexClass, LibraryConstants.BOOK_INDEX__VALUE)
+        this._bookIndexClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.BOOK_INDEX)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._bookIndexClass, LibraryConstants.BOOK_INDEX__KEY)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._bookIndexClass, LibraryConstants.BOOK_INDEX__VALUE)
 
-        this._bookOnTapeClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.BOOK_ON_TAPE)
-        factory.createEReferenceFromContainerAndClassID(this._bookOnTapeClass, LibraryConstants.BOOK_ON_TAPE__READER)
-        factory.createEReferenceFromContainerAndClassID(this._bookOnTapeClass, LibraryConstants.BOOK_ON_TAPE__AUTHOR)
+        this._bookOnTapeClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.BOOK_ON_TAPE)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._bookOnTapeClass,
+            LibraryConstants.BOOK_ON_TAPE__READER
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._bookOnTapeClass,
+            LibraryConstants.BOOK_ON_TAPE__AUTHOR
+        )
 
-        this._borrowerClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.BORROWER)
-        factory.createEReferenceFromContainerAndClassID(this._borrowerClass, LibraryConstants.BORROWER__BORROWED)
+        this._borrowerClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.BORROWER)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._borrowerClass, LibraryConstants.BORROWER__BORROWED)
 
-        this._circulatingItemClass = factory.createEClassFromContainerAndClassID(
+        this._circulatingItemClass = ecoreFactory.createEClassFromContainerAndClassID(
             this,
             LibraryConstants.CIRCULATING_ITEM
         )
 
-        this._documentRootClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.DOCUMENT_ROOT)
-        factory.createEReferenceFromContainerAndClassID(
+        this._documentRootClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.DOCUMENT_ROOT)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._documentRootClass,
             LibraryConstants.DOCUMENT_ROOT__XMLNS_PREFIX_MAP
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._documentRootClass,
             LibraryConstants.DOCUMENT_ROOT__XSI_SCHEMA_LOCATION
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._documentRootClass,
             LibraryConstants.DOCUMENT_ROOT__LIBRARY
         )
 
-        this._employeeClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.EMPLOYEE)
-        factory.createEReferenceFromContainerAndClassID(this._employeeClass, LibraryConstants.EMPLOYEE__MANAGER)
+        this._employeeClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.EMPLOYEE)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._employeeClass, LibraryConstants.EMPLOYEE__MANAGER)
 
-        this._itemClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.ITEM)
-        factory.createEAttributeFromContainerAndClassID(this._itemClass, LibraryConstants.ITEM__PUBLICATION_DATE)
+        this._itemClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.ITEM)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._itemClass, LibraryConstants.ITEM__PUBLICATION_DATE)
 
-        this._lendableClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.LENDABLE)
-        factory.createEAttributeFromContainerAndClassID(this._lendableClass, LibraryConstants.LENDABLE__COPIES)
-        factory.createEReferenceFromContainerAndClassID(this._lendableClass, LibraryConstants.LENDABLE__BORROWERS)
+        this._lendableClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.LENDABLE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._lendableClass, LibraryConstants.LENDABLE__COPIES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._lendableClass, LibraryConstants.LENDABLE__BORROWERS)
 
-        this._libraryClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.LIBRARY)
-        factory.createEAttributeFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__NAME)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__WRITERS)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__EMPLOYEES)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__BORROWERS)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__STOCK)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__BOOKS)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__BRANCHES)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__PARENT_BRANCH)
-        factory.createEAttributeFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__PEOPLE)
-        factory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__PROPRIETARY)
+        this._libraryClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.LIBRARY)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__NAME)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__WRITERS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__EMPLOYEES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__BORROWERS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__STOCK)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__BOOKS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__BRANCHES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._libraryClass,
+            LibraryConstants.LIBRARY__PARENT_BRANCH
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__PEOPLE)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._libraryClass, LibraryConstants.LIBRARY__PROPRIETARY)
 
-        this._periodicalClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.PERIODICAL)
-        factory.createEAttributeFromContainerAndClassID(this._periodicalClass, LibraryConstants.PERIODICAL__TITLE)
-        factory.createEAttributeFromContainerAndClassID(
+        this._periodicalClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.PERIODICAL)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._periodicalClass, LibraryConstants.PERIODICAL__TITLE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._periodicalClass,
             LibraryConstants.PERIODICAL__ISSUES_PER_YEAR
         )
 
-        this._personClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.PERSON)
-        factory.createEAttributeFromContainerAndClassID(this._personClass, LibraryConstants.PERSON__FIRST_NAME)
-        factory.createEAttributeFromContainerAndClassID(this._personClass, LibraryConstants.PERSON__LAST_NAME)
+        this._personClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.PERSON)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._personClass, LibraryConstants.PERSON__FIRST_NAME)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._personClass, LibraryConstants.PERSON__LAST_NAME)
 
-        this._videoCassetteClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.VIDEO_CASSETTE)
-        factory.createEReferenceFromContainerAndClassID(this._videoCassetteClass, LibraryConstants.VIDEO_CASSETTE__CAST)
+        this._videoCassetteClass = ecoreFactory.createEClassFromContainerAndClassID(
+            this,
+            LibraryConstants.VIDEO_CASSETTE
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._videoCassetteClass,
+            LibraryConstants.VIDEO_CASSETTE__CAST
+        )
 
-        this._writerClass = factory.createEClassFromContainerAndClassID(this, LibraryConstants.WRITER)
-        factory.createEAttributeFromContainerAndClassID(this._writerClass, LibraryConstants.WRITER__NAME)
-        factory.createEReferenceFromContainerAndClassID(this._writerClass, LibraryConstants.WRITER__BOOKS)
+        this._writerClass = ecoreFactory.createEClassFromContainerAndClassID(this, LibraryConstants.WRITER)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._writerClass, LibraryConstants.WRITER__NAME)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._writerClass, LibraryConstants.WRITER__BOOKS)
 
-        this._bookCategoryType = factory.createEEnumFromContainerAndClassID(this, LibraryConstants.BOOK_CATEGORY)
+        this._bookCategoryType = ecoreFactory.createEEnumFromContainerAndClassID(this, LibraryConstants.BOOK_CATEGORY)
     }
 
-    private initializePackageContents(): void {
+    private initializePackageContents(ecoreFactory: ecore.EcoreFactory): void {
         this._audioVisualItemClass.getESuperTypes().add(this._circulatingItemClass)
         this._bookClass.getESuperTypes().add(this._circulatingItemClass)
         this._bookOnTapeClass.getESuperTypes().add(this._audioVisualItemClass)
@@ -1074,97 +1094,96 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
         this.addEEnumLiteral(this.getBookCategory(), "ScienceFiction", "ScienceFiction", 1)
         this.addEEnumLiteral(this.getBookCategory(), "Biography", "Biography", 2)
 
-        this.initializeExtendedMetaDataAnnotations()
-        this.initializeGenTSAnnotations()
+        this.initializeExtendedMetaDataAnnotations(ecoreFactory)
+        this.initializeGenTSAnnotations(ecoreFactory)
     }
 
-    private initializeExtendedMetaDataAnnotations(): void {
+    private initializeExtendedMetaDataAnnotations(ecoreFactory: ecore.EcoreFactory): void {
         const source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
-        const factory = ecore.getEcoreFactory()
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Writers())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getLibrary_Writers())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("group", "#people")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Employees())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getLibrary_Employees())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("group", "#people")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Borrowers())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getLibrary_Borrowers())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("group", "#people")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_ParentBranch())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getLibrary_ParentBranch())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "parent-branch")
             eAnnotation.getDetails().put("kind", "element")
             eAnnotation.getDetails().put("namespace", "##targetNamespace")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_People())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getLibrary_People())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("kind", "group")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getLibrary_Proprietary())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getLibrary_Proprietary())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "owner-pdg")
             eAnnotation.getDetails().put("kind", "element")
             eAnnotation.getDetails().put("namespace", "##targetNamespace")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getItem_PublicationDate())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getItem_PublicationDate())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "publication-date")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getPeriodical_IssuesPerYear())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getPeriodical_IssuesPerYear())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "issues-per-year")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getAudioVisualItem_MinutesLength())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getAudioVisualItem_MinutesLength())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "minutes-length")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_FirstName())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getPerson_FirstName())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "first-name")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getPerson_LastName())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getPerson_LastName())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "last-name")
             eAnnotation.getDetails().put("kind", "attribute")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getDocumentRoot())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "")
             eAnnotation.getDetails().put("kind", "mixed")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XMLNSPrefixMap())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getDocumentRoot_XMLNSPrefixMap())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("kind", "attribute")
             eAnnotation.getDetails().put("name", "xmlns:prefix")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_XSISchemaLocation())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getDocumentRoot_XSISchemaLocation())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("kind", "attribute")
             eAnnotation.getDetails().put("name", "xsi:schemaLocation")
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getDocumentRoot_Library())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getDocumentRoot_Library())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("name", "library")
             eAnnotation.getDetails().put("kind", "element")
@@ -1172,11 +1191,10 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
         }
     }
 
-    private initializeGenTSAnnotations(): void {
+    private initializeGenTSAnnotations(ecoreFactory: ecore.EcoreFactory): void {
         const source = "http://net.masagroup/soft/2020/GenTS"
-        const factory = ecore.getEcoreFactory()
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this)
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this)
             eAnnotation.setSource(source)
             eAnnotation
                 .getDetails()
@@ -1186,7 +1204,7 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
                 )
         }
         {
-            const eAnnotation = factory.createEAnnotationFromContainer(this.getWriter())
+            const eAnnotation = ecoreFactory.createEAnnotationFromContainer(this.getWriter())
             eAnnotation.setSource(source)
             eAnnotation.getDetails().put("extension", "true")
         }

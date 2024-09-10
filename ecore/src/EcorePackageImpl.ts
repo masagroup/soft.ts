@@ -17,6 +17,7 @@ import {
     EPackageExt,
     EReference,
     EcoreConstants,
+    EcoreFactory,
     EcorePackage,
     getEcoreFactory
 } from "./internal.js"
@@ -85,14 +86,18 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         return this._instance
     }
 
-    private constructor() {
+    constructor() {
         super()
+        this.initialize(getEcoreFactory(), getEcoreFactory())
+    }
+
+    protected initialize(packageFactory: EcoreFactory, ecoreFactory: EcoreFactory) {
         this.setName(EcoreConstants.eNAME)
         this.setNsPrefix(EcoreConstants.eNS_PREFIX)
         this.setNsURI(EcoreConstants.eNS_URI)
-        this.setEFactoryInstance(getEcoreFactory())
-        this.createPackageContents()
-        this.initializePackageContents()
+        this.setEFactoryInstance(packageFactory)
+        this.createPackageContents(ecoreFactory)
+        this.initializePackageContents(ecoreFactory)
         this.createResource()
     }
 
@@ -669,398 +674,513 @@ export class EcorePackageImpl extends EPackageExt implements EcorePackage {
         return this._eTreeIteratorType
     }
 
-    private createPackageContents(): void {
-        const factory = getEcoreFactory()
-
-        this._eAnnotationClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EANNOTATION)
-        factory.createEAttributeFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__SOURCE)
-        factory.createEReferenceFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__DETAILS)
-        factory.createEReferenceFromContainerAndClassID(
+    private createPackageContents(ecoreFactory: EcoreFactory): void {
+        this._eAnnotationClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EANNOTATION)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__SOURCE)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eAnnotationClass,
+            EcoreConstants.EANNOTATION__DETAILS
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eAnnotationClass,
             EcoreConstants.EANNOTATION__EMODEL_ELEMENT
         )
-        factory.createEReferenceFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__CONTENTS)
-        factory.createEReferenceFromContainerAndClassID(this._eAnnotationClass, EcoreConstants.EANNOTATION__REFERENCES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eAnnotationClass,
+            EcoreConstants.EANNOTATION__CONTENTS
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eAnnotationClass,
+            EcoreConstants.EANNOTATION__REFERENCES
+        )
 
-        this._eAttributeClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EATTRIBUTE)
-        factory.createEAttributeFromContainerAndClassID(this._eAttributeClass, EcoreConstants.EATTRIBUTE__ID)
-        factory.createEReferenceFromContainerAndClassID(
+        this._eAttributeClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EATTRIBUTE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._eAttributeClass, EcoreConstants.EATTRIBUTE__ID)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eAttributeClass,
             EcoreConstants.EATTRIBUTE__EATTRIBUTE_TYPE
         )
 
-        this._eClassClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ECLASS)
-        factory.createEAttributeFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__ABSTRACT)
-        factory.createEAttributeFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__INTERFACE)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EATTRIBUTES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EREFERENCES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__ESUPER_TYPES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EOPERATIONS)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__ECONTAINMENT_FEATURES)
-        factory.createEReferenceFromContainerAndClassID(
+        this._eClassClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.ECLASS)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__ABSTRACT)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__INTERFACE)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eClassClass,
+            EcoreConstants.ECLASS__ESTRUCTURAL_FEATURES
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EATTRIBUTES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EREFERENCES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__ESUPER_TYPES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EOPERATIONS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eClassClass,
+            EcoreConstants.ECLASS__ECONTAINMENT_FEATURES
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__ECROSS_REFERENCE_FEATURES
         )
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_ATTRIBUTES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_REFERENCES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_CONTAINMENTS)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_CROSS_REFERENCES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_OPERATIONS)
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_ATTRIBUTES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_REFERENCES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eClassClass,
+            EcoreConstants.ECLASS__EALL_CONTAINMENTS
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eClassClass,
+            EcoreConstants.ECLASS__EALL_CROSS_REFERENCES
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_OPERATIONS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__EALL_STRUCTURAL_FEATURES
         )
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_SUPER_TYPES)
-        factory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EID_ATTRIBUTE)
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EALL_SUPER_TYPES)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__EID_ATTRIBUTE)
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__IS_SUPER_TYPE_OF_ECLASS
         )
-        factory.createEOperationFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__GET_FEATURE_COUNT)
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
+            this._eClassClass,
+            EcoreConstants.ECLASS__GET_FEATURE_COUNT
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_EINT
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__GET_ESTRUCTURAL_FEATURE_ESTRING
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__GET_FEATURE_ID_ESTRUCTURALFEATURE
         )
-        factory.createEOperationFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__GET_OPERATION_COUNT)
-        factory.createEOperationFromContainerAndClassID(this._eClassClass, EcoreConstants.ECLASS__GET_EOPERATION_EINT)
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
+            this._eClassClass,
+            EcoreConstants.ECLASS__GET_OPERATION_COUNT
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
+            this._eClassClass,
+            EcoreConstants.ECLASS__GET_EOPERATION_EINT
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__GET_OPERATION_ID_EOPERATION
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__GET_OVERRIDE_EOPERATION
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassClass,
             EcoreConstants.ECLASS__GET_FEATURE_TYPE_ESTRUCTURALFEATURE
         )
 
-        this._eClassifierClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ECLASSIFIER)
-        factory.createEAttributeFromContainerAndClassID(
+        this._eClassifierClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.ECLASSIFIER)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
             EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
             EcoreConstants.ECLASSIFIER__INSTANCE_CLASS
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
             EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
             EcoreConstants.ECLASSIFIER__DEFAULT_VALUE
         )
-        factory.createEReferenceFromContainerAndClassID(this._eClassifierClass, EcoreConstants.ECLASSIFIER__EPACKAGE)
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eClassifierClass,
+            EcoreConstants.ECLASSIFIER__EPACKAGE
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eClassifierClass,
             EcoreConstants.ECLASSIFIER__CLASSIFIER_ID
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eClassifierClass,
             EcoreConstants.ECLASSIFIER__IS_INSTANCE_EJAVAOBJECT
         )
 
-        this._eDataTypeClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EDATA_TYPE)
-        factory.createEAttributeFromContainerAndClassID(this._eDataTypeClass, EcoreConstants.EDATA_TYPE__SERIALIZABLE)
+        this._eDataTypeClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EDATA_TYPE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eDataTypeClass,
+            EcoreConstants.EDATA_TYPE__SERIALIZABLE
+        )
 
-        this._eEnumClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EENUM)
-        factory.createEReferenceFromContainerAndClassID(this._eEnumClass, EcoreConstants.EENUM__ELITERALS)
-        factory.createEOperationFromContainerAndClassID(
+        this._eEnumClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EENUM)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eEnumClass, EcoreConstants.EENUM__ELITERALS)
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eEnumClass,
             EcoreConstants.EENUM__GET_EENUM_LITERAL_ESTRING
         )
-        factory.createEOperationFromContainerAndClassID(this._eEnumClass, EcoreConstants.EENUM__GET_EENUM_LITERAL_EINT)
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
+            this._eEnumClass,
+            EcoreConstants.EENUM__GET_EENUM_LITERAL_EINT
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eEnumClass,
             EcoreConstants.EENUM__GET_EENUM_LITERAL_BY_LITERAL_ESTRING
         )
 
-        this._eEnumLiteralClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EENUM_LITERAL)
-        factory.createEAttributeFromContainerAndClassID(this._eEnumLiteralClass, EcoreConstants.EENUM_LITERAL__VALUE)
-        factory.createEAttributeFromContainerAndClassID(this._eEnumLiteralClass, EcoreConstants.EENUM_LITERAL__INSTANCE)
-        factory.createEAttributeFromContainerAndClassID(this._eEnumLiteralClass, EcoreConstants.EENUM_LITERAL__LITERAL)
-        factory.createEReferenceFromContainerAndClassID(this._eEnumLiteralClass, EcoreConstants.EENUM_LITERAL__EENUM)
+        this._eEnumLiteralClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EENUM_LITERAL)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eEnumLiteralClass,
+            EcoreConstants.EENUM_LITERAL__VALUE
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eEnumLiteralClass,
+            EcoreConstants.EENUM_LITERAL__INSTANCE
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eEnumLiteralClass,
+            EcoreConstants.EENUM_LITERAL__LITERAL
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eEnumLiteralClass,
+            EcoreConstants.EENUM_LITERAL__EENUM
+        )
 
-        this._eFactoryClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EFACTORY)
-        factory.createEReferenceFromContainerAndClassID(this._eFactoryClass, EcoreConstants.EFACTORY__EPACKAGE)
-        factory.createEOperationFromContainerAndClassID(this._eFactoryClass, EcoreConstants.EFACTORY__CREATE_ECLASS)
-        factory.createEOperationFromContainerAndClassID(
+        this._eFactoryClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EFACTORY)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eFactoryClass, EcoreConstants.EFACTORY__EPACKAGE)
+        ecoreFactory.createEOperationFromContainerAndClassID(
+            this._eFactoryClass,
+            EcoreConstants.EFACTORY__CREATE_ECLASS
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eFactoryClass,
             EcoreConstants.EFACTORY__CREATE_FROM_STRING_EDATATYPE_ESTRING
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eFactoryClass,
             EcoreConstants.EFACTORY__CONVERT_TO_STRING_EDATATYPE_EJAVAOBJECT
         )
 
-        this._eGenericTypeClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EGENERIC_TYPE)
-        factory.createEReferenceFromContainerAndClassID(
+        this._eGenericTypeClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EGENERIC_TYPE)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
             EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
             EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
             EcoreConstants.EGENERIC_TYPE__ERAW_TYPE
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
             EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
             EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eGenericTypeClass,
             EcoreConstants.EGENERIC_TYPE__ECLASSIFIER
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eGenericTypeClass,
             EcoreConstants.EGENERIC_TYPE__IS_INSTANCE_EJAVAOBJECT
         )
 
-        this._eModelElementClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EMODEL_ELEMENT)
-        factory.createEReferenceFromContainerAndClassID(
+        this._eModelElementClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EMODEL_ELEMENT)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eModelElementClass,
             EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eModelElementClass,
             EcoreConstants.EMODEL_ELEMENT__GET_EANNOTATION_ESTRING
         )
 
-        this._eNamedElementClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ENAMED_ELEMENT)
-        factory.createEAttributeFromContainerAndClassID(this._eNamedElementClass, EcoreConstants.ENAMED_ELEMENT__NAME)
+        this._eNamedElementClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.ENAMED_ELEMENT)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eNamedElementClass,
+            EcoreConstants.ENAMED_ELEMENT__NAME
+        )
 
-        this._eObjectClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EOBJECT)
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECLASS)
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__EIS_PROXY)
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ERESOURCE)
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECONTAINER)
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECONTAINING_FEATURE)
-        factory.createEOperationFromContainerAndClassID(
+        this._eObjectClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EOBJECT)
+        ecoreFactory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECLASS)
+        ecoreFactory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__EIS_PROXY)
+        ecoreFactory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ERESOURCE)
+        ecoreFactory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECONTAINER)
+        ecoreFactory.createEOperationFromContainerAndClassID(
+            this._eObjectClass,
+            EcoreConstants.EOBJECT__ECONTAINING_FEATURE
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
             EcoreConstants.EOBJECT__ECONTAINMENT_FEATURE
         )
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECONTENTS)
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__EALL_CONTENTS)
-        factory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECROSS_REFERENCES)
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__ECONTENTS)
+        ecoreFactory.createEOperationFromContainerAndClassID(this._eObjectClass, EcoreConstants.EOBJECT__EALL_CONTENTS)
+        ecoreFactory.createEOperationFromContainerAndClassID(
+            this._eObjectClass,
+            EcoreConstants.EOBJECT__ECROSS_REFERENCES
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
             EcoreConstants.EOBJECT__EGET_ESTRUCTURALFEATURE
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
             EcoreConstants.EOBJECT__EGET_ESTRUCTURALFEATURE_EBOOLEAN
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
             EcoreConstants.EOBJECT__ESET_ESTRUCTURALFEATURE_EJAVAOBJECT
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
             EcoreConstants.EOBJECT__EIS_SET_ESTRUCTURALFEATURE
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
             EcoreConstants.EOBJECT__EUNSET_ESTRUCTURALFEATURE
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eObjectClass,
             EcoreConstants.EOBJECT__EINVOKE_EOPERATION_EELIST
         )
 
-        this._eOperationClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EOPERATION)
-        factory.createEReferenceFromContainerAndClassID(
+        this._eOperationClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EOPERATION)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eOperationClass,
             EcoreConstants.EOPERATION__ECONTAINING_CLASS
         )
-        factory.createEReferenceFromContainerAndClassID(this._eOperationClass, EcoreConstants.EOPERATION__EPARAMETERS)
-        factory.createEReferenceFromContainerAndClassID(this._eOperationClass, EcoreConstants.EOPERATION__EEXCEPTIONS)
-        factory.createEAttributeFromContainerAndClassID(this._eOperationClass, EcoreConstants.EOPERATION__OPERATION_ID)
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eOperationClass,
+            EcoreConstants.EOPERATION__EPARAMETERS
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eOperationClass,
+            EcoreConstants.EOPERATION__EEXCEPTIONS
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eOperationClass,
+            EcoreConstants.EOPERATION__OPERATION_ID
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eOperationClass,
             EcoreConstants.EOPERATION__IS_OVERRIDE_OF_EOPERATION
         )
 
-        this._ePackageClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EPACKAGE)
-        factory.createEAttributeFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__NS_URI)
-        factory.createEAttributeFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__NS_PREFIX)
-        factory.createEReferenceFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE)
-        factory.createEReferenceFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__ECLASSIFIERS)
-        factory.createEReferenceFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__ESUB_PACKAGES)
-        factory.createEReferenceFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__ESUPER_PACKAGE)
-        factory.createEOperationFromContainerAndClassID(
+        this._ePackageClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EPACKAGE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__NS_URI)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__NS_PREFIX)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._ePackageClass,
+            EcoreConstants.EPACKAGE__EFACTORY_INSTANCE
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._ePackageClass, EcoreConstants.EPACKAGE__ECLASSIFIERS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._ePackageClass,
+            EcoreConstants.EPACKAGE__ESUB_PACKAGES
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._ePackageClass,
+            EcoreConstants.EPACKAGE__ESUPER_PACKAGE
+        )
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._ePackageClass,
             EcoreConstants.EPACKAGE__GET_ECLASSIFIER_ESTRING
         )
 
-        this._eParameterClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EPARAMETER)
-        factory.createEReferenceFromContainerAndClassID(this._eParameterClass, EcoreConstants.EPARAMETER__EOPERATION)
+        this._eParameterClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EPARAMETER)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eParameterClass,
+            EcoreConstants.EPARAMETER__EOPERATION
+        )
 
-        this._eReferenceClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.EREFERENCE)
-        factory.createEAttributeFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__CONTAINMENT)
-        factory.createEAttributeFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__CONTAINER)
-        factory.createEAttributeFromContainerAndClassID(
+        this._eReferenceClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.EREFERENCE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eReferenceClass,
+            EcoreConstants.EREFERENCE__CONTAINMENT
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eReferenceClass,
+            EcoreConstants.EREFERENCE__CONTAINER
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eReferenceClass,
             EcoreConstants.EREFERENCE__RESOLVE_PROXIES
         )
-        factory.createEReferenceFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__EOPPOSITE)
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eReferenceClass,
+            EcoreConstants.EREFERENCE__EOPPOSITE
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eReferenceClass,
             EcoreConstants.EREFERENCE__EREFERENCE_TYPE
         )
-        factory.createEReferenceFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__EKEYS)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._eReferenceClass, EcoreConstants.EREFERENCE__EKEYS)
 
-        this._eStringToStringMapEntryClass = factory.createEClassFromContainerAndClassID(
+        this._eStringToStringMapEntryClass = ecoreFactory.createEClassFromContainerAndClassID(
             this,
             EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStringToStringMapEntryClass,
             EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStringToStringMapEntryClass,
             EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE
         )
 
-        this._eStructuralFeatureClass = factory.createEClassFromContainerAndClassID(
+        this._eStructuralFeatureClass = ecoreFactory.createEClassFromContainerAndClassID(
             this,
             EcoreConstants.ESTRUCTURAL_FEATURE
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED
         )
-        factory.createEReferenceFromContainerAndClassID(
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID
         )
-        factory.createEOperationFromContainerAndClassID(
+        ecoreFactory.createEOperationFromContainerAndClassID(
             this._eStructuralFeatureClass,
             EcoreConstants.ESTRUCTURAL_FEATURE__GET_CONTAINER_CLASS
         )
 
-        this._eTypeParameterClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ETYPE_PARAMETER)
-        factory.createEReferenceFromContainerAndClassID(
+        this._eTypeParameterClass = ecoreFactory.createEClassFromContainerAndClassID(
+            this,
+            EcoreConstants.ETYPE_PARAMETER
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
             this._eTypeParameterClass,
             EcoreConstants.ETYPE_PARAMETER__EBOUNDS
         )
 
-        this._eTypedElementClass = factory.createEClassFromContainerAndClassID(this, EcoreConstants.ETYPED_ELEMENT)
-        factory.createEAttributeFromContainerAndClassID(
+        this._eTypedElementClass = ecoreFactory.createEClassFromContainerAndClassID(this, EcoreConstants.ETYPED_ELEMENT)
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
             EcoreConstants.ETYPED_ELEMENT__ORDERED
         )
-        factory.createEAttributeFromContainerAndClassID(this._eTypedElementClass, EcoreConstants.ETYPED_ELEMENT__UNIQUE)
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eTypedElementClass,
+            EcoreConstants.ETYPED_ELEMENT__UNIQUE
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
             EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND
         )
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
             EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND
         )
-        factory.createEAttributeFromContainerAndClassID(this._eTypedElementClass, EcoreConstants.ETYPED_ELEMENT__MANY)
-        factory.createEAttributeFromContainerAndClassID(
+        ecoreFactory.createEAttributeFromContainerAndClassID(
+            this._eTypedElementClass,
+            EcoreConstants.ETYPED_ELEMENT__MANY
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._eTypedElementClass,
             EcoreConstants.ETYPED_ELEMENT__REQUIRED
         )
-        factory.createEReferenceFromContainerAndClassID(this._eTypedElementClass, EcoreConstants.ETYPED_ELEMENT__ETYPE)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._eTypedElementClass,
+            EcoreConstants.ETYPED_ELEMENT__ETYPE
+        )
 
-        this._eBigDecimalType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBIG_DECIMAL)
-        this._eBigIntegerType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBIG_INTEGER)
-        this._eBooleanType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBOOLEAN)
-        this._eBooleanObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBOOLEAN_OBJECT)
-        this._eByteType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBYTE)
-        this._eByteArrayType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBYTE_ARRAY)
-        this._eByteObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBYTE_OBJECT)
-        this._eCharType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ECHAR)
-        this._eCharacterObjectType = factory.createEDataTypeFromContainerAndClassID(
+        this._eBigDecimalType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBIG_DECIMAL)
+        this._eBigIntegerType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBIG_INTEGER)
+        this._eBooleanType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBOOLEAN)
+        this._eBooleanObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(
+            this,
+            EcoreConstants.EBOOLEAN_OBJECT
+        )
+        this._eByteType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBYTE)
+        this._eByteArrayType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBYTE_ARRAY)
+        this._eByteObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EBYTE_OBJECT)
+        this._eCharType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ECHAR)
+        this._eCharacterObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(
             this,
             EcoreConstants.ECHARACTER_OBJECT
         )
-        this._eDateType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDATE)
-        this._eDiagnosticChainType = factory.createEDataTypeFromContainerAndClassID(
+        this._eDateType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDATE)
+        this._eDiagnosticChainType = ecoreFactory.createEDataTypeFromContainerAndClassID(
             this,
             EcoreConstants.EDIAGNOSTIC_CHAIN
         )
-        this._eDoubleType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDOUBLE)
-        this._eDoubleObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDOUBLE_OBJECT)
-        this._eEListType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EE_LIST)
-        this._eEnumeratorType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EENUMERATOR)
-        this._eFeatureMapType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFEATURE_MAP)
-        this._eFeatureMapEntryType = factory.createEDataTypeFromContainerAndClassID(
+        this._eDoubleType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EDOUBLE)
+        this._eDoubleObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(
+            this,
+            EcoreConstants.EDOUBLE_OBJECT
+        )
+        this._eEListType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EE_LIST)
+        this._eEnumeratorType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EENUMERATOR)
+        this._eFeatureMapType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFEATURE_MAP)
+        this._eFeatureMapEntryType = ecoreFactory.createEDataTypeFromContainerAndClassID(
             this,
             EcoreConstants.EFEATURE_MAP_ENTRY
         )
-        this._eFloatType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFLOAT)
-        this._eFloatObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFLOAT_OBJECT)
-        this._eIntType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EINT)
-        this._eIntegerObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EINTEGER_OBJECT)
-        this._eInvocationTargetExceptionType = factory.createEDataTypeFromContainerAndClassID(
+        this._eFloatType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFLOAT)
+        this._eFloatObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EFLOAT_OBJECT)
+        this._eIntType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EINT)
+        this._eIntegerObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(
+            this,
+            EcoreConstants.EINTEGER_OBJECT
+        )
+        this._eInvocationTargetExceptionType = ecoreFactory.createEDataTypeFromContainerAndClassID(
             this,
             EcoreConstants.EINVOCATION_TARGET_EXCEPTION
         )
-        this._eJavaClassType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EJAVA_CLASS)
-        this._eJavaObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EJAVA_OBJECT)
-        this._eLongType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ELONG)
-        this._eLongObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ELONG_OBJECT)
-        this._eMapType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EMAP)
-        this._eResourceType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ERESOURCE)
-        this._eResourceSetType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ERESOURCE_SET)
-        this._eShortType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ESHORT)
-        this._eShortObjectType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ESHORT_OBJECT)
-        this._eStringType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ESTRING)
-        this._eTreeIteratorType = factory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ETREE_ITERATOR)
+        this._eJavaClassType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EJAVA_CLASS)
+        this._eJavaObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EJAVA_OBJECT)
+        this._eLongType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ELONG)
+        this._eLongObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ELONG_OBJECT)
+        this._eMapType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.EMAP)
+        this._eResourceType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ERESOURCE)
+        this._eResourceSetType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ERESOURCE_SET)
+        this._eShortType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ESHORT)
+        this._eShortObjectType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ESHORT_OBJECT)
+        this._eStringType = ecoreFactory.createEDataTypeFromContainerAndClassID(this, EcoreConstants.ESTRING)
+        this._eTreeIteratorType = ecoreFactory.createEDataTypeFromContainerAndClassID(
+            this,
+            EcoreConstants.ETREE_ITERATOR
+        )
     }
 
-    private initializePackageContents(): void {
+    private initializePackageContents(ecoreFactory: EcoreFactory): void {
         this._eAnnotationClass.getESuperTypes().add(this._eModelElementClass)
         this._eAttributeClass.getESuperTypes().add(this._eStructuralFeatureClass)
         this._eClassClass.getESuperTypes().add(this._eClassifierClass)
