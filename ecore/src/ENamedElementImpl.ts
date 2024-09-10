@@ -9,15 +9,7 @@
 //
 // *****************************************************************************
 
-import {
-    EClass,
-    EModelElementExt,
-    ENamedElement,
-    EcoreConstants,
-    EventType,
-    Notification,
-    getEcorePackage
-} from "./internal.js"
+import { EClass, EModelElementExt, ENamedElement, EcoreConstants, EventType, Notification, getEcorePackage } from "./internal.js"
 
 export class ENamedElementImpl extends EModelElementExt implements ENamedElement {
     protected _name: string

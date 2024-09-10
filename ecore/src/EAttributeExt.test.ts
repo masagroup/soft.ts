@@ -9,14 +9,7 @@
 
 import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import {
-    EAttribute,
-    EAttributeExt,
-    EDataType,
-    EStructuralFeature,
-    EStructuralFeatureExt,
-    isEAttribute
-} from "./internal.js"
+import { EAttribute, EAttributeExt, EDataType, EStructuralFeature, EStructuralFeatureExt, isEAttribute } from "./internal.js"
 
 describe("EAttributeExt", () => {
     test("basicGetEAttributeType", () => {

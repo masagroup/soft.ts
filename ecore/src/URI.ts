@@ -270,12 +270,7 @@ export class URI {
     }
 
     replacePrefix(oldPrefix: URI, newPrefix: URI): URI {
-        if (
-            this.scheme != oldPrefix.scheme ||
-            this.user != oldPrefix.user ||
-            this.host != oldPrefix.host ||
-            this.port != oldPrefix.port
-        )
+        if (this.scheme != oldPrefix.scheme || this.user != oldPrefix.user || this.host != oldPrefix.host || this.port != oldPrefix.port)
             return null
 
         const oldLen = oldPrefix.path.length
@@ -387,10 +382,7 @@ function needsNormalization(path: Uint8Array): number {
     // Scan segments
     while (p <= end) {
         // Looking at "." or ".." ?
-        if (
-            path[p] == DOT &&
-            (p == end || path[p + 1] == SLASH || (path[p + 1] == DOT && (p + 1 == end || path[p + 2] == SLASH)))
-        ) {
+        if (path[p] == DOT && (p == end || path[p + 1] == SLASH || (path[p + 1] == DOT && (p + 1 == end || path[p + 2] == SLASH)))) {
             normal = false
         }
         ns++

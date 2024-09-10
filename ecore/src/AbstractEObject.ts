@@ -313,19 +313,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                 const featureID = this.eClass().getFeatureID(dynamicFeature)
                                 if (oldValue) {
                                     const oldObject = oldValue as EObjectInternal
-                                    notifications = oldObject.eInverseRemove(
-                                        this,
-                                        EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications
-                                    )
+                                    notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                                 }
                                 if (newValue) {
                                     const newObject = newValue as EObjectInternal
-                                    notifications = newObject.eInverseAdd(
-                                        this,
-                                        EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications
-                                    )
+                                    notifications = newObject.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                                 }
                             } else {
                                 const dynamicReference = dynamicFeature as EReference
@@ -393,19 +385,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                                 const featureID = this.eClass().getFeatureID(dynamicFeature)
                                 if (oldValue) {
                                     const oldObject = oldValue as EObjectInternal
-                                    notifications = oldObject.eInverseRemove(
-                                        this,
-                                        EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications
-                                    )
+                                    notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                                 }
                                 if (newValue) {
                                     const newObject = newValue as EObjectInternal
-                                    notifications = newObject.eInverseAdd(
-                                        this,
-                                        EOPPOSITE_FEATURE_BASE - featureID,
-                                        notifications
-                                    )
+                                    notifications = newObject.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                                 }
                             } else {
                                 const dynamicReference = dynamicFeature as EReference
@@ -537,11 +521,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 if (!isBidirectional(dynamicFeature)) {
                     const featureID = this.eClass().getFeatureID(dynamicFeature)
                     if (oldObject) {
-                        notifications = oldObject.eInverseRemove(
-                            this,
-                            EOPPOSITE_FEATURE_BASE - featureID,
-                            notifications
-                        )
+                        notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                     }
                     if (newObject) {
                         notifications = newObject.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
@@ -654,11 +634,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
     }
 
-    protected eDynamicPropertiesUnset(
-        properties: EDynamicProperties,
-        dynamicFeature: EStructuralFeature,
-        dynamicFeatureID: number
-    ) {
+    protected eDynamicPropertiesUnset(properties: EDynamicProperties, dynamicFeature: EStructuralFeature, dynamicFeatureID: number) {
         if (isContainer(dynamicFeature)) {
             if (this.eInternalContainer()) {
                 const featureID = this.eClass().getFeatureID(dynamicFeature)
@@ -679,11 +655,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 if (!isBidirectional(dynamicFeature)) {
                     if (oldObject) {
                         const featureID = this.eClass().getFeatureID(dynamicFeature)
-                        notifications = oldObject.eInverseRemove(
-                            this,
-                            EOPPOSITE_FEATURE_BASE - featureID,
-                            notifications
-                        )
+                        notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                     }
                 } else {
                     const dynamicReference = dynamicFeature as EReference
@@ -826,13 +798,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (dynamicFeatureID >= 0) {
             const properties = this.eDynamicProperties()
             if (properties) {
-                return this.eDynamicPropertiesInverseRemove(
-                    properties,
-                    otherEnd,
-                    feature,
-                    dynamicFeatureID,
-                    notifications
-                )
+                return this.eDynamicPropertiesInverseRemove(properties, otherEnd, feature, dynamicFeatureID, notifications)
             } else {
                 throw new Error("EObject doesn't define any dynamic properties")
             }
@@ -873,11 +839,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return notifications
     }
 
-    protected eBasicSetContainer(
-        newContainer: EObject,
-        newContainerFeatureID: number,
-        n: ENotificationChain
-    ): ENotificationChain {
+    protected eBasicSetContainer(newContainer: EObject, newContainerFeatureID: number, n: ENotificationChain): ENotificationChain {
         let notifications = n
         let oldResource = this.eInternalResource()
         const oldContainer = this.eInternalContainer()
@@ -885,10 +847,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
         let newResource: EResource = null
         if (oldResource) {
-            if (
-                newContainer &&
-                !this.eObjectContainmentFeature(this, newContainer, newContainerFeatureID).isResolveProxies()
-            ) {
+            if (newContainer && !this.eObjectContainmentFeature(this, newContainer, newContainerFeatureID).isResolveProxies()) {
                 const list = oldResource.eContents() as ENotifyingList<EObject>
                 notifications = list.removeWithNotification(this, notifications)
                 this.eSetInternalResource(null)
@@ -949,11 +908,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         else {
             const eContainer = this.eInternalContainer()
             if (isEObjectInternal(eContainer))
-                return eContainer.eInverseRemove(
-                    this,
-                    EOPPOSITE_FEATURE_BASE - this.eInternalContainerFeatureID(),
-                    notifications
-                )
+                return eContainer.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - this.eInternalContainerFeatureID(), notifications)
         }
         return notifications
     }
@@ -964,8 +919,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             const inverseFeature = feature.getEOpposite()
             if (inverseFeature) {
                 const eContainer = this.eInternalContainer()
-                if (isEObjectInternal(eContainer))
-                    return eContainer.eInverseRemove(this, inverseFeature.getFeatureID(), notifications)
+                if (isEObjectInternal(eContainer)) return eContainer.eInverseRemove(this, inverseFeature.getFeatureID(), notifications)
             }
         }
         return notifications

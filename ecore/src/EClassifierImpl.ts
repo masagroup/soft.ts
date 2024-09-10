@@ -52,15 +52,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
         const oldClassifierID = this._classifierID
         this._classifierID = newClassifierID
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ECLASSIFIER__CLASSIFIER_ID,
-                    oldClassifierID,
-                    newClassifierID
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASSIFIER__CLASSIFIER_ID, oldClassifierID, newClassifierID))
         }
     }
 
@@ -88,13 +80,7 @@ export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
         this._instanceClass = newInstanceClass
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ECLASSIFIER__INSTANCE_CLASS,
-                    oldInstanceClass,
-                    newInstanceClass
-                )
+                new Notification(this, EventType.SET, EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, oldInstanceClass, newInstanceClass)
             )
         }
     }

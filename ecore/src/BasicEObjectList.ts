@@ -21,10 +21,7 @@ import {
     EventType
 } from "./internal.js"
 
-export class BasicEObjectList<O extends EObject>
-    extends AbstractNotifyingList<O>
-    implements EObjectList<O>, ENotifyingList<O>
-{
+export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O> implements EObjectList<O>, ENotifyingList<O> {
     private _owner: EObjectInternal
     private _featureID: number
     private _inverseFeatureID: number

@@ -497,9 +497,7 @@ describe("EcoreFactoryImpl", () => {
         const mockDataType = mock<EDataType>()
         const eDataType = instance(mockDataType)
         when(mockDataType.getClassifierID()).thenReturn(EcoreConstants.EDATE)
-        expect(factory.createFromString(eDataType, "2020-05-12T17:33:10.770Z")).toEqual(
-            new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770))
-        )
+        expect(factory.createFromString(eDataType, "2020-05-12T17:33:10.770Z")).toEqual(new Date(Date.UTC(2020, 4, 12, 17, 33, 10, 770)))
     })
     test("convertEDateToString", () => {
         const factory = EcoreFactoryImpl.getInstance()

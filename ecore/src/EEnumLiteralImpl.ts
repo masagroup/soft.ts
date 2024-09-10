@@ -56,9 +56,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         const oldInstance = this._instance
         this._instance = newInstance
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__INSTANCE, oldInstance, newInstance)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__INSTANCE, oldInstance, newInstance))
         }
     }
 
@@ -72,9 +70,7 @@ export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral 
         const oldLiteral = this._literal
         this._literal = newLiteral
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__LITERAL, oldLiteral, newLiteral)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EENUM_LITERAL__LITERAL, oldLiteral, newLiteral))
         }
     }
 

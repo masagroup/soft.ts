@@ -51,16 +51,7 @@ export class ETypeParameterImpl extends ENamedElementImpl implements ETypeParame
     }
 
     protected initEBounds(): EList<EGenericType> {
-        return new BasicEObjectList<EGenericType>(
-            this,
-            EcoreConstants.ETYPE_PARAMETER__EBOUNDS,
-            -1,
-            true,
-            true,
-            false,
-            false,
-            false
-        )
+        return new BasicEObjectList<EGenericType>(this, EcoreConstants.ETYPE_PARAMETER__EBOUNDS, -1, true, true, false, false, false)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {

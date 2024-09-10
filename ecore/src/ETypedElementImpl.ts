@@ -48,15 +48,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
             this._eType = newEType
             if (newEType != oldEType) {
                 if (this.eNotificationRequired()) {
-                    this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.ETYPED_ELEMENT__ETYPE,
-                            oldEType,
-                            newEType
-                        )
-                    )
+                    this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
                 }
             }
         }
@@ -71,15 +63,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
             this._eType = newEType
             if (newEType != oldEType) {
                 if (this.eNotificationRequired()) {
-                    this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.ETYPED_ELEMENT__ETYPE,
-                            oldEType,
-                            newEType
-                        )
-                    )
+                    this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
                 }
             }
         }
@@ -91,9 +75,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         const oldEType = this._eType
         this._eType = newEType
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
         }
     }
 
@@ -124,9 +106,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         const oldOrdered = this._isOrdered
         this._isOrdered = newOrdered
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ORDERED, oldOrdered, newOrdered)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ORDERED, oldOrdered, newOrdered))
         }
     }
 
@@ -145,9 +125,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         const oldUnique = this._isUnique
         this._isUnique = newUnique
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldUnique, newUnique)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UNIQUE, oldUnique, newUnique))
         }
     }
 
@@ -161,15 +139,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         const oldLowerBound = this._lowerBound
         this._lowerBound = newLowerBound
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND,
-                    oldLowerBound,
-                    newLowerBound
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND, oldLowerBound, newLowerBound))
         }
     }
 
@@ -183,15 +153,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         const oldUpperBound = this._upperBound
         this._upperBound = newUpperBound
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND,
-                    oldUpperBound,
-                    newUpperBound
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__UPPER_BOUND, oldUpperBound, newUpperBound))
         }
     }
 

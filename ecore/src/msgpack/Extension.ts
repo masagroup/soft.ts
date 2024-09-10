@@ -37,15 +37,7 @@ export class ExtensionCodec implements ExtensionCodecType {
         this.register(uuidExtension)
     }
 
-    public register({
-        type,
-        encode,
-        decode
-    }: {
-        type: number
-        encode: ExtensionEncoderType
-        decode: ExtensionDecoderType
-    }): void {
+    public register({ type, encode, decode }: { type: number; encode: ExtensionEncoderType; decode: ExtensionDecoderType }): void {
         if (type >= 0) {
             // custom extensions
             this.encoders[type] = encode

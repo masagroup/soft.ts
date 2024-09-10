@@ -7,16 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    EAttribute,
-    EList,
-    EObject,
-    EObjectInternal,
-    EObjectList,
-    EReference,
-    ImmutableEList,
-    isEObject
-} from "./internal.js"
+import { EAttribute, EList, EObject, EObjectInternal, EObjectList, EReference, ImmutableEList, isEObject } from "./internal.js"
 
 export class DeepCopy {
     private _objects: Map<EObject, EObject> = new Map()
@@ -96,12 +87,7 @@ export class DeepCopy {
     copyReferences() {
         for (const [eObject, copyEObject] of this._objects) {
             for (const eReference of eObject.eClass().getEReferences()) {
-                if (
-                    eReference.isChangeable() &&
-                    !eReference.isDerived() &&
-                    !eReference.isContainment() &&
-                    !eReference.isContainer()
-                ) {
+                if (eReference.isChangeable() && !eReference.isDerived() && !eReference.isContainment() && !eReference.isContainer()) {
                     this.copyReference(eReference, eObject, copyEObject)
                 }
             }

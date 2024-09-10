@@ -50,14 +50,7 @@ class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier
     private _featureID: number
 
-    constructor(
-        notifier: ENotifier,
-        featureID: number,
-        eventType: EventType,
-        oldValue: any,
-        newValue: any,
-        position: number = -1
-    ) {
+    constructor(notifier: ENotifier, featureID: number, eventType: EventType, oldValue: any, newValue: any, position: number = -1) {
         super(eventType, oldValue, newValue, position)
         this._notifier = notifier
         this._featureID = featureID
@@ -170,9 +163,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const oldURI = this._uri
         this._uri = uri
         if (this.eNotificationRequired) {
-            this.eNotify(
-                new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1)
-            )
+            this.eNotify(new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1))
         }
     }
 
@@ -251,9 +242,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 ) {
                     id = this.getIDForObject(eObject)
                     if (id.length == 0) {
-                        fragmentPath.unshift(
-                            eContainer.eURIFragmentSegment(internalEObject.eContainingFeature(), internalEObject)
-                        )
+                        fragmentPath.unshift(eContainer.eURIFragmentSegment(internalEObject.eContainingFeature(), internalEObject))
                     }
                     internalEObject = eContainer
                     if (eContainer.eInternalResource() == this) {
@@ -305,10 +294,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         await this.doLoadFromStream(stream, options)
     }
 
-    protected async doLoadFromStream(
-        stream: ReadableStreamLike<BufferLike>,
-        options?: Map<string, any>
-    ): Promise<void> {
+    protected async doLoadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
         const release = await this._mutex.acquire()
         try {
             if (!this._isLoaded) {
@@ -558,13 +544,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 notifications = new NotificationChain()
             }
             notifications.add(
-                new ResourceNotification(
-                    this,
-                    EResourceConstants.RESOURCE__IS_LOADED,
-                    EventType.SET,
-                    oldLoaded,
-                    this._isLoaded
-                )
+                new ResourceNotification(this, EResourceConstants.RESOURCE__IS_LOADED, EventType.SET, oldLoaded, this._isLoaded)
             )
         }
         return notifications
@@ -583,13 +563,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 notifications = new NotificationChain()
             }
             notifications.add(
-                new ResourceNotification(
-                    this,
-                    EResourceConstants.RESOURCE__RESOURCE_SET,
-                    EventType.SET,
-                    oldResourseSet,
-                    this._resourceSet
-                )
+                new ResourceNotification(this, EResourceConstants.RESOURCE__RESOURCE_SET, EventType.SET, oldResourseSet, this._resourceSet)
             )
         }
         return notifications

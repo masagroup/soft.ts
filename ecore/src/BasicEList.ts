@@ -22,8 +22,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     removeAt(index: number): E {
-        if (index < 0 || index >= this._v.length)
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length)
+        if (index < 0 || index >= this._v.length) throw new RangeError("Index out of bounds: index=" + index + " size=" + this._v.length)
         const e = this._v[index]
         this._v.splice(index, 1)
         this.didRemove(index, e)

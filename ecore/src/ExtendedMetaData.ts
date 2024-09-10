@@ -7,15 +7,7 @@
 //
 // *****************************************************************************
 
-import {
-    EClass,
-    EClassifier,
-    ENamedElement,
-    EPackage,
-    EReference,
-    EStructuralFeature,
-    isEStructuralFeature
-} from "./internal.js"
+import { EClass, EClassifier, ENamedElement, EPackage, EReference, EStructuralFeature, isEStructuralFeature } from "./internal.js"
 
 const annotationURI = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
 

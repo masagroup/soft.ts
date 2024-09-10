@@ -119,12 +119,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         return oldObject
     }
 
-    protected createNotification(
-        eventType: EventType,
-        oldValue: any,
-        newValue: any,
-        position: number = -1
-    ): AbstractNotification {
+    protected createNotification(eventType: EventType, oldValue: any, newValue: any, position: number = -1): AbstractNotification {
         return new (class extends AbstractNotification {
             constructor(private list: AbstractNotifyingList<E>) {
                 super(eventType, oldValue, newValue, position)
@@ -175,10 +170,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         })
     }
 
-    private createAndDispatchNotificationFn(
-        notifications: ENotificationChain,
-        createNotification: () => ENotification
-    ) {
+    private createAndDispatchNotificationFn(notifications: ENotificationChain, createNotification: () => ENotification) {
         if (this.isNotificationRequired()) {
             const notification = createNotification()
             if (notifications != null) {

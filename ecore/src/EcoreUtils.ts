@@ -76,9 +76,7 @@ export class EcoreUtils {
             } else {
                 const proxyURIStr = proxyURI.toString()
                 const ndxHash = proxyURIStr.lastIndexOf("#")
-                const ePackage = getPackageRegistry().getPackage(
-                    ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr
-                )
+                const ePackage = getPackageRegistry().getPackage(ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr)
                 if (ePackage) {
                     const eResource = ePackage.eResource()
                     if (eResource) {
@@ -102,9 +100,7 @@ export class EcoreUtils {
             } else {
                 const proxyURIStr = proxyURI.toString()
                 const ndxHash = proxyURIStr.lastIndexOf("#")
-                const ePackage = getPackageRegistry().getPackage(
-                    ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr
-                )
+                const ePackage = getPackageRegistry().getPackage(ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr)
                 if (ePackage) {
                     const eResource = ePackage.eResource()
                     if (eResource) {
@@ -294,14 +290,7 @@ export class EcoreUtils {
                         eObject.eSetDeliver(eDeliver)
                         if (eDeliver && !eObject.eAdapters().isEmpty()) {
                             eObject.eNotify(
-                                new Notification(
-                                    eObject,
-                                    EventType.RESOLVE,
-                                    eFeature,
-                                    resolve.oldValue,
-                                    resolve.newValue,
-                                    resolve.index
-                                )
+                                new Notification(eObject, EventType.RESOLVE, eFeature, resolve.oldValue, resolve.newValue, resolve.index)
                             )
                         }
                     }

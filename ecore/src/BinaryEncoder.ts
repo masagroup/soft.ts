@@ -192,8 +192,7 @@ export class BinaryEncoder implements EEncoder {
                     const featureData = eClassData.featureData[featureID]
                     if (
                         !featureData.isTransient &&
-                        (check == CheckType.CheckContainer ||
-                            featureData.featureKind != BinaryFeatureKind.bfkObjectContainerProxy)
+                        (check == CheckType.CheckContainer || featureData.featureKind != BinaryFeatureKind.bfkObjectContainerProxy)
                     ) {
                         this.encodeFeatureValue(eObjectInternal, featureID, featureData)
                     }
@@ -372,8 +371,7 @@ export class BinaryEncoder implements EEncoder {
         eFeatureData.featureKind = getBinaryCodecFeatureKind(eFeature)
         if (isEReference(eFeature)) {
             const eReference = eFeature as EReference
-            eFeatureData.isTransient =
-                eReference.isTransient() || (eReference.isContainer() && !eReference.isResolveProxies())
+            eFeatureData.isTransient = eReference.isTransient() || (eReference.isContainer() && !eReference.isResolveProxies())
         } else if (isEAttribute(eFeature)) {
             const eAttribute = eFeature as EAttribute
             const eDataType = eAttribute.getEAttributeType()

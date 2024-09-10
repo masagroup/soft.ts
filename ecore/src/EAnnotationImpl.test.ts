@@ -213,18 +213,14 @@ describe("EAnnotationImpl", () => {
             const mockValue = mock<EObjectInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EObject>([value])
-            when(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())
-            ).thenReturn(null)
+            when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EANNOTATION__CONTENTS, l)
             // checks
             expect(o.getContents().size()).toBe(1)
             expect(o.getContents().get(0)).toBe(value)
-            verify(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())
-            ).once()
+            verify(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())).once()
         }
 
         {
@@ -237,9 +233,7 @@ describe("EAnnotationImpl", () => {
             const key = "Test String"
             const value = "Test String"
             when(mockMap[Symbol.iterator]()).thenReturn(iterator)
-            when(mockIterator.next())
-                .thenReturn({ value: entry, done: false })
-                .thenReturn({ value: undefined, done: true })
+            when(mockIterator.next()).thenReturn({ value: entry, done: false }).thenReturn({ value: undefined, done: true })
             when(mockEntry.getKey()).thenReturn(key)
             when(mockEntry.getValue()).thenReturn(value)
             o.eSetFromID(EcoreConstants.EANNOTATION__DETAILS, map)
@@ -365,9 +359,7 @@ describe("EAnnotationImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EObjectInternal>()
             const value = instance(mockValue)
-            when(
-                mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())
-            ).thenReturn(null)
+            when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EANNOTATION__CONTENTS, anything())).thenReturn(null)
 
             o.getContents().add(value)
 

@@ -74,9 +74,7 @@ describe("BinaryEncoder", () => {
 
         const eDocumentRoot = eResource.eContents().get(0)
         expect(eDocumentRoot).not.toBeNull()
-        expect(
-            idManager.setID(eDocumentRoot, id128.Uuid4.fromCanonical("dc48710b-0e2e-419f-94fb-178c7fc1370b"))
-        ).toBeUndefined()
+        expect(idManager.setID(eDocumentRoot, id128.Uuid4.fromCanonical("dc48710b-0e2e-419f-94fb-178c7fc1370b"))).toBeUndefined()
 
         const e = new BinaryEncoder(eResource, new Map<string, any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
         const r = e.encode(eResource)

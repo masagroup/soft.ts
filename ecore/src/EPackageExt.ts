@@ -82,13 +82,7 @@ export class EPackageExt extends EPackageImpl {
         return resource
     }
 
-    protected initEClass(
-        eClass: EClass,
-        name: string,
-        instanceTypeName: string,
-        isAbstract: boolean,
-        isInterface: boolean
-    ) {
+    protected initEClass(eClass: EClass, name: string, instanceTypeName: string, isAbstract: boolean, isInterface: boolean) {
         eClass.setName(name)
         eClass.setAbstract(isAbstract)
         eClass.setInterface(isInterface)
@@ -236,13 +230,7 @@ export class EPackageExt extends EPackageImpl {
         aClassifier.setInstanceTypeName(instanceTypeName)
     }
 
-    protected initEDataType(
-        aDataType: EDataType,
-        name: string,
-        instanceTypeName: string,
-        defaultValue: string,
-        isSerializable: boolean
-    ) {
+    protected initEDataType(aDataType: EDataType, name: string, instanceTypeName: string, defaultValue: string, isSerializable: boolean) {
         this.initEClassifier(aDataType, name, instanceTypeName)
         aDataType.setSerializable(isSerializable)
         if (defaultValue.length > 0) {

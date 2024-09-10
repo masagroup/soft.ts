@@ -11,15 +11,7 @@
 
 import { instance, mock, reset, verify, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import {
-    ENotificationChain,
-    EObject,
-    EObjectInternal,
-    EOperation,
-    EParameterImpl,
-    EcoreConstants,
-    getEcorePackage
-} from "./internal.js"
+import { ENotificationChain, EObject, EObjectInternal, EOperation, EParameterImpl, EcoreConstants, getEcorePackage } from "./internal.js"
 
 interface EOperationInternal extends EOperation, EObjectInternal {}
 

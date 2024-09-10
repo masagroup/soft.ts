@@ -93,9 +93,7 @@ export class XMLDecoder implements EDecoder {
 
     constructor(resource: EResource, options: Map<string, any>) {
         this._resource = resource
-        this._packageRegistry = this._resource.eResourceSet()
-            ? this._resource.eResourceSet().getPackageRegistry()
-            : getPackageRegistry()
+        this._packageRegistry = this._resource.eResourceSet() ? this._resource.eResourceSet().getPackageRegistry() : getPackageRegistry()
         if (options) {
             this._idAttributeName = options.get(XMLOptions.ID_ATTRIBUTE_NAME)
             this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT)
@@ -315,9 +313,7 @@ export class XMLDecoder implements EDecoder {
     }
 
     private onError(err: Error) {
-        this.error(
-            new EDiagnosticImpl(err.message, this._resource.getURI().toString(), this._parser.line, this._parser.column)
-        )
+        this.error(new EDiagnosticImpl(err.message, this._resource.getURI().toString(), this._parser.line, this._parser.column))
     }
 
     private setAttributes(attributes: { [key: string]: sax.QualifiedAttribute }): {
@@ -382,10 +378,7 @@ export class XMLDecoder implements EDecoder {
             this.handleXSISchemaLocation(xsiSchemaLocation)
         }
 
-        const xsiNoNamespaceSchemaLocation = this.getAttributeValue(
-            XMLConstants.xsiURI,
-            XMLConstants.noNamespaceSchemaLocationAttrib
-        )
+        const xsiNoNamespaceSchemaLocation = this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.noNamespaceSchemaLocationAttrib)
         if (xsiNoNamespaceSchemaLocation) {
             this.handleXSINoNamespaceSchemaLocation(xsiSchemaLocation)
         }
@@ -905,12 +898,7 @@ export class XMLDecoder implements EDecoder {
 
     private handleUnknownURI(name: string) {
         this.error(
-            new EDiagnosticImpl(
-                "URI " + name + " not found",
-                this._resource.getURI()?.toString(),
-                this._parser.column,
-                this._parser.line
-            )
+            new EDiagnosticImpl("URI " + name + " not found", this._resource.getURI()?.toString(), this._parser.column, this._parser.line)
         )
     }
 

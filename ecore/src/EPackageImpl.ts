@@ -74,11 +74,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         if (newEFactoryInstance != oldEFactoryInstance) {
             let notifications: ENotificationChain = null
             if (isEObjectInternal(oldEFactoryInstance)) {
-                notifications = oldEFactoryInstance.eInverseRemove(
-                    this,
-                    EcoreConstants.EFACTORY__EPACKAGE,
-                    notifications
-                )
+                notifications = oldEFactoryInstance.eInverseRemove(this, EcoreConstants.EFACTORY__EPACKAGE, notifications)
             }
             if (isEObjectInternal(newEFactoryInstance)) {
                 notifications = newEFactoryInstance.eInverseAdd(this, EcoreConstants.EFACTORY__EPACKAGE, notifications)
@@ -144,9 +140,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
         const oldNsPrefix = this._nsPrefix
         this._nsPrefix = newNsPrefix
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_PREFIX, oldNsPrefix, newNsPrefix)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EPACKAGE__NS_PREFIX, oldNsPrefix, newNsPrefix))
         }
     }
 
@@ -332,11 +326,7 @@ export class EPackageImpl extends ENamedElementImpl implements EPackage {
                 let msgs = notifications
                 const eFactoryInstance = this.getEFactoryInstance()
                 if (isEObjectInternal(eFactoryInstance)) {
-                    msgs = eFactoryInstance.eInverseRemove(
-                        this,
-                        EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE,
-                        msgs
-                    )
+                    msgs = eFactoryInstance.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, msgs)
                 }
                 return this.basicSetEFactoryInstance(otherEnd as EFactory, msgs)
             }
