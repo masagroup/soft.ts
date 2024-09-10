@@ -62,6 +62,7 @@ export {
     EReference,
     EReferenceImpl,
     EResource,
+    EResourceListener,
     EResourceConstants,
     BufferLike,
     ReadableStreamLike,
