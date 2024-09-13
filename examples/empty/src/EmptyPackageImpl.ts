@@ -18,13 +18,9 @@ export class EmptyPackageImpl extends ecore.EPackageExt implements EmptyPackage 
     public static getInstance(): EmptyPackageImpl {
         if (!this._instance) {
             this._instance = new EmptyPackageImpl()
+            this._instance.initialize(getEmptyFactory(), ecore.getEcoreFactory())
         }
         return this._instance
-    }
-
-    constructor() {
-        super()
-        this.initialize(getEmptyFactory(), ecore.getEcoreFactory())
     }
 
     protected initialize(packageFactory: EmptyFactory, ecoreFactory: ecore.EcoreFactory) {

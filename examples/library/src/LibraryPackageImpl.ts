@@ -36,13 +36,9 @@ export class LibraryPackageImpl extends ecore.EPackageExt implements LibraryPack
     public static getInstance(): LibraryPackageImpl {
         if (!this._instance) {
             this._instance = new LibraryPackageImpl()
+            this._instance.initialize(getLibraryFactory(), ecore.getEcoreFactory())
         }
         return this._instance
-    }
-
-    constructor() {
-        super()
-        this.initialize(getLibraryFactory(), ecore.getEcoreFactory())
     }
 
     protected initialize(packageFactory: LibraryFactory, ecoreFactory: ecore.EcoreFactory) {

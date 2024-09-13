@@ -25,13 +25,9 @@ export class TournamentPackageImpl extends ecore.EPackageExt implements Tourname
     public static getInstance(): TournamentPackageImpl {
         if (!this._instance) {
             this._instance = new TournamentPackageImpl()
+            this._instance.initialize(getTournamentFactory(), ecore.getEcoreFactory())
         }
         return this._instance
-    }
-
-    constructor() {
-        super()
-        this.initialize(getTournamentFactory(), ecore.getEcoreFactory())
     }
 
     protected initialize(packageFactory: TournamentFactory, ecoreFactory: ecore.EcoreFactory) {

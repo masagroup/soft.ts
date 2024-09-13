@@ -1,9 +1,9 @@
-import { anything, capture, instance, mock, verify, when } from "ts-mockito"
-import { describe, expect, test } from "vitest"
-import { EObject, EObjectList, EResourceImpl, EResourceListener, ImmutableEList } from "./internal.js";
+import { instance, mock, verify, when } from "ts-mockito"
+import { describe, test } from "vitest"
+import { EObject, EObjectList, EResourceImpl, EResourceListener, ImmutableEList } from "./internal.js"
 
-describe('EResourceImpl', () => {
-    test('listeners', () => {
+describe("EResourceImpl", () => {
+    test("listeners", () => {
         const r = new EResourceImpl()
         const mockObject = mock<EObject>()
         const object = instance(mockObject)
@@ -19,5 +19,5 @@ describe('EResourceImpl', () => {
         verify(mockListener.attached(object)).once()
         r.detached(object)
         verify(mockListener.detached(object)).once()
-    });
+    })
 })
