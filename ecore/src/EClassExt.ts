@@ -148,9 +148,7 @@ export class EClassExt extends EClassImpl {
     }
 
     getEOperation(operationID: number): EOperation {
-        return operationID >= 0 && operationID < this.getEAllOperations().size()
-            ? this.getEAllOperations().get(operationID)
-            : null
+        return operationID >= 0 && operationID < this.getEAllOperations().size() ? this.getEAllOperations().get(operationID) : null
     }
 
     getOperationID(operation: EOperation): number {

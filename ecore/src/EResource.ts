@@ -14,6 +14,7 @@ import {
     ENotifier,
     EObject,
     EObjectIDManager,
+    EResourceListener,
     EResourceSet,
     ReadableStreamLike,
     URI
@@ -29,7 +30,7 @@ export class EResourceConstants {
     public static readonly RESOURCE__IS_LOADED: number = 4
 }
 
-export interface EResource extends ENotifier {
+export interface EResource extends ENotifier, EResourceListener {
     getURI(): URI
     setURI(uri: URI): void
 
@@ -58,14 +59,13 @@ export interface EResource extends ENotifier {
     saveToString(options?: Map<string, any>): string
     saveToBuffer(options?: Map<string, any>): Uint8Array
 
-    attached(object: EObject): void
-    detached(object: EObject): void
-
     getEObject(uriFragment: string): EObject
     getURIFragment(object: EObject): string
 
     getErrors(): EList<EDiagnostic>
     getWarnings(): EList<EDiagnostic>
+
+    getResourceListeners(): EList<EResourceListener>
 }
 
 export function isEResource(o: any): o is EResource {

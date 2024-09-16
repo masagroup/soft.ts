@@ -178,10 +178,7 @@ describe("EReferenceImpl", () => {
         expect(o.eGetFromID(EcoreConstants.EREFERENCE__CONTAINMENT, true)).toStrictEqual(o.isContainment())
         expect(o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, true)).toStrictEqual(o.getEKeys())
         expect(
-            deepEqual(
-                o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, false),
-                (o.getEKeys() as EObjectList<EAttribute>).getUnResolvedList()
-            )
+            deepEqual(o.eGetFromID(EcoreConstants.EREFERENCE__EKEYS, false), (o.getEKeys() as EObjectList<EAttribute>).getUnResolvedList())
         ).toBeTruthy()
         expect(o.eGetFromID(EcoreConstants.EREFERENCE__EOPPOSITE, true)).toStrictEqual(o.getEOpposite())
         expect(() => o.eGetFromID(EcoreConstants.EREFERENCE__EREFERENCE_TYPE, true)).toThrow(Error)

@@ -60,9 +60,7 @@ export class EFactoryImpl extends EModelElementExt implements EFactory {
                 notifications.dispatch()
             }
         } else if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EFACTORY__EPACKAGE, newEPackage, newEPackage)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EFACTORY__EPACKAGE, newEPackage, newEPackage))
         }
     }
 

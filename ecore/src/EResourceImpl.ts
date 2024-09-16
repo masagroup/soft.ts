@@ -7,6 +7,7 @@
 //
 // *****************************************************************************
 
+import { Mutex, MutexInterface } from "async-mutex"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 import { EEncoder } from "./EEncoder.js"
 import {
@@ -31,6 +32,7 @@ import {
     EResource,
     EResourceConstants,
     EResourceInternal,
+    EResourceListener,
     EResourceSet,
     EStructuralFeature,
     ETreeIterator,
@@ -49,14 +51,7 @@ class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier
     private _featureID: number
 
-    constructor(
-        notifier: ENotifier,
-        featureID: number,
-        eventType: EventType,
-        oldValue: any,
-        newValue: any,
-        position: number = -1
-    ) {
+    constructor(notifier: ENotifier, featureID: number, eventType: EventType, oldValue: any, newValue: any, position: number = -1) {
         super(eventType, oldValue, newValue, position)
         this._notifier = notifier
         this._featureID = featureID
@@ -158,6 +153,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _contents: EList<EObject> = null
     private _errors: EList<EDiagnostic> = null
     private _warnings: EList<EDiagnostic> = null
+    private _listeners: EList<EResourceListener> = null
+    private _mutex: Mutex = new Mutex()
     private static _defaultURIConverter = new EURIConverterImpl()
 
     getURI(): URI {
@@ -168,9 +165,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const oldURI = this._uri
         this._uri = uri
         if (this.eNotificationRequired) {
-            this.eNotify(
-                new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1)
-            )
+            this.eNotify(new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1))
         }
     }
 
@@ -188,6 +183,18 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     isLoading() {
         return this._isLoading
+    }
+
+    protected setLoading(isLoading: boolean): void {
+        this._isLoading = isLoading
+    }
+
+    protected lock(): Promise<MutexInterface.Releaser> {
+        return this._mutex.acquire()
+    }
+
+    protected unlock(): void {
+        this._mutex.release()
     }
 
     eResourceSet(): EResourceSet {
@@ -237,9 +244,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 ) {
                     id = this.getIDForObject(eObject)
                     if (id.length == 0) {
-                        fragmentPath.unshift(
-                            eContainer.eURIFragmentSegment(internalEObject.eContainingFeature(), internalEObject)
-                        )
+                        fragmentPath.unshift(eContainer.eURIFragmentSegment(internalEObject.eContainingFeature(), internalEObject))
                     }
                     internalEObject = eContainer
                     if (eContainer.eInternalResource() == this) {
@@ -275,60 +280,72 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return this._warnings
     }
 
+    getResourceListeners(): EList<EResourceListener> {
+        if (!this._listeners) {
+            this._listeners = new BasicEList<EResourceListener>()
+        }
+        return this._listeners
+    }
+
     async load(options?: Map<string, any>): Promise<void> {
         if (!this._isLoaded) {
             const uriConverter = this.getURIConverter()
             if (uriConverter) {
                 const s = await uriConverter.createReadStream(this._uri)
                 if (s) {
-                    await this.loadFromStream(s, options)
+                    await this.doLoadFromStream(s, options)
                 }
             }
         }
     }
 
     async loadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
-        if (!this._isLoaded) {
-            const codecs = this.getCodecRegistry()
-
-            // find codec
-            const codec = codecs.getCodec(this._uri)
-            if (!codec) {
-                const uri = this._uri.toString()
-                const msg = `Unable to find decoder for ':${uri}'`
-                const errors = this.getErrors()
-                errors.clear()
-                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
-                throw new Error(msg)
-            }
-
-            // find decoder
-            const decoder = codec.newDecoder(this, options)
-            if (!decoder) {
-                const uri = this._uri.toString()
-                const msg = `Unable to find codec for ':${uri}'`
-                const errors = this.getErrors()
-                errors.clear()
-                errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
-                throw new Error(msg)
-            }
-
-            this._isLoading = true
-            const n = this.basicSetLoaded(true, null)
-            const iterable = ensureAsyncIterable(stream)
-            try {
-                await this.doLoadFromStream(decoder, iterable)
-                if (n) {
-                    n.dispatch()
-                }
-            } finally {
-                this._isLoading = false
-            }
-        }
+        await this.doLoadFromStream(stream, options)
     }
 
-    protected async doLoadFromStream(decoder: EDecoder, stream: ReadableStreamLike<BufferLike>): Promise<void> {
-        await decoder.decodeAsync(stream)
+    protected async doLoadFromStream(stream: ReadableStreamLike<BufferLike>, options?: Map<string, any>): Promise<void> {
+        const release = await this._mutex.acquire()
+        try {
+            if (!this._isLoaded) {
+                const codecs = this.getCodecRegistry()
+
+                // find codec
+                const codec = codecs.getCodec(this._uri)
+                if (!codec) {
+                    const uri = this._uri.toString()
+                    const msg = `Unable to find decoder for ':${uri}'`
+                    const errors = this.getErrors()
+                    errors.clear()
+                    errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                    throw new Error(msg)
+                }
+
+                // find decoder
+                const decoder = codec.newDecoder(this, options)
+                if (!decoder) {
+                    const uri = this._uri.toString()
+                    const msg = `Unable to find codec for ':${uri}'`
+                    const errors = this.getErrors()
+                    errors.clear()
+                    errors.add(new EDiagnosticImpl(msg, uri, 0, 0))
+                    throw new Error(msg)
+                }
+
+                this.setLoading(true)
+                const n = this.basicSetLoaded(true, null)
+                const iterable = ensureAsyncIterable(stream)
+                try {
+                    await decoder.decodeAsync(iterable)
+                    if (n) {
+                        n.dispatch()
+                    }
+                } finally {
+                    this.setLoading(false)
+                }
+            }
+        } finally {
+            release()
+        }
     }
 
     loadSync(options?: Map<string, any>) {
@@ -370,14 +387,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             }
 
             // decode from bytes
-            this._isLoading = true
+            this.setLoading(true)
             const n = this.basicSetLoaded(true, null)
             const array = ensureUint8Array(buffer)
             this.doLoadFromBytes(decoder, array)
             if (n) {
                 n.dispatch()
             }
-            this._isLoading = false
+            this.setLoading(false)
         }
     }
 
@@ -415,7 +432,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const s = await uriConverter.createWriteStream(this._uri)
         if (s) {
             try {
-                await this.saveToStream(s, options)
+                await this.doSaveToStream(s, options)
             } finally {
                 await s.close()
             }
@@ -423,6 +440,10 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     async saveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
+        await this.doSaveToStream(stream, options)
+    }
+
+    protected async doSaveToStream(stream: WritableStream, options?: Map<string, any>): Promise<void> {
         // find codec
         const codecs = this.getCodecRegistry()
         const codec = codecs.getCodec(this._uri)
@@ -445,7 +466,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             throw new Error(msg)
         }
         // encode resource
-        await this.doSaveToStream(encoder, stream)
+        await encoder.encodeAsync(this, stream)
     }
 
     saveSync(options?: Map<string, any>) {
@@ -493,16 +514,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         return null
     }
 
-    protected async doSaveToStream(encoder: EEncoder, stream: WritableStream): Promise<void> {
-        try {
-            await encoder.encodeAsync(this, stream)
-        } finally {
-            await stream.close()
-        }
-    }
-
     protected isAttachedDetachedRequired(): boolean {
-        return this._objectIDManager != null
+        return this._objectIDManager != null || (this._listeners != null && !this._listeners.isEmpty())
     }
 
     attached(object: EObject): void {
@@ -516,6 +529,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doAttached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.register(object)
+        if (this._listeners) {
+            for (const listener of this._listeners) {
+                listener.attached(object)
+            }
+        }
     }
 
     detached(object: EObject): void {
@@ -529,6 +547,11 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doDetached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.unRegister(object)
+        if (this._listeners) {
+            for (const listener of this._listeners) {
+                listener.detached(object)
+            }
+        }
     }
 
     basicSetLoaded(isLoaded: boolean, msgs: ENotificationChain): ENotificationChain {
@@ -540,13 +563,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 notifications = new NotificationChain()
             }
             notifications.add(
-                new ResourceNotification(
-                    this,
-                    EResourceConstants.RESOURCE__IS_LOADED,
-                    EventType.SET,
-                    oldLoaded,
-                    this._isLoaded
-                )
+                new ResourceNotification(this, EResourceConstants.RESOURCE__IS_LOADED, EventType.SET, oldLoaded, this._isLoaded)
             )
         }
         return notifications
@@ -565,13 +582,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 notifications = new NotificationChain()
             }
             notifications.add(
-                new ResourceNotification(
-                    this,
-                    EResourceConstants.RESOURCE__RESOURCE_SET,
-                    EventType.SET,
-                    oldResourseSet,
-                    this._resourceSet
-                )
+                new ResourceNotification(this, EResourceConstants.RESOURCE__RESOURCE_SET, EventType.SET, oldResourseSet, this._resourceSet)
             )
         }
         return notifications

@@ -202,10 +202,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     async getEObjectAsync(uri: URI, loadOnDemand: boolean): Promise<EObject> {
         const uriStr = uri.toString()
         const ndxHash = uriStr.lastIndexOf("#")
-        const resource = await this.getResourceAsync(
-            ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri,
-            loadOnDemand
-        )
+        const resource = await this.getResourceAsync(ndxHash != -1 ? new URI(uriStr.slice(0, ndxHash)) : uri, loadOnDemand)
         return resource?.getEObject(ndxHash != -1 ? uriStr.slice(ndxHash + 1) : "")
     }
 

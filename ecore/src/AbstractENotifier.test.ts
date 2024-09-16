@@ -9,15 +9,7 @@
 
 import { anything, capture, instance, mock, verify, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import {
-    AbstractENotifier,
-    AbstractENotifierList,
-    EAdapter,
-    EList,
-    ENotification,
-    EventType,
-    ImmutableEList
-} from "./internal.js"
+import { AbstractENotifier, AbstractENotifierList, EAdapter, EList, ENotification, EventType, ImmutableEList } from "./internal.js"
 
 describe("AbstractENotifierList", () => {
     test("add", () => {

@@ -9,16 +9,7 @@
 //
 // *****************************************************************************
 
-import {
-    BasicEObject,
-    EClass,
-    EList,
-    EObject,
-    EOperation,
-    EStructuralFeature,
-    EcoreConstants,
-    getEcorePackage
-} from "./internal.js"
+import { BasicEObject, EClass, EList, EObject, EOperation, EStructuralFeature, EcoreConstants, getEcorePackage } from "./internal.js"
 
 export class EObjectImpl extends BasicEObject implements EObject {
     constructor() {

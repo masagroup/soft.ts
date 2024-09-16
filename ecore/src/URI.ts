@@ -1,3 +1,4 @@
+import path from "path-browserify"
 import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
 
 export type URIParts = Partial<
@@ -81,9 +82,10 @@ function serializeURI(parts: URIParts): string {
     }
     let uri = ""
     if (parts.scheme) {
-        uri += parts.scheme + "://"
+        uri += parts.scheme + ":"
     }
     if (parts.user || parts.host || parts.port) {
+        uri += "//"
         if (parts.user) {
             uri += parts.user + "@"
         }
@@ -141,7 +143,7 @@ export class URI {
         this.path = parts?.path ?? ""
         this.query = parts?.query ?? ""
         this.fragment = parts?.fragment ?? ""
-        this.rawURI = serializeURI(parts)
+        this.rawURI = typeof input === "string" ? input : serializeURI(parts)
     }
 
     toString(): string {
@@ -268,12 +270,7 @@ export class URI {
     }
 
     replacePrefix(oldPrefix: URI, newPrefix: URI): URI {
-        if (
-            this.scheme != oldPrefix.scheme ||
-            this.user != oldPrefix.user ||
-            this.host != oldPrefix.host ||
-            this.port != oldPrefix.port
-        )
+        if (this.scheme != oldPrefix.scheme || this.user != oldPrefix.user || this.host != oldPrefix.host || this.port != oldPrefix.port)
             return null
 
         const oldLen = oldPrefix.path.length
@@ -385,10 +382,7 @@ function needsNormalization(path: Uint8Array): number {
     // Scan segments
     while (p <= end) {
         // Looking at "." or ".." ?
-        if (
-            path[p] == DOT &&
-            (p == end || path[p + 1] == SLASH || (path[p + 1] == DOT && (p + 1 == end || path[p + 2] == SLASH)))
-        ) {
+        if (path[p] == DOT && (p == end || path[p + 1] == SLASH || (path[p + 1] == DOT && (p + 1 == end || path[p + 2] == SLASH)))) {
             normal = false
         }
         ns++
@@ -634,4 +628,12 @@ function resolvePath(base: string, child: string, isAbsolute: boolean): string {
         path = path + child
     }
     return normalize(path)
+}
+
+export function createFileURI(p: string): URI {
+    return p === "" ? null : path.isAbsolute(p) ? new URI({ scheme: "file", path: p }) : new URI({ path: p })
+}
+
+export function createMemoryURI(p: string): URI {
+    return p === "" ? null : new URI({ scheme: "memory", path: p })
 }

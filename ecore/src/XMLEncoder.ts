@@ -679,9 +679,7 @@ export class XMLEncoder implements EEncoder {
     }
 
     private handleDanglingHREF(eObject: EObject) {
-        this.error(
-            new EDiagnosticImpl("Object is not contained in a resource.", this._resource.getURI().toString(), 0, 0)
-        )
+        this.error(new EDiagnosticImpl("Object is not contained in a resource.", this._resource.getURI().toString(), 0, 0))
     }
 
     private error(d: EDiagnostic) {

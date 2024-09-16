@@ -13,7 +13,7 @@ import { EObject, EObjectIDManager } from "./internal.js"
 type Primitive = string | number
 
 export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjectIDManager {
-    private _detachedToID: Map<EObject, ID> = new Map<EObject, ID>()
+    private _detachedToID: WeakMap<EObject, ID> = new WeakMap<EObject, ID>()
     private _objectToID: Map<EObject, ID> = new Map<EObject, ID>()
     private _idToObject: Map<K, EObject> = new Map<K, EObject>()
 
@@ -41,7 +41,7 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
     }
 
     clear(): void {
-        this._detachedToID.clear()
+        this._detachedToID = new WeakMap<EObject, ID>()
         this._objectToID.clear()
         this._idToObject.clear()
     }

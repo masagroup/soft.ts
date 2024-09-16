@@ -156,9 +156,7 @@ describe("EClassifierImpl", () => {
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__DEFAULT_VALUE, false)).toThrow(Error)
         expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__EPACKAGE, true)).toStrictEqual(o.getEPackage())
         expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS, true)).toStrictEqual(o.getInstanceClass())
-        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, true)).toStrictEqual(
-            o.getInstanceClassName()
-        )
+        expect(o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_CLASS_NAME, true)).toStrictEqual(o.getInstanceClassName())
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ECLASSIFIER__INSTANCE_TYPE_NAME, false)).toThrow(Error)
     })

@@ -9,15 +9,7 @@
 //
 // *****************************************************************************
 
-import {
-    EClass,
-    EObjectImpl,
-    EStringToStringMapEntry,
-    EcoreConstants,
-    EventType,
-    Notification,
-    getEcorePackage
-} from "./internal.js"
+import { EClass, EObjectImpl, EStringToStringMapEntry, EcoreConstants, EventType, Notification, getEcorePackage } from "./internal.js"
 
 export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringToStringMapEntry {
     protected _key: string
@@ -43,9 +35,7 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
         const oldKey = this._key
         this._key = newKey
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, oldKey, newKey)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__KEY, oldKey, newKey))
         }
     }
 
@@ -59,15 +49,7 @@ export class EStringToStringMapEntryImpl extends EObjectImpl implements EStringT
         const oldValue = this._value
         this._value = newValue
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE,
-                    oldValue,
-                    newValue
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRING_TO_STRING_MAP_ENTRY__VALUE, oldValue, newValue))
         }
     }
 

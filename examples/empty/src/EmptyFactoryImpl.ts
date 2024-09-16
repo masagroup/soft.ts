@@ -22,10 +22,6 @@ export class EmptyFactoryImpl extends ecore.EFactoryExt implements EmptyFactory 
         return this._instance
     }
 
-    protected constructor() {
-        super()
-    }
-
     create(eClass: ecore.EClass): ecore.EObject {
         switch (eClass.getClassifierID()) {
             default:

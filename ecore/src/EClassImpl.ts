@@ -282,9 +282,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         const oldAbstract = this._isAbstract
         this._isAbstract = newAbstract
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldAbstract, newAbstract)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASS__ABSTRACT, oldAbstract, newAbstract))
         }
     }
 
@@ -298,9 +296,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         const oldInterface = this._isInterface
         this._isInterface = newInterface
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldInterface, newInterface)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ECLASS__INTERFACE, oldInterface, newInterface))
         }
     }
 
@@ -439,16 +435,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         )
     }
     protected initEAttributes(): void {
-        this._eAttributes = new BasicEObjectList<EAttribute>(
-            this,
-            EcoreConstants.ECLASS__EATTRIBUTES,
-            -1,
-            false,
-            false,
-            false,
-            true,
-            false
-        )
+        this._eAttributes = new BasicEObjectList<EAttribute>(this, EcoreConstants.ECLASS__EATTRIBUTES, -1, false, false, false, true, false)
     }
     protected initEContainmentFeatures(): void {
         this._eContainmentFeatures = new BasicEObjectList<EStructuralFeature>(
@@ -490,16 +477,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         )
     }
     protected initEReferences(): void {
-        this._eReferences = new BasicEObjectList<EReference>(
-            this,
-            EcoreConstants.ECLASS__EREFERENCES,
-            -1,
-            false,
-            false,
-            false,
-            true,
-            false
-        )
+        this._eReferences = new BasicEObjectList<EReference>(this, EcoreConstants.ECLASS__EREFERENCES, -1, false, false, false, true, false)
     }
     protected initEStructuralFeatures(): EList<EStructuralFeature> {
         return new BasicEObjectList<EStructuralFeature>(
@@ -514,16 +492,7 @@ export class EClassImpl extends EClassifierExt implements EClass {
         )
     }
     protected initESuperTypes(): EList<EClass> {
-        return new BasicEObjectList<EClass>(
-            this,
-            EcoreConstants.ECLASS__ESUPER_TYPES,
-            -1,
-            false,
-            false,
-            false,
-            true,
-            false
-        )
+        return new BasicEObjectList<EClass>(this, EcoreConstants.ECLASS__ESUPER_TYPES, -1, false, false, false, true, false)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {

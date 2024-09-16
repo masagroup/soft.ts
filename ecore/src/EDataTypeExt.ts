@@ -29,15 +29,7 @@ export class EDataTypeExt extends EDataTypeImpl implements EDataTypeInternal {
         const oldDefaultValue = this._defaultValue
         this._defaultValue = newDefaultValue
         if (this.eNotificationRequired) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EDATA_TYPE__DEFAULT_VALUE,
-                    oldDefaultValue,
-                    newDefaultValue
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EDATA_TYPE__DEFAULT_VALUE, oldDefaultValue, newDefaultValue))
         }
     }
 }

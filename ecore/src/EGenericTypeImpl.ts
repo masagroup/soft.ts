@@ -59,13 +59,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
             if (newEClassifier != oldEClassifier) {
                 if (this.eNotificationRequired()) {
                     this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.EGENERIC_TYPE__ECLASSIFIER,
-                            oldEClassifier,
-                            newEClassifier
-                        )
+                        new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, oldEClassifier, newEClassifier)
                     )
                 }
             }
@@ -82,13 +76,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
             if (newEClassifier != oldEClassifier) {
                 if (this.eNotificationRequired()) {
                     this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.EGENERIC_TYPE__ECLASSIFIER,
-                            oldEClassifier,
-                            newEClassifier
-                        )
+                        new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, oldEClassifier, newEClassifier)
                     )
                 }
             }
@@ -101,15 +89,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         const oldEClassifier = this._eClassifier
         this._eClassifier = newEClassifier
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EGENERIC_TYPE__ECLASSIFIER,
-                    oldEClassifier,
-                    newEClassifier
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, oldEClassifier, newEClassifier))
         }
     }
 
@@ -179,13 +159,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
             if (newERawType != oldERawType) {
                 if (this.eNotificationRequired()) {
                     this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.EGENERIC_TYPE__ERAW_TYPE,
-                            oldERawType,
-                            newERawType
-                        )
+                        new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, oldERawType, newERawType)
                     )
                 }
             }
@@ -202,13 +176,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
             if (newERawType != oldERawType) {
                 if (this.eNotificationRequired()) {
                     this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.EGENERIC_TYPE__ERAW_TYPE,
-                            oldERawType,
-                            newERawType
-                        )
+                        new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, oldERawType, newERawType)
                     )
                 }
             }
@@ -252,13 +220,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         this._eTypeParameter = newETypeParameter
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER,
-                    oldETypeParameter,
-                    newETypeParameter
-                )
+                new Notification(this, EventType.SET, EcoreConstants.EGENERIC_TYPE__ETYPE_PARAMETER, oldETypeParameter, newETypeParameter)
             )
         }
     }
@@ -321,16 +283,7 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
     }
 
     protected initETypeArguments(): EList<EGenericType> {
-        return new BasicEObjectList<EGenericType>(
-            this,
-            EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
-            -1,
-            true,
-            true,
-            false,
-            false,
-            false
-        )
+        return new BasicEObjectList<EGenericType>(this, EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, -1, true, true, false, false, false)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {

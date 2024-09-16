@@ -34,16 +34,14 @@ export abstract class AbstractEList<E> implements EList<E> {
     }
 
     insert(index: number, e: E): boolean {
-        if (index < 0 || index > this.size())
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
+        if (index < 0 || index > this.size()) throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
         if (this._isUnique && this.contains(e)) return false
         this.doInsert(index, e)
         return true
     }
 
     insertAll(index: number, c: Collection<E>): boolean {
-        if (index < 0 || index > this.size())
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
+        if (index < 0 || index > this.size()) throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
         if (this._isUnique) {
             c = getNonDuplicates<E>(this, c)
             if (c.isEmpty()) return false
@@ -84,18 +82,15 @@ export abstract class AbstractEList<E> implements EList<E> {
     }
 
     get(index: number): E {
-        if (index < 0 || index >= this.size())
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
+        if (index < 0 || index >= this.size()) throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
         return this.doGet(index)
     }
 
     set(index: number, e: E): E {
-        if (index < 0 || index >= this.size())
-            throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
+        if (index < 0 || index >= this.size()) throw new RangeError("Index out of bounds: index=" + index + " size=" + this.size())
         if (this._isUnique) {
             const currIndex = this.indexOf(e)
-            if (currIndex >= 0 && currIndex != index)
-                throw new Error("element already in list : uniqueness constraint is not respected")
+            if (currIndex >= 0 && currIndex != index) throw new Error("element already in list : uniqueness constraint is not respected")
         }
         return this.doSet(index, e)
     }

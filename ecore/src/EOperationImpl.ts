@@ -98,15 +98,7 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
         const oldOperationID = this._operationID
         this._operationID = newOperationID
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EOPERATION__OPERATION_ID,
-                    oldOperationID,
-                    newOperationID
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EOPERATION__OPERATION_ID, oldOperationID, newOperationID))
         }
     }
 
@@ -116,16 +108,7 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
     }
 
     protected initEExceptions(): EList<EClassifier> {
-        return new BasicEObjectList<EClassifier>(
-            this,
-            EcoreConstants.EOPERATION__EEXCEPTIONS,
-            -1,
-            false,
-            false,
-            false,
-            true,
-            true
-        )
+        return new BasicEObjectList<EClassifier>(this, EcoreConstants.EOPERATION__EEXCEPTIONS, -1, false, false, false, true, true)
     }
     protected initEParameters(): EList<EParameter> {
         return new BasicEObjectList<EParameter>(

@@ -350,9 +350,7 @@ describe("EPackageImpl", () => {
             reset(mockValue)
             const mockOther = mock<EFactoryInternal>()
             const other = instance(mockOther)
-            when(
-                mockValue.eInverseRemove(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
-            ).thenReturn(null)
+            when(mockValue.eInverseRemove(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(null)
             o.eBasicInverseAdd(other, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
             expect(o.getEFactoryInstance()).toBe(other)
         }

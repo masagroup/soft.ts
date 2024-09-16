@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { TournamentConstants, TournamentPackage, getTournamentFactory } from "./internal.js"
+import { TournamentConstants, TournamentFactory, TournamentPackage, getTournamentFactory } from "./internal.js"
 
 export class TournamentPackageImpl extends ecore.EPackageExt implements TournamentPackage {
     private static _instance: TournamentPackageImpl = null
@@ -25,18 +25,18 @@ export class TournamentPackageImpl extends ecore.EPackageExt implements Tourname
     public static getInstance(): TournamentPackageImpl {
         if (!this._instance) {
             this._instance = new TournamentPackageImpl()
+            this._instance.initialize(getTournamentFactory(), ecore.getEcoreFactory())
         }
         return this._instance
     }
 
-    private constructor() {
-        super()
+    protected initialize(packageFactory: TournamentFactory, ecoreFactory: ecore.EcoreFactory) {
         this.setName(TournamentConstants.eNAME)
         this.setNsPrefix(TournamentConstants.eNS_PREFIX)
         this.setNsURI(TournamentConstants.eNS_URI)
-        this.setEFactoryInstance(getTournamentFactory())
-        this.createPackageContents()
-        this.initializePackageContents()
+        this.setEFactoryInstance(packageFactory)
+        this.createPackageContents(ecoreFactory)
+        this.initializePackageContents(ecoreFactory)
         this.createResource()
     }
 
@@ -109,39 +109,49 @@ export class TournamentPackageImpl extends ecore.EPackageExt implements Tourname
         return this._matchKindType
     }
 
-    private createPackageContents(): void {
-        const factory = ecore.getEcoreFactory()
+    private createPackageContents(ecoreFactory: ecore.EcoreFactory): void {
+        this._groupClass = ecoreFactory.createEClassFromContainerAndClassID(this, TournamentConstants.GROUP)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._groupClass, TournamentConstants.GROUP__TEAMS)
 
-        this._groupClass = factory.createEClassFromContainerAndClassID(this, TournamentConstants.GROUP)
-        factory.createEReferenceFromContainerAndClassID(this._groupClass, TournamentConstants.GROUP__TEAMS)
+        this._matchClass = ecoreFactory.createEClassFromContainerAndClassID(this, TournamentConstants.MATCH)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__GROUP)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__HOME_TEAM)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__GUEST_TEAM)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__DATE)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__LOCATION)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__KIND)
+        ecoreFactory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__RESULT)
 
-        this._matchClass = factory.createEClassFromContainerAndClassID(this, TournamentConstants.MATCH)
-        factory.createEReferenceFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__GROUP)
-        factory.createEReferenceFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__HOME_TEAM)
-        factory.createEReferenceFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__GUEST_TEAM)
-        factory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__DATE)
-        factory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__LOCATION)
-        factory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__KIND)
-        factory.createEAttributeFromContainerAndClassID(this._matchClass, TournamentConstants.MATCH__RESULT)
-
-        this._namedElementClass = factory.createEClassFromContainerAndClassID(this, TournamentConstants.NAMED_ELEMENT)
-        factory.createEAttributeFromContainerAndClassID(
+        this._namedElementClass = ecoreFactory.createEClassFromContainerAndClassID(
+            this,
+            TournamentConstants.NAMED_ELEMENT
+        )
+        ecoreFactory.createEAttributeFromContainerAndClassID(
             this._namedElementClass,
             TournamentConstants.NAMED_ELEMENT__NAME
         )
 
-        this._teamClass = factory.createEClassFromContainerAndClassID(this, TournamentConstants.TEAM)
-        factory.createEReferenceFromContainerAndClassID(this._teamClass, TournamentConstants.TEAM__GROUP)
+        this._teamClass = ecoreFactory.createEClassFromContainerAndClassID(this, TournamentConstants.TEAM)
+        ecoreFactory.createEReferenceFromContainerAndClassID(this._teamClass, TournamentConstants.TEAM__GROUP)
 
-        this._tournamentClass = factory.createEClassFromContainerAndClassID(this, TournamentConstants.TOURNAMENT)
-        factory.createEReferenceFromContainerAndClassID(this._tournamentClass, TournamentConstants.TOURNAMENT__GROUPS)
-        factory.createEReferenceFromContainerAndClassID(this._tournamentClass, TournamentConstants.TOURNAMENT__TEAMS)
-        factory.createEReferenceFromContainerAndClassID(this._tournamentClass, TournamentConstants.TOURNAMENT__MATCHES)
+        this._tournamentClass = ecoreFactory.createEClassFromContainerAndClassID(this, TournamentConstants.TOURNAMENT)
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._tournamentClass,
+            TournamentConstants.TOURNAMENT__GROUPS
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._tournamentClass,
+            TournamentConstants.TOURNAMENT__TEAMS
+        )
+        ecoreFactory.createEReferenceFromContainerAndClassID(
+            this._tournamentClass,
+            TournamentConstants.TOURNAMENT__MATCHES
+        )
 
-        this._matchKindType = factory.createEEnumFromContainerAndClassID(this, TournamentConstants.MATCH_KIND)
+        this._matchKindType = ecoreFactory.createEEnumFromContainerAndClassID(this, TournamentConstants.MATCH_KIND)
     }
 
-    private initializePackageContents(): void {
+    private initializePackageContents(ecoreFactory: ecore.EcoreFactory): void {
         this._groupClass.getESuperTypes().add(this._namedElementClass)
         this._teamClass.getESuperTypes().add(this._namedElementClass)
         this._tournamentClass.getESuperTypes().add(this._namedElementClass)

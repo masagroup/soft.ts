@@ -96,15 +96,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         const oldFeatureID = this._featureID
         this._featureID = newFeatureID
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID,
-                    oldFeatureID,
-                    newFeatureID
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, oldFeatureID, newFeatureID))
         }
     }
 
@@ -119,13 +111,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         this._isChangeable = newChangeable
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE,
-                    oldChangeable,
-                    newChangeable
-                )
+                new Notification(this, EventType.SET, EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, oldChangeable, newChangeable)
             )
         }
     }
@@ -140,15 +126,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         const oldDerived = this._isDerived
         this._isDerived = newDerived
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED,
-                    oldDerived,
-                    newDerived
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, oldDerived, newDerived))
         }
     }
 
@@ -162,15 +140,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         const oldTransient = this._isTransient
         this._isTransient = newTransient
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT,
-                    oldTransient,
-                    newTransient
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, oldTransient, newTransient))
         }
     }
 
@@ -185,13 +155,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         this._isUnsettable = newUnsettable
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE,
-                    oldUnsettable,
-                    newUnsettable
-                )
+                new Notification(this, EventType.SET, EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, oldUnsettable, newUnsettable)
             )
         }
     }
@@ -206,15 +170,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
         const oldVolatile = this._isVolatile
         this._isVolatile = newVolatile
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE,
-                    oldVolatile,
-                    newVolatile
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ESTRUCTURAL_FEATURE__VOLATILE, oldVolatile, newVolatile))
         }
     }
 
@@ -406,11 +362,7 @@ export class EStructuralFeatureImpl extends ETypedElementExt implements EStructu
     eBasicInverseRemove(otherEnd: EObject, featureID: number, notifications: ENotificationChain): ENotificationChain {
         switch (featureID) {
             case EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS: {
-                return this.eBasicSetContainer(
-                    null,
-                    EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS,
-                    notifications
-                )
+                return this.eBasicSetContainer(null, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, notifications)
             }
             default: {
                 return super.eBasicInverseRemove(otherEnd, featureID, notifications)

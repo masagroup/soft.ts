@@ -9,15 +9,7 @@
 //
 // *****************************************************************************
 
-import {
-    EClass,
-    EClassifierExt,
-    EDataType,
-    EcoreConstants,
-    EventType,
-    Notification,
-    getEcorePackage
-} from "./internal.js"
+import { EClass, EClassifierExt, EDataType, EcoreConstants, EventType, Notification, getEcorePackage } from "./internal.js"
 
 export class EDataTypeImpl extends EClassifierExt implements EDataType {
     protected _isSerializable: boolean
@@ -41,15 +33,7 @@ export class EDataTypeImpl extends EClassifierExt implements EDataType {
         const oldSerializable = this._isSerializable
         this._isSerializable = newSerializable
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EDATA_TYPE__SERIALIZABLE,
-                    oldSerializable,
-                    newSerializable
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EDATA_TYPE__SERIALIZABLE, oldSerializable, newSerializable))
         }
     }
 

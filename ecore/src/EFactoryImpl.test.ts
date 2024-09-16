@@ -186,13 +186,9 @@ describe("EFactoryImpl", () => {
     test("eInvokeFromID", () => {
         const o = new EFactoryImpl()
         expect(() => o.eInvokeFromID(-1, null)).toThrow(Error)
-        expect(() => o.eInvokeFromID(EcoreConstants.EFACTORY__CONVERT_TO_STRING_EDATATYPE_EJAVAOBJECT, null)).toThrow(
-            Error
-        )
+        expect(() => o.eInvokeFromID(EcoreConstants.EFACTORY__CONVERT_TO_STRING_EDATATYPE_EJAVAOBJECT, null)).toThrow(Error)
         expect(() => o.eInvokeFromID(EcoreConstants.EFACTORY__CREATE_ECLASS, null)).toThrow(Error)
-        expect(() => o.eInvokeFromID(EcoreConstants.EFACTORY__CREATE_FROM_STRING_EDATATYPE_ESTRING, null)).toThrow(
-            Error
-        )
+        expect(() => o.eInvokeFromID(EcoreConstants.EFACTORY__CREATE_FROM_STRING_EDATATYPE_ESTRING, null)).toThrow(Error)
     })
 
     test("eBasicInverseAdd", () => {

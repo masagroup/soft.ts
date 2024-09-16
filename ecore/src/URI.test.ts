@@ -8,7 +8,7 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { URI } from "./URI.js"
+import { createMemoryURI, URI } from "./URI.js"
 
 describe("URI", () => {
     test("constructor", () => {
@@ -60,25 +60,15 @@ describe("URI", () => {
     })
 
     test("relativize", () => {
-        expect(new URI("http://host:10020/path/").relativize(new URI("http://host:10020/path/path2"))).toEqual(
-            new URI("path2")
-        )
+        expect(new URI("http://host:10020/path/").relativize(new URI("http://host:10020/path/path2"))).toEqual(new URI("path2"))
         expect(new URI("testdata/path2").relativize(new URI("testdata/path1"))).toEqual(new URI("path1"))
     })
 
     test("resolve", () => {
-        expect(new URI("http://host:10020/path/").resolve(new URI("http://host:10020/path2/"))).toEqual(
-            new URI("http://host:10020/path2/")
-        )
-        expect(new URI("http://host:10020/path/").resolve(new URI("../path2"))).toEqual(
-            new URI("http://host:10020/path2")
-        )
-        expect(new URI("http://host:10020/path/").resolve(new URI("/path2"))).toEqual(
-            new URI("http://host:10020/path2")
-        )
-        expect(new URI("http://host:10020/path/").resolve(new URI("./path2"))).toEqual(
-            new URI("http://host:10020/path/path2")
-        )
+        expect(new URI("http://host:10020/path/").resolve(new URI("http://host:10020/path2/"))).toEqual(new URI("http://host:10020/path2/"))
+        expect(new URI("http://host:10020/path/").resolve(new URI("../path2"))).toEqual(new URI("http://host:10020/path2"))
+        expect(new URI("http://host:10020/path/").resolve(new URI("/path2"))).toEqual(new URI("http://host:10020/path2"))
+        expect(new URI("http://host:10020/path/").resolve(new URI("./path2"))).toEqual(new URI("http://host:10020/path/path2"))
         expect(new URI("path/path2").resolve(new URI("path3"))).toEqual(new URI("path/path3"))
     })
     test("isAbsolute", () => {
@@ -118,5 +108,8 @@ describe("URI", () => {
             expect(uri).not.toBeNull()
             expect(uri.path).toBe("test2/toto")
         }
+    })
+    test("toString", () => {
+        expect(createMemoryURI("clock.xml").toString()).toEqual("memory:clock.xml")
     })
 })

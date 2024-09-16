@@ -97,9 +97,7 @@ export class BinaryDecoder implements EDecoder {
             switch (e.constructor) {
                 case Error: {
                     const err = e as Error
-                    this._resource
-                        .getErrors()
-                        .add(new EDiagnosticImpl(err.message, this._resource.getURI().toString(), -1, -1))
+                    this._resource.getErrors().add(new EDiagnosticImpl(err.message, this._resource.getURI().toString(), -1, -1))
                 }
             }
             return Err(e)
@@ -414,8 +412,7 @@ export class BinaryDecoder implements EDecoder {
     private newFeatureData(eClassData: ClassData, featureID: number): FeatureData {
         const eFeatureName = this.decodeString()
         const eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName)
-        if (!eFeature)
-            throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.getName()} EClass`)
+        if (!eFeature) throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.getName()} EClass`)
         const featureData = new FeatureData()
         featureData.eFeature = eFeature
         featureData.featureID = featureID

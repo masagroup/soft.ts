@@ -10,10 +10,8 @@
 import { ENotifier, EStructuralFeature } from "./internal.js"
 
 export enum EventType {
-    // CREATE An event type indicating that the notifier has been created.
-    CREATE = 1,
     // SET An event type indicating that a feature of the notifier has been set.
-    SET,
+    SET = 0,
     // UNSET An event type indicating that a feature of the notifier has been set.
     UNSET,
     // ADD An event type indicating that a feature of the notifier has been unset.

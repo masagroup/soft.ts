@@ -65,13 +65,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
             if (newEOpposite != oldEOpposite) {
                 if (this.eNotificationRequired()) {
                     this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.EREFERENCE__EOPPOSITE,
-                            oldEOpposite,
-                            newEOpposite
-                        )
+                        new Notification(this, EventType.RESOLVE, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite)
                     )
                 }
             }
@@ -88,13 +82,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
             if (newEOpposite != oldEOpposite) {
                 if (this.eNotificationRequired()) {
                     this.eNotify(
-                        new Notification(
-                            this,
-                            EventType.RESOLVE,
-                            EcoreConstants.EREFERENCE__EOPPOSITE,
-                            oldEOpposite,
-                            newEOpposite
-                        )
+                        new Notification(this, EventType.RESOLVE, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite)
                     )
                 }
             }
@@ -107,9 +95,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         const oldEOpposite = this._eOpposite
         this._eOpposite = newEOpposite
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite))
         }
     }
 
@@ -148,15 +134,7 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         const oldContainment = this._isContainment
         this._isContainment = newContainment
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EREFERENCE__CONTAINMENT,
-                    oldContainment,
-                    newContainment
-                )
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__CONTAINMENT, oldContainment, newContainment))
         }
     }
 
@@ -171,28 +149,13 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         this._isResolveProxies = newResolveProxies
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EREFERENCE__RESOLVE_PROXIES,
-                    oldResolveProxies,
-                    newResolveProxies
-                )
+                new Notification(this, EventType.SET, EcoreConstants.EREFERENCE__RESOLVE_PROXIES, oldResolveProxies, newResolveProxies)
             )
         }
     }
 
     protected initEKeys(): EList<EAttribute> {
-        return new BasicEObjectList<EAttribute>(
-            this,
-            EcoreConstants.EREFERENCE__EKEYS,
-            -1,
-            false,
-            false,
-            false,
-            true,
-            false
-        )
+        return new BasicEObjectList<EAttribute>(this, EcoreConstants.EREFERENCE__EKEYS, -1, false, false, false, true, false)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {

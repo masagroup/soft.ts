@@ -97,11 +97,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
                 notifications = this.eBasicRemoveFromContainer(notifications)
             }
             if (isEObjectInternal(newEModelElement)) {
-                notifications = newEModelElement.eInverseAdd(
-                    this,
-                    EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS,
-                    notifications
-                )
+                notifications = newEModelElement.eInverseAdd(this, EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, notifications)
             }
             notifications = this.basicSetEModelElement(newEModelElement, notifications)
             if (notifications != null) {
@@ -109,13 +105,7 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
             }
         } else if (this.eNotificationRequired()) {
             this.eNotify(
-                new Notification(
-                    this,
-                    EventType.SET,
-                    EcoreConstants.EANNOTATION__EMODEL_ELEMENT,
-                    newEModelElement,
-                    newEModelElement
-                )
+                new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, newEModelElement, newEModelElement)
             )
         }
     }
@@ -149,38 +139,18 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         const oldSource = this._source
         this._source = newSource
         if (this.eNotificationRequired()) {
-            this.eNotify(
-                new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__SOURCE, oldSource, newSource)
-            )
+            this.eNotify(new Notification(this, EventType.SET, EcoreConstants.EANNOTATION__SOURCE, oldSource, newSource))
         }
     }
 
     protected initContents(): EList<EObject> {
-        return new BasicEObjectList<EObject>(
-            this,
-            EcoreConstants.EANNOTATION__CONTENTS,
-            -1,
-            true,
-            true,
-            false,
-            false,
-            false
-        )
+        return new BasicEObjectList<EObject>(this, EcoreConstants.EANNOTATION__CONTENTS, -1, true, true, false, false, false)
     }
     protected initDetails(): EMap<string, string> {
         return new BasicEObjectMap<string, string>(getEcorePackage().getEStringToStringMapEntry())
     }
     protected initReferences(): EList<EObject> {
-        return new BasicEObjectList<EObject>(
-            this,
-            EcoreConstants.EANNOTATION__REFERENCES,
-            -1,
-            false,
-            false,
-            false,
-            true,
-            false
-        )
+        return new BasicEObjectList<EObject>(this, EcoreConstants.EANNOTATION__REFERENCES, -1, false, false, false, true, false)
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {

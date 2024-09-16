@@ -257,13 +257,9 @@ describe("EStructuralFeatureImpl", () => {
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__CHANGEABLE, true)).toStrictEqual(o.isChangeable())
         expect(() => o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, true)).toThrow(Error)
         expect(() => o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE, false)).toThrow(Error)
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, true)).toStrictEqual(
-            o.getDefaultValueLiteral()
-        )
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DEFAULT_VALUE_LITERAL, true)).toStrictEqual(o.getDefaultValueLiteral())
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__DERIVED, true)).toStrictEqual(o.isDerived())
-        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, true)).toStrictEqual(
-            o.getEContainingClass()
-        )
+        expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, true)).toStrictEqual(o.getEContainingClass())
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__FEATURE_ID, true)).toStrictEqual(o.getFeatureID())
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__TRANSIENT, true)).toStrictEqual(o.isTransient())
         expect(o.eGetFromID(EcoreConstants.ESTRUCTURAL_FEATURE__UNSETTABLE, true)).toStrictEqual(o.isUnsettable())

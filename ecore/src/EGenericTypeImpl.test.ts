@@ -329,48 +329,26 @@ describe("EGenericTypeImpl", () => {
         {
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
-            when(
-                mockValue.eInverseAdd(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
-                    anything()
-                )
-            ).thenReturn(null)
+            when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, anything())).thenReturn(null)
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, false)).toBe(value)
-            verify(
-                mockValue.eInverseAdd(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND,
-                    anything()
-                )
-            ).once()
+            verify(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, anything())).once()
         }
         {
             // list with a value
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EGenericType>([value])
-            when(
-                mockValue.eInverseAdd(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
-                    anything()
-                )
-            ).thenReturn(null)
+            when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, anything())).thenReturn(
+                null
+            )
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, l)
             // checks
             expect(o.getETypeArguments().size()).toBe(1)
             expect(o.getETypeArguments().get(0)).toBe(value)
-            verify(
-                mockValue.eInverseAdd(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
-                    anything()
-                )
-            ).once()
+            verify(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, anything())).once()
         }
 
         {
@@ -382,22 +360,10 @@ describe("EGenericTypeImpl", () => {
         {
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
-            when(
-                mockValue.eInverseAdd(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
-                    anything()
-                )
-            ).thenReturn(null)
+            when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, anything())).thenReturn(null)
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, false)).toBe(value)
-            verify(
-                mockValue.eInverseAdd(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND,
-                    anything()
-                )
-            ).once()
+            verify(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, anything())).once()
         }
     })
 
@@ -464,13 +430,9 @@ describe("EGenericTypeImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
-            when(
-                mockValue.eInverseAdd(
-                    o,
-                    EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS,
-                    anything()
-                )
-            ).thenReturn(null)
+            when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, anything())).thenReturn(
+                null
+            )
 
             o.getETypeArguments().add(value)
 

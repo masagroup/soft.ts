@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { EmptyConstants, EmptyPackage, getEmptyFactory } from "./internal.js"
+import { EmptyConstants, EmptyFactory, EmptyPackage, getEmptyFactory } from "./internal.js"
 
 export class EmptyPackageImpl extends ecore.EPackageExt implements EmptyPackage {
     private static _instance: EmptyPackageImpl = null
@@ -18,22 +18,22 @@ export class EmptyPackageImpl extends ecore.EPackageExt implements EmptyPackage 
     public static getInstance(): EmptyPackageImpl {
         if (!this._instance) {
             this._instance = new EmptyPackageImpl()
+            this._instance.initialize(getEmptyFactory(), ecore.getEcoreFactory())
         }
         return this._instance
     }
 
-    private constructor() {
-        super()
+    protected initialize(packageFactory: EmptyFactory, ecoreFactory: ecore.EcoreFactory) {
         this.setName(EmptyConstants.eNAME)
         this.setNsPrefix(EmptyConstants.eNS_PREFIX)
         this.setNsURI(EmptyConstants.eNS_URI)
-        this.setEFactoryInstance(getEmptyFactory())
-        this.createPackageContents()
-        this.initializePackageContents()
+        this.setEFactoryInstance(packageFactory)
+        this.createPackageContents(ecoreFactory)
+        this.initializePackageContents(ecoreFactory)
         this.createResource()
     }
 
-    private createPackageContents(): void {}
+    private createPackageContents(ecoreFactory: ecore.EcoreFactory): void {}
 
-    private initializePackageContents(): void {}
+    private initializePackageContents(ecoreFactory: ecore.EcoreFactory): void {}
 }
