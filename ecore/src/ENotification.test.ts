@@ -7,4 +7,3 @@ describe("ENotification", () => {
         expect(EventType.UNSET).toBe(1)
     })
 })
-
