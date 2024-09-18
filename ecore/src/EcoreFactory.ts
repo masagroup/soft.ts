@@ -26,7 +26,7 @@ import {
     EReference,
     EStringToStringMapEntry,
     ETypeParameter,
-    EcoreFactoryExt
+    EcoreFactoryImpl
 } from "./internal.js"
 
 export interface EcoreFactory extends EFactory {
@@ -79,5 +79,5 @@ export interface EcoreFactory extends EFactory {
 }
 
 export function getEcoreFactory(): EcoreFactory {
-    return EcoreFactoryExt.getInstance()
+    return EcoreFactoryImpl.getInstance()
 }
