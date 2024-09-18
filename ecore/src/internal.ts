@@ -111,7 +111,6 @@ export * from "./EGenericTypeImpl.js"
 export * from "./ETypeParameterImpl.js"
 export * from "./EcorePackageImpl.js"
 export * from "./EcoreFactoryImpl.js"
-export * from "./EcoreFactoryExt.js"
 
 export * from "./ExtendedMetaData.js"
 export * from "./FileURIHandler.js"
