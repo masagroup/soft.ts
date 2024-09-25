@@ -29,19 +29,19 @@
     "node": ">=16"
   },
   "devDependencies": {
-    "@eslint/js": "^9.10.0",
+    "@eslint/js": "^9.11.1",
     "@types/deep-equal": "^1.0.4",
     "@types/eslint__js": "^8.42.3",
     "@vitest/coverage-v8": "^2.1.1",
     "deep-equal": "^2.2.3",
-    "eslint": "^9.10.0",
+    "eslint": "^9.11.1",
     "ncp": "^2.0.0",
     "prettier": "^3.3.3",
-    "prettier-plugin-organize-imports": "^4.0.0",
+    "prettier-plugin-organize-imports": "^4.1.0",
     "ts-mockito": "^2.6.1",
     "tslib": "^2.7.0",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.6.0",
+    "typescript-eslint": "^8.7.0",
     "vitest": "^2.1.1"
   },
   "dependencies": {
@@ -54,6 +54,6 @@
     "ts-results-es": "^4.2.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.21.3"
+    "@rollup/rollup-linux-x64-gnu": "4.22.4"
   }
 }
