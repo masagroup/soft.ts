@@ -38,5 +38,5 @@ export interface EResourceSet extends ENotifier {
 }
 
 export function isEResourceSet(o: any): o is EResourceSet {
-    return o == undefined ? undefined : "getResources" in o
+    return o == undefined ? undefined : "createResource" in o
 }

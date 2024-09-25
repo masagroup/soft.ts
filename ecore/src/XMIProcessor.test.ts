@@ -21,7 +21,7 @@ describe("XMIProcessor", () => {
     test("constructor.resourceset", () => {
         const mockEResourceSet = mock<EResourceSet>()
         const eResourceSet = instance(mockEResourceSet)
-        when(mockEResourceSet.getResources()).thenReturn(null)
+        when(mockEResourceSet.createResource(null)).thenReturn(null)
         const xmlProcessor = new XMIProcessor(eResourceSet)
         expect(xmlProcessor).not.toBeNull()
         expect(xmlProcessor.getResourceSet()).toBe(eResourceSet)
