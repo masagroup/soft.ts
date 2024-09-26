@@ -59,6 +59,8 @@ describe("ETypeParameterImpl", () => {
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EGenericType>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())).thenReturn(null)
 
             // set list with new contents
@@ -66,6 +68,8 @@ describe("ETypeParameterImpl", () => {
             // checks
             expect(o.getEBounds().size()).toBe(1)
             expect(o.getEBounds().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())).once()
         }
     })
@@ -101,6 +105,8 @@ describe("ETypeParameterImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.ETYPE_PARAMETER__EBOUNDS, anything())).thenReturn(null)
 
             o.getEBounds().add(value)

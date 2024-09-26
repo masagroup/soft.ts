@@ -234,6 +234,8 @@ describe("EClassifierImpl", () => {
         {
             const mockValue = mock<EPackageInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.ECLASSIFIER__EPACKAGE, null)

@@ -63,6 +63,8 @@ describe("EModelElementImpl", () => {
             const mockValue = mock<EAnnotationInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EAnnotation>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).thenReturn(null)
 
             // set list with new contents
@@ -70,6 +72,8 @@ describe("EModelElementImpl", () => {
             // checks
             expect(o.getEAnnotations().size()).toBe(1)
             expect(o.getEAnnotations().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).once()
         }
     })
@@ -128,6 +132,8 @@ describe("EModelElementImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EAnnotationInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EANNOTATION__EMODEL_ELEMENT, anything())).thenReturn(null)
 
             o.getEAnnotations().add(value)

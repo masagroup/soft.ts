@@ -329,6 +329,8 @@ describe("EGenericTypeImpl", () => {
         {
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, anything())).thenReturn(null)
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__ELOWER_BOUND, false)).toBe(value)
@@ -339,6 +341,8 @@ describe("EGenericTypeImpl", () => {
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EGenericType>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, anything())).thenReturn(
                 null
             )
@@ -348,6 +352,8 @@ describe("EGenericTypeImpl", () => {
             // checks
             expect(o.getETypeArguments().size()).toBe(1)
             expect(o.getETypeArguments().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, anything())).once()
         }
 
@@ -360,6 +366,8 @@ describe("EGenericTypeImpl", () => {
         {
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, anything())).thenReturn(null)
             o.eSetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, value)
             expect(o.eGetFromID(EcoreConstants.EGENERIC_TYPE__EUPPER_BOUND, false)).toBe(value)
@@ -430,6 +438,8 @@ describe("EGenericTypeImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EGenericTypeInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EOPPOSITE_FEATURE_BASE - EcoreConstants.EGENERIC_TYPE__ETYPE_ARGUMENTS, anything())).thenReturn(
                 null
             )

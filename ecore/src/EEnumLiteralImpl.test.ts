@@ -197,6 +197,8 @@ describe("EEnumLiteralImpl", () => {
         {
             const mockValue = mock<EEnumInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EENUM_LITERAL__EENUM, null)

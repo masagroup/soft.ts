@@ -83,6 +83,8 @@ describe("BookImpl", () => {
         // first value
         const mockValue = mock<WriterInternal>()
         const value = instance(mockValue)
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
         o.author = value
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -98,6 +100,10 @@ describe("BookImpl", () => {
         const other = instance(mockOther)
         reset(mockAdapter)
         reset(mockValue)
+        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eStaticClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
         when(mockOther.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
         o.author = other
@@ -248,6 +254,8 @@ describe("BookImpl", () => {
         {
             const mockValue = mock<WriterInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
             o.eSetFromID(LibraryConstants.BOOK__AUTHOR, value)
             expect(o.eGetFromID(LibraryConstants.BOOK__AUTHOR, false)).toBe(value)
@@ -355,6 +363,8 @@ describe("BookImpl", () => {
         {
             const mockValue = mock<WriterInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, LibraryConstants.BOOK__AUTHOR, null)
             expect(o.author).toBe(value)

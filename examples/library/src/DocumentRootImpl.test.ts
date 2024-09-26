@@ -108,6 +108,8 @@ describe("DocumentRootImpl", () => {
         {
             const mockValue = mock<LibraryInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(
                     o,

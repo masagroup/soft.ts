@@ -71,6 +71,8 @@ describe("EEnumImpl", () => {
             const mockValue = mock<EEnumLiteralInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EEnumLiteral>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).thenReturn(null)
 
             // set list with new contents
@@ -78,6 +80,8 @@ describe("EEnumImpl", () => {
             // checks
             expect(o.getELiterals().size()).toBe(1)
             expect(o.getELiterals().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).once()
         }
     })
@@ -138,6 +142,8 @@ describe("EEnumImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EEnumLiteralInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EENUM_LITERAL__EENUM, anything())).thenReturn(null)
 
             o.getELiterals().add(value)

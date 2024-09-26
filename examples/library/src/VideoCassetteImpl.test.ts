@@ -49,12 +49,16 @@ describe("VideoCassetteImpl", () => {
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Person>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(LibraryConstants.VIDEO_CASSETTE__CAST, l)
             // checks
             expect(o.cast.size()).toBe(1)
             expect(o.cast.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
         }
     })
 

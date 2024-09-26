@@ -49,6 +49,8 @@ describe("BorrowerImpl", () => {
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Lendable>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.LENDABLE__BORROWERS, anything())).thenReturn(null)
 
             // set list with new contents
@@ -56,6 +58,8 @@ describe("BorrowerImpl", () => {
             // checks
             expect(o.borrowed.size()).toBe(1)
             expect(o.borrowed.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, LibraryConstants.LENDABLE__BORROWERS, anything())).once()
         }
     })
@@ -108,6 +112,8 @@ describe("BorrowerImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<LendableInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.LENDABLE__BORROWERS, anything())).thenReturn(null)
 
             o.borrowed.add(value)

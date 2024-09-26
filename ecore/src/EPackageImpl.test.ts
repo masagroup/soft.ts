@@ -63,6 +63,8 @@ describe("EPackageImpl", () => {
         // first value
         const mockValue = mock<EFactoryInternal>()
         const value = instance(mockValue)
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
         o.setEFactoryInstance(value)
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -78,6 +80,10 @@ describe("EPackageImpl", () => {
         const other = instance(mockOther)
         reset(mockAdapter)
         reset(mockValue)
+        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eStaticClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
         when(mockOther.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
         o.setEFactoryInstance(other)
@@ -231,6 +237,8 @@ describe("EPackageImpl", () => {
             const mockValue = mock<EClassifierInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EClassifier>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).thenReturn(null)
 
             // set list with new contents
@@ -238,12 +246,16 @@ describe("EPackageImpl", () => {
             // checks
             expect(o.getEClassifiers().size()).toBe(1)
             expect(o.getEClassifiers().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).once()
         }
 
         {
             const mockValue = mock<EFactoryInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
             o.eSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, value)
             expect(o.eGetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, false)).toBe(value)
@@ -254,6 +266,8 @@ describe("EPackageImpl", () => {
             const mockValue = mock<EPackageInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EPackage>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).thenReturn(null)
 
             // set list with new contents
@@ -261,6 +275,8 @@ describe("EPackageImpl", () => {
             // checks
             expect(o.getESubPackages().size()).toBe(1)
             expect(o.getESubPackages().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).once()
         }
 
@@ -344,6 +360,8 @@ describe("EPackageImpl", () => {
         {
             const mockValue = mock<EFactoryInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             o.eBasicInverseAdd(value, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)
             expect(o.getEFactoryInstance()).toBe(value)
 
@@ -363,6 +381,8 @@ describe("EPackageImpl", () => {
         {
             const mockValue = mock<EPackageInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, null)
@@ -393,6 +413,8 @@ describe("EPackageImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EClassifierInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.ECLASSIFIER__EPACKAGE, anything())).thenReturn(null)
 
             o.getEClassifiers().add(value)
@@ -412,6 +434,8 @@ describe("EPackageImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EPackageInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__ESUPER_PACKAGE, anything())).thenReturn(null)
 
             o.getESubPackages().add(value)

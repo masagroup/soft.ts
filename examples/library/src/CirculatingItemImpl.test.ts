@@ -96,6 +96,8 @@ describe("CirculatingItemImpl", () => {
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Borrower>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.BORROWER__BORROWED, anything())).thenReturn(null)
 
             // set list with new contents
@@ -103,6 +105,8 @@ describe("CirculatingItemImpl", () => {
             // checks
             expect(o.borrowers.size()).toBe(1)
             expect(o.borrowers.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, LibraryConstants.BORROWER__BORROWED, anything())).once()
         }
 
@@ -167,6 +171,8 @@ describe("CirculatingItemImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<BorrowerInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.BORROWER__BORROWED, anything())).thenReturn(null)
 
             o.borrowers.add(value)

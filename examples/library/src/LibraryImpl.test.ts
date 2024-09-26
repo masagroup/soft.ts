@@ -144,6 +144,8 @@ describe("LibraryImpl", () => {
         o.eAdapters().add(adapter)
 
         // set value
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
         o.parentBranch = value
@@ -168,6 +170,10 @@ describe("LibraryImpl", () => {
         reset(mockAdapter)
         reset(mockValue)
         reset(mockResource)
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
+        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
         when(mockOther.eInverseAdd(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
@@ -353,6 +359,8 @@ describe("LibraryImpl", () => {
             const mockValue = mock<BookInternal>()
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Book>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BOOKS, anything())
             ).thenReturn(null)
@@ -362,6 +370,8 @@ describe("LibraryImpl", () => {
             // checks
             expect(o.books.size()).toBe(1)
             expect(o.books.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BOOKS, anything())
             ).once()
@@ -372,6 +382,8 @@ describe("LibraryImpl", () => {
             const mockValue = mock<BorrowerInternal>()
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Borrower>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BORROWERS, anything())
             ).thenReturn(null)
@@ -381,6 +393,8 @@ describe("LibraryImpl", () => {
             // checks
             expect(o.borrowers.size()).toBe(1)
             expect(o.borrowers.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BORROWERS, anything())
             ).once()
@@ -391,6 +405,8 @@ describe("LibraryImpl", () => {
             const mockValue = mock<LibraryInternal>()
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Library>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__PARENT_BRANCH, anything())).thenReturn(null)
 
             // set list with new contents
@@ -398,6 +414,8 @@ describe("LibraryImpl", () => {
             // checks
             expect(o.branches.size()).toBe(1)
             expect(o.branches.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__PARENT_BRANCH, anything())).once()
         }
 
@@ -406,6 +424,8 @@ describe("LibraryImpl", () => {
             const mockValue = mock<EmployeeInternal>()
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Employee>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__EMPLOYEES, anything())
             ).thenReturn(null)
@@ -415,6 +435,8 @@ describe("LibraryImpl", () => {
             // checks
             expect(o.employees.size()).toBe(1)
             expect(o.employees.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__EMPLOYEES, anything())
             ).once()
@@ -428,6 +450,8 @@ describe("LibraryImpl", () => {
         {
             const mockValue = mock<LibraryInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
@@ -440,6 +464,8 @@ describe("LibraryImpl", () => {
         {
             const mockValue = mock<PersonInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(
                     o,
@@ -462,6 +488,8 @@ describe("LibraryImpl", () => {
             const mockValue = mock<ItemInternal>()
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Item>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__STOCK, anything())
             ).thenReturn(null)
@@ -471,6 +499,8 @@ describe("LibraryImpl", () => {
             // checks
             expect(o.stock.size()).toBe(1)
             expect(o.stock.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__STOCK, anything())
             ).once()
@@ -481,6 +511,8 @@ describe("LibraryImpl", () => {
             const mockValue = mock<WriterInternal>()
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Writer>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__WRITERS, anything())
             ).thenReturn(null)
@@ -490,6 +522,8 @@ describe("LibraryImpl", () => {
             // checks
             expect(o.writers.size()).toBe(1)
             expect(o.writers.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__WRITERS, anything())
             ).once()
@@ -594,6 +628,8 @@ describe("LibraryImpl", () => {
         {
             const mockValue = mock<LibraryInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, LibraryConstants.LIBRARY__PARENT_BRANCH, null)
@@ -624,6 +660,8 @@ describe("LibraryImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<BookInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BOOKS, anything())
             ).thenReturn(null)
@@ -640,6 +678,8 @@ describe("LibraryImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<BorrowerInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__BORROWERS, anything())
             ).thenReturn(null)
@@ -656,6 +696,8 @@ describe("LibraryImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<LibraryInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__PARENT_BRANCH, anything())).thenReturn(null)
 
             o.branches.add(value)
@@ -670,6 +712,8 @@ describe("LibraryImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EmployeeInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__EMPLOYEES, anything())
             ).thenReturn(null)
@@ -696,6 +740,8 @@ describe("LibraryImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<ItemInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__STOCK, anything())
             ).thenReturn(null)
@@ -712,6 +758,8 @@ describe("LibraryImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<WriterInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(
                 mockValue.eInverseAdd(o, ecore.EOPPOSITE_FEATURE_BASE - LibraryConstants.LIBRARY__WRITERS, anything())
             ).thenReturn(null)
