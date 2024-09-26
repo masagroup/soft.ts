@@ -1,11 +1,11 @@
-import { describe, expect, test } from "vitest"
 import { instance, mock, when } from "ts-mockito"
-import { EObject } from "./EObject.js";
-import { EObjectInternal, isEObject, isEObjectInternal } from "./EObjectInternal.js";
-import { ENotifier } from "./ENotifier.js";
+import { describe, expect, test } from "vitest"
+import { ENotifier } from "./ENotifier.js"
+import { EObject } from "./EObject.js"
+import { EObjectInternal, isEObject, isEObjectInternal } from "./EObjectInternal.js"
 
-describe('EObjectInternal', () => {
-    test('isEObject', () => {
+describe("EObjectInternal", () => {
+    test("isEObject", () => {
         const mockObject = mock<EObject>()
         const object = instance(mockObject)
         when(mockObject.eClass()).thenReturn(null)
@@ -14,8 +14,8 @@ describe('EObjectInternal', () => {
         const mockNotifier = mock<ENotifier>()
         const notifier = instance(mockNotifier)
         expect(isEObject(notifier)).toBeFalsy()
-    });
-    test('isEObjectInternal', () => {
+    })
+    test("isEObjectInternal", () => {
         const mockObjectInternal = mock<EObjectInternal>()
         const objectInternal = instance(mockObjectInternal)
         when(mockObjectInternal.eClass()).thenReturn(null)
@@ -26,5 +26,5 @@ describe('EObjectInternal', () => {
         const object = instance(mockObject)
         when(mockObject.eClass()).thenReturn(null)
         expect(isEObjectInternal(object)).toBeFalsy()
-    });
-});
+    })
+})
