@@ -21,6 +21,11 @@ describe("URI", () => {
         expect(uri.toString()).toBe("file:///path#fragment")
     })
 
+    test('constructor-undefined', () => {
+        const uri = new URI()
+        expect(uri.isEmpty()).toBeTruthy()
+    })
+
     test("constructor-host", () => {
         const uri = new URI("http://user@host:10/path#fragment")
         expect(uri.scheme).toBe("http")
