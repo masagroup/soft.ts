@@ -132,12 +132,16 @@ describe("EOperationImpl", () => {
             const value = instance(mockValue)
             const l = new ImmutableEList<EClassifier>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EOPERATION__EEXCEPTIONS, l)
             // checks
             expect(o.getEExceptions().size()).toBe(1)
             expect(o.getEExceptions().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
         }
 
         {
@@ -145,6 +149,8 @@ describe("EOperationImpl", () => {
             const mockValue = mock<EParameterInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EParameter>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).thenReturn(null)
 
             // set list with new contents
@@ -152,6 +158,8 @@ describe("EOperationImpl", () => {
             // checks
             expect(o.getEParameters().size()).toBe(1)
             expect(o.getEParameters().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).once()
         }
 
@@ -213,6 +221,8 @@ describe("EOperationImpl", () => {
         {
             const mockValue = mock<EClassInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.EOPERATION__ECONTAINING_CLASS, null)
@@ -254,6 +264,8 @@ describe("EOperationImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EParameterInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EPARAMETER__EOPERATION, anything())).thenReturn(null)
 
             o.getEParameters().add(value)

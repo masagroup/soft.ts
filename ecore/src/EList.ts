@@ -16,5 +16,5 @@ export interface EList<E> extends List<E> {
 }
 
 export function isEList<E>(l: EList<E>): l is EList<E> {
-    return "moveTo" in l
+    return l == undefined ? undefined : "moveTo" in l
 }

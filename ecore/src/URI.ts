@@ -118,8 +118,6 @@ function serializeURI(parts: URIParts): string {
 }
 
 export class URI {
-    private static emptyURI = new URI()
-
     readonly scheme: string
     readonly user: string
     readonly host: string
@@ -143,7 +141,7 @@ export class URI {
         this.path = parts?.path ?? ""
         this.query = parts?.query ?? ""
         this.fragment = parts?.fragment ?? ""
-        this.rawURI = typeof input === "string" ? input : serializeURI(parts)
+        this.rawURI = input ? (typeof input === "string" ? input : serializeURI(parts)) : ""
     }
 
     toString(): string {
@@ -159,7 +157,7 @@ export class URI {
     }
 
     isEmpty(): boolean {
-        return this == URI.emptyURI
+        return this.rawURI == ""
     }
 
     authority(): string {

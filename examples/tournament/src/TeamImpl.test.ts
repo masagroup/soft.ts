@@ -73,6 +73,8 @@ describe("TeamImpl", () => {
         // first value
         const mockValue = mock<GroupInternal>()
         const value = instance(mockValue)
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, TournamentConstants.GROUP__TEAMS, null)).thenReturn(null)
         o.setGroup(value)
         verify(mockAdapter.notifyChanged(anything())).once()
@@ -88,6 +90,10 @@ describe("TeamImpl", () => {
         const other = instance(mockOther)
         reset(mockAdapter)
         reset(mockValue)
+        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eStaticClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, TournamentConstants.GROUP__TEAMS, null)).thenReturn(null)
         when(mockOther.eInverseAdd(o, TournamentConstants.GROUP__TEAMS, null)).thenReturn(null)
         o.setGroup(other)
@@ -142,6 +148,8 @@ describe("TeamImpl", () => {
         {
             const mockValue = mock<GroupInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, TournamentConstants.GROUP__TEAMS, null)).thenReturn(null)
             o.eSetFromID(TournamentConstants.TEAM__GROUP, value)
             expect(o.eGetFromID(TournamentConstants.TEAM__GROUP, false)).toBe(value)
@@ -176,6 +184,8 @@ describe("TeamImpl", () => {
         {
             const mockValue = mock<GroupInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, TournamentConstants.TEAM__GROUP, null)
             expect(o.getGroup()).toBe(value)

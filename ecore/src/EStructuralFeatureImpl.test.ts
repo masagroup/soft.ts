@@ -382,6 +382,8 @@ describe("EStructuralFeatureImpl", () => {
         {
             const mockValue = mock<EClassInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eResource()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             o.eBasicInverseAdd(value, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, null)

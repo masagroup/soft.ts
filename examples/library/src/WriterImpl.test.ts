@@ -62,6 +62,8 @@ describe("WriterImpl", () => {
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Book>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.BOOK__AUTHOR, anything())).thenReturn(null)
 
             // set list with new contents
@@ -69,6 +71,8 @@ describe("WriterImpl", () => {
             // checks
             expect(o.books.size()).toBe(1)
             expect(o.books.get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, LibraryConstants.BOOK__AUTHOR, anything())).once()
         }
 
@@ -127,6 +131,8 @@ describe("WriterImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<BookInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.BOOK__AUTHOR, anything())).thenReturn(null)
 
             o.books.add(value)

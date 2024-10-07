@@ -39,9 +39,10 @@ export class EContentAdapter extends AbstractEAdapter {
             } else if (isEResourceSet(notifier)) {
                 l = notifier.getResources()
             }
-            for (const n of l) {
-                this.addAdapter(n)
-            }
+            if (l)
+                for (const n of l) {
+                    this.addAdapter(n)
+                }
         }
     }
 

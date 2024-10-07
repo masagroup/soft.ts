@@ -200,12 +200,16 @@ describe("EReferenceImpl", () => {
             const value = instance(mockValue)
             const l = new ImmutableEList<EAttribute>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.EREFERENCE__EKEYS, l)
             // checks
             expect(o.getEKeys().size()).toBe(1)
             expect(o.getEKeys().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
         }
 
         {

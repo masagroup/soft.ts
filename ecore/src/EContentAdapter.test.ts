@@ -42,6 +42,7 @@ describe("EContentAdapter", () => {
             const adapters = instance(mockAdapters)
 
             when(mockObject.eAdapters()).thenReturn(adapters)
+            when(mockObject.eClass()).thenReturn(null)
             when(mockAdapters.contains(adapter)).thenReturn(false)
             when(mockAdapters.add(adapter)).thenReturn(true)
             when(mockAdapters.remove(adapter)).thenReturn(true)
@@ -49,10 +50,10 @@ describe("EContentAdapter", () => {
         }
         const mockChildren = new ImmutableEList<EObject>(children)
         const mockObject = mock<EObject>()
-        when(mockObject.eContents()).thenReturn(mockChildren)
-
         const object = instance(mockObject)
 
+        when(mockObject.eClass()).thenReturn(null)
+        when(mockObject.eContents()).thenReturn(mockChildren)
         adapter.setTarget(object)
         adapter.setTarget(null)
     })
@@ -67,6 +68,7 @@ describe("EContentAdapter", () => {
             const mockAttribute = mock<EAttribute>()
             const attribute = instance(mockAttribute)
 
+            when(mockObject.eClass()).thenReturn(null)
             when(mockNotification.getNotifier()).thenReturn(object)
             when(mockNotification.getFeature()).thenReturn(attribute)
             adapter.notifyChanged(notification)
@@ -100,6 +102,7 @@ describe("EContentAdapter", () => {
             const mockReference = mock<EReference>()
             const reference = instance(mockReference)
 
+            when(mockObject.eClass()).thenReturn(null)
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters()).thenReturn(oldAdapters)
@@ -135,6 +138,7 @@ describe("EContentAdapter", () => {
             const mockReference = mock<EReference>()
             const reference = instance(mockReference)
 
+            when(mockObject.eClass()).thenReturn(null)
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters()).thenReturn(oldAdapters)
@@ -181,7 +185,7 @@ describe("EContentAdapter", () => {
             const newAdapters = instance(mockNewAdapters)
             const mockReference = mock<EReference>()
             const reference = instance(mockReference)
-
+            when(mockObject.eClass()).thenReturn(null)
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters()).thenReturn(oldAdapters)
@@ -227,7 +231,7 @@ describe("EContentAdapter", () => {
             const newAdapters = instance(mockNewAdapters)
             const mockReference = mock<EReference>()
             const reference = instance(mockReference)
-
+            when(mockObject.eClass()).thenReturn(null)
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters()).thenReturn(oldAdapters)
@@ -269,7 +273,7 @@ describe("EContentAdapter", () => {
             const newAdapters = instance(mockNewAdapters)
             const mockReference = mock<EReference>()
             const reference = instance(mockReference)
-
+            when(mockObject.eClass()).thenReturn(null)
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockNewObject.eAdapters()).thenReturn(newAdapters)
@@ -337,7 +341,10 @@ describe("EContentAdapter", () => {
             const oldAdapters = instance(mockOldAdapters)
             const mockReference = mock<EReference>()
             const reference = instance(mockReference)
-
+            when(mockObject.eClass()).thenReturn(null)
+            when(mockObject.eStaticClass()).thenReturn(null)
+            when(mockOldObject.eClass()).thenReturn(null)
+            when(mockOldObject.eStaticClass()).thenReturn(null)
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
             when(mockOldObject.eAdapters()).thenReturn(oldAdapters)
@@ -367,7 +374,7 @@ describe("EContentAdapter", () => {
             const object = instance(mockObject)
             const mockReference = mock<EReference>()
             const reference = instance(mockReference)
-
+            when(mockObject.eClass()).thenReturn(null)
             when(mockReference.isContainment()).thenReturn(true)
             when(mockReference.getEReferenceType()).thenReturn(null)
 

@@ -49,6 +49,8 @@ describe("GroupImpl", () => {
             const value = instance(mockValue)
             const l = new ecore.ImmutableEList<Team>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, TournamentConstants.TEAM__GROUP, anything())).thenReturn(null)
 
             // set list with new contents
@@ -56,6 +58,8 @@ describe("GroupImpl", () => {
             // checks
             expect(o.getTeams().size()).toBe(1)
             expect(o.getTeams().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, TournamentConstants.TEAM__GROUP, anything())).once()
         }
     })
@@ -108,6 +112,8 @@ describe("GroupImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<TeamInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, TournamentConstants.TEAM__GROUP, anything())).thenReturn(null)
 
             o.getTeams().add(value)

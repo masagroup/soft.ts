@@ -397,6 +397,8 @@ export class BinaryEncoder implements EEncoder {
     }
 
     encode(eResource: EResource): Result<Uint8Array, Error> {
+        if (!eResource) return Err(Error("unable to encode null resource"))
+
         try {
             this.reinitializeState()
             this.encodeSignature()
@@ -409,6 +411,8 @@ export class BinaryEncoder implements EEncoder {
     }
 
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
+        if (!eObject) return Err(Error("unable to encode null object"))
+
         try {
             this.reinitializeState()
             this.encodeSignature()

@@ -332,6 +332,8 @@ describe("EClassImpl", () => {
             const mockValue = mock<EOperationInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EOperation>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything())).thenReturn(null)
 
             // set list with new contents
@@ -339,6 +341,8 @@ describe("EClassImpl", () => {
             // checks
             expect(o.getEOperations().size()).toBe(1)
             expect(o.getEOperations().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything())).once()
         }
 
@@ -347,6 +351,8 @@ describe("EClassImpl", () => {
             const mockValue = mock<EStructuralFeatureInternal>()
             const value = instance(mockValue)
             const l = new ImmutableEList<EStructuralFeature>([value])
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything())).thenReturn(null)
 
             // set list with new contents
@@ -354,6 +360,8 @@ describe("EClassImpl", () => {
             // checks
             expect(o.getEStructuralFeatures().size()).toBe(1)
             expect(o.getEStructuralFeatures().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             verify(mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything())).once()
         }
 
@@ -363,12 +371,16 @@ describe("EClassImpl", () => {
             const value = instance(mockValue)
             const l = new ImmutableEList<EClass>([value])
             when(mockValue.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
 
             // set list with new contents
             o.eSetFromID(EcoreConstants.ECLASS__ESUPER_TYPES, l)
             // checks
             expect(o.getESuperTypes().size()).toBe(1)
             expect(o.getESuperTypes().get(0)).toBe(value)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
         }
 
         {
@@ -487,6 +499,8 @@ describe("EClassImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EOperationInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EOPERATION__ECONTAINING_CLASS, anything())).thenReturn(null)
 
             o.getEOperations().add(value)
@@ -501,6 +515,8 @@ describe("EClassImpl", () => {
             // initialize list with a mock object
             const mockValue = mock<EStructuralFeatureInternal>()
             const value = instance(mockValue)
+            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.ESTRUCTURAL_FEATURE__ECONTAINING_CLASS, anything())).thenReturn(null)
 
             o.getEStructuralFeatures().add(value)
