@@ -21,7 +21,7 @@ describe("URI", () => {
         expect(uri.toString()).toBe("file:///path#fragment")
     })
 
-    test('constructor-undefined', () => {
+    test("constructor-undefined", () => {
         const uri = new URI()
         expect(uri.isEmpty()).toBeTruthy()
     })
