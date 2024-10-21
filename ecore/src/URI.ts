@@ -160,7 +160,7 @@ export class URI {
         return this.rawURI == ""
     }
 
-    equals(other : URI ) : boolean {
+    equals(other: URI): boolean {
         return this.rawURI === other.rawURI
     }
 
