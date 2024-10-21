@@ -117,4 +117,9 @@ describe("URI", () => {
     test("toString", () => {
         expect(createMemoryURI("clock.xml").toString()).toEqual("memory:clock.xml")
     })
+    test("equals", () => {
+        const uri1 = createMemoryURI("simulation")
+        const uri2 = new URI("memory:simulation")
+        expect(uri1.equals(uri2)).toBeTruthy()
+    })
 })

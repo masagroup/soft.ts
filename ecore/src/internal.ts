@@ -144,3 +144,5 @@ export * from "./DeepCopy.js"
 export * from "./DeepEqual.js"
 export * from "./EcoreUtils.js"
 export * from "./URI.js"
+
+export * from "./msgpack/Extension.js"

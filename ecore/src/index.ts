@@ -131,5 +131,10 @@ export {
     URIParts,
     uriToFilePath,
     createFileURI,
-    createMemoryURI
+    createMemoryURI,
+
+    ExtensionEncoderType,
+    ExtensionDecoderType,
+    ExtensionCodec
+  
 } from "./internal.js"

@@ -122,7 +122,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         const normalizedURI = this._uriConverter.normalize(uri)
         for (const resource of this._resources) {
             const resourceURI = this._uriConverter.normalize(resource.getURI())
-            if (resourceURI.toString() == normalizedURI.toString()) {
+            if (resourceURI.equals(normalizedURI)) {
                 if (loadOnDemand && !resource.isLoaded()) {
                     resource.loadSync()
                 }
@@ -164,7 +164,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         const normalizedURI = this._uriConverter.normalize(uri)
         for (const resource of this._resources) {
             const resourceURI = this._uriConverter.normalize(resource.getURI())
-            if (resourceURI.toString() == normalizedURI.toString()) {
+            if (resourceURI.equals(normalizedURI)) {
                 if (loadOnDemand && !resource.isLoaded()) {
                     await resource.load()
                 }
