@@ -160,6 +160,10 @@ export class URI {
         return this.rawURI == ""
     }
 
+    equals(other : URI ) : boolean {
+        return this.rawURI === other.rawURI
+    }
+
     authority(): string {
         if (!this.host) {
             return ""
