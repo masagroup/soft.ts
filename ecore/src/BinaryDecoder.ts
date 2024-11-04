@@ -10,6 +10,7 @@
 import { Err, Ok, Result } from "ts-results-es"
 import { BinaryFeatureKind, getBinaryCodecFeatureKind } from "./BinaryFeatureKind.js"
 import {
+    BinaryOptions,
     BufferLike,
     EClass,
     EcoreUtils,
@@ -23,6 +24,7 @@ import {
     EPackage,
     EResource,
     EStructuralFeature,
+    ExtensionCodec,
     getPackageRegistry,
     ImmutableEList,
     isEAttribute,
@@ -71,10 +73,12 @@ export class BinaryDecoder implements EDecoder {
     private _baseURI: URI
     private _uris: URI[] = []
     private _enumLiterals: string[] = []
+    private _extensionCodec : ExtensionCodec
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext
         this._baseURI = this._resource.getURI()
+        this._extensionCodec = options?.get(BinaryOptions.BINARY_OPTION_CODEC_EXTENSION)
     }
 
     decode(buffer: BufferLike): Result<EResource, Error> {
@@ -168,7 +172,7 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private setBuffer(buffer: ArrayLike<number> | BufferSource): void {
-        this._decoder = new Decoder(buffer)
+        this._decoder = new Decoder(buffer, {extensionCodec : this._extensionCodec})
     }
 
     private decodeSignature() {

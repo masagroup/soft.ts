@@ -24,6 +24,7 @@ import {
     EReference,
     EResource,
     EStructuralFeature,
+    ExtensionCodec,
     isEAttribute,
     isEReference,
     URI
@@ -76,11 +77,13 @@ export class BinaryEncoder implements EEncoder {
     private _version: number = binaryVersion
     private _isIDAttributeEncoded: boolean = false
     private _encoder: Encoder
+    private _extensionCodec: ExtensionCodec
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext
         this._baseURI = this._resource?.getURI()
         this._isIDAttributeEncoded = options?.get(BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE) ?? false
+        this._extensionCodec = options?.get(BinaryOptions.BINARY_OPTION_CODEC_EXTENSION)
     }
 
     private encodeBoolean(object: boolean) {
@@ -393,7 +396,7 @@ export class BinaryEncoder implements EEncoder {
     }
 
     private reinitializeState() {
-        this._encoder = new Encoder()
+        this._encoder = new Encoder({ extensionCodec: this._extensionCodec })
     }
 
     encode(eResource: EResource): Result<Uint8Array, Error> {
