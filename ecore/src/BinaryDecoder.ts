@@ -73,7 +73,7 @@ export class BinaryDecoder implements EDecoder {
     private _baseURI: URI
     private _uris: URI[] = []
     private _enumLiterals: string[] = []
-    private _extensionCodec : ExtensionCodec
+    private _extensionCodec: ExtensionCodec
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext
@@ -172,7 +172,7 @@ export class BinaryDecoder implements EDecoder {
     }
 
     private setBuffer(buffer: ArrayLike<number> | BufferSource): void {
-        this._decoder = new Decoder(buffer, {extensionCodec : this._extensionCodec})
+        this._decoder = new Decoder(buffer, { extensionCodec: this._extensionCodec })
     }
 
     private decodeSignature() {
