@@ -15,6 +15,6 @@ export interface EList<E> extends List<E> {
     moveTo(from: number, to: number): E
 }
 
-export function isEList<E>(l: EList<E>): l is EList<E> {
+export function isEList<E>(l: any): l is EList<E> {
     return l == undefined ? undefined : "moveTo" in l
 }
