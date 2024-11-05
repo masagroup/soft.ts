@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EList, EMapEntry } from "./internal.js"
+import { EList, EMapEntry, isEList } from "./internal.js"
 
 export interface EMap<K, V> extends EList<EMapEntry<K, V>> {
     put(key: K, value: V): void
@@ -18,4 +18,8 @@ export interface EMap<K, V> extends EList<EMapEntry<K, V>> {
     containsValue(value: V): boolean
 
     toMap(): Map<K, V>
+}
+
+export function isEMap<K,V>(m: any): m is EMap<K,V> {
+    return m == undefined ? undefined : isEList<EMapEntry<K, V>>(m) && "put" in m
 }
