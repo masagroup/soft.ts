@@ -17,9 +17,10 @@
     }
   },
   "scripts": {
-    "build": "npm run build-types && npm run build-server",
+    "build": "npm run build-types && npm run build-esm && npm run build-cjs",
     "build-types": "tsc -b tsconfig.types.json",
-    "build-server": "tsc -b tsconfig.esm.json tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
+    "build-esm": "tsc -b tsconfig.esm.json",
+    "build-cjs": "tsc -b tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
     "pretty": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
     "test": "vitest run",

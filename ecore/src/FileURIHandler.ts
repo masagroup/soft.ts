@@ -7,7 +7,6 @@
 //
 // *****************************************************************************
 
-import fs from "fs"
 import stream from "stream"
 import { EURIHandler, URI, uriToFilePath } from "./internal.js"
 
@@ -36,28 +35,56 @@ function writableNodeStreamToWebStream(stream: stream.Writable): WritableStream 
     })
 }
 
-export class FileURIHandler implements EURIHandler {
-    canHandle(uri: URI): boolean {
-        return uri.scheme == "file" || (!uri.scheme && !uri.host && !uri.query)
+export let FileURIHandler 
+try {
+    const fs = require("fs")
+    FileURIHandler = class FileURIHandler implements EURIHandler {
+        canHandle(uri: URI): boolean {
+            return uri.scheme == "file" || (!uri.scheme && !uri.host && !uri.query)
+        }
+    
+        async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
+            const path = uriToFilePath(uri)
+            return fs.existsSync(path) ? readableNodeStreamToWebStream(fs.createReadStream(path)) : null
+        }
+    
+        async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
+            const path = uriToFilePath(uri)
+            return writableNodeStreamToWebStream(fs.createWriteStream(path))
+        }
+    
+        readSync(uri: URI): Uint8Array {
+            const path = uriToFilePath(uri)
+            return fs.existsSync(path) ? fs.readFileSync(path) : null
+        }
+    
+        writeSync(uri: URI, b: Uint8Array): void {
+            const path = uriToFilePath(uri)
+            fs.writeFileSync(path, b)
+        }
     }
-
-    async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
-        const path = uriToFilePath(uri)
-        return fs.existsSync(path) ? readableNodeStreamToWebStream(fs.createReadStream(path)) : null
-    }
-
-    async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
-        const path = uriToFilePath(uri)
-        return writableNodeStreamToWebStream(fs.createWriteStream(path))
-    }
-
-    readSync(uri: URI): Uint8Array {
-        const path = uriToFilePath(uri)
-        return fs.existsSync(path) ? fs.readFileSync(path) : null
-    }
-
-    writeSync(uri: URI, b: Uint8Array): void {
-        const path = uriToFilePath(uri)
-        fs.writeFileSync(path, b)
+} catch {
+    FileURIHandler = class FileURIHandler implements EURIHandler {
+        canHandle(uri: URI): boolean {
+            return uri.scheme == "file" || (!uri.scheme && !uri.host && !uri.query)
+        }
+    
+        async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
+          throw Error("file system not supported")
+        }
+    
+        async createWriteStream(uri: URI): Promise<WritableStream<Uint8Array> | null> {
+            throw Error("file system not supported")
+        }
+    
+        readSync(uri: URI): Uint8Array {
+            throw Error("file system not supported")
+        }
+    
+        writeSync(uri: URI, b: Uint8Array): void {
+            throw Error("file system not supported")
+        }
     }
 }
+
+
