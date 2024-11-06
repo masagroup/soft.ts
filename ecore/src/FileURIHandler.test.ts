@@ -8,39 +8,37 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { FileURIHandler, URI } from "./internal.js"
+import { getURIConverterRegistry, URI } from "./internal.js"
 
 describe("FileURIHandler", () => {
+    const uriHandler = getURIConverterRegistry().getURIHandler(new URI({scheme:"file"}))
+    expect(uriHandler).toBeDefined()
+
     test("canHandle", () => {
-        const uriHandler = new FileURIHandler()
         expect(uriHandler.canHandle(new URI("file://test"))).toBeTruthy()
         expect(uriHandler.canHandle(new URI("http://test"))).toBeFalsy()
         expect(uriHandler.canHandle(new URI("testdata/test"))).toBeTruthy()
     })
 
     test("createReadStream-Absolute", () => {
-        const uriHandler = new FileURIHandler()
         const uri = new URI("file:///" + __dirname + "/../testdata/read-stream.txt")
         const s = uriHandler.createReadStream(uri)
         expect(s).not.toBeNull()
     })
 
     test("createReadStream-Relative", () => {
-        const uriHandler = new FileURIHandler()
         const uri = new URI("testdata/read-stream.txt")
         const s = uriHandler.createReadStream(uri)
         expect(s).not.toBeNull()
     })
 
     test("createWriteStream-Absolute", () => {
-        const uriHandler = new FileURIHandler()
         const uri = new URI("file:///" + __dirname + "/../testdata/write-stream.txt")
         const s = uriHandler.createWriteStream(uri)
         expect(s).not.toBeNull()
     })
 
     test("createWriteStream-Relative", () => {
-        const uriHandler = new FileURIHandler()
         const uri = new URI("testdata/write-stream.txt")
         const s = uriHandler.createWriteStream(uri)
         expect(s).not.toBeNull()
