@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EList, EURIHandler, URI } from "./internal.js"
+import { EList, EURIConverterImpl, EURIHandler, URI } from "./internal.js"
 
 export interface EURIConverter {
     createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null>
@@ -25,4 +25,8 @@ export interface EURIConverter {
     getURIHandlers(): EList<EURIHandler>
 
     getURIMap(): Map<URI, URI>
+}
+
+export function getURIConverterRegistry(): EURIConverter {
+    return EURIConverterImpl.getInstance()
 }

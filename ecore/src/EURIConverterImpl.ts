@@ -7,18 +7,22 @@
 //
 // *****************************************************************************
 
-import { BasicEList, EList, EURIConverter, EURIHandler, FileURIHandler, URI } from "./internal.js"
+import { BasicEList, EList, EURIConverter, EURIHandler, URI } from "./internal.js"
 
 export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>
     private _uriMap: Map<URI, URI>
+    private _delegate: EURIConverter
+    private static _instance: EURIConverterImpl = new EURIConverterImpl()
 
-    constructor() {
-        this._uriHandlers = new BasicEList<EURIHandler>([new FileURIHandler()])
+    constructor(delegate?: EURIConverter) {
+        this._delegate = delegate
+        this._uriHandlers = new BasicEList<EURIHandler>()
         this._uriMap = new Map<URI, URI>()
     }
-    getURIMap(): Map<URI, URI> {
-        return this._uriMap
+
+    static getInstance(): EURIConverterImpl {
+        return this._instance
     }
 
     async createReadStream(uri: URI): Promise<ReadableStream<Uint8Array> | null> {
@@ -53,6 +57,9 @@ export class EURIConverterImpl implements EURIConverter {
                 return uriHandler
             }
         }
+        if (this._delegate) {
+            return this._delegate.getURIHandler(uri)
+        }
         return null
     }
 
@@ -65,8 +72,13 @@ export class EURIConverterImpl implements EURIConverter {
         return uri == normalized ? normalized : this.normalize(normalized)
     }
 
+    getURIMap(): Map<URI, URI> {
+        return this._uriMap
+    }
+
     private getURIFromMap(uri: URI): URI {
-        for (const [oldPrefix, newPrefix] of this._uriMap) {
+        const uriMap = this._delegate ? new Map([...this._delegate.getURIMap().entries(), ...this.getURIMap().entries()]) : this.getURIMap()
+        for (const [oldPrefix, newPrefix] of uriMap) {
             const r = uri.replacePrefix(oldPrefix, newPrefix)
             if (r) {
                 return r

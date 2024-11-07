@@ -13,7 +13,6 @@
     "inlineSourceMap": false,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "removeComments": true
   },
   "exclude": [
     ".vscode",

@@ -97,6 +97,7 @@ export {
     getEcorePackage,
     getPackageRegistry,
     getCodecRegistry,
+    getURIConverterRegistry,
     ImmutableEList,
     UniqueIDManager,
     IncrementalIDManager,

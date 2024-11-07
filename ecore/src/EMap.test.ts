@@ -7,7 +7,7 @@ describe("EMap", () => {
         var a: any
         expect(isEMap(a)).toBeFalsy()
 
-        const mockMap = mock<EMap<any,any>>()
+        const mockMap = mock<EMap<any, any>>()
         const map = instance(mockMap)
         when(mockMap.moveTo(anyNumber(), anyNumber())).thenReturn(undefined)
         when(mockMap.put(anyNumber(), anyNumber())).thenReturn(undefined)

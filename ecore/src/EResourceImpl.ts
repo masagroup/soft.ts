@@ -37,8 +37,8 @@ import {
     EStructuralFeature,
     ETreeIterator,
     EURIConverter,
-    EURIConverterImpl,
     EventType,
+    getURIConverterRegistry,
     NotificationChain,
     ReadableStreamLike,
     URI
@@ -155,7 +155,6 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _warnings: EList<EDiagnostic> = null
     private _listeners: EList<EResourceListener> = null
     private _mutex: Mutex = new Mutex()
-    private static _defaultURIConverter = new EURIConverterImpl()
 
     getURI(): URI {
         return this._uri
@@ -645,7 +644,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     private getURIConverter(): EURIConverter {
-        return this._resourceSet ? this._resourceSet.getURIConverter() : EResourceImpl._defaultURIConverter
+        return this._resourceSet ? this._resourceSet.getURIConverter() : getURIConverterRegistry()
     }
 
     private getCodecRegistry(): ECodecRegistry {

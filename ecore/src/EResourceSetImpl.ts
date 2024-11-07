@@ -28,6 +28,7 @@ import {
     EURIConverterImpl,
     getCodecRegistry,
     getPackageRegistry,
+    getURIConverterRegistry,
     URI
 } from "./internal.js"
 
@@ -67,7 +68,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     constructor() {
         super()
         this._resources = new ResourcesList(this)
-        this._uriConverter = new EURIConverterImpl()
+        this._uriConverter = new EURIConverterImpl(getURIConverterRegistry())
         this._resourceCodecRegistry = new ECodecRegistryImpl(getCodecRegistry())
         this._packageRegistry = new EPackageRegistryImpl(getPackageRegistry())
         this._uriResourceMap = null
