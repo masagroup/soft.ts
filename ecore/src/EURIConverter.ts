@@ -27,6 +27,6 @@ export interface EURIConverter {
     getURIMap(): Map<URI, URI>
 }
 
-export function getURIConverterRegistry() : EURIConverter {
+export function getURIConverterRegistry(): EURIConverter {
     return EURIConverterImpl.getInstance()
 }

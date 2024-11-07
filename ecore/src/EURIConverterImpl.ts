@@ -13,7 +13,7 @@ export class EURIConverterImpl implements EURIConverter {
     private _uriHandlers: EList<EURIHandler>
     private _uriMap: Map<URI, URI>
     private _delegate: EURIConverter
-    private static _instance : EURIConverterImpl = new EURIConverterImpl()
+    private static _instance: EURIConverterImpl = new EURIConverterImpl()
 
     constructor(delegate?: EURIConverter) {
         this._delegate = delegate
@@ -21,7 +21,7 @@ export class EURIConverterImpl implements EURIConverter {
         this._uriMap = new Map<URI, URI>()
     }
 
-    static getInstance() : EURIConverterImpl {
+    static getInstance(): EURIConverterImpl {
         return this._instance
     }
 
@@ -77,8 +77,7 @@ export class EURIConverterImpl implements EURIConverter {
     }
 
     private getURIFromMap(uri: URI): URI {
-        const uriMap = this._delegate ? new Map([...this._delegate.getURIMap().entries(), ...this.getURIMap().entries()])
-            : this.getURIMap()
+        const uriMap = this._delegate ? new Map([...this._delegate.getURIMap().entries(), ...this.getURIMap().entries()]) : this.getURIMap()
         for (const [oldPrefix, newPrefix] of uriMap) {
             const r = uri.replacePrefix(oldPrefix, newPrefix)
             if (r) {

@@ -35,7 +35,6 @@ function writableNodeStreamToWebStream(stream: stream.Writable): WritableStream 
     })
 }
 
-
 async function registerFileURIHandler() {
     let FileURIHandler
     try {

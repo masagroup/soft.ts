@@ -11,7 +11,7 @@ import { describe, expect, test } from "vitest"
 import { getURIConverterRegistry, URI } from "./internal.js"
 
 describe("FileURIHandler", () => {
-    const uriHandler = getURIConverterRegistry().getURIHandler(new URI({scheme:"file"}))
+    const uriHandler = getURIConverterRegistry().getURIHandler(new URI({ scheme: "file" }))
     expect(uriHandler).toBeDefined()
 
     test("canHandle", () => {

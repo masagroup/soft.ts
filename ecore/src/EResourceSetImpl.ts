@@ -26,9 +26,9 @@ import {
     EStructuralFeature,
     EURIConverter,
     EURIConverterImpl,
-    getURIConverterRegistry,
     getCodecRegistry,
     getPackageRegistry,
+    getURIConverterRegistry,
     URI
 } from "./internal.js"
 
