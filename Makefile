@@ -7,7 +7,7 @@
 #
 # *****************************************************************************
 
-ECORE_TS_VERSION := 1.5.3
+ECORE_TS_VERSION := 1.5.6
 
 GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/$(2) -o /pwd/$(1) -P /pwd/generator.properties $(3)
 
