@@ -7,8 +7,6 @@
 #
 # *****************************************************************************
 
-ECORE_TS_VERSION := 1.5.3
-
 GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/$(2) -o /pwd/$(1) -P /pwd/generator.properties $(3)
 
 ifeq (${OS},Windows_NT)
@@ -166,10 +164,4 @@ tournament.build:
 tournament.test:
 	@echo "[tournament.test]"
 	@(cd examples/tournament && $(NPM) run test)
-
-
-.PHONY: versions
-versions:
-	@echo "[ecore.version]"
-	@sed -i 's#"version": "[0-9]*\.[0-9]*\.[0-9]*",#"version": "$(ECORE_TS_VERSION)",#g' ecore/package.json
 
