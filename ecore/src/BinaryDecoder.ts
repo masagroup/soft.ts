@@ -64,6 +64,8 @@ class FeatureData {
     eDataType: EDataType
 }
 
+type BufferDecoder = ArrayLike<number> | BufferSource
+
 export class BinaryDecoder implements EDecoder {
     private _resource: EResource
     private _decoder: Decoder
@@ -83,7 +85,7 @@ export class BinaryDecoder implements EDecoder {
 
     decode(buffer: BufferLike): Result<EResource, Error> {
         try {
-            this.setBuffer(buffer)
+            this.setBuffer(buffer as BufferDecoder)
             this.decodeSignature()
             this.decodeVersion()
 
@@ -110,7 +112,7 @@ export class BinaryDecoder implements EDecoder {
 
     decodeObject(buffer: BufferLike): Result<EObject, Error> {
         try {
-            this.setBuffer(buffer)
+            this.setBuffer(buffer as BufferDecoder)
             this.decodeSignature()
             this.decodeVersion()
             return Ok(this.decodeEObject())

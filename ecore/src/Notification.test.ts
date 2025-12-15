@@ -108,27 +108,21 @@ describe("Notification", () => {
 
     test("mergeRemoveMany", () => {
         const mockObject = mock<EObject>()
-        const mockObject1 = mock<EObject>()
-        const mockObject2 = mock<EObject>()
-        const mockObject3 = mock<EObject>()
         const o = instance(mockObject)
-        const o1 = instance(mockObject1)
-        const o2 = instance(mockObject2)
-        const o3 = instance(mockObject3)
         {
-            const n1 = new Notification(o, EventType.REMOVE, 1, o1, null, 2)
-            const n2 = new Notification(o, EventType.REMOVE, 1, o2, null, 2)
+            const n1 = new Notification(o, EventType.REMOVE, 1, 2, null, 2)
+            const n2 = new Notification(o, EventType.REMOVE, 1, 3, null, 2)
             expect(n1.merge(n2)).toBeTruthy()
             expect(n1.getEventType()).toBe(EventType.REMOVE_MANY)
-            expect(n1.getOldValue()).toEqual(expect.arrayContaining([o1, o2]))
+            expect(n1.getOldValue()).toEqual(expect.arrayContaining([2, 3]))
             expect(n1.getNewValue()).toEqual([2, 3])
         }
         {
-            const n1 = new Notification(o, EventType.REMOVE_MANY, 1, [o1, o2], [2, 3])
-            const n2 = new Notification(o, EventType.REMOVE, 1, o3, null, 2)
+            const n1 = new Notification(o, EventType.REMOVE_MANY, 1, [2, 3], [2, 3])
+            const n2 = new Notification(o, EventType.REMOVE, 1, 4, null, 2)
             expect(n1.merge(n2)).toBeTruthy()
             expect(n1.getEventType()).toBe(EventType.REMOVE_MANY)
-            expect(n1.getOldValue()).toEqual(expect.arrayContaining([o1, o2, o3]))
+            expect(n1.getOldValue()).toEqual(expect.arrayContaining([2, 3, 4]))
             expect(n1.getNewValue()).toEqual([2, 3, 4])
         }
     })
