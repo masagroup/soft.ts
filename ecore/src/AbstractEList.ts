@@ -61,7 +61,7 @@ export abstract class AbstractEList<E> implements EList<E> {
 
     removeAll(c: Collection<E>): boolean {
         let modified = false
-        for (let i = this.size(); --i >= 0; ) {
+        for (let i = this.size(); --i >= 0;) {
             if (c.contains(this.doGet(i))) {
                 this.removeAt(i)
                 modified = true
@@ -72,7 +72,7 @@ export abstract class AbstractEList<E> implements EList<E> {
 
     retainAll(c: Collection<E>): boolean {
         let modified = false
-        for (let i = this.size(); --i >= 0; ) {
+        for (let i = this.size(); --i >= 0;) {
             if (!c.contains(this.doGet(i))) {
                 this.removeAt(i)
                 modified = true
