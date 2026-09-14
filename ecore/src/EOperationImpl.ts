@@ -28,9 +28,9 @@ import {
 } from "./internal.js"
 
 export class EOperationImpl extends ETypedElementExt implements EOperation {
+    protected _eExceptions: EList<EClassifier>
     protected _eParameters: EList<EParameter>
     protected _operationID: number
-    protected _eExceptions: EList<EClassifier>
 
     constructor() {
         super()

@@ -13,13 +13,13 @@ import * as ecore from "@masagroup/ecore"
 import { Group, Match, MatchKind, Team, TournamentConstants, getTournamentPackage } from "./internal.js"
 
 export class MatchImpl extends ecore.EObjectImpl implements Match {
-    protected _kind: MatchKind
-    protected _homeTeam: Team
-    protected _guestTeam: Team
-    protected _result: string
     protected _date: Date
     protected _group: Group
+    protected _guestTeam: Team
+    protected _homeTeam: Team
+    protected _kind: MatchKind
     protected _location: string
+    protected _result: string
 
     constructor() {
         super()

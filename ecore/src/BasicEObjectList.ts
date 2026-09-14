@@ -113,9 +113,18 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         return this.resolve(index, super.doGet(index))
     }
 
+    toArray(): O[] {
+        if (this._proxies) {
+            for (let i = 0; i < this._v.length; i++) {
+                this.resolve(i, this._v[i])
+            }
+        }
+        return super.toArray()
+    }
+
     inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
         const internal = this.forceCast<EObjectInternal>(o)
-        if (internal != null && this._inverse) {
+        if (internal != null && this._owner != null && this._inverse) {
             if (this._opposite) {
                 return internal.eInverseAdd(this._owner, this._inverseFeatureID, notifications)
             } else {
@@ -127,7 +136,7 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
 
     inverseRemove(o: O, notifications: ENotificationChain): ENotificationChain {
         const internal = this.forceCast<EObjectInternal>(o)
-        if (internal != null && this._inverse) {
+        if (internal != null && this._owner != null && this._inverse) {
             if (this._opposite) {
                 return internal.eInverseRemove(this._owner, this._inverseFeatureID, notifications)
             } else {

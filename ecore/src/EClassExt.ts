@@ -11,7 +11,6 @@ import {
     AbstractEAdapter,
     EAttribute,
     EClass,
-    EClassifier,
     EClassImpl,
     EcoreConstants,
     ENotification,
@@ -24,8 +23,8 @@ import {
     isEReference
 } from "./internal.js"
 
-export function isEClass(c: EClassifier): c is EClass {
-    return c == undefined ? undefined : "isAbstract" in c
+export function isEClass(c: any): c is EClass {
+    return typeof c === "object" && c !== null && "isAbstract" in c
 }
 
 class ESuperAdapter extends AbstractEAdapter {

@@ -9,7 +9,7 @@
 
 import { instance, mock, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import { BasicEObjectMap, EClass, EFactory, EMapEntry, EObject, EPackage } from "./internal.js"
+import { BasicEObjectMap, EClass, EFactory, EMapEntry, EObject, EPackage, getEcoreFactory } from "./internal.js"
 
 interface EObjectEMapEntry<K, V> extends EObject, EMapEntry<K, V> {}
 
@@ -35,5 +35,25 @@ describe("BasicEObjectMap", () => {
         const map = new BasicEObjectMap<number, string>(cls)
         map.put(2, "2")
         expect(map.getValue(2)).toBe("2")
+    })
+
+    test("containment and ownership", () => {
+        const factory = getEcoreFactory()
+        const annotation = factory.createEAnnotation()
+        annotation.setSource("testSource")
+
+        const details = annotation.getDetails()
+        details.put("key1", "val1")
+
+        expect(details.size()).toBe(1)
+        expect(details.getValue("key1")).toBe("val1")
+
+        const entry = details.get(0)
+        expect(entry.eContainer()).toBe(annotation)
+        expect(annotation.eContents().contains(entry)).toBe(true)
+
+        details.put("key1", "valUpdated")
+        expect(details.size()).toBe(1)
+        expect(details.getValue("key1")).toBe("valUpdated")
     })
 })

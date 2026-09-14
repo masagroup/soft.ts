@@ -30,23 +30,23 @@ import {
 } from "./internal.js"
 
 export class EClassImpl extends EClassifierExt implements EClass {
-    protected _eReferences: EList<EReference>
-    protected _eAllOperations: EList<EOperation>
-    protected _eOperations: EList<EOperation>
-    protected _eContainmentFeatures: EList<EStructuralFeature>
-    protected _eCrossReferenceFeatures: EList<EStructuralFeature>
-    protected _eAllStructuralFeatures: EList<EStructuralFeature>
-    protected _eAttributes: EList<EAttribute>
-    protected _eAllReferences: EList<EReference>
-    protected _isAbstract: boolean
-    protected _eIDAttribute: EAttribute
-    protected _eAllSuperTypes: EList<EClass>
-    protected _eStructuralFeatures: EList<EStructuralFeature>
-    protected _isInterface: boolean
     protected _eAllAttributes: EList<EAttribute>
     protected _eAllContainments: EList<EReference>
     protected _eAllCrossReferences: EList<EReference>
+    protected _eAllOperations: EList<EOperation>
+    protected _eAllReferences: EList<EReference>
+    protected _eAllStructuralFeatures: EList<EStructuralFeature>
+    protected _eAllSuperTypes: EList<EClass>
+    protected _eAttributes: EList<EAttribute>
+    protected _eContainmentFeatures: EList<EStructuralFeature>
+    protected _eCrossReferenceFeatures: EList<EStructuralFeature>
+    protected _eIDAttribute: EAttribute
+    protected _eOperations: EList<EOperation>
+    protected _eReferences: EList<EReference>
+    protected _eStructuralFeatures: EList<EStructuralFeature>
     protected _eSuperTypes: EList<EClass>
+    protected _isAbstract: boolean
+    protected _isInterface: boolean
 
     constructor() {
         super()

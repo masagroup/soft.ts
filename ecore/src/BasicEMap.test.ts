@@ -45,6 +45,28 @@ describe("BasicEMap", () => {
         expect(m.containsKey(-2)).toBeFalsy()
     })
 
+    test("put existing entry updates without duplicate keys", () => {
+        const m = new BasicEMap<string, string>()
+        m.put("a", "alpha")
+        expect(m.size()).toBe(1)
+        expect(m.getValue("a")).toBe("alpha")
+
+        m.put("a", "updated")
+        expect(m.size()).toBe(1)
+        expect(m.getValue("a")).toBe("updated")
+        expect(m.get(0).getValue()).toBe("updated")
+    })
+
+    test("containsKey correctly handles null and undefined values", () => {
+        const m = new BasicEMap<string, any>()
+        m.put("nullKey", null)
+        m.put("undefKey", undefined)
+
+        expect(m.containsKey("nullKey")).toBe(true)
+        expect(m.containsKey("undefKey")).toBe(true)
+        expect(m.containsKey("missingKey")).toBe(false)
+    })
+
     test("containsValue", () => {
         const m = new BasicEMap<number, string>()
         m.put(2, "2")

@@ -13,6 +13,6 @@ export interface EObjectList<E> extends EList<E> {
     getUnResolvedList(): EList<E>
 }
 
-export function isEObjectList<E>(l: EList<E>): l is EObjectList<E> {
-    return "getUnResolvedList" in l
+export function isEObjectList<E>(l: any): l is EObjectList<E> {
+    return typeof l === "object" && l !== null && "getUnResolvedList" in l
 }

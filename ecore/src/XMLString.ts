@@ -7,6 +7,15 @@
 //
 // *****************************************************************************
 
+function escapeXML(str: string, isAttribute: boolean = false): string {
+    if (!str) return str
+    let res = str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    if (isAttribute) {
+        res = res.replace(/"/g, "&quot;").replace(/'/g, "&apos;")
+    }
+    return res
+}
+
 class XMLStringSegment {
     buffer: string = ""
     lineWidth: number = 0
@@ -126,7 +135,7 @@ export class XMLString {
     }
 
     addAttributeContent(content: string) {
-        this.add(content)
+        this.add(escapeXML(content, true))
     }
 
     endAttribute() {
@@ -163,7 +172,7 @@ export class XMLString {
         this.add("<")
         this.add(name)
         this.add(">")
-        this.add(content)
+        this.add(escapeXML(content, false))
         this.add("</")
         this.depth--
         this.add(name)

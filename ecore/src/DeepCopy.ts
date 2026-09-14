@@ -7,7 +7,18 @@
 //
 // *****************************************************************************
 
-import { EAttribute, EList, EObject, EObjectInternal, EObjectList, EReference, ImmutableEList, isEObject } from "./internal.js"
+import {
+    EAttribute,
+    EList,
+    EObject,
+    EObjectInternal,
+    EObjectList,
+    EReference,
+    ImmutableEList,
+    isEAttribute,
+    isEObject,
+    isEReference
+} from "./internal.js"
 
 export class DeepCopy {
     private _objects: Map<EObject, EObject> = new Map()
@@ -25,14 +36,13 @@ export class DeepCopy {
             if (copyEObject) {
                 this._objects.set(eObject, copyEObject)
                 const eClass = eObject.eClass()
-                for (const eAttribute of eClass.getEAttributes()) {
-                    if (eAttribute.isChangeable() && !eAttribute.isDerived()) {
-                        this.copyAttribute(eAttribute, eObject, copyEObject)
-                    }
-                }
-                for (const eReference of eClass.getEReferences()) {
-                    if (eReference.isChangeable() && !eReference.isDerived() && eReference.isContainment()) {
-                        this.copyContainment(eReference, eObject, copyEObject)
+                for (const eFeature of eClass.getEAllStructuralFeatures()) {
+                    if (eFeature.isChangeable() && !eFeature.isDerived()) {
+                        if (isEAttribute(eFeature)) {
+                            this.copyAttribute(eFeature, eObject, copyEObject)
+                        } else if (isEReference(eFeature) && eFeature.isContainment()) {
+                            this.copyContainment(eFeature, eObject, copyEObject)
+                        }
                     }
                 }
 
@@ -86,7 +96,7 @@ export class DeepCopy {
 
     copyReferences() {
         for (const [eObject, copyEObject] of this._objects) {
-            for (const eReference of eObject.eClass().getEReferences()) {
+            for (const eReference of eObject.eClass().getEAllReferences()) {
                 if (eReference.isChangeable() && !eReference.isDerived() && !eReference.isContainment() && !eReference.isContainer()) {
                     this.copyReference(eReference, eObject, copyEObject)
                 }

@@ -29,12 +29,12 @@ import {
 } from "./internal.js"
 
 export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
-    protected _eTypeArguments: EList<EGenericType>
-    protected _eUpperBound: EGenericType
     protected _eClassifier: EClassifier
-    protected _eRawType: EClassifier
     protected _eLowerBound: EGenericType
+    protected _eRawType: EClassifier
+    protected _eTypeArguments: EList<EGenericType>
     protected _eTypeParameter: ETypeParameter
+    protected _eUpperBound: EGenericType
 
     constructor() {
         super()

@@ -25,9 +25,9 @@ import {
 
 export class EReferenceImpl extends EStructuralFeatureExt implements EReference {
     protected _eKeys: EList<EAttribute>
-    protected _isResolveProxies: boolean
     protected _eOpposite: EReference
     protected _isContainment: boolean
+    protected _isResolveProxies: boolean
 
     constructor() {
         super()

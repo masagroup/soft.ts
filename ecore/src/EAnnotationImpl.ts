@@ -31,10 +31,10 @@ import {
 } from "./internal.js"
 
 export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
-    protected _details: EMap<string, string>
-    protected _source: string
-    protected _references: EList<EObject>
     protected _contents: EList<EObject>
+    protected _details: EMap<string, string>
+    protected _references: EList<EObject>
+    protected _source: string
 
     constructor() {
         super()
@@ -147,7 +147,13 @@ export class EAnnotationImpl extends EModelElementExt implements EAnnotation {
         return new BasicEObjectList<EObject>(this, EcoreConstants.EANNOTATION__CONTENTS, -1, true, true, false, false, false)
     }
     protected initDetails(): EMap<string, string> {
-        return new BasicEObjectMap<string, string>(getEcorePackage().getEStringToStringMapEntry())
+        return new BasicEObjectMap<string, string>(
+            getEcorePackage().getEStringToStringMapEntry(),
+            this,
+            EcoreConstants.EANNOTATION__DETAILS,
+            -1,
+            false
+        )
     }
     protected initReferences(): EList<EObject> {
         return new BasicEObjectList<EObject>(this, EcoreConstants.EANNOTATION__REFERENCES, -1, false, false, false, true, false)

@@ -69,5 +69,5 @@ export function isMapType(feature: EStructuralFeature): boolean {
 }
 
 export function isEStructuralFeature(o: any): o is EStructuralFeature {
-    return o == undefined ? undefined : "getFeatureID" in o
+    return typeof o === "object" && o !== null && "getFeatureID" in o
 }

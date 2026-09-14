@@ -9,9 +9,19 @@
 
 import { instance, mock, verify, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import { EResourceImpl, EResourceInternal, EResourceSetImpl, URI } from "./internal.js"
+import { EResourceImpl, EResourceInternal, EResourceSetImpl, isEResourceSet, URI } from "./internal.js"
 
 describe("EResourceSetImpl", () => {
+    test("isEResourceSet", () => {
+        const rs = new EResourceSetImpl()
+        expect(isEResourceSet(rs)).toBe(true)
+
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEResourceSet(p as any)).toBe(false)
+        }
+    })
+
     test("constructor", () => {
         const rs = new EResourceSetImpl()
         expect(rs.getURIResourceMap()).toBeNull()

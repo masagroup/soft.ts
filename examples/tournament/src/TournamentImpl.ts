@@ -22,9 +22,9 @@ import {
 } from "./internal.js"
 
 export class TournamentImpl extends NamedElementImpl implements Tournament {
-    protected _teams: ecore.EList<Team>
     protected _groups: ecore.EList<Group>
     protected _matches: ecore.EList<Match>
+    protected _teams: ecore.EList<Team>
 
     constructor() {
         super()

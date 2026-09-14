@@ -13,6 +13,7 @@ export interface EDynamicProperties {
     eDynamicGet(dynamicFeatureID: number): any
     eDynamicSet(dynamicFeatureID: number, newValue: any): void
     eDynamicUnset(dynamicFeatureID: number): void
+    eDynamicIsSet?(dynamicFeatureID: number): boolean
 }
 
 export interface EObjectInternal extends EObject {
@@ -52,8 +53,8 @@ export interface EObjectInternal extends EObject {
 }
 
 export function isEObject(o: any): o is EObject {
-    return o == undefined ? undefined : "eClass" in o
+    return typeof o === "object" && o !== null && "eClass" in o
 }
 export function isEObjectInternal(o: any): o is EObjectInternal {
-    return o == undefined ? undefined : isEObject(o) && "eStaticClass" in o
+    return typeof o === "object" && o !== null && isEObject(o) && "eStaticClass" in o
 }

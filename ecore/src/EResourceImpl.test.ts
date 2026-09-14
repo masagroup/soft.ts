@@ -1,8 +1,17 @@
 import { instance, mock, verify, when } from "ts-mockito"
-import { describe, test } from "vitest"
-import { EObject, EObjectList, EResourceImpl, EResourceListener, ImmutableEList } from "./internal.js"
+import { describe, expect, test } from "vitest"
+import { EObject, EObjectList, EResourceImpl, EResourceListener, ImmutableEList, isEResource } from "./internal.js"
 
 describe("EResourceImpl", () => {
+    test("isEResource", () => {
+        const r = new EResourceImpl()
+        expect(isEResource(r)).toBe(true)
+
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEResource(p as any)).toBe(false)
+        }
+    })
     test("listeners", () => {
         const r = new EResourceImpl()
         const mockObject = mock<EObject>()

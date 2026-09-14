@@ -44,8 +44,13 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     put(key: K, value: V): void {
+        const e = this.getEntry(key)
+        if (e) {
+            e.setValue(value)
+        } else {
+            this.add(this.newEntry(key, value))
+        }
         this._mapData.set(key, value)
-        this.add(this.newEntry(key, value))
     }
 
     getValue(key: K): V {
@@ -65,7 +70,7 @@ export class BasicEMap<K, V> extends BasicEList<EMapEntry<K, V>> implements EMap
     }
 
     containsKey(key: K): boolean {
-        return this._mapData.get(key) != undefined
+        return this._mapData.has(key)
     }
 
     containsValue(value: V): boolean {

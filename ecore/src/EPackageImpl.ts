@@ -31,9 +31,9 @@ import {
 export class EPackageImpl extends ENamedElementImpl implements EPackage {
     protected _eClassifiers: EList<EClassifier>
     protected _eFactoryInstance: EFactory
-    protected _nsURI: string
     protected _eSubPackages: EList<EPackage>
     protected _nsPrefix: string
+    protected _nsURI: string
 
     constructor() {
         super()

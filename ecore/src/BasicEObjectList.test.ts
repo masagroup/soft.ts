@@ -9,7 +9,17 @@
 
 import { instance, mock, verify, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
-import { BasicEObjectList, EClass, EObject, EObjectInternal, EObjectList, EStructuralFeature } from "./internal.js"
+import {
+    BasicEObjectList,
+    EClass,
+    EObject,
+    EObjectInternal,
+    EObjectList,
+    EStructuralFeature,
+    getEcoreFactory,
+    getEcorePackage,
+    isEObjectList
+} from "./internal.js"
 
 describe("BasicEObjectList", () => {
     test("constructor", () => {
@@ -270,5 +280,26 @@ describe("BasicEObjectList", () => {
             _proxies: true,
             _unset: false
         })
+    })
+
+    test("toArray resolves proxies", () => {
+        const factory = getEcoreFactory()
+        const owner = factory.createEClass() as any
+        const list = new BasicEObjectList<EObject>(owner, 0, -1, false, false, false, true, false)
+
+        const proxy = factory.createEClass()
+        proxy.eSetProxyURI(getEcorePackage().getEClass().eResource()?.getURI() || null)
+
+        list.add(proxy)
+        const arr = list.toArray()
+        expect(arr.length).toBe(1)
+        expect(arr[0]).toBeDefined()
+    })
+
+    test("isEObjectList on primitives", () => {
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEObjectList(p as any)).toBe(false)
+        }
     })
 })

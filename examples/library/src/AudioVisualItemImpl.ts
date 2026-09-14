@@ -20,8 +20,8 @@ import {
 
 export class AudioVisualItemImpl extends CirculatingItemImpl implements AudioVisualItem {
     protected _isDamaged: boolean
-    protected _title: string
     protected _minutesLength: number
+    protected _title: string
 
     constructor() {
         super()

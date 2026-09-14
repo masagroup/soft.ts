@@ -11,5 +11,10 @@ describe("EList", () => {
         const list = instance(mockList)
         when(mockList.moveTo(anyNumber(), anyNumber())).thenReturn(undefined)
         expect(isEList(list)).toBeTruthy()
+
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEList(p as any)).toBe(false)
+        }
     })
 })

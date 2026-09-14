@@ -9,6 +9,18 @@
 
 import { DynamicEObjectImpl, EClass, EDataType, EFactoryImpl, EObject, isEEnum } from "./internal.js"
 
+function getInstanceTypeName(eDataType: EDataType): string {
+    const eAnnotation =
+        eDataType.getEAnnotation("http://net.masagroup/soft/2020/GenTS") || eDataType.getEAnnotation("http://net.masagroup/soft/2019/GenGo")
+    if (eAnnotation != null) {
+        const typeName = eAnnotation.getDetails().getValue("instanceTypeName")
+        if (typeName) {
+            return typeName
+        }
+    }
+    return eDataType.getInstanceTypeName() || ""
+}
+
 export class EFactoryExt extends EFactoryImpl {
     constructor() {
         super()
@@ -36,13 +48,54 @@ export class EFactoryExt extends EFactoryImpl {
             return result.getValue()
         }
 
-        switch (eDataType.getInstanceTypeName()) {
+        const typeName = getInstanceTypeName(eDataType)
+        switch (typeName) {
             case "number":
+            case "float64":
+            case "java.lang.Double":
+            case "double":
+            case "float32":
+            case "java.lang.Float":
+            case "float":
+            case "int":
+            case "java.lang.Integer":
+            case "int32":
+            case "int16":
+            case "java.lang.Short":
+            case "short":
+            case "int8":
+            case "byte":
                 return Number(literalValue)
+            case "uint64":
+            case "com.google.common.primitives.UnsignedLong":
+            case "int64":
+            case "java.lang.Long":
+            case "long":
+            case "bigint":
+            case "BigInt":
+            case "java.math.BigInteger":
+                try {
+                    return BigInt(literalValue)
+                } catch {
+                    return Number(literalValue)
+                }
             case "boolean":
-                return Boolean(literalValue)
+            case "bool":
+            case "java.lang.Boolean": {
+                const lower = literalValue ? literalValue.toLowerCase() : ""
+                return lower === "true" || lower === "1"
+            }
             case "string":
+            case "java.lang.String":
                 return literalValue
+            case "Date":
+            case "java.util.Date":
+            case "EDate":
+                return new Date(literalValue)
+            case "byte[]":
+            case "[]byte":
+            case "Uint8Array":
+                return new TextEncoder().encode(literalValue)
         }
 
         throw new Error("createFromString not implemented for '" + eDataType.getName() + "'")
@@ -53,12 +106,35 @@ export class EFactoryExt extends EFactoryImpl {
             throw new Error("The datatype '" + eDataType.getName() + "' is not a valid classifier")
         }
 
+        if (instanceValue == null) {
+            return ""
+        }
+
         if (isEEnum(eDataType)) {
             const result = eDataType.getEEnumLiteralByValue(instanceValue)
             if (!result) {
                 throw new Error("The value '" + instanceValue + "' is not a valid enumerator of '" + eDataType.getName() + "'")
             }
             return result.getLiteral()
+        }
+
+        const typeName = getInstanceTypeName(eDataType)
+        switch (typeName) {
+            case "boolean":
+            case "bool":
+            case "java.lang.Boolean":
+                return instanceValue ? "true" : "false"
+            case "Date":
+            case "java.util.Date":
+            case "EDate":
+                return instanceValue instanceof Date ? instanceValue.toISOString() : new Date(instanceValue).toISOString()
+            case "byte[]":
+            case "[]byte":
+            case "Uint8Array":
+                if (instanceValue instanceof Uint8Array) {
+                    return new TextDecoder().decode(instanceValue)
+                }
+                break
         }
 
         return instanceValue.toString()

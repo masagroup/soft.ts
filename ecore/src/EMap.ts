@@ -21,5 +21,5 @@ export interface EMap<K, V> extends EList<EMapEntry<K, V>> {
 }
 
 export function isEMap<K, V>(m: any): m is EMap<K, V> {
-    return m == undefined ? undefined : isEList<EMapEntry<K, V>>(m) && "put" in m
+    return typeof m === "object" && m !== null && isEList<EMapEntry<K, V>>(m) && "put" in m
 }

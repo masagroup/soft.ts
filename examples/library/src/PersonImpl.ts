@@ -13,8 +13,8 @@ import * as ecore from "@masagroup/ecore"
 import { Addressable, LibraryConstants, Person, getLibraryPackage } from "./internal.js"
 
 export class PersonImpl extends ecore.EObjectImpl implements Person {
-    protected _firstName: string
     protected _address: string
+    protected _firstName: string
     protected _lastName: string
 
     constructor() {

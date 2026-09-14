@@ -440,7 +440,7 @@ export class XMLEncoder implements EEncoder {
     private saveDataTypeSingle(eObject: EObject, eFeature: EStructuralFeature) {
         const val = eObject.eGetResolve(eFeature, false)
         const str = this.getDataType(val, eFeature, true)
-        if (str) {
+        if (str !== undefined && str !== null) {
             this._str.addAttribute(this.getFeatureQName(eFeature), str)
         }
     }

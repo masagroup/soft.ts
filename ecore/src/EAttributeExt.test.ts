@@ -37,5 +37,10 @@ describe("EAttributeExt", () => {
         const mockAttributeInstance = instance(mockAttribute)
         when(mockAttribute.getEAttributeType()).thenReturn(null)
         expect(isEAttribute(mockAttributeInstance)).toBeTruthy()
+
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEAttribute(p as any)).toBe(false)
+        }
     })
 })

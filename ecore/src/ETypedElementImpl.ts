@@ -21,11 +21,11 @@ import {
 } from "./internal.js"
 
 export class ETypedElementImpl extends ENamedElementImpl implements ETypedElement {
-    protected _lowerBound: number
-    protected _isOrdered: boolean
     protected _eType: EClassifier
-    protected _upperBound: number
+    protected _isOrdered: boolean
     protected _isUnique: boolean
+    protected _lowerBound: number
+    protected _upperBound: number
 
     constructor() {
         super()

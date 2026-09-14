@@ -21,12 +21,12 @@ import {
 } from "./internal.js"
 
 export class BookImpl extends CirculatingItemImpl implements Book {
-    protected _indexes: ecore.EMap<string, number>
-    protected _category: BookCategory
     protected _author: Writer
-    protected _title: string
+    protected _category: BookCategory
+    protected _indexes: ecore.EMap<string, number>
     protected _pages: number
     protected _tableOfContents: ecore.EList<string>
+    protected _title: string
 
     constructor() {
         super()
@@ -229,7 +229,13 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     // get the value of indexes
     getIndexes(): ecore.EMap<string, number> {
         if (this._indexes == null) {
-            this._indexes = new ecore.BasicEObjectMap<string, number>(getLibraryPackage().getBookIndex())
+            this._indexes = new ecore.BasicEObjectMap<string, number>(
+                getLibraryPackage().getBookIndex(),
+                this,
+                LibraryConstants.BOOK__INDEXES,
+                -1,
+                false
+            )
         }
         return this._indexes
     }

@@ -22,6 +22,7 @@ import {
     getEcoreFactory,
     getEcorePackage,
     ImmutableEList,
+    UNBOUNDED_MULTIPLICITY,
     URI,
     XMIProcessor,
     XMLProcessor
@@ -87,6 +88,51 @@ describe("EcoreUtils", () => {
             when(mockObject1.eClass()).thenReturn(instance(mockClass1))
             when(mockObject2.eIsProxy()).thenReturn(false)
             when(mockObject2.eClass()).thenReturn(instance(mockClass2))
+        })
+
+        test("inherited and lists", () => {
+            const factory = getEcoreFactory()
+            const pkg = factory.createEPackage()
+            pkg.setName("pkg")
+            pkg.setNsURI("http://test/pkg")
+            pkg.setEFactoryInstance(new EFactoryExt())
+
+            const baseClass = factory.createEClass()
+            baseClass.setName("Base")
+            const baseAttr = factory.createEAttribute()
+            baseAttr.setName("baseAttr")
+            baseAttr.setEType(getEcorePackage().getEString())
+            baseClass.getEStructuralFeatures().add(baseAttr)
+
+            const subClass = factory.createEClass()
+            subClass.setName("Sub")
+            subClass.getESuperTypes().add(baseClass)
+
+            const listAttr = factory.createEAttribute()
+            listAttr.setName("numList")
+            listAttr.setEType(getEcorePackage().getEInt())
+            listAttr.setUpperBound(UNBOUNDED_MULTIPLICITY)
+            subClass.getEStructuralFeatures().add(listAttr)
+
+            pkg.getEClassifiers().add(baseClass)
+            pkg.getEClassifiers().add(subClass)
+
+            const obj1 = pkg.getEFactoryInstance().create(subClass)
+            obj1.eSet(baseAttr, "same")
+            const l1 = obj1.eGet(listAttr) as any
+            l1.add(1)
+            l1.add(2)
+
+            const obj2 = pkg.getEFactoryInstance().create(subClass)
+            obj2.eSet(baseAttr, "same")
+            const l2 = obj2.eGet(listAttr) as any
+            l2.add(1)
+            l2.add(2)
+
+            expect(EcoreUtils.equals(obj1, obj2)).toBe(true)
+
+            l2.add(3)
+            expect(EcoreUtils.equals(obj1, obj2)).toBe(false)
         })
     })
 
@@ -250,6 +296,56 @@ describe("EcoreUtils", () => {
             const eClassCopy = EcoreUtils.copy(eClass)
             expect(EcoreUtils.equals(eClass, eClassCopy)).toBeTruthy()
         })
+
+        test("inherited", () => {
+            const factory = getEcoreFactory()
+            const pkg = factory.createEPackage()
+            pkg.setName("testPkg")
+            pkg.setNsURI("http://test/inherited")
+            pkg.setEFactoryInstance(new EFactoryExt())
+
+            const baseClass = factory.createEClass()
+            baseClass.setName("Base")
+            const baseAttr = factory.createEAttribute()
+            baseAttr.setName("baseName")
+            baseAttr.setEType(getEcorePackage().getEString())
+            baseClass.getEStructuralFeatures().add(baseAttr)
+
+            const childClass = factory.createEClass()
+            childClass.setName("Child")
+            const childAttr = factory.createEAttribute()
+            childAttr.setName("childVal")
+            childAttr.setEType(getEcorePackage().getEInt())
+            childClass.getEStructuralFeatures().add(childAttr)
+
+            const subClass = factory.createEClass()
+            subClass.setName("Sub")
+            subClass.getESuperTypes().add(baseClass)
+
+            const containRef = factory.createEReference()
+            containRef.setName("childContainment")
+            containRef.setEType(childClass)
+            containRef.setContainment(true)
+            baseClass.getEStructuralFeatures().add(containRef)
+
+            pkg.getEClassifiers().add(baseClass)
+            pkg.getEClassifiers().add(childClass)
+            pkg.getEClassifiers().add(subClass)
+
+            const subInstance = pkg.getEFactoryInstance().create(subClass)
+            subInstance.eSet(baseAttr, "hello")
+
+            const childInstance = pkg.getEFactoryInstance().create(childClass)
+            childInstance.eSet(childAttr, 42)
+            subInstance.eSet(containRef, childInstance)
+
+            const copied = EcoreUtils.copy(subInstance)
+            expect(copied.eGet(baseAttr)).toBe("hello")
+
+            const copiedChild = copied.eGet(containRef) as EObject
+            expect(copiedChild).not.toBeNull()
+            expect(copiedChild.eGet(childAttr)).toBe(42)
+        })
     })
 
     describe("resolveAll", () => {
@@ -296,6 +392,46 @@ describe("EcoreUtils", () => {
             const product = order.eGetResolve(orderProductReference, false)
             expect(product.eIsProxy()).toBeFalsy()
             expect(product.eGet(productAttibuteName)).toBe("Product 0")
+        })
+    })
+
+    describe("getRelativeURIFragmentPath", () => {
+        test("accumulates segments in correct order", () => {
+            const factory = getEcoreFactory()
+            const pkg = factory.createEPackage()
+            pkg.setName("testPkg")
+            const cls = factory.createEClass()
+            cls.setName("TestClass")
+            pkg.getEClassifiers().add(cls)
+            const attr = factory.createEAttribute()
+            attr.setName("testAttr")
+            cls.getEStructuralFeatures().add(attr)
+
+            const path = EcoreUtils.getRelativeURIFragmentPath(pkg, attr)
+            expect(path).toBe("TestClass/testAttr")
+        })
+    })
+
+    describe("resolveCrossReferencesAsync", () => {
+        test("resolves without this error", async () => {
+            const factory = getEcoreFactory()
+            const pkg = factory.createEPackage()
+            pkg.setName("pkg")
+            pkg.setNsURI("http://test/pkg2")
+            pkg.setEFactoryInstance(new EFactoryExt())
+            const cls = factory.createEClass()
+            cls.setName("Cls")
+            const ref = factory.createEReference()
+            ref.setName("ref")
+            ref.setEType(cls)
+            cls.getEStructuralFeatures().add(ref)
+            pkg.getEClassifiers().add(cls)
+
+            const o1 = pkg.getEFactoryInstance().create(cls)
+            const o2 = pkg.getEFactoryInstance().create(cls)
+            o1.eSet(ref, o2)
+
+            await expect(EcoreUtils.resolveCrossReferencesAsync(o1)).resolves.not.toThrow()
         })
     })
 })

@@ -422,7 +422,14 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
     private eDynamicPropertiesCreateMap(feature: EStructuralFeature): any {
         const eClass = feature.getEType() as EClass
-        return new BasicEObjectMap<any, any>(eClass)
+        let reverseFeatureID = -1
+        if (isEReference(feature)) {
+            const reverseFeature = feature.getEOpposite()
+            if (reverseFeature != null) {
+                reverseFeatureID = reverseFeature.getFeatureID()
+            }
+        }
+        return new BasicEObjectMap<any, any>(eClass, this, feature.getFeatureID(), reverseFeatureID, feature.isUnsettable())
     }
 
     private eDynamicPropertiesCreateList(feature: EStructuralFeature): any {
@@ -603,7 +610,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             const featureID = this.eClass().getFeatureID(dynamicFeature)
             return this.eInternalContainerFeatureID() == featureID && this.eInternalContainer() != null
         } else {
-            return properties.eDynamicGet(dynamicFeatureID) != null
+            return properties.eDynamicIsSet ? properties.eDynamicIsSet(dynamicFeatureID) : properties.eDynamicGet(dynamicFeatureID) != null
         }
     }
 

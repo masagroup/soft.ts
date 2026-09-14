@@ -251,7 +251,7 @@ export class XMLDecoder implements EDecoder {
     private procInst(param: string, s: string): string {
         const regexp = new RegExp(param + '="([^"]*)"', "g")
         const match = regexp.exec(s)
-        return match.length == 0 ? "" : match[1]
+        return !match || match.length == 0 ? "" : match[1]
     }
 
     private onStartTag(tag: sax.QualifiedTag) {
@@ -380,7 +380,7 @@ export class XMLDecoder implements EDecoder {
 
         const xsiNoNamespaceSchemaLocation = this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.noNamespaceSchemaLocationAttrib)
         if (xsiNoNamespaceSchemaLocation) {
-            this.handleXSINoNamespaceSchemaLocation(xsiSchemaLocation)
+            this.handleXSINoNamespaceSchemaLocation(xsiNoNamespaceSchemaLocation)
         }
     }
 
@@ -411,7 +411,7 @@ export class XMLDecoder implements EDecoder {
         if (!eObject) {
             this.error(
                 new EDiagnosticImpl(
-                    "Class {'" + uri + +"':'" + typeName + "}' not found",
+                    "Class {'" + uri + "':'" + typeName + "'} not found",
                     this._resource.getURI().toString(),
                     this._parser.line,
                     this._parser.column
@@ -584,7 +584,7 @@ export class XMLDecoder implements EDecoder {
                             const resolvedIndex = holderContents.indexOf(resolvedObject)
                             if (resolvedIndex != -1) {
                                 const proxyIndex = holderContents.indexOf(eProxy)
-                                holderContents.moveTo(proxyIndex, resolvedIndex)
+                                holderContents.moveTo(resolvedIndex, proxyIndex)
                                 if (proxyIndex > resolvedIndex) {
                                     holderContents.removeAt(proxyIndex - 1)
                                 } else {

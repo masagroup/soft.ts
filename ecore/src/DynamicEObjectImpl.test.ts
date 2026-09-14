@@ -182,4 +182,28 @@ describe("DynamicEObjectImpl", () => {
         expect(o3.eGet(r3)).toBeNull()
         expect(o3.eIsSet(r3)).toBeFalsy()
     })
+
+    test("eFeatureID and eDynamicIsSet", () => {
+        const factory = getEcoreFactory()
+        const pkg = factory.createEPackage()
+        const cls = factory.createEClass()
+        cls.setName("TestClass")
+        const attr = factory.createEAttribute()
+        attr.setName("name")
+        attr.setEType(getEcorePackage().getEString())
+        cls.getEStructuralFeatures().add(attr)
+        pkg.getEClassifiers().add(cls)
+
+        const obj = new DynamicEObjectImpl()
+        obj.setEClass(cls)
+
+        expect(obj.eFeatureID(attr)).toBe(0)
+        expect(obj.eIsSet(attr)).toBe(false)
+
+        obj.eSet(attr, "val")
+        expect(obj.eIsSet(attr)).toBe(true)
+
+        obj.eUnset(attr)
+        expect(obj.eIsSet(attr)).toBe(false)
+    })
 })

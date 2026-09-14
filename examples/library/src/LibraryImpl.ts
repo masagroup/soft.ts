@@ -24,16 +24,16 @@ import {
 } from "./internal.js"
 
 export class LibraryImpl extends ecore.EObjectImpl implements Library {
+    protected _address: string
+    protected _books: ecore.EList<Book>
+    protected _borrowers: ecore.EList<Borrower>
     protected _branches: ecore.EList<Library>
+    protected _employees: ecore.EList<Employee>
     protected _name: string
     protected _people: ecore.EList<any>
-    protected _books: ecore.EList<Book>
+    protected _proprietary: Person
     protected _stock: ecore.EList<Item>
     protected _writers: ecore.EList<Writer>
-    protected _borrowers: ecore.EList<Borrower>
-    protected _proprietary: Person
-    protected _address: string
-    protected _employees: ecore.EList<Employee>
 
     constructor() {
         super()

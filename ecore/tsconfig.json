@@ -13,6 +13,8 @@
     "inlineSourceMap": false,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "rootDir": "src"
   },
   "exclude": [
     ".vscode",

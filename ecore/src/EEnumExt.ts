@@ -1,7 +1,7 @@
 import { EEnum, EEnumImpl, EEnumLiteral } from "./internal.js"
 
 export function isEEnum(o: any): o is EEnum {
-    return o == undefined ? undefined : "getELiterals" in o
+    return typeof o === "object" && o !== null && "getELiterals" in o
 }
 
 export class EEnumExt extends EEnumImpl {

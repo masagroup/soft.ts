@@ -212,7 +212,7 @@ export class EcoreUtils {
         while (eContainer != null && !visited.has(eObject)) {
             visited.add(eObject)
             const path = (eContainer as EObjectInternal).eURIFragmentSegment(eObject.eContainingFeature(), eObject)
-            paths.slice().unshift(path)
+            paths.unshift(path)
             eObject = eContainer
             if (eContainer == ancestor) {
                 break
@@ -274,13 +274,11 @@ export class EcoreUtils {
                         const oldValue = list.get(i)
                         if (oldValue?.eIsProxy()) {
                             promises.push(
-                                new Promise(function (resolve, reject) {
-                                    this.resolveInObjectAsync(oldValue, eObject)
-                                        .then(function (newValue: EObject) {
-                                            resolve({ index: i, oldValue: oldValue, newValue: newValue })
-                                        })
-                                        .catch((e: Error) => reject(e))
-                                })
+                                EcoreUtils.resolveInObjectAsync(oldValue, eObject).then((newValue: EObject) => ({
+                                    index: i,
+                                    oldValue: oldValue,
+                                    newValue: newValue
+                                }))
                             )
                         }
                     }

@@ -17,7 +17,8 @@ import {
     EReferenceExt,
     getEcoreFactory,
     getEcorePackage,
-    ImmutableEList
+    ImmutableEList,
+    isEClass
 } from "./internal.js"
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
@@ -25,6 +26,16 @@ function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
 }
 
 describe("EClassExt", () => {
+    test("isEClass", () => {
+        const cls = new EClassExt()
+        expect(isEClass(cls)).toBe(true)
+
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEClass(p as any)).toBe(false)
+        }
+    })
+
     test("instance", () => {
         const eClass = new EClassExt()
         eClass.setName("eClass")

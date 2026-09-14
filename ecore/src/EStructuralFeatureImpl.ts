@@ -23,13 +23,13 @@ import {
 } from "./internal.js"
 
 export class EStructuralFeatureImpl extends ETypedElementExt implements EStructuralFeature {
-    protected _isTransient: boolean
-    protected _isVolatile: boolean
+    protected _defaultValueLiteral: string
+    protected _featureID: number
     protected _isChangeable: boolean
     protected _isDerived: boolean
-    protected _featureID: number
-    protected _defaultValueLiteral: string
+    protected _isTransient: boolean
     protected _isUnsettable: boolean
+    protected _isVolatile: boolean
 
     constructor() {
         super()

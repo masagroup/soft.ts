@@ -58,12 +58,16 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
         this._properties[dynamicFeatureID] = null
     }
 
+    eDynamicIsSet(dynamicFeatureID: number): boolean {
+        return this._properties[dynamicFeatureID] != null
+    }
+
     eFeatureID(feature: EStructuralFeature): number {
-        return this._clz.getFeatureID(feature)
+        return this.eClass().getFeatureID(feature)
     }
 
     eOperationID(operation: EOperation): number {
-        return this._clz.getOperationID(operation)
+        return this.eClass().getOperationID(operation)
     }
 
     resizeProperties(): void {

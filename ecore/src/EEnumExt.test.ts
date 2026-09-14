@@ -7,8 +7,17 @@
 //
 // *****************************************************************************
 
-import { describe, test } from "vitest"
+import { describe, expect, test } from "vitest"
+import { EEnumExt, isEEnum } from "./internal.js"
 
 describe("EEnumExt", () => {
-    test("isEEnum", () => {})
+    test("isEEnum", () => {
+        const eEnum = new EEnumExt()
+        expect(isEEnum(eEnum)).toBe(true)
+
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEEnum(p as any)).toBe(false)
+        }
+    })
 })

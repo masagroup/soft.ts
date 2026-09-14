@@ -16,5 +16,5 @@ export interface EList<E> extends List<E> {
 }
 
 export function isEList<E>(l: any): l is EList<E> {
-    return l == undefined ? undefined : "moveTo" in l
+    return typeof l === "object" && l !== null && "moveTo" in l
 }

@@ -25,8 +25,8 @@ import {
 
 export class EClassifierImpl extends ENamedElementImpl implements EClassifier {
     protected _classifierID: number
-    protected _instanceClassName: string
     protected _instanceClass: any
+    protected _instanceClassName: string
 
     constructor() {
         super()

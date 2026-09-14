@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EAttribute, EList, EObject, EObjectInternal, EReference } from "./internal.js"
+import { EAttribute, EList, EObject, EObjectInternal, EReference, EStructuralFeature, isEAttribute, isEReference } from "./internal.js"
 
 export class DeepEqual {
     private _objects: Map<EObject, EObject> = new Map()
@@ -75,15 +75,11 @@ export class DeepEqual {
         this._objects.set(eObj1, eObj2)
         this._objects.set(eObj2, eObj1)
 
-        for (const eAttribute of eClass.getEAttributes()) {
-            if (!eAttribute.isDerived() && !this.equalsAttribute(eObj1, eObj2, eAttribute)) {
-                this._objects.delete(eObj1)
-                this._objects.delete(eObj2)
-                return false
+        for (const eFeature of eClass.getEAllStructuralFeatures()) {
+            if (isEReference(eFeature) && (eFeature as EReference).isContainer()) {
+                continue
             }
-        }
-        for (const eReference of eClass.getEReferences()) {
-            if (!eReference.isDerived() && !this.equalsReference(eObj1, eObj2, eReference)) {
+            if (!eFeature.isDerived() && !this.equalsFeature(eObj1, eObj2, eFeature)) {
                 this._objects.delete(eObj1)
                 this._objects.delete(eObj2)
                 return false
@@ -109,29 +105,85 @@ export class DeepEqual {
         return true
     }
 
-    private equalsAttribute(eObj1: EObject, eObj2: EObject, eAttribute: EAttribute): boolean {
-        const isSet1 = eObj1.eIsSet(eAttribute)
-        const isSet2 = eObj2.eIsSet(eAttribute)
+    private equalsPrimitive(p1: any, p2: any): boolean {
+        if (p1 === p2) {
+            return true
+        }
+        if (p1 == null || p2 == null) {
+            return p1 === p2
+        }
+        if (p1 instanceof Date && p2 instanceof Date) {
+            return p1.getTime() === p2.getTime()
+        }
+        if (ArrayBuffer.isView(p1) && ArrayBuffer.isView(p2)) {
+            const u1 = new Uint8Array(p1.buffer, p1.byteOffset, p1.byteLength)
+            const u2 = new Uint8Array(p2.buffer, p2.byteOffset, p2.byteLength)
+            if (u1.length !== u2.length) return false
+            for (let i = 0; i < u1.length; i++) {
+                if (u1[i] !== u2[i]) return false
+            }
+            return true
+        }
+        return false
+    }
+
+    private equalsPrimitiveList(l1: EList<any>, l2: EList<any>): boolean {
+        const size = l1.size()
+        if (size != l2.size()) {
+            return false
+        }
+        for (let i = 0; i < size; i++) {
+            if (!this.equalsPrimitive(l1.get(i), l2.get(i))) {
+                return false
+            }
+        }
+        return true
+    }
+
+    private equalsFeature(eObj1: EObject, eObj2: EObject, eFeature: EStructuralFeature): boolean {
+        const isSet1 = eObj1.eIsSet(eFeature)
+        const isSet2 = eObj2.eIsSet(eFeature)
         if (isSet1 && isSet2) {
-            const value1 = eObj1.eGet(eAttribute)
-            const value2 = eObj2.eGet(eAttribute)
-            return value1 == value2
+            if (isEAttribute(eFeature)) {
+                return this.equalsAttribute(eObj1, eObj2, eFeature)
+            } else if (isEReference(eFeature)) {
+                return this.equalsReference(eObj1, eObj2, eFeature)
+            }
         }
         return isSet1 == isSet2
     }
 
-    private equalsReference(eObj1: EObject, eObj2: EObject, eReference: EReference): boolean {
-        const isSet1 = eObj1.eIsSet(eReference)
-        const isSet2 = eObj2.eIsSet(eReference)
-        if (isSet1 && isSet2) {
-            const value1 = eObj1.eGet(eReference)
-            const value2 = eObj2.eGet(eReference)
-            if (eReference.isMany()) {
-                return this.equalsAll(value1 as EList<EObject>, value2 as EList<EObject>)
-            } else {
-                return this.equals(value1 as EObject, value2 as EObject)
-            }
+    private equalsAttribute(eObj1: EObject, eObj2: EObject, eAttribute: EAttribute): boolean {
+        const value1 = eObj1.eGet(eAttribute)
+        const value2 = eObj2.eGet(eAttribute)
+        if (value1 == null) {
+            return value2 == null
         }
-        return isSet1 == isSet2
+        if (value2 == null) {
+            return false
+        }
+        if (eAttribute.isMany()) {
+            const l1 = value1 as EList<any>
+            const l2 = value2 as EList<any>
+            return this.equalsPrimitiveList(l1, l2)
+        } else {
+            return this.equalsPrimitive(value1, value2)
+        }
+    }
+
+    private equalsReference(eObj1: EObject, eObj2: EObject, eReference: EReference): boolean {
+        const value1 = eObj1.eGet(eReference)
+        const value2 = eObj2.eGet(eReference)
+        if (value1 == null) {
+            return value2 == null
+        }
+        if (value2 == null) {
+            return false
+        }
+        if (eReference.isMany()) {
+            return this.equalsAll(value1 as EList<EObject>, value2 as EList<EObject>)
+        } else {
+            return this.equals(value1 as EObject, value2 as EObject)
+        }
     }
 }

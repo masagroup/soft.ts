@@ -23,9 +23,9 @@ import {
 } from "./internal.js"
 
 export class EEnumLiteralImpl extends ENamedElementImpl implements EEnumLiteral {
-    protected _value: number
     protected _instance: any
     protected _literal: string
+    protected _value: number
 
     constructor() {
         super()

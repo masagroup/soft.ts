@@ -12,5 +12,10 @@ describe("EMap", () => {
         when(mockMap.moveTo(anyNumber(), anyNumber())).thenReturn(undefined)
         when(mockMap.put(anyNumber(), anyNumber())).thenReturn(undefined)
         expect(isEMap(map)).toBeTruthy()
+
+        const primitives = [42, "string", true, false, null, undefined, Symbol("sym"), 100n]
+        for (const p of primitives) {
+            expect(isEMap(p as any)).toBe(false)
+        }
     })
 })
