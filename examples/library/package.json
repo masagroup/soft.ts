@@ -14,15 +14,15 @@
   "license": "MPL-2.0",
   "devDependencies": {
     "deep-equal": "^2.2.3",
-    "prettier": "^3.7.4",
+    "prettier": "^3.9.6",
     "ts-mockito": "^2.6.1",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "@masagroup/ecore": "file:../../ecore"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.53.4"
+    "@rollup/rollup-linux-x64-gnu": "4.63.2"
   }
 }
