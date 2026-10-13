@@ -193,14 +193,24 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
         return this.eClass().getEStructuralFeature(this.eStaticFeatureCount() + dynamicFeatureID)
     }
 
+    // eResetContainer drops the container known in memory: it is read again from the store on
+    // the next access, for an object whose container the store changed.
+    protected eResetContainer(): void {
+        if (this.getEStore()) {
+            super.eSetInternalContainer(null, -1)
+            this._containerInitialized = false
+        }
+    }
+
     private initializeContainerFromStore(): void {
         if (this._containerInitialized) {
             return
         }
-        this._containerInitialized = true
         const store = this.getEStore()
         if (store) {
+            // a store failing to read the container leaves it to be read again
             const [container, feature] = store.getContainer(this)
+            this._containerInitialized = true
             if (container && feature) {
                 let featureID = EOPPOSITE_FEATURE_BASE - container.eClass().getFeatureID(feature)
                 if (isEReference(feature)) {

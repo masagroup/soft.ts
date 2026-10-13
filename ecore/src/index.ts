@@ -1,6 +1,8 @@
 export {
     AbstractEAdapter,
+    AbstractEList,
     AbstractNotification,
+    AbstractNotifyingList,
     BasicEList,
     BasicEMap,
     BasicEDataTypeList,
