@@ -297,8 +297,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         result = this.eDynamicPropertiesCreateList(dynamicFeature)
                     }
                     properties.eDynamicSet(dynamicFeatureID, result)
-                } else if (dynamicFeature.getDefaultValue()) {
-                    result = dynamicFeature.getDefaultValue()
+                } else {
+                    const defaultValue = dynamicFeature.getDefaultValue()
+                    if (defaultValue !== null && defaultValue !== undefined) {
+                        result = defaultValue
+                    }
                 }
             } else if (resolve && isProxy(dynamicFeature)) {
                 if (isEObject(result)) {
@@ -369,8 +372,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         result = this.eDynamicPropertiesCreateList(dynamicFeature)
                     }
                     properties.eDynamicSet(dynamicFeatureID, result)
-                } else if (dynamicFeature.getDefaultValue()) {
-                    result = dynamicFeature.getDefaultValue()
+                } else {
+                    const defaultValue = dynamicFeature.getDefaultValue()
+                    if (defaultValue !== null && defaultValue !== undefined) {
+                        result = defaultValue
+                    }
                 }
             } else if (resolve && isProxy(dynamicFeature)) {
                 if (isEObject(result)) {
