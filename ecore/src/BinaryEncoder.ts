@@ -164,7 +164,9 @@ export class BinaryEncoder implements EEncoder {
                         this.encodeURI(eObjectInternal.eProxyURI())
                         saveFeatureValues = false
                     } else {
-                        const eResource = eObjectInternal.eInternalResource()
+                        // The resource of the object, or of its container: an object contained in
+                        // another resource, such as a data type of Ecore, is encoded as a proxy.
+                        const eResource = eObjectInternal.eResource()
                         if (
                             eResource != null &&
                             (eResource != this._resource ||

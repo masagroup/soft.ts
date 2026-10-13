@@ -252,7 +252,7 @@ export class URI {
             return ref
         }
 
-        if (this.scheme != this.scheme || this.authority() != ref.authority()) {
+        if (this.scheme != ref.scheme || this.authority() != ref.authority()) {
             return ref
         }
 
