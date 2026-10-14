@@ -21,7 +21,7 @@
     "build-types": "tsc -b tsconfig.types.json",
     "build-esm": "tsc -b tsconfig.esm.json",
     "build-cjs": "tsc -b tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
-    "pretty": "prettier --write src/**/*.ts",
+    "pretty": "node scripts/remove-unused-imports.mjs && prettier --write src/**/*.ts",
     "lint": "oxlint src",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"

@@ -2,10 +2,12 @@
 .vscode
 coverage
 node_modules
+scripts
 src
 testdata
 
 # configs
+.oxlintrc.json
 .prettier*
 *.config.js
 *.config.ts
