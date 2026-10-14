@@ -14,6 +14,7 @@ import {
     EAttribute,
     EClass,
     EList,
+    EMap,
     ENotification,
     EObject,
     EReference,
@@ -219,6 +220,54 @@ describe("EStoreEObjectImpl", () => {
         tags.add("x")
         expect(tags.toArray()).toEqual(["x"])
         expect(o.eIsSet(m.tags)).toBeTruthy()
+    })
+
+    test("withoutStore_featureIDsFrom64", () => {
+        // without a store, the cache is the only place the values are kept: those of features
+        // with an ID from 64 are kept too
+        const f = getEcoreFactory()
+        const eClass = f.createEClass()
+        eClass.setName("Wide")
+        const attributes: EAttribute[] = []
+        for (let i = 0; i < 70; i++) {
+            const attribute = f.createEAttribute()
+            attribute.setName("a" + i)
+            attribute.setEType(getEcorePackage().getEString())
+            eClass.getEStructuralFeatures().add(attribute)
+            attributes.push(attribute)
+        }
+        const pkg = f.createEPackage()
+        pkg.getEClassifiers().add(eClass)
+        const o = newObject(eClass, null)
+        attributes.forEach((a, i) => o.eSet(a, "v" + i))
+        attributes.forEach((a, i) => expect(o.eGet(a)).toBe("v" + i))
+        expect(o.eIsSet(attributes[66])).toBeTruthy()
+        o.eUnset(attributes[66])
+        expect(o.eIsSet(attributes[66])).toBeFalsy()
+        expect(o.eGet(attributes[69])).toBe("v69")
+    })
+
+    test("mapOfEStringToStringMapEntry", () => {
+        // the entries of EStringToStringMapEntry, as in the XML namespace maps of a document root,
+        // are not cache providers
+        const f = getEcoreFactory()
+        const eClass = f.createEClass()
+        eClass.setName("DocumentRoot")
+        const prefixes = f.createEReference()
+        prefixes.setName("xMLNSPrefixMap")
+        prefixes.setEType(getEcorePackage().getEStringToStringMapEntry())
+        prefixes.setContainment(true)
+        prefixes.setUpperBound(-1)
+        eClass.getEStructuralFeatures().add(prefixes)
+        const pkg = f.createEPackage()
+        pkg.getEClassifiers().add(eClass)
+        for (const store of [null, new MemoryStore()]) {
+            const o = newObject(eClass, store)
+            const map = o.eGet(prefixes) as EMap<string, string>
+            map.put("xsi", "http://www.w3.org/2001/XMLSchema-instance")
+            expect(map.getValue("xsi")).toBe("http://www.w3.org/2001/XMLSchema-instance")
+            expect(o.eIsSet(prefixes), store ? "with a store" : "without a store").toBeTruthy()
+        }
     })
 
     test("getSetThroughStore", () => {

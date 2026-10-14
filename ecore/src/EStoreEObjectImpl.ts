@@ -132,7 +132,8 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
 
     eDynamicIsSet(dynamicFeatureID: number): boolean {
         const feature = this.eDynamicFeature(dynamicFeatureID)
-        const store = feature.isTransient() ? null : this.getEStore()
+        // maps are kept in memory, not held by the store (eCreateMap)
+        const store = feature.isTransient() || isMapType(feature) ? null : this.getEStore()
         if (store) {
             return store.isSet(this, feature)
         }
