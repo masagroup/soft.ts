@@ -10,9 +10,9 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { instance, mock, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { EmptyConstants, EmptyFactory, EmptyFactoryImpl } from "./internal.js"
+import { EmptyFactoryImpl } from "./internal.js"
 
 describe("EmptyFactoryImpl", () => {
     test("createFromEClass", () => {

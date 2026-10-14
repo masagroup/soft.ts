@@ -287,7 +287,7 @@ describe("BasicEObjectList", () => {
         const owner = factory.createEClass() as any
         const list = new BasicEObjectList<EObject>(owner, 0, -1, false, false, false, true, false)
 
-        const proxy = factory.createEClass()
+        const proxy = factory.createEClass() as unknown as EObjectInternal
         proxy.eSetProxyURI(getEcorePackage().getEClass().eResource()?.getURI() || null)
 
         list.add(proxy)

@@ -10,15 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import {
-    AudioVisualItem,
-    AudioVisualItemImpl,
-    BookOnTape,
-    LibraryConstants,
-    Person,
-    Writer,
-    getLibraryPackage
-} from "./internal.js"
+import { AudioVisualItemImpl, BookOnTape, LibraryConstants, Person, Writer, getLibraryPackage } from "./internal.js"
 
 export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
     protected _author: Writer

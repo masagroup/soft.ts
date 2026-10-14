@@ -11,7 +11,6 @@
 
 import * as ecore from "@masagroup/ecore"
 import {
-    Addressable,
     Book,
     Borrower,
     Employee,

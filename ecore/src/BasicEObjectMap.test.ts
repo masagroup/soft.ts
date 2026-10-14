@@ -48,7 +48,7 @@ describe("BasicEObjectMap", () => {
         expect(details.size()).toBe(1)
         expect(details.getValue("key1")).toBe("val1")
 
-        const entry = details.get(0)
+        const entry = details.get(0) as EObjectEMapEntry<string, string>
         expect(entry.eContainer()).toBe(annotation)
         expect(annotation.eContents().contains(entry)).toBe(true)
 

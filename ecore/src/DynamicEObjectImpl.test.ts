@@ -78,6 +78,19 @@ describe("DynamicEObjectImpl", () => {
         expect(o.eGet(a)).toBe(null)
     })
 
+    test("falsyDefaultValue", async () => {
+        const c = getEcoreFactory().createEClass()
+        const a = getEcoreFactory().createEAttribute()
+        a.setEType(getEcorePackage().getEBoolean())
+        a.setDefaultValueLiteral("false")
+        c.getEStructuralFeatures().add(a)
+
+        const o = new DynamicEObjectImpl()
+        o.setEClass(c)
+        expect(o.eGet(a)).toBe(false)
+        expect(await o.eGetFromIDAsync(c.getFeatureID(a), true)).toBe(false)
+    })
+
     test("container", () => {
         const r1 = getEcoreFactory().createEReference()
         r1.setContainment(true)

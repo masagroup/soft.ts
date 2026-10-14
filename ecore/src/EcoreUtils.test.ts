@@ -407,7 +407,7 @@ describe("EcoreUtils", () => {
             attr.setName("testAttr")
             cls.getEStructuralFeatures().add(attr)
 
-            const path = EcoreUtils.getRelativeURIFragmentPath(pkg, attr)
+            const path = EcoreUtils.getRelativeURIFragmentPath(pkg, attr, false)
             expect(path).toBe("TestClass/testAttr")
         })
     })
@@ -431,7 +431,7 @@ describe("EcoreUtils", () => {
             const o2 = pkg.getEFactoryInstance().create(cls)
             o1.eSet(ref, o2)
 
-            await expect(EcoreUtils.resolveCrossReferencesAsync(o1)).resolves.not.toThrow()
+            await expect(EcoreUtils["resolveCrossReferencesAsync"](o1)).resolves.not.toThrow()
         })
     })
 })

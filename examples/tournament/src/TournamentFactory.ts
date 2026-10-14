@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Group, Match, NamedElement, Team, Tournament, TournamentFactoryImpl } from "./internal.js"
+import { Group, Match, Team, Tournament, TournamentFactoryImpl } from "./internal.js"
 
 export interface TournamentFactory extends ecore.EFactory {
     createGroup(): Group

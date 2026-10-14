@@ -10,32 +10,9 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, instance, mock, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import {
-    Addressable,
-    AudioVisualItem,
-    Book,
-    BookCategory,
-    BookIndex,
-    BookOnTape,
-    Borrower,
-    CirculatingItem,
-    DocumentRoot,
-    Employee,
-    Item,
-    Lendable,
-    Library,
-    LibraryConstants,
-    LibraryFactory,
-    LibraryFactoryImpl,
-    Periodical,
-    Person,
-    VideoCassette,
-    Writer,
-    bookCategoryFromString,
-    bookCategoryToString
-} from "./internal.js"
+import { BookCategory, Library, LibraryConstants, LibraryFactoryImpl } from "./internal.js"
 
 describe("LibraryFactoryImpl", () => {
     test("createFromEClass", () => {

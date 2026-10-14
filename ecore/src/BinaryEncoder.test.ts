@@ -10,12 +10,19 @@
 import fs from "fs"
 import id128 from "id128"
 import { describe, expect, test } from "vitest"
+import { BinaryDecoder } from "./BinaryDecoder.js"
 import { BinaryEncoder } from "./BinaryEncoder.js"
 import {
     BinaryOptions,
+    EAttribute,
+    EClass,
     EPackage,
+    EPackageRegistryImpl,
+    EResource,
     EResourceImpl,
     EResourceSetImpl,
+    getEcoreFactory,
+    getEcorePackage,
     URI,
     uriToFilePath,
     UUIDManager,
@@ -82,5 +89,70 @@ describe("BinaryEncoder", () => {
         const expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()
         const result = Buffer.from(r.unwrap()).toString()
         expect(result).toBe(expected)
+    })
+
+    // The objects of another resource, or contained by an object of another resource, are encoded
+    // as proxies, with the URI of their resource: a package referencing the data types of Ecore, or
+    // a class of another package, decodes back to them.
+    test("referencesToOtherResources", () => {
+        const factory = getEcoreFactory()
+        const base = factory.createEPackage()
+        base.setName("base")
+        base.setNsURI("http://example.com/base")
+        const named = factory.createEClass()
+        named.setName("Named")
+        base.getEClassifiers().add(named)
+        const baseResource = new EResourceImpl()
+        baseResource.setURI(new URI(base.getNsURI()))
+        baseResource.eContents().add(base)
+
+        const derived = factory.createEPackage()
+        derived.setName("derived")
+        derived.setNsURI("http://example.com/derived")
+        const item = factory.createEClass()
+        item.setName("Item")
+        item.getESuperTypes().add(named)
+        const name = factory.createEAttribute()
+        name.setName("name")
+        name.setEType(getEcorePackage().getEString())
+        item.getEStructuralFeatures().add(name)
+        derived.getEClassifiers().add(item)
+        const derivedResource = new EResourceImpl()
+        derivedResource.setURI(new URI(derived.getNsURI()))
+
+        const decode = (bytes: Uint8Array, alone: boolean): EPackage => {
+            const rs = new EResourceSetImpl()
+            const registry = new EPackageRegistryImpl()
+            registry.registerPackage(getEcorePackage())
+            registry.registerPackage(base)
+            rs.setPackageRegistry(registry)
+            const resource: EResource = rs.createResource(new URI(derived.getNsURI()))
+            const decoder = new BinaryDecoder(resource)
+            if (alone) {
+                const r = decoder.decodeObject(bytes)
+                expect(r.isOk()).toBeTruthy()
+                resource.eContents().add(r.unwrap())
+            } else {
+                expect(decoder.decode(bytes).isOk()).toBeTruthy()
+            }
+            return resource.eContents().get(0) as EPackage
+        }
+        const check = (decoded: EPackage) => {
+            const decodedItem = decoded.getEClassifier("Item") as EClass
+            expect(decodedItem.getESuperTypes().get(0)).toBe(named)
+            const decodedName = decodedItem.getEStructuralFeatureFromName("name") as EAttribute
+            expect(decodedName.getEType()).toBe(getEcorePackage().getEString())
+        }
+
+        // The package alone, outside of its resource.
+        const alone = new BinaryEncoder(derivedResource).encodeObject(derived)
+        expect(alone.isOk()).toBeTruthy()
+        check(decode(alone.unwrap(), true))
+
+        // The resource of the package.
+        derivedResource.eContents().add(derived)
+        const whole = new BinaryEncoder(derivedResource).encode(derivedResource)
+        expect(whole.isOk()).toBeTruthy()
+        check(decode(whole.unwrap(), false))
     })
 })

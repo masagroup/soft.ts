@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { Group, NamedElement, NamedElementImpl, Team, TournamentConstants, getTournamentPackage } from "./internal.js"
+import { Group, NamedElementImpl, Team, TournamentConstants, getTournamentPackage } from "./internal.js"
 
 export class GroupImpl extends NamedElementImpl implements Group {
     protected _teams: ecore.EList<Team>

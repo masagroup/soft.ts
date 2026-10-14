@@ -67,6 +67,8 @@ describe("URI", () => {
     test("relativize", () => {
         expect(new URI("http://host:10020/path/").relativize(new URI("http://host:10020/path/path2"))).toEqual(new URI("path2"))
         expect(new URI("testdata/path2").relativize(new URI("testdata/path1"))).toEqual(new URI("path1"))
+        // A URI of another scheme is kept as it is.
+        expect(new URI("http://host/path/").relativize(new URI("https://host/path/path2"))).toEqual(new URI("https://host/path/path2"))
     })
 
     test("resolve", () => {

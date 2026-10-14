@@ -10,9 +10,9 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, capture, instance, mock, verify } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { Addressable, LibraryConstants, PersonImpl, getLibraryPackage } from "./internal.js"
+import { LibraryConstants, PersonImpl, getLibraryPackage } from "./internal.js"
 
 describe("PersonImpl", () => {
     test("eStaticClass", () => {

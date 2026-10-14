@@ -10,15 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import {
-    Book,
-    BookCategory,
-    CirculatingItem,
-    CirculatingItemImpl,
-    LibraryConstants,
-    Writer,
-    getLibraryPackage
-} from "./internal.js"
+import { Book, BookCategory, CirculatingItemImpl, LibraryConstants, Writer, getLibraryPackage } from "./internal.js"
 
 export class BookImpl extends CirculatingItemImpl implements Book {
     protected _author: Writer

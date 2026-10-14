@@ -1,6 +1,6 @@
 {
   "name": "@masagroup/ecore",
-  "version": "1.5.8",
+  "version": "1.6.0",
   "description": "ecore typescript library",
   "author": "MASA Group",
   "license": "MPL-2.0",
@@ -21,8 +21,8 @@
     "build-types": "tsc -b tsconfig.types.json",
     "build-esm": "tsc -b tsconfig.esm.json",
     "build-cjs": "tsc -b tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json",
-    "pretty": "prettier --write src/**/*.ts",
-    "lint": "eslint src/**/*.ts",
+    "pretty": "node scripts/remove-unused-imports.mjs && prettier --write src/**/*.ts",
+    "lint": "oxlint src",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
@@ -30,19 +30,16 @@
     "node": ">=16"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@types/deep-equal": "^1.0.4",
-    "@vitest/coverage-v8": "^5.0.0",
+    "@vitest/coverage-v8": "^5.0.4",
     "deep-equal": "^2.2.3",
-    "eslint": "^10.10.0",
     "ncp": "^2.0.0",
-    "prettier": "^3.9.6",
-    "prettier-plugin-organize-imports": "^4.3.0",
+    "oxlint": "^1.88.0",
+    "prettier": "^3.9.10",
     "ts-mockito": "^2.6.1",
     "tslib": "^2.8.1",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.70.0",
-    "vitest": "^5.0.0"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.4"
   },
   "dependencies": {
     "@types/path-browserify": "^1.0.3",
@@ -54,6 +51,6 @@
     "ts-results-es": "^7.1.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.63.2"
+    "@rollup/rollup-linux-x64-gnu": "4.64.6"
   }
 }

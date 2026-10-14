@@ -15,7 +15,7 @@ jobs:
     - name: Install Node
       uses: actions/setup-node@v4
       with:
-        node-version: 22.5.1
+        node-version: 24.21.0
     - name: Checkout TS
       uses: actions/checkout@v4
       with:
@@ -28,5 +28,7 @@ jobs:
         path: models
     - name: Build and Test
       working-directory: ts
-      run: sudo make ci
+      run: |
+        sudo env "PATH=$PATH" node --version
+        sudo env "PATH=$PATH" make ci
     

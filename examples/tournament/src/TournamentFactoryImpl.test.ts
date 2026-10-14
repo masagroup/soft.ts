@@ -10,21 +10,9 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { instance, mock, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import {
-    Group,
-    Match,
-    MatchKind,
-    NamedElement,
-    Team,
-    Tournament,
-    TournamentConstants,
-    TournamentFactory,
-    TournamentFactoryImpl,
-    matchKindFromString,
-    matchKindToString
-} from "./internal.js"
+import { MatchKind, TournamentConstants, TournamentFactoryImpl } from "./internal.js"
 
 describe("TournamentFactoryImpl", () => {
     test("createFromEClass", () => {

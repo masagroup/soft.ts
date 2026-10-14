@@ -289,7 +289,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
         } else {
             let result = properties.eDynamicGet(dynamicFeatureID)
-            if (!result) {
+            if (result === null || result === undefined) {
                 if (dynamicFeature.isMany()) {
                     if (isMapType(dynamicFeature)) {
                         result = this.eDynamicPropertiesCreateMap(dynamicFeature)
@@ -297,8 +297,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         result = this.eDynamicPropertiesCreateList(dynamicFeature)
                     }
                     properties.eDynamicSet(dynamicFeatureID, result)
-                } else if (dynamicFeature.getDefaultValue()) {
-                    result = dynamicFeature.getDefaultValue()
+                } else {
+                    const defaultValue = dynamicFeature.getDefaultValue()
+                    if (defaultValue !== null && defaultValue !== undefined) {
+                        result = defaultValue
+                    }
                 }
             } else if (resolve && isProxy(dynamicFeature)) {
                 if (isEObject(result)) {
@@ -361,7 +364,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
         } else {
             let result = properties.eDynamicGet(dynamicFeatureID)
-            if (!result) {
+            if (result === null || result === undefined) {
                 if (dynamicFeature.isMany()) {
                     if (isMapType(dynamicFeature)) {
                         result = this.eDynamicPropertiesCreateMap(dynamicFeature)
@@ -369,8 +372,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         result = this.eDynamicPropertiesCreateList(dynamicFeature)
                     }
                     properties.eDynamicSet(dynamicFeatureID, result)
-                } else if (dynamicFeature.getDefaultValue()) {
-                    result = dynamicFeature.getDefaultValue()
+                } else {
+                    const defaultValue = dynamicFeature.getDefaultValue()
+                    if (defaultValue !== null && defaultValue !== undefined) {
+                        result = defaultValue
+                    }
                 }
             } else if (resolve && isProxy(dynamicFeature)) {
                 if (isEObject(result)) {

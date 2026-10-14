@@ -4,7 +4,7 @@ import { EMap, isEMap } from "./EMap.js"
 
 describe("EMap", () => {
     test("isEMap", () => {
-        var a: any
+        const a: any = undefined
         expect(isEMap(a)).toBeFalsy()
 
         const mockMap = mock<EMap<any, any>>()
