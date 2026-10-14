@@ -15,10 +15,14 @@
 
 import { spawnSync } from "node:child_process"
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
-import { join, resolve } from "node:path"
+import { dirname, join, resolve } from "node:path"
 
 const paths = process.argv.length > 2 ? process.argv.slice(2) : ["src"]
+
+// oxlint is resolved from this script so that the examples can use ecore's one
+const oxlint = join(dirname(createRequire(import.meta.url).resolve("oxlint/package.json")), "bin", "oxlint")
 
 function lint() {
     const dir = mkdtempSync(join(tmpdir(), "unused-imports-"))
@@ -32,10 +36,9 @@ function lint() {
                 rules: { "no-unused-vars": ["error", { args: "none", caughtErrors: "none" }] }
             })
         )
-        const result = spawnSync("npx", ["oxlint", "-c", config, "-f", "json", ...paths], {
+        const result = spawnSync(process.execPath, [oxlint, "-c", config, "-f", "json", ...paths], {
             encoding: "utf8",
-            maxBuffer: 64 * 1024 * 1024,
-            shell: process.platform === "win32"
+            maxBuffer: 64 * 1024 * 1024
         })
         if (result.error) throw result.error
         return JSON.parse(result.stdout)
