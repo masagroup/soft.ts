@@ -4,7 +4,7 @@ import { EList, isEList } from "./EList.js"
 
 describe("EList", () => {
     test("isEList", () => {
-        var a: any
+        const a: any = undefined
         expect(isEList(a)).toBeFalsy()
 
         const mockList = mock<EList<any>>()
