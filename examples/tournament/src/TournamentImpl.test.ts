@@ -11,17 +11,9 @@
 
 import { describe, expect, test } from "vitest"
 import deepEqual from "deep-equal"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, instance, mock, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import {
-    Group,
-    Match,
-    NamedElement,
-    Team,
-    TournamentConstants,
-    TournamentImpl,
-    getTournamentPackage
-} from "./internal.js"
+import { Group, Match, Team, TournamentConstants, TournamentImpl, getTournamentPackage } from "./internal.js"
 
 interface GroupInternal extends Group, ecore.EObjectInternal {}
 interface MatchInternal extends Match, ecore.EObjectInternal {}

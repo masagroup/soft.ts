@@ -10,14 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import {
-    AudioVisualItem,
-    AudioVisualItemImpl,
-    LibraryConstants,
-    Person,
-    VideoCassette,
-    getLibraryPackage
-} from "./internal.js"
+import { AudioVisualItemImpl, LibraryConstants, Person, VideoCassette, getLibraryPackage } from "./internal.js"
 
 export class VideoCassetteImpl extends AudioVisualItemImpl implements VideoCassette {
     protected _cast: ecore.EList<Person>

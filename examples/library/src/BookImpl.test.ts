@@ -10,18 +10,9 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import deepEqual from "deep-equal"
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import {
-    BookCategory,
-    BookImpl,
-    BookIndex,
-    CirculatingItem,
-    LibraryConstants,
-    Writer,
-    getLibraryPackage
-} from "./internal.js"
+import { BookCategory, BookImpl, BookIndex, LibraryConstants, Writer, getLibraryPackage } from "./internal.js"
 
 interface BookIndexInternal extends BookIndex, ecore.EObjectInternal {}
 interface WriterInternal extends Writer, ecore.EObjectInternal {}

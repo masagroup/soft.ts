@@ -12,7 +12,7 @@
 import { describe, expect, test } from "vitest"
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { Group, NamedElement, TeamImpl, TournamentConstants, getTournamentPackage } from "./internal.js"
+import { Group, TeamImpl, TournamentConstants, getTournamentPackage } from "./internal.js"
 
 interface GroupInternal extends Group, ecore.EObjectInternal {}
 

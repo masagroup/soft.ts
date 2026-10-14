@@ -16,7 +16,6 @@ import {
     Match,
     MatchImpl,
     MatchKind,
-    NamedElement,
     Team,
     TeamImpl,
     Tournament,

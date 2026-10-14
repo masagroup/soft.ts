@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "pretty": "prettier --write src/**/*.ts"
+    "pretty": "node ../../ecore/scripts/remove-unused-imports.mjs && prettier --write src/**/*.ts"
   },
   "author": "MASA Group",
   "license": "MPL-2.0",

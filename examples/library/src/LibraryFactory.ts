@@ -11,20 +11,14 @@
 
 import * as ecore from "@masagroup/ecore"
 import {
-    Addressable,
-    AudioVisualItem,
     Book,
     BookIndex,
     BookOnTape,
     Borrower,
-    CirculatingItem,
     DocumentRoot,
     Employee,
-    Item,
-    Lendable,
     Library,
     LibraryFactoryImpl,
-    Periodical,
     Person,
     VideoCassette,
     Writer

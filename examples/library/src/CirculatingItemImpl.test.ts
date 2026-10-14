@@ -11,9 +11,9 @@
 
 import { describe, expect, test } from "vitest"
 import deepEqual from "deep-equal"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, capture, instance, mock, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { Borrower, CirculatingItemImpl, Item, Lendable, LibraryConstants, getLibraryPackage } from "./internal.js"
+import { Borrower, CirculatingItemImpl, LibraryConstants, getLibraryPackage } from "./internal.js"
 
 interface BorrowerInternal extends Borrower, ecore.EObjectInternal {}
 

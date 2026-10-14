@@ -10,9 +10,9 @@
 // *****************************************************************************
 
 import { describe, expect, test } from "vitest"
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
+import { anything, capture, instance, mock, verify, when } from "ts-mockito"
 import * as ecore from "@masagroup/ecore"
-import { Employee, EmployeeImpl, LibraryConstants, Person, getLibraryPackage } from "./internal.js"
+import { Employee, EmployeeImpl, LibraryConstants, getLibraryPackage } from "./internal.js"
 
 interface EmployeeInternal extends Employee, ecore.EObjectInternal {}
 

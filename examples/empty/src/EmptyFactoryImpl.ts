@@ -10,7 +10,7 @@
 // *****************************************************************************
 
 import * as ecore from "@masagroup/ecore"
-import { EmptyConstants, EmptyFactory } from "./internal.js"
+import { EmptyFactory } from "./internal.js"
 
 export class EmptyFactoryImpl extends ecore.EFactoryExt implements EmptyFactory {
     private static _instance: EmptyFactoryImpl = null
