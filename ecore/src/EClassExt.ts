@@ -211,14 +211,17 @@ export class EClassExt extends EClassImpl {
     }
 
     private initFeatureSubSet(): void {
+        // recomputing all structural features resets the subsets, so it must come first
+        this.initEAllStructuralFeatures()
         if (this._eContainmentFeatures != null) {
             return
         }
 
-        this.initEAllStructuralFeatures()
+        // like EMF's EClassImpl, the subsets are computed from all structural features,
+        // inherited ones included, so that eContents / eCrossReferences visit inherited references
         const containments: EStructuralFeature[] = []
         const crossreferences: EStructuralFeature[] = []
-        for (const eFeature of this.getEStructuralFeatures()) {
+        for (const eFeature of this._eAllStructuralFeatures) {
             if (isEReference(eFeature)) {
                 if (eFeature.isContainment()) {
                     if (!eFeature.isDerived()) {
@@ -305,6 +308,21 @@ export class EClassExt extends EClassImpl {
         this._eAllContainments = new ImmutableEList<EReference>(allContainments)
     }
 
+    protected initEAllCrossReferences(): void {
+        if (this._eAllCrossReferences != null) {
+            return
+        }
+
+        const allCrossReferences: EReference[] = []
+        for (const eReference of this.getEAllReferences()) {
+            if (!eReference.isContainment() && !eReference.isContainer()) {
+                allCrossReferences.push(eReference)
+            }
+        }
+
+        this._eAllCrossReferences = new ImmutableEList<EReference>(allCrossReferences)
+    }
+
     protected initEAllOperations(): void {
         if (this._eAllOperations != null) {
             return
@@ -374,23 +392,27 @@ export class EClassExt extends EClassImpl {
                 this._eAllStructuralFeatures = null
                 this._eAllReferences = null
                 this._eAllContainments = null
+                this._eAllCrossReferences = null
                 break
             }
             case EcoreConstants.ECLASS__EATTRIBUTES: {
                 this._eAllAttributes = null
                 this._eAllStructuralFeatures = null
                 this._eAllContainments = null
+                this._eAllCrossReferences = null
                 break
             }
             case EcoreConstants.ECLASS__EREFERENCES: {
                 this._eAllStructuralFeatures = null
                 this._eAllReferences = null
                 this._eAllContainments = null
+                this._eAllCrossReferences = null
                 break
             }
             case EcoreConstants.ECLASS__EOPERATIONS: {
                 this._eAllOperations = null
                 this._eAllContainments = null
+                this._eAllCrossReferences = null
                 break
             }
             case EcoreConstants.ECLASS__ESUPER_TYPES: {
@@ -400,6 +422,7 @@ export class EClassExt extends EClassImpl {
                 this._eAllStructuralFeatures = null
                 this._eAllReferences = null
                 this._eAllContainments = null
+                this._eAllCrossReferences = null
                 break
             }
         }

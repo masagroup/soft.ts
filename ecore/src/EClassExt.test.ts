@@ -290,6 +290,91 @@ describe("EClassExt", () => {
         expect(eClass.getECrossReferenceFeatures().toArray()).toEqual([eReference0, eReference2])
     })
 
+    test("eContainmentsFeaturesInherited", () => {
+        const eSuperClass = new EClassExt()
+        // containment ref of the super class
+        const eSuperContainment = new EReferenceExt()
+        eSuperContainment.setName("superContainment")
+        eSuperContainment.setContainment(true)
+        // cross ref of the super class
+        const eSuperCrossRef = new EReferenceExt()
+        eSuperCrossRef.setName("superCrossRef")
+        // container ref of the super class : neither containment nor cross reference
+        const eSuperContainer = new EReferenceExt()
+        eSuperContainer.setName("superContainer")
+        eSuperContainment.setEOpposite(eSuperContainer)
+        eSuperContainer.setEOpposite(eSuperContainment)
+        eSuperClass.getEStructuralFeatures().addAll(new ImmutableEList([eSuperContainment, eSuperCrossRef, eSuperContainer]))
+
+        const eClass = new EClassExt()
+        eClass.getESuperTypes().add(eSuperClass)
+        const eContainment = new EReferenceExt()
+        eContainment.setName("containment")
+        eContainment.setContainment(true)
+        const eCrossRef = new EReferenceExt()
+        eCrossRef.setName("crossRef")
+        eClass.getEStructuralFeatures().addAll(new ImmutableEList([eCrossRef, eContainment]))
+
+        // like EMF, the subsets are computed from all structural features, inherited ones included
+        expect(eClass.getEContainmentFeatures().toArray()).toEqual([eSuperContainment, eContainment])
+        expect(eClass.getECrossReferenceFeatures().toArray()).toEqual([eSuperCrossRef, eCrossRef])
+        expect(eSuperClass.getEContainmentFeatures().toArray()).toEqual([eSuperContainment])
+        expect(eSuperClass.getECrossReferenceFeatures().toArray()).toEqual([eSuperCrossRef])
+        // the subsets are consistent with the all lists
+        expect(eClass.getEContainmentFeatures().toArray()).toEqual(eClass.getEAllContainments().toArray())
+        expect(eClass.getECrossReferenceFeatures().toArray()).toEqual(eClass.getEAllCrossReferences().toArray())
+    })
+
+    test("eContainmentsFeaturesInvalidation", () => {
+        const eSuperClass = new EClassExt()
+        const eSuperContainment = new EReferenceExt()
+        eSuperContainment.setName("superContainment")
+        eSuperContainment.setContainment(true)
+        const eSuperCrossRef = new EReferenceExt()
+        eSuperCrossRef.setName("superCrossRef")
+        eSuperClass.getEStructuralFeatures().addAll(new ImmutableEList([eSuperContainment, eSuperCrossRef]))
+
+        const eClass = new EClassExt()
+        const eContainment = new EReferenceExt()
+        eContainment.setName("containment")
+        eContainment.setContainment(true)
+        eClass.getEStructuralFeatures().add(eContainment)
+
+        // compute the subsets before the super type is set
+        expect(eClass.getEContainmentFeatures().toArray()).toEqual([eContainment])
+        expect(eClass.getECrossReferenceFeatures().toArray()).toEqual([])
+        expect(eClass.getEAllContainments().toArray()).toEqual([eContainment])
+        expect(eClass.getEAllCrossReferences().toArray()).toEqual([])
+
+        // add the super type : caches must be invalidated
+        eClass.getESuperTypes().add(eSuperClass)
+        expect(eClass.getEContainmentFeatures().toArray()).toEqual([eSuperContainment, eContainment])
+        expect(eClass.getECrossReferenceFeatures().toArray()).toEqual([eSuperCrossRef])
+        expect(eClass.getEAllContainments().toArray()).toEqual([eSuperContainment, eContainment])
+        expect(eClass.getEAllCrossReferences().toArray()).toEqual([eSuperCrossRef])
+
+        // add a feature to the super type : sub class caches must be invalidated
+        const eOtherSuperCrossRef = new EReferenceExt()
+        eOtherSuperCrossRef.setName("otherSuperCrossRef")
+        eSuperClass.getEStructuralFeatures().add(eOtherSuperCrossRef)
+        expect(eClass.getECrossReferenceFeatures().toArray()).toEqual([eSuperCrossRef, eOtherSuperCrossRef])
+        expect(eClass.getEAllCrossReferences().toArray()).toEqual([eSuperCrossRef, eOtherSuperCrossRef])
+
+        // add a cross reference to the class itself
+        const eCrossRef = new EReferenceExt()
+        eCrossRef.setName("crossRef")
+        eClass.getEStructuralFeatures().add(eCrossRef)
+        expect(eClass.getECrossReferenceFeatures().toArray()).toEqual([eSuperCrossRef, eOtherSuperCrossRef, eCrossRef])
+        expect(eClass.getEAllCrossReferences().toArray()).toEqual([eSuperCrossRef, eOtherSuperCrossRef, eCrossRef])
+
+        // remove the super type
+        eClass.getESuperTypes().remove(eSuperClass)
+        expect(eClass.getEContainmentFeatures().toArray()).toEqual([eContainment])
+        expect(eClass.getECrossReferenceFeatures().toArray()).toEqual([eCrossRef])
+        expect(eClass.getEAllContainments().toArray()).toEqual([eContainment])
+        expect(eClass.getEAllCrossReferences().toArray()).toEqual([eCrossRef])
+    })
+
     test("isSuperTypeOf", () => {
         const eClass = new EClassExt()
         const eOther = new EClassExt()
