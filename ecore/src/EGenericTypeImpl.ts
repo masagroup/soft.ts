@@ -55,8 +55,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         if (this._eClassifier != null && this._eClassifier.eIsProxy()) {
             const oldEClassifier = this._eClassifier
             const newEClassifier = this.eResolveProxy(oldEClassifier) as EClassifier
-            this._eClassifier = newEClassifier
             if (newEClassifier != oldEClassifier) {
+                this._eClassifier = newEClassifier
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, oldEClassifier, newEClassifier)
@@ -72,8 +72,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         if (this._eClassifier != null && this._eClassifier.eIsProxy()) {
             const oldEClassifier = this._eClassifier
             const newEClassifier = (await this.eResolveProxyAsync(oldEClassifier)) as EClassifier
-            this._eClassifier = newEClassifier
             if (newEClassifier != oldEClassifier) {
+                this._eClassifier = newEClassifier
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ECLASSIFIER, oldEClassifier, newEClassifier)
@@ -155,8 +155,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         if (this._eRawType != null && this._eRawType.eIsProxy()) {
             const oldERawType = this._eRawType
             const newERawType = this.eResolveProxy(oldERawType) as EClassifier
-            this._eRawType = newERawType
             if (newERawType != oldERawType) {
+                this._eRawType = newERawType
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, oldERawType, newERawType)
@@ -172,8 +172,8 @@ export class EGenericTypeImpl extends EObjectImpl implements EGenericType {
         if (this._eRawType != null && this._eRawType.eIsProxy()) {
             const oldERawType = this._eRawType
             const newERawType = (await this.eResolveProxyAsync(oldERawType)) as EClassifier
-            this._eRawType = newERawType
             if (newERawType != oldERawType) {
+                this._eRawType = newERawType
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new Notification(this, EventType.RESOLVE, EcoreConstants.EGENERIC_TYPE__ERAW_TYPE, oldERawType, newERawType)
