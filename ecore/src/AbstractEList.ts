@@ -24,6 +24,12 @@ export abstract class AbstractEList<E> implements EList<E> {
         return true
     }
 
+    // appends e without the duplicate scan add performs on a unique list, as EMF's
+    // addUnique does for a caller that knows e is not there yet
+    addUnique(e: E): void {
+        this.doAdd(e)
+    }
+
     addAll(c: Collection<E>): boolean {
         if (this._isUnique) {
             c = getNonDuplicates<E>(this, c)
