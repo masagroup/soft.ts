@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EStructuralFeature, isEAttribute, isEEnum, isEReference } from "./internal.js"
+import { EStructuralFeature, getEcorePackage, isEAttribute, isEEnum, isEReference } from "./internal.js"
 
 export enum BinaryFeatureKind {
     bfkObjectContainer,
@@ -21,6 +21,8 @@ export enum BinaryFeatureKind {
     bfkObjectContainmentList,
     bfkObjectContainmentListProxy,
     bfkNumber,
+    bfkFloat32,
+    bfkByte,
     bfkBool,
     bfkString,
     bfkByteArray,
@@ -72,16 +74,27 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
             const eDataType = eFeature.getEAttributeType()
             if (isEEnum(eDataType)) return BinaryFeatureKind.bfkEnum
 
+            // ecore float types are "number" in typescript but float32 in go
+            const ecorePackage = getEcorePackage()
+            if (eDataType === ecorePackage.getEFloat() || eDataType === ecorePackage.getEFloatObject()) {
+                return BinaryFeatureKind.bfkFloat32
+            }
+
             switch (eDataType.getInstanceTypeName()) {
+                case "float":
+                case "float32":
+                case "java.lang.Float":
+                    return BinaryFeatureKind.bfkFloat32
+                case "byte":
+                    return BinaryFeatureKind.bfkByte
                 case "number":
                 case "java.lang.Double":
-                case "java.lang.Float":
                 case "java.lang.Integer":
                 case "java.lang.Long":
                 case "java.lang.Short":
                 case "java.math.BigInteger":
                 case "double":
-                case "float":
+                case "float64":
                 case "int":
                 case "int64":
                 case "int32":
@@ -97,9 +110,11 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
                 case "java.lang.String":
                     return BinaryFeatureKind.bfkString
                 case "Uint8Array":
+                case "[]byte":
                 case "java.util.ByteArray":
                     return BinaryFeatureKind.bfkByteArray
                 case "Date":
+                case "*time/time.Time":
                 case "java.util.Date":
                     return BinaryFeatureKind.bfkDate
             }

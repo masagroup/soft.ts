@@ -17,6 +17,7 @@ import { EResource } from "./EResource.js"
 export class BinaryOptions {
     static BINARY_OPTION_ID_ATTRIBUTE = "ID_ATTRIBUTE" // if true, save id attribute of the object
     static BINARY_OPTION_CODEC_EXTENSION = "CODEC_EXTENSION" // msgpack codec extension object
+    static BINARY_OPTION_NAMESPACE_ATTRIBUTE = "NAMESPACE_ATTRIBUTE" // if true, namespaces informations are encoded
 }
 
 export class BinaryCodec implements ECodec {

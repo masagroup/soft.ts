@@ -86,27 +86,10 @@ export class BinaryDecoder implements EDecoder {
     decode(buffer: BufferLike): Result<EResource, Error> {
         try {
             this.setBuffer(buffer as BufferDecoder)
-            this.decodeSignature()
-            this.decodeVersion()
-
-            // objects
-            const size = this._decoder.decodeNumber()
-            const objects = []
-            for (let i = 0; i < size; i++) {
-                objects.push(this.decodeEObject())
-            }
-
-            // add objects to resource
-            this._resource.eContents().addAll(new ImmutableEList(objects))
+            this.decodeResource()
             return Ok(this._resource)
         } catch (e) {
-            switch (e.constructor) {
-                case Error: {
-                    const err = e as Error
-                    this._resource.getErrors().add(new EDiagnosticImpl(err.message, this._resource.getURI().toString(), -1, -1))
-                }
-            }
-            return Err(e)
+            return Err(this.addError(e))
         }
     }
 
@@ -124,10 +107,18 @@ export class BinaryDecoder implements EDecoder {
     async decodeAsync(streamLike: ReadableStreamLike<BufferLike>): Promise<EResource> {
         // convert stream to buffer
         const buffer = await this.getBuffer(streamLike)
-        // set decoder buffer
-        this.setBuffer(buffer)
+        try {
+            // set decoder buffer
+            this.setBuffer(buffer)
+            // decode
+            this.decodeResource()
+            return this._resource
+        } catch (e) {
+            throw this.addError(e)
+        }
+    }
 
-        // decode
+    private decodeResource() {
         this.decodeSignature()
         this.decodeVersion()
 
@@ -140,7 +131,13 @@ export class BinaryDecoder implements EDecoder {
 
         // add objects to resource
         this._resource.eContents().addAll(new ImmutableEList(objects))
-        return this._resource
+    }
+
+    private addError(e: unknown): Error {
+        const err = e instanceof Error ? e : new Error(String(e))
+        const uri = this._resource.getURI()
+        this._resource.getErrors().add(new EDiagnosticImpl(err.message, uri ? uri.toString() : "", -1, -1))
+        return err
     }
 
     async decodeObjectAsync(streamLike: ReadableStreamLike<BufferLike>): Promise<EObject> {
@@ -310,11 +307,14 @@ export class BinaryDecoder implements EDecoder {
             const eResourceSet = this._resource.eResourceSet()
             const packageRegistry = eResourceSet ? eResourceSet.getPackageRegistry() : getPackageRegistry()
             let ePackage = packageRegistry.getPackage(nsURI)
-            if (!ePackage) {
+            if (!ePackage && eResourceSet) {
                 const eObject = eResourceSet.getEObject(uri, true)
                 if (isEPackage(eObject)) {
                     ePackage = eObject
                 }
+            }
+            if (!ePackage) {
+                throw new Error(`unable to find package '${nsURI}'`)
             }
 
             // create new package data
@@ -380,8 +380,17 @@ export class BinaryDecoder implements EDecoder {
                 eObject.eSetFromID(featureData.featureID, this.decodeDate())
                 break
             case BinaryFeatureKind.bfkNumber:
+            case BinaryFeatureKind.bfkFloat32:
                 eObject.eSetFromID(featureData.featureID, this.decodeNumber())
                 break
+            case BinaryFeatureKind.bfkByte: {
+                // byte features were previously encoded by typescript as data strings
+                const value = this._decoder.isStringNext()
+                    ? featureData.eFactory.createFromString(featureData.eDataType, this.decodeString())
+                    : this.decodeNumber()
+                eObject.eSetFromID(featureData.featureID, value)
+                break
+            }
             case BinaryFeatureKind.bfkBool:
                 eObject.eSetFromID(featureData.featureID, this.decodeBoolean())
                 break

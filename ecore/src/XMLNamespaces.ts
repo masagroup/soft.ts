@@ -37,8 +37,7 @@ export class XMLNamespaces {
                 return true
             }
         }
-        this._namespacesSize++
-        if (this._namespacesSize > this._namespaces.length) {
+        if (this._namespacesSize >= this._namespaces.length) {
             this._namespaces.push({ prefix: prefix, uri: uri })
         } else {
             this._namespaces[this._namespacesSize] = {
@@ -46,6 +45,7 @@ export class XMLNamespaces {
                 uri: uri
             }
         }
+        this._namespacesSize++
         return false
     }
 
