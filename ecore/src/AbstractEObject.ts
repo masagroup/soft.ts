@@ -32,6 +32,7 @@ import {
     isContainer,
     isContains,
     isEAttribute,
+    isEClass,
     isEList,
     isEObject,
     isEObjectInternal,
@@ -195,8 +196,13 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return this.eDerivedFeatureID(feature.eContainer(), feature.getFeatureID())
     }
 
+    // eDerivedFeatureID converts the id of a feature in its container class into its id in the
+    // class of this object: they differ when the container is not the first super type
     eDerivedFeatureID(container: EObject, featureID: number): number {
-        return featureID
+        const eClass = this.eClass()
+        if (container == eClass || !isEClass(container)) return featureID
+        const feature = container.getEStructuralFeature(featureID)
+        return feature ? eClass.getFeatureID(feature) : featureID
     }
 
     eOperationID(operation: EOperation): number {
@@ -453,7 +459,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                 reverseFeatureID = reverseFeature.getFeatureID()
             }
         }
-        return new BasicEObjectMap<any, any>(eClass, this, feature.getFeatureID(), reverseFeatureID, feature.isUnsettable())
+        return new BasicEObjectMap<any, any>(eClass, this, this.eClass().getFeatureID(feature), reverseFeatureID, feature.isUnsettable())
     }
 
     private eDynamicPropertiesCreateList(feature: EStructuralFeature): any {
@@ -474,7 +480,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
             return new BasicEObjectList(
                 this,
-                feature.getFeatureID(),
+                this.eClass().getFeatureID(feature),
                 reverseID,
                 feature.isContainment(),
                 inverse,
@@ -962,7 +968,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             const inverseFeature = feature.getEOpposite()
             if (inverseFeature) {
                 const eContainer = this.eInternalContainer()
-                if (isEObjectInternal(eContainer)) return eContainer.eInverseRemove(this, inverseFeature.getFeatureID(), notifications)
+                if (isEObjectInternal(eContainer)) {
+                    // the id of the opposite in the class of the container
+                    const featureID = eContainer.eClass()?.getFeatureID(inverseFeature) ?? -1
+                    return eContainer.eInverseRemove(this, featureID >= 0 ? featureID : inverseFeature.getFeatureID(), notifications)
+                }
             }
         }
         return notifications

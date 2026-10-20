@@ -19,14 +19,17 @@ import {
     EObjectInternal,
     EObjectList,
     EOPPOSITE_FEATURE_BASE,
+    EReference,
     EStructuralFeature,
-    EventType
+    EventType,
+    isEReference
 } from "./internal.js"
 
 export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O> implements EObjectList<O>, ENotifyingList<O> {
     private _owner: EObjectInternal
     private _featureID: number
     private _inverseFeatureID: number
+    private _oppositeFeature: EReference = undefined
     private _containment: boolean
     private _inverse: boolean
     private _opposite: boolean
@@ -182,11 +185,25 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         return super.toArray()
     }
 
+    // inverseFeatureID returns the id of the opposite feature in the class of o: it differs from
+    // the id in the class declaring the opposite when that class is not the first super type of o
+    private inverseFeatureID(o: EObjectInternal): number {
+        if (this._oppositeFeature === undefined) {
+            const feature = this._owner.eClass()?.getEStructuralFeature(this._featureID)
+            this._oppositeFeature = isEReference(feature) ? feature.getEOpposite() : null
+        }
+        if (this._oppositeFeature) {
+            const featureID = o.eClass()?.getFeatureID(this._oppositeFeature)
+            if (featureID >= 0) return featureID
+        }
+        return this._inverseFeatureID
+    }
+
     inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
         const internal = this.forceCast<EObjectInternal>(o)
         if (internal != null && this._owner != null && this._inverse) {
             if (this._opposite) {
-                return internal.eInverseAdd(this._owner, this._inverseFeatureID, notifications)
+                return internal.eInverseAdd(this._owner, this.inverseFeatureID(internal), notifications)
             } else {
                 return internal.eInverseAdd(this._owner, EOPPOSITE_FEATURE_BASE - this._featureID, notifications)
             }
@@ -198,7 +215,7 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         const internal = this.forceCast<EObjectInternal>(o)
         if (internal != null && this._owner != null && this._inverse) {
             if (this._opposite) {
-                return internal.eInverseRemove(this._owner, this._inverseFeatureID, notifications)
+                return internal.eInverseRemove(this._owner, this.inverseFeatureID(internal), notifications)
             } else {
                 return internal.eInverseRemove(this._owner, EOPPOSITE_FEATURE_BASE - this._featureID, notifications)
             }

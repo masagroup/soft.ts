@@ -174,7 +174,7 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
                 reverseFeatureID = reverseFeature.getFeatureID()
             }
         }
-        return new BasicEObjectMap<any, any>(eClass, this, feature.getFeatureID(), reverseFeatureID, feature.isUnsettable())
+        return new BasicEObjectMap<any, any>(eClass, this, this.eClass().getFeatureID(feature), reverseFeatureID, feature.isUnsettable())
     }
 
     eInternalContainer(): EObject {
