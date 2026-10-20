@@ -171,9 +171,10 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     return feature
                 }
             } else {
-                const feature = this.eClass().getEStructuralFeature(containerFeatureID)
-                if (isEReference(feature)) {
-                    return feature
+                // containerFeatureID is the id of the container reference of o: the containment is its opposite
+                const feature = o.eClass().getEStructuralFeature(containerFeatureID)
+                if (isEReference(feature) && feature.getEOpposite()) {
+                    return feature.getEOpposite()
                 }
             }
             throw new Error("The containment feature could not be located")
