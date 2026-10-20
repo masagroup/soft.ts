@@ -16,6 +16,7 @@ import {
     ENotificationChain,
     ENotifier,
     EObject,
+    checkSameImplementation,
     EObjectInternal,
     EObjectList,
     EOPPOSITE_FEATURE_BASE,
@@ -398,6 +399,7 @@ export class EStoreList<E> extends AbstractNotifyingList<E> implements EObjectLi
     }
 
     protected inverseAdd(e: E, notifications: ENotificationChain): ENotificationChain {
+        checkSameImplementation(this._owner, e)
         if (this._inverse && isEObjectInternal(e)) {
             if (this._opposite) {
                 const inverseReference = (this._feature as EReference).getEOpposite()

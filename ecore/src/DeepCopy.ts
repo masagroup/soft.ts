@@ -12,6 +12,7 @@ import {
     EList,
     EObject,
     EObjectInternal,
+    getClassFactory,
     EObjectList,
     EReference,
     ImmutableEList,
@@ -63,7 +64,8 @@ export class DeepCopy {
 
     private createCopy(eObject: EObject): EObject {
         const eClass = eObject.eClass()
-        const eFactory = eClass.getEPackage().getEFactoryInstance()
+        // the copy is built by the implementation of the original
+        const eFactory = getClassFactory(eObject, eClass)
         return eFactory.create(eClass)
     }
 

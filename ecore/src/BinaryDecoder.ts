@@ -25,6 +25,7 @@ import {
     EStructuralFeature,
     ExtensionCodec,
     getPackageRegistry,
+    getRegistryFactory,
     ImmutableEList,
     isEAttribute,
     isEClass,
@@ -46,6 +47,8 @@ const binarySignature = Uint8Array.from([137, 101, 109, 102, 10, 13, 26, 10])
 
 class PackageData {
     ePackage: EPackage
+    // the factory the package registry chose for the classes of the package
+    eFactory: EFactory
     eClassData: ClassData[]
 }
 
@@ -318,6 +321,7 @@ export class BinaryDecoder implements EDecoder {
 
             // create new package data
             const ePackageData = this.newPackageData(ePackage)
+            ePackageData.eFactory = getRegistryFactory(packageRegistry, ePackage)
             this._packageData.push(ePackageData)
             return ePackageData
         } else {
@@ -412,7 +416,7 @@ export class BinaryDecoder implements EDecoder {
         if (isEClass(eClassifier)) {
             const classData = new ClassData()
             classData.eClass = eClassifier
-            classData.eFactory = ePackage.getEFactoryInstance()
+            classData.eFactory = ePackageData.eFactory ?? ePackage.getEFactoryInstance()
             classData.featureData = new Array(eClassifier.getFeatureCount())
             return classData
         }

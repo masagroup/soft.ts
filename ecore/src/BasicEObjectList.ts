@@ -16,6 +16,7 @@ import {
     ENotifier,
     ENotifyingList,
     EObject,
+    checkSameImplementation,
     EObjectInternal,
     EObjectList,
     EOPPOSITE_FEATURE_BASE,
@@ -200,6 +201,7 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
     }
 
     inverseAdd(o: O, notifications: ENotificationChain): ENotificationChain {
+        checkSameImplementation(this._owner, o)
         const internal = this.forceCast<EObjectInternal>(o)
         if (internal != null && this._owner != null && this._inverse) {
             if (this._opposite) {

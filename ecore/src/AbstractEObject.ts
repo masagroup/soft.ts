@@ -12,6 +12,7 @@ import {
     BasicEList,
     BasicEObjectList,
     BasicEObjectMap,
+    checkSameImplementation,
     EClass,
     EcoreUtils,
     EDynamicProperties,
@@ -529,6 +530,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         dynamicFeatureID: number,
         newValue: any
     ) {
+        checkSameImplementation(this, newValue)
         if (dynamicFeature.isMany()) {
             // many: the list keeps its identity, its elements are replaced
             const list = this.eDynamicPropertiesGetList(properties, dynamicFeature, dynamicFeatureID)
@@ -893,6 +895,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     protected eBasicSetContainer(newContainer: EObject, newContainerFeatureID: number, n: ENotificationChain): ENotificationChain {
+        checkSameImplementation(newContainer, this)
         let notifications = n
         let oldResource = this.eInternalResource()
         const oldContainer = this.eInternalContainer()
