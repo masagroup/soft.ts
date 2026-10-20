@@ -563,10 +563,14 @@ export class XMLDecoder implements EDecoder {
                     }
                 }
             } else {
+                // a placeholder, so onEndTag pops it and not a real ancestor
+                this._types.push(LOAD_ERROR_TYPE)
+                this._objects.push(null)
                 this.handleUnknownFeature(local)
             }
         } else {
             this._types.push(LOAD_ERROR_TYPE)
+            this._objects.push(null)
             this.handleUnknownFeature(local)
         }
     }
@@ -721,26 +725,28 @@ export class XMLDecoder implements EDecoder {
         const kind = this.getLoadFeatureKind(eFeature)
         switch (kind) {
             case LoadFeatureKind.Single: {
-                const eClassifier = eFeature.getEType()
-                const eDataType = eClassifier as EDataType
-                const eFactory = eDataType.getEPackage().getEFactoryInstance()
+                const eDataType = eFeature.getEType() as EDataType
                 if (!value) {
                     eObject.eSet(eFeature, null)
                 } else {
-                    eObject.eSet(eFeature, eFactory.createFromString(eDataType, value as string))
+                    const eFactory = this.factoryFor(eFeature, eDataType)
+                    if (eFactory) {
+                        eObject.eSet(eFeature, eFactory.createFromString(eDataType, value as string))
+                    }
                 }
                 break
             }
             case LoadFeatureKind.Many: {
-                const eClassifier = eFeature.getEType()
-                const eDataType = eClassifier as EDataType
-                const eFactory = eDataType.getEPackage().getEFactoryInstance()
+                const eDataType = eFeature.getEType() as EDataType
                 const eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
                 if (position != -2) {
                     if (!value) {
                         eList.add(null)
                     } else {
-                        eList.add(eFactory.createFromString(eDataType, value as string))
+                        const eFactory = this.factoryFor(eFeature, eDataType)
+                        if (eFactory) {
+                            eList.add(eFactory.createFromString(eDataType, value as string))
+                        }
                     }
                 }
                 break
@@ -882,6 +888,27 @@ export class XMLDecoder implements EDecoder {
             return LoadFeatureKind.ManyMove
         }
         return LoadFeatureKind.Other
+    }
+
+    // the factory that builds values of eDataType, or null once a load diagnostic
+    // reports why: a data type contained by no package has no factory to reach
+    private factoryFor(eFeature: EStructuralFeature, eDataType: EDataType): EFactory {
+        const ePackage = eDataType.getEPackage()
+        if (!ePackage) {
+            this.decodeError("Data type " + eDataType.getName() + " of feature " + eFeature.getName() + " belongs to no package")
+            return null
+        }
+        const eFactory = ePackage.getEFactoryInstance()
+        if (!eFactory) {
+            this.decodeError(
+                "Package " + ePackage.getNsURI() + " has no factory to build " + eDataType.getName() + " for feature " + eFeature.getName()
+            )
+        }
+        return eFactory
+    }
+
+    private decodeError(message: string) {
+        this.error(new EDiagnosticImpl(message, this._resource.getURI()?.toString(), this._parser.column, this._parser.line))
     }
 
     private handleUnknownFeature(name: string) {

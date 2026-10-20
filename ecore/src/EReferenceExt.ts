@@ -30,8 +30,6 @@ export function isProxy(feature: EStructuralFeature): boolean {
 }
 
 export class EReferenceExt extends EReferenceImpl {
-    private _referenceType: EClass
-
     constructor() {
         super()
     }
@@ -42,23 +40,13 @@ export class EReferenceExt extends EReferenceImpl {
 
     // get the value of eReferenceType
     getEReferenceType(): EClass {
-        if (!this._referenceType || this._referenceType.eIsProxy()) {
-            const eType = this.getEType()
-            if (isEClass(eType)) {
-                this._referenceType = eType
-            }
-        }
-        return this._referenceType
+        const eType = this.getEType()
+        return isEClass(eType) ? eType : null
     }
 
     // get the basic value of eReferenceType with no proxy resolution
     basicGetEReferenceType(): EClass {
-        if (!this._referenceType) {
-            const eType = this.basicGetEType()
-            if (isEClass(eType)) {
-                this._referenceType = eType
-            }
-        }
-        return this._referenceType
+        const eType = this.basicGetEType()
+        return isEClass(eType) ? eType : null
     }
 }

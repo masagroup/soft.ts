@@ -45,8 +45,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         if (this._eType != null && this._eType.eIsProxy()) {
             const oldEType = this._eType
             const newEType = this.eResolveProxy(oldEType) as EClassifier
-            this._eType = newEType
             if (newEType != oldEType) {
+                this._eType = newEType
                 if (this.eNotificationRequired()) {
                     this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
                 }
@@ -60,8 +60,8 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
         if (this._eType != null && this._eType.eIsProxy()) {
             const oldEType = this._eType
             const newEType = (await this.eResolveProxyAsync(oldEType)) as EClassifier
-            this._eType = newEType
             if (newEType != oldEType) {
+                this._eType = newEType
                 if (this.eNotificationRequired()) {
                     this.eNotify(new Notification(this, EventType.RESOLVE, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
                 }

@@ -61,8 +61,8 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         if (this._eOpposite != null && this._eOpposite.eIsProxy()) {
             const oldEOpposite = this._eOpposite
             const newEOpposite = this.eResolveProxy(oldEOpposite) as EReference
-            this._eOpposite = newEOpposite
             if (newEOpposite != oldEOpposite) {
+                this._eOpposite = newEOpposite
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new Notification(this, EventType.RESOLVE, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite)
@@ -78,8 +78,8 @@ export class EReferenceImpl extends EStructuralFeatureExt implements EReference 
         if (this._eOpposite != null && this._eOpposite.eIsProxy()) {
             const oldEOpposite = this._eOpposite
             const newEOpposite = (await this.eResolveProxyAsync(oldEOpposite)) as EReference
-            this._eOpposite = newEOpposite
             if (newEOpposite != oldEOpposite) {
+                this._eOpposite = newEOpposite
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new Notification(this, EventType.RESOLVE, EcoreConstants.EREFERENCE__EOPPOSITE, oldEOpposite, newEOpposite)
