@@ -51,6 +51,16 @@ type XMLReference = {
 const LOAD_OBJECT_TYPE = "object"
 const LOAD_ERROR_TYPE = "error"
 
+// adds a decoded value to a many-valued feature without the duplicate scan, which
+// made loading a long list quadratic. A list without addUnique falls back to add.
+function appendLoaded(eList: EList<EObject>, value: any) {
+    if ("addUnique" in eList && typeof eList.addUnique === "function") {
+        eList.addUnique(value)
+    } else {
+        eList.add(value)
+    }
+}
+
 enum LoadFeatureKind {
     Single,
     Many,
@@ -739,7 +749,7 @@ export class XMLDecoder implements EDecoder {
             case LoadFeatureKind.ManyMove: {
                 const eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
                 if (position == -1) {
-                    eList.add(value)
+                    appendLoaded(eList, value)
                 } else if (position == -2) {
                     eList.clear()
                 } else if (eObject == value) {
@@ -750,7 +760,7 @@ export class XMLDecoder implements EDecoder {
                         eList.moveTo(position, index)
                     }
                 } else if (kind == LoadFeatureKind.ManyAdd) {
-                    eList.add(value)
+                    appendLoaded(eList, value)
                 } else {
                     eList.move(position, value)
                 }
