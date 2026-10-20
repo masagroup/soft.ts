@@ -246,32 +246,6 @@ export class EStoreList<E> extends AbstractNotifyingList<E> implements EObjectLi
         return e
     }
 
-    // addWithNotification adds e and returns notifications with its notification, without inverse:
-    // it is the inverse of a change of e.
-    addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
-        const index = this.size()
-        this.basicInsert(index, e)
-        return this.createAndAddNotification(notifications, EventType.ADD, null, e, index)
-    }
-
-    // removeWithNotification removes e and returns notifications with its notification, without
-    // inverse: it is the inverse of a change of e.
-    removeWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
-        const index = this.indexOf(e)
-        if (index != -1) {
-            const old = this.basicRemove(index)
-            return this.createAndAddNotification(notifications, EventType.REMOVE, old, null, index)
-        }
-        return notifications
-    }
-
-    // setWithNotification sets e at index and returns notifications with its notification,
-    // without inverse.
-    setWithNotification(index: number, e: E, notifications: ENotificationChain): ENotificationChain {
-        const old = this.basicSet(index, e)
-        return this.createAndAddNotification(notifications, EventType.SET, old, e, index)
-    }
-
     getUnResolvedList(): EList<E> {
         if (this._object && this._proxies) {
             return new UnResolvedEStoreList<E>(this)
@@ -353,6 +327,24 @@ export class EStoreList<E> extends AbstractNotifyingList<E> implements EObjectLi
             this.createAndDispatchNotification(notifications, EventType.SET, oldObject, newObject, index)
         }
         return oldObject
+    }
+
+    // perform* are used by addWithNotification, removeWithNotification and setWithNotification
+
+    protected performAdd(e: E): void {
+        this.basicInsert(this.size(), e)
+    }
+
+    protected performInsert(index: number, e: E): void {
+        this.basicInsert(index, e)
+    }
+
+    protected performRemove(index: number): E {
+        return this.basicRemove(index)
+    }
+
+    protected performSet(index: number, e: E): E {
+        return this.basicSet(index, e)
     }
 
     // basicInsert inserts e at index in the cache and the store, without notification.

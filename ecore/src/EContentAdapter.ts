@@ -161,7 +161,7 @@ export class EContentAdapter extends AbstractEAdapter {
                         }
                     }
                     if (checkContainer) {
-                        if (notifier.eInternalContainer() && notifier.eInternalResource().eAdapters().contains(this)) {
+                        if (notifier.eInternalContainer() && notifier.eInternalContainer().eAdapters().contains(this)) {
                             return
                         }
                     }

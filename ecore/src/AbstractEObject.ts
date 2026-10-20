@@ -27,10 +27,12 @@ import {
     EStructuralFeature,
     ETreeIterator,
     EventType,
+    ImmutableEList,
     isBidirectional,
     isContainer,
     isContains,
     isEAttribute,
+    isEList,
     isEObject,
     isEObjectInternal,
     isEReference,
@@ -426,6 +428,22 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         return null
     }
 
+    // eDynamicPropertiesGetList returns the list of the many-valued dynamic feature, created if needed.
+    private eDynamicPropertiesGetList(
+        properties: EDynamicProperties,
+        dynamicFeature: EStructuralFeature,
+        dynamicFeatureID: number
+    ): EList<any> {
+        let list = properties.eDynamicGet(dynamicFeatureID)
+        if (list === null || list === undefined) {
+            list = isMapType(dynamicFeature)
+                ? this.eDynamicPropertiesCreateMap(dynamicFeature)
+                : this.eDynamicPropertiesCreateList(dynamicFeature)
+            properties.eDynamicSet(dynamicFeatureID, list)
+        }
+        return list
+    }
+
     private eDynamicPropertiesCreateMap(feature: EStructuralFeature): any {
         const eClass = feature.getEType() as EClass
         let reverseFeatureID = -1
@@ -501,7 +519,13 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         dynamicFeatureID: number,
         newValue: any
     ) {
-        if (isContainer(dynamicFeature)) {
+        if (dynamicFeature.isMany()) {
+            // many: the list keeps its identity, its elements are replaced
+            const list = this.eDynamicPropertiesGetList(properties, dynamicFeature, dynamicFeatureID)
+            const values: any[] = newValue == null ? [] : isEList(newValue) ? [...newValue.toArray()] : Array.from(newValue)
+            list.clear()
+            list.addAll(new ImmutableEList(values))
+        } else if (isContainer(dynamicFeature)) {
             // container
             const featureID = this.eClass().getFeatureID(dynamicFeature)
             const oldContainer = this.eInternalContainer()
@@ -648,7 +672,13 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     }
 
     protected eDynamicPropertiesUnset(properties: EDynamicProperties, dynamicFeature: EStructuralFeature, dynamicFeatureID: number) {
-        if (isContainer(dynamicFeature)) {
+        if (dynamicFeature.isMany()) {
+            // many: the list keeps its identity, it is emptied
+            const list = properties.eDynamicGet(dynamicFeatureID)
+            if (isEList(list)) {
+                list.clear()
+            }
+        } else if (isContainer(dynamicFeature)) {
             if (this.eInternalContainer()) {
                 const featureID = this.eClass().getFeatureID(dynamicFeature)
                 let notifications = this.eBasicRemoveFromContainer(null)
@@ -683,7 +713,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
                 // create notification
                 if (this.eNotificationRequired()) {
-                    const eventType = dynamicFeature.isUnsettable ? EventType.UNSET : EventType.SET
+                    const eventType = dynamicFeature.isUnsettable() ? EventType.UNSET : EventType.SET
                     const notification = new Notification(this, eventType, dynamicFeature, oldValue, null)
                     if (notifications) {
                         notifications.add(notification)
@@ -724,7 +754,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
     eInverseAdd(otherEnd: EObject, featureID: number, n: ENotificationChain): ENotificationChain {
         let notifications = n
         if (featureID >= 0) {
-            this.eBasicInverseAdd(otherEnd, featureID, notifications)
+            return this.eBasicInverseAdd(otherEnd, featureID, notifications)
         } else {
             notifications = this.eBasicRemoveFromContainer(notifications)
             return this.eBasicSetContainer(otherEnd, featureID, notifications)

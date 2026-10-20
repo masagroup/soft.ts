@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EClass, EDynamicProperties, EObjectImpl, EOperation, EStructuralFeature, getEcorePackage } from "./internal.js"
+import { EClass, EDynamicProperties, EObjectImpl, EOperation, EStructuralFeature, getEcorePackage, isEList } from "./internal.js"
 
 function resize(arr: any[], newSize: number, defaultValue: any) {
     while (newSize > arr.length) arr.push(defaultValue)
@@ -59,7 +59,9 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
     }
 
     eDynamicIsSet(dynamicFeatureID: number): boolean {
-        return this._properties[dynamicFeatureID] != null
+        // an empty list is not set
+        const value = this._properties[dynamicFeatureID]
+        return value != null && !(isEList(value) && value.isEmpty())
     }
 
     eFeatureID(feature: EStructuralFeature): number {
