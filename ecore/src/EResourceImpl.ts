@@ -156,6 +156,10 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _listeners: EList<EResourceListener> = null
     private _mutex: Mutex = new Mutex()
 
+    // maps intrinsic ids to objects when no EObjectIDManager is set: filled by a scan,
+    // kept on attach and detach, and rebuilt by the next scan when a lookup misses
+    private _idIndex: Map<string, EObject> = null
+
     getURI(): URI {
         return this._uri
     }
@@ -163,6 +167,10 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     setURI(uri: URI) {
         const oldURI = this._uri
         this._uri = uri
+        const resourceSet = this._resourceSet as any
+        if (resourceSet && typeof resourceSet.resourceURIChanged === "function") {
+            resourceSet.resourceURIChanged(this, uri)
+        }
         if (this.eNotificationRequired) {
             this.eNotify(new ResourceNotification(this, EResourceConstants.RESOURCE__URI, EventType.SET, oldURI, uri, -1))
         }
@@ -423,6 +431,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._errors = null
         this._warnings = null
         this._objectIDManager?.clear()
+        this._idIndex = null
     }
 
     async save(options?: Map<string, any>): Promise<void> {
@@ -514,7 +523,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     protected isAttachedDetachedRequired(): boolean {
-        return this._objectIDManager != null || (this._listeners != null && !this._listeners.isEmpty())
+        return this._objectIDManager != null || this._idIndex != null || (this._listeners != null && !this._listeners.isEmpty())
     }
 
     attached(object: EObject): void {
@@ -528,6 +537,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doAttached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.register(object)
+        this.indexAttached(object)
         if (this._listeners) {
             for (const listener of this._listeners) {
                 listener.attached(object)
@@ -546,6 +556,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
     protected doDetached(object: EObject): void {
         if (this._objectIDManager) this._objectIDManager.unRegister(object)
+        this.indexDetached(object)
         if (this._listeners) {
             for (const listener of this._listeners) {
                 listener.detached(object)
@@ -598,12 +609,31 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private getObjectByID(id: string): EObject {
         if (this._objectIDManager) return this._objectIDManager.getEObject(id)
 
+        const eObject = this._idIndex?.get(id)
+        if (eObject && EcoreUtils.getEObjectID(eObject) == id) return eObject
+
+        // a miss or a stale entry: rescan, keeping the first object of the tree for each id
+        const index = new Map<string, EObject>()
         for (const eObject of this.eAllContentsResolve(this, false)) {
             const objectID = EcoreUtils.getEObjectID(eObject)
-            if (id == objectID) return eObject
+            if (objectID && !index.has(objectID)) index.set(objectID, eObject)
         }
+        this._idIndex = index
+        return index.get(id) ?? null
+    }
 
-        return null
+    private indexAttached(object: EObject) {
+        if (this._idIndex) {
+            const id = EcoreUtils.getEObjectID(object)
+            if (id && !this._idIndex.has(id)) this._idIndex.set(id, object)
+        }
+    }
+
+    private indexDetached(object: EObject) {
+        if (this._idIndex) {
+            const id = EcoreUtils.getEObjectID(object)
+            if (id && this._idIndex.get(id) == object) this._idIndex.delete(id)
+        }
     }
 
     private getIDForObject(eObject: EObject): string {
