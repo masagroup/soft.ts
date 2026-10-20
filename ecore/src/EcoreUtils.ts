@@ -284,6 +284,7 @@ export class EcoreUtils {
                     }
                     for (const resolve of await Promise.all(promises)) {
                         const eDeliver = eObject.eDeliver()
+                        eObject.eSetDeliver(false)
                         list.set(resolve.index, resolve.newValue)
                         eObject.eSetDeliver(eDeliver)
                         if (eDeliver && !eObject.eAdapters().isEmpty()) {

@@ -35,28 +35,34 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
         return this.getNotifier() != null && this.getNotifier().eDeliver() && !this.getNotifier().eAdapters().isEmpty()
     }
 
+    // addWithNotification adds e and returns notifications with its notification, without inverse:
+    // it is the inverse of a change of e.
     addWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
         const index = this.size()
-        this.doAdd(e)
+        this.performAdd(e)
         return this.createAndAddNotification(notifications, EventType.ADD, null, e, index)
     }
 
+    // removeWithNotification removes e and returns notifications with its notification, without
+    // inverse: it is the inverse of a change of e.
     removeWithNotification(e: E, notifications: ENotificationChain): ENotificationChain {
         const index = this.indexOf(e)
         if (index != -1) {
-            const old = this.removeAt(index)
+            const old = this.performRemove(index)
             return this.createAndAddNotification(notifications, EventType.REMOVE, old, null, index)
         }
         return notifications
     }
 
+    // setWithNotification sets e at index and returns notifications with its notification,
+    // without inverse.
     setWithNotification(index: number, e: E, notifications: ENotificationChain): ENotificationChain {
-        const old = this.doSet(index, e)
+        const old = this.performSet(index, e)
         return this.createAndAddNotification(notifications, EventType.SET, old, e, index)
     }
 
     public removeAt(index: number): E {
-        const oldObject = super.removeAt(index)
+        const oldObject = this.performRemove(index)
         let notifications: ENotificationChain = null
         notifications = this.inverseRemove(oldObject, notifications)
         this.createAndDispatchNotification(notifications, EventType.REMOVE, oldObject, null, index)
@@ -73,7 +79,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
 
     protected doAdd(e: E): void {
         const index = this.size()
-        super.doAdd(e)
+        this.performAdd(e)
         const notifications = this.inverseAdd(e, null)
         this.createAndDispatchNotification(notifications, EventType.ADD, null, e, index)
     }
@@ -83,7 +89,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
     }
 
     protected doInsert(index: number, e: E) {
-        super.doInsert(index, e)
+        this.performInsert(index, e)
         const notifications = this.inverseAdd(e, null)
         this.createAndDispatchNotification(notifications, EventType.ADD, null, e, index)
     }
@@ -93,7 +99,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
             return false
         }
 
-        const result = super.doInsertAll(index, c)
+        const result = this.performInsertAll(index, c)
         let notifications: ENotificationChain = new NotificationChain()
         for (const e of c) {
             notifications = this.inverseAdd(e, notifications)
@@ -109,7 +115,7 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
     }
 
     protected doSet(index: number, newObject: E): E {
-        const oldObject = super.doSet(index, newObject)
+        const oldObject = this.performSet(index, newObject)
         if (newObject != oldObject) {
             let notifications: ENotificationChain = null
             notifications = this.inverseRemove(oldObject, notifications)
@@ -117,6 +123,68 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
             this.createAndDispatchNotification(notifications, EventType.SET, oldObject, newObject, index)
         }
         return oldObject
+    }
+
+    protected doClear(): E[] {
+        const oldData = this.performClear()
+        if (oldData.length == 0) {
+            this.createAndDispatchNotification(null, EventType.REMOVE_MANY, [], null, -1)
+        } else {
+            let notifications: ENotificationChain = new NotificationChain()
+            for (const e of oldData) {
+                notifications = this.inverseRemove(e, notifications)
+            }
+            this.createAndDispatchNotificationFn(notifications, () => {
+                if (oldData.length == 1) {
+                    return this.createNotification(EventType.REMOVE, oldData[0], null, 0)
+                } else {
+                    return this.createNotification(EventType.REMOVE_MANY, oldData, null, -1)
+                }
+            })
+        }
+        return oldData
+    }
+
+    protected doMove(from: number, to: number): E {
+        const size = this.size()
+        if (from < 0 || from >= size || to < 0 || to >= size) {
+            throw new RangeError("Index out of bounds: from=" + from + " to=" + to + " size=" + size)
+        }
+        const oldObject = this.performMove(from, to)
+        if (from != to) {
+            this.createAndDispatchNotification(null, EventType.MOVE, from, oldObject, to)
+        }
+        return oldObject
+    }
+
+    // perform* change the elements, without inverse and without notification
+
+    protected performAdd(e: E): void {
+        super.doAdd(e)
+    }
+
+    protected performInsert(index: number, e: E): void {
+        super.doInsert(index, e)
+    }
+
+    protected performInsertAll(index: number, c: Collection<E>): boolean {
+        return super.doInsertAll(index, c)
+    }
+
+    protected performRemove(index: number): E {
+        return super.removeAt(index)
+    }
+
+    protected performSet(index: number, e: E): E {
+        return super.doSet(index, e)
+    }
+
+    protected performClear(): E[] {
+        return super.doClear()
+    }
+
+    protected performMove(from: number, to: number): E {
+        return super.doMove(from, to)
     }
 
     protected createNotification(eventType: EventType, oldValue: any, newValue: any, position: number = -1): AbstractNotification {

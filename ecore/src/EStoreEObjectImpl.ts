@@ -92,9 +92,12 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
         return this._cache
     }
 
-    // clearCache drops the cached values: they are read again from the store.
+    // clearCache drops the cached values: they are read again from the store. Without store, the
+    // values are kept: they are not cached, they are the only copy.
     clearCache(): void {
-        this._cachedValues.clear()
+        if (this.getEStore()) {
+            this._cachedValues.clear()
+        }
     }
 
     eDynamicGet(dynamicFeatureID: number): any {
