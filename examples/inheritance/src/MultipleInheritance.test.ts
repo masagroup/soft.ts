@@ -74,6 +74,7 @@ describe("single valued opposites across multiple inheritance", () => {
         parent.setChild(leaf)
         expect(leaf.getParent()).toBe(parent)
         expect(leaf.eContainer()).toBe(parent)
+        expect(leaf.eContainmentFeature()).toBe(getInheritancePackage().getParent_Child())
 
         const other = f.createParent()
         leaf.setParent(other)
