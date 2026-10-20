@@ -32,6 +32,7 @@ import {
 import { Encoder } from "./msgpack/Encoder.js"
 
 const binaryVersion = 0
+const extendedMetaData = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData"
 const binarySignature = Uint8Array.from([137, 101, 109, 102, 10, 13, 26, 10])
 
 enum CheckType {
@@ -76,6 +77,7 @@ export class BinaryEncoder implements EEncoder {
     private _enumLiteralToIDMap: Map<string, number> = new Map<string, number>()
     private _version: number = binaryVersion
     private _isIDAttributeEncoded: boolean = false
+    private _isNamespaceAttributeEncoded: boolean = false
     private _encoder: Encoder
     private _extensionCodec: ExtensionCodec
 
@@ -84,6 +86,12 @@ export class BinaryEncoder implements EEncoder {
         this._baseURI = this._resource?.getURI()
         this._isIDAttributeEncoded = options?.get(BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE) ?? false
         this._extensionCodec = options?.get(BinaryOptions.BINARY_OPTION_CODEC_EXTENSION)
+        if (options) {
+            // like go, namespace attributes are encoded unless the option is explicitly disabled
+            this._isNamespaceAttributeEncoded = options.has(BinaryOptions.BINARY_OPTION_NAMESPACE_ATTRIBUTE)
+                ? options.get(BinaryOptions.BINARY_OPTION_NAMESPACE_ATTRIBUTE) === true
+                : true
+        }
     }
 
     private encodeBoolean(object: boolean) {
@@ -96,6 +104,14 @@ export class BinaryEncoder implements EEncoder {
 
     private encodeBytes(object: ArrayBufferView) {
         this._encoder.encodeBinary(object)
+    }
+
+    private encodeFloat32(object: number) {
+        this._encoder.encodeFloat32(object)
+    }
+
+    private encodeByte(object: number) {
+        this._encoder.encodeUint8(object)
     }
 
     private encodeString(object: string) {
@@ -340,6 +356,14 @@ export class BinaryEncoder implements EEncoder {
                     this.encodeNumber(value as number)
                     break
                 }
+                case BinaryFeatureKind.bfkFloat32: {
+                    this.encodeFloat32(value as number)
+                    break
+                }
+                case BinaryFeatureKind.bfkByte: {
+                    this.encodeByte(value as number)
+                    break
+                }
                 case BinaryFeatureKind.bfkBool: {
                     this.encodeBoolean(value as boolean)
                     break
@@ -384,6 +408,17 @@ export class BinaryEncoder implements EEncoder {
             eFeatureData.dataType = eDataType
             eFeatureData.factory = eDataType.getEPackage().getEFactoryInstance()
         }
+        // if we have a xmlns prefix map or schema location map, consider it as non transient to ensure
+        // information is kept between binary encoder and xml encoder
+        if (this._isNamespaceAttributeEncoded) {
+            const eAnnotation = eFeature.getEAnnotation(extendedMetaData)
+            if (eAnnotation) {
+                const name = eAnnotation.getDetails().getValue("name")
+                if (name == "xmlns:prefix" || name == "xsi:schemaLocation") {
+                    eFeatureData.isTransient = false
+                }
+            }
+        }
         return eFeatureData
     }
 
@@ -399,6 +434,7 @@ export class BinaryEncoder implements EEncoder {
 
     private reinitializeState() {
         this._encoder = new Encoder({ extensionCodec: this._extensionCodec })
+        this._objectRoot = null
     }
 
     encode(eResource: EResource): Result<Uint8Array, Error> {
@@ -420,6 +456,7 @@ export class BinaryEncoder implements EEncoder {
 
         try {
             this.reinitializeState()
+            this._objectRoot = eObject
             this.encodeSignature()
             this.encodeVersion()
             this.encodeEObject(eObject, CheckType.CheckContainer)
@@ -432,7 +469,12 @@ export class BinaryEncoder implements EEncoder {
     async encodeAsync(eResource: EResource, stream: WritableStream): Promise<Uint8Array> {
         const r = this.encode(eResource)
         if (r.isOk()) {
-            stream.getWriter().write(r.value)
+            const writer = stream.getWriter()
+            try {
+                await writer.write(r.value)
+            } finally {
+                writer.releaseLock()
+            }
             return r.value
         } else {
             return Promise.reject(r.error)
@@ -442,7 +484,12 @@ export class BinaryEncoder implements EEncoder {
     async encodeObjectAsync(eObject: EObject, stream: WritableStream): Promise<Uint8Array> {
         const r = this.encodeObject(eObject)
         if (r.isOk()) {
-            stream.getWriter().write(r.value)
+            const writer = stream.getWriter()
+            try {
+                await writer.write(r.value)
+            } finally {
+                writer.releaseLock()
+            }
             return r.value
         } else {
             return Promise.reject(r.error)

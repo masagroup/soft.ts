@@ -168,7 +168,12 @@ export class XMLEncoder implements EEncoder {
     async encodeAsync(eResource: EResource, stream: WritableStream): Promise<Uint8Array> {
         const r = this.encode(eResource)
         if (r.isOk()) {
-            stream.getWriter().write(r.value)
+            const writer = stream.getWriter()
+            try {
+                await writer.write(r.value)
+            } finally {
+                writer.releaseLock()
+            }
             return r.value
         } else {
             return Promise.reject(r.error)
@@ -178,7 +183,12 @@ export class XMLEncoder implements EEncoder {
     async encodeObjectAsync(eObject: EObject, stream: WritableStream): Promise<Uint8Array> {
         const r = this.encodeObject(eObject)
         if (r.isOk()) {
-            stream.getWriter().write(r.value)
+            const writer = stream.getWriter()
+            try {
+                await writer.write(r.value)
+            } finally {
+                writer.releaseLock()
+            }
             return r.value
         } else {
             return Promise.reject(r.error)
@@ -791,7 +801,7 @@ export class XMLEncoder implements EEncoder {
                 prefixes.push(prefix)
                 this._uriToPrefixes.set(nsURI, prefixes)
             } else {
-                this._uriToPrefixes.set(nsURI, [])
+                this._uriToPrefixes.set(nsURI, [prefix])
             }
         }
     }

@@ -45,10 +45,14 @@ export class XMLString {
         return result
     }
 
-    write(stream: WritableStream) {
+    async write(stream: WritableStream): Promise<void> {
         const w = stream.getWriter()
-        for (const segment of this.segments) {
-            w.write(segment.buffer)
+        try {
+            for (const segment of this.segments) {
+                await w.write(segment.buffer)
+            }
+        } finally {
+            w.releaseLock()
         }
     }
 

@@ -128,7 +128,7 @@ class ENamedElementExtendedMetaDataImpl implements ENamedElementExtendedMetaData
     }
 
     getName(): string {
-        if (!this._name) {
+        if (this._name === undefined) {
             this._name = this._emd.basicGetName(this._eElement)
         }
         return this._name
@@ -181,7 +181,7 @@ class EStructuralFeatureExtentedMetaDataImpl extends ENamedElementExtendedMetaDa
     }
 
     getNamespace(): string {
-        if (!this._namespace) {
+        if (this._namespace === undefined) {
             this._namespace = this._emd.basicGetNamespace(this._eElement as EStructuralFeature)
         }
         return this._namespace

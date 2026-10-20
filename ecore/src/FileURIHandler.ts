@@ -23,11 +23,17 @@ function readableNodeStreamToWebStream(stream: stream.Readable): ReadableStream 
 
 function writableNodeStreamToWebStream(stream: stream.Writable): WritableStream {
     return new WritableStream({
-        write(chunk, controller) {
-            stream.write(chunk)
+        write(chunk) {
+            return new Promise<void>((resolve, reject) => {
+                stream.write(chunk, (err) => (err ? reject(err) : resolve()))
+            })
         },
         close() {
-            stream.end()
+            // resolve once the data has been flushed to the underlying file
+            return new Promise<void>((resolve, reject) => {
+                stream.once("error", reject)
+                stream.end(() => resolve())
+            })
         },
         abort(err) {
             stream.destroy(err)

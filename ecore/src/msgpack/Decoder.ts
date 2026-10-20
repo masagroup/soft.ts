@@ -38,7 +38,7 @@ export class Decoder {
     decode(): unknown {
         const code = this.readU8()
         if (Types.isFixedNum(code)) {
-            return code
+            return uncomplement(code, 8)
         }
         if (Types.isFixedString(code)) {
             return this.string(code)
@@ -134,12 +134,20 @@ export class Decoder {
         throw new Error(`Unrecognized type byte: ${prettyByte(code)}`)
     }
 
+    isStringNext(): boolean {
+        const code = this._bytes[this._pos]
+        return Types.isFixedString(code) || code === Types.Str8 || code === Types.Str16 || code === Types.Str32
+    }
+
     decodeString(): string {
         const code = this.readU8()
         return this.string(code)
     }
 
     private string(code: number): string {
+        if (code === Types.Nil) {
+            return ""
+        }
         const len = this.bytesLen(code)
         let str = ""
         if (len > 0) {
@@ -155,6 +163,9 @@ export class Decoder {
     }
 
     private bytes(code: number): Uint8Array {
+        if (code === Types.Nil) {
+            return null
+        }
         const len = this.bytesLen(code)
         const bytes = this._bytes.subarray(this._pos, this._pos + len)
         this._pos += len
@@ -162,10 +173,6 @@ export class Decoder {
     }
 
     private bytesLen(c: number): number {
-        if (c == Types.Nil) {
-            return -1
-        }
-
         if (Types.isFixedString(c)) {
             return c & Types.FixedStrMask
         }

@@ -137,7 +137,7 @@ export class XMLDecoder implements EDecoder {
     private createSAXParser(): sax.SAXParser {
         // configure parser
         const saxParser = new sax.SAXParser(true, {
-            trim: true,
+            trim: false,
             lowercase: true,
             xmlns: true,
             position: true
@@ -145,6 +145,7 @@ export class XMLDecoder implements EDecoder {
         saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t)
         saxParser.onclosetag = (t: string) => this.onEndTag(t)
         saxParser.ontext = (t: string) => this.onText(t)
+        saxParser.oncdata = (t: string) => this.onText(t)
         saxParser.onerror = (e) => this.onError(e)
         saxParser.onprocessinginstruction = (n) => this.onProcessingInstruction(n)
         return saxParser
@@ -204,12 +205,7 @@ export class XMLDecoder implements EDecoder {
         }
         // parser & buffer
         this._parser = this.createSAXParser()
-        const iterable = ensureAsyncIterable(streamLike)
-        for await (const bufferLike of iterable) {
-            const buffer = ensureUint8Array(bufferLike)
-            const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
-            this._parser.write(bufferUTF8)
-        }
+        await this.writeStream(streamLike)
         // close parser
         this._parser.close()
         // result
@@ -232,16 +228,26 @@ export class XMLDecoder implements EDecoder {
         }
         // parser & buffer
         this._parser = this.createSAXParser()
-        const iterable = ensureAsyncIterable(streamLike)
-        for await (const bufferLike of iterable) {
-            const buffer = ensureUint8Array(bufferLike)
-            const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
-            this._parser.write(bufferUTF8)
-        }
+        await this.writeStream(streamLike)
         // close parser
         this._parser.close()
         // result
         return error ? Promise.reject(error) : object
+    }
+
+    private async writeStream(streamLike: ReadableStreamLike<BufferLike>): Promise<void> {
+        // a single streaming decoder keeps multibyte characters split across chunks intact
+        const textDecoder = new TextDecoder("utf-8")
+        for await (const bufferLike of ensureAsyncIterable(streamLike)) {
+            const text = textDecoder.decode(ensureUint8Array(bufferLike), { stream: true })
+            if (text.length > 0) {
+                this._parser.write(text)
+            }
+        }
+        const remaining = textDecoder.decode()
+        if (remaining.length > 0) {
+            this._parser.write(remaining)
+        }
     }
 
     private onProcessingInstruction(node: { name: string; body: string }) {
@@ -286,7 +292,7 @@ export class XMLDecoder implements EDecoder {
         }
 
         const eType = this._types.pop()
-        if (this._text) {
+        if (this._text !== undefined) {
             if (eType === LOAD_OBJECT_TYPE) {
                 if (this._text.length > 0) {
                     this.handleProxy(eObject, this._text)
@@ -317,7 +323,7 @@ export class XMLDecoder implements EDecoder {
     }
 
     private onText(text: string): void {
-        if (this._text) {
+        if (this._text !== undefined) {
             this._text += text
         }
     }
@@ -700,9 +706,7 @@ export class XMLDecoder implements EDecoder {
         const eObjectInternal = eProxy as EObjectInternal
         eObjectInternal.eSetProxyURI(uri)
 
-        const ndx = id.indexOf("#")
-        const trimmedURI: string = ndx != -1 ? (ndx > 0 ? id.slice(0, ndx - 1) : "") : id
-        if (this._resource.getURI()?.toString() == trimmedURI) {
+        if (resourceURI.equals(uri.trimFragment())) {
             this._sameDocumentProxies.push(eProxy)
         }
     }
@@ -726,7 +730,7 @@ export class XMLDecoder implements EDecoder {
         switch (kind) {
             case LoadFeatureKind.Single: {
                 const eDataType = eFeature.getEType() as EDataType
-                if (!value) {
+                if (value === null || value === undefined) {
                     eObject.eSet(eFeature, null)
                 } else {
                     const eFactory = this.factoryFor(eFeature, eDataType)
@@ -740,7 +744,7 @@ export class XMLDecoder implements EDecoder {
                 const eDataType = eFeature.getEType() as EDataType
                 const eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
                 if (position != -2) {
-                    if (!value) {
+                    if (value === null || value === undefined) {
                         eList.add(null)
                     } else {
                         const eFactory = this.factoryFor(eFeature, eDataType)
