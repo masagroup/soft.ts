@@ -32,7 +32,7 @@ import {
 } from "./internal.js"
 
 export function isEPackage(o: any): o is EPackage {
-    return typeof o === "object" && o !== null && "nsURI" in o
+    return typeof o === "object" && o !== null && "getNsURI" in o
 }
 
 class EPackageExtAdapter extends AbstractEAdapter {
