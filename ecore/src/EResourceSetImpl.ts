@@ -73,6 +73,12 @@ class ResourcesList extends AbstractNotifyingList<EResource> {
         if (newE) this._resourceSet.indexResource(newE, newE.getURI())
     }
 
+    protected didMove(from: number, index: number, e: EResource): void {
+        super.didMove(from, index, e)
+        // the first resource of the list wins for a uri: the order of the resources changed
+        this._resourceSet.reindexResources()
+    }
+
     protected didClear(elements: EResource[]): void {
         this._resourceSet.clearResourceIndex()
     }
@@ -83,6 +89,8 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     private _uriConverter: EURIConverter
     private _uriResourceMap: Map<string, EResource>
     private _resourceIndex: Map<string, EResource> = null
+    // the keys of each resource in the resource index
+    private _resourceKeys: Map<EResource, string[]> = null
     private _resourceCodecRegistry: ECodecRegistry
     private _packageRegistry: EPackageRegistry
 
@@ -229,10 +237,7 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     setURIConverter(uriConverter: EURIConverter): void {
         this._uriConverter = uriConverter
         // the index is keyed by normalized uri : rebuild it with the new converter
-        this._resourceIndex = null
-        for (const resource of this._resources) {
-            this.indexResource(resource, resource.getURI())
-        }
+        this.reindexResources()
     }
 
     // the resource of the set whose uri, once normalized by the uri converter, is uri normalized,
@@ -265,36 +270,39 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
     }
 
     // registers resource, whose uri is uri, in the index of the resources of the set, by uri and
-    // by normalized uri. The first resource indexed for a uri is kept, as the first resource of
-    // the list is the one getResource returns.
+    // by normalized uri. For a uri shared by several resources, the index keeps the first one
+    // of the list, as it is the one getResource returns.
     indexResource(resource: EResource, uri: URI): void {
         if (!uri) {
             return
         }
-        const key = uri.toString()
-        if (!this._resourceIndex?.has(key)) {
-            this.setIndexedResource(key, resource)
-        }
-        const normalizedKey = this._uriConverter.normalize(uri).toString()
-        if (!this._resourceIndex.has(normalizedKey)) {
-            this.setIndexedResource(normalizedKey, resource)
-        }
+        this.indexResourceKey(uri.toString(), resource)
+        this.indexResourceKey(this._uriConverter.normalize(uri).toString(), resource)
     }
 
     // removes resource from the index of the resources of the set. Another resource of the set
     // with the same uri, if any, is indexed again by the next getResource that scans the list.
     unindexResource(resource: EResource): void {
-        if (this._resourceIndex) {
-            for (const [key, indexed] of this._resourceIndex) {
-                if (indexed == resource) {
-                    this._resourceIndex.delete(key)
-                }
+        const keys = this._resourceKeys?.get(resource)
+        if (keys) {
+            for (const key of keys) {
+                this._resourceIndex.delete(key)
             }
+            this._resourceKeys.delete(resource)
         }
     }
 
     clearResourceIndex(): void {
         this._resourceIndex = null
+        this._resourceKeys = null
+    }
+
+    // rebuilds the index of the resources of the set
+    reindexResources(): void {
+        this.clearResourceIndex()
+        for (const resource of this._resources) {
+            this.indexResource(resource, resource.getURI())
+        }
     }
 
     // called by a resource of the set when its uri changes
@@ -303,10 +311,44 @@ export class EResourceSetImpl extends ENotifierImpl implements EResourceSet {
         this.indexResource(resource, newURI)
     }
 
+    private indexResourceKey(key: string, resource: EResource) {
+        const indexed = this._resourceIndex?.get(key)
+        if (indexed == resource) {
+            return
+        }
+        if (indexed) {
+            // keep the first resource of the list
+            const indexedIndex = this._resources.indexOf(indexed)
+            if (indexedIndex != -1 && indexedIndex < this._resources.indexOf(resource)) {
+                return
+            }
+        }
+        this.setIndexedResource(key, resource)
+    }
+
     private setIndexedResource(key: string, resource: EResource) {
         if (!this._resourceIndex) {
             this._resourceIndex = new Map<string, EResource>()
+            this._resourceKeys = new Map<EResource, string[]>()
+        }
+        const indexed = this._resourceIndex.get(key)
+        if (indexed == resource) {
+            return
+        }
+        if (indexed) {
+            // the key moves from indexed to resource
+            const indexedKeys = this._resourceKeys.get(indexed)
+            const i = indexedKeys ? indexedKeys.indexOf(key) : -1
+            if (i != -1) {
+                indexedKeys.splice(i, 1)
+            }
         }
         this._resourceIndex.set(key, resource)
+        const keys = this._resourceKeys.get(resource)
+        if (keys) {
+            keys.push(key)
+        } else {
+            this._resourceKeys.set(resource, [key])
+        }
     }
 }

@@ -69,21 +69,27 @@ export class EURIConverterImpl implements EURIConverter {
 
     normalize(uri: URI): URI {
         const normalized = this.getURIFromMap(uri)
-        return uri == normalized ? normalized : this.normalize(normalized)
+        return uri.equals(normalized) ? normalized : this.normalize(normalized)
     }
 
     getURIMap(): Map<URI, URI> {
         return this._uriMap
     }
 
+    // the uri with its prefix replaced by the first matching entry of the uri map of the
+    // converter, else of the uri map of the delegate: the entries of the converter override
+    // the ones of the delegate
     private getURIFromMap(uri: URI): URI {
-        const uriMap = this._delegate ? new Map([...this._delegate.getURIMap().entries(), ...this.getURIMap().entries()]) : this.getURIMap()
-        for (const [oldPrefix, newPrefix] of uriMap) {
-            const r = uri.replacePrefix(oldPrefix, newPrefix)
-            if (r) {
-                return r
-            }
-        }
-        return uri
+        return replacePrefix(uri, this._uriMap) ?? (this._delegate ? replacePrefix(uri, this._delegate.getURIMap()) : null) ?? uri
     }
+}
+
+function replacePrefix(uri: URI, uriMap: Map<URI, URI>): URI {
+    for (const [oldPrefix, newPrefix] of uriMap) {
+        const r = uri.replacePrefix(oldPrefix, newPrefix)
+        if (r) {
+            return r
+        }
+    }
+    return null
 }

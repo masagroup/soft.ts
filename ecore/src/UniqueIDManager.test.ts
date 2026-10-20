@@ -246,3 +246,52 @@ describe("IDManager", () => {
         })
     })
 })
+
+describe("IDManager ids", () => {
+    test("incremental ids are distinct", () => {
+        const m = new IncrementalIDManager()
+        const a = instance(mock<EObject>())
+        const b = instance(mock<EObject>())
+        m.register(a)
+        m.register(b)
+        expect(m.getID(a)).toBe(0)
+        expect(m.getID(b)).toBe(1)
+        expect(m.getEObject(0)).toBe(a)
+        expect(m.getEObject(1)).toBe(b)
+        expect(m.getEObject("1")).toBe(b)
+    })
+
+    test("incremental ids after setID", () => {
+        const m = new IncrementalIDManager()
+        const a = instance(mock<EObject>())
+        const b = instance(mock<EObject>())
+        const c = instance(mock<EObject>())
+        m.setID(a, 5)
+        m.register(b)
+        expect(m.getID(b)).toBe(6)
+        // a lower id doesn't make the next id go back
+        m.setID(c, 2)
+        const d = instance(mock<EObject>())
+        m.register(d)
+        expect(m.getID(d)).toBe(7)
+    })
+
+    test("incremental invalid ids", () => {
+        const m = new IncrementalIDManager()
+        const a = instance(mock<EObject>())
+        m.setID(a, 12)
+        expect(m.getEObject("12abc")).toBeUndefined()
+        expect(m.getEObject("12")).toBe(a)
+    })
+
+    test("uuid getEObject with an invalid id", () => {
+        const m = new UUIDManager()
+        expect(m.getEObject("foo")).toBeUndefined()
+        expect(m.getEObject(new Uint8Array(3))).toBeUndefined()
+    })
+
+    test("ulid getEObject with an invalid id", () => {
+        const m = new ULIDManager()
+        expect(m.getEObject("foo")).toBeUndefined()
+    })
+})

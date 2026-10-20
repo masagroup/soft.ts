@@ -1,4 +1,3 @@
-import path from "path-browserify"
 import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
 
 export type URIParts = Partial<
@@ -10,6 +9,8 @@ export type URIParts = Partial<
         path: string
         query: string
         fragment: string
+        // the uri has an authority, even an empty one as in file:///path
+        hasAuthority: boolean
     }>
 >
 
@@ -26,16 +27,47 @@ const authorityRegExp = new RegExp(
         "(?::(\\d*))?"
 ) // port)
 
+// a windows absolute path: a drive letter followed by a separator
+const windowsDriveRegExp = /^[a-zA-Z]:\//
+// the path of a file uri of a windows absolute path: /C:/...
+const windowsDrivePathRegExp = /^\/[a-zA-Z]:\//
+
+function percentDecode(s: string): string {
+    if (s.indexOf("%") == -1) {
+        return s
+    }
+    try {
+        return decodeURIComponent(s)
+    } catch {
+        // not a valid percent-encoded sequence: keep it as it is
+        return s
+    }
+}
+
+// escapes the characters of a file path that can't appear as they are in a uri path
+function percentEncodePath(p: string): string {
+    return encodeURI(p).replace(/[?#]/g, (c) => encodeURIComponent(c))
+}
+
 export function uriToFilePath(uri: URI): string {
-    let path = uri.normalize().path
-    if (process.platform == "win32" && path[0] == "/") {
+    const normalized = uri.normalize()
+    let path = percentDecode(normalized.path)
+    if (windowsDrivePathRegExp.test(path)) {
+        // file:///C:/dir/file -> C:/dir/file
         path = path.slice(1)
+    } else if (normalized.host) {
+        // file://server/share/file -> //server/share/file
+        path = "//" + normalized.host + path
     }
     return path
 }
 
 function parseURI(u: string): URIParts {
     const uri = u.replace(/\\/g, "/")
+    if (windowsDriveRegExp.test(uri)) {
+        // a windows absolute path, not a single letter scheme
+        return { path: uri }
+    }
     const uriMatchs = uriRegExp.exec(uri)
     if (!uriMatchs) {
         throw new Error(`invalid uri: ${uri}`)
@@ -45,11 +77,13 @@ function parseURI(u: string): URIParts {
     let host = ""
     let port = ""
     let user = ""
+    let hasAuthority = false
     const authorityAndPath = uriMatchs[3] ?? ""
     const authorityAndPathMatches = authorityAndPathRegExp.exec(authorityAndPath)
     if (!authorityAndPathMatches) {
         path = authorityAndPath
     } else {
+        hasAuthority = true
         const authority = authorityAndPathMatches[1]
         const authorityMatches = authorityRegExp.exec(authority)
         if (!authorityMatches) {
@@ -58,7 +92,7 @@ function parseURI(u: string): URIParts {
         if (authorityMatches[1]) {
             user = authorityMatches[1]
             if (authorityMatches[2]) {
-                user += authorityMatches[2]
+                user += ":" + authorityMatches[2]
             }
         }
         host = authorityMatches[3] ?? ""
@@ -72,7 +106,8 @@ function parseURI(u: string): URIParts {
         port: port,
         path: path,
         query: uriMatchs[4] ?? "",
-        fragment: uriMatchs[5] ?? ""
+        fragment: uriMatchs[5] ?? "",
+        hasAuthority: hasAuthority
     }
 }
 
@@ -84,14 +119,16 @@ function serializeURI(parts: URIParts): string {
     if (parts.scheme) {
         uri += parts.scheme + ":"
     }
-    if (parts.user || parts.host || parts.port) {
+    // an empty authority is kept: file:///path is not file:/path
+    const hasAuthority = parts.user || parts.host || parts.port || parts.hasAuthority
+    if (hasAuthority) {
         uri += "//"
         if (parts.user) {
             uri += parts.user + "@"
         }
         if (parts.host) {
             uri += parts.host
-        } else {
+        } else if (parts.user || parts.port) {
             throw new Error("host must be defined")
         }
         if (parts.port) {
@@ -102,7 +139,7 @@ function serializeURI(parts: URIParts): string {
         const path = parts.path
         // if the URI is not opaque and the path is not already prefixed
         // with a '/', add one.
-        if (parts.host && parts.path && parts.path.charAt(0) != "/") {
+        if (hasAuthority && path.charAt(0) != "/") {
             uri += "/"
         }
         uri += path
@@ -125,6 +162,7 @@ export class URI {
     readonly path: string
     readonly query: string
     readonly fragment: string
+    readonly hasAuthority: boolean
     readonly rawURI: string
 
     constructor(input?: URIParts | string) {
@@ -141,6 +179,7 @@ export class URI {
         this.path = parts?.path ?? ""
         this.query = parts?.query ?? ""
         this.fragment = parts?.fragment ?? ""
+        this.hasAuthority = Boolean(parts?.hasAuthority || this.user || this.host || this.port)
         this.rawURI = input ? (typeof input === "string" ? input : serializeURI(parts)) : ""
     }
 
@@ -187,30 +226,21 @@ export class URI {
         if (np == this.path) {
             return this
         }
-        return new URI({
-            scheme: this.scheme,
-            user: this.user,
-            host: this.host,
-            port: this.port,
-            path: np,
-            query: this.query,
-            fragment: this.fragment
-        })
+        return new URI({ ...this.parts(), path: np })
     }
 
     resolve(ref: URI): URI {
-        // check if opaque first
-        if (ref.isOpaque() || this.isOpaque()) {
-            return ref
-        }
-
-        const refAuthority = ref.authority()
-        // Reference to current document (lone fragment)
-        if (!ref.scheme && !refAuthority && !ref.path && !ref.fragment && !ref.query) {
-            if (!this.fragment || ref.fragment == this.fragment) {
+        // Reference to current document (lone fragment): the base with the fragment of ref
+        if (!ref.scheme && !ref.hasAuthority && !ref.path && !ref.query && ref.fragment) {
+            if (ref.fragment == this.fragment) {
                 return this
             }
-            return new URI({ fragment: ref.fragment })
+            return new URI({ ...this.parts(), fragment: ref.fragment })
+        }
+
+        // check if opaque
+        if (ref.isOpaque() || this.isOpaque()) {
+            return ref
         }
 
         // ref is absolute
@@ -219,30 +249,14 @@ export class URI {
         }
 
         // no authority
-        if (!refAuthority) {
+        if (!ref.hasAuthority) {
             let path = ref.path
             if (!path || path[0] != "/") {
                 path = resolvePath(this.path, ref.path, this.isAbsolute())
             }
-            return new URI({
-                scheme: this.scheme,
-                user: this.user,
-                host: this.host,
-                port: this.port,
-                path: path,
-                query: ref.query,
-                fragment: ref.fragment
-            })
+            return new URI({ ...this.parts(), path: path, query: ref.query, fragment: ref.fragment })
         } else {
-            return new URI({
-                scheme: this.scheme,
-                user: ref.user,
-                host: ref.host,
-                port: ref.port,
-                path: ref.path,
-                query: ref.query,
-                fragment: ref.fragment
-            })
+            return new URI({ ...ref.parts(), scheme: this.scheme })
         }
     }
 
@@ -259,11 +273,8 @@ export class URI {
         let bp = normalize(this.path)
         const cp = normalize(ref.path)
         if (bp != cp) {
-            const i = bp.lastIndexOf("/")
-            if (i != -1) {
-                bp = bp.substring(0, i + 1)
-            }
-
+            // the directory of the base: empty when the base path has no "/"
+            bp = bp.substring(0, bp.lastIndexOf("/") + 1)
             if (!cp.startsWith(bp)) {
                 return ref
             }
@@ -278,10 +289,7 @@ export class URI {
         const oldLen = oldPrefix.path.length
         if (this.path.length >= oldLen && this.path.slice(0, oldLen) == oldPrefix.path) {
             return new URI({
-                scheme: newPrefix.scheme,
-                user: newPrefix.user,
-                host: newPrefix.host,
-                port: newPrefix.port,
+                ...newPrefix.parts(),
                 path: newPrefix.path + this.path.slice(oldLen),
                 query: this.query,
                 fragment: this.fragment
@@ -291,25 +299,24 @@ export class URI {
     }
 
     trimFragment(): URI {
-        return new URI({
-            scheme: this.scheme,
-            user: this.user,
-            host: this.host,
-            port: this.port,
-            path: this.path,
-            query: this.query
-        })
+        return new URI({ ...this.parts(), fragment: "" })
     }
 
     trimQuery(): URI {
-        return new URI({
+        return new URI({ ...this.parts(), query: "" })
+    }
+
+    private parts(): URIParts {
+        return {
             scheme: this.scheme,
             user: this.user,
             host: this.host,
             port: this.port,
             path: this.path,
-            fragment: this.fragment
-        })
+            query: this.query,
+            fragment: this.fragment,
+            hasAuthority: this.hasAuthority
+        }
     }
 }
 
@@ -632,8 +639,29 @@ function resolvePath(base: string, child: string, isAbsolute: boolean): string {
     return normalize(path)
 }
 
+// creates the uri of the file path p, absolute or relative, posix or windows:
+//   /dir/file            -> file:/dir/file
+//   C:\dir\file          -> file:/C:/dir/file
+//   \\server\share\file  -> file://server/share/file
+//   dir/file             -> dir/file
 export function createFileURI(p: string): URI {
-    return p === "" ? null : path.isAbsolute(p) ? new URI({ scheme: "file", path: p }) : new URI({ path: p })
+    if (p === "") {
+        return null
+    }
+    const s = p.replace(/\\/g, "/")
+    if (windowsDriveRegExp.test(s)) {
+        return new URI({ scheme: "file", path: "/" + percentEncodePath(s) })
+    }
+    if (s.startsWith("//")) {
+        const i = s.indexOf("/", 2)
+        const host = i == -1 ? s.slice(2) : s.slice(2, i)
+        const path = i == -1 ? "/" : s.slice(i)
+        return new URI({ scheme: "file", host: host, path: percentEncodePath(path) })
+    }
+    if (s.startsWith("/")) {
+        return new URI({ scheme: "file", path: percentEncodePath(s) })
+    }
+    return new URI({ path: percentEncodePath(s) })
 }
 
 export function createMemoryURI(p: string): URI {
