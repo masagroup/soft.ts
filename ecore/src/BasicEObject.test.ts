@@ -68,3 +68,45 @@ describe("BasicEObject", () => {
         expect(eReference.eCrossReferences().contains(eTargetClass)).toBeTruthy()
     })
 })
+
+describe("BasicEObject contents", () => {
+    test("eContents is a live view without adapter", () => {
+        const eFactory = getEcoreFactory()
+        const eClass = eFactory.createEClass()
+        const adapters = eClass.eAdapters().toArray().slice()
+        const contents = eClass.eContents()
+        expect(eClass.eAdapters().toArray()).toEqual(adapters)
+        expect(contents.isEmpty()).toBeTruthy()
+
+        const a1 = eFactory.createEAnnotation()
+        const a2 = eFactory.createEAnnotation()
+        const attribute = eFactory.createEAttribute()
+        eClass.getEAnnotations().add(a1)
+        eClass.getEAnnotations().add(a2)
+        eClass.getEStructuralFeatures().add(attribute)
+        expect(eClass.eAdapters().toArray()).toEqual(adapters)
+        expect(contents.size()).toBe(3)
+        expect(contents.get(0)).toBe(a1)
+        expect(contents.get(2)).toBe(attribute)
+        expect(contents.get(3)).toBeUndefined()
+        expect(contents.indexOf(attribute)).toBe(2)
+        expect([...contents]).toEqual(contents.toArray())
+
+        // no delivery: the view is still up to date
+        eClass.eSetDeliver(false)
+        eClass.getEAnnotations().remove(a1)
+        expect(contents.toArray()).toEqual([a2, attribute])
+    })
+
+    test("eCrossReferences is a live view", () => {
+        const eFactory = getEcoreFactory()
+        const eReference = eFactory.createEReference()
+        const eTarget = eFactory.createEClass()
+        const adapters = eReference.eAdapters().toArray().slice()
+        const crossReferences = eReference.eCrossReferences()
+        expect(crossReferences.contains(eTarget)).toBeFalsy()
+        eReference.setEType(eTarget)
+        expect(crossReferences.contains(eTarget)).toBeTruthy()
+        expect(eReference.eAdapters().toArray()).toEqual(adapters)
+    })
+})

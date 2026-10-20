@@ -27,7 +27,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20.16"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
