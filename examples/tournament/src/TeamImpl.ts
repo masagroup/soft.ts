@@ -29,8 +29,8 @@ export class TeamImpl extends NamedElementImpl implements Team {
         if (this._group != null && this._group.eIsProxy()) {
             const oldGroup = this._group
             const newGroup = this.eResolveProxy(oldGroup) as Group
-            this._group = newGroup
             if (newGroup != oldGroup) {
+                this._group = newGroup
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -52,8 +52,8 @@ export class TeamImpl extends NamedElementImpl implements Team {
         if (this._group != null && this._group.eIsProxy()) {
             const oldGroup = this._group
             const newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
-            this._group = newGroup
             if (newGroup != oldGroup) {
+                this._group = newGroup
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(

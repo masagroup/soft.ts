@@ -29,8 +29,8 @@ export class NodeImpl extends NamedImpl implements Node {
         if (this._link != null && this._link.eIsProxy()) {
             const oldLink = this._link
             const newLink = this.eResolveProxy(oldLink) as Anchor
-            this._link = newLink
             if (newLink != oldLink) {
+                this._link = newLink
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -52,8 +52,8 @@ export class NodeImpl extends NamedImpl implements Node {
         if (this._link != null && this._link.eIsProxy()) {
             const oldLink = this._link
             const newLink = (await this.eResolveProxyAsync(oldLink)) as Anchor
-            this._link = newLink
             if (newLink != oldLink) {
+                this._link = newLink
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(

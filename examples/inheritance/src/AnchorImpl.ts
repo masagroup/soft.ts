@@ -29,8 +29,8 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
         if (this._linked != null && this._linked.eIsProxy()) {
             const oldLinked = this._linked
             const newLinked = this.eResolveProxy(oldLinked) as Linkable
-            this._linked = newLinked
             if (newLinked != oldLinked) {
+                this._linked = newLinked
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -52,8 +52,8 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
         if (this._linked != null && this._linked.eIsProxy()) {
             const oldLinked = this._linked
             const newLinked = (await this.eResolveProxyAsync(oldLinked)) as Linkable
-            this._linked = newLinked
             if (newLinked != oldLinked) {
+                this._linked = newLinked
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -100,11 +100,13 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
     unSetLinked(): void {
         if (this._linked != null) {
             let notifications: ecore.ENotificationChain = null
-            notifications = (this._linked as unknown as ecore.EObjectInternal).eInverseRemove(
-                this,
-                this._linked.eClass().getFeatureID(getInheritancePackage().getLinkable_Link()),
-                notifications
-            )
+            if (ecore.isEObjectInternal(this._linked)) {
+                notifications = this._linked.eInverseRemove(
+                    this,
+                    this._linked.eClass().getFeatureID(getInheritancePackage().getLinkable_Link()),
+                    notifications
+                )
+            }
             notifications = this.basicUnSetLinked(notifications)
             if (notifications != null) {
                 notifications.dispatch()

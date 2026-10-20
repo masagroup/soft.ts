@@ -39,8 +39,8 @@ export class EmployeeImpl extends PersonImpl implements Employee {
         if (this._manager != null && this._manager.eIsProxy()) {
             const oldManager = this._manager
             const newManager = this.eResolveProxy(oldManager) as Employee
-            this._manager = newManager
             if (newManager != oldManager) {
+                this._manager = newManager
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -62,8 +62,8 @@ export class EmployeeImpl extends PersonImpl implements Employee {
         if (this._manager != null && this._manager.eIsProxy()) {
             const oldManager = this._manager
             const newManager = (await this.eResolveProxyAsync(oldManager)) as Employee
-            this._manager = newManager
             if (newManager != oldManager) {
+                this._manager = newManager
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(

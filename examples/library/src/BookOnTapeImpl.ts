@@ -51,8 +51,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
         if (this._author != null && this._author.eIsProxy()) {
             const oldAuthor = this._author
             const newAuthor = this.eResolveProxy(oldAuthor) as Writer
-            this._author = newAuthor
             if (newAuthor != oldAuthor) {
+                this._author = newAuthor
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -74,8 +74,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
         if (this._author != null && this._author.eIsProxy()) {
             const oldAuthor = this._author
             const newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
-            this._author = newAuthor
             if (newAuthor != oldAuthor) {
+                this._author = newAuthor
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -119,8 +119,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
         if (this._reader != null && this._reader.eIsProxy()) {
             const oldReader = this._reader
             const newReader = this.eResolveProxy(oldReader) as Person
-            this._reader = newReader
             if (newReader != oldReader) {
+                this._reader = newReader
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -142,8 +142,8 @@ export class BookOnTapeImpl extends AudioVisualItemImpl implements BookOnTape {
         if (this._reader != null && this._reader.eIsProxy()) {
             const oldReader = this._reader
             const newReader = (await this.eResolveProxyAsync(oldReader)) as Person
-            this._reader = newReader
             if (newReader != oldReader) {
+                this._reader = newReader
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(

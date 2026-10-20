@@ -102,8 +102,8 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         if (this._author != null && this._author.eIsProxy()) {
             const oldAuthor = this._author
             const newAuthor = this.eResolveProxy(oldAuthor) as Writer
-            this._author = newAuthor
             if (newAuthor != oldAuthor) {
+                this._author = newAuthor
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -125,8 +125,8 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         if (this._author != null && this._author.eIsProxy()) {
             const oldAuthor = this._author
             const newAuthor = (await this.eResolveProxyAsync(oldAuthor)) as Writer
-            this._author = newAuthor
             if (newAuthor != oldAuthor) {
+                this._author = newAuthor
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
