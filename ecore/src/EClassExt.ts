@@ -100,6 +100,22 @@ class ESuperAdapter extends AbstractEAdapter {
     }
 }
 
+// removes the duplicates of a, keeping the first occurrence of each element
+function uniqueInPlace<T>(a: T[]): void {
+    if (a.length < 2) {
+        return
+    }
+    const seen = new Set<T>()
+    let n = 0
+    for (const e of a) {
+        if (!seen.has(e)) {
+            seen.add(e)
+            a[n++] = e
+        }
+    }
+    a.length = n
+}
+
 export class EClassExt extends EClassImpl {
     private _nameToFeatureMap: Map<string, EStructuralFeature>
     private _operationToOverrideMap: Map<EOperation, EOperation>
@@ -255,6 +271,7 @@ export class EClassExt extends EClassImpl {
                 }
             }
         }
+        uniqueInPlace(allAttributes)
 
         for (const eFeature of this.getEStructuralFeatures()) {
             if (isEAttribute(eFeature)) {
@@ -281,6 +298,7 @@ export class EClassExt extends EClassImpl {
         for (const eSuperType of this.getESuperTypes()) {
             allReferences.push(...eSuperType.getEAllReferences().toArray())
         }
+        uniqueInPlace(allReferences)
 
         for (const eFeature of this.getEStructuralFeatures()) {
             if (isEReference(eFeature)) {
@@ -334,6 +352,7 @@ export class EClassExt extends EClassImpl {
         for (const eSuperType of this.getESuperTypes()) {
             allOperations.push(...eSuperType.getEAllOperations().toArray())
         }
+        uniqueInPlace(allOperations)
 
         let operationID = allOperations.length
         for (const eOperation of this.getEOperations()) {
@@ -357,6 +376,8 @@ export class EClassExt extends EClassImpl {
         for (const eSuperType of this.getESuperTypes()) {
             allFeatures.push(...eSuperType.getEAllStructuralFeatures().toArray())
         }
+        // a feature inherited through several super types (diamond) is kept once
+        uniqueInPlace(allFeatures)
 
         let featureID = allFeatures.length
         for (const eFeature of this.getEStructuralFeatures()) {
@@ -377,6 +398,7 @@ export class EClassExt extends EClassImpl {
             allSuperTypes.push(...eSuperType.getEAllSuperTypes().toArray())
             allSuperTypes.push(eSuperType)
         }
+        uniqueInPlace(allSuperTypes)
 
         this._eAllSuperTypes = new ImmutableEList<EClass>(allSuperTypes)
     }

@@ -17,6 +17,26 @@ export function isENamedElement(o: any): o is ENamedElement {
     return typeof o === "object" && o !== null && "getName" in o
 }
 
+// escapes s as a fragment segment, as go url.PathEscape does: "/", "?", "#", "%" and the
+// characters that are not allowed in a uri are escaped. A trailing ".<digits>" is escaped too,
+// as it would otherwise be read as a count.
+function escapeSegment(s: string): string {
+    const escaped = encodeURIComponent(s).replace(/%(24|26|2B|3A|3D|40)/g, (c) => decodeURIComponent(c))
+    return escaped.replace(/\.(\d+)$/, "%2E$1")
+}
+
+function unescapeSegment(s: string): string {
+    try {
+        return decodeURIComponent(s)
+    } catch {
+        return s
+    }
+}
+
+function parseCount(s: string): number {
+    return /^\d+$/.test(s) ? parseInt(s) : NaN
+}
+
 export class EModelElementExt extends EModelElementImpl {
     constructor() {
         super()
@@ -50,13 +70,13 @@ export class EModelElementExt extends EModelElementImpl {
                             let source = ""
                             const encodedSource = uriFragmentSegment.slice(1, index)
                             if (encodedSource != "%") {
-                                source = decodeURI(encodedSource)
+                                source = unescapeSegment(encodedSource)
                             }
 
                             // Check for a count, i.e., a '.' followed by a number.
                             let count = 0
                             if (hasCount) {
-                                const i = parseInt(uriFragmentSegment.slice(index + 2))
+                                const i = parseCount(uriFragmentSegment.slice(index + 2))
                                 if (!isNaN(i)) {
                                     count = i
                                 }
@@ -84,7 +104,7 @@ export class EModelElementExt extends EModelElementImpl {
                 let name = index != -1 ? uriFragmentSegment.slice(0, index) : uriFragmentSegment
                 let count = 0
                 if (index != -1) {
-                    const i = parseInt(uriFragmentSegment.slice(index + 1))
+                    const i = parseCount(uriFragmentSegment.slice(index + 1))
                     if (isNaN(i)) {
                         name = uriFragmentSegment
                     } else {
@@ -95,7 +115,7 @@ export class EModelElementExt extends EModelElementImpl {
                 if (name == "%") {
                     name = ""
                 } else {
-                    name = encodeURI(name)
+                    name = unescapeSegment(name)
                 }
 
                 for (const eObject of this.eContents()) {
@@ -129,7 +149,7 @@ export class EModelElementExt extends EModelElementImpl {
             if (name.length == 0) {
                 name = "%"
             } else {
-                name = encodeURI(name)
+                name = escapeSegment(name)
             }
             if (count > 0) {
                 return name + "." + count.toString()
@@ -151,7 +171,7 @@ export class EModelElementExt extends EModelElementImpl {
             if (!o.getSource() || o.getSource().length == 0) {
                 result += "%"
             } else {
-                result += encodeURI(o.getSource())
+                result += escapeSegment(o.getSource())
             }
             result += "%"
             if (count > 0) {

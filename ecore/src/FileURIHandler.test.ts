@@ -7,8 +7,11 @@
 //
 // *****************************************************************************
 
+import fs from "fs"
+import os from "os"
+import path from "path"
 import { describe, expect, test } from "vitest"
-import { getURIConverterRegistry, URI } from "./internal.js"
+import { createFileURI, FileURIHandler, getURIConverterRegistry, URI } from "./internal.js"
 
 describe("FileURIHandler", () => {
     const uriHandler = getURIConverterRegistry().getURIHandler(new URI({ scheme: "file" }))
@@ -42,5 +45,26 @@ describe("FileURIHandler", () => {
         const uri = new URI("testdata/write-stream.txt")
         const s = uriHandler.createWriteStream(uri)
         expect(s).not.toBeNull()
+    })
+})
+
+describe("FileURIHandler sync", () => {
+    test("readSync and writeSync without awaiting", () => {
+        // the file system is loaded synchronously: no await is needed before a synchronous call
+        const handler = new FileURIHandler()
+        const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ecore-"))
+        try {
+            const uri = createFileURI(path.join(dir, "my file.txt"))
+            handler.writeSync(uri, new Uint8Array([1, 2, 3]))
+            expect(Array.from(handler.readSync(uri))).toEqual([1, 2, 3])
+            expect(handler.readSync(createFileURI(path.join(dir, "missing.txt")))).toBeNull()
+        } finally {
+            fs.rmSync(dir, { recursive: true, force: true })
+        }
+    })
+
+    test("registered", () => {
+        const handlers = getURIConverterRegistry().getURIHandlers().toArray()
+        expect(handlers.some((h) => h instanceof FileURIHandler)).toBeTruthy()
     })
 })

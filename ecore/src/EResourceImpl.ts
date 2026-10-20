@@ -159,6 +159,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     // maps intrinsic ids to objects when no EObjectIDManager is set: filled by a scan,
     // kept on attach and detach, and rebuilt by the next scan when a lookup misses
     private _idIndex: Map<string, EObject> = null
+    // the key of each object of the id index
+    private _idIndexKeys: Map<EObject, string> = null
 
     getURI(): URI {
         return this._uri
@@ -397,11 +399,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             this.setLoading(true)
             const n = this.basicSetLoaded(true, null)
             const array = ensureUint8Array(buffer)
-            this.doLoadFromBytes(decoder, array)
-            if (n) {
-                n.dispatch()
+            try {
+                this.doLoadFromBytes(decoder, array)
+                if (n) {
+                    n.dispatch()
+                }
+            } finally {
+                this.setLoading(false)
             }
-            this.setLoading(false)
         }
     }
 
@@ -432,6 +437,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._warnings = null
         this._objectIDManager?.clear()
         this._idIndex = null
+        this._idIndexKeys = null
     }
 
     async save(options?: Map<string, any>): Promise<void> {
@@ -485,7 +491,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     saveToString(options?: Map<string, any>): string {
-        const buffer = this.saveToBuffer()
+        const buffer = this.saveToBuffer(options)
         return buffer ? utf8Decode(buffer, 0, buffer.length) : ""
     }
 
@@ -612,27 +618,40 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const eObject = this._idIndex?.get(id)
         if (eObject && EcoreUtils.getEObjectID(eObject) == id) return eObject
 
-        // a miss or a stale entry: rescan, keeping the first object of the tree for each id
+        // a miss or a stale entry: rescan, keeping the first object of the tree for each id. As
+        // the id of an object can change without notifying the resource, a miss can't be trusted
         const index = new Map<string, EObject>()
+        const keys = new Map<EObject, string>()
         for (const eObject of this.eAllContentsResolve(this, false)) {
             const objectID = EcoreUtils.getEObjectID(eObject)
-            if (objectID && !index.has(objectID)) index.set(objectID, eObject)
+            if (objectID && !index.has(objectID)) {
+                index.set(objectID, eObject)
+                keys.set(eObject, objectID)
+            }
         }
         this._idIndex = index
+        this._idIndexKeys = keys
         return index.get(id) ?? null
     }
 
     private indexAttached(object: EObject) {
         if (this._idIndex) {
             const id = EcoreUtils.getEObjectID(object)
-            if (id && !this._idIndex.has(id)) this._idIndex.set(id, object)
+            if (id && !this._idIndex.has(id)) {
+                this._idIndex.set(id, object)
+                this._idIndexKeys.set(object, id)
+            }
         }
     }
 
     private indexDetached(object: EObject) {
         if (this._idIndex) {
-            const id = EcoreUtils.getEObjectID(object)
-            if (id && this._idIndex.get(id) == object) this._idIndex.delete(id)
+            // the key the object was indexed with: its id may have changed since
+            const id = this._idIndexKeys.get(object)
+            if (id !== undefined) {
+                if (this._idIndex.get(id) == object) this._idIndex.delete(id)
+                this._idIndexKeys.delete(object)
+            }
         }
     }
 
