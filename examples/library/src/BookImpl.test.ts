@@ -74,7 +74,7 @@ describe("BookImpl", () => {
         // first value
         const mockValue = mock<WriterInternal>()
         const value = instance(mockValue)
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getLibraryPackage().getWriter())
         when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
         o.author = value
@@ -91,9 +91,9 @@ describe("BookImpl", () => {
         const other = instance(mockOther)
         reset(mockAdapter)
         reset(mockValue)
-        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eClass()).thenReturn(getLibraryPackage().getWriter())
         when(mockOther.eStaticClass()).thenReturn(null)
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getLibraryPackage().getWriter())
         when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
         when(mockOther.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
@@ -245,7 +245,7 @@ describe("BookImpl", () => {
         {
             const mockValue = mock<WriterInternal>()
             const value = instance(mockValue)
-            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eClass()).thenReturn(getLibraryPackage().getWriter())
             when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
             o.eSetFromID(LibraryConstants.BOOK__AUTHOR, value)
@@ -364,6 +364,7 @@ describe("BookImpl", () => {
             const mockOther = mock<WriterInternal>()
             const other = instance(mockOther)
             when(mockOther.eIsProxy()).thenReturn(false)
+            when(mockValue.eClass()).thenReturn(getLibraryPackage().getWriter())
             when(mockValue.eInverseRemove(o, LibraryConstants.WRITER__BOOKS, null)).thenReturn(null)
             o.eBasicInverseAdd(other, LibraryConstants.BOOK__AUTHOR, null)
             expect(o.author).toBe(other)

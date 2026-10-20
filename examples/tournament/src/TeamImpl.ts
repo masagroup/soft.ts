@@ -76,10 +76,18 @@ export class TeamImpl extends NamedElementImpl implements Team {
         if (newGroup != oldGroup) {
             let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldGroup)) {
-                notifications = oldGroup.eInverseRemove(this, TournamentConstants.GROUP__TEAMS, notifications)
+                notifications = oldGroup.eInverseRemove(
+                    this,
+                    oldGroup.eClass().getFeatureID(getTournamentPackage().getGroup_Teams()),
+                    notifications
+                )
             }
             if (ecore.isEObjectInternal(newGroup)) {
-                notifications = newGroup.eInverseAdd(this, TournamentConstants.GROUP__TEAMS, notifications)
+                notifications = newGroup.eInverseAdd(
+                    this,
+                    newGroup.eClass().getFeatureID(getTournamentPackage().getGroup_Teams()),
+                    notifications
+                )
             }
             notifications = this.basicSetGroup(newGroup, notifications)
             if (notifications != null) {
@@ -180,7 +188,11 @@ export class TeamImpl extends NamedElementImpl implements Team {
                 let msgs = notifications
                 const group = this.basicGetGroup()
                 if (ecore.isEObjectInternal(group)) {
-                    msgs = group.eInverseRemove(this, TournamentConstants.GROUP__TEAMS, msgs)
+                    msgs = group.eInverseRemove(
+                        this,
+                        group.eClass().getFeatureID(getTournamentPackage().getGroup_Teams()),
+                        msgs
+                    )
                 }
                 return this.basicSetGroup(otherEnd as Group, msgs)
             }

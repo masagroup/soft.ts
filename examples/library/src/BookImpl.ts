@@ -149,10 +149,18 @@ export class BookImpl extends CirculatingItemImpl implements Book {
         if (newAuthor != oldAuthor) {
             let notifications: ecore.ENotificationChain = null
             if (ecore.isEObjectInternal(oldAuthor)) {
-                notifications = oldAuthor.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, notifications)
+                notifications = oldAuthor.eInverseRemove(
+                    this,
+                    oldAuthor.eClass().getFeatureID(getLibraryPackage().getWriter_Books()),
+                    notifications
+                )
             }
             if (ecore.isEObjectInternal(newAuthor)) {
-                notifications = newAuthor.eInverseAdd(this, LibraryConstants.WRITER__BOOKS, notifications)
+                notifications = newAuthor.eInverseAdd(
+                    this,
+                    newAuthor.eClass().getFeatureID(getLibraryPackage().getWriter_Books()),
+                    notifications
+                )
             }
             notifications = this.basicSetAuthor(newAuthor, notifications)
             if (notifications != null) {
@@ -427,7 +435,11 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 let msgs = notifications
                 const author = this.basicGetAuthor()
                 if (ecore.isEObjectInternal(author)) {
-                    msgs = author.eInverseRemove(this, LibraryConstants.WRITER__BOOKS, msgs)
+                    msgs = author.eInverseRemove(
+                        this,
+                        author.eClass().getFeatureID(getLibraryPackage().getWriter_Books()),
+                        msgs
+                    )
                 }
                 return this.basicSetAuthor(otherEnd as Writer, msgs)
             }

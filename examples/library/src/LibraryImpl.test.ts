@@ -143,7 +143,7 @@ describe("LibraryImpl", () => {
         o.eAdapters().add(adapter)
 
         // set value
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getLibraryPackage().getLibrary())
         when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
@@ -169,9 +169,9 @@ describe("LibraryImpl", () => {
         reset(mockAdapter)
         reset(mockValue)
         reset(mockResource)
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getLibraryPackage().getLibrary())
         when(mockValue.eStaticClass()).thenReturn(null)
-        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eClass()).thenReturn(getLibraryPackage().getLibrary())
         when(mockOther.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, LibraryConstants.LIBRARY__BRANCHES, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
@@ -449,7 +449,7 @@ describe("LibraryImpl", () => {
         {
             const mockValue = mock<LibraryInternal>()
             const value = instance(mockValue)
-            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eClass()).thenReturn(getLibraryPackage().getLibrary())
             when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)

@@ -8,6 +8,7 @@
 # *****************************************************************************
 
 GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/$(2) -o /pwd/$(1) -P /pwd/generator.properties $(3)
+GENERATE_EXAMPLE = docker run --rm -v $(CURDIR):/pwd -w /pwd masagroup/soft.generator.ts -m /pwd/examples/$(1)/$(1).ecore -o /pwd/examples -P /pwd/generator.properties $(2)
 
 ifeq (${OS},Windows_NT)
 DEVNULL := NUL
@@ -32,10 +33,10 @@ else
 endif
 
 .PHONY: all
-all: ecore empty library tournament
+all: ecore empty library tournament inheritance
 
 .PHONY: ci
-ci: ecore.ci empty.ci library.ci tournament.ci
+ci: ecore.ci empty.ci library.ci tournament.ci inheritance.ci
 
 .PHONY: ecore
 ecore: ecore.install ecore.generate ecore.format ecore.build ecore.test
@@ -164,4 +165,35 @@ tournament.build:
 tournament.test:
 	@echo "[tournament.test]"
 	@(cd examples/tournament && $(NPM) run test)
+
+.PHONY: inheritance
+inheritance: inheritance.install inheritance.generate inheritance.format inheritance.build inheritance.test
+
+.PHONY: inheritance.ci
+inheritance.ci: inheritance.install inheritance.build inheritance.test
+
+.PHONY: inheritance.install
+inheritance.install:
+	@echo "[inheritance.install]"
+	@(cd examples/inheritance && $(NPM) install --no-fund --loglevel=error)
+
+.PHONY: inheritance.generate
+inheritance.generate:
+	@echo "[inheritance.generate]"
+	@$(call GENERATE_EXAMPLE,inheritance,)
+
+.PHONY: inheritance.format
+inheritance.format:
+	@echo "[inheritance.format]"
+	@(cd examples/inheritance && $(NPM) run pretty)
+
+.PHONY: inheritance.build
+inheritance.build:
+	@echo "[inheritance.build]"
+	@(cd examples/inheritance && $(NPM) run build)
+
+.PHONY: inheritance.test
+inheritance.test:
+	@echo "[inheritance.test]"
+	@(cd examples/inheritance && $(NPM) run test)
 
