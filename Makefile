@@ -7,14 +7,11 @@
 #
 # *****************************************************************************
 
-# the generator: soft-gen of soft.gen v2, run from its module at a fixed version
-SOFT_GEN_VERSION = v2.0.0-alpha.2
-GENERATOR ?= $(SOFT_GEN_GO) run github.com/masagroup/soft.gen/v2/cmd/soft-gen@$(SOFT_GEN_VERSION) ts
-GENERATE = $(GENERATOR) -m ../models/$(2) -o ./$(1) -P generator.properties $(3)
-GENERATE_EXAMPLE = $(GENERATOR) -m examples/$(1)/$(1).ecore -o examples -P generator.properties $(2)
 # the golang image soft-gen runs in when go is not installed: its Go must
 # support the go directive of soft.gen
 SOFT_GEN_GOLANG_IMAGE ?= golang:1.27.3-alpine
+# the generator: soft-gen of soft.gen v2, run from its module at a fixed version
+SOFT_GEN_VERSION = v2.0.0-alpha.2
 
 ifeq (${OS},Windows_NT)
 DEVNULL := NUL
@@ -34,6 +31,19 @@ else ifneq ($(shell $(WHICH) go.exe 2>$(DEVNULL)),)
 else
 	SOFT_GEN_GO := docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -v soft-gen-gomod:/go/pkg/mod -w /pwd $(SOFT_GEN_GOLANG_IMAGE) go
 endif
+
+# the soft-gen ts command: built and run by go from the soft.gen module at
+# SOFT_GEN_VERSION (downloaded once into the go module cache); another
+# generator may be given on the command line (make GENERATOR="...")
+GENERATOR ?= $(SOFT_GEN_GO) run github.com/masagroup/soft.gen/v2/cmd/soft-gen@$(SOFT_GEN_VERSION) ts
+# GENERATE generates typescript code from a model of ../models with the
+# properties of generator.properties: $(call GENERATE,<output folder>,<model>,<options>),
+# the output folder relative to this one (empty: here), the model a file name
+# in ../models, the options extra soft-gen options (-t <template>, -p key=value)
+GENERATE = $(GENERATOR) -m ../models/$(2) -o ./$(1) -P generator.properties $(3)
+# GENERATE_EXAMPLE generates an example from its own model, examples/<name>/<name>.ecore,
+# into examples: $(call GENERATE_EXAMPLE,<name>,<options>)
+GENERATE_EXAMPLE = $(GENERATOR) -m examples/$(1)/$(1).ecore -o examples -P generator.properties $(2)
 
 ifneq ($(shell npm -v 2>$(DEVNULL)),)
 	# npm found
