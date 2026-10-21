@@ -7,8 +7,9 @@
 #
 # *****************************************************************************
 
-GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd masagroup/soft.generator.ts -m /models/$(2) -o /pwd/$(1) -P /pwd/generator.properties $(3)
-GENERATE_EXAMPLE = docker run --rm -v $(CURDIR):/pwd -w /pwd masagroup/soft.generator.ts -m /pwd/examples/$(1)/$(1).ecore -o /pwd/examples -P /pwd/generator.properties $(2)
+GENERATOR ?= masagroup/soft.generator.ts
+GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd $(GENERATOR) -m /models/$(2) -o /pwd/$(1) -P /pwd/generator.properties $(3)
+GENERATE_EXAMPLE = docker run --rm -v $(CURDIR):/pwd -w /pwd $(GENERATOR) -m /pwd/examples/$(1)/$(1).ecore -o /pwd/examples -P /pwd/generator.properties $(2)
 
 ifeq (${OS},Windows_NT)
 DEVNULL := NUL
@@ -33,10 +34,10 @@ else
 endif
 
 .PHONY: all
-all: ecore empty library tournament inheritance
+all: ecore empty library tournament inheritance coexistence
 
 .PHONY: ci
-ci: ecore.ci empty.ci library.ci tournament.ci inheritance.ci
+ci: ecore.ci empty.ci library.ci tournament.ci inheritance.ci coexistence.ci
 
 .PHONY: ecore
 ecore: ecore.install ecore.generate ecore.format ecore.build ecore.test
@@ -197,3 +198,40 @@ inheritance.test:
 	@echo "[inheritance.test]"
 	@(cd examples/inheritance && $(NPM) run test)
 
+
+# one tournament package shared by two implementations : typed (fields) and reflective (store)
+COEXISTENCE_PACKAGES = packages=http://mattsch.com/emf/examples/tournament=tournament\#tournament/$(1)
+COEXISTENCE_GENERATE = $(call GENERATE,examples,tournament.ecore,-p packageInstance=interfaces -p packageDir=coexistence/src/$(1) -p "$(call COEXISTENCE_PACKAGES,$(2))" $(3))
+
+.PHONY: coexistence
+coexistence: coexistence.install coexistence.generate coexistence.format coexistence.build coexistence.test
+
+.PHONY: coexistence.ci
+coexistence.ci: coexistence.install coexistence.build coexistence.test
+
+.PHONY: coexistence.install
+coexistence.install:
+	@echo "[coexistence.install]"
+	@(cd examples/coexistence && $(NPM) install --no-fund --loglevel=error)
+
+.PHONY: coexistence.generate
+coexistence.generate:
+	@echo "[coexistence.generate]"
+	@$(call COEXISTENCE_GENERATE,tournament,typed,-t generateInterfaces)
+	@$(call COEXISTENCE_GENERATE,typed,typed,-p paths=tournament=../tournament/internal.js -t generateImplementations -t generateTests)
+	@$(call COEXISTENCE_GENERATE,reflective,reflective,-p paths=tournament=../tournament/internal.js -p featureDelegation=Reflective -t generateImplementations)
+
+.PHONY: coexistence.format
+coexistence.format:
+	@echo "[coexistence.format]"
+	@(cd examples/coexistence && $(NPM) run pretty)
+
+.PHONY: coexistence.build
+coexistence.build:
+	@echo "[coexistence.build]"
+	@(cd examples/coexistence && $(NPM) run build)
+
+.PHONY: coexistence.test
+coexistence.test:
+	@echo "[coexistence.test]"
+	@(cd examples/coexistence && $(NPM) run test)

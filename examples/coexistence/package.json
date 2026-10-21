@@ -1,0 +1,28 @@
+{
+  "name": "coexistence",
+  "version": "1.0.0",
+  "description": "two implementations of one shared tournament package",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "pretty": "node ../../ecore/scripts/remove-unused-imports.mjs && prettier --write src/*.ts src/**/*.ts"
+  },
+  "author": "MASA Group",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "deep-equal": "^2.2.3",
+    "prettier": "^3.9.10",
+    "ts-mockito": "^2.6.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.4"
+  },
+  "dependencies": {
+    "@masagroup/ecore": "file:../../ecore"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.64.6"
+  }
+}

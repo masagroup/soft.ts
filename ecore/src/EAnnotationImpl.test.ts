@@ -9,9 +9,9 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import deepEqual from "deep-equal"
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
-import { describe, expect, test } from "vitest"
 import {
     EAdapter,
     EAnnotationImpl,
@@ -80,7 +80,7 @@ describe("EAnnotationImpl", () => {
         o.eAdapters().add(adapter)
 
         // set value
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getEcorePackage().getEModelElement())
         when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
@@ -106,9 +106,9 @@ describe("EAnnotationImpl", () => {
         reset(mockAdapter)
         reset(mockValue)
         reset(mockResource)
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getEcorePackage().getEModelElement())
         when(mockValue.eStaticClass()).thenReturn(null)
-        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eClass()).thenReturn(getEcorePackage().getEModelElement())
         when(mockOther.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, EcoreConstants.EMODEL_ELEMENT__EANNOTATIONS, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
@@ -252,7 +252,7 @@ describe("EAnnotationImpl", () => {
         {
             const mockValue = mock<EModelElementInternal>()
             const value = instance(mockValue)
-            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eClass()).thenReturn(getEcorePackage().getEModelElement())
             when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)

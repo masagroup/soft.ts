@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { DynamicEObjectImpl, EClass, EDataType, EFactoryImpl, EObject, isEEnum } from "./internal.js"
+import { DynamicEObjectImpl, EClass, EDataType, EFactoryImpl, EObject, EPackage, isEEnum } from "./internal.js"
 
 function getInstanceTypeName(eDataType: EDataType): string {
     const eAnnotation =
@@ -51,8 +51,21 @@ function parseFloatLiteral(literal: string, float32: boolean, invalid: () => Err
 }
 
 export class EFactoryExt extends EFactoryImpl {
+    private _sharedPackage: EPackage = null
+
     constructor() {
         super()
+    }
+
+    // setSharedEPackage makes ePackage the package of this factory without making this factory
+    // the factory instance of ePackage: the factory of one implementation of a package shared
+    // by several implementations, registered in a package registry (registerFactory)
+    setSharedEPackage(ePackage: EPackage): void {
+        this._sharedPackage = ePackage
+    }
+
+    getEPackage(): EPackage {
+        return this._sharedPackage ?? super.getEPackage()
     }
 
     create(eClass: EClass): EObject {

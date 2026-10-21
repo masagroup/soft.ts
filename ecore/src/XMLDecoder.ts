@@ -494,7 +494,12 @@ export class XMLDecoder implements EDecoder {
         let eResult: EObject = null
         if (eFeature?.getEType()) {
             const eType = eFeature.getEType()
-            const eFactory = eType.getEPackage().getEFactoryInstance()
+            const ePackage = eType.getEPackage()
+            // the factory the package registry chose for the package, else its factory instance
+            let eFactory = this.getFactoryForURI(ePackage.getNsURI())
+            if (!eFactory || eFactory.getEPackage() != ePackage) {
+                eFactory = ePackage.getEFactoryInstance()
+            }
             eResult = this.createObjectWithFactory(eFactory, eType)
         }
         if (eResult) {

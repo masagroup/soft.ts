@@ -9,9 +9,9 @@
 //
 // *****************************************************************************
 
+import { describe, expect, test } from "vitest"
 import deepEqual from "deep-equal"
 import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
-import { describe, expect, test } from "vitest"
 import {
     EAdapter,
     EClassifier,
@@ -63,7 +63,7 @@ describe("EPackageImpl", () => {
         // first value
         const mockValue = mock<EFactoryInternal>()
         const value = instance(mockValue)
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getEcorePackage().getEFactory())
         when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
         o.setEFactoryInstance(value)
@@ -80,9 +80,9 @@ describe("EPackageImpl", () => {
         const other = instance(mockOther)
         reset(mockAdapter)
         reset(mockValue)
-        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eClass()).thenReturn(getEcorePackage().getEFactory())
         when(mockOther.eStaticClass()).thenReturn(null)
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getEcorePackage().getEFactory())
         when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
         when(mockOther.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
@@ -254,7 +254,7 @@ describe("EPackageImpl", () => {
         {
             const mockValue = mock<EFactoryInternal>()
             const value = instance(mockValue)
-            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eClass()).thenReturn(getEcorePackage().getEFactory())
             when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eInverseAdd(o, EcoreConstants.EFACTORY__EPACKAGE, null)).thenReturn(null)
             o.eSetFromID(EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, value)

@@ -27,6 +27,7 @@ import {
     ENotifyingList,
     EObject,
     EObjectIDManager,
+    checkSameRootImplementation,
     EObjectInternal,
     EObjectList,
     EResource,
@@ -95,6 +96,7 @@ class ResourceContents extends AbstractNotifyingList<EObject> implements EObject
     }
 
     protected inverseAdd(eObject: EObject, notifications: ENotificationChain): ENotificationChain {
+        checkSameRootImplementation(this.toArray(), eObject)
         const n = (eObject as EObjectInternal).eSetResource(this._resource, notifications)
         this._resource.attached(eObject)
         return n

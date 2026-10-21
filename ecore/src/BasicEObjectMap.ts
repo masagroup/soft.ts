@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { BasicEObjectList, EClass, EMap, EMapEntry, EObject, EObjectInternal } from "./internal.js"
+import { BasicEObjectList, EClass, EMap, EMapEntry, EObject, EObjectInternal, getClassFactory } from "./internal.js"
 import { EMapIndex } from "./EMapIndex.js"
 
 export class BasicEObjectMap<K, V> extends BasicEObjectList<EMapEntry<K, V> & EObject> implements EMap<K, V> {
@@ -83,7 +83,7 @@ export class BasicEObjectMap<K, V> extends BasicEObjectList<EMapEntry<K, V> & EO
     }
 
     protected newEntry(key: K, value: V): EMapEntry<K, V> & EObject {
-        const eFactory = this._entryClass.getEPackage().getEFactoryInstance()
+        const eFactory = getClassFactory(this.getNotifier(), this._entryClass)
         const eEntry = eFactory.create(this._entryClass) as any as EMapEntry<K, V> & EObject
         eEntry.setKey(key)
         eEntry.setValue(value)
