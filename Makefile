@@ -7,9 +7,11 @@
 #
 # *****************************************************************************
 
-GENERATOR ?= masagroup/soft.generator.ts
-GENERATE = docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -w /pwd $(GENERATOR) -m /models/$(2) -o /pwd/$(1) -P /pwd/generator.properties $(3)
-GENERATE_EXAMPLE = docker run --rm -v $(CURDIR):/pwd -w /pwd $(GENERATOR) -m /pwd/examples/$(1)/$(1).ecore -o /pwd/examples -P /pwd/generator.properties $(2)
+# the generator: soft-gen of soft.gen v2, run from its module at a fixed version
+SOFT_GEN_VERSION = v2.0.0-alpha.2
+GENERATOR ?= go run github.com/masagroup/soft.gen/v2/cmd/soft-gen@$(SOFT_GEN_VERSION) ts
+GENERATE = $(GENERATOR) -m ../models/$(2) -o ./$(1) -P generator.properties $(3)
+GENERATE_EXAMPLE = $(GENERATOR) -m examples/$(1)/$(1).ecore -o examples -P generator.properties $(2)
 
 ifeq (${OS},Windows_NT)
 DEVNULL := NUL
@@ -53,7 +55,7 @@ ecore.install:
 .PHONY: ecore.generate
 ecore.generate:
 	@echo "[ecore.generate]"
-	@$(call GENERATE,,ecore.ecore,-t generateModel -t generateTests)
+	@$(call GENERATE,,ecore.ecore,-t generateModel -t generateTests -p printWidth=140)
 
 .PHONY: ecore.format
 ecore.format:
