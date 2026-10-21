@@ -62,11 +62,14 @@ export class EPackageExt extends EPackageImpl {
     }
 
     getEClassifier(name: string): EClassifier {
-        if (!this._nameToClassifier) {
-            this._nameToClassifier = new Map<string, EClassifier>()
-            for (const classifier of this.getEClassifiers()) {
-                this._nameToClassifier.set(classifier.getName(), classifier)
-            }
+        // a classifier renamed since the map was built is found by its new name after a rebuild
+        const classifier = this._nameToClassifier?.get(name)
+        if (classifier && classifier.getName() == name) {
+            return classifier
+        }
+        this._nameToClassifier = new Map<string, EClassifier>()
+        for (const classifier of this.getEClassifiers()) {
+            this._nameToClassifier.set(classifier.getName(), classifier)
         }
         return this._nameToClassifier.get(name)
     }

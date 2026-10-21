@@ -39,16 +39,20 @@ export class ECodecRegistryImpl implements ECodecRegistry {
     }
 
     getCodec(uri: URI): ECodec {
-        let factory = this._protocolToCodec.get(uri.scheme)
-        if (factory) {
-            return factory
-        }
-        const ndx = uri.path.lastIndexOf(".")
-        if (ndx != -1) {
-            const extension = uri.path.slice(ndx + 1)
-            factory = this._extensionToCodec.get(extension)
+        let factory: ECodec
+        // a resource without uri has only the default codec
+        if (uri) {
+            factory = this._protocolToCodec.get(uri.scheme)
             if (factory) {
                 return factory
+            }
+            const ndx = uri.path?.lastIndexOf(".") ?? -1
+            if (ndx != -1) {
+                const extension = uri.path.slice(ndx + 1)
+                factory = this._extensionToCodec.get(extension)
+                if (factory) {
+                    return factory
+                }
             }
         }
         factory = this._extensionToCodec.get("*")

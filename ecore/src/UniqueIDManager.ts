@@ -32,6 +32,9 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
 
         if (this.isValid(newID)) {
             const newKey = this.toKey(newID)
+            // an id given to an object is taken from its previous owner
+            const previous = this._idToObject.get(newKey)
+            if (previous && previous !== eObject) this._objectToID.delete(previous)
             this.setCurrent(newID)
             this._objectToID.set(eObject, newID)
             this._idToObject.set(newKey, eObject)

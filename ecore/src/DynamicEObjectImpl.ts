@@ -7,7 +7,34 @@
 //
 // *****************************************************************************
 
-import { EClass, EDynamicProperties, EObjectImpl, EOperation, EStructuralFeature, getEcorePackage, isEList } from "./internal.js"
+import {
+    EClass,
+    EDynamicProperties,
+    EObjectImpl,
+    EOperation,
+    EStructuralFeature,
+    getEcorePackage,
+    isEAttribute,
+    isEList
+} from "./internal.js"
+
+function equalsDefault(value: any, defaultValue: any): boolean {
+    if (value === defaultValue) return true
+    if (value instanceof Date && defaultValue instanceof Date) return value.getTime() === defaultValue.getTime()
+    if (value instanceof Uint8Array && defaultValue instanceof Uint8Array) {
+        return value.length === defaultValue.length && value.every((b, i) => b === defaultValue[i])
+    }
+    return false
+}
+
+// isSetValue reports whether value, the value of feature, makes the feature set: as in EMF, an empty
+// list and an attribute (not unsettable) set to its default value are not set
+export function isSetValue(feature: EStructuralFeature, value: any): boolean {
+    if (value === null || value === undefined) return false
+    if (isEList(value)) return !value.isEmpty()
+    if (!isEAttribute(feature) || feature.isMany() || feature.isUnsettable()) return true
+    return !equalsDefault(value, feature.getDefaultValue())
+}
 
 function resize(arr: any[], newSize: number, defaultValue: any) {
     while (newSize > arr.length) arr.push(defaultValue)
@@ -59,9 +86,8 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
     }
 
     eDynamicIsSet(dynamicFeatureID: number): boolean {
-        // an empty list is not set
         const value = this._properties[dynamicFeatureID]
-        return value != null && !(isEList(value) && value.isEmpty())
+        return value != null && isSetValue(this.eClass().getEStructuralFeature(dynamicFeatureID), value)
     }
 
     eFeatureID(feature: EStructuralFeature): number {

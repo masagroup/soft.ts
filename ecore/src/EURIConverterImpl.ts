@@ -68,8 +68,21 @@ export class EURIConverterImpl implements EURIConverter {
     }
 
     normalize(uri: URI): URI {
-        const normalized = this.getURIFromMap(uri)
-        return uri.equals(normalized) ? normalized : this.normalize(normalized)
+        // the uri is mapped until it does not change, or until a uri already met: a cycle of mappings
+        let visited: Set<string> = null
+        let current = uri
+        for (;;) {
+            const normalized = this.getURIFromMap(current)
+            if (current.equals(normalized)) {
+                return normalized
+            }
+            if (!visited) visited = new Set<string>()
+            visited.add(current.toString())
+            if (visited.has(normalized.toString())) {
+                return current
+            }
+            current = normalized
+        }
     }
 
     getURIMap(): Map<URI, URI> {
@@ -84,12 +97,28 @@ export class EURIConverterImpl implements EURIConverter {
     }
 }
 
+// replacePrefix maps uri with the longest prefix of uriMap matching it, as EMF does: the map
+// iteration order does not choose between overlapping prefixes. A prefix matches whole path
+// segments: it ends with '/', or the path of uri is the prefix or continues with '/'.
 function replacePrefix(uri: URI, uriMap: Map<URI, URI>): URI {
+    let result: URI = null
+    let bestLength = -1
+    let bestKey = ""
+    const path = uri.path ?? ""
     for (const [oldPrefix, newPrefix] of uriMap) {
-        const r = uri.replacePrefix(oldPrefix, newPrefix)
-        if (r) {
-            return r
+        const oldPath = oldPrefix.path ?? ""
+        if (oldPath.length > 0 && !oldPath.endsWith("/") && path.length > oldPath.length && path[oldPath.length] != "/") {
+            continue
+        }
+        const mapped = uri.replacePrefix(oldPrefix, newPrefix)
+        if (mapped) {
+            const key = oldPrefix.toString()
+            if (oldPath.length > bestLength || (oldPath.length == bestLength && key < bestKey)) {
+                result = mapped
+                bestLength = oldPath.length
+                bestKey = key
+            }
         }
     }
-    return null
+    return result
 }

@@ -227,8 +227,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 path = path.splice(1)
                 return this.getObjectByPath(path)
             } else if (uriFragment.charAt(uriFragment.length - 1) == "?") {
-                const index = uriFragment.slice(0, -2).lastIndexOf("?")
-                if (index != -1) id = uriFragment.slice(0, index)
+                // "id?query?": the id ends at the "?" before the last one
+                const index = uriFragment.slice(0, -1).lastIndexOf("?")
+                if (index > 0) id = uriFragment.slice(0, index)
             }
         }
         return this.getObjectByID(id)
@@ -321,7 +322,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 // find codec
                 const codec = codecs.getCodec(this._uri)
                 if (!codec) {
-                    const uri = this._uri.toString()
+                    const uri = this._uri?.toString() ?? ""
                     const msg = `Unable to find decoder for ':${uri}'`
                     const errors = this.getErrors()
                     errors.clear()
@@ -332,7 +333,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 // find decoder
                 const decoder = codec.newDecoder(this, options)
                 if (!decoder) {
-                    const uri = this._uri.toString()
+                    const uri = this._uri?.toString() ?? ""
                     const msg = `Unable to find codec for ':${uri}'`
                     const errors = this.getErrors()
                     errors.clear()
@@ -376,7 +377,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             //find codec
             const codec = codecs.getCodec(this._uri)
             if (!codec) {
-                const uri = this._uri.toString()
+                const uri = this._uri?.toString() ?? ""
                 const msg = `Unable to find codec for ':${uri}'`
                 const errors = this.getErrors()
                 errors.clear()
@@ -387,7 +388,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             // find decoder
             const decoder = codec.newDecoder(this, options)
             if (!decoder) {
-                const uri = this._uri.toString()
+                const uri = this._uri?.toString() ?? ""
                 const msg = `Unable to find decoder for ':${uri}'`
                 const errors = this.getErrors()
                 errors.clear()
@@ -462,7 +463,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const codecs = this.getCodecRegistry()
         const codec = codecs.getCodec(this._uri)
         if (!codec) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find codec for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -472,7 +473,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         // find encoder
         const encoder = codec.newEncoder(this, options)
         if (!encoder) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find encoder for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -499,7 +500,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const codecs = this.getCodecRegistry()
         const codec = codecs.getCodec(this._uri)
         if (!codec) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find codec for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -509,7 +510,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
         const encoder = codec.newEncoder(this, options)
         if (!encoder) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find encoder for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -617,6 +618,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
         const eObject = this._idIndex?.get(id)
         if (eObject && EcoreUtils.getEObjectID(eObject) == id) return eObject
+        // while loading, the objects are indexed as they are attached: a missing id is a forward
+        // reference, which a rescan would not find either (and would make loading quadratic)
+        if (!eObject && this._idIndex && this._isLoading) return null
 
         // a miss or a stale entry: rescan, keeping the first object of the tree for each id. As
         // the id of an object can change without notifying the resource, a miss can't be trusted
@@ -675,7 +679,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         let pos = 0
         if (rootSegment.length > 0) {
             if (rootSegment.charAt(0) == "?") return this.getObjectByID(rootSegment.slice(1))
-            else pos = parseInt(rootSegment)
+            // a root segment that is not an index designates no object
+            else if (!/^\d+$/.test(rootSegment)) return null
+            else pos = Number(rootSegment)
         }
 
         if (pos >= 0 && pos < this.eContents().size()) return this.eContents().get(pos)

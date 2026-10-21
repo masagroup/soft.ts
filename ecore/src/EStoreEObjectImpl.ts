@@ -25,6 +25,7 @@ import {
     isECacheProvider,
     isEReference,
     isMapType,
+    isSetValue,
     NO_INDEX
 } from "./internal.js"
 
@@ -140,11 +141,7 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
         if (store) {
             return store.isSet(this, feature)
         }
-        const value = this._cachedValues.get(dynamicFeatureID)
-        if (feature.isMany()) {
-            return value != null && !(value as EList<any>).isEmpty()
-        }
-        return value != null
+        return isSetValue(feature, this._cachedValues.get(dynamicFeatureID))
     }
 
     eDynamicUnset(dynamicFeatureID: number): void {

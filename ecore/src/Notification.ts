@@ -40,7 +40,12 @@ export class Notification extends AbstractNotification {
 
     getFeatureID(): number {
         if (this._featureID != -1) return this._featureID
-        if (this._feature != null) return this._feature.getFeatureID()
+        if (this._feature != null) {
+            // the id of the feature in the class of the notifier, which differs from its id in its
+            // declaring class under multiple inheritance
+            const featureID = this._object?.eClass()?.getFeatureID(this._feature) ?? -1
+            return featureID != -1 ? featureID : this._feature.getFeatureID()
+        }
         return -1
     }
 

@@ -24,6 +24,7 @@ import {
     EStoreProvider,
     EStructuralFeature,
     EventType,
+    ImmutableEList,
     isECacheProvider,
     isEObjectInternal,
     isEReference,
@@ -300,7 +301,8 @@ export class EStoreList<E> extends AbstractNotifyingList<E> implements EObjectLi
             this._v.splice(index, 0, ...elements)
         }
         if (this._store) {
-            this._store.addAll(this._owner, this._feature, index, c)
+            // the store gets its own copy: c belongs to the caller
+            this._store.addAll(this._owner, this._feature, index, new ImmutableEList(elements))
         }
         for (let i = 0; i < elements.length; i++) {
             this.didAdd(index + i, elements[i])

@@ -191,26 +191,29 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         })
     }
 
+    // eFeatureID returns the id of feature in the class of this object, as go does: no scan of the
+    // features, and right under multiple inheritance
     eFeatureID(feature: EStructuralFeature): number {
-        if (!this.eClass().getEAllStructuralFeatures().contains(feature))
-            throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
-        return this.eDerivedFeatureID(feature.eContainer(), feature.getFeatureID())
+        const featureID = this.eClass().getFeatureID(feature)
+        if (featureID == -1) throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
+        return featureID
     }
 
     // eDerivedFeatureID converts the id of a feature in its container class into its id in the
-    // class of this object: they differ when the container is not the first super type
+    // class of this object: they differ when the container is not the first super type. The id is
+    // kept when the container is not a super type of the class of this object.
     eDerivedFeatureID(container: EObject, featureID: number): number {
         const eClass = this.eClass()
         if (container == eClass || !isEClass(container)) return featureID
         const feature = container.getEStructuralFeature(featureID)
-        return feature ? eClass.getFeatureID(feature) : featureID
+        const derivedID = feature ? eClass.getFeatureID(feature) : -1
+        return derivedID != -1 ? derivedID : featureID
     }
 
     eOperationID(operation: EOperation): number {
-        if (!this.eClass().getEAllOperations().contains(operation)) {
-            throw new Error("The operation '" + operation.getName() + "' is not a valid feature")
-        }
-        return this.eDerivedOperationID(operation.eContainer(), operation.getOperationID())
+        const operationID = this.eClass().getOperationID(operation)
+        if (operationID == -1) throw new Error("The operation '" + operation.getName() + "' is not a valid feature")
+        return operationID
     }
 
     eDerivedOperationID(container: EObject, operationID: number): number {
