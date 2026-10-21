@@ -11,7 +11,8 @@ function escapeXML(str: string, isAttribute: boolean = false): string {
     if (!str) return str
     let res = str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     if (isAttribute) {
-        res = res.replace(/"/g, "&quot;").replace(/'/g, "&apos;")
+        // a parser normalizes the white spaces of an attribute value: they are kept as references
+        res = res.replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/\r/g, "&#13;").replace(/\n/g, "&#xA;").replace(/\t/g, "&#x9;")
     }
     return res
 }
@@ -45,10 +46,14 @@ export class XMLString {
         return result
     }
 
-    write(stream: WritableStream) {
+    async write(stream: WritableStream): Promise<void> {
         const w = stream.getWriter()
-        for (const segment of this.segments) {
-            w.write(segment.buffer)
+        try {
+            for (const segment of this.segments) {
+                await w.write(segment.buffer)
+            }
+        } finally {
+            w.releaseLock()
         }
     }
 

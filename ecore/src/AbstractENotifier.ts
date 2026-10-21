@@ -92,7 +92,8 @@ export abstract class AbstractENotifier implements ENotifier {
 
     eNotify(notification: ENotification): void {
         if (this.eNotificationRequired()) {
-            for (const adapter of this.eBasicAdapters()) {
+            // a snapshot: an adapter may remove itself, or another one, when notified
+            for (const adapter of [...this.eBasicAdapters().toArray()]) {
                 adapter.notifyChanged(notification)
             }
         }

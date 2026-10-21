@@ -328,7 +328,11 @@ export class LibraryImpl extends ecore.EObjectImpl implements Library {
                 notifications = this.eBasicRemoveFromContainer(notifications)
             }
             if (ecore.isEObjectInternal(newParentBranch)) {
-                notifications = newParentBranch.eInverseAdd(this, LibraryConstants.LIBRARY__BRANCHES, notifications)
+                notifications = newParentBranch.eInverseAdd(
+                    this,
+                    newParentBranch.eClass().getFeatureID(getLibraryPackage().getLibrary_Branches()),
+                    notifications
+                )
             }
             notifications = this.basicSetParentBranch(newParentBranch, notifications)
             if (notifications != null) {

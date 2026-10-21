@@ -159,6 +159,8 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     // maps intrinsic ids to objects when no EObjectIDManager is set: filled by a scan,
     // kept on attach and detach, and rebuilt by the next scan when a lookup misses
     private _idIndex: Map<string, EObject> = null
+    // the key of each object of the id index
+    private _idIndexKeys: Map<EObject, string> = null
 
     getURI(): URI {
         return this._uri
@@ -225,8 +227,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 path = path.splice(1)
                 return this.getObjectByPath(path)
             } else if (uriFragment.charAt(uriFragment.length - 1) == "?") {
-                const index = uriFragment.slice(0, -2).lastIndexOf("?")
-                if (index != -1) id = uriFragment.slice(0, index)
+                // "id?query?": the id ends at the "?" before the last one
+                const index = uriFragment.slice(0, -1).lastIndexOf("?")
+                if (index > 0) id = uriFragment.slice(0, index)
             }
         }
         return this.getObjectByID(id)
@@ -319,7 +322,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 // find codec
                 const codec = codecs.getCodec(this._uri)
                 if (!codec) {
-                    const uri = this._uri.toString()
+                    const uri = this._uri?.toString() ?? ""
                     const msg = `Unable to find decoder for ':${uri}'`
                     const errors = this.getErrors()
                     errors.clear()
@@ -330,7 +333,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
                 // find decoder
                 const decoder = codec.newDecoder(this, options)
                 if (!decoder) {
-                    const uri = this._uri.toString()
+                    const uri = this._uri?.toString() ?? ""
                     const msg = `Unable to find codec for ':${uri}'`
                     const errors = this.getErrors()
                     errors.clear()
@@ -374,7 +377,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             //find codec
             const codec = codecs.getCodec(this._uri)
             if (!codec) {
-                const uri = this._uri.toString()
+                const uri = this._uri?.toString() ?? ""
                 const msg = `Unable to find codec for ':${uri}'`
                 const errors = this.getErrors()
                 errors.clear()
@@ -385,7 +388,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             // find decoder
             const decoder = codec.newDecoder(this, options)
             if (!decoder) {
-                const uri = this._uri.toString()
+                const uri = this._uri?.toString() ?? ""
                 const msg = `Unable to find decoder for ':${uri}'`
                 const errors = this.getErrors()
                 errors.clear()
@@ -397,11 +400,14 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
             this.setLoading(true)
             const n = this.basicSetLoaded(true, null)
             const array = ensureUint8Array(buffer)
-            this.doLoadFromBytes(decoder, array)
-            if (n) {
-                n.dispatch()
+            try {
+                this.doLoadFromBytes(decoder, array)
+                if (n) {
+                    n.dispatch()
+                }
+            } finally {
+                this.setLoading(false)
             }
-            this.setLoading(false)
         }
     }
 
@@ -432,6 +438,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         this._warnings = null
         this._objectIDManager?.clear()
         this._idIndex = null
+        this._idIndexKeys = null
     }
 
     async save(options?: Map<string, any>): Promise<void> {
@@ -456,7 +463,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const codecs = this.getCodecRegistry()
         const codec = codecs.getCodec(this._uri)
         if (!codec) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find codec for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -466,7 +473,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         // find encoder
         const encoder = codec.newEncoder(this, options)
         if (!encoder) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find encoder for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -485,7 +492,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     saveToString(options?: Map<string, any>): string {
-        const buffer = this.saveToBuffer()
+        const buffer = this.saveToBuffer(options)
         return buffer ? utf8Decode(buffer, 0, buffer.length) : ""
     }
 
@@ -493,7 +500,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const codecs = this.getCodecRegistry()
         const codec = codecs.getCodec(this._uri)
         if (!codec) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find codec for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -503,7 +510,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
         const encoder = codec.newEncoder(this, options)
         if (!encoder) {
-            const uri = this._uri.toString()
+            const uri = this._uri?.toString() ?? ""
             const msg = `Unable to find encoder for ':${uri}'`
             const errors = this.getErrors()
             errors.clear()
@@ -611,28 +618,44 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
 
         const eObject = this._idIndex?.get(id)
         if (eObject && EcoreUtils.getEObjectID(eObject) == id) return eObject
+        // while loading, the objects are indexed as they are attached: a missing id is a forward
+        // reference, which a rescan would not find either (and would make loading quadratic)
+        if (!eObject && this._idIndex && this._isLoading) return null
 
-        // a miss or a stale entry: rescan, keeping the first object of the tree for each id
+        // a miss or a stale entry: rescan, keeping the first object of the tree for each id. As
+        // the id of an object can change without notifying the resource, a miss can't be trusted
         const index = new Map<string, EObject>()
+        const keys = new Map<EObject, string>()
         for (const eObject of this.eAllContentsResolve(this, false)) {
             const objectID = EcoreUtils.getEObjectID(eObject)
-            if (objectID && !index.has(objectID)) index.set(objectID, eObject)
+            if (objectID && !index.has(objectID)) {
+                index.set(objectID, eObject)
+                keys.set(eObject, objectID)
+            }
         }
         this._idIndex = index
+        this._idIndexKeys = keys
         return index.get(id) ?? null
     }
 
     private indexAttached(object: EObject) {
         if (this._idIndex) {
             const id = EcoreUtils.getEObjectID(object)
-            if (id && !this._idIndex.has(id)) this._idIndex.set(id, object)
+            if (id && !this._idIndex.has(id)) {
+                this._idIndex.set(id, object)
+                this._idIndexKeys.set(object, id)
+            }
         }
     }
 
     private indexDetached(object: EObject) {
         if (this._idIndex) {
-            const id = EcoreUtils.getEObjectID(object)
-            if (id && this._idIndex.get(id) == object) this._idIndex.delete(id)
+            // the key the object was indexed with: its id may have changed since
+            const id = this._idIndexKeys.get(object)
+            if (id !== undefined) {
+                if (this._idIndex.get(id) == object) this._idIndex.delete(id)
+                this._idIndexKeys.delete(object)
+            }
         }
     }
 
@@ -656,7 +679,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         let pos = 0
         if (rootSegment.length > 0) {
             if (rootSegment.charAt(0) == "?") return this.getObjectByID(rootSegment.slice(1))
-            else pos = parseInt(rootSegment)
+            // a root segment that is not an index designates no object
+            else if (!/^\d+$/.test(rootSegment)) return null
+            else pos = Number(rootSegment)
         }
 
         if (pos >= 0 && pos < this.eContents().size()) return this.eContents().get(pos)

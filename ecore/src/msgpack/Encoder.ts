@@ -65,7 +65,8 @@ export class Encoder {
     }
 
     encodeNumber(object: number) {
-        if (Number.isSafeInteger(object)) {
+        // integers beyond 2^53 are still integers: keep them as (u)int64 rather than doubles
+        if (Number.isInteger(object) && object >= -0x8000_0000_0000_0000 && object < 0x1_0000_0000_0000_0000) {
             if (object >= 0) {
                 if (object < 0x80) {
                     // positive fixint
@@ -114,6 +115,35 @@ export class Encoder {
             this.writeU8(Types.Double)
             this.writeF64(object)
         }
+    }
+
+    // encodeBigInt encodes an integer held as a bigint (int64 values of the dynamic factory)
+    encodeBigInt(object: bigint) {
+        if (object >= BigInt(Number.MIN_SAFE_INTEGER) && object <= BigInt(Number.MAX_SAFE_INTEGER)) {
+            this.encodeNumber(Number(object))
+        } else if (object >= -0x8000_0000_0000_0000n && object < 0) {
+            this.writeU8(Types.Int64)
+            this.ensureBufferSizeToWrite(8)
+            this._view.setBigInt64(this._pos, object)
+            this._pos += 8
+        } else if (object >= 0 && object < 0x1_0000_0000_0000_0000n) {
+            this.writeU8(Types.Uint64)
+            this.ensureBufferSizeToWrite(8)
+            this._view.setBigUint64(this._pos, object)
+            this._pos += 8
+        } else {
+            throw new Error(`integer ${object} out of the 64 bits range`)
+        }
+    }
+
+    encodeFloat32(object: number) {
+        this.writeU8(Types.Float)
+        this.writeF32(object)
+    }
+
+    encodeUint8(object: number) {
+        this.writeU8(Types.Uint8)
+        this.writeU8(object)
     }
 
     encodeBinary(object: ArrayBufferView) {
@@ -234,6 +264,12 @@ export class Encoder {
     private writeI32(value: number) {
         this.ensureBufferSizeToWrite(4)
         this._view.setInt32(this._pos, value)
+        this._pos += 4
+    }
+
+    private writeF32(value: number) {
+        this.ensureBufferSizeToWrite(4)
+        this._view.setFloat32(this._pos, value)
         this._pos += 4
     }
 

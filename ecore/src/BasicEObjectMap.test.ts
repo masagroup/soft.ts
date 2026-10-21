@@ -32,6 +32,9 @@ describe("BasicEObjectMap", () => {
         when(mockClass.getEPackage()).thenReturn(p)
         when(mockPackage.getEFactoryInstance()).thenReturn(factory)
         when(mockFactory.create(cls)).thenReturn(entry)
+        // values are read from the entries
+        when(mockEntry.getKey()).thenReturn(2)
+        when(mockEntry.getValue()).thenReturn("2")
         const map = new BasicEObjectMap<number, string>(cls)
         map.put(2, "2")
         expect(map.getValue(2)).toBe("2")

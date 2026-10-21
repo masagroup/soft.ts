@@ -94,7 +94,7 @@ export class BasicEList<E> extends AbstractEList<E> {
     }
 
     protected doMove(from: number, to: number): E {
-        if (from < 0 || from >= this.size() || to < 0 || to > this.size()) {
+        if (from < 0 || from >= this.size() || to < 0 || to >= this.size()) {
             throw new RangeError("Index out of bounds: from=" + from + " to=" + to + " size=" + this.size())
         }
         const e = this._v[from]

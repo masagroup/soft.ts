@@ -95,6 +95,8 @@ export class XMLDecoder implements EDecoder {
     protected _packageRegistry: EPackageRegistry
     protected _extendedMetaData: ExtendedMetaData
     protected _idAttributeName: string
+    // the ids of the objects of the document set by setObjectID (xmi:id)
+    protected _ids: Map<string, EObject>
     protected _text: string
     protected _xmlVersion: string
     protected _encoding: string
@@ -137,7 +139,7 @@ export class XMLDecoder implements EDecoder {
     private createSAXParser(): sax.SAXParser {
         // configure parser
         const saxParser = new sax.SAXParser(true, {
-            trim: true,
+            trim: false,
             lowercase: true,
             xmlns: true,
             position: true
@@ -145,6 +147,7 @@ export class XMLDecoder implements EDecoder {
         saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t)
         saxParser.onclosetag = (t: string) => this.onEndTag(t)
         saxParser.ontext = (t: string) => this.onText(t)
+        saxParser.oncdata = (t: string) => this.onText(t)
         saxParser.onerror = (e) => this.onError(e)
         saxParser.onprocessinginstruction = (n) => this.onProcessingInstruction(n)
         return saxParser
@@ -204,12 +207,7 @@ export class XMLDecoder implements EDecoder {
         }
         // parser & buffer
         this._parser = this.createSAXParser()
-        const iterable = ensureAsyncIterable(streamLike)
-        for await (const bufferLike of iterable) {
-            const buffer = ensureUint8Array(bufferLike)
-            const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
-            this._parser.write(bufferUTF8)
-        }
+        await this.writeStream(streamLike)
         // close parser
         this._parser.close()
         // result
@@ -232,16 +230,26 @@ export class XMLDecoder implements EDecoder {
         }
         // parser & buffer
         this._parser = this.createSAXParser()
-        const iterable = ensureAsyncIterable(streamLike)
-        for await (const bufferLike of iterable) {
-            const buffer = ensureUint8Array(bufferLike)
-            const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
-            this._parser.write(bufferUTF8)
-        }
+        await this.writeStream(streamLike)
         // close parser
         this._parser.close()
         // result
         return error ? Promise.reject(error) : object
+    }
+
+    private async writeStream(streamLike: ReadableStreamLike<BufferLike>): Promise<void> {
+        // a single streaming decoder keeps multibyte characters split across chunks intact
+        const textDecoder = new TextDecoder("utf-8")
+        for await (const bufferLike of ensureAsyncIterable(streamLike)) {
+            const text = textDecoder.decode(ensureUint8Array(bufferLike), { stream: true })
+            if (text.length > 0) {
+                this._parser.write(text)
+            }
+        }
+        const remaining = textDecoder.decode()
+        if (remaining.length > 0) {
+            this._parser.write(remaining)
+        }
     }
 
     private onProcessingInstruction(node: { name: string; body: string }) {
@@ -286,7 +294,7 @@ export class XMLDecoder implements EDecoder {
         }
 
         const eType = this._types.pop()
-        if (this._text) {
+        if (this._text !== undefined) {
             if (eType === LOAD_OBJECT_TYPE) {
                 if (this._text.length > 0) {
                     this.handleProxy(eObject, this._text)
@@ -317,13 +325,13 @@ export class XMLDecoder implements EDecoder {
     }
 
     private onText(text: string): void {
-        if (this._text) {
+        if (this._text !== undefined) {
             this._text += text
         }
     }
 
     private onError(err: Error) {
-        this.error(new EDiagnosticImpl(err.message, this._resource.getURI().toString(), this._parser.line, this._parser.column))
+        this.decodeError(err.message)
     }
 
     private setAttributes(attributes: { [key: string]: sax.QualifiedAttribute }): {
@@ -419,14 +427,7 @@ export class XMLDecoder implements EDecoder {
 
     private validateObject(eObject: EObject, uri: string, typeName: string) {
         if (!eObject) {
-            this.error(
-                new EDiagnosticImpl(
-                    "Class {'" + uri + "':'" + typeName + "'} not found",
-                    this._resource.getURI().toString(),
-                    this._parser.line,
-                    this._parser.column
-                )
-            )
+            this.decodeError("Class {'" + uri + "':'" + typeName + "'} not found")
         }
     }
 
@@ -580,7 +581,7 @@ export class XMLDecoder implements EDecoder {
             for (const eReference of eProxy.eClass().getEAllReferences()) {
                 const eOpposite = eReference.getEOpposite()
                 if (eOpposite && eOpposite.isChangeable() && eProxy.eIsSet(eReference)) {
-                    const resolvedObject = this._resource.getEObject((eProxy as EObjectInternal).eProxyURI().fragment)
+                    const resolvedObject = this.getEObject((eProxy as EObjectInternal).eProxyURI().fragment)
                     if (resolvedObject) {
                         let proxyHolder: EObject = null
                         if (eReference.isMany()) {
@@ -636,18 +637,11 @@ export class XMLDecoder implements EDecoder {
         }
 
         for (const reference of this._references) {
-            const eObject = this._resource.getEObject(reference.id)
+            const eObject = this.getEObject(reference.id)
             if (eObject) {
                 this.setFeatureValue(reference.object, reference.feature, eObject, reference.pos)
             } else {
-                this.error(
-                    new EDiagnosticImpl(
-                        "Unresolved reference '" + reference.id + "'",
-                        this._resource.getURI().toString(),
-                        this._parser.line,
-                        this._parser.column
-                    )
-                )
+                this.decodeError("Unresolved reference '" + reference.id + "'")
             }
         }
     }
@@ -700,9 +694,7 @@ export class XMLDecoder implements EDecoder {
         const eObjectInternal = eProxy as EObjectInternal
         eObjectInternal.eSetProxyURI(uri)
 
-        const ndx = id.indexOf("#")
-        const trimmedURI: string = ndx != -1 ? (ndx > 0 ? id.slice(0, ndx - 1) : "") : id
-        if (this._resource.getURI()?.toString() == trimmedURI) {
+        if (resourceURI.equals(uri.trimFragment())) {
             this._sameDocumentProxies.push(eProxy)
         }
     }
@@ -726,12 +718,13 @@ export class XMLDecoder implements EDecoder {
         switch (kind) {
             case LoadFeatureKind.Single: {
                 const eDataType = eFeature.getEType() as EDataType
-                if (!value) {
+                if (value === null || value === undefined) {
                     eObject.eSet(eFeature, null)
                 } else {
                     const eFactory = this.factoryFor(eFeature, eDataType)
                     if (eFactory) {
-                        eObject.eSet(eFeature, eFactory.createFromString(eDataType, value as string))
+                        const literal = this.createFromString(eFactory, eDataType, value as string)
+                        if (literal.ok) eObject.eSet(eFeature, literal.value)
                     }
                 }
                 break
@@ -740,12 +733,13 @@ export class XMLDecoder implements EDecoder {
                 const eDataType = eFeature.getEType() as EDataType
                 const eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
                 if (position != -2) {
-                    if (!value) {
+                    if (value === null || value === undefined) {
                         eList.add(null)
                     } else {
                         const eFactory = this.factoryFor(eFeature, eDataType)
                         if (eFactory) {
-                            eList.add(eFactory.createFromString(eDataType, value as string))
+                            const literal = this.createFromString(eFactory, eDataType, value as string)
+                            if (literal.ok) eList.add(literal.value)
                         }
                     }
                 }
@@ -763,7 +757,7 @@ export class XMLDecoder implements EDecoder {
                     if (index == -1) {
                         eList.insert(position, value)
                     } else {
-                        eList.moveTo(position, index)
+                        eList.moveTo(index, position)
                     }
                 } else if (kind == LoadFeatureKind.ManyAdd) {
                     appendLoaded(eList, value)
@@ -830,7 +824,7 @@ export class XMLDecoder implements EDecoder {
                 }
 
                 if (mustAddOrNotOppositeIsMany) {
-                    const resolved = this._resource.getEObject(id)
+                    const resolved = this.getEObject(id)
                     if (resolved) {
                         this.setFeatureValue(eObject, eReference, resolved, -1)
                         qName = ""
@@ -907,36 +901,58 @@ export class XMLDecoder implements EDecoder {
         return eFactory
     }
 
-    private decodeError(message: string) {
-        this.error(new EDiagnosticImpl(message, this._resource.getURI()?.toString(), this._parser.column, this._parser.line))
+    // diagnostic returns a diagnostic at the current position of the parser: the location of a
+    // resource without uri is empty
+    private diagnostic(message: string): EDiagnostic {
+        return new EDiagnosticImpl(message, this._resource.getURI()?.toString() ?? "", this._parser.line, this._parser.column)
+    }
+
+    // createFromString creates the value of eDataType from str: a factory throws on an invalid
+    // literal, which is reported and not set
+    private createFromString(eFactory: EFactory, eDataType: EDataType, str: string): { ok: boolean; value?: any } {
+        try {
+            return { ok: true, value: eFactory.createFromString(eDataType, str) }
+        } catch (e) {
+            this.decodeError(e instanceof Error ? e.message : String(e))
+            return { ok: false }
+        }
+    }
+
+    // setObjectID gives id to eObject, an object of the document (xmi:id): the references of the
+    // document resolve it, and the object id manager of the resource, if any, registers it
+    protected setObjectID(eObject: EObject, id: string) {
+        if (!this._ids) this._ids = new Map<string, EObject>()
+        this._ids.set(id, eObject)
+        const idManager = this._resource.getObjectIDManager()
+        if (idManager) {
+            try {
+                idManager.setID(eObject, id)
+            } catch (e) {
+                this.decodeError(e instanceof Error ? e.message : String(e))
+            }
+        }
+    }
+
+    // getEObject returns the object of the document with id or fragment: an id set by setObjectID,
+    // else the object of the resource
+    private getEObject(id: string): EObject {
+        return this._ids?.get(id) ?? this._resource.getEObject(id)
+    }
+
+    protected decodeError(message: string) {
+        this.error(this.diagnostic(message))
     }
 
     private handleUnknownFeature(name: string) {
-        this.error(
-            new EDiagnosticImpl(
-                "Feature " + name + " not found",
-                this._resource.getURI()?.toString(),
-                this._parser.column,
-                this._parser.line
-            )
-        )
+        this.decodeError("Feature " + name + " not found")
     }
 
     private handleUnknownPackage(name: string) {
-        this.error(
-            new EDiagnosticImpl(
-                "Package " + name + " not found",
-                this._resource.getURI()?.toString(),
-                this._parser.column,
-                this._parser.line
-            )
-        )
+        this.decodeError("Package " + name + " not found")
     }
 
     private handleUnknownURI(name: string) {
-        this.error(
-            new EDiagnosticImpl("URI " + name + " not found", this._resource.getURI()?.toString(), this._parser.column, this._parser.line)
-        )
+        this.decodeError("URI " + name + " not found")
     }
 
     private error(diagnostic: EDiagnostic) {

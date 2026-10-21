@@ -83,7 +83,13 @@ describe("BinaryEncoder", () => {
         expect(eDocumentRoot).not.toBeNull()
         expect(idManager.setID(eDocumentRoot, id128.Uuid4.fromCanonical("dc48710b-0e2e-419f-94fb-178c7fc1370b"))).toBeUndefined()
 
-        const e = new BinaryEncoder(eResource, new Map<string, any>([[BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true]]))
+        const e = new BinaryEncoder(
+            eResource,
+            new Map<string, any>([
+                [BinaryOptions.BINARY_OPTION_ID_ATTRIBUTE, true],
+                [BinaryOptions.BINARY_OPTION_NAMESPACE_ATTRIBUTE, false]
+            ])
+        )
         const r = e.encode(eResource)
         expect(r.isOk()).toBeTruthy()
         const expected = fs.readFileSync(uriToFilePath(expectedURI)).toString()

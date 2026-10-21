@@ -1,6 +1,6 @@
 {
   "name": "@masagroup/ecore",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "ecore typescript library",
   "author": "MASA Group",
   "license": "MPL-2.0",
@@ -27,7 +27,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20.16"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",

@@ -8,10 +8,11 @@
 // *****************************************************************************
 
 import { BasicEObjectList, EClass, EMap, EMapEntry, EObject, EObjectInternal } from "./internal.js"
+import { EMapIndex } from "./EMapIndex.js"
 
 export class BasicEObjectMap<K, V> extends BasicEObjectList<EMapEntry<K, V> & EObject> implements EMap<K, V> {
     private _entryClass: EClass
-    private _mapData: Map<K, V> = new Map<K, V>()
+    private _index = new EMapIndex<K, EMapEntry<K, V> & EObject>(() => this)
 
     constructor(
         entryClass: EClass,
@@ -38,17 +39,16 @@ export class BasicEObjectMap<K, V> extends BasicEObjectList<EMapEntry<K, V> & EO
         if (e) {
             e.setValue(value)
         } else {
-            this.add(this.newEntry(key, value))
+            // a new entry is not in the list: no duplicate scan
+            this.addUnique(this.newEntry(key, value))
         }
-        this._mapData.set(key, value)
     }
 
     getValue(key: K): V {
-        return this._mapData.get(key)
+        return this.getEntry(key)?.getValue()
     }
 
     removeKey(key: K): V {
-        this._mapData.delete(key)
         const e = this.getEntry(key)
         if (e) {
             this.remove(e)
@@ -58,12 +58,12 @@ export class BasicEObjectMap<K, V> extends BasicEObjectList<EMapEntry<K, V> & EO
     }
 
     containsKey(key: K): boolean {
-        return this._mapData.has(key)
+        return this.getEntry(key) !== undefined
     }
 
     containsValue(value: V): boolean {
-        for (const [_, v] of this._mapData) {
-            if (v == value) {
+        for (const e of this) {
+            if (e.getValue() == value) {
                 return true
             }
         }
@@ -71,16 +71,15 @@ export class BasicEObjectMap<K, V> extends BasicEObjectList<EMapEntry<K, V> & EO
     }
 
     toMap(): Map<K, V> {
-        return this._mapData
+        const m = new Map<K, V>()
+        for (const e of this._index.values()) {
+            m.set(e.getKey(), e.getValue())
+        }
+        return m
     }
 
     private getEntry(key: K): (EMapEntry<K, V> & EObject) | undefined {
-        for (const entry of this) {
-            if (entry.getKey() == key) {
-                return entry
-            }
-        }
-        return undefined
+        return this._index.get(key)
     }
 
     protected newEntry(key: K, value: V): EMapEntry<K, V> & EObject {
@@ -92,23 +91,23 @@ export class BasicEObjectMap<K, V> extends BasicEObjectList<EMapEntry<K, V> & EO
     }
 
     protected didAdd(index: number, e: EMapEntry<K, V> & EObject): void {
-        this._mapData.set(e.getKey(), e.getValue())
+        this._index.add(e)
         super.didAdd(index, e)
     }
 
     protected didRemove(index: number, e: EMapEntry<K, V> & EObject): void {
-        this._mapData.delete(e.getKey())
+        this._index.remove(e)
         super.didRemove(index, e)
     }
 
     protected didClear(elements: (EMapEntry<K, V> & EObject)[]): void {
-        this._mapData.clear()
+        this._index.clear()
         super.didClear(elements)
     }
 
     protected didSet(index: number, newE: EMapEntry<K, V> & EObject, oldE: EMapEntry<K, V> & EObject): void {
-        this._mapData.delete(oldE.getKey())
-        this._mapData.set(newE.getKey(), newE.getValue())
+        this._index.remove(oldE)
+        this._index.add(newE)
         super.didSet(index, newE, oldE)
     }
 }

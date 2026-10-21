@@ -160,3 +160,69 @@ describe("EResourceSetImpl index", () => {
         expect(rs.getEObject(new URI("test://doc.xml#/"), false)).toBe(root)
     })
 })
+
+describe("EResourceSetImpl index order", () => {
+    test("first resource of the list wins", () => {
+        const rs = new EResourceSetImpl()
+        const r1 = rs.createResource(new URI("test://a"))
+        const r0 = new EResourceImpl()
+        r0.setURI(new URI("test://a"))
+        rs.getResources().insert(0, r0)
+        expect(rs.getResources().get(0)).toBe(r0)
+        expect(rs.getResource(new URI("test://a"), false)).toBe(r0)
+
+        // a resource added after keeps the first one indexed
+        const r2 = new EResourceImpl()
+        r2.setURI(new URI("test://a"))
+        rs.getResources().add(r2)
+        expect(rs.getResource(new URI("test://a"), false)).toBe(r0)
+
+        // removing the first one gives the next one
+        rs.getResources().remove(r0)
+        expect(rs.getResource(new URI("test://a"), false)).toBe(r1)
+    })
+
+    test("move", () => {
+        const rs = new EResourceSetImpl()
+        const r1 = rs.createResource(new URI("test://a"))
+        const r2 = rs.createResource(new URI("test://a"))
+        expect(rs.getResource(new URI("test://a"), false)).toBe(r1)
+        rs.getResources().moveTo(0, 1)
+        expect(rs.getResources().get(0)).toBe(r2)
+        expect(rs.getResource(new URI("test://a"), false)).toBe(r2)
+    })
+
+    test("uri change of a shadowed resource", () => {
+        const rs = new EResourceSetImpl()
+        const r1 = rs.createResource(new URI("test://a"))
+        const r2 = rs.createResource(new URI("test://a"))
+        r2.setURI(new URI("test://b"))
+        expect(rs.getResource(new URI("test://a"), false)).toBe(r1)
+        expect(rs.getResource(new URI("test://b"), false)).toBe(r2)
+        r1.setURI(new URI("test://c"))
+        expect(rs.getResource(new URI("test://a"), false)).toBeNull()
+        expect(rs.getResource(new URI("test://c"), false)).toBe(r1)
+    })
+
+    test("unindex keeps the other resources", () => {
+        const rs = new EResourceSetImpl()
+        const resources = []
+        for (let i = 0; i < 100; i++) {
+            resources.push(rs.createResource(new URI(`test://r${i}`)))
+        }
+        for (let i = 0; i < 100; i += 2) {
+            rs.getResources().remove(resources[i])
+        }
+        for (let i = 0; i < 100; i++) {
+            expect(rs.getResource(new URI(`test://r${i}`), false)).toBe(i % 2 == 0 ? null : resources[i])
+        }
+        expect(resourceIndex(rs).size).toBe(50)
+    })
+
+    test("resolved file uri", () => {
+        const rs = new EResourceSetImpl()
+        const r = rs.createResource(new URI("file:///abs/dir/a.xml"))
+        const resolved = new URI("file:///abs/dir/x.xml").resolve(new URI("a.xml"))
+        expect(rs.getResource(resolved, false)).toBe(r)
+    })
+})

@@ -25,6 +25,7 @@ import {
     isECacheProvider,
     isEReference,
     isMapType,
+    isSetValue,
     NO_INDEX
 } from "./internal.js"
 
@@ -92,9 +93,12 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
         return this._cache
     }
 
-    // clearCache drops the cached values: they are read again from the store.
+    // clearCache drops the cached values: they are read again from the store. Without store, the
+    // values are kept: they are not cached, they are the only copy.
     clearCache(): void {
-        this._cachedValues.clear()
+        if (this.getEStore()) {
+            this._cachedValues.clear()
+        }
     }
 
     eDynamicGet(dynamicFeatureID: number): any {
@@ -137,11 +141,7 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
         if (store) {
             return store.isSet(this, feature)
         }
-        const value = this._cachedValues.get(dynamicFeatureID)
-        if (feature.isMany()) {
-            return value != null && !(value as EList<any>).isEmpty()
-        }
-        return value != null
+        return isSetValue(feature, this._cachedValues.get(dynamicFeatureID))
     }
 
     eDynamicUnset(dynamicFeatureID: number): void {
@@ -171,7 +171,7 @@ export class EStoreEObjectImpl extends EObjectImpl implements EDynamicProperties
                 reverseFeatureID = reverseFeature.getFeatureID()
             }
         }
-        return new BasicEObjectMap<any, any>(eClass, this, feature.getFeatureID(), reverseFeatureID, feature.isUnsettable())
+        return new BasicEObjectMap<any, any>(eClass, this, this.eClass().getFeatureID(feature), reverseFeatureID, feature.isUnsettable())
     }
 
     eInternalContainer(): EObject {

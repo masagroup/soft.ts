@@ -30,7 +30,12 @@ export class EStructuralFeatureExt extends EStructuralFeatureImpl {
             const factory = eType.getEPackage()?.getEFactoryInstance()
             if (factory && factory != this._defaultValueFactory) {
                 if (eType.isSerializable()) {
-                    this._defaultValue = factory.createFromString(eType, defaultValueLiteral)
+                    try {
+                        this._defaultValue = factory.createFromString(eType, defaultValueLiteral)
+                    } catch {
+                        // an invalid literal gives the default of the data type, once
+                        this._defaultValue = eType.getDefaultValue()
+                    }
                 }
                 this._defaultValueFactory = factory
             }

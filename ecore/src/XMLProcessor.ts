@@ -46,7 +46,7 @@ export class XMLProcessor {
         const r = rs.createResource(uri)
         let o = new Map<string, any>([[XMLOptions.EXTENDED_META_DATA, this._extendMetaData]])
         if (options) o = new Map([...Array.from(o.entries()), ...Array.from(options.entries())])
-        await r.load(options)
+        await r.load(o)
         return r
     }
 

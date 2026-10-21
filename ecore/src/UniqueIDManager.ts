@@ -32,6 +32,9 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
 
         if (this.isValid(newID)) {
             const newKey = this.toKey(newID)
+            // an id given to an object is taken from its previous owner
+            const previous = this._idToObject.get(newKey)
+            if (previous && previous !== eObject) this._objectToID.delete(previous)
             this.setCurrent(newID)
             this._objectToID.set(eObject, newID)
             this._idToObject.set(newKey, eObject)
@@ -78,7 +81,13 @@ export abstract class UniqueIDManager<ID, K extends Primitive> implements EObjec
     }
 
     getEObject(aid: any): EObject {
-        const id = this.toID(aid)
+        let id: ID
+        try {
+            id = this.toID(aid)
+        } catch {
+            // not an id of this manager
+            return undefined
+        }
         const key = this.toKey(id)
         return key != undefined ? this._idToObject.get(key) : undefined
     }
@@ -158,7 +167,8 @@ export class IncrementalIDManager extends UniqueIDManager<number, number> {
 
     toID(v: any): number {
         if (typeof v === "string") {
-            return parseInt(v as string)
+            // a decimal integer, as "12abc" is not the id 12
+            return /^\d+$/.test(v) ? parseInt(v) : undefined
         } else if (typeof v === "number") {
             return v as number
         }
@@ -170,6 +180,7 @@ export class IncrementalIDManager extends UniqueIDManager<number, number> {
     }
 
     setCurrent(id: number): void {
-        this._id = id
+        // the next generated id must be greater than any registered id
+        this._id = Math.max(id + 1, this._id)
     }
 }

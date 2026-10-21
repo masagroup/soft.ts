@@ -67,52 +67,45 @@ export class EcoreUtils {
         return this.resolveInResourceSetAsync(proxy, resource?.eResourceSet())
     }
 
+    // resolveInPackageRegistry resolves proxyURI in the resource of the registered package of its nsURI
+    private static resolveInPackageRegistry(proxyURI: URI): EObject {
+        const proxyURIStr = proxyURI.toString()
+        const ndxHash = proxyURIStr.lastIndexOf("#")
+        const ePackage = getPackageRegistry().getPackage(ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr)
+        const eResource = ePackage?.eResource()
+        return eResource ? eResource.getEObject(ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "") : null
+    }
+
+    // a resolved object may be a proxy too: it is resolved in turn, until a proxy already met, which
+    // would loop forever. A cycle of proxies resolves none of them.
     static resolveInResourceSet(proxy: EObject, resourceSet: EResourceSet): EObject {
-        const proxyURI = (proxy as EObjectInternal).eProxyURI()
-        if (proxyURI) {
-            let resolved: EObject
-            if (resourceSet) {
-                resolved = resourceSet.getEObject(proxyURI, true)
-            } else {
-                const proxyURIStr = proxyURI.toString()
-                const ndxHash = proxyURIStr.lastIndexOf("#")
-                const ePackage = getPackageRegistry().getPackage(ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr)
-                if (ePackage) {
-                    const eResource = ePackage.eResource()
-                    if (eResource) {
-                        resolved = eResource.getEObject(ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "")
-                    }
-                }
-            }
-            if (resolved && resolved != proxy) {
-                return this.resolveInResourceSet(resolved, resourceSet)
-            }
+        let visited: Set<EObject> = null
+        let current = proxy
+        for (;;) {
+            const proxyURI = (current as EObjectInternal).eProxyURI()
+            if (!proxyURI) return current
+            const resolved = resourceSet ? resourceSet.getEObject(proxyURI, true) : this.resolveInPackageRegistry(proxyURI)
+            if (!resolved || resolved == current) return current
+            if (!visited) visited = new Set<EObject>()
+            visited.add(current)
+            if (visited.has(resolved)) return proxy
+            current = resolved
         }
-        return proxy
     }
 
     static async resolveInResourceSetAsync(proxy: EObject, resourceSet: EResourceSet): Promise<EObject> {
-        const proxyURI = (proxy as EObjectInternal).eProxyURI()
-        if (proxyURI) {
-            let resolved: EObject
-            if (resourceSet) {
-                resolved = await resourceSet.getEObjectAsync(proxyURI, true)
-            } else {
-                const proxyURIStr = proxyURI.toString()
-                const ndxHash = proxyURIStr.lastIndexOf("#")
-                const ePackage = getPackageRegistry().getPackage(ndxHash != -1 ? proxyURIStr.slice(0, ndxHash) : proxyURIStr)
-                if (ePackage) {
-                    const eResource = ePackage.eResource()
-                    if (eResource) {
-                        resolved = eResource.getEObject(ndxHash != -1 ? proxyURIStr.slice(ndxHash + 1) : "")
-                    }
-                }
-            }
-            if (resolved && resolved != proxy) {
-                return this.resolveInResourceSetAsync(resolved, resourceSet)
-            }
+        let visited: Set<EObject> = null
+        let current = proxy
+        for (;;) {
+            const proxyURI = (current as EObjectInternal).eProxyURI()
+            if (!proxyURI) return current
+            const resolved = resourceSet ? await resourceSet.getEObjectAsync(proxyURI, true) : this.resolveInPackageRegistry(proxyURI)
+            if (!resolved || resolved == current) return current
+            if (!visited) visited = new Set<EObject>()
+            visited.add(current)
+            if (visited.has(resolved)) return proxy
+            current = resolved
         }
-        return proxy
     }
 
     static copy(eObject: EObject): EObject {
@@ -284,6 +277,7 @@ export class EcoreUtils {
                     }
                     for (const resolve of await Promise.all(promises)) {
                         const eDeliver = eObject.eDeliver()
+                        eObject.eSetDeliver(false)
                         list.set(resolve.index, resolve.newValue)
                         eObject.eSetDeliver(eDeliver)
                         if (eDeliver && !eObject.eAdapters().isEmpty()) {

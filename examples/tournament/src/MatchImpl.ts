@@ -57,8 +57,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._group != null && this._group.eIsProxy()) {
             const oldGroup = this._group
             const newGroup = this.eResolveProxy(oldGroup) as Group
-            this._group = newGroup
             if (newGroup != oldGroup) {
+                this._group = newGroup
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -80,8 +80,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._group != null && this._group.eIsProxy()) {
             const oldGroup = this._group
             const newGroup = (await this.eResolveProxyAsync(oldGroup)) as Group
-            this._group = newGroup
             if (newGroup != oldGroup) {
+                this._group = newGroup
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -119,8 +119,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._guestTeam != null && this._guestTeam.eIsProxy()) {
             const oldGuestTeam = this._guestTeam
             const newGuestTeam = this.eResolveProxy(oldGuestTeam) as Team
-            this._guestTeam = newGuestTeam
             if (newGuestTeam != oldGuestTeam) {
+                this._guestTeam = newGuestTeam
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -142,8 +142,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._guestTeam != null && this._guestTeam.eIsProxy()) {
             const oldGuestTeam = this._guestTeam
             const newGuestTeam = (await this.eResolveProxyAsync(oldGuestTeam)) as Team
-            this._guestTeam = newGuestTeam
             if (newGuestTeam != oldGuestTeam) {
+                this._guestTeam = newGuestTeam
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -187,8 +187,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._homeTeam != null && this._homeTeam.eIsProxy()) {
             const oldHomeTeam = this._homeTeam
             const newHomeTeam = this.eResolveProxy(oldHomeTeam) as Team
-            this._homeTeam = newHomeTeam
             if (newHomeTeam != oldHomeTeam) {
+                this._homeTeam = newHomeTeam
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
@@ -210,8 +210,8 @@ export class MatchImpl extends ecore.EObjectImpl implements Match {
         if (this._homeTeam != null && this._homeTeam.eIsProxy()) {
             const oldHomeTeam = this._homeTeam
             const newHomeTeam = (await this.eResolveProxyAsync(oldHomeTeam)) as Team
-            this._homeTeam = newHomeTeam
             if (newHomeTeam != oldHomeTeam) {
+                this._homeTeam = newHomeTeam
                 if (this.eNotificationRequired()) {
                     this.eNotify(
                         new ecore.Notification(
