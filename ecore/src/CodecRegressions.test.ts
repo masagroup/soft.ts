@@ -22,7 +22,6 @@ import {
     EObject,
     EObjectInternal,
     EPackage,
-    EReference,
     EResourceImpl,
     EResourceSetImpl,
     ExtendedMetaData,

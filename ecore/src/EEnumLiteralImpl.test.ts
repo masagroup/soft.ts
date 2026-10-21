@@ -9,8 +9,8 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
+import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import {
     EAdapter,
     EEnum,

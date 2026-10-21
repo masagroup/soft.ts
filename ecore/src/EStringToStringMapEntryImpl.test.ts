@@ -9,8 +9,8 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, verify } from "ts-mockito"
 import { describe, expect, test } from "vitest"
+import { anything, capture, instance, mock, verify } from "ts-mockito"
 import { EAdapter, EStringToStringMapEntryImpl, EcoreConstants, getEcorePackage } from "./internal.js"
 
 describe("EStringToStringMapEntryImpl", () => {

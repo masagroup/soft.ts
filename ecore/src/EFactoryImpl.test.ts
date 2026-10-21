@@ -9,8 +9,8 @@
 //
 // *****************************************************************************
 
-import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import { describe, expect, test } from "vitest"
+import { anything, capture, instance, mock, reset, verify, when } from "ts-mockito"
 import {
     EAdapter,
     EFactoryImpl,
@@ -61,7 +61,7 @@ describe("EFactoryImpl", () => {
         o.eAdapters().add(adapter)
 
         // set value
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getEcorePackage().getEPackage())
         when(mockValue.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseAdd(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
@@ -87,9 +87,9 @@ describe("EFactoryImpl", () => {
         reset(mockAdapter)
         reset(mockValue)
         reset(mockResource)
-        when(mockValue.eClass()).thenReturn(null)
+        when(mockValue.eClass()).thenReturn(getEcorePackage().getEPackage())
         when(mockValue.eStaticClass()).thenReturn(null)
-        when(mockOther.eClass()).thenReturn(null)
+        when(mockOther.eClass()).thenReturn(getEcorePackage().getEPackage())
         when(mockOther.eStaticClass()).thenReturn(null)
         when(mockValue.eInverseRemove(o, EcoreConstants.EPACKAGE__EFACTORY_INSTANCE, null)).thenReturn(null)
         when(mockValue.eResource()).thenReturn(resource)
@@ -163,7 +163,7 @@ describe("EFactoryImpl", () => {
         {
             const mockValue = mock<EPackageInternal>()
             const value = instance(mockValue)
-            when(mockValue.eClass()).thenReturn(null)
+            when(mockValue.eClass()).thenReturn(getEcorePackage().getEPackage())
             when(mockValue.eStaticClass()).thenReturn(null)
             when(mockValue.eIsProxy()).thenReturn(false)
             when(mockValue.eResource()).thenReturn(null)
