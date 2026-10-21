@@ -20,7 +20,8 @@ export class XMIDecoder extends XMLDecoder {
         this._notFeatures.push(
             { uri: XMIConstants.xmiURI, local: XMIConstants.typeAttrib },
             { uri: XMIConstants.xmiURI, local: XMIConstants.versionAttrib },
-            { uri: XMIConstants.xmiURI, local: XMIConstants.uuidAttrib }
+            { uri: XMIConstants.xmiURI, local: XMIConstants.uuidAttrib },
+            { uri: XMIConstants.xmiURI, local: XMIConstants.idAttrib }
         )
     }
 
@@ -40,6 +41,11 @@ export class XMIDecoder extends XMLDecoder {
         const version = this.getAttributeValue(XMIConstants.xmiURI, XMIConstants.versionAttrib)
         if (version && version.length > 0) {
             this._xmiVersion = version
+        }
+        // the id of an object in an xmi resource (EMF's xmi:id): the references by id resolve it
+        const id = this.getAttributeValue(XMIConstants.xmiURI, XMIConstants.idAttrib)
+        if (id && id.length > 0) {
+            this.setObjectID(object, id)
         }
         super.handleAttributes(object)
     }

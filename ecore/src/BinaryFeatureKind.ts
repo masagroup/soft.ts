@@ -7,7 +7,15 @@
 //
 // *****************************************************************************
 
-import { EStructuralFeature, getEcorePackage, isEAttribute, isEEnum, isEReference } from "./internal.js"
+import { EDataType, EStructuralFeature, getEcorePackage, isEAttribute, isEEnum, isEReference } from "./internal.js"
+
+// getInstanceTypeName returns the type of the values of eDataType as go sees it: the instance type of
+// its GenGo annotation first, as the go binary codec does, so that both write the same kinds
+function getInstanceTypeName(eDataType: EDataType): string {
+    const eAnnotation = eDataType.getEAnnotation("http://net.masagroup/soft/2019/GenGo")
+    const name = eAnnotation?.getDetails().getValue("instanceTypeName")
+    return name ? name : eDataType.getInstanceTypeName()
+}
 
 export enum BinaryFeatureKind {
     bfkObjectContainer,
@@ -80,7 +88,7 @@ export function getBinaryCodecFeatureKind(eFeature: EStructuralFeature): BinaryF
                 return BinaryFeatureKind.bfkFloat32
             }
 
-            switch (eDataType.getInstanceTypeName()) {
+            switch (getInstanceTypeName(eDataType)) {
                 case "float":
                 case "float32":
                 case "java.lang.Float":

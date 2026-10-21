@@ -353,7 +353,11 @@ export class BinaryEncoder implements EEncoder {
                     break
                 }
                 case BinaryFeatureKind.bfkNumber: {
-                    this.encodeNumber(value as number)
+                    if (typeof value === "bigint") {
+                        this._encoder.encodeBigInt(value)
+                    } else {
+                        this.encodeNumber(value as number)
+                    }
                     break
                 }
                 case BinaryFeatureKind.bfkFloat32: {

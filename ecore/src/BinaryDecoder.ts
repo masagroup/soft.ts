@@ -13,7 +13,6 @@ import {
     BinaryOptions,
     BufferLike,
     EClass,
-    EcoreUtils,
     EDataType,
     EDecoder,
     EDiagnosticImpl,
@@ -70,7 +69,6 @@ export class BinaryDecoder implements EDecoder {
     private _resource: EResource
     private _decoder: Decoder
     private _objects: EObject[] = []
-    private _isResolveProxies: boolean = false
     private _packageData: PackageData[] = []
     private _baseURI: URI
     private _uris: URI[] = []
@@ -192,27 +190,21 @@ export class BinaryDecoder implements EDecoder {
         const id = this.decodeNumber()
         if (id == -1) {
             return null
-        } else if (this._objects.length <= id) {
+        } else if (id < -1 || id > this._objects.length) {
+            // the objects are numbered in the order they are encoded
+            throw new Error(`invalid object id ${id}`)
+        } else if (this._objects.length == id) {
             const eClassData = this.decodeClass()
             const eObject = eClassData.eFactory.create(eClassData.eClass) as EObjectInternal
-            let eResult: EObject = eObject
             let featureID = this.decodeNumber() - 1
 
             if (featureID == -3) {
                 // proxy object
                 const eProxyURI = this.decodeURI()
                 eObject.eSetProxyURI(eProxyURI)
-                if (this._isResolveProxies) {
-                    eResult = EcoreUtils.resolveInResource(eObject, this._resource)
-                    this._objects.push(eResult)
-                } else {
-                    this._objects.push(eObject)
-                }
                 featureID = this.decodeNumber() - 1
-            } else {
-                // standard object
-                this._objects.push(eObject)
             }
+            this._objects.push(eObject)
 
             if (featureID == -2) {
                 // object id attribute
@@ -224,14 +216,18 @@ export class BinaryDecoder implements EDecoder {
                 featureID = this.decodeNumber() - 1
             }
             for (; featureID != -1; featureID = this.decodeNumber() - 1) {
+                if (featureID < 0) {
+                    throw new Error(`invalid feature id ${featureID}`)
+                }
+                // the feature data are indexed by the id of the feature in the encoder
                 let eFeatureData = eClassData.featureData[featureID]
                 if (!eFeatureData) {
-                    eFeatureData = this.newFeatureData(eClassData, featureID)
+                    eFeatureData = this.newFeatureData(eClassData)
                     eClassData.featureData[featureID] = eFeatureData
                 }
                 this.decodeFeatureValue(eObject, eFeatureData)
             }
-            return eResult
+            return eObject
         } else {
             return this._objects[id]
         }
@@ -298,7 +294,10 @@ export class BinaryDecoder implements EDecoder {
 
     private decodePackage(): PackageData {
         const id = this.decodeNumber()
-        if (this._packageData.length <= id) {
+        if (id < 0 || id > this._packageData.length) {
+            throw new Error(`invalid package id ${id}`)
+        }
+        if (this._packageData.length == id) {
             // decode package parameters
             const nsURI = this.decodeString()
             const uri = this.decodeURI()
@@ -364,8 +363,11 @@ export class BinaryDecoder implements EDecoder {
             }
             case BinaryFeatureKind.bfkEnum: {
                 const id = this.decodeNumber()
+                if (id < 0 || id > this._enumLiterals.length) {
+                    throw new Error(`invalid enum literal id ${id}`)
+                }
                 let valueStr: string
-                if (this._enumLiterals.length <= id) {
+                if (this._enumLiterals.length == id) {
                     valueStr = this.decodeString()
                     this._enumLiterals.push(valueStr)
                 } else {
@@ -424,13 +426,14 @@ export class BinaryDecoder implements EDecoder {
         return packageData
     }
 
-    private newFeatureData(eClassData: ClassData, featureID: number): FeatureData {
+    private newFeatureData(eClassData: ClassData): FeatureData {
         const eFeatureName = this.decodeString()
         const eFeature = eClassData.eClass.getEStructuralFeatureFromName(eFeatureName)
         if (!eFeature) throw new Error(`Unable to find feature ${eFeatureName} in ${eClassData.eClass.getName()} EClass`)
         const featureData = new FeatureData()
         featureData.eFeature = eFeature
-        featureData.featureID = featureID
+        // the id of the feature in this class: the encoder may number its features differently
+        featureData.featureID = eClassData.eClass.getFeatureID(eFeature)
         featureData.featureKind = getBinaryCodecFeatureKind(eFeature)
         if (isEAttribute(eFeature)) {
             featureData.eDataType = eFeature.getEAttributeType()
@@ -442,9 +445,11 @@ export class BinaryDecoder implements EDecoder {
     private decodeURI(): URI {
         const id = this.decodeNumber()
         if (id == -1) return null
-        else {
+        else if (id < -1 || id > this._uris.length) {
+            throw new Error(`invalid uri id ${id}`)
+        } else {
             let uri: URI
-            if (this._uris.length <= id) {
+            if (this._uris.length == id) {
                 // build uri
                 const uriStr = this.decodeString()
                 if (uriStr == "") {

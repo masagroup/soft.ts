@@ -13,5 +13,6 @@ export class XMIConstants {
     static versionAttrib = "version"
     static uuidAttrib = "uuid"
     static typeAttrib = "type"
+    static idAttrib = "id"
     static xmlNS = "xmlns"
 }

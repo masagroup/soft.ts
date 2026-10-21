@@ -117,6 +117,25 @@ export class Encoder {
         }
     }
 
+    // encodeBigInt encodes an integer held as a bigint (int64 values of the dynamic factory)
+    encodeBigInt(object: bigint) {
+        if (object >= BigInt(Number.MIN_SAFE_INTEGER) && object <= BigInt(Number.MAX_SAFE_INTEGER)) {
+            this.encodeNumber(Number(object))
+        } else if (object >= -0x8000_0000_0000_0000n && object < 0) {
+            this.writeU8(Types.Int64)
+            this.ensureBufferSizeToWrite(8)
+            this._view.setBigInt64(this._pos, object)
+            this._pos += 8
+        } else if (object >= 0 && object < 0x1_0000_0000_0000_0000n) {
+            this.writeU8(Types.Uint64)
+            this.ensureBufferSizeToWrite(8)
+            this._view.setBigUint64(this._pos, object)
+            this._pos += 8
+        } else {
+            throw new Error(`integer ${object} out of the 64 bits range`)
+        }
+    }
+
     encodeFloat32(object: number) {
         this.writeU8(Types.Float)
         this.writeF32(object)
