@@ -7,11 +7,9 @@
 #
 # *****************************************************************************
 
-# the golang image soft-gen runs in when go is not installed: its Go must
-# support the go directive of soft.gen
-SOFT_GEN_GOLANG_IMAGE ?= golang:1.27.3-alpine
-# the generator: soft-gen of soft.gen v2, run from its module at a fixed version
-SOFT_GEN_VERSION = v2.0.0-alpha.2
+# the generator: the docker image of soft.gen v2 at a fixed version
+SOFT_GEN_VERSION = v2.0.0-alpha.3
+SOFT_GEN_IMAGE ?= masagroup/soft.gen:$(SOFT_GEN_VERSION)
 
 ifeq (${OS},Windows_NT)
 DEVNULL := NUL
@@ -19,31 +17,25 @@ WHICH := where
 else
 DEVNULL := /dev/null
 WHICH := which
+# the generated files belong to the user, not to root
+SOFT_GEN_USER := --user $(shell id -u):$(shell id -g)
 endif
 
-# the go that runs soft-gen: go, else go.exe (the Windows Go, from wsl), else
-# go in a golang container, the folder of the models mounted where ../models
-# points (the go modules are kept in the soft-gen-gomod volume)
-ifneq ($(shell $(WHICH) go 2>$(DEVNULL)),)
-	SOFT_GEN_GO := go
-else ifneq ($(shell $(WHICH) go.exe 2>$(DEVNULL)),)
-	SOFT_GEN_GO := go.exe
-else
-	SOFT_GEN_GO := docker run --rm -v $(CURDIR):/pwd -v $(realpath ../models):/models -v soft-gen-gomod:/go/pkg/mod -w /pwd $(SOFT_GEN_GOLANG_IMAGE) go
-endif
+# the folder of the models, resolved once
+MODELS := $(realpath ../models)
 
-# the soft-gen ts command: built and run by go from the soft.gen module at
-# SOFT_GEN_VERSION (downloaded once into the go module cache); another
-# generator may be given on the command line (make GENERATOR="...")
-GENERATOR ?= $(SOFT_GEN_GO) run github.com/masagroup/soft.gen/v2/cmd/soft-gen@$(SOFT_GEN_VERSION) ts
+# the soft.gen ts command: the soft.gen image, this folder mounted at /soft/ts
+# and the folder of the models where ../models points; another generator may
+# be given on the command line (make GENERATOR="...")
+GENERATOR ?= docker run --rm $(SOFT_GEN_USER) -v $(CURDIR):/soft/ts -v $(or $(MODELS),$(error "../models not found")):/soft/models -w /soft/ts $(SOFT_GEN_IMAGE) ts
 # GENERATE generates typescript code from a model of ../models with the
-# properties of generator.properties: $(call GENERATE,<output folder>,<model>,<options>),
+# properties of .generator.yaml: $(call GENERATE,<output folder>,<model>,<options>),
 # the output folder relative to this one (empty: here), the model a file name
-# in ../models, the options extra soft-gen options (-t <template>, -p key=value)
-GENERATE = $(GENERATOR) -m ../models/$(2) -o ./$(1) -P generator.properties $(3)
+# in ../models, the options extra soft.gen options (-t <template>, -p key=value)
+GENERATE = $(GENERATOR) -m ../models/$(2) -o ./$(1) -P .generator.yaml $(3)
 # GENERATE_EXAMPLE generates an example from its own model, examples/<name>/<name>.ecore,
 # into examples: $(call GENERATE_EXAMPLE,<name>,<options>)
-GENERATE_EXAMPLE = $(GENERATOR) -m examples/$(1)/$(1).ecore -o examples -P generator.properties $(2)
+GENERATE_EXAMPLE = $(GENERATOR) -m examples/$(1)/$(1).ecore -o examples -P .generator.yaml $(2)
 
 ifneq ($(shell npm -v 2>$(DEVNULL)),)
 	# npm found
