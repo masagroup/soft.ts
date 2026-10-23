@@ -231,10 +231,10 @@ flowchart LR
     uri["URI"] --> rs["EResourceSet"]
     rs --> reg["ECodecRegistryImpl"]
     reg --> dec["EDecoder (stream in)"]
-    dec --> graph["EObject graph (generated or dynamic)"]
-    graph -. "optional" .-> store["EStore"]
-    graph --> notif["Notifications to adapters"]
-    graph --> enc["EEncoder (stream out)"]
+    dec --> objects["EObject graph (generated or dynamic)"]
+    objects -. "optional" .-> store["EStore"]
+    objects --> notif["Notifications to adapters"]
+    objects --> enc["EEncoder (stream out)"]
 ```
 
 Notable points:
