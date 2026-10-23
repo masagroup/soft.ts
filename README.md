@@ -7,7 +7,7 @@ sword:
   generation: shared
   shipped: false # UNVERIFIED
   languages: [TypeScript]
-  build: [npm, make, go, docker]
+  build: [npm, make, docker]
   ng: [ecore-model, storage, esync, webclient]
   apps: []
 -->
@@ -26,7 +26,7 @@ sword:
 | **Languages** | TypeScript (ES modules, target ES2020) |
 | **Remote / branch** | github.com/masagroup/soft.ts, default branch `master` |
 | **Generation** | shared (partially generated; consumed by next gen TypeScript code) |
-| **Build systems** | npm (`ecore/package.json`) · GNU Make (root `Makefile`) · Go (or a golang container) only to run the code generator |
+| **Build systems** | npm (`ecore/package.json`) · GNU Make (root `Makefile`) · Docker only to run the code generator (image `masagroup/soft.gen:v2.0.0-alpha.3`) |
 
 ## Overview
 
@@ -34,20 +34,21 @@ Soft TS is the TypeScript member of the "Soft" family (soft.go, soft.cpp, soft.g
 
 It is a pure in-process library: no executable, no network code, no ports. Everything that talks to the outside is a consumer of this package.
 
-- Version: `1.7.0` (latest tag `v1.7.0`), license MPL-2.0.
+- Version: `1.7.2` (latest tag `v1.7.2`), license MPL-2.0.
 - Dual ESM + CJS package with generated type declarations.
 - Consumers: the examples of this repo (`file:../../ecore`), [soft.sync.ts](https://github.com/masagroup/soft.sync.ts) (`@masagroup/esync`), [sw.api.ng.ts](https://github.com/masagroup/sw.api.ng.ts), [sw.webclient](https://github.com/masagroup/sw.webclient), and `soft.sync.studio/app` ([soft.sync.studio](https://github.com/masagroup/soft.sync.studio)).
 - The meta-repo [soft](https://github.com/masagroup/soft) declares this repo as its `ts` submodule (`soft/.gitmodules`, url `https://github.com/masagroup/soft.ts.git`). The checkout of that submodule in the workspace is a separate, older checkout (package version `1.0.4`, layout `ecore`/`library`, no `examples/`).
 
 ```mermaid
 flowchart LR
-    models["soft.models (.ecore)"] --> gen["soft-gen ts (soft.gen v2)"]
+    models["soft.models (.ecore)"] --> gen["soft.gen ts (image masagroup/soft.gen)"]
     gen --> ecoreSrc["soft.ts: ecore/src (generated + Ext)"]
     gen --> examples["soft.ts: examples/*"]
     ecoreSrc --> npm["@masagroup/ecore (npm)"]
     npm --> sync["soft.sync.ts"]
     npm --> apingts["sw.api.ng.ts"]
     npm --> web["sw.webclient"]
+    npm --> studio["soft.sync.studio/app"]
 ```
 
 ## Repository layout
@@ -63,7 +64,7 @@ soft.ts/
 │   ├── dist/              build output (git-ignored)
 │   └── package.json, tsconfig*.json, vite.config.ts, package-cjs.json
 ├── examples/              generated packages: empty, library, tournament, inheritance, coexistence
-├── generator.properties   options passed to the code generator
+├── .generator.yaml        options passed to the code generator (generator.properties up to v1.7.0)
 ├── Makefile               install / generate / format / build / test targets
 ├── README.md
 └── LICENSE
@@ -80,7 +81,7 @@ Only the Node/npm toolchain and a root GNU `Makefile` are present.
 - Node 24.21.0 in CI (`.github/workflows/build_and_test.yaml`); `engines.node >= 16` in `ecore/package.json`.
 - Dev dependencies: TypeScript `^7.0.2`, vitest `^5.0.4`, prettier `^3.9.10`, oxlint `^1.88.0`, ncp `^2.0.0`.
 - `make` and `npm` must be on the PATH. UNVERIFIED which `make` implementation Windows developers use.
-- Go is needed only to regenerate code: the generator `soft-gen` of soft.gen v2 is run with `go`, else `go.exe`, else `go` in a golang container (`SOFT_GEN_GOLANG_IMAGE`, default `golang:1.27.3-alpine`). Not needed for `make ci`.
+- Docker is needed only to regenerate code: the generator soft.gen v2 runs from its image `masagroup/soft.gen:$(SOFT_GEN_VERSION)` (`v2.0.0-alpha.3`). Go is not needed (up to v1.7.0 the Makefile ran `soft-gen` with `go`, else `go.exe`, else `go` in a golang container). Not needed for `make ci`.
 
 ### Windows (Ant)
 
@@ -88,7 +89,7 @@ Not applicable (no `build.xml`).
 
 ### Linux (Docker)
 
-Not applicable for the build. Docker is only a fallback of the Makefile to run `soft-gen` in a golang container when neither `go` nor `go.exe` is on the PATH (see below).
+Not applicable for the build. Docker only runs the generator: the `*.generate` targets of the Makefile run the image `masagroup/soft.gen` (see below).
 
 ### Other (npm, Make)
 
@@ -108,7 +109,7 @@ npm run build
 npm test
 ```
 
-Regenerate the generated sources (needs Go, or Docker as a fallback, and the `soft.models` repo as `../models`):
+Regenerate the generated sources (needs Docker and the `soft.models` repo as `../models`):
 
 ```
 make ecore.generate
@@ -140,24 +141,23 @@ Root `Makefile` targets:
 | `ecore` | `ecore.install ecore.generate ecore.format ecore.build ecore.test` |
 | `ecore.ci` | `ecore.install ecore.build ecore.test` |
 | `ecore.install` | `cd ecore && npm install --no-fund --loglevel=error` |
-| `ecore.generate` | `soft-gen ts` on `ecore.ecore` with `-t generateModel -t generateTests -p printWidth=140` |
+| `ecore.generate` | `soft.gen ts` on `ecore.ecore` with `-t generateModel -t generateTests -p printWidth=140` |
 | `ecore.format` / `ecore.build` / `ecore.test` | `npm run pretty` / `build` / `test` in `ecore/` |
 | `examples` | `library empty` (`tournament`, `inheritance` and `coexistence` are not part of `examples`) |
 | `library`, `empty`, `tournament`, `inheritance`, `coexistence` | `<x>.install <x>.generate <x>.format <x>.build <x>.test` |
 | `<x>.ci` | `<x>.install <x>.build <x>.test` |
-| `<x>.generate` | `soft-gen ts` on `library.ecore` (`-p accessors=property`), `empty.ecore` (no extra option), `tournament.ecore` (`-p async=true`), output to `examples/`; `inheritance` from its own model `examples/inheritance/inheritance.ecore`; `coexistence` runs three generations of `tournament.ecore` (interfaces, typed and reflective implementations, see the architecture section below) |
+| `<x>.generate` | `soft.gen ts` on `library.ecore` (`-p accessors=property`), `empty.ecore` (no extra option), `tournament.ecore` (`-p async=true`), output to `examples/`; `inheritance` from its own model `examples/inheritance/inheritance.ecore`; `coexistence` runs three generations of `tournament.ecore` (interfaces, typed and reflective implementations, see the architecture section below) |
 
-Generator invocation (`Makefile`): the model is generated with soft.gen v2 (`soft-gen ts`, a Go tool), not with the former Java generator or the `masagroup/soft.generator.ts` Docker image.
+Generator invocation (`Makefile`): the model is generated with soft.gen v2 (`soft.gen ts`, a Go tool run from its Docker image `masagroup/soft.gen`), not with the former Java generator or the `masagroup/soft.generator.ts` Docker image.
 
 ```
-$(SOFT_GEN_GO) run github.com/masagroup/soft.gen/v2/cmd/soft-gen@v2.0.0-alpha.2 ts -m ../models/<model>.ecore -o ./<out> -P generator.properties <opts>
+docker run --rm $(SOFT_GEN_USER) -v $(CURDIR):/soft/ts -v $(MODELS):/soft/models -w /soft/ts masagroup/soft.gen:v2.0.0-alpha.3 ts -m ../models/<model>.ecore -o ./<out> -P .generator.yaml <opts>
 ```
 
-- `GENERATOR` is the `soft-gen ts` command, built and run by Go from the soft.gen module at the fixed version `SOFT_GEN_VERSION` (`v2.0.0-alpha.2`, downloaded once into the Go module cache); another generator can be given on the command line (`make GENERATOR="..."`).
-- `GENERATE` (`$(call GENERATE,<output folder>,<model>,<options>)`) generates from a model of `../models` with `generator.properties`; `GENERATE_EXAMPLE` (`$(call GENERATE_EXAMPLE,<name>,<options>)`) generates an example from its own model `examples/<name>/<name>.ecore` into `examples/`.
-- `SOFT_GEN_GO` is `go`, else `go.exe`, else a `docker run` of the golang image `SOFT_GEN_GOLANG_IMAGE` (default `golang:1.27.3-alpine`) with the checkout mounted on `/pwd`, the models folder on `/models` and the Go module cache in the `soft-gen-gomod` volume.
+- `GENERATOR` is the `soft.gen ts` command: a `docker run` of `SOFT_GEN_IMAGE` (`masagroup/soft.gen:$(SOFT_GEN_VERSION)`, `SOFT_GEN_VERSION` = `v2.0.0-alpha.3`) with the checkout mounted on `/soft/ts` and the models folder `MODELS` (`$(realpath ../models)`) on `/soft/models`; on Linux `SOFT_GEN_USER` (`--user <uid>:<gid>`) gives the generated files to the user. It stops with `"../models not found"` when that folder is missing. Another generator can be given on the command line (`make GENERATOR="..."`). Up to v1.7.0 it was `$(SOFT_GEN_GO) run github.com/masagroup/soft.gen/v2/cmd/soft-gen@v2.0.0-alpha.2 ts` (the command is `cmd/soft-gen` up to soft.gen `v2.0.0-alpha.2`, `cmd/soft.gen` from `v2.0.0-alpha.3`).
+- `GENERATE` (`$(call GENERATE,<output folder>,<model>,<options>)`) generates from a model of `../models` with `.generator.yaml`; `GENERATE_EXAMPLE` (`$(call GENERATE_EXAMPLE,<name>,<options>)`) generates an example from its own model `examples/<name>/<name>.ecore` into `examples/`.
 - The Makefile expects the [soft.models](https://github.com/masagroup/soft.models) repo as a sibling directory named `models` (`../models`). On the reference workstation the sibling is named `soft.models`, so a `models` directory or link would be needed. UNVERIFIED how the team handles it locally.
-- `generator.properties`: MPL 2.0 license header ("Copyright(c) 2024 MASA Group"), `packageDir = $1/src`, `testFramework = vitest`.
+- `.generator.yaml`: MPL 2.0 license header (`fileNotes`, "Copyright(c) 2024 MASA Group"), `packageDir: $1/src`, `testFramework: vitest` (the same properties were in `generator.properties` up to v1.7.0).
 
 ## Run
 
@@ -171,20 +171,20 @@ Library entry point: `ecore/src/index.ts` re-exports the public API (EObject, EC
 
 | Repository | How it is pulled | What for |
 |---|---|---|
-| [soft.models](https://github.com/masagroup/soft.models) | sibling folder `../models` (generation; bind-mounted when soft-gen runs in a container); CI checkout at commit `f0dd72e4ff1ff931f202c7464d30a15b4cf2102d` | Ecore models `ecore.ecore`, `library.ecore`, `empty.ecore`, `tournament.ecore` fed to the generator |
-| [soft.gen](https://github.com/masagroup/soft.gen) (v2, `github.com/masagroup/soft.gen/v2/cmd/soft-gen`) | `go run ...@v2.0.0-alpha.2` in the `Makefile` (`SOFT_GEN_VERSION`), in a golang container if Go is absent | Generates model classes in `ecore/src` and the `examples/*` packages |
+| [soft.models](https://github.com/masagroup/soft.models) | sibling folder `../models` (generation; mounted on `/soft/models` in the soft.gen container); CI checkout at commit `f0dd72e4ff1ff931f202c7464d30a15b4cf2102d` | Ecore models `ecore.ecore`, `library.ecore`, `empty.ecore`, `tournament.ecore` fed to the generator |
+| [soft.gen](https://github.com/masagroup/soft.gen) (v2) | Docker image `masagroup/soft.gen:v2.0.0-alpha.3` in the `Makefile` (`SOFT_GEN_VERSION`, `SOFT_GEN_IMAGE`); `go run github.com/masagroup/soft.gen/v2/cmd/soft-gen@v2.0.0-alpha.2` up to v1.7.0 | Generates model classes in `ecore/src` and the `examples/*` packages |
 
-No `<update>` / `<update-gh>` (no Ant), no `FROM masagroup/*` (no Dockerfile), no `go.mod` of its own (soft-gen is fetched by `go run`), no submodule. The shared `masagroup/cicd` workflows are not used.
+No `<update>` / `<update-gh>` (no Ant), no `FROM masagroup/*` (no Dockerfile), no `go.mod` (soft.gen runs from its Docker image), no submodule. The shared `masagroup/cicd` workflows are not used.
 
 Inbound (repositories that consume `@masagroup/ecore`):
 
 | Consumer | How | Version |
 |---|---|---|
 | `examples/*` (this repo) | `file:../../ecore` | local |
-| [soft.sync.ts](https://github.com/masagroup/soft.sync.ts) (`@masagroup/esync`) | npm, `package.json` line 62 | `1.5.8` |
+| [soft.sync.ts](https://github.com/masagroup/soft.sync.ts) (`@masagroup/esync`) | npm, `package.json` line 62 (`master`, esync 1.x); line 52 on the `release/v2` branch (`@masagroup/esync` `2.0.0-alpha.3`) | `1.5.8` (`master`), `^1.7.2` (`release/v2`) |
 | [sw.api.ng.ts](https://github.com/masagroup/sw.api.ng.ts) | npm, `package.json` line 80, ~2600 files import it | `1.5.8` |
 | [sw.webclient](https://github.com/masagroup/sw.webclient) | npm, `package.json` line 46, ~10 files import it | `1.5.8` |
-| [soft.sync.studio](https://github.com/masagroup/soft.sync.studio) (`app`) | `file:../../soft/ts/ecore` (the `ts` submodule of the [soft](https://github.com/masagroup/soft) meta-repo; the workspace checkout of that submodule is the older `1.0.4` one) | local |
+| [soft.sync.studio](https://github.com/masagroup/soft.sync.studio) (`app`) | npm, `app/package.json` line 14 (before: `file:../../soft/ts/ecore`, the `ts` submodule of the [soft](https://github.com/masagroup/soft) meta-repo, whose checkout is the older `1.0.4` one) | `^1.7.2` |
 
 ### External
 
@@ -270,7 +270,7 @@ There is no global default implementation: each resource set chooses its impleme
 
 - This workflow does NOT use the shared [cicd](https://github.com/masagroup/cicd) reusable workflows (outlier versus the convention described in the ecosystem wiki page "CI/CD pipelines").
 - No publish step: no `npm publish`, no release, no artifact upload, no Docker image. How `@masagroup/ecore` reaches npm is not visible in this repo (UNVERIFIED; "build: set package version to X" commits and `v1.x.y` tags suggest a manual or external publication).
-- `make ci` does not call the generator; the `soft.models` checkout therefore appears unused by it (UNVERIFIED whether it is a leftover or needed when the Makefile evaluates `$(realpath ../models)`).
+- `make ci` does not call the generator, and the Makefile only stops on a missing `../models` when a generation recipe expands `GENERATOR`: the `soft.models` checkout appears unused by `make ci` (UNVERIFIED whether it is a leftover).
 - The README badge references `build_and_test.yaml` in `masagroup/soft.ts`.
 
 ## Next-gen relevance
@@ -280,7 +280,7 @@ See the ecosystem wiki pages "Next generation ecosystem" and "esync and ecore".
 | Concern | Status | Evidence |
 |---|---|---|
 | ecore model | Implements the TypeScript Ecore runtime (XMI/XML/binary codecs) | `ecore/src` |
-| esync | Not in this repo; the TS esync library [soft.sync.ts](https://github.com/masagroup/soft.sync.ts) and `soft.sync.studio/app` depend on `@masagroup/ecore` (1.5.8 and local `file:` respectively) | `soft.sync.ts/package.json`, `soft.sync.studio/app/package.json` |
+| esync | Not in this repo; the TS esync library [soft.sync.ts](https://github.com/masagroup/soft.sync.ts) and `soft.sync.studio/app` depend on `@masagroup/ecore` (`soft.sync.ts`: 1.5.8 on `master`, `^1.7.2` on its `release/v2` branch; `soft.sync.studio/app`: `^1.7.2`) | `soft.sync.ts/package.json`, `soft.sync.studio/app/package.json` |
 | storage | Partially related: provides the `EStore` abstraction (`EStore.ts`, `EStoreEObjectImpl.ts`, `EStoreList.ts`), no concrete backend, no link to a `storage` service | `ecore/src/EStore*.ts` |
 | webclient | Consumer: [sw.webclient](https://github.com/masagroup/sw.webclient) depends on `@masagroup/ecore` 1.5.8 (~10 source files import it); the library is also browser-oriented (`path-browserify`, `DOM` lib) | `sw.webclient/package.json`, `tsconfig.json` |
 | api.ng.ts | Consumer: [sw.api.ng.ts](https://github.com/masagroup/sw.api.ng.ts) (TypeScript code generated from the NG ecore model) depends on `@masagroup/ecore` 1.5.8 and imports it in ~2600 files | `sw.api.ng.ts/package.json` |
@@ -288,9 +288,9 @@ See the ecosystem wiki pages "Next generation ecosystem" and "esync and ecore".
 
 ## Known issues
 
-No audit exists. The upstream `README.md` (installation, plus the section on one shared package with several implementations) has no statement contradicting the code, but it does not describe: the Makefile workflow, the soft-gen generator, the `../models` expectation, the Node version, the EStore feature, the binary codec, or the examples other than `coexistence`. There is no CHANGELOG and no `docs/` folder.
+No audit exists. The upstream `README.md` (installation, plus the section on one shared package with several implementations) has no statement contradicting the code, but it does not describe: the Makefile workflow, the soft.gen generator, the `../models` expectation, the Node version, the EStore feature, the binary codec, or the examples other than `coexistence`. There is no CHANGELOG and no `docs/` folder.
 
-Context: `soft.sync.ts`, `sw.api.ng.ts` and `sw.webclient` are all still on `@masagroup/ecore` 1.5.8 while this repo is at 1.7.0 (potential upgrade task, see open questions).
+Context: `soft.sync.ts`, `sw.api.ng.ts` and `sw.webclient` are all still on `@masagroup/ecore` 1.5.8 while this repo is at 1.7.2 (potential upgrade task, see open questions); only the v2 line requires `^1.7.2`: the `release/v2` branch of `soft.sync.ts` (`@masagroup/esync` 2.0.0-alpha.3) and `soft.sync.studio/app`.
 
 ## Open questions
 
@@ -299,10 +299,10 @@ Context: `soft.sync.ts`, `sw.api.ng.ts` and `sw.webclient` are all still on `@ma
 - UNVERIFIED: whether any concrete `EStore` implementation exists in another repo, and which next-gen component consumes `EStoreEObjectImpl`.
 - UNVERIFIED: binary (msgpack) format compatibility with soft.go / soft.cpp.
 - UNVERIFIED: origin and licensing of the vendored `src/msgpack/` code.
-- UNVERIFIED: why `soft.sync.ts`, `sw.api.ng.ts` and `sw.webclient` are all still on `@masagroup/ecore` 1.5.8 versus 1.7.0 here, and whether they need the 1.6.x or later EStore.
-- UNVERIFIED: whether `soft.sync.studio/app` is intended to build against the older `1.0.4` checkout of the `ts` submodule rather than this repo (1.7.0).
+- UNVERIFIED: why `soft.sync.ts`, `sw.api.ng.ts` and `sw.webclient` are all still on `@masagroup/ecore` 1.5.8 versus 1.7.2 here, and whether they need the 1.6.x or later EStore.
+- Answered: `soft.sync.studio/app` no longer builds against the older `1.0.4` checkout of the `ts` submodule: its `app/package.json` requires `@masagroup/ecore` `^1.7.2` from npm (2026-10-23).
 - UNVERIFIED: which `make` implementation is used on Windows developer machines.
-- UNVERIFIED: whether the `soft.models` checkout in CI is actually needed by `make ci`.
+- UNVERIFIED: whether the `soft.models` checkout in CI is a leftover (the Makefile does not read `../models` for `make ci`).
 
 ## Legacy notes
 
