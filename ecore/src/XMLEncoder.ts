@@ -102,6 +102,7 @@ export class XMLEncoder implements EEncoder {
     private _idAttributeName: string
     private _roots: EList<EObject>
     private _extendedMetaData: ExtendedMetaData
+    private _useEncodedAttributeStyle = false
     private _xmlVersion: string
     private _encoding: string
     private _errorFn: (eDiagnostic: EDiagnostic) => void
@@ -114,6 +115,7 @@ export class XMLEncoder implements EEncoder {
             this._idAttributeName = options.get(XMLOptions.ID_ATTRIBUTE_NAME)
             this._roots = options.get(XMLOptions.ROOT_OBJECTS)
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA)
+            this._useEncodedAttributeStyle = options.get(XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE) === true
         }
         if (!this._extendedMetaData) {
             this._extendedMetaData = new ExtendedMetaData()
@@ -320,6 +322,10 @@ export class XMLEncoder implements EEncoder {
                         if (!this.isNil(eObject, eFeature)) {
                             switch (this.getSaveResourceKindSingle(eObject, eFeature)) {
                                 case SaveResourceKind.Cross: {
+                                    if (this._useEncodedAttributeStyle) {
+                                        this.saveEObjectSingle(eObject, eFeature)
+                                        continue LOOP
+                                    }
                                     break
                                 }
                                 case SaveResourceKind.Same: {
@@ -335,6 +341,10 @@ export class XMLEncoder implements EEncoder {
                     case SaveFeatureKind.ObjectHREFSingle: {
                         switch (this.getSaveResourceKindSingle(eObject, eFeature)) {
                             case SaveResourceKind.Cross: {
+                                if (this._useEncodedAttributeStyle) {
+                                    this.saveEObjectSingle(eObject, eFeature)
+                                    continue LOOP
+                                }
                                 break
                             }
                             case SaveResourceKind.Same: {
@@ -353,6 +363,10 @@ export class XMLEncoder implements EEncoder {
                         } else {
                             switch (this.getSaveResourceKindMany(eObject, eFeature)) {
                                 case SaveResourceKind.Cross: {
+                                    if (this._useEncodedAttributeStyle) {
+                                        this.saveEObjectMany(eObject, eFeature)
+                                        continue LOOP
+                                    }
                                     break
                                 }
                                 case SaveResourceKind.Same: {
@@ -368,6 +382,10 @@ export class XMLEncoder implements EEncoder {
                     case SaveFeatureKind.ObjectHREFMany: {
                         switch (this.getSaveResourceKindMany(eObject, eFeature)) {
                             case SaveResourceKind.Cross: {
+                                if (this._useEncodedAttributeStyle) {
+                                    this.saveEObjectMany(eObject, eFeature)
+                                    continue LOOP
+                                }
                                 break
                             }
                             case SaveResourceKind.Same: {
@@ -493,8 +511,10 @@ export class XMLEncoder implements EEncoder {
     private saveEObjectSingle(eObject: EObject, eFeature: EStructuralFeature) {
         const value = eObject.eGetResolve(eFeature, false)
         if (value && isEObject(value)) {
-            const id = this.getHRef(value)
-            this._str.addAttribute(this.getFeatureQName(eFeature), id)
+            const id = this.getEncodedHRef(value, eFeature)
+            if (id != "") {
+                this._str.addAttribute(this.getFeatureQName(eFeature), id)
+            }
         }
     }
 
@@ -505,7 +525,7 @@ export class XMLEncoder implements EEncoder {
         let buffer = ""
         for (const value of l) {
             if (value) {
-                const id = this.getHRef(value)
+                const id = this.getEncodedHRef(value, eFeature)
                 if (id == "") {
                     failure = true
                 } else {
@@ -520,6 +540,21 @@ export class XMLEncoder implements EEncoder {
         if (!failure && buffer.length > 0) {
             this._str.addAttribute(this.getFeatureQName(eFeature), buffer)
         }
+    }
+
+    // getEncodedHRef is the href of eObject in the encoded attribute style: prefixed with the
+    // qualified name of its class when the type of eFeature does not tell it, as the type attribute
+    // of an href element would be.
+    private getEncodedHRef(eObject: EObject, eFeature: EStructuralFeature): string {
+        const href = this.getHRef(eObject)
+        if (href != "") {
+            const eClass = eObject.eClass()
+            const eType = eFeature.getEType()
+            if (eType && isEClass(eType) && eType != eClass && eType.isAbstract()) {
+                return this.getClassQName(eClass) + " " + href
+            }
+        }
+        return href
     }
 
     private saveNil(eObject: EObject, eFeature: EStructuralFeature) {
