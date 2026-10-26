@@ -83,6 +83,19 @@ export class ExtendedMetaData {
         return null
     }
 
+    // getFeatureKind is the ExtendedMetaData kind of a feature ("attribute", "element", "simple", ...),
+    // or "" when none is declared.
+    getFeatureKind(eFeature: EStructuralFeature): string {
+        const annotation = eFeature.getEAnnotation(annotationURI)
+        if (annotation) {
+            const kind = annotation.getDetails().getValue("kind")
+            if (typeof kind === "string") {
+                return kind
+            }
+        }
+        return ""
+    }
+
     basicGetName(eElement: ENamedElement): string {
         const annotation = eElement.getEAnnotation(annotationURI)
         if (annotation) {
