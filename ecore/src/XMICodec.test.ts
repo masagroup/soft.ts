@@ -9,7 +9,23 @@
 
 import fs from "fs"
 import { afterEach, beforeEach, describe, expect, test } from "vitest"
-import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, URI, uriToFilePath, XMLOptions } from "./internal.js"
+import {
+    EAttribute,
+    EClass,
+    EClassifier,
+    ECodecRegistryImpl,
+    EcoreCodec,
+    EPackage,
+    EReference,
+    EResourceImpl,
+    URI,
+    uriToFilePath,
+    XMICodec,
+    XMLOptions
+} from "./internal.js"
+
+// the options of a save of the libraries, whose cross resource references are href elements
+const hrefStyle = new Map<string, any>([[XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, false]])
 
 describe("XMICodec", () => {
     describe("load.library.simple", () => {
@@ -191,7 +207,7 @@ describe("XMICodec", () => {
             resource.setURI(new URI("testdata/library.simple.ecore"))
             await resource.load()
 
-            const result = resource.saveToString()
+            const result = resource.saveToString(hrefStyle)
             const expected = fs
                 .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
@@ -207,7 +223,7 @@ describe("XMICodec", () => {
             resource.setURI(new URI("testdata/library.complex.ecore"))
             await resource.load()
 
-            const result = resource.saveToString()
+            const result = resource.saveToString(hrefStyle)
             const expected = fs
                 .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
@@ -224,23 +240,40 @@ describe("XMICodec", () => {
             await resource.load()
             expect(resource.getErrors().isEmpty()).toBeTruthy()
 
-            const result = resource.saveToString(new Map([[XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, true]]))
             const expected = fs
                 .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
                 .replace(/\r?\n|\r/g, "\n")
 
-            expect(result).toBe(expected)
+            // the default style of a .ecore resource, and with the option
+            expect(resource.saveToString()).toBe(expected)
+            expect(resource.saveToString(new Map([[XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, true]]))).toBe(expected)
         })
 
-        test("saveToStringWithoutOption", async () => {
+        test("saveToStringWithOptionOff", async () => {
             const resource = new EResourceImpl()
             resource.setURI(new URI("testdata/library.encoded.ecore"))
             await resource.load()
 
-            const result = resource.saveToString()
+            const result = resource.saveToString(hrefStyle)
             expect(result).toContain('<eType xsi:type="ecore:EClass" href="library.simple.ecore#//Book"/>')
             expect(result).toContain('<eSuperTypes href="library.simple.ecore#//Book"/>')
+        })
+
+        test("saveToStringWithXMICodec", async () => {
+            const resource = new EResourceImpl()
+            resource.setURI(new URI("testdata/library.encoded.ecore"))
+            await resource.load()
+
+            // the XMI codec itself saves href elements
+            const result = new TextDecoder().decode(new XMICodec().newEncoder(resource, null).encode(resource).unwrapOr(null))
+            expect(result).toContain('<eSuperTypes href="library.simple.ecore#//Book"/>')
+        })
+    })
+
+    describe("registry", () => {
+        test("ecore", () => {
+            expect(ECodecRegistryImpl.getInstance().getCodec(new URI("model.ecore"))).toBeInstanceOf(EcoreCodec)
         })
     })
 })

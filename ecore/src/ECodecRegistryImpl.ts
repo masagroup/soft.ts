@@ -11,7 +11,7 @@ import { BinaryCodec } from "./BinaryCodec.js"
 import { ECodec } from "./ECodec.js"
 import { ECodecRegistry } from "./ECodecRegistry.js"
 import { NoCodec } from "./NoCodec.js"
-import { XMICodec } from "./XMICodec.js"
+import { EcoreCodec } from "./XMICodec.js"
 import { XMLCodec } from "./XMLCodec.js"
 import { URI } from "./internal.js"
 
@@ -24,7 +24,7 @@ export class ECodecRegistryImpl implements ECodecRegistry {
     public static getInstance(): ECodecRegistryImpl {
         if (!this._instance) {
             this._instance = new ECodecRegistryImpl()
-            this._instance._extensionToCodec.set("ecore", new XMICodec())
+            this._instance._extensionToCodec.set("ecore", new EcoreCodec())
             this._instance._extensionToCodec.set("xml", new XMLCodec())
             this._instance._extensionToCodec.set("bin", new BinaryCodec())
             this._instance._protocolToCodec.set("memory", new NoCodec())

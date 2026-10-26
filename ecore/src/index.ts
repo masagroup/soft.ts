@@ -145,6 +145,7 @@ export {
     NotificationChain,
     NO_INDEX,
     UNBOUNDED_MULTIPLICITY,
+    EcoreCodec,
     XMICodec,
     XMIProcessor,
     XMLCodec,
