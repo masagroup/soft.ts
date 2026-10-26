@@ -22,6 +22,7 @@ export class XMLOptions {
     static ID_ATTRIBUTE_NAME = "ID_ATTRIBUTE_NAME"
     static ROOT_OBJECTS = "ROOT_OBJECTS"
     static USE_ENCODED_ATTRIBUTE_STYLE = "USE_ENCODED_ATTRIBUTE_STYLE"
+    static KEEP_DEFAULTS = "KEEP_DEFAULTS"
 }
 
 export class XMLCodec implements ECodec {

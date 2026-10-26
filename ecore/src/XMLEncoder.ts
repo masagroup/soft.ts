@@ -116,6 +116,7 @@ export class XMLEncoder implements EEncoder {
             this._roots = options.get(XMLOptions.ROOT_OBJECTS)
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA)
             this._useEncodedAttributeStyle = options.get(XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE) === true
+            this._keepDefaults = options.get(XMLOptions.KEEP_DEFAULTS) === true
         }
         if (!this._extendedMetaData) {
             this._extendedMetaData = new ExtendedMetaData()

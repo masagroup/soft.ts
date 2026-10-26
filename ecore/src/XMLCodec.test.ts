@@ -345,6 +345,33 @@ describe("XMLResource", () => {
         })
     })
 
+    describe("save.keepDefaults", () => {
+        const ePackage = loadPackage("library.complex.ecore")
+        const eBookClass = ePackage.getEClassifier("Book") as EClass
+        expect(eBookClass).not.toBeNull()
+        const eResource = new EResourceSetImpl().createResource(new URI("testdata/book.xml"))
+        const eBook = ePackage.getEFactoryInstance().create(eBookClass)
+        eResource.eContents().add(eBook)
+
+        function encode(options: Map<string, any>): string {
+            const result = new XMLEncoder(eResource, options).encodeObject(eBook)
+            expect(result.isOk()).toBeTruthy()
+            return new TextDecoder().decode(Buffer.from(result.unwrapOr(null)))
+        }
+
+        test("withoutOption", () => {
+            expect(encode(null)).not.toContain(`pages=`)
+            expect(encode(new Map<string, any>([[XMLOptions.KEEP_DEFAULTS, false]]))).not.toContain(`pages=`)
+        })
+
+        test("withOption", () => {
+            const result = encode(new Map<string, any>([[XMLOptions.KEEP_DEFAULTS, true]]))
+            expect(result).toContain(`pages="100"`)
+            // a feature without a default value is still not saved
+            expect(result).not.toContain(`title=`)
+        })
+    })
+
     describe("save.object", () => {
         const ePackage = loadPackage("library.simple.ecore")
         expect(ePackage).not.toBeNull()
