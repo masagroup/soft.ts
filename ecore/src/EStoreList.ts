@@ -87,6 +87,34 @@ export class EStoreList<E> extends AbstractNotifyingList<E> implements EObjectLi
         return this._owner.eClass().getFeatureID(this._feature)
     }
 
+    protected isUnsettable(): boolean {
+        return this._feature.isUnsettable()
+    }
+
+    // isSet returns true when the list is set (EUnsettableList): for an unsettable feature, as its
+    // store tells, or without store when it changed since it was created or unset; else when it is
+    // not empty.
+    isSet(): boolean {
+        if (this.isUnsettable() && this._store) {
+            return this._store.isSet(this._owner, this._feature)
+        }
+        return super.isSet()
+    }
+
+    // unset clears the list (EUnsettableList) and, for an unsettable feature, unsets it in the store
+    // and notifies UNSET, from the old set state to false.
+    unset(): void {
+        if (this.isUnsettable() && this._store) {
+            this.clear()
+            const oldIsSet = this.isSet()
+            this._isSet = false
+            this._store.unSet(this._owner, this._feature)
+            this.createAndDispatchNotification(null, EventType.UNSET, oldIsSet, false)
+        } else {
+            super.unset()
+        }
+    }
+
     getEStore(): EStore {
         return this._store
     }
@@ -190,6 +218,8 @@ export class EStoreList<E> extends AbstractNotifyingList<E> implements EObjectLi
     clear(): void {
         const elements = this.getRawArray()
         if (elements.length == 0) {
+            // a clear of an empty list sets an unsettable list, as EMF
+            this.didChange()
             return
         }
         if (this._store) {

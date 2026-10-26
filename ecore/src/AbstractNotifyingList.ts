@@ -16,13 +16,44 @@ import {
     ENotifier,
     ENotifyingList,
     EStructuralFeature,
+    EUnsettableList,
     EventType,
     NotificationChain
 } from "./internal.js"
 
-export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements ENotifyingList<E> {
+export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements ENotifyingList<E>, EUnsettableList<E> {
+    // _isSet tells whether the list of an unsettable feature changed since it was created or unset
+    protected _isSet: boolean = false
+
     constructor(iterable: Iterable<E> | ArrayLike<E> = []) {
         super(iterable, true)
+    }
+
+    // isUnsettable returns true for the list of an unsettable feature: it is set from its first
+    // change until unset
+    protected isUnsettable(): boolean {
+        return false
+    }
+
+    // isSet returns true when the list is set (EUnsettableList): for an unsettable feature, when it
+    // changed since it was created or unset, else when it is not empty.
+    isSet(): boolean {
+        return this.isUnsettable() ? this._isSet : !this.isEmpty()
+    }
+
+    // unset clears the list (EUnsettableList) and, for an unsettable feature, makes it unset and
+    // notifies UNSET, from the old set state to false.
+    unset(): void {
+        this.clear()
+        const oldIsSet = this._isSet
+        this._isSet = false
+        if (this.isUnsettable()) {
+            this.createAndDispatchNotification(null, EventType.UNSET, oldIsSet, false)
+        }
+    }
+
+    protected didChange(): void {
+        this._isSet = true
     }
 
     abstract getNotifier(): ENotifier

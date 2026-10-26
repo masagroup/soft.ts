@@ -15,7 +15,9 @@ import {
     EStructuralFeature,
     getEcorePackage,
     isEAttribute,
-    isEList
+    isEList,
+    isSetList,
+    NIL
 } from "./internal.js"
 
 function equalsDefault(value: any, defaultValue: any): boolean {
@@ -27,11 +29,13 @@ function equalsDefault(value: any, defaultValue: any): boolean {
     return false
 }
 
-// isSetValue reports whether value, the value of feature, makes the feature set: as in EMF, an empty
-// list and an attribute (not unsettable) set to its default value are not set
+// isSetValue reports whether value, the value of feature, makes the feature set: as in EMF, a list
+// that is not set (isSetList), and an attribute (not unsettable) set to its default value are not
+// set; a feature set to null (NIL) is
 export function isSetValue(feature: EStructuralFeature, value: any): boolean {
     if (value === null || value === undefined) return false
-    if (isEList(value)) return !value.isEmpty()
+    if (value === NIL) return true
+    if (isEList(value)) return isSetList(value)
     if (!isEAttribute(feature) || feature.isMany() || feature.isUnsettable()) return true
     return !equalsDefault(value, feature.getDefaultValue())
 }
@@ -83,6 +87,11 @@ export class DynamicEObjectImpl extends EObjectImpl implements EDynamicPropertie
     }
     eDynamicUnset(dynamicFeatureID: number): void {
         this._properties[dynamicFeatureID] = null
+    }
+
+    // eDynamicKeepsNil tells that the properties keep NIL, the value of a feature set to null.
+    eDynamicKeepsNil(): boolean {
+        return true
     }
 
     eDynamicIsSet(dynamicFeatureID: number): boolean {
