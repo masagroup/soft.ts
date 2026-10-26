@@ -156,6 +156,18 @@ describe("AnchorImpl", () => {
         expect(o.getLinked()).toBeNull()
     })
 
+    test("isSetLinked", () => {
+        const o = new AnchorImpl()
+        expect(o.isSetLinked()).toBeFalsy()
+        expect(o.eIsSetFromID(InheritanceConstants.ANCHOR__LINKED)).toBeFalsy()
+        o["_linkedESet"] = true
+        expect(o.isSetLinked()).toBeTruthy()
+        expect(o.eIsSetFromID(InheritanceConstants.ANCHOR__LINKED)).toBeTruthy()
+        o.unSetLinked()
+        expect(o.isSetLinked()).toBeFalsy()
+        expect(o.eIsSetFromID(InheritanceConstants.ANCHOR__LINKED)).toBeFalsy()
+    })
+
     test("eGetFromID", () => {
         const o = new AnchorImpl()
         expect(() => o.eGetFromID(-1, true)).toThrow(Error)

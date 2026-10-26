@@ -15,6 +15,7 @@ import { Book, BookCategory, CirculatingItemImpl, LibraryConstants, Writer, getL
 export class BookImpl extends CirculatingItemImpl implements Book {
     protected _author: Writer
     protected _category: BookCategory
+    protected _categoryESet: boolean = false
     protected _indexes: ecore.EMap<string, number>
     protected _pages: number
     protected _tableOfContents: ecore.EList<string>
@@ -204,6 +205,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
     setCategory(newCategory: BookCategory): void {
         const oldCategory = this._category
         this._category = newCategory
+        this._categoryESet = true
         if (this.eNotificationRequired()) {
             this.eNotify(
                 new ecore.Notification(
@@ -219,11 +221,25 @@ export class BookImpl extends CirculatingItemImpl implements Book {
 
     // unSetCategory unset the value of _category
     unSetCategory(): void {
+        const oldCategory = this._category
+        this._category = BookCategory.MYSTERY
+        this._categoryESet = false
         if (this.eNotificationRequired()) {
             this.eNotify(
-                new ecore.Notification(this, ecore.EventType.UNSET, LibraryConstants.BOOK__CATEGORY, null, null)
+                new ecore.Notification(
+                    this,
+                    ecore.EventType.UNSET,
+                    LibraryConstants.BOOK__CATEGORY,
+                    oldCategory,
+                    BookCategory.MYSTERY
+                )
             )
         }
+    }
+
+    // isSetCategory get if the value of category is set
+    isSetCategory(): boolean {
+        return this._categoryESet
     }
 
     // get the value of indexes
@@ -374,7 +390,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 break
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                this.setCategory(BookCategory.MYSTERY)
+                this.unSetCategory()
                 break
             }
             case LibraryConstants.BOOK__INDEXES: {
@@ -405,7 +421,7 @@ export class BookImpl extends CirculatingItemImpl implements Book {
                 return this._author != null
             }
             case LibraryConstants.BOOK__CATEGORY: {
-                return this._category != BookCategory.MYSTERY
+                return this._categoryESet
             }
             case LibraryConstants.BOOK__INDEXES: {
                 return this._indexes && !this._indexes.isEmpty()

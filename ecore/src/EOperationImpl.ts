@@ -73,6 +73,11 @@ export class EOperationImpl extends ETypedElementExt implements EOperation {
         }
     }
 
+    // isSetEExceptions get if the value of eExceptions is set
+    isSetEExceptions(): boolean {
+        return this._eExceptions && !this._eExceptions.isEmpty()
+    }
+
     // get the value of eParameters
     getEParameters(): EList<EParameter> {
         if (this._eParameters == null) {

@@ -8,7 +8,7 @@
 # *****************************************************************************
 
 # the generator: the docker image of soft.gen v2 at a fixed version
-SOFT_GEN_VERSION = v2.0.0-alpha.3
+SOFT_GEN_VERSION = v2.0.0-alpha.5
 SOFT_GEN_IMAGE ?= masagroup/soft.gen:$(SOFT_GEN_VERSION)
 
 ifeq (${OS},Windows_NT)

@@ -21,6 +21,7 @@ export interface EOperation extends ETypedElement {
     // eExceptions
     getEExceptions(): EList<EClassifier>
     unSetEExceptions(): void
+    isSetEExceptions(): boolean
 
     // operationID
     getOperationID(): number

@@ -18,4 +18,5 @@ export interface Anchor extends ecore.EObject {
     getLinkedAsync(): Promise<Linkable>
     setLinked(newLinked: Linkable): void
     unSetLinked(): void
+    isSetLinked(): boolean
 }

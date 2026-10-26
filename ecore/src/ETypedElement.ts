@@ -39,4 +39,5 @@ export interface ETypedElement extends ENamedElement {
     getETypeAsync(): Promise<EClassifier>
     setEType(newEType: EClassifier): void
     unSetEType(): void
+    isSetEType(): boolean
 }

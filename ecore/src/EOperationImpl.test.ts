@@ -65,6 +65,11 @@ describe("EOperationImpl", () => {
         expect(o.getEExceptions().isEmpty()).toBeTruthy()
     })
 
+    test("isSetEExceptions", () => {
+        const o = new EOperationImpl()
+        expect(o.isSetEExceptions()).toBeFalsy()
+    })
+
     test("getEParameters", () => {
         const o = new EOperationImpl()
         expect(o.getEParameters()).not.toBeNull()

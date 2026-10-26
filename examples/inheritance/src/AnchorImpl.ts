@@ -14,6 +14,7 @@ import { Anchor, InheritanceConstants, Linkable, getInheritancePackage } from ".
 
 export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
     protected _linked: Linkable
+    protected _linkedESet: boolean = false
 
     constructor() {
         super()
@@ -93,6 +94,8 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
             if (notifications != null) {
                 notifications.dispatch()
             }
+        } else {
+            this._linkedESet = true
         }
     }
 
@@ -111,10 +114,13 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
             if (notifications != null) {
                 notifications.dispatch()
             }
-        } else if (this.eNotificationRequired()) {
-            this.eNotify(
-                new ecore.Notification(this, ecore.EventType.UNSET, InheritanceConstants.ANCHOR__LINKED, null, null)
-            )
+        } else {
+            this._linkedESet = false
+            if (this.eNotificationRequired()) {
+                this.eNotify(
+                    new ecore.Notification(this, ecore.EventType.UNSET, InheritanceConstants.ANCHOR__LINKED, null, null)
+                )
+            }
         }
     }
 
@@ -126,6 +132,7 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
     basicSetLinked(newLinked: Linkable, msgs: ecore.ENotificationChain): ecore.ENotificationChain {
         const oldLinked = this._linked
         this._linked = newLinked
+        this._linkedESet = true
         let notifications = msgs
         if (this.eNotificationRequired()) {
             const notification = new ecore.Notification(
@@ -148,6 +155,7 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
         const oldLinked = this._linked
         let notifications = msgs
         this._linked = null
+        this._linkedESet = false
         if (this.eNotificationRequired()) {
             const notification = new ecore.Notification(
                 this,
@@ -163,6 +171,11 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
             }
         }
         return notifications
+    }
+
+    // isSetLinked get if the value of linked is set
+    isSetLinked(): boolean {
+        return this._linkedESet
     }
 
     eGetFromID(featureID: number, resolve: boolean): any {
@@ -213,7 +226,7 @@ export class AnchorImpl extends ecore.EObjectImpl implements Anchor {
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case InheritanceConstants.ANCHOR__LINKED: {
-                return this._linked != null
+                return this._linkedESet
             }
             default: {
                 return super.eIsSetFromID(featureID)
