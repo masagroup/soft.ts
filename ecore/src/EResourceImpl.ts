@@ -163,6 +163,9 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     private _idIndex: Map<string, EObject> = null
     // the key of each object of the id index
     private _idIndexKeys: Map<EObject, string> = null
+    // set by a scan that met no object whose class declares an id attribute: until such an object
+    // is attached, a rescan finds nothing whatever was renamed
+    private _idless: boolean = false
 
     getURI(): URI {
         return this._uri
@@ -622,13 +625,18 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         if (eObject && EcoreUtils.getEObjectID(eObject) == id) return eObject
         // while loading, the objects are indexed as they are attached: a missing id is a forward
         // reference, which a rescan would not find either (and would make loading quadratic)
-        if (!eObject && this._idIndex && this._isLoading) return null
+        // nor would a rescan of a tree without id attribute
+        if (!eObject && this._idIndex && (this._isLoading || this._idless)) return null
 
         // a miss or a stale entry: rescan, keeping the first object of the tree for each id. As
         // the id of an object can change without notifying the resource, a miss can't be trusted
         const index = new Map<string, EObject>()
         const keys = new Map<EObject, string>()
+        let idless = true
         for (const eObject of this.eAllContentsResolve(this, false)) {
+            if (idless && eObject.eClass().getEIDAttribute()) {
+                idless = false
+            }
             const objectID = EcoreUtils.getEObjectID(eObject)
             if (objectID && !index.has(objectID)) {
                 index.set(objectID, eObject)
@@ -637,11 +645,15 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         }
         this._idIndex = index
         this._idIndexKeys = keys
+        this._idless = idless
         return index.get(id) ?? null
     }
 
     private indexAttached(object: EObject) {
         if (this._idIndex) {
+            if (object.eClass().getEIDAttribute()) {
+                this._idless = false
+            }
             const id = EcoreUtils.getEObjectID(object)
             if (id && !this._idIndex.has(id)) {
                 this._idIndex.set(id, object)

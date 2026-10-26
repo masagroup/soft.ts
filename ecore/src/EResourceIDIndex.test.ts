@@ -48,6 +48,52 @@ describe("EResourceImpl id index", () => {
         expect(resource.getEObject("added")).toBeNull()
         expect(resource.getEObject("unknown")).toBeNull()
     })
+
+    // a miss on a tree whose classes declare no id attribute does not rescan it, until an object with
+    // an id attribute is attached
+    test("getEObject scans a tree without id attribute once", () => {
+        const factory = getEcoreFactory()
+        const ePackage = factory.createEPackage()
+        ePackage.setName("ids")
+        ePackage.setNsPrefix("ids")
+        ePackage.setNsURI("urn:ids")
+        const named = factory.createEClass()
+        named.setName("Named")
+        const name = factory.createEAttribute()
+        name.setName("name")
+        name.setEType(getEcorePackage().getEString())
+        named.getEStructuralFeatures().add(name)
+        const item = factory.createEClass()
+        item.setName("Item")
+        const id = factory.createEAttribute()
+        id.setName("id")
+        id.setEType(getEcorePackage().getEString())
+        id.setID(true)
+        item.getEStructuralFeatures().add(id)
+        ePackage.getEClassifiers().add(named)
+        ePackage.getEClassifiers().add(item)
+        const resource = new EResourceImpl()
+        for (let i = 0; i < 3; i++) {
+            const o = ePackage.getEFactoryInstance().create(named)
+            o.eSet(name, "n" + i)
+            resource.eContents().add(o)
+        }
+        const internals = resource as any
+
+        expect(resource.getEObject("n1")).toBeNull()
+        expect(internals._idless).toBeTruthy()
+        const scanned = internals._idIndex
+        expect(resource.getEObject("n2")).toBeNull()
+        expect(internals._idIndex).toBe(scanned)
+
+        const late = ePackage.getEFactoryInstance().create(item)
+        late.eSet(id, "late")
+        resource.eContents().add(late)
+        expect(internals._idless).toBeFalsy()
+        expect(resource.getEObject("late")).toBe(late)
+        late.eSet(id, "renamed")
+        expect(resource.getEObject("renamed")).toBe(late)
+    })
 })
 
 describe("AbstractEList addUnique", () => {
@@ -100,5 +146,37 @@ describe("XMLDecoder long list", () => {
         expect(list.size()).toBe(n)
         expect(list.get(0).eGet(name)).toBe("item0")
         expect(list.get(n - 1).eGet(name)).toBe("item" + (n - 1))
+    })
+
+    // a long many-valued data type feature loads every value, in document order
+    test("loads a long data type list in order", () => {
+        const factory = getEcoreFactory()
+        const ePackage = factory.createEPackage()
+        ePackage.setName("tags")
+        ePackage.setNsPrefix("tags")
+        ePackage.setNsURI("urn:tags")
+        const root = factory.createEClass()
+        root.setName("Root")
+        const tags = factory.createEAttribute()
+        tags.setName("tags")
+        tags.setEType(getEcorePackage().getEString())
+        tags.setUpperBound(-1)
+        root.getEStructuralFeatures().add(tags)
+        ePackage.getEClassifiers().add(root)
+
+        const n = 2000
+        let document = `<?xml version="1.0" encoding="UTF-8"?>\n<tags:Root xmlns:tags="urn:tags">\n`
+        for (let i = 0; i < n; i++) document += `  <tags>tag${i}</tags>\n`
+        document += "</tags:Root>\n"
+
+        const rs = new EResourceSetImpl()
+        rs.getPackageRegistry().registerPackage(ePackage)
+        const resource = rs.createResource(new URI("tags.xml"))
+        resource.loadFromString(document)
+        expect(resource.getErrors().isEmpty()).toBeTruthy()
+        const list = resource.eContents().get(0).eGet(tags) as EList<string>
+        expect(list.size()).toBe(n)
+        expect(list.get(0)).toBe("tag0")
+        expect(list.get(n - 1)).toBe("tag" + (n - 1))
     })
 })
