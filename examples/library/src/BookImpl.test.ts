@@ -164,6 +164,18 @@ describe("BookImpl", () => {
         expect(notification.getPosition()).toBe(-1)
     })
 
+    test("isSetCategory", () => {
+        const o = new BookImpl()
+        expect(o.isSetCategory()).toBeFalsy()
+        expect(o.eIsSetFromID(LibraryConstants.BOOK__CATEGORY)).toBeFalsy()
+        o["_categoryESet"] = true
+        expect(o.isSetCategory()).toBeTruthy()
+        expect(o.eIsSetFromID(LibraryConstants.BOOK__CATEGORY)).toBeTruthy()
+        o.unSetCategory()
+        expect(o.isSetCategory()).toBeFalsy()
+        expect(o.eIsSetFromID(LibraryConstants.BOOK__CATEGORY)).toBeFalsy()
+    })
+
     test("getIndexes", () => {
         const o = new BookImpl()
         expect(o.indexes).not.toBeNull()

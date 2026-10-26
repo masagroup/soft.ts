@@ -114,6 +114,18 @@ describe("ETypedElementImpl", () => {
         expect(o.getEType()).toBeNull()
     })
 
+    test("isSetEType", () => {
+        const o = new ETypedElementImpl()
+        expect(o.isSetEType()).toBeFalsy()
+        expect(o.eIsSetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE)).toBeFalsy()
+        o["_eTypeESet"] = true
+        expect(o.isSetEType()).toBeTruthy()
+        expect(o.eIsSetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE)).toBeTruthy()
+        o.unSetEType()
+        expect(o.isSetEType()).toBeFalsy()
+        expect(o.eIsSetFromID(EcoreConstants.ETYPED_ELEMENT__ETYPE)).toBeFalsy()
+    })
+
     test("getMany", () => {
         const o = new ETypedElementImpl()
         expect(() => o.isMany()).toThrow(Error)

@@ -22,6 +22,7 @@ import {
 
 export class ETypedElementImpl extends ENamedElementImpl implements ETypedElement {
     protected _eType: EClassifier
+    protected _eTypeESet: boolean = false
     protected _isOrdered: boolean
     protected _isUnique: boolean
     protected _lowerBound: number
@@ -74,6 +75,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     setEType(newEType: EClassifier): void {
         const oldEType = this._eType
         this._eType = newEType
+        this._eTypeESet = true
         if (this.eNotificationRequired()) {
             this.eNotify(new Notification(this, EventType.SET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, newEType))
         }
@@ -81,14 +83,22 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
 
     // unSetEType unset the value of _eType
     unSetEType(): void {
+        const oldEType = this._eType
+        this._eType = null
+        this._eTypeESet = false
         if (this.eNotificationRequired()) {
-            this.eNotify(new Notification(this, EventType.UNSET, EcoreConstants.ETYPED_ELEMENT__ETYPE, null, null))
+            this.eNotify(new Notification(this, EventType.UNSET, EcoreConstants.ETYPED_ELEMENT__ETYPE, oldEType, null))
         }
     }
 
     // get the basic value of eType with no proxy resolution
     basicGetEType(): EClassifier {
         return this._eType
+    }
+
+    // isSetEType get if the value of eType is set
+    isSetEType(): boolean {
+        return this._eTypeESet
     }
 
     // get the value of many
@@ -255,7 +265,7 @@ export class ETypedElementImpl extends ENamedElementImpl implements ETypedElemen
     eIsSetFromID(featureID: number): boolean {
         switch (featureID) {
             case EcoreConstants.ETYPED_ELEMENT__ETYPE: {
-                return this._eType != null
+                return this._eTypeESet
             }
             case EcoreConstants.ETYPED_ELEMENT__LOWER_BOUND: {
                 return this._lowerBound != 0
