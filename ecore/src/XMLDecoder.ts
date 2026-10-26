@@ -856,12 +856,12 @@ export class XMLDecoder implements EDecoder {
                 const eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
                 if (position != -2) {
                     if (value === null || value === undefined) {
-                        eList.add(null)
+                        appendLoaded(eList, null)
                     } else {
                         const eFactory = this.factoryFor(eFeature, eDataType)
                         if (eFactory) {
                             const literal = this.createFromString(eFactory, eDataType, value as string)
-                            if (literal.ok) eList.add(literal.value)
+                            if (literal.ok) appendLoaded(eList, literal.value)
                         }
                     }
                 }
