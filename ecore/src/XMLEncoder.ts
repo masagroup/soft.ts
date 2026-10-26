@@ -117,6 +117,10 @@ export class XMLEncoder implements EEncoder {
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA)
             this._useEncodedAttributeStyle = options.get(XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE) === true
             this._keepDefaults = options.get(XMLOptions.KEEP_DEFAULTS) === true
+            const lineWidth = options.get(XMLOptions.LINE_WIDTH)
+            if (typeof lineWidth === "number" && lineWidth > 0) {
+                this._str.lineWidth = lineWidth
+            }
         }
         if (!this._extendedMetaData) {
             this._extendedMetaData = new ExtendedMetaData()

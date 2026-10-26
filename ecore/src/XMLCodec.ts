@@ -23,6 +23,7 @@ export class XMLOptions {
     static ROOT_OBJECTS = "ROOT_OBJECTS"
     static USE_ENCODED_ATTRIBUTE_STYLE = "USE_ENCODED_ATTRIBUTE_STYLE"
     static KEEP_DEFAULTS = "KEEP_DEFAULTS"
+    static LINE_WIDTH = "LINE_WIDTH"
 }
 
 export class XMLCodec implements ECodec {
