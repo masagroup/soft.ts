@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="library" nsURI="http:///org/eclipse/emf/examples/library/library.encoded.ecore/1.0.0" nsPrefix="lib">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="library" nsURI="http:///org/eclipse/emf/examples/library/library.encoded.ecore/1.0.0"
+    nsPrefix="lib">
   <eClassifiers xsi:type="ecore:EClass" name="Library">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" eType="#//Novel" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="bestSeller" lowerBound="1" eType="ecore:EClass library.simple.ecore#//Book">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
+        eType="#//Novel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bestSeller" lowerBound="1"
+        eType="ecore:EClass library.simple.ecore#//Book">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
       </eAnnotations>

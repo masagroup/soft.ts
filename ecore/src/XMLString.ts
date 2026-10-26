@@ -208,7 +208,9 @@ export class XMLString {
 
     mark(): XMLStringSegment {
         const r = this.currentSegment
+        // the line goes on in the new segment: its width starts at the one of the marked segment
         this.currentSegment = new XMLStringSegment()
+        this.currentSegment.lineWidth = r.lineWidth
         this.segments.push(this.currentSegment)
         return r
     }
@@ -221,5 +223,7 @@ export class XMLString {
         if (segment) {
             this.currentSegment = segment
         }
+        // as EMF, the attributes added at the mark are indented as the ones of a top level element
+        this.depth++
     }
 }

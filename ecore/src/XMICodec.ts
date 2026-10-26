@@ -25,11 +25,15 @@ export class XMICodec implements ECodec {
 }
 
 // EcoreCodec is the XMI codec of the .ecore resources: as EMF's EcoreResourceFactoryImpl, it
-// saves the cross resource references in the encoded attribute style, unless the options of the
-// save set XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE.
+// saves the cross resource references in the encoded attribute style and wraps the attributes at
+// a line width of 80, unless the options of the save set XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE
+// or XMLOptions.LINE_WIDTH.
 export class EcoreCodec extends XMICodec {
     newEncoder(eContext: EResource, options?: Map<string, any>): EEncoder {
-        const o = new Map<string, any>([[XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, true]])
+        const o = new Map<string, any>([
+            [XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, true],
+            [XMLOptions.LINE_WIDTH, 80]
+        ])
         options?.forEach((value, key) => o.set(key, value))
         return new XMIEncoder(eContext, o)
     }

@@ -24,8 +24,12 @@ import {
     XMLOptions
 } from "./internal.js"
 
-// the options of a save of the libraries, whose cross resource references are href elements
-const hrefStyle = new Map<string, any>([[XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, false]])
+// the options of a save of the libraries in the style of the XMI codec: the cross resource references
+// are href elements and the lines are not wrapped
+const xmiStyle = new Map<string, any>([
+    [XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, false],
+    [XMLOptions.LINE_WIDTH, 0]
+])
 
 describe("XMICodec", () => {
     describe("load.library.simple", () => {
@@ -207,7 +211,7 @@ describe("XMICodec", () => {
             resource.setURI(new URI("testdata/library.simple.ecore"))
             await resource.load()
 
-            const result = resource.saveToString(hrefStyle)
+            const result = resource.saveToString(xmiStyle)
             const expected = fs
                 .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
@@ -223,7 +227,7 @@ describe("XMICodec", () => {
             resource.setURI(new URI("testdata/library.complex.ecore"))
             await resource.load()
 
-            const result = resource.saveToString(hrefStyle)
+            const result = resource.saveToString(xmiStyle)
             const expected = fs
                 .readFileSync(uriToFilePath(resource.getURI()))
                 .toString()
@@ -245,9 +249,28 @@ describe("XMICodec", () => {
                 .toString()
                 .replace(/\r?\n|\r/g, "\n")
 
-            // the default style of a .ecore resource, and with the option
+            // the default style of a .ecore resource, and with the options
             expect(resource.saveToString()).toBe(expected)
-            expect(resource.saveToString(new Map([[XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, true]]))).toBe(expected)
+            expect(
+                resource.saveToString(
+                    new Map<string, any>([
+                        [XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, true],
+                        [XMLOptions.LINE_WIDTH, 80]
+                    ])
+                )
+            ).toBe(expected)
+        })
+
+        test("saveToStringWithoutLineWidth", async () => {
+            const resource = new EResourceImpl()
+            resource.setURI(new URI("testdata/library.encoded.ecore"))
+            await resource.load()
+
+            // an element on one line
+            const result = resource.saveToString(new Map([[XMLOptions.LINE_WIDTH, 0]]))
+            expect(result).toContain(
+                '<eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1" eType="#//Novel" containment="true"/>'
+            )
         })
 
         test("saveToStringWithOptionOff", async () => {
@@ -255,7 +278,7 @@ describe("XMICodec", () => {
             resource.setURI(new URI("testdata/library.encoded.ecore"))
             await resource.load()
 
-            const result = resource.saveToString(hrefStyle)
+            const result = resource.saveToString(xmiStyle)
             expect(result).toContain('<eType xsi:type="ecore:EClass" href="library.simple.ecore#//Book"/>')
             expect(result).toContain('<eSuperTypes href="library.simple.ecore#//Book"/>')
         })
