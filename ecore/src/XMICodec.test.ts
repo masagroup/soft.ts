@@ -9,7 +9,7 @@
 
 import fs from "fs"
 import { afterEach, beforeEach, describe, expect, test } from "vitest"
-import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, URI, uriToFilePath } from "./internal.js"
+import { EAttribute, EClass, EClassifier, EPackage, EReference, EResourceImpl, URI, uriToFilePath, XMLOptions } from "./internal.js"
 
 describe("XMICodec", () => {
     describe("load.library.simple", () => {
@@ -214,6 +214,33 @@ describe("XMICodec", () => {
                 .replace(/\r?\n|\r/g, "\n")
 
             expect(result).toBe(expected)
+        })
+    })
+
+    describe("save.library.encoded", () => {
+        test("saveToString", async () => {
+            const resource = new EResourceImpl()
+            resource.setURI(new URI("testdata/library.encoded.ecore"))
+            await resource.load()
+            expect(resource.getErrors().isEmpty()).toBeTruthy()
+
+            const result = resource.saveToString(new Map([[XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE, true]]))
+            const expected = fs
+                .readFileSync(uriToFilePath(resource.getURI()))
+                .toString()
+                .replace(/\r?\n|\r/g, "\n")
+
+            expect(result).toBe(expected)
+        })
+
+        test("saveToStringWithoutOption", async () => {
+            const resource = new EResourceImpl()
+            resource.setURI(new URI("testdata/library.encoded.ecore"))
+            await resource.load()
+
+            const result = resource.saveToString()
+            expect(result).toContain('<eType xsi:type="ecore:EClass" href="library.simple.ecore#//Book"/>')
+            expect(result).toContain('<eSuperTypes href="library.simple.ecore#//Book"/>')
         })
     })
 })
