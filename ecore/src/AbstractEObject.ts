@@ -9,7 +9,7 @@
 
 import {
     AbstractENotifier,
-    BasicEList,
+    BasicEDataTypeList,
     BasicEObjectList,
     BasicEObjectMap,
     checkSameImplementation,
@@ -40,12 +40,58 @@ import {
     isEReference,
     isMapType,
     isProxy,
+    isSetList,
+    NIL,
     Notification,
+    unsetList,
     URI
 } from "./internal.js"
 
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n)
+}
+
+// eDynamicStoredValue returns the value eDynamicSet stores for newValue set to a single-valued
+// feature, and the new value to notify, as EMF does: null set to an attribute whose type has a
+// default value (a number, a boolean...) stores no value, and notifies the default value of the
+// feature; null set to an unsettable feature, or to an attribute with a default value, stores NIL in
+// the properties that keep it.
+function eDynamicStoredValue(properties: EDynamicProperties, feature: EStructuralFeature, newValue: any): [any, any] {
+    if (newValue !== null && newValue !== undefined) {
+        return [newValue, newValue]
+    }
+    if (isEAttribute(feature)) {
+        const eType = feature.getEType()
+        if (eType && eType.getDefaultValue() != null) {
+            return [null, feature.getDefaultValue()]
+        }
+        if (!feature.isUnsettable() && feature.getDefaultValue() == null) {
+            return [null, null]
+        }
+    } else if (!feature.isUnsettable()) {
+        return [null, null]
+    }
+    return [properties.eDynamicKeepsNil?.() ? NIL : null, null]
+}
+
+// eDynamicValue returns the value of a single-valued feature whose stored value is stored: null for
+// NIL, the default value of the feature for no value.
+function eDynamicValue(feature: EStructuralFeature, stored: any): any {
+    if (stored === null || stored === undefined) {
+        return eDynamicDefaultValue(feature)
+    }
+    return stored === NIL ? null : stored
+}
+
+// eDynamicDefaultValue returns the default value of a single-valued feature: null for a reference.
+function eDynamicDefaultValue(feature: EStructuralFeature): any {
+    return isEAttribute(feature) ? (feature.getDefaultValue() ?? null) : null
+}
+
+// unsetEventType returns the type of the notification of the unset of a single-valued feature:
+// UNSET for an unsettable feature, else SET.
+function unsetEventType(feature: EStructuralFeature): EventType {
+    return feature.isUnsettable() ? EventType.UNSET : EventType.SET
 }
 
 export abstract class AbstractEObject extends AbstractENotifier implements EObjectInternal {
@@ -316,6 +362,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         result = defaultValue
                     }
                 }
+            } else if (result === NIL) {
+                result = null
             } else if (resolve && isProxy(dynamicFeature)) {
                 if (isEObject(result)) {
                     const oldValue = result
@@ -391,6 +439,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                         result = defaultValue
                     }
                 }
+            } else if (result === NIL) {
+                result = null
             } else if (resolve && isProxy(dynamicFeature)) {
                 if (isEObject(result)) {
                     const oldValue = result
@@ -469,7 +519,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
     private eDynamicPropertiesCreateList(feature: EStructuralFeature): any {
         if (isEAttribute(feature)) {
-            return new BasicEList([], feature.isUnique())
+            return new BasicEDataTypeList(this, this.eClass().getFeatureID(feature), feature.isUnique(), feature.isUnsettable())
         } else if (isEReference(feature)) {
             let inverse = false
             let opposite = false
@@ -561,8 +611,11 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
         } else if (isBidirectional(dynamicFeature) || isContains(dynamicFeature)) {
             // inverse - opposite
-            const oldValue = properties.eDynamicGet(dynamicFeatureID)
-            if (oldValue != newValue) {
+            const oldStored = properties.eDynamicGet(dynamicFeatureID)
+            const oldValue = oldStored === NIL ? null : oldStored
+            const [newStored] = eDynamicStoredValue(properties, dynamicFeature, newValue)
+            // null set to an unset unsettable reference sets it: it has no inverse to update
+            if (oldValue != newValue || oldStored != newStored) {
                 let notifications: ENotificationChain = null
                 const oldObject = isEObjectInternal(oldValue) ? oldValue : null
                 const newObject = isEObjectInternal(newValue) ? newValue : null
@@ -588,7 +641,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     }
                 }
                 // basic set
-                properties.eDynamicSet(dynamicFeatureID, newValue)
+                properties.eDynamicSet(dynamicFeatureID, newStored)
 
                 // create notification
                 if (this.eNotificationRequired()) {
@@ -607,12 +660,13 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
         } else {
             // basic set
-            const oldValue = properties.eDynamicGet(dynamicFeatureID)
-            properties.eDynamicSet(dynamicFeatureID, newValue)
+            const oldStored = properties.eDynamicGet(dynamicFeatureID)
+            const [newStored, notifiedValue] = eDynamicStoredValue(properties, dynamicFeature, newValue)
+            properties.eDynamicSet(dynamicFeatureID, newStored)
 
             // notify
             if (this.eNotificationRequired()) {
-                this.eNotify(new Notification(this, EventType.SET, dynamicFeature, oldValue, newValue))
+                this.eNotify(new Notification(this, EventType.SET, dynamicFeature, eDynamicValue(dynamicFeature, oldStored), notifiedValue))
             }
         }
     }
@@ -651,9 +705,19 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         if (isContainer(dynamicFeature)) {
             const featureID = this.eClass().getFeatureID(dynamicFeature)
             return this.eInternalContainerFeatureID() == featureID && this.eInternalContainer() != null
-        } else {
-            return properties.eDynamicIsSet ? properties.eDynamicIsSet(dynamicFeatureID) : properties.eDynamicGet(dynamicFeatureID) != null
+        } else if (
+            !(properties.eDynamicIsSet ? properties.eDynamicIsSet(dynamicFeatureID) : properties.eDynamicGet(dynamicFeatureID) != null)
+        ) {
+            return false
+        } else if (dynamicFeature.isMany()) {
+            // the list of a many feature is created by its first read: as in EMF, its list tells
+            // whether it is set, not its existence
+            const list = properties.eDynamicGet(dynamicFeatureID)
+            if (isEList(list)) {
+                return isSetList(list)
+            }
         }
+        return true
     }
 
     eUnset(feature: EStructuralFeature): void {
@@ -685,11 +749,10 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
 
     protected eDynamicPropertiesUnset(properties: EDynamicProperties, dynamicFeature: EStructuralFeature, dynamicFeatureID: number) {
         if (dynamicFeature.isMany()) {
-            // many: the list keeps its identity, it is emptied
-            const list = properties.eDynamicGet(dynamicFeatureID)
-            if (isEList(list)) {
-                list.clear()
-            }
+            // many: as EMF, the list keeps its identity and is unset: emptied, which updates the
+            // containment and the opposites of its elements and notifies, and for an unsettable
+            // feature made unset
+            unsetList(this.eDynamicPropertiesGetList(properties, dynamicFeature, dynamicFeatureID))
         } else if (isContainer(dynamicFeature)) {
             if (this.eInternalContainer()) {
                 const featureID = this.eClass().getFeatureID(dynamicFeature)
@@ -703,47 +766,50 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             }
         } else if (isBidirectional(dynamicFeature) || isContains(dynamicFeature)) {
             // inverse - opposite
-            const oldValue = properties.eDynamicGet(dynamicFeatureID)
-            if (oldValue) {
-                let notifications: ENotificationChain = null
-                const oldObject = isEObjectInternal(oldValue) ? oldValue : null
+            const oldStored = properties.eDynamicGet(dynamicFeatureID)
+            const oldValue = oldStored === NIL || oldStored === undefined ? null : oldStored
+            let notifications: ENotificationChain = null
+            if (isEObjectInternal(oldValue)) {
                 if (!isBidirectional(dynamicFeature)) {
-                    if (oldObject) {
-                        const featureID = this.eClass().getFeatureID(dynamicFeature)
-                        notifications = oldObject.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
-                    }
+                    const featureID = this.eClass().getFeatureID(dynamicFeature)
+                    notifications = oldValue.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - featureID, notifications)
                 } else {
-                    const dynamicReference = dynamicFeature as EReference
-                    const reverseFeature = dynamicReference.getEOpposite()
-                    if (oldObject) {
-                        const featureID = oldObject.eClass().getFeatureID(reverseFeature)
-                        notifications = oldObject.eInverseRemove(this, featureID, notifications)
-                    }
-                }
-                // basic unset
-                properties.eDynamicUnset(dynamicFeatureID)
-
-                // create notification
-                if (this.eNotificationRequired()) {
-                    const eventType = dynamicFeature.isUnsettable() ? EventType.UNSET : EventType.SET
-                    const notification = new Notification(this, eventType, dynamicFeature, oldValue, null)
-                    if (notifications) {
-                        notifications.add(notification)
-                    } else {
-                        notifications = notification
-                    }
-                }
-
-                // notify
-                if (notifications) {
-                    notifications.dispatch()
+                    const reverseFeature = (dynamicFeature as EReference).getEOpposite()
+                    const featureID = oldValue.eClass().getFeatureID(reverseFeature)
+                    notifications = oldValue.eInverseRemove(this, featureID, notifications)
                 }
             }
-        } else {
-            const oldValue = properties.eDynamicGet(dynamicFeatureID)
+            // basic unset
             properties.eDynamicUnset(dynamicFeatureID)
+
+            // create notification: UNSET for an unsettable feature, else SET, as EMF
             if (this.eNotificationRequired()) {
-                this.eNotify(new Notification(this, EventType.UNSET, dynamicFeature, oldValue, null))
+                const notification = new Notification(this, unsetEventType(dynamicFeature), dynamicFeature, oldValue, null)
+                if (notifications) {
+                    notifications.add(notification)
+                } else {
+                    notifications = notification
+                }
+            }
+
+            // notify
+            if (notifications) {
+                notifications.dispatch()
+            }
+        } else {
+            const oldStored = properties.eDynamicGet(dynamicFeatureID)
+            properties.eDynamicUnset(dynamicFeatureID)
+            // as EMF: UNSET for an unsettable feature, else SET, to the default value of the feature
+            if (this.eNotificationRequired()) {
+                this.eNotify(
+                    new Notification(
+                        this,
+                        unsetEventType(dynamicFeature),
+                        dynamicFeature,
+                        eDynamicValue(dynamicFeature, oldStored),
+                        eDynamicDefaultValue(dynamicFeature)
+                    )
+                )
             }
         }
     }
@@ -795,12 +861,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         notifications: ENotificationChain
     ): ENotificationChain {
         if (dynamicFeature.isMany()) {
-            let value = properties.eDynamicGet(dynamicFeatureID)
-            if (!value) {
-                value = this.eDynamicPropertiesCreateList(dynamicFeature)
-                properties.eDynamicSet(dynamicFeatureID, value)
-            }
-            const list = value as ENotifyingList<EObject>
+            const list = this.eDynamicPropertiesGetList(properties, dynamicFeature, dynamicFeatureID) as ENotifyingList<EObject>
             return list.addWithNotification(otherEnd, notifications)
         } else if (isContainer(dynamicFeature)) {
             let msgs = notifications
@@ -811,7 +872,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             return this.eBasicSetContainer(otherEnd, featureID, msgs)
         } else {
             // inverse - opposite
-            const oldValue = properties.eDynamicGet(dynamicFeatureID)
+            const oldStored = properties.eDynamicGet(dynamicFeatureID)
+            const oldValue = oldStored === NIL ? null : oldStored
             const oldObject = isEObjectInternal(oldValue) ? oldValue : null
             if (oldObject) {
                 if (isContains(dynamicFeature)) {
@@ -878,12 +940,13 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
             const featureID = this.eClass().getFeatureID(dynamicFeature)
             return this.eBasicSetContainer(null, featureID, notifications)
         } else {
-            const oldValue = properties.eDynamicGet(dynamicFeatureID)
+            const oldStored = properties.eDynamicGet(dynamicFeatureID)
+            const oldValue = oldStored === NIL ? null : oldStored
             properties.eDynamicUnset(dynamicFeatureID)
 
-            // create notification
+            // create notification: UNSET for an unsettable feature, else SET, as EMF
             if (this.eNotificationRequired()) {
-                const notification = new Notification(this, EventType.SET, dynamicFeature, oldValue, null)
+                const notification = new Notification(this, unsetEventType(dynamicFeature), dynamicFeature, oldValue, null)
                 if (notifications) {
                     notifications.add(notification)
                 } else {

@@ -9,11 +9,20 @@
 
 import { EClass, EList, ENotificationChain, EObject, EResource, EStructuralFeature, URI } from "./internal.js"
 
+// NIL is the value a single-valued feature set to null keeps in the EDynamicProperties that tell it
+// from an unset feature (EMF DynamicValueHolder.NIL): an unsettable feature, or an attribute whose
+// default value is not null. AbstractEObject gives it to the dynamic properties that keep it
+// (eDynamicKeepsNil), DynamicEObjectImpl; the store-backed ones get null, and their store tells
+// whether the feature is set.
+export const NIL: unique symbol = Symbol("NIL")
+
 export interface EDynamicProperties {
     eDynamicGet(dynamicFeatureID: number): any
     eDynamicSet(dynamicFeatureID: number, newValue: any): void
     eDynamicUnset(dynamicFeatureID: number): void
     eDynamicIsSet?(dynamicFeatureID: number): boolean
+    // eDynamicKeepsNil returns true when the properties keep NIL, the value of a feature set to null
+    eDynamicKeepsNil?(): boolean
 }
 
 export interface EObjectInternal extends EObject {

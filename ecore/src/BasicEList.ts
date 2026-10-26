@@ -58,6 +58,7 @@ export class BasicEList<E> extends AbstractEList<E> {
         const oldData = this._v
         this._v = []
         this.didClear(oldData)
+        this.didChange()
         return oldData
     }
 

@@ -62,6 +62,10 @@ export class BasicEObjectList<O extends EObject> extends AbstractNotifyingList<O
         return this._owner
     }
 
+    protected isUnsettable(): boolean {
+        return this._unset
+    }
+
     getFeature(): EStructuralFeature {
         return this._owner != null ? this._owner.eClass().getEStructuralFeature(this._featureID) : null
     }
