@@ -913,10 +913,15 @@ export class XMLDecoder implements EDecoder {
     }
 
     // createFromString creates the value of eDataType from str: a factory throws on an invalid
-    // literal, which is reported and not set
+    // literal, which is reported and not set. A factory parsing numbers with Number reads the
+    // infinities of XSD (INF, -INF) and Go (+Inf, -Inf) as NaN: they are read as infinities.
     private createFromString(eFactory: EFactory, eDataType: EDataType, str: string): { ok: boolean; value?: any } {
         try {
-            return { ok: true, value: eFactory.createFromString(eDataType, str) }
+            const value = eFactory.createFromString(eDataType, str)
+            if (typeof value === "number" && Number.isNaN(value) && /^[+-]?inf(inity)?$/i.test(str.trim())) {
+                return { ok: true, value: str.trim().startsWith("-") ? -Infinity : Infinity }
+            }
+            return { ok: true, value: value }
         } catch (e) {
             this.decodeError(e instanceof Error ? e.message : String(e))
             return { ok: false }

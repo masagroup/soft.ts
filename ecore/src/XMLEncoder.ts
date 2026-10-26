@@ -15,6 +15,7 @@ import {
     EDiagnostic,
     EDiagnosticImpl,
     EEncoder,
+    EFactory,
     EList,
     EMap,
     ENamedElement,
@@ -72,6 +73,16 @@ enum SaveResourceKind {
     Skip,
     Same,
     Cross
+}
+
+// convertToString is the lexical form of a data value: the one of its factory, but for the
+// infinite and NaN numbers, written in the XSD lexical space of xsd:double and xsd:float (INF,
+// -INF, NaN) instead of the JavaScript forms (Infinity, -Infinity). The decoder reads both.
+function convertToString(eFactory: EFactory, eDataType: EDataType, value: any): string {
+    if (typeof value === "number" && !Number.isFinite(value)) {
+        return Number.isNaN(value) ? "NaN" : value > 0 ? "INF" : "-INF"
+    }
+    return eFactory.convertToString(eDataType, value)
 }
 
 function stringFormat(template: string, ...args: any[]) {
@@ -462,14 +473,14 @@ export class XMLEncoder implements EEncoder {
         const f = p.getEFactoryInstance()
         const name = this.getFeatureQName(eFeature)
         for (const value of l) {
-            if (!value) {
+            if (value == null) {
                 this._str.startElement(name)
                 this._str.addAttribute("xsi:nil", "true")
                 this._str.endEmptyElement()
                 this._uriToPrefixes.set(XMLConstants.xsiURI, [XMLConstants.xsiNS])
                 this._prefixesToURI.set(XMLConstants.xsiNS, XMLConstants.xsiURI)
             } else {
-                const str = f.convertToString(d, value)
+                const str = convertToString(f, d, value)
                 this._str.addContent(name, str)
             }
         }
@@ -661,7 +672,7 @@ export class XMLEncoder implements EEncoder {
             const d = feature.getEType() as EDataType
             const p = d.getEPackage()
             const f = p.getEFactoryInstance()
-            const s = f.convertToString(d, value)
+            const s = convertToString(f, d, value)
             return s
         }
     }
