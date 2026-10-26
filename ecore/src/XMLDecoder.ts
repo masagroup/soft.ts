@@ -31,6 +31,7 @@ import {
     getPackageRegistry,
     isEClass,
     isEDataType,
+    isEPackage,
     ReadableStreamLike,
     URI,
     XMLNamespaces,
@@ -100,12 +101,20 @@ export class XMLDecoder implements EDecoder {
     protected _text: string
     protected _xmlVersion: string
     protected _encoding: string
+    // the load options of the document: a package it names in xsi:schemaLocation loads with them
+    private _options: Map<string, any>
+    // the locations of the xsi:schemaLocation of the document by namespace, the location of
+    // xsi:noNamespaceSchemaLocation under ""
+    private _urisToLocations: Map<string, URI> = new Map<string, URI>()
+    // the reasons why the package at the location of a namespace did not load
+    private _locationErrors: Map<string, string> = new Map<string, string>()
     private _attachFn: (eObject: EObject) => void
     private _errorFn: (eDiagnostic: EDiagnostic) => void
 
     constructor(resource: EResource, options: Map<string, any>) {
         this._resource = resource
         this._packageRegistry = this._resource.eResourceSet() ? this._resource.eResourceSet().getPackageRegistry() : getPackageRegistry()
+        this._options = options
         if (options) {
             this._idAttributeName = options.get(XMLOptions.ID_ATTRIBUTE_NAME)
             this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT)
@@ -402,9 +411,83 @@ export class XMLDecoder implements EDecoder {
         }
     }
 
-    protected handleXSISchemaLocation(loc: string): void {}
+    // handleXSISchemaLocation records the locations of xsi:schemaLocation, pairs of a namespace and a
+    // location, a relative location resolved against the uri of the resource. The package of a
+    // namespace loads from its location when the package registry does not know it (see
+    // getPackageFromLocation).
+    protected handleXSISchemaLocation(loc: string): void {
+        const fields = loc.split(/\s+/).filter((field) => field.length > 0)
+        for (let i = 0; i + 1 < fields.length; i += 2) {
+            this.putLocation(fields[i], fields[i + 1])
+        }
+    }
 
-    protected handleXSINoNamespaceSchemaLocation(loc: string): void {}
+    // handleXSINoNamespaceSchemaLocation records the location of the elements without namespace.
+    protected handleXSINoNamespaceSchemaLocation(loc: string): void {
+        this.putLocation("", loc.trim())
+    }
+
+    private putLocation(uri: string, location: string) {
+        let locationURI: URI
+        try {
+            locationURI = new URI(location)
+        } catch {
+            return
+        }
+        const resourceURI = this._resource.getURI()
+        if (resourceURI && !locationURI.isAbsolute()) {
+            locationURI = resourceURI.resolve(locationURI)
+        }
+        this._urisToLocations.set(uri, locationURI)
+    }
+
+    // getPackageFromLocation loads the package of the namespace uri from its schema location, through
+    // the resource set with the options of the document, and registers it in the package registry of
+    // the resource set (EMF XMLHandler.getPackageForURI). A resource of the resource set at the location
+    // is reused, loaded when it is not: a resource being loaded, as in a cycle of schema locations,
+    // gives the package already decoded. It returns null without a location or a resource set, or when
+    // the location has no package, the reason recorded for the diagnostic of the unknown package.
+    private getPackageFromLocation(uri: string): EPackage {
+        const location = this._urisToLocations.get(uri)
+        const eResourceSet = this._resource.eResourceSet()
+        if (!location || !eResourceSet) {
+            return null
+        }
+        let eResource = eResourceSet.getResource(location, false)
+        if (!eResource) {
+            eResource = eResourceSet.createResource(location)
+            if (!eResource) {
+                this._locationErrors.set(uri, location.toString() + ": no codec")
+                return null
+            }
+            this.loadLocation(eResource)
+            if (!eResource.isLoaded() || !eResource.getErrors().isEmpty()) {
+                // a location that does not load is not kept in the resource set
+                eResourceSet.getResources().remove(eResource)
+                const reason = eResource.getErrors().isEmpty() ? "not loaded" : eResource.getErrors().get(0).message
+                this._locationErrors.set(uri, location.toString() + ": " + reason)
+                return null
+            }
+        } else if (!eResource.isLoaded() && !eResource.isLoading()) {
+            this.loadLocation(eResource)
+        }
+        for (const eObject of eResource.eContents()) {
+            if (isEPackage(eObject)) {
+                eResourceSet.getPackageRegistry().registerPackage(eObject)
+                return eObject
+            }
+        }
+        this._locationErrors.set(uri, location.toString() + ": no package")
+        return null
+    }
+
+    private loadLocation(eResource: EResource) {
+        try {
+            eResource.loadSync(this._options)
+        } catch (e) {
+            eResource.getErrors().add(new EDiagnosticImpl(e instanceof Error ? e.message : String(e), eResource.getURI().toString(), 0, 0))
+        }
+    }
 
     protected getXSIType(): string {
         return this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.typeAttrib)
@@ -471,7 +554,7 @@ export class XMLDecoder implements EDecoder {
             }
         } else {
             const prefix = this._namespaces.getPrefix(uri)
-            if (prefix) this.handleUnknownPackage(prefix)
+            if (prefix) this.handleUnknownPackage(prefix, uri)
             else this.handleUnknownURI(uri)
             return null
         }
@@ -521,7 +604,7 @@ export class XMLDecoder implements EDecoder {
         const uri = this._namespaces.getURI(prefix)
         const eFactory = this.getFactoryForURI(uri)
         if (!eFactory) {
-            this.handleUnknownPackage(prefix)
+            this.handleUnknownPackage(prefix, uri)
             return null
         }
 
@@ -539,6 +622,9 @@ export class XMLDecoder implements EDecoder {
         let factory = this._uriToFactories.get(uri)
         if (factory == undefined) {
             factory = this._packageRegistry.getFactory(uri)
+            if (!factory && this.getPackageFromLocation(uri)) {
+                factory = this._packageRegistry.getFactory(uri)
+            }
             if (factory) {
                 this._uriToFactories.set(uri, factory)
             }
@@ -957,12 +1043,17 @@ export class XMLDecoder implements EDecoder {
         this.decodeError("Feature " + name + " not found")
     }
 
-    private handleUnknownPackage(name: string) {
-        this.decodeError("Package " + name + " not found")
+    private handleUnknownPackage(name: string, uri: string) {
+        this.decodeError("Package {'" + name + "'='" + uri + "'} not found" + this.getLocationError(uri))
     }
 
-    private handleUnknownURI(name: string) {
-        this.decodeError("URI " + name + " not found")
+    private handleUnknownURI(uri: string) {
+        this.decodeError("URI " + uri + " not found" + this.getLocationError(uri))
+    }
+
+    private getLocationError(uri: string): string {
+        const reason = this._locationErrors.get(uri)
+        return reason ? " (schema location " + reason + ")" : ""
     }
 
     private error(diagnostic: EDiagnostic) {
