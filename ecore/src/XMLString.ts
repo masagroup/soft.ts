@@ -9,10 +9,11 @@
 
 function escapeXML(str: string, isAttribute: boolean = false): string {
     if (!str) return str
-    let res = str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    // a parser normalizes a carriage return to a line feed: it is kept as a reference
+    let res = str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r/g, "&#13;")
     if (isAttribute) {
         // a parser normalizes the white spaces of an attribute value: they are kept as references
-        res = res.replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/\r/g, "&#13;").replace(/\n/g, "&#xA;").replace(/\t/g, "&#x9;")
+        res = res.replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/\n/g, "&#xA;").replace(/\t/g, "&#x9;")
     }
     return res
 }

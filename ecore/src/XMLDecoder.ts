@@ -75,6 +75,7 @@ enum LoadFeatureKind {
 export class XMLDecoder implements EDecoder {
     protected _resource: EResource
     protected _parser: sax.SAXParser
+    private _isMalformed: boolean = false
     protected _attributes: { [key: string]: sax.QualifiedAttribute } = null
     protected _namespaces: XMLNamespaces = new XMLNamespaces()
     protected _uriToFactories: Map<string, EFactory> = new Map<string, EFactory>()
@@ -121,7 +122,7 @@ export class XMLDecoder implements EDecoder {
         this._options = options
         if (options) {
             this._idAttributeName = options.get(XMLOptions.ID_ATTRIBUTE_NAME)
-            this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT)
+            this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT) === true
             this._isResolveDeferred = options.get(XMLOptions.DEFERRED_REFERENCE_RESOLUTION) === true
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA)
             if (options.get(XMLOptions.DEFERRED_ROOT_ATTACHMENT) === true) {
@@ -131,6 +132,12 @@ export class XMLDecoder implements EDecoder {
         if (!this._extendedMetaData) {
             this._extendedMetaData = new ExtendedMetaData()
         }
+    }
+
+    // setExtendedMetaData sets the ExtendedMetaData of the names and kinds of the features, none (null)
+    // reading them under their own names
+    setExtendedMetaData(extendedMetaData: ExtendedMetaData): void {
+        this._extendedMetaData = extendedMetaData
     }
 
     setXMLVersion(xmlVersion: string): void {
@@ -157,12 +164,15 @@ export class XMLDecoder implements EDecoder {
             xmlns: true,
             position: true
         })
-        saxParser.onopentag = (t: sax.QualifiedTag) => this.onStartTag(t)
-        saxParser.onclosetag = (t: string) => this.onEndTag(t)
-        saxParser.ontext = (t: string) => this.onText(t)
-        saxParser.oncdata = (t: string) => this.onText(t)
+        // after the first error of a malformed document, decoding stops (as soft.go): the rest of the
+        // document is not read
+        this._isMalformed = false
+        saxParser.onopentag = (t: sax.QualifiedTag) => this._isMalformed || this.onStartTag(t)
+        saxParser.onclosetag = (t: string) => this._isMalformed || this.onEndTag(t)
+        saxParser.ontext = (t: string) => this._isMalformed || this.onText(t)
+        saxParser.oncdata = (t: string) => this._isMalformed || this.onText(t)
         saxParser.onerror = (e) => this.onError(e)
-        saxParser.onprocessinginstruction = (n) => this.onProcessingInstruction(n)
+        saxParser.onprocessinginstruction = (n) => this._isMalformed || this.onProcessingInstruction(n)
         return saxParser
     }
 
@@ -280,9 +290,10 @@ export class XMLDecoder implements EDecoder {
     }
 
     private procInst(param: string, s: string): string {
-        const regexp = new RegExp(param + '="([^"]*)"', "g")
+        // the value is between double or single quotes
+        const regexp = new RegExp(param + "\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)')")
         const match = regexp.exec(s)
-        return !match || match.length == 0 ? "" : match[1]
+        return match ? (match[1] ?? match[2]) : ""
     }
 
     private onStartTag(tag: sax.QualifiedTag) {
@@ -350,7 +361,12 @@ export class XMLDecoder implements EDecoder {
     }
 
     private onError(err: Error) {
-        this.decodeError(err.message)
+        if (!this._isMalformed) {
+            this._isMalformed = true
+            this.decodeError(err.message)
+        }
+        // sax keeps its error and throws it on the next write or close unless it is resumed
+        this._parser.resume()
     }
 
     private setAttributes(attributes: { [key: string]: sax.QualifiedAttribute }): {
@@ -774,7 +790,13 @@ export class XMLDecoder implements EDecoder {
                 const attr = this._attributes[i]
                 if (attr.local == this._idAttributeName) {
                     const idManager = this._resource.getObjectIDManager()
-                    if (idManager) idManager.setID(eObject, attr.value)
+                    if (idManager) {
+                        try {
+                            idManager.setID(eObject, attr.value)
+                        } catch (e) {
+                            this.decodeError(e instanceof Error ? e.message : String(e))
+                        }
+                    }
                 } else if (attr.local == XMLConstants.href) {
                     this.handleProxy(eObject, attr.value)
                 } else if (attr.prefix != XMLConstants.xmlNS && this.isUserAttribute(attr)) {
@@ -900,7 +922,8 @@ export class XMLDecoder implements EDecoder {
         let isFirstID = true
         let position = 0
         let qName = ""
-        const tokens = ids.split(" ")
+        // split on any white space, as a parser normalizes it: an empty list has no token
+        const tokens = ids.split(/\s+/).filter((token) => token.length > 0)
         const references: XMLReference[] = []
         for (let id of tokens) {
             const index = id.indexOf("#")
