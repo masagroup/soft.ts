@@ -31,6 +31,7 @@ export class XMLString {
     indentation: string = "    "
     indents: string[] = [""]
     lastElementIsStart: boolean = false
+    lastElementHasText: boolean = false
     elementNames: string[] = []
 
     constructor() {
@@ -95,6 +96,16 @@ export class XMLString {
     endElement() {
         if (this.lastElementIsStart) {
             this.endEmptyElement()
+        } else if (this.lastElementHasText) {
+            // text was written inline after the start tag: close the element on the same line
+            const name = this.removeLast()
+            if (name != "") {
+                this.add("</")
+                this.add(name)
+                this.add(">")
+                this.addLine()
+            }
+            this.lastElementHasText = false
         } else {
             const name = this.removeLast()
             if (name != "") {
@@ -184,6 +195,17 @@ export class XMLString {
         this.add(">")
         this.addLine()
         this.lastElementIsStart = false
+    }
+
+    // addContentValue closes the open start tag and appends the text as the element's content;
+    // endElement keeps the closing tag on the same line.
+    addContentValue(content: string) {
+        if (this.lastElementIsStart) {
+            this.add(">")
+            this.lastElementIsStart = false
+        }
+        this.add(escapeXML(content, false))
+        this.lastElementHasText = true
     }
 
     getElementIndent(): string {

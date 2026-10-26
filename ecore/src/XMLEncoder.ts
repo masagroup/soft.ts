@@ -302,6 +302,29 @@ export class XMLEncoder implements EEncoder {
                         this.saveDataTypeSingle(eObject, eFeature)
                         continue LOOP
                     }
+                    case SaveFeatureKind.ObjectAttributeSingle: {
+                        // an attribute reference: a full href across resources, an IDREF otherwise
+                        switch (this.getSaveResourceKindSingle(eObject, eFeature)) {
+                            case SaveResourceKind.Cross:
+                                this.saveEObjectSingle(eObject, eFeature, false)
+                                break
+                            case SaveResourceKind.Same:
+                                this.saveIDRefSingle(eObject, eFeature)
+                                break
+                        }
+                        continue LOOP
+                    }
+                    case SaveFeatureKind.ObjectAttributeMany: {
+                        switch (this.getSaveResourceKindMany(eObject, eFeature)) {
+                            case SaveResourceKind.Cross:
+                                this.saveEObjectMany(eObject, eFeature, false)
+                                break
+                            case SaveResourceKind.Same:
+                                this.saveIDRefMany(eObject, eFeature)
+                                break
+                        }
+                        continue LOOP
+                    }
 
                     case SaveFeatureKind.DataTypeSingleNillable: {
                         if (!this.isNil(eObject, eFeature)) {
@@ -320,7 +343,9 @@ export class XMLEncoder implements EEncoder {
                     }
                     case SaveFeatureKind.ObjectContainSingleUnsettable:
                     case SaveFeatureKind.ObjectContainSingle:
-                    case SaveFeatureKind.ObjectContainMany: {
+                    case SaveFeatureKind.ObjectContainMany:
+                    case SaveFeatureKind.DataTypeContentSingle:
+                    case SaveFeatureKind.DataTypeElementSingle: {
                         break
                     }
                     case SaveFeatureKind.ObjectHREFSingleUnsettable: {
@@ -328,7 +353,7 @@ export class XMLEncoder implements EEncoder {
                             switch (this.getSaveResourceKindSingle(eObject, eFeature)) {
                                 case SaveResourceKind.Cross: {
                                     if (this._useEncodedAttributeStyle) {
-                                        this.saveEObjectSingle(eObject, eFeature)
+                                        this.saveEObjectSingle(eObject, eFeature, true)
                                         continue LOOP
                                     }
                                     break
@@ -347,7 +372,7 @@ export class XMLEncoder implements EEncoder {
                         switch (this.getSaveResourceKindSingle(eObject, eFeature)) {
                             case SaveResourceKind.Cross: {
                                 if (this._useEncodedAttributeStyle) {
-                                    this.saveEObjectSingle(eObject, eFeature)
+                                    this.saveEObjectSingle(eObject, eFeature, true)
                                     continue LOOP
                                 }
                                 break
@@ -369,7 +394,7 @@ export class XMLEncoder implements EEncoder {
                             switch (this.getSaveResourceKindMany(eObject, eFeature)) {
                                 case SaveResourceKind.Cross: {
                                     if (this._useEncodedAttributeStyle) {
-                                        this.saveEObjectMany(eObject, eFeature)
+                                        this.saveEObjectMany(eObject, eFeature, true)
                                         continue LOOP
                                     }
                                     break
@@ -388,7 +413,7 @@ export class XMLEncoder implements EEncoder {
                         switch (this.getSaveResourceKindMany(eObject, eFeature)) {
                             case SaveResourceKind.Cross: {
                                 if (this._useEncodedAttributeStyle) {
-                                    this.saveEObjectMany(eObject, eFeature)
+                                    this.saveEObjectMany(eObject, eFeature, true)
                                     continue LOOP
                                 }
                                 break
@@ -443,6 +468,14 @@ export class XMLEncoder implements EEncoder {
                     this.saveContainedSingle(eObject, eFeature)
                     break
                 }
+                case SaveFeatureKind.DataTypeContentSingle: {
+                    this.saveDataTypeContent(eObject, eFeature)
+                    break
+                }
+                case SaveFeatureKind.DataTypeElementSingle: {
+                    this.saveDataTypeElementSingle(eObject, eFeature)
+                    break
+                }
                 case SaveFeatureKind.ObjectContainManyUnsettable:
                 case SaveFeatureKind.ObjectContainMany: {
                     this.saveContainedMany(eObject, eFeature)
@@ -489,6 +522,24 @@ export class XMLEncoder implements EEncoder {
         }
     }
 
+    // saveDataTypeElementSingle saves a kind="element" single attribute as a child element
+    private saveDataTypeElementSingle(eObject: EObject, eFeature: EStructuralFeature) {
+        const val = eObject.eGetResolve(eFeature, false)
+        const str = this.getDataType(val, eFeature, false)
+        if (str !== undefined && str !== null) {
+            this._str.addContent(this.getFeatureQName(eFeature), str)
+        }
+    }
+
+    // saveDataTypeContent saves a kind="simple" attribute as the text of the element
+    private saveDataTypeContent(eObject: EObject, eFeature: EStructuralFeature) {
+        const val = eObject.eGetResolve(eFeature, false)
+        const str = this.getDataType(val, eFeature, false)
+        if (str !== undefined && str !== null) {
+            this._str.addContentValue(str)
+        }
+    }
+
     private saveDataTypeMany(eObject: EObject, eFeature: EStructuralFeature) {
         const l = eObject.eGetResolve(eFeature, false) as EList<EObject>
         const d = eFeature.getEType() as EDataType
@@ -513,24 +564,26 @@ export class XMLEncoder implements EEncoder {
         this._str.addAttribute(this.getFeatureQName(eFeature), "")
     }
 
-    private saveEObjectSingle(eObject: EObject, eFeature: EStructuralFeature) {
+    // saveEObjectSingle saves a reference as an attribute holding its href, prefixed with the class of
+    // the object in the encoded attribute style
+    private saveEObjectSingle(eObject: EObject, eFeature: EStructuralFeature, encoded: boolean) {
         const value = eObject.eGetResolve(eFeature, false)
         if (value && isEObject(value)) {
-            const id = this.getEncodedHRef(value, eFeature)
+            const id = encoded ? this.getEncodedHRef(value, eFeature) : this.getHRef(value)
             if (id != "") {
                 this._str.addAttribute(this.getFeatureQName(eFeature), id)
             }
         }
     }
 
-    private saveEObjectMany(eObject: EObject, eFeature: EStructuralFeature) {
+    private saveEObjectMany(eObject: EObject, eFeature: EStructuralFeature, encoded: boolean) {
         const l = eObject.eGetResolve(eFeature, false) as EList<EObject>
         let failure = false
         let first = true
         let buffer = ""
         for (const value of l) {
             if (value) {
-                const id = this.getEncodedHRef(value, eFeature)
+                const id = encoded ? this.getEncodedHRef(value, eFeature) : this.getHRef(value)
                 if (id == "") {
                     failure = true
                 } else {
@@ -901,6 +954,10 @@ export class XMLEncoder implements EEncoder {
             if (f.getEOpposite()?.isContainment()) {
                 return SaveFeatureKind.Transient
             }
+            // a kind="attribute" reference is an attribute, as the decoder reads it
+            if (this._extendedMetaData?.getFeatureKind(f) === "attribute") {
+                return f.isMany() ? SaveFeatureKind.ObjectAttributeMany : SaveFeatureKind.ObjectAttributeSingle
+            }
             if (f.isMany()) {
                 if (f.isUnsettable()) {
                     return SaveFeatureKind.ObjectHREFManyUnsettable
@@ -921,6 +978,17 @@ export class XMLEncoder implements EEncoder {
                 if (!eType.isSerializable()) {
                     return SaveFeatureKind.Transient
                 }
+            if (!f.isMany()) {
+                // a kind="simple" attribute is the text of the element, a kind="element" one a child
+                // element, as the decoder reads them
+                const featureKind = this._extendedMetaData?.getFeatureKind(f)
+                if (featureKind === "simple") {
+                    return SaveFeatureKind.DataTypeContentSingle
+                }
+                if (featureKind === "element") {
+                    return SaveFeatureKind.DataTypeElementSingle
+                }
+            }
             if (f.isMany()) {
                 return SaveFeatureKind.DataTypeMany
             }

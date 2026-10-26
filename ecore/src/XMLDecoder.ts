@@ -11,6 +11,7 @@ import sax from "sax"
 import { Err, Ok, Result } from "ts-results-es"
 import {
     BufferLike,
+    EClass,
     EClassifier,
     EcoreUtils,
     EDataType,
@@ -29,6 +30,7 @@ import {
     EStructuralFeature,
     ExtendedMetaData,
     getPackageRegistry,
+    isEAttribute,
     isEClass,
     isEDataType,
     ReadableStreamLike,
@@ -98,6 +100,8 @@ export class XMLDecoder implements EDecoder {
     // the ids of the objects of the document set by setObjectID (xmi:id)
     protected _ids: Map<string, EObject>
     protected _text: string
+    // the kind="simple" attribute of a class, if any
+    private _simpleFeatures: Map<EClass, EStructuralFeature> = new Map<EClass, EStructuralFeature>()
     protected _xmlVersion: string
     protected _encoding: string
     private _attachFn: (eObject: EObject) => void
@@ -297,7 +301,13 @@ export class XMLDecoder implements EDecoder {
         if (this._text !== undefined) {
             if (eType === LOAD_OBJECT_TYPE) {
                 if (this._text.length > 0) {
-                    this.handleProxy(eObject, this._text)
+                    // the text of an element is the simple content of its class if it has one, else a proxy URI
+                    const eSimpleFeature = this.getSimpleFeature(eObject.eClass())
+                    if (eSimpleFeature) {
+                        this.setFeatureValue(eObject, eSimpleFeature, this._text, -1)
+                    } else {
+                        this.handleProxy(eObject, this._text)
+                    }
                 }
             } else if (eType !== LOAD_ERROR_TYPE) {
                 if (eObject == null && this._objects.length > 0) {
@@ -435,9 +445,30 @@ export class XMLDecoder implements EDecoder {
         if (eObject) {
             this._objects.push(eObject)
             this._types.push(LOAD_OBJECT_TYPE)
+            // capture the text of the element of a class with simple content
+            if (this.getSimpleFeature(eObject.eClass())) {
+                this._text = ""
+            }
         } else {
             this._types.push(LOAD_ERROR_TYPE)
         }
+    }
+
+    private getSimpleFeature(eClass: EClass): EStructuralFeature {
+        let eFeature = this._simpleFeatures.get(eClass)
+        if (eFeature === undefined) {
+            eFeature = null
+            if (this._extendedMetaData) {
+                for (const f of eClass.getEAllStructuralFeatures()) {
+                    if (isEAttribute(f) && this._extendedMetaData.getFeatureKind(f) === "simple") {
+                        eFeature = f
+                        break
+                    }
+                }
+            }
+            this._simpleFeatures.set(eClass, eFeature)
+        }
+        return eFeature
     }
 
     private createTopObject(uri: string, local: string): EObject {
