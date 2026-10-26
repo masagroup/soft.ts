@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EResource } from "./internal.js"
+import { EResource, XMLOptions } from "./internal.js"
 import { XMIConstants } from "./XMIConstants.js"
 import { XMLEncoder } from "./XMLEncoder.js"
 
@@ -17,6 +17,10 @@ export class XMIEncoder extends XMLEncoder {
     constructor(resource: EResource, options: Map<string, any>) {
         super(resource, options)
         this._xmiVersion = "2.0"
+        // as EMF and soft.go, an XMI document uses ExtendedMetaData only when the options give one
+        if (!options?.get(XMLOptions.EXTENDED_META_DATA)) {
+            this.setExtendedMetaData(null)
+        }
     }
 
     getXMIVersion(): string {

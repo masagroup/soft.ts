@@ -127,6 +127,12 @@ export class XMLEncoder implements EEncoder {
         }
     }
 
+    // setExtendedMetaData sets the ExtendedMetaData of the names and kinds of the features, none (null)
+    // saving them under their own names
+    setExtendedMetaData(extendedMetaData: ExtendedMetaData): void {
+        this._extendedMetaData = extendedMetaData
+    }
+
     setXMLVersion(xmlVersion: string): void {
         this._xmlVersion = xmlVersion
     }
@@ -154,23 +160,27 @@ export class XMLEncoder implements EEncoder {
         if (contents.isEmpty()) {
             return Ok(new Uint8Array())
         }
+        // the errors the resource already has, as the ones of its loading, are not the ones of this encoding
+        const errors = this._resource.getErrors()
+        const errorCount = errors.size()
         this.encodeTopObject(contents.get(0))
 
-        const errors = this._resource.getErrors()
-        if (errors.isEmpty()) {
+        if (errors.size() == errorCount) {
             const r = this._str.toString()
             const e = new Uint8Array(utf8Count(r))
             utf8Encode(r, e, 0)
             return Ok(e)
         } else {
-            return Err(errors.get(0))
+            return Err(errors.get(errorCount))
         }
     }
 
     encodeObject(eObject: EObject): Result<Uint8Array, Error> {
         let error: Error
         this._errorFn = (diagnostic: EDiagnostic) => {
-            error = diagnostic
+            if (!error) {
+                error = diagnostic
+            }
         }
         this.encodeTopObject(eObject)
         if (error) {
@@ -277,7 +287,7 @@ export class XMLEncoder implements EEncoder {
     protected saveElementID(eObject: EObject) {
         if (this._idAttributeName && this._resource.getObjectIDManager()) {
             const id = this._resource.getObjectIDManager().getID(eObject)
-            if (id) {
+            if (id !== undefined && id !== null) {
                 this._str.addAttribute(this._idAttributeName, String(id))
             }
         }
@@ -778,7 +788,10 @@ export class XMLEncoder implements EEncoder {
                 if (eResource) {
                     uri = this.getResourceHRef(eResource, eObject)
                 } else {
-                    if (this._resource && this._resource.getObjectIDManager()) {
+                    // an object in no resource has an href only by the id the id manager gave it
+                    const idManager = this._resource?.getObjectIDManager()
+                    const id = idManager?.getID(eObject)
+                    if (id !== undefined && id !== null) {
                         uri = this.getResourceHRef(this._resource, eObject)
                     } else {
                         this.handleDanglingHREF(eObject)
