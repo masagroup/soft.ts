@@ -25,7 +25,6 @@ import {
     EResource,
     EStructuralFeature,
     ExtendedMetaData,
-    getEcorePackage,
     getPackageRegistry,
     isEClass,
     isEDataType,
@@ -657,7 +656,7 @@ export class XMLEncoder implements EEncoder {
         this._str.startElement(this.getFeatureQName(f))
         const eClass = o.eClass()
         const eType = f.getEType()
-        if (eType != eClass && eType != getEcorePackage().getEObject()) {
+        if (eType != eClass) {
             this.saveTypeAttribute(eClass)
         }
         this.saveElementID(o)

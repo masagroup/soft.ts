@@ -11,7 +11,7 @@ import fs from "fs"
 import os from "os"
 import path from "path"
 import { afterEach, describe, expect, test } from "vitest"
-import { createFileURI, EObject, EPackage, EResource, XMIProcessor } from "./internal.js"
+import { createFileURI, EAnnotation, EObject, EPackage, EResource, EResourceSetImpl, isEAnnotation, URI, XMIProcessor } from "./internal.js"
 
 // ecorePackage is an .ecore document of a package named name with the namespace urn:<name>, its root
 // element carrying the attributes attrs, holding body.
@@ -157,5 +157,43 @@ describe("XMIDecoder xsi:schemaLocation", () => {
         expect(message).toContain("Package {'notes'='urn:notes'} not found")
         expect(message).toContain("gone.ecore")
         expect(eResource.eResourceSet().getResources().size()).toBe(1)
+    })
+})
+
+describe("XMIEncoder annotation contents", () => {
+    // the contents of an annotation, a feature typed EObject, are saved with their type, as EMF saves
+    // them, and load back as the objects they were
+    test("saves the type of the contents", () => {
+        const dir = writeDocuments({
+            "notes.ecore": ecorePackage("notes", "", noteClass),
+            "document.ecore": ecorePackage(
+                "document",
+                `xmlns:notes="urn:notes" xsi:schemaLocation="urn:notes notes.ecore"`,
+                `  <eAnnotations source="meta">
+    <contents xsi:type="notes:Note" text="a note"/>
+    <contents xsi:type="ecore:EAnnotation" source="nested"/>
+  </eAnnotations>`
+            )
+        })
+        const eResource = loadDocument(dir, "document.ecore")
+        expect(errorMessages(eResource)).toBe("")
+
+        const saved = new XMIProcessor().saveToString(eResource)
+        expect(saved).toContain(`<contents xsi:type="notes:Note" text="a note"/>`)
+        expect(saved).toContain(`<contents xsi:type="ecore:EAnnotation" source="nested"/>`)
+
+        // the saved document loads with the notes package registered, without its schema location
+        const notes = eResource.eResourceSet().getPackageRegistry().getPackage("urn:notes")
+        expect(notes).toBeTruthy()
+        const eResourceSet = new EResourceSetImpl()
+        eResourceSet.getPackageRegistry().registerPackage(notes)
+        const reloaded = eResourceSet.createResource(new URI("document.ecore"))
+        reloaded.loadFromString(saved)
+        const note = annotationContent(reloaded, 0)
+        expect(note.eClass().getEPackage()).toBe(notes)
+        expect(note.eGet(note.eClass().getEStructuralFeatureFromName("text"))).toBe("a note")
+        const nested = annotationContent(reloaded, 1)
+        expect(isEAnnotation(nested)).toBe(true)
+        expect((nested as EAnnotation).getSource()).toBe("nested")
     })
 })
