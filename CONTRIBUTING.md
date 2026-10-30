@@ -36,7 +36,3 @@ The build of the repository is described in the [README](README.md#build); the t
 - No publish step: no `npm publish`, no release, no artifact upload, no Docker image. How `@masagroup/ecore` reaches npm is not visible in this repo (UNVERIFIED; "build: set package version to X" commits and `v1.x.y` tags suggest a manual or external publication).
 - `make ci` does not call the generator, and the Makefile only stops on a missing `../models` when a generation recipe expands `GENERATOR`: the `soft.models` checkout appears unused by `make ci` (UNVERIFIED whether it is a leftover).
 - The README badge references `build_and_test.yaml` in `masagroup/soft.ts`.
-
-## Known issues and open questions
-
-They are not kept in the repository: see the [private artifact](https://claude.ai/artifact/UfvKmky7e8LwEXf192hQjQ#soft.ts) that holds them for every page of the wiki.

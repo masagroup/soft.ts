@@ -24,7 +24,7 @@ For the previous documentation of the project (v1), see [README.LEGACY.md](READM
 | **Languages** | TypeScript (ES modules, target ES2020) |
 | **Build systems** | npm (`ecore/package.json`) · GNU Make (root `Makefile`) · Docker only to run the code generator (image `masagroup/soft.gen:v2.0.0-alpha.3`) |
 
-**[Architecture](ARCHITECTURE.md)** · [Contributing](CONTRIBUTING.md) · [previous README (v1)](README.LEGACY.md) · [known issues and open questions](https://claude.ai/artifact/UfvKmky7e8LwEXf192hQjQ#soft.ts) · [repository on GitHub](https://github.com/masagroup/soft.ts)
+**[Architecture](ARCHITECTURE.md)** · [Contributing](CONTRIBUTING.md) · [previous README (v1)](README.LEGACY.md) · [known issues and open questions](https://github.com/masagroup/wiki/wiki/known-issues#soft.ts) · [repository on GitHub](https://github.com/masagroup/soft.ts)
 
 ## Overview
 
@@ -170,7 +170,7 @@ No executable is produced by this repository (library, contract, data or tooling
 - [Architecture](ARCHITECTURE.md): position in the ecosystem, repository layout, internal structure, how it works (diagrams), dependencies.
 - [Contributing](CONTRIBUTING.md): development environment, Git and Jira workflow, conventions, CI/CD.
 - [Previous README (v1)](README.LEGACY.md): the documentation of the repository before the wiki rewrite.
-- [Known issues and open questions](https://claude.ai/artifact/UfvKmky7e8LwEXf192hQjQ#soft.ts): the private artifact that holds them (every page of the wiki).
+- [Known issues and open questions](https://github.com/masagroup/wiki/wiki/known-issues#soft.ts): the known defects and open points of the repository, kept in the SWORD wiki.
 - Related repositories: [soft](https://github.com/masagroup/soft), [soft.gen](https://github.com/masagroup/soft.gen), [soft.models](https://github.com/masagroup/soft.models), [soft.sync.studio](https://github.com/masagroup/soft.sync.studio), [soft.sync.ts](https://github.com/masagroup/soft.sync.ts), [sw.api.ng.ts](https://github.com/masagroup/sw.api.ng.ts), [sw.webclient](https://github.com/masagroup/sw.webclient).
 - Transverse pages: [Build on Windows](https://github.com/masagroup/wiki/wiki/build-windows), [Build on Linux](https://github.com/masagroup/wiki/wiki/build-linux), [CI/CD pipelines](https://github.com/masagroup/wiki/wiki/cicd-pipelines), [Ecosystem today](https://github.com/masagroup/wiki/wiki/ecosystem-current), [Ecosystem next gen](https://github.com/masagroup/wiki/wiki/ecosystem-nextgen), [Glossary](https://github.com/masagroup/wiki/wiki/glossary).
 - Repository on GitHub: [masagroup/soft.ts](https://github.com/masagroup/soft.ts).
