@@ -35,6 +35,19 @@ export class Decoder {
         this._pos = 0
     }
 
+    // remaining returns the number of bytes left to read
+    remaining(): number {
+        return this._bytes.byteLength - this._pos
+    }
+
+    // checkRemaining throws if the input has less than len bytes left: a length read from the
+    // input is not trusted
+    private checkRemaining(len: number) {
+        if (len > this.remaining()) {
+            throw new Error(`invalid length ${len}: only ${this.remaining()} bytes left`)
+        }
+    }
+
     decode(): unknown {
         const code = this.readU8()
         if (Types.isFixedNum(code)) {
@@ -149,6 +162,7 @@ export class Decoder {
             return ""
         }
         const len = this.bytesLen(code)
+        this.checkRemaining(len)
         let str = ""
         if (len > 0) {
             str = utf8Decode(this._bytes, this._pos, len)
@@ -167,6 +181,7 @@ export class Decoder {
             return null
         }
         const len = this.bytesLen(code)
+        this.checkRemaining(len)
         const bytes = this._bytes.subarray(this._pos, this._pos + len)
         this._pos += len
         return bytes
@@ -194,6 +209,7 @@ export class Decoder {
     private decodeExt(c: number) {
         const extLen = this.parseExtLen(c)
         const extID = this.readI8()
+        this.checkRemaining(extLen)
         const data = this._bytes.subarray(this._pos, this._pos + extLen)
         this._pos += extLen
         return this._extensionCodec.decode(data, extID)
