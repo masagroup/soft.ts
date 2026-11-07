@@ -95,6 +95,16 @@ function unsetEventType(feature: EStructuralFeature): EventType {
     return feature.isUnsettable() ? EventType.UNSET : EventType.SET
 }
 
+// unhandledFeature returns the error of a static feature that no generated class handles in
+// eSetFromID, eIsSetFromID or eUnsetFromID, such as an unchangeable feature: the package of a
+// classifier, the derived attributes of a class. The generated classes handle their features in
+// those methods, overriding them; a feature they do not handle reached AbstractEObject.
+// Delegating to eSet, eIsSet or eUnset, as these methods did, called them again for the same ID:
+// it recursed until the stack overflowed. EMF throws an IllegalArgumentException.
+function unhandledFeature(feature: EStructuralFeature, verb: string): Error {
+    return new Error("The feature '" + feature.getName() + "' cannot be " + verb)
+}
+
 export abstract class AbstractEObject extends AbstractENotifier implements EObjectInternal {
     abstract eInternalContainer(): EObject
     abstract eInternalResource(): EResource
@@ -559,6 +569,10 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
     }
 
+    // eSetFromID sets the value of the feature of ID featureID: a dynamic feature in the dynamic
+    // properties. A static feature is set by the generated classes, which override eSetFromID: one
+    // reaching this method is a feature no class sets, such as an unchangeable one, and it throws
+    // (see unhandledFeature).
     eSetFromID(featureID: number, newValue: any): void {
         const feature = this.eClass().getEStructuralFeature(featureID)
         if (!feature) {
@@ -566,7 +580,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
         const dynamicFeatureID = featureID - this.eStaticFeatureCount()
         if (dynamicFeatureID < 0) {
-            return this.eSet(feature, newValue)
+            throw unhandledFeature(feature, "set")
         } else {
             const properties = this.eDynamicProperties()
             if (properties) {
@@ -682,6 +696,9 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         throw new Error("The feature '" + feature.getName() + "' is not a valid feature")
     }
 
+    // eIsSetFromID returns true when the feature of ID featureID is set: a dynamic feature in the
+    // dynamic properties. The generated classes answer for a static feature by overriding
+    // eIsSetFromID: one reaching this method throws (see unhandledFeature).
     eIsSetFromID(featureID: number): boolean {
         const feature = this.eClass().getEStructuralFeature(featureID)
         if (!feature) {
@@ -689,7 +706,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
         const dynamicFeatureID = featureID - this.eStaticFeatureCount()
         if (dynamicFeatureID < 0) {
-            return this.eIsSet(feature)
+            throw unhandledFeature(feature, "checked")
         } else {
             const properties = this.eDynamicProperties()
             if (properties) {
@@ -732,6 +749,9 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
     }
 
+    // eUnsetFromID unsets the feature of ID featureID: a dynamic feature in the dynamic properties.
+    // A static feature is unset by the generated classes, which override eUnsetFromID: one reaching
+    // this method throws (see unhandledFeature).
     eUnsetFromID(featureID: number): void {
         const feature = this.eClass().getEStructuralFeature(featureID)
         if (!feature) {
@@ -739,7 +759,7 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
         }
         const dynamicFeatureID = featureID - this.eStaticFeatureCount()
         if (dynamicFeatureID < 0) {
-            this.eUnset(feature)
+            throw unhandledFeature(feature, "unset")
         } else {
             const properties = this.eDynamicProperties()
             if (properties) {
