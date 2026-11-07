@@ -27,6 +27,24 @@ export function isEClass(c: any): c is EClass {
     return typeof c === "object" && c !== null && "isAbstract" in c
 }
 
+// EClassModifiable is a class whose derived values a change of its features, operations or super
+// types invalidates, in the class and in its sub classes: an attribute that becomes, or stops
+// being, the ID of its class invalidates the attributes of the class (EAttributeExt.setID).
+// Internal to the package: index.ts does not export it.
+export interface EClassModifiable {
+    setModified(featureID: number): void
+}
+
+// EClassSubClasses is a class that knows its sub classes, to invalidate their derived values with
+// its own. The super types adapter registers a class with its super types (addSubClass,
+// removeSubClass). The values are built the other way, from the super types. Internal to the
+// package: index.ts does not export it.
+export interface EClassSubClasses extends EClassModifiable {
+    getSubClasses(): readonly EClassExt[]
+    addSubClass(subClass: EClassExt): void
+    removeSubClass(subClass: EClassExt): void
+}
+
 class ESuperAdapter extends AbstractEAdapter {
     constructor(private _eClass: EClassExt) {
         super()
@@ -34,62 +52,35 @@ class ESuperAdapter extends AbstractEAdapter {
 
     notifyChanged(notification: ENotification): void {
         const eventType = notification.getEventType()
-        const notifier = notification.getNotifier() as EClassExt
         if (eventType != EventType.REMOVING_ADAPTER) {
             if (notification.getFeatureID() == EcoreConstants.ECLASS__ESUPER_TYPES) {
+                const notifier = notification.getNotifier() as EClassExt
                 switch (eventType) {
                     case EventType.SET:
-                    case EventType.RESOLVE: {
-                        if (notification.getOldValue() != null) {
-                            const eClass = notification.getOldValue() as EClassExt
-                            const index = eClass._subClasses.findIndex((c) => c == notifier)
-                            if (index != -1) eClass._subClasses.splice(index, 1)
+                    case EventType.RESOLVE:
+                    case EventType.ADD:
+                    case EventType.REMOVE: {
+                        const oldSuperType = notification.getOldValue() as EClassSubClasses
+                        if (oldSuperType != null) {
+                            oldSuperType.removeSubClass(notifier)
                         }
-                        if (notification.getNewValue() != null) {
-                            const eClass = notification.getNewValue() as EClassExt
-                            eClass._subClasses.push(notifier)
-                        }
-                        break
-                    }
-                    case EventType.ADD: {
-                        if (notification.getNewValue() != null) {
-                            const eClass = notification.getNewValue() as EClassExt
-                            eClass._subClasses.push(notifier)
+                        const newSuperType = notification.getNewValue() as EClassSubClasses
+                        if (newSuperType != null) {
+                            newSuperType.addSubClass(notifier)
                         }
                         break
                     }
                     case EventType.ADD_MANY: {
-                        if (notification.getNewValue() != null) {
-                            const classes = notification.getNewValue() as EClassExt[]
-                            for (const cls of classes) {
-                                cls._subClasses.push(notifier)
-                            }
-                        }
-                        break
-                    }
-                    case EventType.REMOVE: {
-                        if (notification.getOldValue() != null) {
-                            const eClass = notification.getOldValue() as EClassExt
-                            for (const [i, subClass] of eClass._subClasses.entries()) {
-                                if (subClass == notifier) {
-                                    eClass._subClasses.splice(i, 1)
-                                    break
-                                }
-                            }
+                        const newSuperTypes = notification.getNewValue() as EClassSubClasses[]
+                        for (const superType of newSuperTypes ?? []) {
+                            superType.addSubClass(notifier)
                         }
                         break
                     }
                     case EventType.REMOVE_MANY: {
-                        if (notification.getOldValue() != null) {
-                            const classes = notification.getOldValue() as EClassExt[]
-                            for (const eClass of classes) {
-                                for (const [i, subClass] of eClass._subClasses.entries()) {
-                                    if (subClass == notifier) {
-                                        eClass._subClasses.splice(i, 1)
-                                        break
-                                    }
-                                }
-                            }
+                        const oldSuperTypes = notification.getOldValue() as EClassSubClasses[]
+                        for (const superType of oldSuperTypes ?? []) {
+                            superType.removeSubClass(notifier)
                         }
                         break
                     }
@@ -124,7 +115,7 @@ const BUILDING_REFERENCES = 1 << 2
 const BUILDING_OPERATIONS = 1 << 3
 const BUILDING_STRUCTURAL_FEATURES = 1 << 4
 
-export class EClassExt extends EClassImpl {
+export class EClassExt extends EClassImpl implements EClassSubClasses {
     // the derived values whose build is in progress (BUILDING_*): a class among its own super
     // types, directly or through other classes, is an invalid model, but nothing refuses it. The
     // build of a value of such a class reaches the build of the same value of the class, which
@@ -135,7 +126,7 @@ export class EClassExt extends EClassImpl {
     private _nameToFeatureMap: Map<string, EStructuralFeature>
     private _operationToOverrideMap: Map<EOperation, EOperation>
     private _adapter: ESuperAdapter
-    public _subClasses: EClassExt[] = []
+    private _subClasses: EClassExt[] = []
 
     constructor() {
         super()
@@ -455,6 +446,22 @@ export class EClassExt extends EClassImpl {
 
     protected initEIDAttribute(): void {
         this.initEAllAttributes()
+    }
+
+    getSubClasses(): readonly EClassExt[] {
+        return this._subClasses
+    }
+
+    addSubClass(subClass: EClassExt): void {
+        this._subClasses.push(subClass)
+    }
+
+    // removeSubClass removes subClass once: a class may list a super type twice
+    removeSubClass(subClass: EClassExt): void {
+        const index = this._subClasses.indexOf(subClass)
+        if (index != -1) {
+            this._subClasses.splice(index, 1)
+        }
     }
 
     // setModified invalidates the values derived from featureID, in this class and its sub classes

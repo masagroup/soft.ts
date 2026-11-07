@@ -7,7 +7,7 @@
 //
 // *****************************************************************************
 
-import { EAttribute, EAttributeImpl, EClassExt, EcoreConstants, EDataType } from "./internal.js"
+import { EAttribute, EAttributeImpl, EClassModifiable, EcoreConstants, EDataType } from "./internal.js"
 
 export function isEAttribute(s: any): s is EAttribute {
     return typeof s === "object" && s !== null && "getEAttributeType" in s
@@ -30,8 +30,9 @@ export class EAttributeExt extends EAttributeImpl {
         super.setID(newIsID)
         const eClass = this.getEContainingClass()
         if (eClass != null) {
-            const eClassExt = eClass as EClassExt
-            eClassExt.setModified(EcoreConstants.ECLASS__EATTRIBUTES)
+            // the ID attribute of the class is derived from its attributes
+            const eClassModifiable = eClass as unknown as EClassModifiable
+            eClassModifiable.setModified(EcoreConstants.ECLASS__EATTRIBUTES)
         }
     }
 }

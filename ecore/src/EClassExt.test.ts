@@ -22,7 +22,7 @@ import {
 } from "./internal.js"
 
 function containsSubClass(eSuper: EClassExt, eClass: EClassExt): boolean {
-    return eSuper._subClasses.indexOf(eClass) != -1
+    return eSuper.getSubClasses().indexOf(eClass) != -1
 }
 
 describe("EClassExt", () => {
