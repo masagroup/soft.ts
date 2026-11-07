@@ -558,7 +558,9 @@ export class XMLDecoder implements EDecoder {
                 this._text = ""
             }
         } else {
+            // a placeholder, so onEndTag pops it and not the object holding the element
             this._types.push(LOAD_ERROR_TYPE)
+            this._objects.push(null)
         }
     }
 
@@ -701,6 +703,14 @@ export class XMLDecoder implements EDecoder {
                 if (featureKind == LoadFeatureKind.Single || featureKind == LoadFeatureKind.Many) {
                     this._text = ""
                     this._types.push(eFeature)
+                    this._objects.push(null)
+                } else if (this.getAttributeValue(XMLConstants.xsiURI, XMLConstants.nilAttrib) == "true") {
+                    // an unsettable object feature set to nil, as the encoder writes it: no object is
+                    // created, and a placeholder keeps the stack of objects in step with the elements
+                    if (!eFeature.isMany()) {
+                        eObject.eSet(eFeature, null)
+                    }
+                    this._types.push(LOAD_ERROR_TYPE)
                     this._objects.push(null)
                 } else {
                     const xsiType = this.getXSIType()

@@ -10,6 +10,7 @@
 export class XMLConstants {
     static href = "href"
     static typeAttrib = "type"
+    static nilAttrib = "nil"
     static schemaLocationAttrib = "schemaLocation"
     static noNamespaceSchemaLocationAttrib = "noNamespaceSchemaLocation"
     static xsiURI = "http://www.w3.org/2001/XMLSchema-instance"
