@@ -264,7 +264,11 @@ export class XMLEncoder implements EEncoder {
 
     private getRootFeature(eClassifier: EClassifier): EStructuralFeature {
         if (this._extendedMetaData) {
-            while (eClassifier) {
+            // the classifiers searched already: the first super types may lead to a cycle, in an
+            // invalid model
+            const searched = new Set<EClassifier>()
+            while (eClassifier && !searched.has(eClassifier)) {
+                searched.add(eClassifier)
                 const eClass = this._extendedMetaData.getDocumentRoot(eClassifier.getEPackage())
                 if (eClass) {
                     for (const eFeature of eClass.getEStructuralFeatures()) {

@@ -34,6 +34,7 @@ import {
     URI
 } from "./internal.js"
 import { Decoder } from "./msgpack/Decoder.js"
+import { checkSuperTypes } from "./SuperTypesCycle.js"
 import { ensureAsyncIterable } from "./utils/Stream.js"
 import { ensureUint8Array } from "./utils/TypedArray.js"
 
@@ -105,7 +106,7 @@ export class BinaryDecoder implements EDecoder {
             this.setBuffer(buffer as BufferDecoder)
             this.decodeSignature()
             this.decodeVersion()
-            return Ok(this.decodeEObject())
+            return Ok(this.decodeRootEObject())
         } catch (e) {
             return Err(e)
         }
@@ -135,6 +136,11 @@ export class BinaryDecoder implements EDecoder {
         for (let i = 0; i < size; i++) {
             objects.push(this.decodeEObject())
         }
+        // an invalid model, a class among its own super types, is an error: the resource stays empty
+        const err = checkSuperTypes(this._objects)
+        if (err) {
+            throw err
+        }
 
         // add objects to resource
         this._resource.eContents().addAll(new ImmutableEList(objects))
@@ -155,7 +161,19 @@ export class BinaryDecoder implements EDecoder {
         // decode
         this.decodeSignature()
         this.decodeVersion()
-        return this.decodeEObject()
+        return this.decodeRootEObject()
+    }
+
+    // decodeRootEObject decodes the object of decodeObject: an error if the super types of a class
+    // decoded now lead to a cycle (the classes decoded before have their super types already)
+    private decodeRootEObject(): EObject {
+        const decoded = this._objects.length
+        const eObject = this.decodeEObject()
+        const err = checkSuperTypes(this._objects.slice(decoded))
+        if (err) {
+            throw err
+        }
+        return eObject
     }
 
     private async getBuffer(streamLike: ReadableStreamLike<BufferLike>): Promise<Uint8Array> {

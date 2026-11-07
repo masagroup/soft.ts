@@ -179,3 +179,15 @@ describe("XMLEncoder ExtendedMetaData kinds", () => {
         expect(reloaded.eGet(m.category)).toBe("ANT & co")
     })
 })
+
+describe("XMLEncoder root feature", () => {
+    // the root element of an object whose class is in a cycle of first super types, an invalid
+    // model, is searched in each class once
+    test("super types cycle", () => {
+        const m = new KindsModel()
+        m.root.getESuperTypes().add(m.target)
+        m.target.getESuperTypes().add(m.root)
+        const encoded = m.save(m.create(m.root))
+        expect(encoded).toContain("<kinds:Root")
+    })
+})
