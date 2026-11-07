@@ -37,6 +37,7 @@ import {
     isEList,
     isEObject,
     isEObjectInternal,
+    isEObjectList,
     isEReference,
     isMapType,
     isProxy,
@@ -407,7 +408,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     }
                 }
             }
-            return result
+            // as the generated getters: a list that does not resolve its proxies
+            return !resolve && dynamicFeature.isMany() && isEObjectList(result) ? result.getUnResolvedList() : result
         }
         return null
     }
@@ -484,7 +486,8 @@ export abstract class AbstractEObject extends AbstractENotifier implements EObje
                     }
                 }
             }
-            return result
+            // as the generated getters: a list that does not resolve its proxies
+            return !resolve && dynamicFeature.isMany() && isEObjectList(result) ? result.getUnResolvedList() : result
         }
         return null
     }
