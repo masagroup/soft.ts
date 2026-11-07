@@ -13,5 +13,8 @@ export function encodeUUIDExtension(object: unknown): Uint8Array | null {
 }
 
 export function decodeUUIDExtension(data: Uint8Array): id128.Uuid4 {
+    if (data.byteLength != 16) {
+        throw new Error(`invalid uuid length ${data.byteLength}`)
+    }
     return id128.Uuid4.construct(data)
 }

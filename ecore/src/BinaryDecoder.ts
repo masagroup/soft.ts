@@ -77,11 +77,17 @@ export class BinaryDecoder implements EDecoder {
     private _uris: URI[] = []
     private _enumLiterals: string[] = []
     private _extensionCodec: ExtensionCodec
+    private _depth = 0
+    private _maxDepth = BinaryOptions.BINARY_DEFAULT_MAX_DEPTH
 
     constructor(eContext: EResource, options?: Map<string, any>) {
         this._resource = eContext
         this._baseURI = this._resource.getURI()
         this._extensionCodec = options?.get(BinaryOptions.BINARY_OPTION_CODEC_EXTENSION)
+        const maxDepth = options?.get(BinaryOptions.BINARY_OPTION_MAX_DEPTH)
+        if (Number.isInteger(maxDepth) && maxDepth > 0) {
+            this._maxDepth = maxDepth
+        }
     }
 
     decode(buffer: BufferLike): Result<EResource, Error> {
@@ -124,7 +130,7 @@ export class BinaryDecoder implements EDecoder {
         this.decodeVersion()
 
         // objects
-        const size = this.decodeNumber()
+        const size = this.decodeSize()
         const objects = []
         for (let i = 0; i < size; i++) {
             objects.push(this.decodeEObject())
@@ -197,47 +203,60 @@ export class BinaryDecoder implements EDecoder {
             // the objects are numbered in the order they are encoded
             throw new Error(`invalid object id ${id}`)
         } else if (this._objects.length == id) {
-            const eClassData = this.decodeClass()
-            const eObject = eClassData.eFactory.create(eClassData.eClass) as EObjectInternal
-            let featureID = this.decodeNumber() - 1
-
-            if (featureID == -3) {
-                // proxy object
-                const eProxyURI = this.decodeURI()
-                eObject.eSetProxyURI(eProxyURI)
-                featureID = this.decodeNumber() - 1
+            // a new object is decoded inside the one that refers to it first
+            if (this._depth >= this._maxDepth) {
+                throw new Error(`invalid object ${id}: nested deeper than ${this._maxDepth} objects`)
             }
-            this._objects.push(eObject)
-
-            if (featureID == -2) {
-                // object id attribute
-                const objectID = this.decodeAny()
-                const objectIDManager = this._resource.getObjectIDManager()
-                if (objectIDManager) {
-                    objectIDManager.setID(eObject, objectID)
-                }
-                featureID = this.decodeNumber() - 1
+            this._depth++
+            try {
+                return this.decodeNewEObject()
+            } finally {
+                this._depth--
             }
-            for (; featureID != -1; featureID = this.decodeNumber() - 1) {
-                if (featureID < 0) {
-                    throw new Error(`invalid feature id ${featureID}`)
-                }
-                // the feature data are indexed by the id of the feature in the encoder
-                let eFeatureData = eClassData.featureData[featureID]
-                if (!eFeatureData) {
-                    eFeatureData = this.newFeatureData(eClassData)
-                    eClassData.featureData[featureID] = eFeatureData
-                }
-                this.decodeFeatureValue(eObject, eFeatureData)
-            }
-            return eObject
         } else {
             return this._objects[id]
         }
     }
 
+    private decodeNewEObject(): EObject {
+        const eClassData = this.decodeClass()
+        const eObject = eClassData.eFactory.create(eClassData.eClass) as EObjectInternal
+        let featureID = this.decodeNumber() - 1
+
+        if (featureID == -3) {
+            // proxy object
+            const eProxyURI = this.decodeURI()
+            eObject.eSetProxyURI(eProxyURI)
+            featureID = this.decodeNumber() - 1
+        }
+        this._objects.push(eObject)
+
+        if (featureID == -2) {
+            // object id attribute
+            const objectID = this.decodeAny()
+            const objectIDManager = this._resource.getObjectIDManager()
+            if (objectIDManager) {
+                objectIDManager.setID(eObject, objectID)
+            }
+            featureID = this.decodeNumber() - 1
+        }
+        for (; featureID != -1; featureID = this.decodeNumber() - 1) {
+            if (featureID < 0) {
+                throw new Error(`invalid feature id ${featureID}`)
+            }
+            // the feature data are indexed by the id of the feature in the encoder
+            let eFeatureData = eClassData.featureData[featureID]
+            if (!eFeatureData) {
+                eFeatureData = this.newFeatureData(eClassData)
+                eClassData.featureData[featureID] = eFeatureData
+            }
+            this.decodeFeatureValue(eObject, eFeatureData)
+        }
+        return eObject
+    }
+
     private decodeEObjects(list: EList<EObject>) {
-        let size = this.decodeNumber()
+        let size = this.decodeSize()
         const objects = []
         for (let i = 0; i < size; i++) {
             objects.push(this.decodeEObject())
@@ -354,7 +373,7 @@ export class BinaryDecoder implements EDecoder {
                 break
             }
             case BinaryFeatureKind.bfkDataList: {
-                const size = this.decodeNumber()
+                const size = this.decodeSize()
                 const values = []
                 for (let i = 0; i < size; i++) {
                     const valueStr = this.decodeString()
@@ -480,6 +499,20 @@ export class BinaryDecoder implements EDecoder {
 
     private decodeBoolean(): boolean {
         return this._decoder.decodeBoolean()
+    }
+
+    // decodeSize decodes the number of elements of a list. The size is read from the input and is
+    // not trusted: one that is not a natural number is refused, and so is one larger than the
+    // remaining input, since every element takes at least one byte.
+    private decodeSize(): number {
+        const size = this.decodeNumber()
+        if (!Number.isInteger(size) || size < 0) {
+            throw new Error(`invalid size ${size}`)
+        }
+        if (size > this._decoder.remaining()) {
+            throw new Error(`invalid size ${size}: only ${this._decoder.remaining()} bytes left`)
+        }
+        return size
     }
 
     private decodeNumber(): number {
