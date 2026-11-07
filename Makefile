@@ -57,6 +57,11 @@ all: ecore empty library tournament inheritance coexistence
 .PHONY: ci
 ci: ecore.ci empty.ci library.ci tournament.ci inheritance.ci coexistence.ci
 
+# generate regenerates and formats all the generated code: the ci checks that it
+# matches the committed code
+.PHONY: generate
+generate: $(foreach m,ecore empty library tournament inheritance coexistence,$(m).install $(m).generate $(m).format)
+
 .PHONY: ecore
 ecore: ecore.install ecore.generate ecore.format ecore.build ecore.test
 
