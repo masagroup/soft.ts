@@ -464,3 +464,29 @@ describe("EClassExt diamond", () => {
         expect(d.getEStructuralFeatureFromName("c")).toBe(cAttr)
     })
 })
+
+describe("EClassExt invalidation", () => {
+    // the features by name and the overrides are derived from all the features and operations: a
+    // modification of a super type, read before, invalidates them in the sub class
+    test("features by name and overrides invalidated by a super type", () => {
+        const eClass = new EClassExt()
+        const eSuperClass = new EClassExt()
+        eClass.getESuperTypes().add(eSuperClass)
+        expect(eClass.getEStructuralFeatureFromName("a")).toBeUndefined()
+        const mockOperation = mock<EOperation>()
+        const eOperation = instance(mockOperation)
+        eClass.getEOperations().add(eOperation)
+        expect(eClass.getOverride(eOperation)).toBeUndefined()
+
+        const eAttribute = new EAttributeExt()
+        eAttribute.setName("a")
+        eSuperClass.getEStructuralFeatures().add(eAttribute)
+        expect(eClass.getEStructuralFeatureFromName("a")).toBe(eAttribute)
+
+        const mockSuperOperation = mock<EOperation>()
+        const eSuperOperation = instance(mockSuperOperation)
+        when(mockOperation.isOverrideOf(eSuperOperation)).thenReturn(true)
+        eSuperClass.getEOperations().add(eSuperOperation)
+        expect(eClass.getOverride(eSuperOperation)).toBe(eOperation)
+    })
+})

@@ -29,6 +29,7 @@ import {
     EResource,
     EStructuralFeature,
     ExtendedMetaData,
+    getEcorePackage,
     getPackageRegistry,
     isEAttribute,
     isEClass,
@@ -39,6 +40,7 @@ import {
     XMLNamespaces,
     XMLOptions
 } from "./internal.js"
+import { checkSuperTypes } from "./SuperTypesCycle.js"
 import { ensureAsyncIterable } from "./utils/Stream.js"
 import { ensureUint8Array } from "./utils/TypedArray.js"
 import { utf8Decode } from "./utils/UTF8.js"
@@ -113,6 +115,8 @@ export class XMLDecoder implements EDecoder {
     private _urisToLocations: Map<string, URI> = new Map<string, URI>()
     // the reasons why the package at the location of a namespace did not load
     private _locationErrors: Map<string, string> = new Map<string, string>()
+    // the classes of the document given super types: checked for a cycle of super types at its end
+    private _subClasses: EObject[] = []
     private _attachFn: (eObject: EObject) => void
     private _errorFn: (eDiagnostic: EDiagnostic) => void
 
@@ -345,6 +349,11 @@ export class XMLDecoder implements EDecoder {
                 })
             }
             this.handleReferences()
+            const err = checkSuperTypes(this._subClasses)
+            if (err) {
+                this.decodeError(err.message)
+            }
+            this._subClasses = []
             this.recordSchemaLocations(eRoot)
         }
 
@@ -891,6 +900,9 @@ export class XMLDecoder implements EDecoder {
             }
             case LoadFeatureKind.ManyAdd:
             case LoadFeatureKind.ManyMove: {
+                if (value && eFeature == getEcorePackage().getEClass_ESuperTypes()) {
+                    this._subClasses.push(eObject)
+                }
                 const eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
                 if (position == -1) {
                     appendLoaded(eList, value)
