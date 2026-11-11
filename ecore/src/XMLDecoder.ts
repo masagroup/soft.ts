@@ -895,7 +895,21 @@ export class XMLDecoder implements EDecoder {
             case LoadFeatureKind.Many: {
                 const eDataType = eFeature.getEType() as EDataType
                 const eList = eObject.eGetResolve(eFeature, false) as EList<EObject>
-                if (position != -2) {
+                if (position == -2) {
+                    // a list written as one XML attribute holds its values separated by white
+                    // space, which EMF's XMLHelperImpl splits the same way
+                    if (typeof value === "string") {
+                        const eFactory = this.factoryFor(eFeature, eDataType)
+                        if (eFactory) {
+                            for (const token of value.split(/\s+/)) {
+                                if (token.length > 0) {
+                                    const literal = this.createFromString(eFactory, eDataType, token)
+                                    if (literal.ok) appendLoaded(eList, literal.value)
+                                }
+                            }
+                        }
+                    }
+                } else {
                     if (value === null || value === undefined) {
                         appendLoaded(eList, null)
                     } else {
