@@ -90,6 +90,12 @@ function stringFormat(template: string, ...args: any[]) {
     })
 }
 
+// SchemaLocation is the location of the schema of a namespace, "" for a schema without namespace
+interface SchemaLocation {
+    namespace: string
+    location: string
+}
+
 export class XMLEncoder implements EEncoder {
     protected _resource: EResource
     protected _str: XMLString = new XMLString()
@@ -105,6 +111,20 @@ export class XMLEncoder implements EEncoder {
     private _xmlVersion: string
     private _encoding: string
     private _errorFn: (eDiagnostic: EDiagnostic) => void
+    // the packages of the document by namespace, those of _packages
+    private _ePackages: Map<string, EPackage> = new Map<string, EPackage>()
+    // the schemas of the document, from the SCHEMA_LOCATION option or its document root: written as
+    // xsi:schemaLocation, and xsi:noNamespaceSchemaLocation for the namespace ""
+    private _schemaLocations: SchemaLocation[] = []
+    // the SCHEMA_LOCATION option names the schemas: the document root is not read
+    private _hasSchemaLocations = false
+    // the SCHEMA_LOCATION option is true: the location of each package of the document is written
+    private _declareSchemaLocation = false
+    // the package of the top object: the package of the schema without namespace
+    private _rootPackage: EPackage
+    // set by a schema without namespace: the names of the packages that are not qualified
+    // (ExtendedMetaData.isQualified) are written without namespace
+    private _noNamespace = false
 
     constructor(resource: EResource, options: Map<string, any>) {
         this._resource = resource
@@ -119,6 +139,17 @@ export class XMLEncoder implements EEncoder {
             const lineWidth = options.get(XMLOptions.LINE_WIDTH)
             if (typeof lineWidth === "number" && lineWidth > 0) {
                 this._str.lineWidth = lineWidth
+            }
+            const schemaLocations = options.get(XMLOptions.SCHEMA_LOCATION)
+            if (typeof schemaLocations === "boolean") {
+                this._declareSchemaLocation = schemaLocations
+            } else if (typeof schemaLocations === "object" && schemaLocations !== null) {
+                const entries: [string, string][] =
+                    schemaLocations instanceof Map ? [...schemaLocations.entries()] : Object.entries(schemaLocations)
+                this._hasSchemaLocations = true
+                this._schemaLocations = entries
+                    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+                    .map(([namespace, location]) => ({ namespace, location }))
             }
         }
         if (!this._extendedMetaData) {
@@ -225,10 +256,21 @@ export class XMLEncoder implements EEncoder {
     private encodeTopObject(eObject: EObject) {
         // header
         this.saveHeader()
+        this._rootPackage = eObject.eClass().getEPackage()
 
         // initialize prefixes if any in top
         if (this._extendedMetaData) {
             const eClass = eObject.eClass()
+            // read only when set: reading the map builds it on the object. The option names the
+            // schemas instead.
+            const eSchemaLocationFeature = this._extendedMetaData.getXSISchemaLocationMapFeature(eClass)
+            if (eSchemaLocationFeature && !this._hasSchemaLocations && eObject.eIsSet(eSchemaLocationFeature)) {
+                for (const entry of eObject.eGet(eSchemaLocationFeature) as EMap<string, string>) {
+                    this._schemaLocations.push({ namespace: entry.getKey() ?? "", location: entry.getValue() ?? "" })
+                }
+            }
+            this._noNamespace = this._schemaLocations.some((l) => l.namespace == "")
+            // after the schemas: the namespace of a package written without namespace is not declared
             const ePrefixMapFeature = this._extendedMetaData.getXMLNSPrefixMapFeature(eClass)
             if (ePrefixMapFeature) {
                 const m = eObject.eGet(ePrefixMapFeature) as EMap<string, string>
@@ -524,6 +566,77 @@ export class XMLEncoder implements EEncoder {
             let attribute = "xmlns"
             if (prefix.length > 0) attribute += ":" + prefix
             this._str.addAttribute(attribute, this._prefixesToURI.get(prefix))
+        }
+        // the schemas of the document, as EMF writes them: the schema without namespace as
+        // xsi:noNamespaceSchemaLocation. A schema without namespace and without location writes none,
+        // and only makes the document a document without namespace.
+        if (this._declareSchemaLocation) {
+            this.addPackageSchemaLocations()
+        }
+        const pairs: string[] = []
+        let noNamespaceLocation = ""
+        for (const l of this._schemaLocations) {
+            if (l.namespace == "") {
+                noNamespaceLocation = l.location
+            } else {
+                pairs.push(l.namespace, l.location)
+            }
+        }
+        if ((pairs.length > 0 || noNamespaceLocation != "") && !this._prefixesToURI.has(XMLConstants.xsiNS)) {
+            this._str.addAttribute("xmlns:" + XMLConstants.xsiNS, XMLConstants.xsiURI)
+        }
+        if (pairs.length > 0) {
+            this._str.addAttribute(XMLConstants.xsiNS + ":" + XMLConstants.schemaLocationAttrib, pairs.join(" "))
+        }
+        if (noNamespaceLocation != "") {
+            this._str.addAttribute(XMLConstants.xsiNS + ":" + XMLConstants.noNamespaceSchemaLocationAttrib, noNamespaceLocation)
+        }
+    }
+
+    // addPackageSchemaLocations adds the location of each package of the document, for the
+    // SCHEMA_LOCATION option true, as EMF does: the uri of the resource of the package, relative to
+    // the resource saved, its fragment kept unless it is the root. A package without resource, or
+    // registered at its namespace, as a generated package is, has none. The schemas the document names
+    // already are kept, and those named without location are given one. A package written without
+    // namespace is the schema without namespace when it is the package of the top object.
+    private addPackageSchemaLocations() {
+        const known = new Map<string, number>()
+        this._schemaLocations.forEach((l, i) => known.set(l.namespace, i))
+        const ePackages = [...this._ePackages.values()].sort((a, b) =>
+            a.getNsURI() < b.getNsURI() ? -1 : a.getNsURI() > b.getNsURI() ? 1 : 0
+        )
+        for (const ePackage of ePackages) {
+            let namespace = ePackage.getNsURI()
+            if (this.isUnqualified(ePackage)) {
+                if (ePackage != this._rootPackage) {
+                    continue
+                }
+                namespace = ""
+            }
+            const i = known.get(namespace)
+            if (i !== undefined && this._schemaLocations[i].location != "") {
+                continue
+            }
+            const eResource = ePackage.eResource()
+            if (!eResource || !eResource.getURI()) {
+                continue
+            }
+            let location = eResource.getURI()
+            if (eResource.getURIFragment(ePackage) != "/") {
+                location = this.getResourceHRef(eResource, ePackage)
+            }
+            if (location.toString() == ePackage.getNsURI()) {
+                continue
+            }
+            if (this._resource?.getURI()) {
+                location = this._resource.getURI().relativize(location)
+            }
+            if (i !== undefined) {
+                this._schemaLocations[i].location = location.toString()
+            } else {
+                known.set(namespace, this._schemaLocations.length)
+                this._schemaLocations.push({ namespace, location: location.toString() })
+            }
         }
     }
 
@@ -841,6 +954,11 @@ export class XMLEncoder implements EEncoder {
         if (this._extendedMetaData) {
             const name = this._extendedMetaData.getName(eFeature)
             const namespace = this._extendedMetaData.getNamespace(eFeature)
+            if (namespace == "") {
+                // a feature without namespace, as an attribute is by default, is not qualified, even
+                // when a package is registered for documents without namespace
+                return name
+            }
             const ePackage = this.getPackageForSpace(namespace)
             if (ePackage) {
                 return this.getElementQName(ePackage, name, false)
@@ -873,6 +991,11 @@ export class XMLEncoder implements EEncoder {
     private getPrefix(ePackage: EPackage, mustHavePrefix: boolean): string {
         let nsPrefix = this._packages.get(ePackage.getNsURI())
         if (nsPrefix === undefined) {
+            this._ePackages.set(ePackage.getNsURI(), ePackage)
+            if (this.isUnqualified(ePackage)) {
+                this._packages.set(ePackage.getNsURI(), "")
+                return ""
+            }
             let found = false
             const prefixes = this._uriToPrefixes.get(ePackage.getNsURI())
             if (prefixes) {
@@ -907,13 +1030,23 @@ export class XMLEncoder implements EEncoder {
         return nsPrefix
     }
 
+    // isUnqualified returns whether the names of a package are written without namespace: in a
+    // document without namespace, those of a package that is not qualified
+    private isUnqualified(ePackage: EPackage): boolean {
+        return this._noNamespace && this._extendedMetaData != null && !this._extendedMetaData.isQualified(ePackage)
+    }
+
     private setPrefixToNamespace(prefixToNamespaceMap: EMap<string, string>) {
         for (const mapEntry of prefixToNamespaceMap) {
             const prefix = mapEntry.getKey()
             const nsURI = mapEntry.getValue()
             const ePackage = this.getPackageForSpace(nsURI)
+            if (ePackage && this.isUnqualified(ePackage)) {
+                continue
+            }
             if (ePackage) {
                 this._packages.set(ePackage.getNsURI(), prefix)
+                this._ePackages.set(ePackage.getNsURI(), ePackage)
             }
             this._prefixesToURI.set(prefix, nsURI)
             if (this._uriToPrefixes.has(nsURI)) {

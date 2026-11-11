@@ -113,6 +113,12 @@ export class XMLDecoder implements EDecoder {
     // the locations of the xsi:schemaLocation of the document by namespace, the location of
     // xsi:noNamespaceSchemaLocation under ""
     private _urisToLocations: Map<string, URI> = new Map<string, URI>()
+    // the xsi:schemaLocation of the root element as written, recorded in the document root: pairs of
+    // a namespace and the location of its schema
+    private _xsiSchemaLocation = ""
+    // the xsi:noNamespaceSchemaLocation of the root element, recorded in the document root under the
+    // namespace ""
+    private _xsiNoNamespaceSchemaLocation = ""
     // the reasons why the package at the location of a namespace did not load
     private _locationErrors: Map<string, string> = new Map<string, string>()
     // the classes of the document given super types: checked for a cycle of super types at its end
@@ -431,6 +437,20 @@ export class XMLDecoder implements EDecoder {
                     m.put(key, value)
                 }
             }
+            // the schema of each namespace, as the document wrote it, which a save writes back, as
+            // EMF does: the schema without namespace under "". A document that names none leaves the
+            // map unbuilt.
+            const xsiSchemaLocationFeature = this._extendedMetaData.getXSISchemaLocationMapFeature(eObject.eClass())
+            if (xsiSchemaLocationFeature && (this._xsiSchemaLocation != "" || this._xsiNoNamespaceSchemaLocation != "")) {
+                const m = eObject.eGet(xsiSchemaLocationFeature) as EMap<string, string>
+                const pairs = this._xsiSchemaLocation.split(/\s+/).filter((pair) => pair.length > 0)
+                for (let i = 0; i + 1 < pairs.length; i += 2) {
+                    m.put(pairs[i], pairs[i + 1])
+                }
+                if (this._xsiNoNamespaceSchemaLocation != "") {
+                    m.put("", this._xsiNoNamespaceSchemaLocation)
+                }
+            }
         }
     }
 
@@ -451,6 +471,7 @@ export class XMLDecoder implements EDecoder {
     // namespace loads from its location when the package registry does not know it (see
     // getPackageFromLocation).
     protected handleXSISchemaLocation(loc: string): void {
+        this._xsiSchemaLocation = loc
         const fields = loc.split(/\s+/).filter((field) => field.length > 0)
         for (let i = 0; i + 1 < fields.length; i += 2) {
             this.putLocation(fields[i], fields[i + 1])
@@ -459,6 +480,7 @@ export class XMLDecoder implements EDecoder {
 
     // handleXSINoNamespaceSchemaLocation records the location of the elements without namespace.
     protected handleXSINoNamespaceSchemaLocation(loc: string): void {
+        this._xsiNoNamespaceSchemaLocation = loc.trim()
         this.putLocation("", loc.trim())
     }
 

@@ -83,6 +83,13 @@ export class ExtendedMetaData {
         return null
     }
 
+    // isQualified returns whether the names of a package are qualified by its namespace: false for a
+    // package annotated qualified="false", as for a schema without target namespace.
+    isQualified(ePackage: EPackage): boolean {
+        const annotation = ePackage.getEAnnotation(annotationURI)
+        return !annotation || annotation.getDetails().getValue("qualified") !== "false"
+    }
+
     // getFeatureKind is the ExtendedMetaData kind of a feature ("attribute", "element", "simple", ...),
     // or "" when none is declared.
     getFeatureKind(eFeature: EStructuralFeature): string {
