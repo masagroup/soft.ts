@@ -135,6 +135,26 @@ describe("EClassExt", () => {
         expect(eReference2.getFeatureID()).toBe(4)
     })
 
+    // the lookups by ID follow the features of a super type added after a first lookup
+    test("featuresLookupsAfterSuperTypeAdded", () => {
+        const eClass = new EClassExt()
+        const eAttribute = new EAttributeExt()
+        eClass.getEStructuralFeatures().add(eAttribute)
+        expect(eClass.getFeatureCount()).toBe(1)
+        expect(eClass.getEStructuralFeature(0)).toBe(eAttribute)
+        expect(eClass.getEStructuralFeature(-1)).toBe(null)
+
+        const eSuperClass = new EClassExt()
+        const eSuperAttribute = new EAttributeExt()
+        eSuperClass.getEStructuralFeatures().add(eSuperAttribute)
+        eClass.getESuperTypes().add(eSuperClass)
+        expect(eClass.getFeatureCount()).toBe(2)
+        expect(eClass.getEStructuralFeature(0)).toBe(eSuperAttribute)
+        expect(eClass.getEStructuralFeature(1)).toBe(eAttribute)
+        expect(eClass.getFeatureID(eAttribute)).toBe(1)
+        expect(eClass.getFeatureID(eSuperAttribute)).toBe(0)
+    })
+
     test("featuresGettersWithSuperType", () => {
         const eClass = new EClassExt()
         const eSuperClass = new EClassExt()

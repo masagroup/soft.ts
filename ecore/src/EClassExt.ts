@@ -123,6 +123,7 @@ export class EClassExt extends EClassImpl implements EClassSubClasses {
     // its sub classes only (the builds are synchronous), as EMF ends its computations of the
     // classes in progress. The super types loops below skip a null value.
     private _building = 0
+    private _eAllStructuralFeaturesArray: EStructuralFeature[] = []
     private _nameToFeatureMap: Map<string, EStructuralFeature>
     private _operationToOverrideMap: Map<EOperation, EOperation>
     private _adapter: ESuperAdapter
@@ -138,14 +139,23 @@ export class EClassExt extends EClassImpl implements EClassSubClasses {
         return someClass == this || (someClass != null && someClass.getEAllSuperTypes().contains(this))
     }
 
+    // features returns all the features of the class as an array: the lookups by ID read it
+    // without going through the list
+    private features(): readonly EStructuralFeature[] {
+        if (this._eAllStructuralFeatures == null && this.getEAllStructuralFeatures() == null) {
+            // a cycle of super types: the features are being built
+            return []
+        }
+        return this._eAllStructuralFeaturesArray
+    }
+
     getFeatureCount(): number {
-        return this.getEAllStructuralFeatures().size()
+        return this.features().length
     }
 
     getEStructuralFeature(featureID: number): EStructuralFeature {
-        return featureID >= 0 && featureID < this.getEAllStructuralFeatures().size()
-            ? this.getEAllStructuralFeatures().get(featureID)
-            : null
+        const features = this.features()
+        return featureID >= 0 && featureID < features.length ? features[featureID] : null
     }
 
     getEStructuralFeatureFromName(featureName: string): EStructuralFeature {
@@ -154,11 +164,11 @@ export class EClassExt extends EClassImpl implements EClassSubClasses {
     }
 
     getFeatureID(feature: EStructuralFeature): number {
-        const features = this.getEAllStructuralFeatures()
+        const features = this.features()
         let featureID = feature.getFeatureID()
         if (featureID != -1) {
-            for (; featureID < features.size(); featureID++) {
-                if (features.get(featureID) == feature) return featureID
+            for (; featureID < features.length; featureID++) {
+                if (features[featureID] == feature) return featureID
             }
         }
         return -1
@@ -416,6 +426,7 @@ export class EClassExt extends EClassImpl implements EClassSubClasses {
                 allFeatures.push(eFeature)
             }
 
+            this._eAllStructuralFeaturesArray = allFeatures
             this._eAllStructuralFeatures = new ImmutableEList<EStructuralFeature>(allFeatures)
         } finally {
             this._building &= ~BUILDING_STRUCTURAL_FEATURES
