@@ -7,13 +7,15 @@
 //
 // *****************************************************************************
 
+// escapeXML escapes only what XML requires, as EMF does: '&', '<' and '>', a '"' in an attribute, and
+// the white spaces a parser would normalize. An apostrophe stays an apostrophe.
 function escapeXML(str: string, isAttribute: boolean = false): string {
     if (!str) return str
     // a parser normalizes a carriage return to a line feed: it is kept as a reference
     let res = str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r/g, "&#13;")
     if (isAttribute) {
         // a parser normalizes the white spaces of an attribute value: they are kept as references
-        res = res.replace(/"/g, "&quot;").replace(/'/g, "&apos;").replace(/\n/g, "&#xA;").replace(/\t/g, "&#x9;")
+        res = res.replace(/"/g, "&quot;").replace(/\n/g, "&#xA;").replace(/\t/g, "&#x9;")
     }
     return res
 }

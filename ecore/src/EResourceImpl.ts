@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import { Mutex, MutexInterface } from "async-mutex"
+import { CODEC_TEXT_OPTION } from "./ECodec.js"
 import { getCodecRegistry } from "./ECodecRegistry.js"
 import { EEncoder } from "./EEncoder.js"
 import {
@@ -47,6 +48,14 @@ import {
 import { ensureAsyncIterable } from "./utils/Stream.js"
 import { ensureUint8Array } from "./utils/TypedArray.js"
 import { utf8Count, utf8Decode, utf8Encode } from "./utils/UTF8.js"
+
+// withTextOption returns options with CODEC_TEXT_OPTION: a string is a text, whatever encoding the
+// document declares
+function withTextOption(options?: Map<string, any>): Map<string, any> {
+    const textOptions = new Map<string, any>(options ?? [])
+    textOptions.set(CODEC_TEXT_OPTION, true)
+    return textOptions
+}
 
 class ResourceNotification extends AbstractNotification {
     private _notifier: ENotifier
@@ -420,7 +429,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
         const byteLength = utf8Count(s)
         const bytes = new Uint8Array(byteLength)
         utf8Encode(s, bytes, 0)
-        this.loadFromBuffer(bytes, options)
+        this.loadFromBuffer(bytes, withTextOption(options))
     }
 
     protected doLoadFromBytes(decoder: EDecoder, buffer: BufferLike): void {
@@ -497,7 +506,7 @@ export class EResourceImpl extends ENotifierImpl implements EResourceInternal {
     }
 
     saveToString(options?: Map<string, any>): string {
-        const buffer = this.saveToBuffer(options)
+        const buffer = this.saveToBuffer(withTextOption(options))
         return buffer ? utf8Decode(buffer, 0, buffer.length) : ""
     }
 

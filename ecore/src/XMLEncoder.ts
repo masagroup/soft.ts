@@ -34,6 +34,8 @@ import {
     URI,
     XMLOptions
 } from "./internal.js"
+import { CODEC_TEXT_OPTION } from "./ECodec.js"
+import { encodeXMLText, escapeXMLText } from "./XMLEncoding.js"
 import { utf8Count, utf8Encode } from "./utils/UTF8.js"
 import { XMLConstants } from "./XMLConstants.js"
 import { XMLString } from "./XMLString.js"
@@ -110,6 +112,10 @@ export class XMLEncoder implements EEncoder {
     private _useEncodedAttributeStyle = false
     private _xmlVersion: string
     private _encoding: string
+    // the document type declaration written after the XML declaration, <!DOCTYPE TS>
+    private _documentType = ""
+    // the document is written as a text, in UTF-8 (CODEC_TEXT_OPTION)
+    private _isText = false
     private _errorFn: (eDiagnostic: EDiagnostic) => void
     // the packages of the document by namespace, those of _packages
     private _ePackages: Map<string, EPackage> = new Map<string, EPackage>()
@@ -136,6 +142,11 @@ export class XMLEncoder implements EEncoder {
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA)
             this._useEncodedAttributeStyle = options.get(XMLOptions.USE_ENCODED_ATTRIBUTE_STYLE) === true
             this._keepDefaults = options.get(XMLOptions.KEEP_DEFAULTS) === true
+            this._isText = options.get(CODEC_TEXT_OPTION) === true
+            const encoding = options.get(XMLOptions.ENCODING)
+            if (typeof encoding === "string" && encoding != "") {
+                this._encoding = encoding
+            }
             const lineWidth = options.get(XMLOptions.LINE_WIDTH)
             if (typeof lineWidth === "number" && lineWidth > 0) {
                 this._str.lineWidth = lineWidth
@@ -171,12 +182,44 @@ export class XMLEncoder implements EEncoder {
         return this._xmlVersion
     }
 
+    // setEncoding sets the encoding the document is written in, an IANA name or a WHATWG label, UTF-8
+    // by default, as the ENCODING option does
     setEncoding(encoding: string): void {
         this._encoding = encoding
     }
 
     getEncoding(): string {
         return this._encoding
+    }
+
+    // setDocumentType sets the document type declaration written after the XML declaration,
+    // <!DOCTYPE TS>, none by default
+    setDocumentType(documentType: string): void {
+        this._documentType = documentType
+    }
+
+    getDocumentType(): string {
+        return this._documentType
+    }
+
+    // toBytes returns the bytes of the document in its encoding, a character the encoding cannot
+    // represent as a character reference; null for an encoding it cannot write, reported as an error
+    private toBytes(): Uint8Array {
+        const r = this._str.toString()
+        let bytes: Uint8Array
+        if (this._isText) {
+            const text = escapeXMLText(r, this._encoding)
+            if (text !== null) {
+                bytes = new Uint8Array(utf8Count(text))
+                utf8Encode(text, bytes, 0)
+            }
+        } else {
+            bytes = encodeXMLText(r, this._encoding)
+        }
+        if (!bytes) {
+            this.error(new EDiagnosticImpl(`unsupported encoding "${this._encoding}"`, this._resource?.getURI()?.toString() ?? "", 0, 0))
+        }
+        return bytes
     }
 
     encode(eResource: EResource): Result<Uint8Array, Error> {
@@ -194,12 +237,10 @@ export class XMLEncoder implements EEncoder {
         const errors = this._resource.getErrors()
         const errorCount = errors.size()
         this.encodeTopObject(contents.get(0))
+        const bytes = errors.size() == errorCount ? this.toBytes() : null
 
         if (errors.size() == errorCount) {
-            const r = this._str.toString()
-            const e = new Uint8Array(utf8Count(r))
-            utf8Encode(r, e, 0)
-            return Ok(e)
+            return Ok(bytes)
         } else {
             return Err(errors.get(errorCount))
         }
@@ -213,13 +254,11 @@ export class XMLEncoder implements EEncoder {
             }
         }
         this.encodeTopObject(eObject)
+        const bytes = error ? null : this.toBytes()
         if (error) {
             return Err(error)
         } else {
-            const r = this._str.toString()
-            const e = new Uint8Array(utf8Count(r))
-            utf8Encode(r, e, 0)
-            return Ok(e)
+            return Ok(bytes)
         }
     }
 
@@ -289,6 +328,10 @@ export class XMLEncoder implements EEncoder {
     private saveHeader() {
         this._str.add(stringFormat('<?xml version="{0}" encoding="{1}"?>', this._xmlVersion, this._encoding))
         this._str.addLine()
+        if (this._documentType != "") {
+            this._str.add(this._documentType)
+            this._str.addLine()
+        }
     }
 
     private saveTopObject(eObject: EObject) {

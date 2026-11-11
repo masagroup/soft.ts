@@ -28,6 +28,8 @@ export class XMLOptions {
     // (or a record) gives the location of the schema of each namespace, "" for a schema without
     // namespace, written instead of the ones its document root records
     static SCHEMA_LOCATION = "SCHEMA_LOCATION"
+    // encode: string, the encoding of the document, an IANA name or a WHATWG label, UTF-8 by default
+    static ENCODING = "ENCODING"
 }
 
 export class XMLCodec implements ECodec {
