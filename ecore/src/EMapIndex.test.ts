@@ -55,6 +55,33 @@ describe("EMapIndex", () => {
         expect(details.containsKey("k")).toBeFalsy()
     })
 
+    // an entry of key "" is found, iterated and replaced, as an entry of any other key
+    test("empty key", () => {
+        const eAnnotation = getEcoreFactory().createEAnnotation()
+        const details = eAnnotation.getDetails()
+        details.put("", "a")
+        details.put("k", "v")
+        expect(details.getValue("")).toBe("a")
+        expect(details.containsKey("")).toBeTruthy()
+        details.put("", "b")
+        expect(details.size()).toBe(2)
+        expect(details.getValue("")).toBe("b")
+        expect(details.toMap()).toEqual(
+            new Map([
+                ["k", "v"],
+                ["", "b"]
+            ])
+        )
+        expect(details.removeKey("")).toBe("b")
+        expect(details.containsKey("")).toBeFalsy()
+
+        const m = new BasicEMap<string, string>()
+        m.put("", "a")
+        m.put("", "b")
+        expect(m.size()).toBe(1)
+        expect(m.getValue("")).toBe("b")
+    })
+
     test("put is not quadratic", () => {
         const m = new BasicEMap<number, number>()
         const n = 50000

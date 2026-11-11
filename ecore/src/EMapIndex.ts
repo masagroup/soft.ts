@@ -13,7 +13,8 @@ import { EMapEntry } from "./EMapEntry.js"
 // values are read from the entries, so a value set directly on an entry (decoders
 // resolving forward references) is seen. Entries added with a default key (null,
 // undefined or "", the key is set after the entry is added) are pending and indexed
-// on the next lookup miss. As in EMF, the key of an entry is not expected to change
+// on the next lookup miss; an entry whose key is still a default one is found by a scan
+// of the pending entries, as the default key may be its real key. As in EMF, the key of an entry is not expected to change
 // while the entry is in the map: such a change is detected only when the old key
 // is looked up, which rebuilds the index.
 export class EMapIndex<K, E extends EMapEntry<K, any>> {
@@ -34,7 +35,7 @@ export class EMapIndex<K, E extends EMapEntry<K, any>> {
         }
         if (this._pending.size > 0) {
             this.indexPending()
-            return this._entries.get(key)
+            return this._entries.get(key) ?? this.getPending(key)
         }
         return undefined
     }
@@ -67,8 +68,21 @@ export class EMapIndex<K, E extends EMapEntry<K, any>> {
     values(): IterableIterator<E> {
         if (this._pending.size > 0) {
             this.indexPending()
+            if (this._pending.size > 0) {
+                return [...this._entries.values(), ...this._pending].values()
+            }
         }
         return this._entries.values()
+    }
+
+    // getPending returns the pending entry of key: an entry whose key is a default one
+    private getPending(key: K): E | undefined {
+        for (const e of this._pending) {
+            if (e.getKey() === key) {
+                return e
+            }
+        }
+        return undefined
     }
 
     private indexPending(): void {
