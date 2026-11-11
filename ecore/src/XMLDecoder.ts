@@ -28,6 +28,7 @@ import {
     EReference,
     EResource,
     EStructuralFeature,
+    IllegalValueDiagnostic,
     ExtendedMetaData,
     getEcorePackage,
     getPackageRegistry,
@@ -908,7 +909,7 @@ export class XMLDecoder implements EDecoder {
                 } else {
                     const eFactory = this.factoryFor(eFeature, eDataType)
                     if (eFactory) {
-                        const literal = this.createFromString(eFactory, eDataType, value as string)
+                        const literal = this.createFromString(eFeature, eFactory, eDataType, value as string)
                         if (literal.ok) eObject.eSet(eFeature, literal.value)
                     }
                 }
@@ -925,7 +926,7 @@ export class XMLDecoder implements EDecoder {
                         if (eFactory) {
                             for (const token of value.split(/\s+/)) {
                                 if (token.length > 0) {
-                                    const literal = this.createFromString(eFactory, eDataType, token)
+                                    const literal = this.createFromString(eFeature, eFactory, eDataType, token)
                                     if (literal.ok) appendLoaded(eList, literal.value)
                                 }
                             }
@@ -937,7 +938,7 @@ export class XMLDecoder implements EDecoder {
                     } else {
                         const eFactory = this.factoryFor(eFeature, eDataType)
                         if (eFactory) {
-                            const literal = this.createFromString(eFactory, eDataType, value as string)
+                            const literal = this.createFromString(eFeature, eFactory, eDataType, value as string)
                             if (literal.ok) appendLoaded(eList, literal.value)
                         }
                     }
@@ -1110,10 +1111,16 @@ export class XMLDecoder implements EDecoder {
         return new EDiagnosticImpl(message, this._resource.getURI()?.toString() ?? "", this._parser.line, this._parser.column)
     }
 
-    // createFromString creates the value of eDataType from str: a factory throws on an invalid
-    // literal, which is reported and not set. A factory parsing numbers with Number reads the
+    // createFromString creates the value of eDataType from str, read for eFeature: a factory throws on
+    // an invalid literal, which is reported as an IllegalValueDiagnostic and not set, as EMF's loader
+    // reports an IllegalValueException. A factory parsing numbers with Number reads the
     // infinities of XSD (INF, -INF) and Go (+Inf, -Inf) as NaN: they are read as infinities.
-    private createFromString(eFactory: EFactory, eDataType: EDataType, str: string): { ok: boolean; value?: any } {
+    private createFromString(
+        eFeature: EStructuralFeature,
+        eFactory: EFactory,
+        eDataType: EDataType,
+        str: string
+    ): { ok: boolean; value?: any } {
         try {
             const value = eFactory.createFromString(eDataType, str)
             if (typeof value === "number" && Number.isNaN(value) && /^[+-]?inf(inity)?$/i.test(str.trim())) {
@@ -1121,7 +1128,17 @@ export class XMLDecoder implements EDecoder {
             }
             return { ok: true, value: value }
         } catch (e) {
-            this.decodeError(e instanceof Error ? e.message : String(e))
+            this.error(
+                new IllegalValueDiagnostic(
+                    e instanceof Error ? e.message : String(e),
+                    this._resource.getURI()?.toString() ?? "",
+                    this._parser.line,
+                    this._parser.column,
+                    eFeature,
+                    eDataType,
+                    str
+                )
+            )
             return { ok: false }
         }
     }

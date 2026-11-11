@@ -118,6 +118,7 @@ export * from "./EcoreFactoryImpl.js"
 
 export * from "./ExtendedMetaData.js"
 export * from "./EDiagnosticImpl.js"
+export * from "./IllegalValueDiagnostic.js"
 export * from "./EURIConverterImpl.js"
 export * from "./FileURIHandler.js"
 export * from "./EResourceImpl.js"
