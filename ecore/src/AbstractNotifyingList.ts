@@ -8,6 +8,7 @@
 // *****************************************************************************
 
 import {
+    AbstractENotifier,
     AbstractNotification,
     BasicEList,
     Collection,
@@ -62,8 +63,18 @@ export abstract class AbstractNotifyingList<E> extends BasicEList<E> implements 
 
     abstract getFeatureID(): number
 
+    // isNotificationRequired reports whether the notifier of the list delivers notifications and has
+    // adapters to deliver them to. It does not create the adapter list of a notifier that has none:
+    // eAdapters would, and the notifier would then require notifications for every later change.
     isNotificationRequired(): boolean {
-        return this.getNotifier() != null && this.getNotifier().eDeliver() && !this.getNotifier().eAdapters().isEmpty()
+        const notifier = this.getNotifier()
+        if (notifier == null) {
+            return false
+        }
+        if (notifier instanceof AbstractENotifier) {
+            return notifier.eNotificationRequired()
+        }
+        return notifier.eDeliver() && !notifier.eAdapters().isEmpty()
     }
 
     // addWithNotification adds e and returns notifications with its notification, without inverse:
