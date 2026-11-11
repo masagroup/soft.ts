@@ -24,6 +24,10 @@ export class XMLOptions {
     static USE_ENCODED_ATTRIBUTE_STYLE = "USE_ENCODED_ATTRIBUTE_STYLE"
     static KEEP_DEFAULTS = "KEEP_DEFAULTS"
     static LINE_WIDTH = "LINE_WIDTH"
+    // encode: true saves the location of the packages of the document, as EMF; a Map<string, string>
+    // (or a record) gives the location of the schema of each namespace, "" for a schema without
+    // namespace, written instead of the ones its document root records
+    static SCHEMA_LOCATION = "SCHEMA_LOCATION"
 }
 
 export class XMLCodec implements ECodec {
