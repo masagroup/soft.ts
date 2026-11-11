@@ -32,6 +32,7 @@ export {
     EDataTypeExt,
     EDiagnostic,
     EDiagnosticImpl,
+    IllegalValueDiagnostic,
     EEnum,
     EEnumImpl,
     EEnumExt,

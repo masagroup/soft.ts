@@ -15,11 +15,13 @@ import {
     BinaryEncoder,
     EAttribute,
     EClass,
+    EList,
     EObject,
     EPackage,
     EResourceSetImpl,
     getEcoreFactory,
     getEcorePackage,
+    IllegalValueDiagnostic,
     IncrementalIDManager,
     UNBOUNDED_MULTIPLICITY,
     URI,
@@ -85,9 +87,41 @@ describe("XMLDecoder go parity", () => {
         const r = m.rs.createResource(new URI("file:///c.xml"))
         new XMLDecoder(r, null).decode(encoder.encode(`<p:C xmlns:p="http://p1" count="12x" s="n"/>`))
         expect(r.getErrors().size()).toBe(1)
+        // a refused value is told from the other diagnostics (soft.go #253)
+        const illegal = r.getErrors().get(0)
+        expect(illegal).toBeInstanceOf(IllegalValueDiagnostic)
+        if (illegal instanceof IllegalValueDiagnostic) {
+            expect(illegal.feature).toBe(m.count)
+            expect(illegal.dataType).toBe(m.count.getEType())
+            expect(illegal.value).toBe("12x")
+            expect(illegal.location).toBe("file:///c.xml")
+            expect(illegal.name).toBe("IllegalValueDiagnostic")
+        }
         const o = r.eContents().get(0)
         expect(o.eIsSet(m.count)).toBeFalsy()
         expect(o.eGet(m.s)).toBe("n")
+    })
+
+    // each refused token of a list written as one attribute is reported, the accepted ones are kept
+    test("an invalid literal in a list is reported, the others are kept", () => {
+        const m = model("http://p1l")
+        const counts = getEcoreFactory().createEAttribute()
+        counts.setName("counts")
+        counts.setEType(m.count.getEType())
+        counts.setUpperBound(UNBOUNDED_MULTIPLICITY)
+        m.c.getEStructuralFeatures().add(counts)
+        const r = m.rs.createResource(new URI("file:///c.xml"))
+        new XMLDecoder(r, null).decode(encoder.encode(`<p:C xmlns:p="http://p1l" counts="1 x 3 y"/>`))
+        const refused = r
+            .getErrors()
+            .toArray()
+            .map((d) => {
+                expect(d).toBeInstanceOf(IllegalValueDiagnostic)
+                expect((d as IllegalValueDiagnostic).feature).toBe(counts)
+                return (d as IllegalValueDiagnostic).value
+            })
+        expect(refused).toEqual(["x", "y"])
+        expect((r.eContents().get(0).eGet(counts) as EList<number>).toArray()).toEqual([1, 3])
     })
 
     test("an invalid enum literal does not lose the resource", () => {
