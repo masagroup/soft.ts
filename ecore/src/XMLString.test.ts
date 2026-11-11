@@ -19,7 +19,7 @@ describe("XMLString", () => {
         xml.endElement()
 
         const str = xml.toString()
-        expect(str).toContain('attr="a &lt; b &amp; c &gt; d &quot;quoted&quot; &apos;apos&apos;"')
+        expect(str).toContain(`attr="a &lt; b &amp; c &gt; d &quot;quoted&quot; 'apos'"`)
         expect(str).toContain("<content>hello &lt;world&gt; &amp; goodbye</content>")
     })
 })

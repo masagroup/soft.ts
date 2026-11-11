@@ -44,7 +44,18 @@ import {
 import { checkSuperTypes } from "./SuperTypesCycle.js"
 import { ensureAsyncIterable } from "./utils/Stream.js"
 import { ensureUint8Array } from "./utils/TypedArray.js"
-import { utf8Decode } from "./utils/UTF8.js"
+import { CODEC_TEXT_OPTION } from "./ECodec.js"
+import {
+    declaredEncoding,
+    declaredEncodingOfBytes,
+    decodeUTF8,
+    isDeclarationComplete,
+    isUTF16,
+    isUTF8,
+    newXMLTextDecoder,
+    sniffUTF16,
+    XMLTextDecoder
+} from "./XMLEncoding.js"
 import { XMLConstants } from "./XMLConstants.js"
 
 type XMLReference = {
@@ -73,6 +84,15 @@ enum LoadFeatureKind {
     ManyAdd,
     ManyMove,
     Other
+}
+
+// UTF8TextDecoder decodes a document in UTF-8, the default
+class UTF8TextDecoder implements XMLTextDecoder {
+    private _decoder = new TextDecoder("utf-8")
+
+    decode(bytes: Uint8Array, stream: boolean): string {
+        return this._decoder.decode(bytes, { stream })
+    }
 }
 
 export class XMLDecoder implements EDecoder {
@@ -109,6 +129,10 @@ export class XMLDecoder implements EDecoder {
     private _simpleFeatures: Map<EClass, EStructuralFeature> = new Map<EClass, EStructuralFeature>()
     protected _xmlVersion: string
     protected _encoding: string
+    // the document type declaration of the document as written, <!DOCTYPE TS>
+    protected _documentType = ""
+    // the bytes are the UTF-8 of a text (CODEC_TEXT_OPTION): its declared encoding is not read
+    private _isText = false
     // the load options of the document: a package it names in xsi:schemaLocation loads with them
     private _options: Map<string, any>
     // the locations of the xsi:schemaLocation of the document by namespace, the location of
@@ -136,6 +160,7 @@ export class XMLDecoder implements EDecoder {
             this._isSuppressDocumentRoot = options.get(XMLOptions.SUPPRESS_DOCUMENT_ROOT) === true
             this._isResolveDeferred = options.get(XMLOptions.DEFERRED_REFERENCE_RESOLUTION) === true
             this._extendedMetaData = options.get(XMLOptions.EXTENDED_META_DATA)
+            this._isText = options.get(CODEC_TEXT_OPTION) === true
             if (options.get(XMLOptions.DEFERRED_ROOT_ATTACHMENT) === true) {
                 this._deferred = []
             }
@@ -163,8 +188,16 @@ export class XMLDecoder implements EDecoder {
         return this._xmlVersion
     }
 
+    // getEncoding returns the encoding of the document as its declaration names it, "UTF-16" for one in
+    // UTF-16 without declaration
     getEncoding(): string {
         return this._encoding
+    }
+
+    // getDocumentType returns the document type declaration of the document as it was written,
+    // <!DOCTYPE TS>, "" for none
+    getDocumentType(): string {
+        return this._documentType
     }
 
     private createSAXParser(): sax.SAXParser {
@@ -184,6 +217,7 @@ export class XMLDecoder implements EDecoder {
         saxParser.oncdata = (t: string) => this._isMalformed || this.onText(t)
         saxParser.onerror = (e) => this.onError(e)
         saxParser.onprocessinginstruction = (n) => this._isMalformed || this.onProcessingInstruction(n)
+        saxParser.ondoctype = (d: string) => this._isMalformed || this.onDocumentType(d)
         return saxParser
     }
 
@@ -197,9 +231,11 @@ export class XMLDecoder implements EDecoder {
         }
         // parser & buffer
         const buffer = ensureUint8Array(bufferLike)
-        const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
         this._parser = this.createSAXParser()
-        this._parser.write(bufferUTF8).close()
+        const text = this.decodeText(buffer)
+        if (text !== null) {
+            this._parser.write(text).close()
+        }
 
         // check errors
         const errors = this._resource.getErrors()
@@ -222,9 +258,11 @@ export class XMLDecoder implements EDecoder {
         }
         // parser & buffer
         const buffer = ensureUint8Array(bufferLike)
-        const bufferUTF8 = utf8Decode(buffer, 0, buffer.length)
         this._parser = this.createSAXParser()
-        this._parser.write(bufferUTF8).close()
+        const text = this.decodeText(buffer)
+        if (text !== null) {
+            this._parser.write(text).close()
+        }
         // check error
         return error ? Err(error) : Ok(object)
     }
@@ -272,17 +310,90 @@ export class XMLDecoder implements EDecoder {
     }
 
     private async writeStream(streamLike: ReadableStreamLike<BufferLike>): Promise<void> {
-        // a single streaming decoder keeps multibyte characters split across chunks intact
-        const textDecoder = new TextDecoder("utf-8")
-        for await (const bufferLike of ensureAsyncIterable(streamLike)) {
-            const text = textDecoder.decode(ensureUint8Array(bufferLike), { stream: true })
+        // a single streaming decoder keeps multibyte characters split across chunks intact; it is
+        // chosen once the first bytes hold the XML declaration, if any
+        let textDecoder: XMLTextDecoder = null
+        let head = new Uint8Array(0)
+        const write = (bytes: Uint8Array, stream: boolean): boolean => {
+            if (!textDecoder) {
+                textDecoder = this.selectTextDecoder(bytes)
+                if (!textDecoder) {
+                    return false
+                }
+            }
+            const text = textDecoder.decode(bytes, stream)
             if (text.length > 0) {
                 this._parser.write(text)
             }
+            return true
         }
-        const remaining = textDecoder.decode()
-        if (remaining.length > 0) {
-            this._parser.write(remaining)
+        for await (const bufferLike of ensureAsyncIterable(streamLike)) {
+            let bytes = ensureUint8Array(bufferLike)
+            if (!textDecoder) {
+                const joined = new Uint8Array(head.length + bytes.length)
+                joined.set(head)
+                joined.set(bytes, head.length)
+                if (!isDeclarationComplete(joined)) {
+                    head = joined
+                    continue
+                }
+                bytes = joined
+            }
+            if (!write(bytes, true)) {
+                return
+            }
+        }
+        write(textDecoder ? new Uint8Array(0) : head, false)
+    }
+
+    // decodeText returns the text of the bytes of a document, in the encoding it declares, null for an
+    // encoding it cannot read, reported as an error
+    private decodeText(bytes: Uint8Array): string {
+        if (this._isText) {
+            return decodeUTF8(bytes)
+        }
+        const textDecoder = this.selectTextDecoder(bytes)
+        if (!textDecoder) {
+            return null
+        }
+        return textDecoder instanceof UTF8TextDecoder ? decodeUTF8(bytes) : textDecoder.decode(bytes, false)
+    }
+
+    // selectTextDecoder returns the decoder of a document by its first bytes, as XML 1.0 appendix F:
+    // UTF-16 by a byte order mark or a declaration without one, else the encoding its declaration
+    // names, UTF-8 by default. A document in UTF-16 must declare UTF-16, and an encoding nor IANA nor
+    // WHATWG knows is an error: null is returned.
+    private selectTextDecoder(head: Uint8Array): XMLTextDecoder {
+        if (this._isText) {
+            return new UTF8TextDecoder()
+        }
+        const utf16 = sniffUTF16(head)
+        if (utf16) {
+            this._encoding = "UTF-16"
+            const label = declaredEncoding(
+                new TextDecoder(head[0] == 0 || head[0] == 0xfe ? "utf-16be" : "utf-16le").decode(head.subarray(0, 2048))
+            )
+            if (label != "" && !isUTF16(label)) {
+                this.decodeError(`encoding "${label}" of a document in UTF-16`)
+                return null
+            }
+            return utf16
+        }
+        const label = declaredEncodingOfBytes(head)
+        if (label == "" || isUTF8(label)) {
+            return new UTF8TextDecoder()
+        }
+        const textDecoder = newXMLTextDecoder(label)
+        if (!textDecoder) {
+            this.decodeError(`unsupported encoding "${label}"`)
+        }
+        return textDecoder
+    }
+
+    // onDocumentType keeps the document type declaration of the document, read before its root
+    private onDocumentType(doctype: string) {
+        if (this._objects.length == 0 && this._documentType == "") {
+            this._documentType = "<!DOCTYPE" + doctype + ">"
         }
     }
 

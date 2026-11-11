@@ -9,7 +9,7 @@
 
 import { Ok } from "ts-results-es"
 import { describe, expect, test } from "vitest"
-import { ECodec, ECodecRegistry, EDecoder, EEncoder, EResource, EResourceSetImpl, URI } from "./internal.js"
+import { CODEC_TEXT_OPTION, ECodec, ECodecRegistry, EDecoder, EEncoder, EResource, EResourceSetImpl, URI } from "./internal.js"
 
 // a resource whose codec is codec
 function newResource(codec: ECodec): EResource {
@@ -33,7 +33,10 @@ describe("EResourceImpl load and save", () => {
         const r = newResource(codec)
         const options = new Map<string, any>([["key", "value"]])
         expect(r.saveToString(options)).toBe("hi")
-        expect(encoderOptions).toBe(options)
+        // the options, and the string a text whatever the encoding of the document
+        expect(encoderOptions.get("key")).toBe("value")
+        expect(encoderOptions.get(CODEC_TEXT_OPTION)).toBe(true)
+        expect(options.has(CODEC_TEXT_OPTION)).toBe(false)
     })
 
     test("loadFromBuffer error resets loading", () => {
