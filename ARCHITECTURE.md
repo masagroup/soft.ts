@@ -278,3 +278,38 @@ Dev: `typescript ^7.0.2`, `vitest ^5.0.4`, `@vitest/coverage-v8 ^5.0.4`, `pretti
 Optional: `@rollup/rollup-linux-x64-gnu 4.64.6`, pinned in every `package.json`; the purpose is presumably a rollup/vitest Linux CI workaround (UNVERIFIED).
 
 The MessagePack codec is vendored in `ecore/src/msgpack/` (Encoder, Decoder, Extension, Date/UUID/ULID extensions, Int helpers). Its naming resembles `@msgpack/msgpack` but no such npm dependency exists; the origin of the vendored code is UNVERIFIED.
+
+## Interfaces
+
+### npm scripts of `ecore/package.json`
+
+| Script | Command |
+|---|---|
+| `build` | `npm run build-types && npm run build-esm && npm run build-cjs` |
+| `build-types` | `tsc -b tsconfig.types.json` (declarations into `dist/types`) |
+| `build-esm` | `tsc -b tsconfig.esm.json` (into `dist/esm`) |
+| `build-cjs` | `tsc -b tsconfig.cjs.json && ncp ./package-cjs.json ./dist/cjs/package.json` (CommonJS in `dist/cjs`) |
+| `pretty` | `node scripts/remove-unused-imports.mjs && prettier --write src/**/*.ts` |
+| `lint` | `oxlint src` |
+| `test` | `vitest run` (config `ecore/vite.config.ts`: include `src/**/*.test.ts`) |
+| `test:coverage` | `vitest run --coverage` |
+
+The package exports map is `.` -> `types: dist/types/index.d.ts`, `require: dist/cjs/index.js`, `import: dist/esm/index.js`. `ecore/scripts/remove-unused-imports.mjs` runs oxlint in JSON mode and strips only the unused import specifiers; the example packages reuse it.
+
+### Makefile targets
+
+| Target | Chain / action |
+|---|---|
+| `all` | `ecore empty library tournament inheritance coexistence` (regeneration, build and test) |
+| `ci` | `ecore.ci empty.ci library.ci tournament.ci inheritance.ci coexistence.ci` (install, build and test, no generation) |
+| `ecore` | `ecore.install ecore.generate ecore.format ecore.build ecore.test` |
+| `ecore.install` | `cd ecore && npm install --no-fund --loglevel=error` |
+| `ecore.generate` | `soft.gen ts` on `ecore.ecore` with `-t generateModel -t generateTests -p printWidth=140` |
+| `ecore.format`, `ecore.build`, `ecore.test` | `npm run pretty`, `build`, `test` in `ecore/` |
+| `examples` | `library empty` |
+| `<x>` for `library`, `empty`, `tournament`, `inheritance`, `coexistence` | `<x>.install <x>.generate <x>.format <x>.build <x>.test` |
+| `<x>.ci` | `<x>.install <x>.build <x>.test` |
+
+`<x>.generate` runs `soft.gen ts` on `library.ecore` (`-p accessors=property`), `empty.ecore`, `tournament.ecore` (`-p async=true`) into `examples/`, on `examples/inheritance/inheritance.ecore`, and three times on `tournament.ecore` for `coexistence` (interfaces, typed and reflective implementations).
+
+The `GENERATOR` variable is the `soft.gen ts` command, a `docker run` of `masagroup/soft.gen:$(SOFT_GEN_VERSION)` with the checkout on `/soft/ts` and the models folder `MODELS` (`../models`) on `/soft/models`; the Makefile stops with `../models not found` when that folder is missing. On Linux the container runs with `--user <uid>:<gid>` so the generated files belong to the user. The generator properties are in `.generator.yaml` (license header, `packageDir: $1/src`, `testFramework: vitest`).
