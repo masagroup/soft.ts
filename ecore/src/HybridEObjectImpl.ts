@@ -20,6 +20,11 @@ import { EStore, EStoreEObjectImpl } from "./internal.js"
 // (eClearField), a cleared cache, a new store or a change of caching clears them all
 // (eClearFields). A reference is published only when it is not a proxy, and its getter reads it
 // again when its object became a proxy: a proxy is resolved at each read, as EMF does.
+//
+// The fields cache the values whatever the caching of the object (setCache): a value changed in
+// the store by another way is read again after clearCache. The container of the object, and the
+// reference to its container, are not in the fields: they are kept by EStoreEObjectImpl, as the
+// changes of the container do not set the feature. The asynchronous getters stay reflective.
 export class HybridEObjectImpl extends EStoreEObjectImpl {
     constructor() {
         super()
