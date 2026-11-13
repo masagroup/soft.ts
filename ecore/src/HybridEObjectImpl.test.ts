@@ -9,8 +9,10 @@
 
 import { describe, expect, test } from "vitest"
 import {
+    AbstractEAdapter,
     EClass,
     EList,
+    ENotification,
     EObject,
     EResourceImpl,
     EResourceSetImpl,
@@ -19,6 +21,7 @@ import {
     getEcoreFactory,
     getEcorePackage,
     HybridEObjectImpl,
+    ImmutableEList,
     isHybridEObject,
     NO_INDEX,
     URI
@@ -107,10 +110,13 @@ class CountingStore implements EStore {
     toArray(object: EObject, feature: EStructuralFeature): any[] {
         return [...this.list(object, feature)]
     }
-    getContainer(): [EObject, EStructuralFeature] {
-        return [null, null]
+    containers = new Map<EObject, [EObject, EStructuralFeature]>()
+    getContainer(object: EObject): [EObject, EStructuralFeature] {
+        return this.containers.get(object) ?? [null, null]
     }
-    setContainer(): void {}
+    setContainer(object: EObject, container: EObject, feature: EStructuralFeature): void {
+        this.containers.set(object, [container, feature])
+    }
     addRoot(): void {}
     removeRoot(): void {}
     getRoots(): EObject[] {
@@ -136,7 +142,7 @@ const hybridClass: EClass = (() => {
     items.setName("items")
     items.setUpperBound(-1)
     items.setEType(getEcorePackage().getEString())
-    c.getEStructuralFeatures().addAll([name, count, ref, items])
+    c.getEStructuralFeatures().addAll(new ImmutableEList<EStructuralFeature>([name, count, ref, items]))
     return c
 })()
 
@@ -257,6 +263,92 @@ function newHybrid(store: EStore | null): HybridTest {
     return o
 }
 
+// nodeClass is a class of a containment, child, its container opposite, parent, and two opposite
+// references, peer and peerOf.
+const nodeClass: EClass = (() => {
+    const f = getEcoreFactory()
+    const c = f.createEClass()
+    c.setName("Node")
+    const ref = (name: string) => {
+        const r = f.createEReference()
+        r.setName(name)
+        r.setEType(c)
+        return r
+    }
+    const [child, parent, peer, peerOf] = [ref("child"), ref("parent"), ref("peer"), ref("peerOf")]
+    child.setContainment(true)
+    child.setEOpposite(parent)
+    parent.setEOpposite(child)
+    peer.setEOpposite(peerOf)
+    peerOf.setEOpposite(peer)
+    c.getEStructuralFeatures().addAll(new ImmutableEList<EStructuralFeature>([child, parent, peer, peerOf]))
+    return c
+})()
+
+// HybridNode is nodeClass as soft.gen generates it with storage=hybrid: a field per reference but
+// the container one, parent, read from the container of the object.
+class HybridNode extends HybridEObjectImpl {
+    private _h0 = 0
+    private _refs: EObject[] = [null, null, null, null]
+
+    eStaticClass(): EClass {
+        return nodeClass
+    }
+
+    private ref(id: number): any {
+        const bit = 1 << id
+        if (this._h0 & bit && !this._refs[id]?.eIsProxy()) {
+            return this._refs[id]
+        }
+        const value = this.eBaseGetFromID(id, true) as EObject
+        if (!value?.eIsProxy()) {
+            this._refs[id] = value
+            this._h0 |= bit
+        }
+        return value
+    }
+    getChild(): HybridNode {
+        return this.ref(0)
+    }
+    getParent(): HybridNode {
+        return this.eGetFromID(1, true)
+    }
+    getPeer(): HybridNode {
+        return this.ref(2)
+    }
+    getPeerOf(): HybridNode {
+        return this.ref(3)
+    }
+
+    eGetFromID(featureID: number, resolve: boolean): any {
+        if (resolve && featureID >= 0 && featureID < 4 && featureID != 1) {
+            return this.ref(featureID)
+        }
+        return super.eGetFromID(featureID, resolve)
+    }
+
+    eClearFields(): void {
+        this._h0 = 0
+        super.eClearFields()
+    }
+
+    eClearField(featureID: number): void {
+        if (featureID >= 0 && featureID < 4 && featureID != 1) {
+            this._h0 &= ~(1 << featureID)
+            return
+        }
+        super.eClearField(featureID)
+    }
+}
+
+function newNode(store: EStore | null): HybridNode {
+    const o = new HybridNode()
+    if (store) {
+        o.setEStore(store)
+    }
+    return o
+}
+
 describe("HybridEObjectImpl", () => {
     test("a getter reads the store once", () => {
         const store = new CountingStore()
@@ -365,6 +457,124 @@ describe("HybridEObjectImpl", () => {
             expect(o.getRef()).toBe(object)
             object.eSetProxyURI(new URI("b.xml#/0"))
             expect(o.getRef(), `store ${withStore}: a published object made a proxy is resolved`).toBe(target)
+        }
+    })
+
+    test("a set notifies its adapters, the same value too", () => {
+        const o = newHybrid(new CountingStore())
+        const notifications: ENotification[] = []
+        const adapter = new (class extends AbstractEAdapter {
+            notifyChanged(n: ENotification): void {
+                notifications.push(n)
+            }
+        })()
+        o.eAdapters().add(adapter)
+        o.setName("a")
+        o.setName("a")
+        o.setName("b")
+        expect(notifications.map((n) => [n.getOldValue(), n.getNewValue()])).toEqual([
+            [null, "a"],
+            ["a", "a"],
+            ["a", "b"]
+        ])
+        expect(o.getName()).toBe("b")
+        o.eUnset(hybridClass.getEStructuralFeature(NAME))
+        expect(notifications.length).toBe(4)
+        expect(o.getName()).toBeNull()
+    })
+
+    test("a dynamic subclass keeps the typed fields of its static features", () => {
+        const f = getEcoreFactory()
+        const sub = f.createEClass()
+        sub.setName("Sub")
+        sub.getESuperTypes().add(hybridClass)
+        const extra = f.createEAttribute()
+        extra.setName("extra")
+        extra.setEType(getEcorePackage().getEString())
+        sub.getEStructuralFeatures().add(extra)
+        for (const withStore of [false, true]) {
+            const o = newHybrid(withStore ? new CountingStore() : null)
+            o.setEClass(sub)
+            o.setName("n")
+            o.eSet(extra, "e")
+            expect(o.getName(), `store ${withStore}`).toBe("n")
+            expect(o.eGet(sub.getEStructuralFeatureFromName("name"))).toBe("n")
+            expect(o.eGet(extra), `store ${withStore}`).toBe("e")
+            expect(o.eIsSet(extra)).toBe(true)
+            o.eUnset(extra)
+            expect(o.eIsSet(extra)).toBe(false)
+            expect(o.getName(), `store ${withStore}: the static field is kept`).toBe("n")
+        }
+    })
+
+    test("an object keeps its values when its store goes", () => {
+        const store = new CountingStore()
+        const o = newHybrid(store)
+        o.setName("a")
+        o.getItems().add("x")
+        expect(o.getName()).toBe("a")
+        o.setEStore(null)
+        expect(o.getName()).toBe("a")
+        expect(o.getItems().toArray()).toEqual(["x"])
+        o.setName("b")
+        expect(o.getName()).toBe("b")
+        expect(store.values.get(o).get(hybridClass.getEStructuralFeature(NAME)), "the store is left").toBe("a")
+    })
+
+    test("a list is unset and set reflectively", () => {
+        const o = newHybrid(new CountingStore())
+        const items = hybridClass.getEStructuralFeature(ITEMS)
+        const list = o.getItems()
+        list.add("x")
+        o.eUnset(items)
+        expect(o.eIsSet(items)).toBe(false)
+        expect(o.getItems(), "the same list").toBe(list)
+        expect(list.size()).toBe(0)
+        o.eSet(items, ["y", "z"])
+        expect(o.getItems().toArray()).toEqual(["y", "z"])
+    })
+
+    // The typed fields cache the values whatever the caching of the object: they are dropped by
+    // the changes made through the object, a cleared cache, a new store or a change of caching.
+    test("the typed fields cache the values when the object does not", () => {
+        const store = new CountingStore()
+        const o = newHybrid(store)
+        o.setCache(false)
+        o.setName("a")
+        expect(o.getName()).toBe("a")
+        store.values.get(o).set(hybridClass.getEStructuralFeature(NAME), "changed in the store")
+        expect(o.getName(), "the field").toBe("a")
+        o.clearCache()
+        expect(o.getName()).toBe("changed in the store")
+    })
+
+    test("containments and opposites keep the fields of both ends", () => {
+        for (const withStore of [false, true]) {
+            const store = withStore ? new CountingStore() : null
+            const [a, b, c] = [newNode(store), newNode(store), newNode(store)]
+            const feature = (name: string) => nodeClass.getEStructuralFeatureFromName(name)
+            expect(a.getChild()).toBeNull()
+            expect(b.getChild()).toBeNull()
+            expect(b.getPeerOf()).toBeNull()
+
+            a.eSet(feature("child"), c)
+            expect(a.getChild(), `store ${withStore}`).toBe(c)
+            expect(c.eContainer()).toBe(a)
+            expect(c.getParent()).toBe(a)
+            b.eSet(feature("child"), c)
+            expect(b.getChild(), `store ${withStore}: moved`).toBe(c)
+            expect(c.getParent(), `store ${withStore}: moved`).toBe(b)
+            expect(a.getChild(), `store ${withStore}: moved away`).toBeNull()
+            expect(a.eIsSet(feature("child"))).toBe(false)
+
+            a.eSet(feature("peer"), b)
+            expect(a.getPeer()).toBe(b)
+            expect(b.getPeerOf(), `store ${withStore}: inverse`).toBe(a)
+            c.eSet(feature("peer"), b)
+            expect(b.getPeerOf(), `store ${withStore}: inverse replaced`).toBe(c)
+            expect(a.getPeer(), `store ${withStore}: old end cleared`).toBeNull()
+            b.eUnset(feature("peerOf"))
+            expect(c.getPeer(), `store ${withStore}: unset clears the other end`).toBeNull()
         }
     })
 })
