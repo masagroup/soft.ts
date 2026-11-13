@@ -80,6 +80,7 @@ export * from "./EObjectImpl.js"
 export * from "./EContentAdapter.js"
 export * from "./DynamicEObjectImpl.js"
 export * from "./EStoreEObjectImpl.js"
+export * from "./HybridEObjectImpl.js"
 
 export * from "./EModelElementImpl.js"
 export * from "./EModelElementExt.js"
