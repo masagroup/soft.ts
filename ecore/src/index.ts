@@ -94,6 +94,8 @@ export {
     EStoreEObjectImpl,
     HybridEObjectImpl,
     EStoreList,
+    EStoreListSharedState,
+    newEStoreListSharedState,
     EStoreProvider,
     ECacheProvider,
     EStructuralFeature,

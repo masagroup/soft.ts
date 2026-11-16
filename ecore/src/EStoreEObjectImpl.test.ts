@@ -21,11 +21,14 @@ import {
     EStore,
     EStoreEObjectImpl,
     EStoreList,
+    EStoreListSharedState,
     EStructuralFeature,
     EventType,
     getEcoreFactory,
     getEcorePackage,
-    isEStoreProvider
+    ImmutableEList,
+    isEStoreProvider,
+    newEStoreListSharedState
 } from "./internal.js"
 
 // MemoryStore is an EStore keeping the values in maps, recording the calls it receives.
@@ -409,5 +412,125 @@ describe("EStoreEObjectImpl", () => {
             EventType.MOVE,
             EventType.REMOVE_MANY
         ])
+    })
+})
+
+// The lists made with a shared state, as soft.go estorelist_shared_test.go: they share it until
+// their first setEStore or setCache, and change their store as the other lists do.
+// hasState reports whether list has the state state.
+function hasState(list: EStoreList<any>, state: EStoreListSharedState): boolean {
+    return (list as any)._s === state
+}
+
+describe("EStoreListSharedState", () => {
+    test("needsAStore", () => {
+        const m = createModel()
+        expect(() => newEStoreListSharedState(null, m.tags)).toThrow()
+    })
+
+    test("read", () => {
+        const m = createModel()
+        const store = new MemoryStore()
+        const o = newObject(m.parent, store)
+        store.add(o, m.tags, 0, "a")
+        store.add(o, m.tags, 1, "b")
+        store.calls = []
+        const shared = newEStoreListSharedState(store, m.tags)
+        const tags = new EStoreList<string>(o, shared)
+        expect(store.calls, "nothing asked of the store when made").toEqual([])
+        expect(hasState(tags, shared)).toBeTruthy()
+        expect(tags.getEStore()).toBe(store)
+        expect(tags.getFeature()).toBe(m.tags)
+        expect(tags.isCache()).toBeFalsy()
+        expect(tags.size()).toBe(2)
+        expect(tags.isEmpty()).toBeFalsy()
+        expect(tags.get(1)).toBe("b")
+        expect(tags.toArray()).toEqual(["a", "b"])
+        expect(tags.indexOf("b")).toBe(1)
+    })
+
+    test("changesKeepTheSharedState", () => {
+        const m = createModel()
+        const store = new MemoryStore()
+        const o = newObject(m.parent, store)
+        const other = newObject(m.parent, store)
+        store.add(other, m.tags, 0, "x")
+        const shared = newEStoreListSharedState(store, m.tags)
+        const tags = new EStoreList<string>(o, shared)
+        const otherTags = new EStoreList<string>(other, shared)
+
+        // the elements and the changes of a list are its own, its state is not changed
+        tags.add("a")
+        tags.addAll(new ImmutableEList(["b", "c"]))
+        tags.insert(0, "d")
+        expect(tags.removeAt(1)).toBe("a")
+        expect(tags.set(0, "e")).toBe("d")
+        expect(tags.moveTo(0, 2)).toBe("e")
+        expect(store.toArray(o, m.tags)).toEqual(["b", "c", "e"])
+        expect(hasState(tags, shared)).toBeTruthy()
+        expect(otherTags.toArray()).toEqual(["x"])
+        tags.clear()
+        expect(tags.size()).toBe(0)
+        expect(tags.isEmpty()).toBeTruthy()
+        expect(hasState(otherTags, shared)).toBeTruthy()
+        expect(shared.store).toBe(store)
+        expect(shared.cache).toBeFalsy()
+    })
+
+    test("setCache", () => {
+        const m = createModel()
+        const store = new MemoryStore()
+        const o = newObject(m.parent, store)
+        store.add(o, m.tags, 0, "a")
+        store.add(o, m.tags, 1, "b")
+        const shared = newEStoreListSharedState(store, m.tags)
+        const tags = new EStoreList<string>(o, shared)
+        const other = new EStoreList<string>(newObject(m.parent, store), shared)
+
+        // no cache already: nothing to do
+        tags.setCache(false)
+        expect(hasState(tags, shared)).toBeTruthy()
+
+        tags.setCache(true)
+        expect(hasState(tags, shared), "a state of its own").toBeFalsy()
+        expect(tags.isCache()).toBeTruthy()
+        expect(tags.getEStore()).toBe(store)
+        store.calls = []
+        expect(tags.get(1)).toBe("b")
+        expect(store.calls, "read from the cache").toEqual([])
+        expect(other.isCache()).toBeFalsy()
+        expect(hasState(other, shared)).toBeTruthy()
+        expect(shared.cache).toBeFalsy()
+    })
+
+    test("setEStoreNull", () => {
+        const m = createModel()
+        const store = new MemoryStore()
+        const o = newObject(m.parent, store)
+        store.add(o, m.tags, 0, "a")
+        const shared = newEStoreListSharedState(store, m.tags)
+        const tags = new EStoreList<string>(o, shared)
+
+        tags.setEStore(null)
+        expect(hasState(tags, shared)).toBeFalsy()
+        expect(tags.getEStore()).toBeNull()
+        expect(tags.toArray(), "the elements of the former store").toEqual(["a"])
+        tags.add("b")
+        expect(store.toArray(o, m.tags)).toEqual(["a"])
+        expect(shared.store).toBe(store)
+    })
+
+    test("containment", () => {
+        const m = createModel()
+        const store = new MemoryStore()
+        const p = newObject(m.parent, store)
+        const c = newObject(m.child, store)
+        const shared = newEStoreListSharedState(store, m.children)
+        const children = new EStoreList<EObject>(p, shared)
+        children.add(c)
+        expect(store.toArray(p, m.children)).toEqual([c])
+        expect(c.eContainer(), "the inverse of a containment").toBe(p)
+        expect(children.removeAt(0)).toBe(c)
+        expect(c.eContainer()).toBeNull()
     })
 })
